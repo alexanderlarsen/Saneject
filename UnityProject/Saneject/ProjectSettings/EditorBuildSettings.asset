@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1045 &1
+EditorBuildSettings:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Scenes:
+  - enabled: 1
+    path: Assets/Plugins/Saneject/Demo/StartScene.unity
+    guid: 15d7f5558018bbb42a18f6ec8141f383
+  - enabled: 1
+    path: Assets/Plugins/Saneject/Demo/Scenes/GameScene.unity
+    guid: aa011174a9d382c4aa562d4014794a47
+  - enabled: 1
+    path: Assets/Plugins/Saneject/Demo/Scenes/UIScene.unity
+    guid: 51d3d79ee5eba1341a73cecefb1ef13b
+  m_configObjects:
+    com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}
+  m_UseUCBPForAssetBundles: 0

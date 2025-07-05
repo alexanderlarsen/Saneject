@@ -1,0 +1,56 @@
+# ───────── Unity demo project ─────────
+/UnityProject/Saneject/[Ll]ibrary/
+/UnityProject/Saneject/[Tt]emp/
+/UnityProject/Saneject/[Oo]bj/
+/UnityProject/Saneject/[Bb]uild/
+/UnityProject/Saneject/[Bb]uilds/
+/UnityProject/Saneject/[Ll]ogs/
+/UnityProject/Saneject/[Uu]ser[Ss]ettings/
+/UnityProject/Saneject/[Mm]emoryCaptures/
+/UnityProject/Saneject/[Rr]ecordings/
+/UnityProject/Saneject/ExportedObj/
+/UnityProject/Saneject/.gradle/
+/UnityProject/Saneject/.vs/
+/UnityProject/Saneject/*.sln
+/UnityProject/Saneject/*.csproj
+/UnityProject/Saneject/*.unityproj
+/UnityProject/Saneject/*.pidb
+/UnityProject/Saneject/*.pdb
+/UnityProject/Saneject/*.mdb
+/UnityProject/Saneject/*.VC.db
+
+# JetBrains Rider plugin generated inside Unity
+/UnityProject/Saneject/Assets/Plugins/Editor/JetBrains*
+
+# Addressables blobs
+/UnityProject/Saneject/Assets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
+/UnityProject/Saneject/Assets/[Ss]treamingAssets/aa.meta
+/UnityProject/Saneject/Assets/[Ss]treamingAssets/aa/*
+
+# Unity crash/sysinfo
+/UnityProject/Saneject/sysinfo.txt
+
+# Unity builds & packages
+*.apk
+*.aab
+*.unitypackage
+*.app
+
+# ───────── SourceGenerators project ─────────
+/SourceGenerators/bin/
+/SourceGenerators/obj/
+!SourceGenerators/SourceGenerators.csproj
+
+# ───────── General tooling ─────────
+.vs/
+.gradle/
+.idea/
+*.suo
+*.user
+*.userprefs
+*.tmp
+*.booproj
+*.pidb.meta
+*.pdb.meta
+*.mdb.meta
+crashlytics-build.properties
