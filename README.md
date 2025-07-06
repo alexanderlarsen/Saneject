@@ -58,7 +58,7 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 
 ### Injection & Binding
 
-- **Editor-time, deterministic injection:** Bindings are resolved in the editor, stored directly in serialized fields.
+- **Editor-time, deterministic injection:** Bindings are resolved in the editor, stored directly in serialized fields, including nested serialized classes.
 - **Fluent, scope-aware binding API:** Search hierarchy or project, filter by tag/layer/name, bind by type or ID.
 - **Fail-fast validation:** Flags missing/conflicting bindings and invalid setups (e.g., global inside prefabs) during editor injection pass.
 - **Unified Scope component:** One Scope type handles both scenes and prefabs, with automatic context detection.
@@ -686,7 +686,7 @@ Found under **Saneject → User Settings**, these let you customize editor and l
 - Circular dependency detection is not yet implemented.
 - No warnings if a field is marked `[Inject]` but lacks `[SerializeField]` or `[SerializeInterface]`.
 - Unity's object picker cannot filter by interface types in the Inspector.
-- Multi-binding (e.g. injecting `IEnumerable<T>`) is not supported yet.
+- Collection bindings (e.g. injecting `IEnumerable<T>`) is not supported yet.
 - Unity Package Manager (UPM) support is not yet available. Use `.unitypackage` or clone + copy for now. Planned for post-beta once the API and structure stabilize.
 
 ## Credits / Contribution
