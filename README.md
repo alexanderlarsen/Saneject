@@ -633,24 +633,28 @@ If you're using `InterfaceProxyObject`, global registration is one of the ways t
 
 💡 You can toggle logging for global registration under **Saneject → User Settings → Logging**.
 
-### Roslyn Source Generators in Saneject
+### Roslyn Tools in Saneject
 
-A Roslyn source generator is a compile-time tool that can inject new C# code into your assembly during the compilation step.
+Roslyn tools enhance your compile-time experience using C#'s powerful compiler APIs.
 
-Unlike a *Roslyn analyzer* (which only reports diagnostics or code-style hints), a generator can actually add source files before the compiler finishes, giving you new types, methods, or attributes without hand-writing them.
+- A **Roslyn analyzer** inspects code and reports diagnostics (like errors or suggestions).
+- A **Roslyn code fix** provides a quick-fix action for an analyzer error.
+- A **Roslyn source generator** adds new C# code to your project during compilation.
 
-Saneject ships two generator DLLs (located in the `Saneject/SourceGenerators` folder of the package):
+Saneject ships with three Roslyn tool DLLs (in `Saneject/RoslynLibs`):
 
-| Generator DLL                       | What it emits                                                                                                                                                    | Why it matters                                                                       |
-|-------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------|
-| **SerializeInterfaceGenerator.dll** | Creates partial classes that add hidden backing `Object` fields and `ISerializationCallbackReceiver` glue for every `[SerializeInterface]` field or property.    | Allows interfaces to appear in the Inspector and be serialized safely.               |
-| **InterfaceProxyGenerator.dll**     | Creates partial classes that implement every public interface on a target type and forward calls to a concrete instance (the `InterfaceProxyObject<T>` pattern). | Enables cross-scene or prefab-to-scene references while keeping interface contracts. |
+| DLL                                 | Type               | Purpose                                                                                                                                                             |
+|-------------------------------------|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **SerializeInterfaceGenerator.dll** | Source Generator   | Generates hidden backing fields and serialization hooks for `[SerializeInterface]` members.                                                                         |
+| **InterfaceProxyGenerator.dll**     | Source Generator   | Emits proxy classes that forward interface calls to backing fields (via `InterfaceProxyObject<T>`).                                                                 |
+| **AttributesAnalyzer.dll**          | Analyzer + CodeFix | Validates field decoration rules for `[Inject]`, `[SerializeField]`, and `[SerializeInterface]`. Includes context-aware quick fixes in supported IDEs (like Rider). |
 
-Need the setup steps? Unity explains it here: <https://docs.unity3d.com/Manual/roslyn-analyzers.html>
+Unity’s official Roslyn analyzer documentation (including setup instructions):  
+<https://docs.unity3d.com/Manual/roslyn-analyzers.html>
 
-Follow that doc if you want to plug in your own source generator or run Saneject’s generators in a different project structure.
+Use that guide if you want to plug in custom Roslyn tooling or integrate Saneject’s tools in other project structures.
 
-Source code for the generators is [here](SourceGenerators).
+Roslyn source code is in the [RoslynTools](https://github.com/alexanderlarsen/Saneject/tree/dev/RoslynTools) folder.
 
 ### UX
 
