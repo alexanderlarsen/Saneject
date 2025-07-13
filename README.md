@@ -654,7 +654,7 @@ Unity’s official Roslyn analyzer documentation (including setup instructions):
 
 Use that guide if you want to plug in custom Roslyn tooling or integrate Saneject’s tools in other project structures.
 
-Roslyn source code is in the [RoslynTools](https://github.com/alexanderlarsen/Saneject/tree/dev/RoslynTools) folder.
+Roslyn source code is in the [RoslynTools](RoslynTools) folder.
 
 ### UX
 
