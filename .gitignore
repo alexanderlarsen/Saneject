@@ -37,9 +37,10 @@
 *.app
 
 # ───────── SourceGenerators project ─────────
-/SourceGenerators/bin/
-/SourceGenerators/obj/
-!SourceGenerators/SourceGenerators.csproj
+
+/RoslynTools/bin/
+/RoslynTools/obj/
+!RoslynTools/RoslynTools.csproj
 
 # ───────── General tooling ─────────
 .vs/

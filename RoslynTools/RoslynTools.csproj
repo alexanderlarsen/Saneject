@@ -14,19 +14,19 @@
     <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
   </ItemGroup>
   
-  <ItemGroup Condition="'$(Generator)' == 'SerializeInterface'">
+  <ItemGroup Condition="'$(Module)' == 'SerializeInterface'">
     <Compile Include="SerializeInterfaceGenerator.cs" />
   </ItemGroup>
 
-  <ItemGroup Condition="'$(Generator)' == 'InterfaceProxy'">
+  <ItemGroup Condition="'$(Module)' == 'InterfaceProxy'">
     <Compile Include="InterfaceProxyGenerator.cs" />
   </ItemGroup>
   
-  <PropertyGroup Condition="'$(Generator)' == 'SerializeInterface'">
+  <PropertyGroup Condition="'$(Module)' == 'SerializeInterface'">
 	<AssemblyName>SerializeInterfaceGenerator</AssemblyName>
   </PropertyGroup>
 
-  <PropertyGroup Condition="'$(Generator)' == 'InterfaceProxy'">
+  <PropertyGroup Condition="'$(Module)' == 'InterfaceProxy'">
     <AssemblyName>InterfaceProxyGenerator</AssemblyName>
   </PropertyGroup>
 </Project>

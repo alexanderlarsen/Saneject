@@ -5,7 +5,7 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace SerializedDIGenerators;
+namespace Saneject.Roslyn.Generators;
 
 [Generator]
 public class SerializeInterfaceGenerator : ISourceGenerator
