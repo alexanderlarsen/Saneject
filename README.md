@@ -695,7 +695,7 @@ Inspired by:
 
 - [Zenject](https://github.com/modesttree/Zenject)
 - [VContainer](https://github.com/hadashiA/VContainer)
-- [serialize-interface-generator](https://github.com/SimonNordon4/serialize-interface-generator)
+- [Serialize Interface Generator](https://github.com/SimonNordon4/serialize-interface-generator)
 
 Contributions are welcome. If you find bugs or have suggestions, feel free to open an issue. PRs are appreciated too. There’s no formal roadmap right now, but I’ll do my best to review what comes in.
 
