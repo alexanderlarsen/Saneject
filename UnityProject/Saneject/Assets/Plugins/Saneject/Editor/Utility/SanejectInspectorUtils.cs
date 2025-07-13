@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Globalization;
 using System.Reflection;
+using System.Text.RegularExpressions;
 using Plugins.Saneject.Runtime.Attributes;
 using UnityEditor;
 using UnityEngine;
@@ -56,15 +58,46 @@ namespace Plugins.Saneject.Editor.Utility
 
                 if (IsSerializeInterfaceField(field))
                 {
-                    string backingName = "__" + field.Name;
-                    SerializedProperty property = serializedObject.FindProperty(backingName);
+                    Type fieldType = field.FieldType;
 
-                    if (property != null && drawn.Add(property.propertyPath))
+                    bool isArray = fieldType.IsArray;
+                    bool isList = fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>);
+
+                    if (isArray || isList)
+                    {
+                        string backingName = "__" + field.Name;
+                        SerializedProperty property = serializedObject.FindProperty(backingName);
+
+                        if (property == null || !drawn.Add(property.propertyPath))
+                            continue;
+
+                        Type interfaceType = isArray
+                            ? fieldType.GetElementType()
+                            : fieldType.GetGenericArguments()[0];
+
+                        if (ShouldDrawAsReadOnlyCollection(field, property))
+                            DrawReadOnlyCollection(property, interfaceType);
+                        else
+                            EditorGUILayout.PropertyField(
+                                property,
+                                new GUIContent(FormatInterfaceLabel(field.Name, interfaceType)),
+                                true
+                            );
+                    }
+                    else
+                    {
+                        string backingName = "__" + field.Name;
+                        SerializedProperty property = serializedObject.FindProperty(backingName);
+
+                        if (property == null || !drawn.Add(property.propertyPath))
+                            continue;
+
                         EditorGUILayout.PropertyField(
                             property,
                             new GUIContent(ObjectNames.NicifyVariableName(field.Name)),
                             true
                         );
+                    }
                 }
                 else
                 {
@@ -97,7 +130,9 @@ namespace Plugins.Saneject.Editor.Utility
         /// <summary>
         /// Renders a list or array property in a read-only format, mimicking Unity's native collection layout but with editing disabled.
         /// </summary>
-        public static void DrawReadOnlyCollection(SerializedProperty prop)
+        public static void DrawReadOnlyCollection(
+            SerializedProperty prop,
+            Type interfaceType = null)
         {
             Rect fullRect = GUILayoutUtility.GetRect(1f, EditorGUIUtility.singleLineHeight, GUILayout.ExpandWidth(true));
 
@@ -115,7 +150,13 @@ namespace Plugins.Saneject.Editor.Utility
 
             // Label without indent (manually positioned)
             Rect labelRect = new(foldoutRect.x + 1, foldoutRect.y, foldoutRect.width - 1, foldoutRect.height);
-            EditorGUI.LabelField(labelRect, ObjectNames.NicifyVariableName(prop.name), EditorStyles.boldLabel);
+
+            EditorGUI.LabelField(
+                labelRect,
+                interfaceType != null
+                    ? FormatInterfaceLabel(prop.name, interfaceType)
+                    : ObjectNames.NicifyVariableName($"{prop.name}"),
+                EditorStyles.boldLabel);
 
             // Right-aligned item count
             Rect countRect = new(fullRect.xMax - 48, fullRect.y, 48, fullRect.height);
@@ -128,32 +169,53 @@ namespace Plugins.Saneject.Editor.Utility
 
             EditorGUI.BeginDisabledGroup(true);
 
-            for (int i = 0; i < prop.arraySize; i++)
+            if (prop.arraySize == 0)
             {
-                SerializedProperty element = prop.GetArrayElementAtIndex(i);
-                string label = $"Element {i}";
-
-                switch (element.propertyType)
+                GUILayout.BeginHorizontal();
+                GUILayout.Space(16f);
+                GUILayout.Label("List is Empty");
+                GUILayout.EndHorizontal();
+            }
+            else
+            {
+                for (int i = 0; i < prop.arraySize; i++)
                 {
-                    case SerializedPropertyType.ObjectReference:
-                        EditorGUILayout.ObjectField(label, element.objectReferenceValue, typeof(Object), false);
-                        break;
-                    case SerializedPropertyType.String:
-                        EditorGUILayout.TextField(label, element.stringValue);
-                        break;
-                    case SerializedPropertyType.Integer:
-                        EditorGUILayout.IntField(label, element.intValue);
-                        break;
-                    case SerializedPropertyType.Float:
-                        EditorGUILayout.FloatField(label, element.floatValue);
-                        break;
-                    default:
-                        EditorGUILayout.PropertyField(element, new GUIContent(label), true);
-                        break;
+                    SerializedProperty element = prop.GetArrayElementAtIndex(i);
+                    string label = $"Element {i}";
+
+                    switch (element.propertyType)
+                    {
+                        case SerializedPropertyType.ObjectReference:
+                            EditorGUILayout.ObjectField(label, element.objectReferenceValue, typeof(Object), false);
+                            break;
+                        case SerializedPropertyType.String:
+                            EditorGUILayout.TextField(label, element.stringValue);
+                            break;
+                        case SerializedPropertyType.Integer:
+                            EditorGUILayout.IntField(label, element.intValue);
+                            break;
+                        case SerializedPropertyType.Float:
+                            EditorGUILayout.FloatField(label, element.floatValue);
+                            break;
+                        default:
+                            EditorGUILayout.PropertyField(element, new GUIContent(label), true);
+                            break;
+                    }
                 }
             }
 
             EditorGUI.EndDisabledGroup();
+        }
+
+        public static string FormatInterfaceLabel(
+            string fieldName,
+            Type interfaceType)
+        {
+            string trimmed = fieldName.TrimStart('_');
+            string spaced = Regex.Replace(trimmed, "([a-z])([A-Z])", "$1 $2");
+            TextInfo ti = CultureInfo.InvariantCulture.TextInfo;
+            string titled = ti.ToTitleCase(spaced);
+            return $"{titled} ({interfaceType.Name})";
         }
 
         /// <summary>

@@ -451,7 +451,7 @@ Serializing an interface in the literal sense doesn't make much sense, because a
 
 #### What the Saneject Roslyn generator adds
 
-For every `[SerializeInterface]` field the generator emits a hidden, serializable backing `Object` in a partial class that implements `ISerializationCallbackReceiver`. The partial class copies the reference into the real interface field after deserialization:
+For every `[SerializeInterface]` field the generator emits a hidden, serializable backing `Object` in a partial class that implements `ISerializationCallbackReceiver`. The partial class copies the reference into the real interface field after deserialization. It also syncs the interface to the backing field before serialization - in the Editor only - to reflect the current value of the interface in the Inspector.
 
 ```csharp
 // User written class. 
@@ -465,12 +465,19 @@ public partial class SomeClass : MonoBehaviour
 
 ```csharp
 // Auto-generated partial.
-// Slightly simplified code for demonstration purposes.
+// Simplified code for demonstration purposes.
 public partial class SomeClass : ISerializationCallbackReceiver
 {
     [SerializeField, InterfaceBackingField(typeof(someInterface))]
     private Object __someInterface; // Real serialized field
 
+    public void OnBeforeSerialize()
+    {
+        #if UNITY_EDITOR
+        __someInterface = someInterface as Object;
+        #endif
+    }
+    
     public void OnAfterDeserialize()
     {
         // When Unity deserialization occurs, the Object is assigned to the actual interface field.

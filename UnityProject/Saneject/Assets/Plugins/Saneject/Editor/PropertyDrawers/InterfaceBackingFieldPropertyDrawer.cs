@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Editor.PropertyDrawers
 {
     /// <summary>
-    /// Custom property drawer for <see cref="InterfaceBackingFieldAttribute"/>.
+    /// Custom property drawer for <see cref="InterfaceBackingFieldAttribute" />.
     /// Draws interface backing fields in the inspector, formats their label, disables editing if injected, and syncs their value from the interface property.
     /// </summary>
     [CustomPropertyDrawer(typeof(InterfaceBackingFieldAttribute))]
@@ -28,15 +28,13 @@ namespace Plugins.Saneject.Editor.PropertyDrawers
             Type interfaceType = interfaceBackingFieldAttribute.InterfaceType;
             bool isInjected = interfaceBackingFieldAttribute.IsInjected;
 
-            label.text = FormatLabel(property.name, interfaceType);
+            label.text = FormatInterfaceLabel(property.name, interfaceType);
 
             if (!interfaceType.IsInterface)
             {
                 DrawError(position, label);
                 return;
             }
-
-            SyncBackingFieldFromInterface(property);
 
             using (new EditorGUI.DisabledScope(isInjected))
             {
@@ -53,42 +51,6 @@ namespace Plugins.Saneject.Editor.PropertyDrawers
                 : -EditorGUIUtility.standardVerticalSpacing;
         }
 
-        private static void SyncBackingFieldFromInterface(SerializedProperty property)
-        {
-            string interfaceFieldName = GetInterfaceFieldName(property.name);
-            string interfacePath = ReplaceLastPropertyPathElement(property.propertyPath, interfaceFieldName);
-
-            SerializedProperty interfaceProp = property.serializedObject.FindProperty(interfacePath);
-
-            if (interfaceProp == null)
-                return;
-
-            Object interfaceValue = interfaceProp.objectReferenceValue;
-
-            if (interfaceValue != property.objectReferenceValue)
-            {
-                property.objectReferenceValue = interfaceValue;
-                property.serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            }
-        }
-
-        private static string ReplaceLastPropertyPathElement(
-            string propertyPath,
-            string newElement)
-        {
-            int lastDot = propertyPath.LastIndexOf('.');
-
-            if (lastDot < 0)
-                return newElement;
-
-            return propertyPath[..(lastDot + 1)] + newElement;
-        }
-
-        private static string GetInterfaceFieldName(string backingFieldName)
-        {
-            return backingFieldName.StartsWith("__") ? backingFieldName[2..] : backingFieldName;
-        }
-
         private static void DrawObjectField(
             Rect position,
             SerializedProperty property,
@@ -99,6 +61,9 @@ namespace Plugins.Saneject.Editor.PropertyDrawers
 
             Object oldValue = property.objectReferenceValue;
             Object newValue = EditorGUI.ObjectField(position, label, oldValue, typeof(Object), true);
+
+            if (newValue is GameObject gameObject && gameObject.TryGetComponent(interfaceType, out Component compObj))
+                newValue = compObj;
 
             if (newValue != null && !interfaceType.IsAssignableFrom(newValue.GetType()))
             {
@@ -118,7 +83,7 @@ namespace Plugins.Saneject.Editor.PropertyDrawers
             EditorGUI.HelpBox(position, $"Unable to resolve interface type for {label.text}", MessageType.Error);
         }
 
-        private static string FormatLabel(
+        private static string FormatInterfaceLabel(
             string fieldName,
             Type interfaceType)
         {

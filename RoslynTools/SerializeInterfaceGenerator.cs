@@ -21,7 +21,8 @@ public class SerializeInterfaceGenerator : ISourceGenerator
             return;
 
         Dictionary<INamedTypeSymbol, List<IFieldSymbol>> groupedFields = new(SymbolEqualityComparer.Default);
-        Dictionary<INamedTypeSymbol, List<(IPropertySymbol prop, bool hasInject, string idValue)>> groupedProps = new(SymbolEqualityComparer.Default);
+        Dictionary<INamedTypeSymbol, List<(IPropertySymbol propertySymbol, bool hasInject, string idValue)>> groupedProps = new(SymbolEqualityComparer.Default);
+        bool hasInterfaceCollection = false;
 
         //–– fields ––
         foreach (FieldDeclarationSyntax candidate in receiver.FieldCandidates)
@@ -30,30 +31,49 @@ public class SerializeInterfaceGenerator : ISourceGenerator
 
             foreach (VariableDeclaratorSyntax variable in candidate.Declaration.Variables)
             {
-                if (model.GetDeclaredSymbol(variable) is not IFieldSymbol fieldSym) continue;
-                if (!fieldSym.GetAttributes().Any(a => a.AttributeClass?.Name == "SerializeInterfaceAttribute")) continue;
-                if (fieldSym.Type.TypeKind != TypeKind.Interface) continue;
+                if (model.GetDeclaredSymbol(variable) is not IFieldSymbol fieldSymbol)
+                    continue;
 
-                INamedTypeSymbol cls = fieldSym.ContainingType;
-                if (!groupedFields.TryGetValue(cls, out List<IFieldSymbol> list)) groupedFields[cls] = list = new List<IFieldSymbol>();
-                list.Add(fieldSym);
+                if (!fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.Name == "SerializeInterfaceAttribute"))
+                    continue;
+
+                ITypeSymbol t = fieldSymbol.Type;
+                bool isSingle = t.TypeKind == TypeKind.Interface;
+                bool isCollection = IsInterfaceCollection(t);
+                hasInterfaceCollection |= isCollection;
+
+                if (!isSingle && !isCollection)
+                    continue;
+
+                INamedTypeSymbol owner = fieldSymbol.ContainingType;
+
+                if (!groupedFields.TryGetValue(owner, out List<IFieldSymbol> list))
+                    groupedFields[owner] = list = new List<IFieldSymbol>();
+
+                list.Add(fieldSymbol);
             }
         }
 
         //–– props ––
         foreach (PropertyDeclarationSyntax candidate in receiver.PropertyCandidates)
         {
-            // only [field: SerializeInterface]
-            if (!candidate.AttributeLists
-                    .Any(al => al.Target?.Identifier.Text == "field"
-                               && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
+            if (!candidate.AttributeLists.Any(al => al.Target?.Identifier.Text == "field"
+                                                    && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
                 continue;
 
             SemanticModel model = context.Compilation.GetSemanticModel(candidate.SyntaxTree);
-            if (model.GetDeclaredSymbol(candidate) is not IPropertySymbol propSym) continue;
-            if (propSym.Type.TypeKind != TypeKind.Interface) continue;
 
-            // detect [field: Inject(...)]
+            if (model.GetDeclaredSymbol(candidate) is not IPropertySymbol prop)
+                continue;
+
+            ITypeSymbol t = prop.Type;
+            bool isSingle = t.TypeKind == TypeKind.Interface;
+            bool isCollection = IsInterfaceCollection(t);
+            hasInterfaceCollection |= isCollection;
+
+            if (!isSingle && !isCollection)
+                continue;
+
             AttributeSyntax injectSyntax = candidate.AttributeLists
                 .Where(al => al.Target?.Identifier.Text == "field")
                 .SelectMany(al => al.Attributes)
@@ -62,26 +82,33 @@ public class SerializeInterfaceGenerator : ISourceGenerator
             bool hasInject = injectSyntax != null;
             string idValue = "null";
 
-            if (hasInject && injectSyntax.ArgumentList?.Arguments.Count > 0)
-            {
-                ExpressionSyntax expr = injectSyntax.ArgumentList.Arguments[0].Expression;
+            if (hasInject && injectSyntax.ArgumentList?.Arguments.Count > 0
+                          && injectSyntax.ArgumentList.Arguments[0].Expression is LiteralExpressionSyntax lit
+                          && lit.Token.Value is string s)
+                idValue = $"\"{s}\"";
 
-                if (expr is LiteralExpressionSyntax lit && lit.Token.Value is string s)
-                    idValue = $"\"{s}\"";
-            }
+            INamedTypeSymbol owner = prop.ContainingType;
 
-            INamedTypeSymbol cls = propSym.ContainingType;
-            if (!groupedProps.TryGetValue(cls, out List<(IPropertySymbol prop, bool hasInject, string idValue)> list)) groupedProps[cls] = list = new List<(IPropertySymbol prop, bool hasInject, string idValue)>();
-            list.Add((propSym, hasInject, idValue));
+            if (!groupedProps.TryGetValue(owner, out List<(IPropertySymbol propertySymbol, bool hasInject, string idValue)> list))
+                groupedProps[owner] = list = new List<(IPropertySymbol, bool, string)>();
+
+            list.Add((prop, hasInject, idValue));
         }
 
         //–– generate ––
-        foreach (INamedTypeSymbol cls in groupedFields.Keys.Union(groupedProps.Keys))
+        foreach (INamedTypeSymbol classSymbol in groupedFields.Keys.Union(groupedProps.Keys))
         {
-            if (!IsUnitySerializable(cls) || cls.IsSealed) continue;
-            string ns = cls.ContainingNamespace?.ToDisplayString();
-            bool hasNs = !string.IsNullOrEmpty(ns) && !cls.ContainingNamespace.IsGlobalNamespace;
+            if (!IsUnitySerializable(classSymbol) || classSymbol.IsSealed)
+                continue;
+
+            INamespaceSymbol nsSymbol = classSymbol.ContainingNamespace;
+            string ns = nsSymbol.ToDisplayString();
+            bool hasNs = !string.IsNullOrEmpty(ns) && !nsSymbol.IsGlobalNamespace;
             StringBuilder sb = new();
+
+            sb.AppendLine("using System;");
+            sb.AppendLine("using System.Collections.Generic;");
+            sb.AppendLine("using System.Linq;");
             sb.AppendLine("using UnityEngine;");
             sb.AppendLine("using Plugins.Saneject.Runtime.Attributes;");
             sb.AppendLine();
@@ -92,64 +119,188 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 sb.AppendLine("{");
             }
 
-            sb.AppendLine($"    public partial class {cls.Name} : UnityEngine.ISerializationCallbackReceiver");
+            sb.AppendLine($"    public partial class {classSymbol.Name} : ISerializationCallbackReceiver");
             sb.AppendLine("    {");
 
-            if (groupedFields.TryGetValue(cls, out List<IFieldSymbol> fields))
-                foreach (IFieldSymbol f in fields)
+            // backing fields for fields
+            if (groupedFields.TryGetValue(classSymbol, out List<IFieldSymbol> fields))
+                foreach (IFieldSymbol fs in fields)
                 {
-                    string bn = "__" + f.Name;
-                    AttributeData inj = f.GetAttributes().FirstOrDefault(a => a.AttributeClass?.Name == "InjectAttribute");
-                    bool hi = inj != null;
-                    string iv = "null";
-                    if (hi && inj.ConstructorArguments.Length > 0 && inj.ConstructorArguments[0].Value is string id) iv = $"\"{id}\"";
+                    string backing = "__" + fs.Name;
+                    ITypeSymbol t = fs.Type;
+                    string typeStr = t.ToDisplayString();
+                    AttributeData injAttr = fs.GetAttributes().FirstOrDefault(a => a.AttributeClass?.Name == "InjectAttribute");
+                    string hasInj = injAttr != null ? "true" : "false";
+                    string id = "null";
 
-                    sb.AppendLine(
-                        $"        [SerializeField, InterfaceBackingField(typeof({f.Type.ToDisplayString()}), {hi.ToString().ToLowerInvariant()}, {iv})] private UnityEngine.Object {bn};"
-                    );
+                    if (injAttr?.ConstructorArguments.Length > 0 && injAttr.ConstructorArguments[0].Value is string idv)
+                        id = $"\"{idv}\"";
+
+                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                    {
+                        string elementType = arr.ElementType.ToDisplayString();
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id})] private UnityEngine.Object[] {backing};");
+                    }
+                    else if (t is INamedTypeSymbol named && named.IsGenericType
+                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
+                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    {
+                        string elementType = named.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id})] private List<UnityEngine.Object> {backing};");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {id})] private UnityEngine.Object {backing};");
+                    }
                 }
 
-            if (groupedProps.TryGetValue(cls, out List<(IPropertySymbol prop, bool hasInject, string idValue)> props))
-                foreach ((IPropertySymbol p, bool hi, string iv) in props)
+            // backing fields for props
+            if (groupedProps.TryGetValue(classSymbol, out List<(IPropertySymbol propertySymbol, bool hasInject, string idValue)> props))
+                foreach ((IPropertySymbol ps, bool hasInjAttr, string idv) in props)
                 {
-                    string bn = "__" + p.Name;
+                    string backing = "__" + ps.Name;
+                    ITypeSymbol t = ps.Type;
+                    string typeStr = t.ToDisplayString();
+                    string hasInj = hasInjAttr ? "true" : "false";
 
-                    sb.AppendLine(
-                        $"        [SerializeField, InterfaceBackingField(typeof({p.Type.ToDisplayString()}), {hi.ToString().ToLowerInvariant()}, {iv})] private UnityEngine.Object {bn};"
-                    );
+                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                    {
+                        string elementType = arr.ElementType.ToDisplayString();
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv})] private UnityEngine.Object[] {backing};");
+                    }
+                    else if (t is INamedTypeSymbol named && named.IsGenericType
+                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
+                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    {
+                        string elementType = named.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv})] private List<UnityEngine.Object> {backing};");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {idv})] private UnityEngine.Object {backing};");
+                    }
                 }
 
             sb.AppendLine();
-            sb.AppendLine("        public void OnBeforeSerialize() {}");
+            sb.AppendLine("        public void OnBeforeSerialize()");
+            sb.AppendLine("        {");
+            sb.AppendLine("        #if UNITY_EDITOR");
+
+            if (groupedFields.TryGetValue(classSymbol, out fields))
+                foreach (IFieldSymbol fs in fields)
+                {
+                    string name = fs.Name;
+                    string backing = "__" + name;
+                    ITypeSymbol t = fs.Type;
+
+                    if (t.TypeKind == TypeKind.Interface)
+                        sb.AppendLine($"            {backing} = {name} as UnityEngine.Object;");
+                    else if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToArray();");
+                    else if (t is INamedTypeSymbol named && named.IsGenericType &&
+                             named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>" &&
+                             named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToList();");
+                }
+
+            if (groupedProps.TryGetValue(classSymbol, out props))
+                foreach ((IPropertySymbol ps, _, _) in props)
+                {
+                    string name = ps.Name;
+                    string backing = "__" + name;
+                    ITypeSymbol t = ps.Type;
+
+                    if (t.TypeKind == TypeKind.Interface)
+                        sb.AppendLine($"            {backing} = {name} as UnityEngine.Object;");
+                    else if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToArray();");
+                    else if (t is INamedTypeSymbol named && named.IsGenericType &&
+                             named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>" &&
+                             named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToList();");
+                }
+
+            sb.AppendLine("        #endif");
+            sb.AppendLine("        }");
             sb.AppendLine();
             sb.AppendLine("        public void OnAfterDeserialize()");
             sb.AppendLine("        {");
 
-            if (fields != null)
-                foreach (IFieldSymbol f in fields)
+            // deserialize fields
+            if (groupedFields.TryGetValue(classSymbol, out fields))
+                foreach (IFieldSymbol fs in fields)
                 {
-                    string bn = "__" + f.Name;
-                    sb.AppendLine($"            {f.Name} = {bn} as {f.Type.ToDisplayString()};");
+                    string name = fs.Name;
+                    ITypeSymbol t = fs.Type;
+                    string backing = "__" + name;
+
+                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                    {
+                        string elem = arr.ElementType.ToDisplayString();
+                        sb.AppendLine($"            {name} = ({backing} ?? Array.Empty<UnityEngine.Object>()).Select(x => x as {elem}).ToArray();");
+                    }
+                    else if (t is INamedTypeSymbol named && named.IsGenericType
+                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
+                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    {
+                        string elem = named.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"            {name} = ({backing} ?? new List<UnityEngine.Object>()).Select(x => x as {elem}).ToList();");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"            {name} = {backing} as {t.ToDisplayString()};");
+                    }
                 }
 
-            if (props != null)
-                foreach ((IPropertySymbol p, bool _, string _) in props)
+            // deserialize props
+            if (groupedProps.TryGetValue(classSymbol, out props))
+                foreach ((IPropertySymbol ps, bool _, string _) in props)
                 {
-                    string bn = "__" + p.Name;
-                    sb.AppendLine($"            {p.Name} = {bn} as {p.Type.ToDisplayString()};");
+                    string name = ps.Name;
+                    ITypeSymbol t = ps.Type;
+                    string backing = "__" + name;
+
+                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                    {
+                        string elem = arr.ElementType.ToDisplayString();
+                        sb.AppendLine($"            {name} = ({backing} ?? Array.Empty<UnityEngine.Object>()).Select(x => x as {elem}).ToArray();");
+                    }
+                    else if (t is INamedTypeSymbol named && named.IsGenericType
+                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
+                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    {
+                        string elem = named.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"            {name} = ({backing} ?? new List<UnityEngine.Object>()).Select(x => x as {elem}).ToList();");
+                    }
+                    else
+                    {
+                        sb.AppendLine($"            {name} = {backing} as {t.ToDisplayString()};");
+                    }
                 }
 
             sb.AppendLine("        }");
             sb.AppendLine("    }");
             if (hasNs) sb.AppendLine("}");
 
-            string safeName = cls.ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
+            string hint = classSymbol
+                .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
                 .Replace("global::", "")
                 .Replace(".", "_")
-                .Replace("+", "_"); // for nested classes
+                .Replace("+", "_");
 
-            context.AddSource($"{safeName}_SerializeInterface.g.cs", SourceText.From(sb.ToString(), Encoding.UTF8));
+            context.AddSource($"{hint}_SerializeInterface.g.cs", SourceText.From(sb.ToString(), Encoding.UTF8));
         }
+    }
+
+    private static bool IsInterfaceCollection(ITypeSymbol t)
+    {
+        if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface) return true;
+
+        if (t is INamedTypeSymbol named && named.IsGenericType
+                                        && named.TypeArguments.Length == 1
+                                        && named.TypeArguments[0].TypeKind == TypeKind.Interface) return true;
+
+        return false;
     }
 
     private static bool InheritsFromUnityObject(INamedTypeSymbol? t)
@@ -165,7 +316,8 @@ public class SerializeInterfaceGenerator : ISourceGenerator
 
     private static bool IsUnitySerializable(INamedTypeSymbol t)
     {
-        return InheritsFromUnityObject(t) || t.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "System.SerializableAttribute");
+        return InheritsFromUnityObject(t)
+               || t.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "System.SerializableAttribute");
     }
 
     private class InterfaceMemberReceiver : ISyntaxReceiver

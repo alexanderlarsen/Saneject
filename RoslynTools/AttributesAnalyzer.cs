@@ -19,7 +19,7 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
     private static readonly DiagnosticDescriptor Rule2 = new(
         "INJ002",
         "[SerializeInterface] fields must be interfaces",
-        "Field '{0}' is marked with [SerializeInterface] but its type '{1}' is not an interface",
+        "Field '{0}' is marked with [SerializeInterface] but its type '{1}' is not an interface or a List/Array of interfaces",
         "Injection",
         DiagnosticSeverity.Error,
         true);
@@ -48,7 +48,21 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
     {
         if (context.Symbol is not IFieldSymbol field) return;
         if (!HasAttribute(field, "SerializeInterface")) return;
-        if (field.Type.TypeKind == TypeKind.Interface) return;
+        
+        ITypeSymbol typeSymbol = field.Type;
+
+        // skip single‐interface
+        if (typeSymbol.TypeKind == TypeKind.Interface)
+            return;
+
+        // skip interface[] 
+        if (typeSymbol is IArrayTypeSymbol { ElementType.TypeKind: TypeKind.Interface })
+            return;
+
+        // skip List<IFoo> or any single-T generic of an interface
+        if (typeSymbol is INamedTypeSymbol { IsGenericType: true, TypeArguments.Length: 1 } namedTypeSymbol
+            && namedTypeSymbol.TypeArguments[0].TypeKind == TypeKind.Interface)
+            return;
 
         context.ReportDiagnostic(Diagnostic.Create(Rule2, field.Locations[0], field.Name, field.Type.Name));
     }
