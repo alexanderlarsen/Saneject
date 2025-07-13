@@ -1,32 +1,44 @@
 ﻿<Project Sdk="Microsoft.NET.Sdk">
-  <PropertyGroup>
-    <TargetFramework>netstandard2.0</TargetFramework>
-    <LangVersion>latest</LangVersion>
-    <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
-	<EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
-	<GenerateDependencyFile>false</GenerateDependencyFile>
-	<DebugType>none</DebugType>
-    <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
-  </PropertyGroup>
+    <PropertyGroup>
+        <TargetFramework>netstandard2.0</TargetFramework>
+        <LangVersion>latest</LangVersion>
+        <EmitCompilerGeneratedFiles>true</EmitCompilerGeneratedFiles>
+        <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
+        <GenerateDependencyFile>false</GenerateDependencyFile>
+        <DebugType>none</DebugType>
+        <EnableDefaultCompileItems>false</EnableDefaultCompileItems>
+    </PropertyGroup>
 
-  <ItemGroup>
-    <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" PrivateAssets="all" />
-    <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all" />
-  </ItemGroup>
-  
-  <ItemGroup Condition="'$(Module)' == 'SerializeInterface'">
-    <Compile Include="SerializeInterfaceGenerator.cs" />
-  </ItemGroup>
+    <ItemGroup>
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all"/>
+    </ItemGroup>
 
-  <ItemGroup Condition="'$(Module)' == 'InterfaceProxy'">
-    <Compile Include="InterfaceProxyGenerator.cs" />
-  </ItemGroup>
-  
-  <PropertyGroup Condition="'$(Module)' == 'SerializeInterface'">
-	<AssemblyName>SerializeInterfaceGenerator</AssemblyName>
-  </PropertyGroup>
+    <ItemGroup Condition="'$(Module)' == 'SerializeInterface'">
+        <Compile Include="SerializeInterfaceGenerator.cs"/>
+    </ItemGroup>
 
-  <PropertyGroup Condition="'$(Module)' == 'InterfaceProxy'">
-    <AssemblyName>InterfaceProxyGenerator</AssemblyName>
-  </PropertyGroup>
+    <ItemGroup Condition="'$(Module)' == 'InterfaceProxy'">
+        <Compile Include="InterfaceProxyGenerator.cs"/>
+    </ItemGroup>
+
+    <ItemGroup Condition="'$(Module)' == 'AttributesAnalyzer'">
+        <Compile Include="AttributesAnalyzer.cs"/>
+    </ItemGroup>
+
+    <ItemGroup>
+        <Compile Include="AttributesAnalyzer.cs" />
+    </ItemGroup>
+
+    <PropertyGroup Condition="'$(Module)' == 'SerializeInterface'">
+        <AssemblyName>SerializeInterfaceGenerator</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Module)' == 'InterfaceProxy'">
+        <AssemblyName>InterfaceProxyGenerator</AssemblyName>
+    </PropertyGroup>
+
+    <PropertyGroup Condition="'$(Module)' == 'AttributesAnalyzer'">
+        <AssemblyName>AttributesAnalyzer</AssemblyName>
+    </PropertyGroup>
 </Project>
