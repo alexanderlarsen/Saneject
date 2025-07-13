@@ -56,7 +56,7 @@ namespace Plugins.Saneject.Editor.Inspectors
             string label = mixed ? "Mixed" : hasPrefab ? "Prefab" : "Scene";
             EditorGUILayout.LabelField("Scope Type", label);
 
-            SanejectInspectorUtils.DrawAllSerializedFieldsWithCorrectInterfaceOrder(serializedObject, target);
+            SanejectInspectorUtils.DrawAllSerializedFields(serializedObject, target);
 
             if (Application.isPlaying)
                 GUILayout.Label("Injection is editor-only. Exit Play Mode to inject.", EditorStyles.boldLabel);

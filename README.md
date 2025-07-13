@@ -27,6 +27,7 @@ Editor-time resolved serialized field dependency injection for Unity - keep your
     - [Component Filter Methods](#component-filter-methods)
     - [Object Filter Methods](#object-filter-methods)
     - [SerializeInterface](#serializeinterface)
+    - [MonoBehaviourInspector](#monobehaviourinspector)
     - [Interface Proxy Object](#interface-proxy-object)
     - [Global Scope](#global-scope)
     - [Roslyn Tools in Saneject](#roslyn-tools-in-saneject)
@@ -494,6 +495,17 @@ Unity lists fields from generated partials last, which would push every backing 
 A custom Inspector `SerializeInterfaceInspector` reorders them so each backing field appears directly beneath its corresponding interface field, preserving the original/intended layout.
 
 > ⚠️ `SerializeInterfaceInspector` draws all `MonoBehaviour` inspectors, which you may find too intrusive and it may override your own custom inspectors. If that’s the case, you can safely delete it and call `SanejectInspectorUtils.DrawAllSerializedFieldsWithCorrectInterfaceOrder(SerializedObject, Object)`  inside your own custom inspector instead.
+
+### MonoBehaviourInspector
+
+Unity lists fields from generated partials last, which would push every interface backing field to the bottom of the Inspector.
+
+A custom Inspector `MonoBehaviourInspector` reorders them so each backing field appears directly beneath its corresponding interface field, preserving the intended layout. 
+
+It also handles drawing of `[ReadOnly]` and `[Inject]` collections (lists and arrays) to remove editing capabilities from the collections, which Unity’s `PropertyDrawer` system does not support natively.
+
+> ⚠️ `MonoBehaviourInspector` overrides the inspector for all `MonoBehaviour` types, which may interfere with your own custom inspectors. If that’s an issue, you can safely delete it and instead call `SanejectInspectorUtils.DrawAllSerializedFields(SerializedObject, Object)` inside your own inspector or use the other utility methods in `SanejectInspectorUtils` individually for a more granular implementation.
+
 
 ### Interface Proxy Object
 

@@ -35,10 +35,12 @@ namespace Plugins.Saneject.Editor.Utility
         /// <summary>
         /// Draws all serialized fields for a <see cref="MonoBehaviour" />, ensuring interface backing fields generated
         /// in partial classes are displayed immediately after their associated interface field, not at the end of the inspector.
+        /// Due to limitations in Unity's PropertyDrawer system, <c>[Inject]</c> and <c>[ReadOnly]</c> collections (lists/arrays)
+        /// are also drawn here instead of via PropertyDrawers.
         /// </summary>
         /// <param name="serializedObject">The serialized object to draw fields from.</param>
         /// <param name="target">The target object being drawn.</param>
-        public static void DrawAllSerializedFieldsWithCorrectInterfaceOrder(
+        public static void DrawAllSerializedFields(
             SerializedObject serializedObject,
             Object target)
         {
@@ -69,15 +71,95 @@ namespace Plugins.Saneject.Editor.Utility
                     SerializedProperty prop = serializedObject.FindProperty(field.Name);
 
                     if (prop != null && drawn.Add(prop.propertyPath))
-                        EditorGUILayout.PropertyField(prop, true);
+                    {
+                        if (ShouldDrawAsReadOnlyCollection(field, prop))
+                            DrawReadOnlyCollection(prop);
+                        else
+                            EditorGUILayout.PropertyField(prop, true);
+                    }
                 }
             }
         }
 
         /// <summary>
-        /// Gets all instance fields for the type, base classes first, in normal declaration order.
+        /// Determines whether a collection field should be drawn as a non-editable list,
+        /// based on the presence of <c>[Inject]</c> or <c>[ReadOnly]</c> attributes.
         /// </summary>
-        private static FieldInfo[] GetOrderedFields(Type type)
+        public static bool ShouldDrawAsReadOnlyCollection(
+            FieldInfo field,
+            SerializedProperty prop)
+        {
+            return prop.isArray && prop.propertyType != SerializedPropertyType.String &&
+                   (field.IsDefined(typeof(ReadOnlyAttribute), false) ||
+                    field.IsDefined(typeof(InjectAttribute), false));
+        }
+
+        /// <summary>
+        /// Renders a list or array property in a read-only format, mimicking Unity's native collection layout but with editing disabled.
+        /// </summary>
+        public static void DrawReadOnlyCollection(SerializedProperty prop)
+        {
+            Rect fullRect = GUILayoutUtility.GetRect(1f, EditorGUIUtility.singleLineHeight, GUILayout.ExpandWidth(true));
+
+            // Background highlight excluding count
+            Rect bgRect = new(fullRect.x, fullRect.y, fullRect.width - 48, fullRect.height);
+
+            if (bgRect.Contains(Event.current.mousePosition))
+                EditorGUI.DrawRect(bgRect, EditorGUIUtility.isProSkin
+                    ? new Color(1f, 1f, 1f, 0.05f)
+                    : new Color(0f, 0f, 0f, 0.1f));
+
+            // Foldout toggle
+            Rect foldoutRect = new(fullRect.x, fullRect.y, fullRect.width - 48, fullRect.height);
+            prop.isExpanded = EditorGUI.Foldout(foldoutRect, prop.isExpanded, GUIContent.none, true);
+
+            // Label without indent (manually positioned)
+            Rect labelRect = new(foldoutRect.x + 1, foldoutRect.y, foldoutRect.width - 1, foldoutRect.height);
+            EditorGUI.LabelField(labelRect, ObjectNames.NicifyVariableName(prop.name), EditorStyles.boldLabel);
+
+            // Right-aligned item count
+            Rect countRect = new(fullRect.xMax - 48, fullRect.y, 48, fullRect.height);
+            EditorGUI.BeginDisabledGroup(true);
+            EditorGUI.IntField(countRect, GUIContent.none, prop.arraySize);
+            EditorGUI.EndDisabledGroup();
+
+            if (!prop.isExpanded)
+                return;
+
+            EditorGUI.BeginDisabledGroup(true);
+
+            for (int i = 0; i < prop.arraySize; i++)
+            {
+                SerializedProperty element = prop.GetArrayElementAtIndex(i);
+                string label = $"Element {i}";
+
+                switch (element.propertyType)
+                {
+                    case SerializedPropertyType.ObjectReference:
+                        EditorGUILayout.ObjectField(label, element.objectReferenceValue, typeof(Object), false);
+                        break;
+                    case SerializedPropertyType.String:
+                        EditorGUILayout.TextField(label, element.stringValue);
+                        break;
+                    case SerializedPropertyType.Integer:
+                        EditorGUILayout.IntField(label, element.intValue);
+                        break;
+                    case SerializedPropertyType.Float:
+                        EditorGUILayout.FloatField(label, element.floatValue);
+                        break;
+                    default:
+                        EditorGUILayout.PropertyField(element, new GUIContent(label), true);
+                        break;
+                }
+            }
+
+            EditorGUI.EndDisabledGroup();
+        }
+
+        /// <summary>
+        /// Returns all instance fields from a type and its base types (excluding <see cref="MonoBehaviour" />), in declaration order.
+        /// </summary>
+        public static FieldInfo[] GetOrderedFields(Type type)
         {
             List<FieldInfo> fields = new();
 
@@ -91,9 +173,9 @@ namespace Plugins.Saneject.Editor.Utility
         }
 
         /// <summary>
-        /// Returns true if this field should be shown in the inspector.
+        /// Determines whether a field should be displayed in the inspector, based on serialization and visibility attributes.
         /// </summary>
-        private static bool ShouldDrawField(FieldInfo fieldInfo)
+        public static bool ShouldDrawField(FieldInfo fieldInfo)
         {
             if (fieldInfo.IsDefined(typeof(NonSerializedAttribute), false))
                 return false;
@@ -108,9 +190,9 @@ namespace Plugins.Saneject.Editor.Utility
         }
 
         /// <summary>
-        /// True if field has <c>[SerializeInterface]</c>.
+        /// Returns true if the field is decorated with <c>[SerializeInterface]</c>, indicating a special backing field should be used.
         /// </summary>
-        private static bool IsSerializeInterfaceField(FieldInfo fieldInfo)
+        public static bool IsSerializeInterfaceField(FieldInfo fieldInfo)
         {
             return fieldInfo.IsDefined(typeof(SerializeInterfaceAttribute), false);
         }
