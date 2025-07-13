@@ -168,6 +168,9 @@ public class GameScope : Scope
 
 Saneject fills in the serialized fields. Press Play - no runtime container required.
 
+> ⚠️ **Custom Inspector Override**  
+> `MonoBehaviourInspector` overrides the inspector for all `MonoBehaviour` types to provide proper layout and read-only handling of injected and serialized interface fields. This is critical for intended UX, but may interfere with your own custom inspectors. If needed, you can safely delete it and instead call `SanejectInspectorUtils.DrawAllSerializedFields(SerializedObject, Object)` inside your own inspector, or use the utility methods individually for full control and granular integration.
+
 ## Demo Game
 
 A small three-scene demo game lives in `Assets/Plugins/Saneject/Demo`. It shows how to use Saneject in a real (but simple) game setup:
@@ -500,12 +503,12 @@ A custom Inspector `SerializeInterfaceInspector` reorders them so each backing f
 
 Unity lists fields from generated partials last, which would push every interface backing field to the bottom of the Inspector.
 
-A custom Inspector `MonoBehaviourInspector` reorders them so each backing field appears directly beneath its corresponding interface field, preserving the intended layout. 
+A custom Inspector `MonoBehaviourInspector` reorders them so each backing field appears directly beneath its corresponding interface field, preserving the intended layout.
 
 It also handles drawing of `[ReadOnly]` and `[Inject]` collections (lists and arrays) to remove editing capabilities from the collections, which Unity’s `PropertyDrawer` system does not support natively.
 
-> ⚠️ `MonoBehaviourInspector` overrides the inspector for all `MonoBehaviour` types, which may interfere with your own custom inspectors. If that’s an issue, you can safely delete it and instead call `SanejectInspectorUtils.DrawAllSerializedFields(SerializedObject, Object)` inside your own inspector or use the other utility methods in `SanejectInspectorUtils` individually for a more granular implementation.
-
+> ⚠️ **Custom Inspector Override**  
+> `MonoBehaviourInspector` overrides the inspector for all `MonoBehaviour` types to provide proper layout and read-only handling of injected and serialized interface fields. This is critical for intended UX, but may interfere with your own custom inspectors. If needed, you can safely delete it and instead call `SanejectInspectorUtils.DrawAllSerializedFields(SerializedObject, Object)` inside your own inspector, or use the utility methods individually for full control and granular integration.
 
 ### Interface Proxy Object
 
