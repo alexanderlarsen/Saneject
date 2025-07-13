@@ -688,7 +688,6 @@ Found under **Saneject → User Settings**, these let you customize editor and l
 - Platform coverage: so far tested on Windows (Mono + IL2CPP) and Android IL2CPP builds only.
 - Proxy-creation menu can be flaky. It relies on `SessionState` keys to survive a domain reload, and occasionally Unity clears them before the follow-up dialog appears. If that happens, the `.cs` proxy file is generated but no `.asset` is created, just run **Generate Interface Proxy** again on the script to finish the flow.
 - Circular dependency detection is not yet implemented.
-- No warnings if a field is marked `[Inject]` but lacks `[SerializeField]` or `[SerializeInterface]`.
 - Unity's object picker cannot filter by interface types in the Inspector.
 - Collection bindings (e.g. injecting `IEnumerable<T>`) is not supported yet.
 - Unity Package Manager (UPM) support is not yet available. Use `.unitypackage` or clone + copy for now. Planned for post-beta once the API and structure stabilize.
