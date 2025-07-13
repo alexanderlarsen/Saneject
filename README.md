@@ -29,7 +29,7 @@ Editor-time resolved serialized field dependency injection for Unity - keep your
     - [SerializeInterface](#serializeinterface)
     - [Interface Proxy Object](#interface-proxy-object)
     - [Global Scope](#global-scope)
-    - [Roslyn Source Generators in Saneject](#roslyn-source-generators-in-saneject)
+    - [Roslyn Tools in Saneject](#roslyn-tools-in-saneject)
     - [UX](#ux)
     - [User Settings](#user-settings)
 - [Limitations / Known Issues](#limitations--known-issues)
