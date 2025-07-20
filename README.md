@@ -28,6 +28,7 @@ Editor-time resolved serialized field dependency injection for Unity - keep your
     - [Object Filter Methods](#object-filter-methods)
     - [SerializeInterface](#serializeinterface)
     - [MonoBehaviourInspector](#monobehaviourinspector)
+    - [SanejectInspector API](#sanejectinspector-api)
     - [Interface Proxy Object](#interface-proxy-object)
     - [Global Scope](#global-scope)
     - [Roslyn Tools in Saneject](#roslyn-tools-in-saneject)
@@ -168,8 +169,12 @@ public class GameScope : Scope
 
 Saneject fills in the serialized fields. Press Play - no runtime container required.
 
-> ⚠️ **Custom Inspector Override**  
-> `MonoBehaviourInspector` overrides the inspector for all `MonoBehaviour` types to provide proper layout and read-only handling of injected and serialized interface fields. This is critical for intended UX, but may interfere with your own custom inspectors. If needed, you can safely delete it and instead call `SanejectInspectorUtils.DrawAllSerializedFields(SerializedObject, Object)` inside your own inspector, or use the utility methods individually for full control and granular integration.
+> ⚠️ **Global MonoBehaviour Inspector Override**  
+> A `MonoBehaviourInspector.cs` file overrides all `MonoBehaviour` inspectors to enforce intended UX (read-only injected fields, correct interface order and more).
+>
+> If you need to use your own custom inspector or it causes issues with other plugins, you can safely delete this file and call `SanejectInspector.DrawAllSerializedFields(serializedObject, target)` from your own inspector. You can also use lower-level helpers from `SanejectInspector` for full control.
+>
+> Saneject will still work if you delete it, but inspector UX will degrade. Use `SanejectInspector` methods directly in your own inspector for full control and to restore UX.
 
 ## Demo Game
 
@@ -490,32 +495,43 @@ In the Inspector this appears as a standard object picker labelled “Some Inter
 
 ![Interface field visible in the Inspector](Docs/SerializeInterfaceInspector.webp)
 
-#### InterfaceBackingFieldPropertyDrawer
-
-Formats that label, disables injected fields, and validates the selection.
-
-It also syncs the interface field with the `Object` backing field - which isn’t ideal to do in a `PropertyDrawer`. But the deserialization assignment only goes one way, so if you assign the interface field directly in code, the backing field would not update and the change wouldn't be reflected in the Inspector. So, having the `PropertyDrawer` sync in the other direction was the most practical solution I could come up with that didn't require user boilerplate.
-
-Now, if you assign the interface reference in code, the backing field and Inspector field will reflect the change automatically.
-
-#### SerializeInterfaceInspector
-
-Unity lists fields from generated partials last, which would push every backing field to the bottom of the Inspector.
-
-A custom Inspector `SerializeInterfaceInspector` reorders them so each backing field appears directly beneath its corresponding interface field, preserving the original/intended layout.
-
-> ⚠️ `SerializeInterfaceInspector` draws all `MonoBehaviour` inspectors, which you may find too intrusive and it may override your own custom inspectors. If that’s the case, you can safely delete it and call `SanejectInspectorUtils.DrawAllSerializedFieldsWithCorrectInterfaceOrder(SerializedObject, Object)`  inside your own custom inspector instead.
-
 ### MonoBehaviourInspector
 
-Unity lists fields from generated partials last, which would push every interface backing field to the bottom of the Inspector.
+Unity's default inspector draws serialized fields in declaration order, which causes interface backing fields generated in partials to appear at the bottom of the inspector. This breaks intended grouping and makes injected interfaces harder to interpret.
 
-A custom Inspector `MonoBehaviourInspector` reorders them so each backing field appears directly beneath its corresponding interface field, preserving the intended layout.
+`MonoBehaviourInspector` is a global `CustomEditor` for all `MonoBehaviour`s. It replaces Unity's default drawing with a call to `SanejectInspector.DrawAllSerializedFields`, which ensures:
 
-It also handles drawing of `[ReadOnly]` and `[Inject]` collections (lists and arrays) to remove editing capabilities from the collections, which Unity’s `PropertyDrawer` system does not support natively.
+- Interface backing fields appear directly after their interface declarations
+- `[ReadOnly]` and `[Inject]` collections are shown non-editable
+- Nested `[Serializable]` objects are rendered recursively with correct order
+- Backing fields are never shown out of place or detached from their interfaces
 
-> ⚠️ **Custom Inspector Override**  
-> `MonoBehaviourInspector` overrides the inspector for all `MonoBehaviour` types to provide proper layout and read-only handling of injected and serialized interface fields. This is critical for intended UX, but may interfere with your own custom inspectors. If needed, you can safely delete it and instead call `SanejectInspectorUtils.DrawAllSerializedFields(SerializedObject, Object)` inside your own inspector, or use the utility methods individually for full control and granular integration.
+> ⚠️ **Global MonoBehaviour Inspector Override**  
+> A `MonoBehaviourInspector.cs` file overrides all `MonoBehaviour` inspectors to enforce intended UX (read-only injected fields, correct interface order and more).
+>
+> If you need to use your own custom inspector or it causes issues with other plugins, you can safely delete this file and call `SanejectInspector.DrawAllSerializedFields(serializedObject, target)` from your own inspector. You can also use lower-level helpers from `SanejectInspector` for full control.
+>
+> Saneject will still work if you delete it, but inspector UX will degrade. Use `SanejectInspector` methods directly in your own inspector for full control and to restore UX.
+
+### SanejectInspector API
+
+The `SanejectInspector` class contains the full inspector rendering system. It reflects all serializable fields in declaration order, pairs them with their interface backings, and handles nested objects with recursion.
+
+You can use the full system:
+
+```csharp
+SanejectInspector.DrawAllSerializedFields(serializedObject, target);
+```  
+
+Or cherry-pick from its modular API for more control:
+
+- `DrawSerializedField` draws a single field with injection and nesting logic
+- `ShouldDrawField` filters hidden/non-serialized/internal fields
+- `DrawInterfaceObjectField` draws interface fields with component resolution
+- `DrawReadOnlyCollection` draws disabled list/array UIs
+- `DrawNestedSerializable` recursively draws nested `[Serializable]` classes
+
+Useful for advanced tooling, partial inspectors, or manual integration with other editor frameworks.
 
 ### Interface Proxy Object
 
