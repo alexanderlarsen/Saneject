@@ -287,13 +287,14 @@ namespace Plugins.Saneject.Editor.Core
             SerializedProperty serializedProperty = serializedObject.GetIterator();
 
             while (serializedProperty.NextVisible(enterChildren: true))
-                if (serializedProperty.IsInjectable(out string injectId, out Type targetType))
+                if (serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
                 {
                     bool isCollection = serializedProperty.isArray;
                     Object injectionTarget = serializedObject.targetObject;
 
                     Object[] dependencies = scope.GetAllMatchingDependencies(
-                            targetType,
+                            interfaceType,
+                            concreteType,
                             injectId,
                             isCollection,
                             injectionTarget)
@@ -315,8 +316,10 @@ namespace Plugins.Saneject.Editor.Core
                         serializedProperty.NullifyOrClearArray();
 
                         string idString = !string.IsNullOrEmpty(injectId) ? $"(ID: {injectId}) " : string.Empty;
-                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding '{targetType.Name}' {idString}in scope '{scope.name}'", scope);
-
+                        string concreteName = concreteType != null ? concreteType.Name : string.Empty;
+                        string interfaceName = interfaceType != null ? $"{interfaceType.Name}" : string.Empty;
+                        string separator = concreteType != null && interfaceType != null ? "/" : string.Empty;
+                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding '{interfaceName}{separator}{concreteName}' {idString}in scope '{scope.name}'", scope);
                         stats.missingBindings++;
                     }
                 }
@@ -329,23 +332,28 @@ namespace Plugins.Saneject.Editor.Core
         /// </summary>
         private static bool IsInjectable(
             this SerializedProperty serializedProperty,
-            out string propertyInjectId,
-            out Type targetType)
+            out Type interfaceType,
+            out Type concreteType,
+            out string injectId)
         {
-            propertyInjectId = null;
-            targetType = null;
+            interfaceType = null;
+            concreteType = null;
+            injectId = null;
 
             FieldInfo field = serializedProperty.GetFieldInfo();
 
             if (field == null || !field.IsDefined(typeof(SerializeField)))
                 return false;
 
+            concreteType = serializedProperty.isArray ? field.FieldType.GetElementType() : field.FieldType;
+
             InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
 
             if (interfaceBackingFieldAttribute is { IsInjected: true })
             {
-                targetType = interfaceBackingFieldAttribute.InterfaceType;
-                propertyInjectId = interfaceBackingFieldAttribute.InjectId;
+                interfaceType = interfaceBackingFieldAttribute.InterfaceType;
+                concreteType = null;
+                injectId = interfaceBackingFieldAttribute.InjectId;
                 return true;
             }
 
@@ -353,8 +361,7 @@ namespace Plugins.Saneject.Editor.Core
 
             if (injectAttribute != null && typeof(object).IsAssignableFrom(field.FieldType))
             {
-                targetType = serializedProperty.isArray ? field.FieldType.GetElementType() : field.FieldType;
-                propertyInjectId = injectAttribute.ID;
+                injectId = injectAttribute.ID;
                 return true;
             }
 

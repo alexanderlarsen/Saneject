@@ -36,12 +36,13 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// Resolves all dependencies matching target type from scope.
         /// </summary>
         public IEnumerable<Object> GetAllMatchingDependencies(
-            Type targetType,
+            Type interfaceType,
+            Type concreteType,
             string injectId,
             bool isCollection,
             Object injectionTarget)
         {
-            Binding binding = GetBindingRecursiveUpwards(injectId, targetType, isCollection, injectionTarget);
+            Binding binding = GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
             IEnumerable<Object> resolved = binding?.LocateDependencies(injectionTarget);
             return resolved;
         }
@@ -123,23 +124,28 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
         private Binding GetBindingRecursiveUpwards(
-            string id,
-            Type type,
+            Type interfaceType,
+            Type concreteType,
+            string injectId,
             bool isCollection,
-            Object injectionTarget = null)
+            Object injectionTarget)
         {
             if (Application.isPlaying)
                 throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
 
             // Find all matching bindings for the type
-            IEnumerable<Binding> matchingBindings = bindings.Where(b => !b.IsGlobal && b.Id == id && (b.InterfaceType == type || b.ConcreteType == type) && b.IsCollectionBinding == isCollection);
+            IEnumerable<Binding> matchingBindings = bindings.Where(binding =>
+                !binding.IsGlobal &&
+                binding.InterfaceType == interfaceType &&
+                (binding.ConcreteType == concreteType || concreteType == null) && // skip concrete check if we have an interface
+                binding.Id == injectId &&
+                binding.IsCollection == isCollection);
 
             // If we have an injection target, try to find a binding that passes target filters
             if (injectionTarget != null)
             {
-                foreach (Binding binding in matchingBindings)
-                    if (binding.PassesTargetFilters(injectionTarget))
-                        return binding;
+                foreach (Binding binding in matchingBindings.Where(binding => binding.PassesTargetFilters(injectionTarget)))
+                    return binding;
             }
             else
             {
@@ -150,7 +156,14 @@ namespace Plugins.Saneject.Runtime.Scopes
                     return binding;
             }
 
-            return ParentScope ? ParentScope.GetBindingRecursiveUpwards(id, type, isCollection, injectionTarget) : null;
+            return ParentScope
+                ? ParentScope.GetBindingRecursiveUpwards(
+                    interfaceType,
+                    concreteType,
+                    injectId,
+                    isCollection,
+                    injectionTarget)
+                : null;
         }
     }
 }

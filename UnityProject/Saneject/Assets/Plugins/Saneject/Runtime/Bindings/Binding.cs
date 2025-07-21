@@ -31,7 +31,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool IsGlobal { get; private set; }
         public bool RequiresInjectionTarget { get; private set; }
         public bool IsUsed { get; private set; }
-        public bool IsCollectionBinding { get; private set; }
+        public bool IsCollection { get; private set; }
 
         public void MarkCollectionBinding()
         {
@@ -41,7 +41,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 return;
             }
 
-            IsCollectionBinding = true;
+            IsCollection = true;
         }
 
         /// <summary>
@@ -58,7 +58,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public void MarkGlobal()
         {
-            if (IsCollectionBinding)
+            if (IsCollection)
             {
                 Debug.LogError("Saneject: Collection bindings cannot be marked as global.");
                 return;
