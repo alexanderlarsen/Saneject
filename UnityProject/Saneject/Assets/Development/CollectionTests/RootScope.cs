@@ -6,7 +6,7 @@ namespace Development.ReadOnlyCollectionDrawer
     {
         public override void Configure()
         {
-            Bind<ITest, TestMono>().AsCollection().FromScopeDescendants();
+            // Bind<ITest, TestMono>().AsCollection().FromScopeDescendants();
             Bind<ITest, TestMono>().FromScopeDescendants().WhereIsLastSibling();
         }
     }

@@ -33,39 +33,17 @@ namespace Plugins.Saneject.Runtime.Scopes
         }
 
         /// <summary>
-        /// For internal use by Saneject. Not intended for user code.
+        /// Resolves all dependencies matching target type from scope.
         /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public Binding GetBindingRecursiveUpwards(
-            string id,
-            Type type,
+        public IEnumerable<Object> GetAllMatchingDependencies(
+            Type targetType,
+            string injectId,
             bool isCollection,
-            Object injectionTarget = null)
+            Object injectionTarget)
         {
-            if (Application.isPlaying)
-                throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
-
-            // Find all matching bindings for the type
-            var matchingBindings = bindings.Where(b => !b.IsGlobal && b.Id == id && (b.InterfaceType == type || b.ConcreteType == type) && b.IsCollectionBinding == isCollection);
-    
-            // If we have an injection target, try to find a binding that passes target filters
-            if (injectionTarget != null)
-            {
-                foreach (Binding binding in matchingBindings)
-                {
-                    if (binding.PassesTargetFilters(injectionTarget))
-                        return binding;
-                }
-            }
-            else
-            {
-                // No injection target provided, return first matching binding (backwards compatibility)
-                Binding binding = matchingBindings.FirstOrDefault();
-                if (binding != null)
-                    return binding;
-            }
-
-            return ParentScope ? ParentScope.GetBindingRecursiveUpwards(id, type, isCollection, injectionTarget) : null;
+            Binding binding = GetBindingRecursiveUpwards(injectId, targetType, isCollection, injectionTarget);
+            IEnumerable<Object> resolved = binding?.LocateDependencies(injectionTarget);
+            return resolved;
         }
 
         /// <summary>
@@ -139,6 +117,40 @@ namespace Plugins.Saneject.Runtime.Scopes
             }
 
             return builder;
+        }
+
+        /// <summary>
+        /// For internal use by Saneject. Not intended for user code.
+        /// </summary>
+        private Binding GetBindingRecursiveUpwards(
+            string id,
+            Type type,
+            bool isCollection,
+            Object injectionTarget = null)
+        {
+            if (Application.isPlaying)
+                throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
+
+            // Find all matching bindings for the type
+            IEnumerable<Binding> matchingBindings = bindings.Where(b => !b.IsGlobal && b.Id == id && (b.InterfaceType == type || b.ConcreteType == type) && b.IsCollectionBinding == isCollection);
+
+            // If we have an injection target, try to find a binding that passes target filters
+            if (injectionTarget != null)
+            {
+                foreach (Binding binding in matchingBindings)
+                    if (binding.PassesTargetFilters(injectionTarget))
+                        return binding;
+            }
+            else
+            {
+                // No injection target provided, return first matching binding (backwards compatibility)
+                Binding binding = matchingBindings.FirstOrDefault();
+
+                if (binding != null)
+                    return binding;
+            }
+
+            return ParentScope ? ParentScope.GetBindingRecursiveUpwards(id, type, isCollection, injectionTarget) : null;
         }
     }
 }

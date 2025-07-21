@@ -1,9 +1,5 @@
-﻿using System;
-using System.Collections.Generic;
-using Plugins.Saneject.Runtime.Bindings;
-using Plugins.Saneject.Runtime.Scopes;
+﻿using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Editor.Extensions
 {
@@ -48,21 +44,6 @@ namespace Plugins.Saneject.Editor.Extensions
                 scope.SetParentScope();
                 scope.Configure();
             }
-        }
-        
-        /// <summary>
-        /// Resolves all dependencies matching target type from scope. 
-        /// </summary>
-        public static IEnumerable<Object> GetAllMatchingDependencies(
-            this Scope scope,
-            Type targetType,
-            string injectId,
-            bool isCollection,
-            Object injectionTarget)
-        {
-            Binding binding = scope.GetBindingRecursiveUpwards(injectId, targetType, isCollection, injectionTarget);
-            IEnumerable<Object> resolved = binding?.LocateDependencies(injectionTarget);
-            return resolved;
         }
 
         /// <summary>

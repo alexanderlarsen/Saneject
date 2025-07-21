@@ -602,12 +602,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e8554bc7e28f4fed8e424674cc64028e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  testMonosss:
-  - {fileID: 1527778238}
-  - {fileID: 823138081}
-  - {fileID: 2055455686}
-  - {fileID: 960518257}
-  - {fileID: 782796880}
+  testMonosss: []
   testMonoSingle: {fileID: 782796880}
   stringListReadOnly:
   - 1
@@ -625,18 +620,8 @@ MonoBehaviour:
   - 1
   - 2
   - 3
-  __testArray:
-  - {fileID: 1527778238}
-  - {fileID: 823138081}
-  - {fileID: 2055455686}
-  - {fileID: 960518257}
-  - {fileID: 782796880}
-  __testList:
-  - {fileID: 1527778238}
-  - {fileID: 823138081}
-  - {fileID: 2055455686}
-  - {fileID: 960518257}
-  - {fileID: 782796880}
+  __testArray: []
+  __testList: []
   __testSingle: {fileID: 782796880}
 --- !u!4 &2132546138
 Transform:

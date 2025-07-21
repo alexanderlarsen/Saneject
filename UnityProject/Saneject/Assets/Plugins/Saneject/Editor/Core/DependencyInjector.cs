@@ -315,7 +315,7 @@ namespace Plugins.Saneject.Editor.Core
                         serializedProperty.NullifyOrClearArray();
 
                         string idString = !string.IsNullOrEmpty(injectId) ? $"(ID: {injectId}) " : string.Empty;
-                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "")} binding '{targetType.Name}' {idString}in scope '{scope.name}'", scope);
+                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding '{targetType.Name}' {idString}in scope '{scope.name}'", scope);
 
                         stats.missingBindings++;
                     }
