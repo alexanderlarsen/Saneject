@@ -287,18 +287,16 @@ namespace Plugins.Saneject.Editor.Core
             SerializedProperty serializedProperty = serializedObject.GetIterator();
 
             while (serializedProperty.NextVisible(enterChildren: true))
-                if (serializedProperty.IsInjectable(
-                        out string injectId,
-                        out Type targetType))
+                if (serializedProperty.IsInjectable(out string injectId, out Type targetType))
                 {
                     bool isCollection = serializedProperty.isArray;
+                    Object injectionTarget = serializedObject.targetObject;
 
-                    Object[] dependencies = GetAllMatchingDependencies(
-                            scope,
+                    Object[] dependencies = scope.GetAllMatchingDependencies(
                             targetType,
                             injectId,
                             isCollection,
-                            serializedObject.targetObject)
+                            injectionTarget)
                         ?.ToArray();
 
                     bool foundDependencies = dependencies is { Length: > 0 };
@@ -314,9 +312,11 @@ namespace Plugins.Saneject.Editor.Core
                     }
                     else
                     {
-                        serializedProperty.NullifyOrClear();
+                        serializedProperty.NullifyOrClearArray();
+
                         string idString = !string.IsNullOrEmpty(injectId) ? $"(ID: {injectId}) " : string.Empty;
                         Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "")} binding '{targetType.Name}' {idString}in scope '{scope.name}'", scope);
+
                         stats.missingBindings++;
                     }
                 }
@@ -335,96 +335,30 @@ namespace Plugins.Saneject.Editor.Core
             propertyInjectId = null;
             targetType = null;
 
-            FieldInfo field = GetFieldFromProperty
-            (
-                serializedProperty.serializedObject.targetObject.GetType(),
-                serializedProperty.propertyPath
-            );
+            FieldInfo field = serializedProperty.GetFieldInfo();
 
-            if (field == null)
+            if (field == null || !field.IsDefined(typeof(SerializeField)))
                 return false;
 
-            if (field.GetCustomAttribute<SerializeField>() == null)
-                return false;
+            InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
 
-            InterfaceBackingFieldAttribute interfaceAttr = field.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
-
-            if (interfaceAttr is { IsInjected: true })
+            if (interfaceBackingFieldAttribute is { IsInjected: true })
             {
-                targetType = interfaceAttr.InterfaceType;
-                propertyInjectId = interfaceAttr.InjectId;
+                targetType = interfaceBackingFieldAttribute.InterfaceType;
+                propertyInjectId = interfaceBackingFieldAttribute.InjectId;
                 return true;
             }
 
-            InjectAttribute injectAttr = field.GetCustomAttribute<InjectAttribute>(true);
+            InjectAttribute injectAttribute = field.GetCustomAttribute<InjectAttribute>(true);
 
-            if (injectAttr != null && typeof(object).IsAssignableFrom(field.FieldType))
+            if (injectAttribute != null && typeof(object).IsAssignableFrom(field.FieldType))
             {
                 targetType = serializedProperty.isArray ? field.FieldType.GetElementType() : field.FieldType;
-                propertyInjectId = injectAttr.ID;
+                propertyInjectId = injectAttribute.ID;
                 return true;
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Returns the <see cref="FieldInfo" /> for a field with the given name, searching the entire class hierarchy (base types included).
-        /// </summary>
-        private static FieldInfo GetFieldInClassHierarchy(
-            Type type,
-            string fieldName)
-        {
-            while (type != null && type != typeof(object))
-            {
-                FieldInfo field = type.GetField(fieldName, BindingFlags.Instance | BindingFlags.Public | BindingFlags.NonPublic);
-
-                if (field != null)
-                    return field;
-
-                type = type.BaseType;
-            }
-
-            return null;
-        }
-
-        /// <summary>
-        /// Navigates property path and returns the corresponding <see cref="FieldInfo" /> (if present).
-        /// </summary>
-        private static FieldInfo GetFieldFromProperty(
-            Type type,
-            string propertyPath)
-        {
-            string[] parts = propertyPath.Split('.');
-            Type currentType = type;
-            FieldInfo field = null;
-
-            foreach (string part in parts)
-            {
-                field = GetFieldInClassHierarchy(currentType, part);
-
-                if (field == null)
-                    return null;
-
-                currentType = field.FieldType;
-            }
-
-            return field;
-        }
-
-        /// <summary>
-        /// Resolves a dependency via scope binding, with caching for faster processing.
-        /// </summary>
-        private static IEnumerable<Object> GetAllMatchingDependencies(
-            Scope scope,
-            Type targetType,
-            string injectId,
-            bool isCollection,
-            Object injectionTarget)
-        {
-            Binding binding = scope.GetBindingRecursiveUpwards(injectId, targetType, isCollection, injectionTarget);
-            IEnumerable<Object> resolved = binding?.LocateDependencies(injectionTarget);
-            return resolved;
         }
 
         /// <summary>

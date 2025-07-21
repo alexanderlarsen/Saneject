@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Runtime.Bindings
@@ -34,6 +35,12 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public void MarkCollectionBinding()
         {
+            if (IsGlobal)
+            {
+                Debug.LogError("Saneject: Collection bindings cannot be marked as global.");
+                return;
+            }
+
             IsCollectionBinding = true;
         }
 
@@ -51,6 +58,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public void MarkGlobal()
         {
+            if (IsCollectionBinding)
+            {
+                Debug.LogError("Saneject: Collection bindings cannot be marked as global.");
+                return;
+            }
+
             IsGlobal = true;
         }
 
