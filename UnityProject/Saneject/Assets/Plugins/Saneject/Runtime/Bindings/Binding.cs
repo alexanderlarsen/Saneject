@@ -91,5 +91,24 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             return filtered.FirstOrDefault();
         }
+
+        /// <summary>
+        /// Checks if this binding's target filters pass for the given injection target.
+        /// </summary>
+        /// <param name="target">The injection target to evaluate against target filters.</param>
+        /// <returns>True if all target filters pass or no target filters exist, false otherwise.</returns>
+        public bool PassesTargetFilters(Object target)
+        {
+            // If no target filters, binding always passes
+            if (targetFilters.Count == 0)
+                return true;
+
+            // If target filters exist but no target provided, binding fails
+            if (target == null)
+                return false;
+
+            // Check if all target filters pass
+            return targetFilters.All(f => f(target));
+        }
     }
 }

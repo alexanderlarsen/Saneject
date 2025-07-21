@@ -112,7 +112,7 @@ namespace Plugins.Saneject.Editor.Core
                 Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
                 return;
             }
-            
+
             allScopes.Configure();
 
             InjectionStats stats = new();
@@ -246,7 +246,6 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            Dictionary<CacheKey, Object> cache = new();
             InjectRecursive(rootScope.transform, rootScope);
             return;
 
@@ -268,7 +267,7 @@ namespace Plugins.Saneject.Editor.Core
                 foreach (MonoBehaviour monoBehaviour in currentTransform.GetComponents<MonoBehaviour>())
                 {
                     SerializedObject serializedObject = new(monoBehaviour);
-                    InjectSerializedObject(serializedObject, currentScope, cache, stats);
+                    InjectSerializedObject(serializedObject, currentScope, stats);
                     EditorUtility.SetDirty(monoBehaviour);
                 }
 
@@ -283,7 +282,6 @@ namespace Plugins.Saneject.Editor.Core
         private static void InjectSerializedObject(
             SerializedObject serializedObject,
             Scope scope,
-            Dictionary<CacheKey, Object> cache,
             InjectionStats stats)
         {
             SerializedProperty serializedProperty = serializedObject.GetIterator();
@@ -292,7 +290,7 @@ namespace Plugins.Saneject.Editor.Core
                 if (serializedProperty.propertyType == SerializedPropertyType.ObjectReference)
                     if (serializedProperty.IsEligibleForInjection(serializedObject.targetObject.GetType(), out string propertyInjectId, out Type targetType))
                     {
-                        Object resolved = ResolveDependency(scope, targetType, propertyInjectId, cache, serializedObject.targetObject);
+                        Object resolved = ResolveDependency(scope, targetType, propertyInjectId, serializedObject.targetObject);
 
                         if (resolved)
                         {
@@ -403,25 +401,10 @@ namespace Plugins.Saneject.Editor.Core
             Scope scope,
             Type targetType,
             string id,
-            Dictionary<CacheKey, Object> cache,
             Object injectionTarget)
         {
-            Binding binding = scope.GetBindingRecursiveUpwards(id, targetType);
-
-            if (binding == null)
-                return null;
-
-            // For bindings that require target, include injectionTarget in the key
-            CacheKey key = new(id, targetType, scope, binding.RequiresInjectionTarget ? injectionTarget : null);
-
-            if (cache.TryGetValue(key, out Object cached))
-                return cached;
-
-            Object resolved = binding.LocateDependency(injectionTarget);
-
-            if (resolved != null)
-                cache[key] = resolved;
-
+            Binding binding = scope.GetBindingRecursiveUpwards(id, targetType, injectionTarget);
+            Object resolved = binding?.LocateDependency(injectionTarget);
             return resolved;
         }
 
@@ -434,48 +417,6 @@ namespace Plugins.Saneject.Editor.Core
             public int injectedFields;
             public int missingBindings;
             public int unusedBindings;
-        }
-
-        /// <summary>
-        /// Cache key for ensuring uniqueness in the resolved dependency cache.
-        /// </summary>
-        private class CacheKey : IEquatable<CacheKey>
-        {
-            private readonly string id;
-            private readonly Type type;
-            private readonly Scope scope;
-            private readonly Object injectionTarget;
-
-            public CacheKey(
-                string id,
-                Type type,
-                Scope scope,
-                Object injectionTarget = null)
-            {
-                this.id = id;
-                this.type = type;
-                this.scope = scope;
-                this.injectionTarget = injectionTarget;
-            }
-
-            public bool Equals(CacheKey other)
-            {
-                return other != null
-                       && Equals(id, other.id)
-                       && type == other.type
-                       && scope == other.scope
-                       && Equals(injectionTarget, other.injectionTarget);
-            }
-
-            public override bool Equals(object obj)
-            {
-                return obj is CacheKey other && Equals(other);
-            }
-
-            public override int GetHashCode()
-            {
-                return HashCode.Combine(id, type, scope, injectionTarget);
-            }
         }
     }
 }

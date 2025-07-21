@@ -12,7 +12,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// <summary>
     /// Fluent builder for registering a component binding in a <see cref="Plugins.Saneject.Runtime.Scopes.Scope" />.
     /// Used to define how dependencies of type <c>T</c> (a <see cref="Component" />) are located and injected.
-    /// Typical usage: call <see cref="Scope.RegisterComponent{T}" /> or <see cref="Scope.RegisterComponent{TInterface,TConcrete}" />
+    /// Typical usage: call <see cref="Scope.Bind{T}" /> or <see cref="Scope.Bind{TInterface,TConcrete}" />
     /// and chain with methods on this builder to specify the search strategy for the dependency.
     /// </summary>
     /// <typeparam name="T">The <see cref="Component" /> type to bind.</typeparam>
@@ -39,7 +39,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             binding = new Binding(interfaceType, concreteType);
         }
 
-        // ---------- DEFAULT (SCOPE) METHODS START ----------
+        #region DEFAULT (SCOPE) METHODS
 
         /// <summary>
         /// Locate the component on the <see cref="Scope" />'s own <see cref="Transform" />.
@@ -115,15 +115,18 @@ namespace Plugins.Saneject.Runtime.Bindings
             return FromScopeSiblings();
         }
 
-        // ---------- DEFAULT (SCOPE) METHODS END ----------
+        #endregion
 
-        // ---------- SCOPE METHODS START ----------
+        #region SCOPE METHODS
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the <see cref="Scope" />'s own <see cref="Transform" />.
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeSelf()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeSelf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ => scope.transform.GetComponent<T>().WrapInEnumerable());
             return new FilterableBindingBuilder<T>(binding);
         }
@@ -133,6 +136,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeParent()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeParent)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 scope.transform.parent
                     ? scope.transform.parent.GetComponent<T>().WrapInEnumerable()
@@ -147,6 +153,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeAncestors()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeAncestors)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ => scope.transform.GetComponentsInParents<T>());
             return new FilterableBindingBuilder<T>(binding);
         }
@@ -156,6 +165,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeFirstChild()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeFirstChild)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 scope.transform.childCount > 0
                     ? scope.transform.GetChild(0).GetComponent<T>().WrapInEnumerable()
@@ -169,6 +181,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeLastChild()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeLastChild)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 scope.transform.childCount > 0
                     ? scope.transform.GetChild(scope.transform.childCount - 1).GetComponent<T>().WrapInEnumerable()
@@ -182,6 +197,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeChildWithIndex(int index)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeChildWithIndex)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 index >= 0 && index < scope.transform.childCount
                     ? scope.transform.GetChild(index).GetComponent<T>().WrapInEnumerable()
@@ -196,10 +214,16 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeDescendants(bool includeSelf = true)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeDescendants)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
-                includeSelf
+            {
+                return includeSelf
                     ? scope.transform.GetComponentsInChildren<T>(true)
-                    : scope.transform.GetComponentsInChildren<T>(true).Where(t => t is Component c && c.gameObject != scope.gameObject));
+                    : scope.transform.GetComponentsInChildren<T>(true)
+                        .Where(t => t is Component c && c.gameObject != scope.gameObject);
+            });
 
             return new FilterableBindingBuilder<T>(binding);
         }
@@ -209,6 +233,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromScopeSiblings()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromScopeSiblings)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 scope.transform.parent
                     ? scope.transform.parent.Cast<Transform>()
@@ -220,15 +247,18 @@ namespace Plugins.Saneject.Runtime.Bindings
             return new FilterableBindingBuilder<T>(binding);
         }
 
-        // ---------- SCOPE METHODS END ----------
+        #endregion
 
-        // ---------- ROOT METHODS START ----------
+        #region ROOT METHODS
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />.
         /// </summary>
         public FilterableBindingBuilder<T> FromRootSelf()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromRootSelf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ => scope.transform.root.GetComponent<T>().WrapInEnumerable());
             return new FilterableBindingBuilder<T>(binding);
         }
@@ -238,6 +268,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromRootFirstChild()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromRootFirstChild)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 scope.transform.root.childCount > 0
                     ? scope.transform.root.GetChild(0).GetComponent<T>().WrapInEnumerable()
@@ -251,6 +284,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromRootLastChild()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromRootLastChild)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 scope.transform.root.childCount > 0
                     ? scope.transform.root.GetChild(scope.transform.root.childCount - 1).GetComponent<T>().WrapInEnumerable()
@@ -264,6 +300,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromRootChildWithIndex(int index)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromRootChildWithIndex)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 index >= 0 && index < scope.transform.root.childCount
                     ? scope.transform.root.GetChild(index).GetComponent<T>().WrapInEnumerable()
@@ -278,6 +317,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromRootDescendants(bool includeSelf = true)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromRootDescendants)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 includeSelf
                     ? scope.transform.root.GetComponentsInChildren<T>(true)
@@ -286,9 +328,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             return new FilterableBindingBuilder<T>(binding);
         }
 
-        // ---------- ROOT METHODS END ----------
+        #endregion
 
-        // ---------- INJECTION TARGET METHODS START ----------
+        #region INJECTION TARGET METHODS
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the injection target's own <see cref="Transform" />.
@@ -296,6 +338,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetSelf()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetSelf)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -312,6 +357,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetParent()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetParent)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -329,6 +377,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetAncestors()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetAncestors)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -345,6 +396,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetFirstChild()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetFirstChild)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -361,6 +415,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetLastChild()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetLastChild)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -377,6 +434,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetChildWithIndex(int index)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetChildWithIndex)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -394,6 +454,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetDescendants(bool includeSelf = true)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetDescendants)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -412,6 +475,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromTargetSiblings()
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromTargetSiblings)}. '{typeof(T)}' is not a Component.");
+
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
@@ -427,15 +493,18 @@ namespace Plugins.Saneject.Runtime.Bindings
             return new FilterableBindingBuilder<T>(binding);
         }
 
-        // ---------- INJECTION TARGET METHODS END ----------
+        #endregion
 
-        // ---------- CUSTOM TARGET METHODS START ----------
+        #region CUSTOM TARGET METHODS
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />.
         /// </summary>
         public FilterableBindingBuilder<T> From(Transform target)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(From)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ => target.GetComponent<T>().WrapInEnumerable());
             return new FilterableBindingBuilder<T>(binding);
         }
@@ -445,6 +514,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromParentOf(Transform target)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromParentOf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 target.parent
                     ? target.parent.GetComponent<T>().WrapInEnumerable()
@@ -459,6 +531,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromAncestorsOf(Transform target)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromAncestorsOf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ => target.GetComponentsInParents<T>());
             return new FilterableBindingBuilder<T>(binding);
         }
@@ -468,6 +543,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromFirstChildOf(Transform target)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromFirstChildOf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 target.childCount > 0
                     ? target.GetChild(0).GetComponent<T>().WrapInEnumerable()
@@ -481,6 +559,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromLastChildOf(Transform target)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromLastChildOf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 target.childCount > 0
                     ? target.GetChild(target.childCount - 1).GetComponent<T>().WrapInEnumerable()
@@ -496,6 +577,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             Transform target,
             int index)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromChildWithIndexOf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 index >= 0 && index < target.childCount
                     ? target.GetChild(index).GetComponent<T>().WrapInEnumerable()
@@ -512,6 +596,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             Transform target,
             bool includeSelf = true)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromDescendantsOf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 includeSelf
                     ? target.GetComponentsInChildren<T>(true)
@@ -525,6 +612,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> FromSiblingsOf(Transform target)
         {
+            if (!typeof(Component).IsAssignableFrom(typeof(T)))
+                throw new InvalidOperationException($"You can only resolve types derived from Component using {nameof(FromSiblingsOf)}. '{typeof(T)}' is not a Component.");
+
             binding.SetLocator(_ =>
                 target.parent
                     ? target.parent.Cast<Transform>()
@@ -535,14 +625,15 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             return new FilterableBindingBuilder<T>(binding);
         }
-// ---------- CUSTOM TARGET METHODS END ----------
 
-// ---------- SPECIAL METHODS START ----------
+        #endregion
 
-/// <summary>
-/// Locate the <see cref="Component" /> anywhere in the scene using <see cref="Object.FindObjectsByType(Type, FindObjectsSortMode)" />.
-/// </summary>
-public FilterableBindingBuilder<T> FromAnywhereInScene()
+        #region SPECIAL METHODS
+
+        /// <summary>
+        /// Locate the <see cref="Component" /> anywhere in the scene using <see cref="Object.FindObjectsByType(Type, FindObjectsSortMode)" />.
+        /// </summary>
+        public FilterableBindingBuilder<T> FromAnywhereInScene()
         {
             binding.SetLocator(_ => Object.FindObjectsByType<T>(FindObjectsInactive.Include, FindObjectsSortMode.None));
             return new FilterableBindingBuilder<T>(binding);
@@ -610,6 +701,7 @@ public FilterableBindingBuilder<T> FromAnywhereInScene()
             binding.MarkGlobal();
             return this;
         }
-// ---------- SPECIAL METHODS END ----------
+
+        #endregion
     }
 }

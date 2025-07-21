@@ -6,7 +6,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 {
     /// <summary>
     /// Fluent builder for adding filters to a component binding created by <see cref="BindingBuilder{T}" />.
-    /// Enables fine-grained selection of <typeparamref name="T" /> (a <see cref="Component"/>) by <see cref="GameObject"/> name, tag, layer, active state, sibling index, or custom predicates.
+    /// Enables fine-grained selection of <typeparamref name="T" /> (a <see cref="Component" />) by <see cref="GameObject" /> name, tag, layer, active state, sibling index, or custom predicates.
     /// </summary>
     /// <typeparam name="T">The <see cref="Component" /> type to filter.</typeparam>
     public class FilterableBindingBuilder<T> where T : Object
@@ -33,7 +33,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereTagIs(string tag)
         {
-            binding.AddFilter(o => o is Component c && c.gameObject.CompareTag(tag));
+            binding.AddFilter(o => GetGameObject(o)?.CompareTag(tag) == true);
             return this;
         }
 
@@ -42,7 +42,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereNameIs(string name)
         {
-            binding.AddFilter(o => o is Component c && c.gameObject.name == name);
+            binding.AddFilter(o => GetObjectName(o) == name);
             return this;
         }
 
@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereNameContains(string substring)
         {
-            binding.AddFilter(o => o is Component c && c.gameObject.name.Contains(substring));
+            binding.AddFilter(o => GetObjectName(o)?.Contains(substring) == true);
             return this;
         }
 
@@ -60,7 +60,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereLayerIs(int layer)
         {
-            binding.AddFilter(o => o is Component c && c.gameObject.layer == layer);
+            binding.AddFilter(o => GetGameObject(o)?.layer == layer);
             return this;
         }
 
@@ -69,7 +69,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereActiveInHierarchy()
         {
-            binding.AddFilter(o => o is Component { gameObject: { activeInHierarchy: true } });
+            binding.AddFilter(o => GetGameObject(o)?.activeInHierarchy == true);
             return this;
         }
 
@@ -78,7 +78,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereInactiveInHierarchy()
         {
-            binding.AddFilter(o => o is Component { gameObject: { activeInHierarchy: false } });
+            binding.AddFilter(o => GetGameObject(o)?.activeInHierarchy == false);
             return this;
         }
 
@@ -87,7 +87,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereSiblingIndexIs(int index)
         {
-            binding.AddFilter(o => o is Component c && c.transform.GetSiblingIndex() == index);
+            binding.AddFilter(o => GetTransform(o)?.GetSiblingIndex() == index);
             return this;
         }
 
@@ -96,7 +96,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public FilterableBindingBuilder<T> WhereIsFirstSibling()
         {
-            binding.AddFilter(o => o is Component c && c.transform.GetSiblingIndex() == 0);
+            binding.AddFilter(o => GetTransform(o)?.GetSiblingIndex() == 0);
             return this;
         }
 
@@ -107,9 +107,8 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.AddFilter(o =>
             {
-                if (o is not Component c) return false;
-                Transform parent = c.transform.parent;
-                return parent && c.transform.GetSiblingIndex() == parent.childCount - 1;
+                Transform t = GetTransform(o);
+                return t && t.parent && t.GetSiblingIndex() == t.parent.childCount - 1;
             });
 
             return this;
@@ -123,14 +122,36 @@ namespace Plugins.Saneject.Runtime.Bindings
             binding.AddFilter(o => o is T t && predicate(t));
             return this;
         }
-        
-        /// <summary>
-        /// Filter results to only <see cref="Object" />s of type <typeparamref name="TO" />.
-        /// </summary>
-        public FilterableBindingBuilder<T> WhereIsOfType<TO>() where TO : Object
+
+        private static Transform GetTransform(Object o)
         {
-            binding.AddFilter(o => o is TO);
-            return this;
+            return o switch
+            {
+                Transform t => t,
+                Component c => c.transform,
+                GameObject go => go.transform,
+                _ => null
+            };
+        }
+
+        private static string GetObjectName(Object o)
+        {
+            return o switch
+            {
+                Component c => c.gameObject.name,
+                GameObject go => go.name,
+                _ => o?.name
+            };
+        }
+
+        private static GameObject GetGameObject(Object o)
+        {
+            return o switch
+            {
+                GameObject go => go,
+                Component c => c.gameObject,
+                _ => null
+            };
         }
     }
 }
