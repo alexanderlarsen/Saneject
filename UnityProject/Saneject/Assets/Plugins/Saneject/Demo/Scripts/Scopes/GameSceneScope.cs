@@ -15,19 +15,19 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     {
         public override void Configure()
         {
-            RegisterGlobalComponent<Player>().FromScopeDescendants();
-            RegisterGlobalComponent<EnemyManager>().FromScopeDescendants();
-            RegisterGlobalComponent<ScoreManager>().FromScopeDescendants();
-            RegisterGlobalComponent<CameraController>().FromScopeDescendants();
-            RegisterGlobalComponent<GameStateManager>().FromScopeDescendants();
+            Bind<Player>().AsGlobal().FromScopeDescendants();
+            Bind<EnemyManager>().AsGlobal().FromScopeDescendants();
+            Bind<ScoreManager>().AsGlobal().FromScopeDescendants();
+            Bind<CameraController>().AsGlobal().FromScopeDescendants();
+            Bind<GameStateManager>().AsGlobal().FromScopeDescendants();
 
-            RegisterComponent<ICameraFollowTarget, Player>().FromScopeDescendants();
-            RegisterComponent<IScoreUpdater, ScoreManager>().FromScopeDescendants();
-            RegisterComponent<IEnemyObservable, EnemyManager>().FromScopeDescendants();
+            Bind<ICameraFollowTarget, Player>().FromScopeDescendants();
+            Bind<IScoreUpdater, ScoreManager>().FromScopeDescendants();
+            Bind<IEnemyObservable, EnemyManager>().FromScopeDescendants();
 
-            RegisterComponent<UnityEngine.Camera>().FromAnywhereInScene();
+            Bind<UnityEngine.Camera>().FromAnywhereInScene();
 
-            RegisterObject<GameObject>().WithId("EnemyPrefab").FromAssetLoad("Assets/Plugins/Saneject/Demo/Prefabs/Enemy.prefab");
+            Bind<GameObject>().WithId("EnemyPrefab").FromAssetLoad("Assets/Plugins/Saneject/Demo/Prefabs/Enemy.prefab");
         }
     }
 }

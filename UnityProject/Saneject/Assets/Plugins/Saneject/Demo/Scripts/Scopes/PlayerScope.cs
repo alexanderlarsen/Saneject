@@ -11,8 +11,8 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     {
         public override void Configure()
         {
-            RegisterComponent<CharacterController>().FromScopeSelf();
-            RegisterComponent<PlayerInput>().FromScopeSelf();
+            Bind<CharacterController>().FromScopeSelf();
+            Bind<PlayerInput>().FromScopeSelf();
         }
     }
 }

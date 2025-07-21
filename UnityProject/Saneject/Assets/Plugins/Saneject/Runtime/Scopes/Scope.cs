@@ -18,8 +18,7 @@ namespace Plugins.Saneject.Runtime.Scopes
     [DisallowMultipleComponent]
     public abstract class Scope : MonoBehaviour
     {
-        private readonly Dictionary<BindingKey, Binding> bindings = new();
-        private readonly Dictionary<BindingKey, Binding> globalBindings = new();
+        private readonly HashSet<Binding> bindings = new();
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
@@ -38,15 +37,15 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Binding GetBindingRecursiveUpwards(
-            object id,
+            string id,
             Type type)
         {
             if (Application.isPlaying)
                 throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
 
-            BindingKey key = new(id, type);
+            Binding binding = bindings.FirstOrDefault(b => !b.IsGlobal && b.Id == id && (b.InterfaceType == type || b.ConcreteType == type));
 
-            if (bindings.TryGetValue(key, out Binding binding))
+            if (binding != null)
                 return binding;
 
             return ParentScope ? ParentScope.GetBindingRecursiveUpwards(id, type) : null;
@@ -58,7 +57,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         [EditorBrowsable(EditorBrowsableState.Never)]
         public List<Binding> GetGlobalBindings()
         {
-            return globalBindings.Values.ToList();
+            return bindings.Where(b => b.IsGlobal).ToList();
         }
 
         /// <summary>
@@ -74,7 +73,6 @@ namespace Plugins.Saneject.Runtime.Scopes
         public void Dispose()
         {
             bindings.Clear();
-            globalBindings.Clear();
             ParentScope = null;
         }
 
@@ -84,7 +82,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         [EditorBrowsable(EditorBrowsableState.Never)]
         public List<Binding> GetUnusedBindings()
         {
-            return bindings.Values.Where(binding => !binding.IsUsed).ToList();
+            return bindings.Where(binding => !binding.IsUsed).ToList();
         }
 
         /// <summary>
@@ -93,131 +91,17 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// Use this for dependencies that live in another scene or outside a prefab (and not in the Project folder as these can just be injected with <see cref="RegisterObject{T}" /> or <see cref="RegisterObject{TInterface, TConcrete}" />).
         /// </summary>
         /// <returns>A fluent builder to configure the binding</returns>
-        protected ComponentBindingBuilder<T> RegisterGlobalComponent<T>() where T : Component
+        protected BindingBuilder<T> Bind<T>() where T : Object
         {
-            ComponentBindingBuilder<T> builder = new(this, typeof(T));
-            builder.OnBindingCreated += RegisterBinding;
-            return builder;
+            BindingBuilder<T> builder = new(this, typeof(T));
 
-            void RegisterBinding(Binding binding)
+            if (!bindings.Add(builder.binding))
             {
-                BindingKey key = new(binding.id, typeof(T));
-
-                if (globalBindings.ContainsKey(key))
-                {
-                    string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate global bindings for '{typeof(T).Name}' (ID: {binding.id})";
-                    Debug.LogError(errorMessage);
-                }
-
-                globalBindings[key] = binding;
-                builder.OnBindingCreated -= RegisterBinding;
+                string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{typeof(T).Name}' (ID: {builder.binding.Id})";
+                Debug.LogError(errorMessage);
             }
-        }
 
-        /// <summary>
-        /// Registers a <see cref="UnityEngine.Object" /> as a global-scoped dependency.
-        /// Dependencies registered with this method are added to/serialized in a <see cref="Plugins.Saneject.Runtime.Global.SceneGlobalContainer" /> during injection, and added to <see cref="Plugins.Saneject.Runtime.Global.GlobalScope" /> at runtime.
-        /// Use this for dependencies that live in another scene or outside a prefab (and not in the Project folder as these can just be injected with <see cref="RegisterObject{T}" /> or <see cref="RegisterObject{TInterface, TConcrete}" />).
-        /// </summary>
-        /// <returns>A fluent builder to configure the binding</returns>
-        protected ObjectBindingBuilder<T> RegisterGlobalObject<T>() where T : Object
-        {
-            ObjectBindingBuilder<T> builder = new(typeof(T));
-            builder.OnBindingCreated += RegisterBinding;
             return builder;
-
-            void RegisterBinding(Binding binding)
-            {
-                BindingKey key = new(binding.id, typeof(T));
-
-                if (globalBindings.ContainsKey(key))
-                {
-                    string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate global bindings for '{typeof(T).Name}' (ID: {binding.id})";
-                    Debug.LogError(errorMessage);
-                }
-
-                globalBindings[key] = binding;
-                builder.OnBindingCreated -= RegisterBinding;
-            }
-        }
-
-        /// <summary>
-        /// Starts registration for a dependency of type <see cref="UnityEngine.Component" /> in this scope.
-        /// </summary>
-        /// <returns>A fluent builder to configure the binding</returns>
-        protected ComponentBindingBuilder<T> RegisterComponent<T>() where T : Component
-        {
-            ComponentBindingBuilder<T> builder = new(this, typeof(T));
-            builder.OnBindingCreated += RegisterBinding;
-            return builder;
-
-            void RegisterBinding(Binding binding)
-            {
-                BindingKey key = new(binding.id, typeof(T));
-
-                if (bindings.ContainsKey(key))
-                {
-                    string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{typeof(T).Name}' (ID: {binding.id})";
-                    Debug.LogError(errorMessage);
-                }
-
-                bindings[key] = binding;
-                builder.OnBindingCreated -= RegisterBinding;
-            }
-        }
-
-        /// <summary>
-        /// Starts registration for an interface-to-component binding in this scope.
-        /// Use this to resolve a dependency of interface type <typeparamref name="TInterface" /> with a concrete <typeparamref name="TConcrete" /> implementation.
-        /// </summary>
-        /// <returns>A fluent builder to configure the binding</returns>
-        protected ComponentBindingBuilder<TConcrete> RegisterComponent<TInterface, TConcrete>()
-            where TConcrete : Component, TInterface
-            where TInterface : class
-        {
-            ComponentBindingBuilder<TConcrete> builder = new(this, typeof(TInterface), typeof(TConcrete));
-            builder.OnBindingCreated += RegisterBinding;
-            return builder;
-
-            void RegisterBinding(Binding binding)
-            {
-                BindingKey key = new(binding.id, typeof(TInterface));
-
-                if (bindings.ContainsKey(key))
-                {
-                    string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{typeof(TInterface).Name}' (ID: {binding.id})";
-                    Debug.LogError(errorMessage);
-                }
-
-                bindings[key] = binding;
-                builder.OnBindingCreated -= RegisterBinding;
-            }
-        }
-
-        /// <summary>
-        /// Starts registration for a dependency of type <see cref="UnityEngine.Object" /> in this scope.
-        /// Returns a fluent builder to configure the binding.
-        /// </summary>
-        /// <returns>A fluent builder to configure the binding</returns>
-        protected ObjectBindingBuilder<T> RegisterObject<T>() where T : Object
-        {
-            ObjectBindingBuilder<T> builder = new(typeof(T));
-            builder.OnBindingCreated += RegisterBinding;
-            return builder;
-
-            void RegisterBinding(Binding binding)
-            {
-                BindingKey key = new(binding.id, typeof(T));
-
-                if (bindings.ContainsKey(key))
-                {
-                    string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{typeof(T).Name}' (ID: {binding.id})";
-                    Debug.LogError(errorMessage);
-                }
-
-                bindings[key] = binding;
-                builder.OnBindingCreated -= RegisterBinding;
-            }
         }
 
         /// <summary>
@@ -225,71 +109,19 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// Use this to resolve a dependency of interface type <typeparamref name="TInterface" /> with a concrete <typeparamref name="TConcrete" /> implementation.
         /// </summary>
         /// <returns>A fluent builder to configure the binding</returns>
-        protected ObjectBindingBuilder<TConcrete> RegisterObject<TInterface, TConcrete>()
+        protected BindingBuilder<TConcrete> Bind<TInterface, TConcrete>()
             where TConcrete : Object, TInterface
             where TInterface : class
         {
-            ObjectBindingBuilder<TConcrete> builder = new(typeof(TInterface), typeof(TConcrete));
-            builder.OnBindingCreated += RegisterBinding;
+            BindingBuilder<TConcrete> builder = new(this, typeof(TInterface), typeof(TConcrete));
+
+            if (!bindings.Add(builder.binding))
+            {
+                string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{typeof(TInterface).Name}' (ID: {builder.binding.Id})";
+                Debug.LogError(errorMessage);
+            }
+
             return builder;
-
-            void RegisterBinding(Binding binding)
-            {
-                BindingKey key = new(binding.id, typeof(TInterface));
-
-                if (bindings.ContainsKey(key))
-                {
-                    string errorMessage = $"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{typeof(TInterface).Name}' (ID: {binding.id})";
-                    Debug.LogError(errorMessage);
-                }
-
-                bindings[key] = binding;
-                builder.OnBindingCreated -= RegisterBinding;
-            }
-        }
-
-        /// <summary>
-        /// Key class to ensure uniqueness in bindings per scope.
-        /// </summary>
-        private class BindingKey : IEquatable<BindingKey>
-        {
-            private readonly object id;
-            private readonly Type type;
-
-            public BindingKey(
-                object id,
-                Type type)
-            {
-                this.id = id;
-                this.type = type;
-            }
-
-            public bool Equals(BindingKey other)
-            {
-                if (other is null)
-                    return false;
-
-                if (ReferenceEquals(this, other))
-                    return true;
-
-                return Equals(id, other.id) && type == other.type;
-            }
-
-            public override bool Equals(object obj)
-            {
-                if (obj is null)
-                    return false;
-
-                if (ReferenceEquals(this, obj))
-                    return true;
-
-                return obj.GetType() == GetType() && Equals((BindingKey)obj);
-            }
-
-            public override int GetHashCode()
-            {
-                return HashCode.Combine(id, type);
-            }
         }
     }
 }

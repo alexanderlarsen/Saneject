@@ -28,14 +28,14 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
 
         public override void Configure()
         {
-            RegisterObject<IGameStateObservable, GameStateManagerProxy>().FromInstance(gameStateManagerProxy);
-            RegisterObject<IScoreObservable, ScoreManagerProxy>().FromInstance(scoreManagerProxy);
-            RegisterObject<IEnemyObservable, EnemyManagerProxy>().FromInstance(enemyManagerProxy);
-            RegisterObject<ISceneManager, SceneManagerProxy>().FromInstance(sceneManagerProxy);
+            Bind<IGameStateObservable, GameStateManagerProxy>().FromInstance(gameStateManagerProxy);
+            Bind<IScoreObservable, ScoreManagerProxy>().FromInstance(scoreManagerProxy);
+            Bind<IEnemyObservable, EnemyManagerProxy>().FromInstance(enemyManagerProxy);
+            Bind<ISceneManager, SceneManagerProxy>().FromInstance(sceneManagerProxy);
 
-            RegisterComponent<TextMeshProUGUI>().WithId("enemiesTmp").FromTargetDescendants().WhereNameIs("EnemiesTmp");
-            RegisterComponent<TextMeshProUGUI>().WithId("scoreTmp").FromTargetDescendants().WhereNameIs("ScoreTmp");
-            RegisterComponent<Button>().WithId("restartButton").FromTargetDescendants().WhereNameIs("RestartButton");
+            Bind<TextMeshProUGUI>().WithId("enemiesTmp").FromTargetDescendants().WhereNameIs("EnemiesTmp");
+            Bind<TextMeshProUGUI>().WithId("scoreTmp").FromTargetDescendants().WhereNameIs("ScoreTmp");
+            Bind<Button>().WithId("restartButton").FromTargetDescendants().WhereNameIs("RestartButton");
         }
     }
 }

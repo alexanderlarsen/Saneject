@@ -123,7 +123,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (globalBindings.Count > 0)
                     foreach (Binding binding in globalBindings)
-                        Debug.LogWarning($"Saneject: Invalid global binding '{binding.concreteType.Name}' in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
+                        Debug.LogWarning($"Saneject: Invalid global binding '{binding.ConcreteType.Name}' in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
 
                 stats.unusedBindings += globalBindings.Count;
             }
@@ -164,9 +164,9 @@ namespace Plugins.Saneject.Editor.Core
                 if (UserSettings.LogUnusedBindings && unusedBindings.Count > 0)
                     foreach (Binding binding in unusedBindings)
                         Debug.LogWarning(
-                            binding.interfaceType != null
-                                ? $"Saneject: Unused binding '{binding.interfaceType.Name}/{binding.concreteType.Name}' in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it."
-                                : $"Saneject: Unused binding '{binding.concreteType.Name}' in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it.", scope);
+                            binding.InterfaceType != null
+                                ? $"Saneject: Unused binding '{binding.InterfaceType.Name}/{binding.ConcreteType.Name}' in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it."
+                                : $"Saneject: Unused binding '{binding.ConcreteType.Name}' in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it.", scope);
 
                 stats.unusedBindings += unusedBindings.Count;
             }

@@ -7,33 +7,49 @@ namespace Plugins.Saneject.Runtime.Bindings
 {
     /// <summary>
     /// Represents a user-defined binding between an interface and a concrete type in Saneject's DI system.
-    /// Encapsulates dependency location rules as defined by <see cref="Plugins.Saneject.Runtime.Bindings.ComponentBindingBuilder{T}" /> or <see cref="Plugins.Saneject.Runtime.Bindings.ObjectBindingBuilder{T}" />.
+    /// Encapsulates dependency location rules as defined by <see cref="BindingBuilder{T}" />.
     /// </summary>
     public class Binding
     {
-        public readonly Type interfaceType;
-        public readonly Type concreteType;
-        public readonly string id;
         private readonly List<Func<Object, bool>> filters = new();
-        private readonly Func<Object, IEnumerable<Object>> locator;
         private readonly List<Func<Object, bool>> targetFilters = new();
+
+        private Func<Object, IEnumerable<Object>> locator;
 
         public Binding(
             Type interfaceType,
-            Type concreteType,
-            string id,
-            Func<Object, IEnumerable<Object>> locator,
-            bool requiresInjectionTarget = false)
+            Type concreteType)
         {
-            this.interfaceType = interfaceType;
-            this.concreteType = concreteType;
-            this.id = id;
-            this.locator = locator;
-            RequiresInjectionTarget = requiresInjectionTarget;
+            InterfaceType = interfaceType;
+            ConcreteType = concreteType;
         }
 
-        public bool RequiresInjectionTarget { get; }
+        public Type InterfaceType { get; }
+        public Type ConcreteType { get; }
+        public string Id { get; private set; }
+        public bool IsGlobal { get; private set; }
+        public bool RequiresInjectionTarget { get; private set; }
         public bool IsUsed { get; private set; }
+
+        public void SetId(string id)
+        {
+            Id = id;
+        }
+
+        public void MarkGlobal()
+        {
+            IsGlobal = true;
+        }
+
+        public void MarkRequireInjectionTarget()
+        {
+            RequiresInjectionTarget = true;
+        }
+
+        public void SetLocator(Func<Object, IEnumerable<Object>> locator)
+        {
+            this.locator = locator;
+        }
 
         /// <summary>
         /// Add a filter for candidate <see cref="UnityEngine.Object" />s. Only objects passing all filters will be considered for resolution.
