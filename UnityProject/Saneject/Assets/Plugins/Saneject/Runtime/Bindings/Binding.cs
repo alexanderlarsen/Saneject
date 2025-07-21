@@ -31,21 +31,36 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool RequiresInjectionTarget { get; private set; }
         public bool IsUsed { get; private set; }
 
+        /// <summary>
+        /// Sets a custom ID for this binding to match against fields marked with <c>[Inject(Id = "...")]</c>.
+        /// </summary>
+        /// <param name="id">The custom ID string.</param>
         public void SetId(string id)
         {
             Id = id;
         }
 
+        /// <summary>
+        /// Marks this binding as global, making it eligible for use in <c>GlobalScope</c> resolution.
+        /// </summary>
         public void MarkGlobal()
         {
             IsGlobal = true;
         }
 
+        /// <summary>
+        /// Indicates that this binding must be resolved relative to an injection target <see cref="UnityEngine.Object"/>.
+        /// </summary>
         public void MarkRequireInjectionTarget()
         {
             RequiresInjectionTarget = true;
         }
 
+        /// <summary>
+        /// Sets the method that locates candidate objects for dependency resolution.
+        /// This delegate is invoked during injection passes.
+        /// </summary>
+        /// <param name="locator">A delegate that returns a collection of candidate <see cref="UnityEngine.Object"/> instances.</param>
         public void SetLocator(Func<Object, IEnumerable<Object>> locator)
         {
             this.locator = locator;
