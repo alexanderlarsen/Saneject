@@ -39,13 +39,14 @@ namespace Plugins.Saneject.Runtime.Scopes
         public Binding GetBindingRecursiveUpwards(
             string id,
             Type type,
+            bool isCollection,
             Object injectionTarget = null)
         {
             if (Application.isPlaying)
                 throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
 
             // Find all matching bindings for the type
-            var matchingBindings = bindings.Where(b => !b.IsGlobal && b.Id == id && (b.InterfaceType == type || b.ConcreteType == type));
+            var matchingBindings = bindings.Where(b => !b.IsGlobal && b.Id == id && (b.InterfaceType == type || b.ConcreteType == type) && b.IsCollectionBinding == isCollection);
     
             // If we have an injection target, try to find a binding that passes target filters
             if (injectionTarget != null)
@@ -64,7 +65,7 @@ namespace Plugins.Saneject.Runtime.Scopes
                     return binding;
             }
 
-            return ParentScope ? ParentScope.GetBindingRecursiveUpwards(id, type, injectionTarget) : null;
+            return ParentScope ? ParentScope.GetBindingRecursiveUpwards(id, type, isCollection, injectionTarget) : null;
         }
 
         /// <summary>

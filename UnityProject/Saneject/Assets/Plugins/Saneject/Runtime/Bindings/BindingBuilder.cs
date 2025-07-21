@@ -702,6 +702,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             return this;
         }
 
+        public BindingBuilder<T> AsCollection()
+        {
+            binding.MarkCollectionBinding();
+            return this;
+        }
+
         #endregion
     }
 }

@@ -13,8 +13,14 @@ namespace Development.ReadOnlyCollectionDrawer
         [SerializeInterface, Inject]
         private List<ITest> testList;
 
+        [SerializeField, Inject]
+        private TestMono[] testMonosss;
+
         [SerializeInterface, Inject]
         private ITest testSingle;
+
+        [SerializeField, Inject]
+        private TestMono testMonoSingle;
 
         [SerializeField, ReadOnly]
         private List<string> stringListReadOnly = new() { "1", "2", "3" };

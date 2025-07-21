@@ -201,7 +201,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 foreach (Binding globalBinding in globalBindings)
                 {
-                    Object resolved = globalBinding.LocateDependency();
+                    Object resolved = globalBinding.LocateDependencies().FirstOrDefault();
 
                     if (!resolved)
                     {
@@ -267,7 +267,7 @@ namespace Plugins.Saneject.Editor.Core
                 foreach (MonoBehaviour monoBehaviour in currentTransform.GetComponents<MonoBehaviour>())
                 {
                     SerializedObject serializedObject = new(monoBehaviour);
-                    InjectSerializedObject(serializedObject, currentScope, stats);
+                    serializedObject.InjectSerializedObject(currentScope, stats);
                     EditorUtility.SetDirty(monoBehaviour);
                 }
 
@@ -277,34 +277,49 @@ namespace Plugins.Saneject.Editor.Core
         }
 
         /// <summary>
-        /// Handles assignment of references to serialized fields/properties on MonoBehaviours.
+        /// Handles assignment of references to serialized fields/properties on MonoBehaviours, including nested Serializable classes.
         /// </summary>
         private static void InjectSerializedObject(
-            SerializedObject serializedObject,
+            this SerializedObject serializedObject,
             Scope scope,
             InjectionStats stats)
         {
             SerializedProperty serializedProperty = serializedObject.GetIterator();
 
             while (serializedProperty.NextVisible(enterChildren: true))
-                if (serializedProperty.propertyType == SerializedPropertyType.ObjectReference)
-                    if (serializedProperty.IsEligibleForInjection(serializedObject.targetObject.GetType(), out string propertyInjectId, out Type targetType))
-                    {
-                        Object resolved = ResolveDependency(scope, targetType, propertyInjectId, serializedObject.targetObject);
+                if (serializedProperty.IsInjectable(
+                        out string injectId,
+                        out Type targetType))
+                {
+                    bool isCollection = serializedProperty.isArray;
 
-                        if (resolved)
-                        {
-                            serializedProperty.objectReferenceValue = resolved;
-                            stats.injectedFields++;
-                        }
+                    Object[] dependencies = GetAllMatchingDependencies(
+                            scope,
+                            targetType,
+                            injectId,
+                            isCollection,
+                            serializedObject.targetObject)
+                        ?.ToArray();
+
+                    bool foundDependencies = dependencies is { Length: > 0 };
+
+                    if (foundDependencies)
+                    {
+                        if (isCollection)
+                            serializedProperty.SetCollection(dependencies);
                         else
-                        {
-                            serializedProperty.objectReferenceValue = null;
-                            string idString = !string.IsNullOrEmpty(propertyInjectId) ? $"(ID: {propertyInjectId}) " : string.Empty;
-                            Debug.LogError($"Saneject: Missing binding '{targetType.Name}' {idString}in scope '{scope.name}'", scope);
-                            stats.missingBindings++;
-                        }
+                            serializedProperty.objectReferenceValue = dependencies.FirstOrDefault();
+
+                        stats.injectedFields++;
                     }
+                    else
+                    {
+                        serializedProperty.NullifyOrClear();
+                        string idString = !string.IsNullOrEmpty(injectId) ? $"(ID: {injectId}) " : string.Empty;
+                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "")} binding '{targetType.Name}' {idString}in scope '{scope.name}'", scope);
+                        stats.missingBindings++;
+                    }
+                }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
@@ -312,16 +327,19 @@ namespace Plugins.Saneject.Editor.Core
         /// <summary>
         /// Returns true if the given field/property is eligible for injection and returns its metadata.
         /// </summary>
-        private static bool IsEligibleForInjection(
+        private static bool IsInjectable(
             this SerializedProperty serializedProperty,
-            Type rootType,
             out string propertyInjectId,
             out Type targetType)
         {
             propertyInjectId = null;
             targetType = null;
 
-            FieldInfo field = GetFieldFromProperty(rootType, serializedProperty.propertyPath);
+            FieldInfo field = GetFieldFromProperty
+            (
+                serializedProperty.serializedObject.targetObject.GetType(),
+                serializedProperty.propertyPath
+            );
 
             if (field == null)
                 return false;
@@ -340,9 +358,9 @@ namespace Plugins.Saneject.Editor.Core
 
             InjectAttribute injectAttr = field.GetCustomAttribute<InjectAttribute>(true);
 
-            if (injectAttr != null && typeof(Object).IsAssignableFrom(field.FieldType))
+            if (injectAttr != null && typeof(object).IsAssignableFrom(field.FieldType))
             {
-                targetType = field.FieldType;
+                targetType = serializedProperty.isArray ? field.FieldType.GetElementType() : field.FieldType;
                 propertyInjectId = injectAttr.ID;
                 return true;
             }
@@ -397,14 +415,15 @@ namespace Plugins.Saneject.Editor.Core
         /// <summary>
         /// Resolves a dependency via scope binding, with caching for faster processing.
         /// </summary>
-        private static Object ResolveDependency(
+        private static IEnumerable<Object> GetAllMatchingDependencies(
             Scope scope,
             Type targetType,
-            string id,
+            string injectId,
+            bool isCollection,
             Object injectionTarget)
         {
-            Binding binding = scope.GetBindingRecursiveUpwards(id, targetType, injectionTarget);
-            Object resolved = binding?.LocateDependency(injectionTarget);
+            Binding binding = scope.GetBindingRecursiveUpwards(injectId, targetType, isCollection, injectionTarget);
+            IEnumerable<Object> resolved = binding?.LocateDependencies(injectionTarget);
             return resolved;
         }
 
