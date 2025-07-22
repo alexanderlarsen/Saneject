@@ -100,6 +100,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public void MarkGlobal()
         {
+            if (!string.IsNullOrWhiteSpace(Id))
+                Debug.LogWarning($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' cannot have an ID. Ignoring the ID.", scope);
+
             if (IsGlobal)
             {
                 Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as global. Ignoring this call.", scope);
