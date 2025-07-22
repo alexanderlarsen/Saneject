@@ -10,6 +10,7 @@ namespace Development.ReadOnlyCollectionDrawer
             Bind<TestMono>().AsCollection().FromScopeDescendants();
             Bind<ITest, TestMono>().FromScopeDescendants().WhereIsLastSibling();
             Bind<TestMono>().WithId("LOL").FromScopeDescendants().WhereSiblingIndexIs(2);
+            Bind<TestMono>().AsGlobalSingleton().FromScopeDescendants().WhereSiblingIndexIs(2);
         }
     }
 }

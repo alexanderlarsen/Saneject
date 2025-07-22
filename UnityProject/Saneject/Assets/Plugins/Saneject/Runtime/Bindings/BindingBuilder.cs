@@ -696,7 +696,10 @@ namespace Plugins.Saneject.Runtime.Bindings
             return this;
         }
 
-        public BindingBuilder<T> AsGlobal()
+        /// <summary>
+        /// Marks this binding as a global singleton, making it eligible for use in <see cref="Plugins.Saneject.Runtime.Global.GlobalScope"/> resolution by adding it to a <see cref="Plugins.Saneject.Runtime.Global.SceneGlobalContainer"/>.
+        /// </summary>
+        public BindingBuilder<T> AsGlobalSingleton()
         {
             binding.MarkGlobal();
             return this;

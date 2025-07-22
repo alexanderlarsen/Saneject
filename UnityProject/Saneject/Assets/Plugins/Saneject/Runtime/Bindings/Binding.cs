@@ -37,6 +37,26 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool IsUsed { get; private set; }
         public bool IsCollection { get; private set; }
 
+        public static string ConstructBindingName(
+            Type interfaceType,
+            Type concreteType,
+            string id)
+        {
+            string output = string.Empty;
+
+            if (interfaceType != null && concreteType != null)
+                output = $"{interfaceType.Name} -> {concreteType.Name}";
+            else if (interfaceType == null && concreteType != null)
+                output = $"{concreteType.Name}";
+            else if (interfaceType != null)
+                output = $"{interfaceType.Name}";
+
+            if (id != null)
+                output += $" | ID: {id}";
+
+            return output;
+        }
+
         public void MarkCollectionBinding()
         {
             if (IsCollection)
@@ -76,7 +96,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         }
 
         /// <summary>
-        /// Marks this binding as global, making it eligible for use in <c>GlobalScope</c> resolution.
+        /// Marks this binding as a global singleton, making it eligible for use in <see cref="Plugins.Saneject.Runtime.Global.GlobalScope" /> resolution by adding it to a <see cref="Plugins.Saneject.Runtime.Global.SceneGlobalContainer" />.
         /// </summary>
         public void MarkGlobal()
         {
@@ -116,6 +136,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <param name="locator">A delegate that returns a collection of candidate <see cref="UnityEngine.Object" /> instances.</param>
         public void SetLocator(Func<Object, IEnumerable<Object>> locator)
         {
+            if (this.locator != null)
+            {
+                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has a locator and cannot specify multiple locators.", scope);
+                return;
+            }
+
             this.locator = locator;
         }
 
@@ -177,19 +203,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public string GetName()
         {
-            string output = string.Empty;
-
-            if (InterfaceType != null && ConcreteType != null)
-                output = $"{InterfaceType.Name} -> {ConcreteType.Name}";
-            else if (InterfaceType == null && ConcreteType != null)
-                output = $"{ConcreteType.Name}";
-            else if (InterfaceType != null && ConcreteType == null)
-                output = $"{InterfaceType.Name}";
-
-            if (Id != null)
-                output += $" | ID: {Id}";
-
-            return output;
+            return ConstructBindingName(InterfaceType, ConcreteType, Id);
         }
     }
 }

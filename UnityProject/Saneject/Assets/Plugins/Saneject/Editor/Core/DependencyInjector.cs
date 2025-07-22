@@ -312,7 +312,7 @@ namespace Plugins.Saneject.Editor.Core
                     {
                         serializedProperty.NullifyOrClearArray();
 
-                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.name}'", scope);
+                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.name}'", scope);
                         
                         stats.missingBindings++;
                     }
@@ -321,25 +321,6 @@ namespace Plugins.Saneject.Editor.Core
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
-        private static string ConstructBindingName(
-            Type interfaceType,
-            Type concreteType,
-            string id)
-        {
-            string output = string.Empty;
-
-            if (interfaceType != null && concreteType != null)
-                output = $"{interfaceType.Name} -> {concreteType.Name}";
-            else if (interfaceType == null && concreteType != null)
-                output = $"{concreteType.Name}";
-            else if (interfaceType != null)
-                output = $"{interfaceType.Name}";
-
-            if (id != null)
-                output += $" | ID: {id}";
-
-            return output;
-        }
 
         /// <summary>
         /// Returns true if the given field/property is eligible for injection and returns its metadata.
