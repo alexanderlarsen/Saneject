@@ -40,7 +40,7 @@ Editor-time resolved serialized field dependency injection for Unity - keep your
 
 ## What Is This?
 
-Saneject is a lightweight middle-ground between hand-wiring references and a full runtime DI container. It resolves dependencies in the Unity Editor using familiar DI syntax and workflows, writes them straight into serialized fields (including interfaces), and keeps your classes free of `GetComponent`, singletons, manual look-ups, etc. At runtime it’s just regular, serialized Unity objects - no reflection, no container, no startup hit.
+Saneject is a middle-ground between hand-wiring references and a full runtime DI container. It resolves dependencies in the Unity Editor using familiar DI syntax and workflows, writes them straight into serialized fields (including interfaces), and keeps your classes free of `GetComponent`, singletons, manual look-ups, etc. At runtime it’s just regular, serialized Unity objects - no reflection, no container, no startup hit.
 
 ## Why Another DI Tool?
 
