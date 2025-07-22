@@ -19,7 +19,7 @@ namespace Development.ReadOnlyCollectionDrawer
         [SerializeInterface, Inject]
         private ITest testSingle;
 
-        [SerializeField, Inject]
+        [SerializeField, Inject("LOL")]
         private TestMono testMonoSingle;
 
         [SerializeField, ReadOnly]

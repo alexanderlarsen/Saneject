@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -12,6 +13,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// </summary>
     public class Binding
     {
+        private readonly Scope scope;
         private readonly List<Func<Object, bool>> filters = new();
         private readonly List<Func<Object, bool>> targetFilters = new();
 
@@ -19,8 +21,10 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public Binding(
             Type interfaceType,
-            Type concreteType)
+            Type concreteType,
+            Scope scope)
         {
+            this.scope = scope;
             InterfaceType = interfaceType;
             ConcreteType = concreteType;
         }
@@ -35,9 +39,15 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public void MarkCollectionBinding()
         {
+            if (IsCollection)
+            {
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as a collection binding. Ignoring this call.", scope);
+                return;
+            }
+
             if (IsGlobal)
             {
-                Debug.LogError("Saneject: Collection bindings cannot be marked as global.");
+                Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' cannot be marked as a collection.", scope);
                 return;
             }
 
@@ -47,10 +57,22 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Sets a custom ID for this binding to match against fields marked with <c>[Inject(Id = "...")]</c>.
         /// </summary>
-        /// <param name="id">The custom ID string.</param>
-        public void SetId(string id)
+        /// <param name="newId">The custom ID string.</param>
+        public void SetId(string newId)
         {
-            Id = id;
+            if (IsGlobal)
+            {
+                Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' cannot have an ID.", scope);
+                return;
+            }
+
+            if (!string.IsNullOrWhiteSpace(Id))
+            {
+                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has an ID '{Id}' and cannot have multiple IDs.", scope);
+                return;
+            }
+
+            Id = newId;
         }
 
         /// <summary>
@@ -58,9 +80,15 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public void MarkGlobal()
         {
+            if (IsGlobal)
+            {
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as global. Ignoring this call.", scope);
+                return;
+            }
+
             if (IsCollection)
             {
-                Debug.LogError("Saneject: Collection bindings cannot be marked as global.");
+                Debug.LogError($"Saneject: Collection binding ({GetName()}) in scope '{scope.GetType().Name}' cannot be marked as global.", scope);
                 return;
             }
 
@@ -72,6 +100,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public void MarkRequireInjectionTarget()
         {
+            if (RequiresInjectionTarget)
+            {
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as requiring an injection target. Ignoring this call.", scope);
+                return;
+            }
+
             RequiresInjectionTarget = true;
         }
 
@@ -137,12 +171,25 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (targetFilters.Count == 0)
                 return true;
 
-            // If target filters exist but no target provided, binding fails
-            if (target == null)
-                return false;
+            // If target filters exist but no target provided, binding fails & check if all target filters pass
+            return target != null && targetFilters.All(f => f(target));
+        }
 
-            // Check if all target filters pass
-            return targetFilters.All(f => f(target));
+        public string GetName()
+        {
+            string output = string.Empty;
+
+            if (InterfaceType != null && ConcreteType != null)
+                output = $"{InterfaceType.Name} -> {ConcreteType.Name}";
+            else if (InterfaceType == null && ConcreteType != null)
+                output = $"{ConcreteType.Name}";
+            else if (InterfaceType != null && ConcreteType == null)
+                output = $"{InterfaceType.Name}";
+
+            if (Id != null)
+                output += $" | ID: {Id}";
+
+            return output;
         }
     }
 }

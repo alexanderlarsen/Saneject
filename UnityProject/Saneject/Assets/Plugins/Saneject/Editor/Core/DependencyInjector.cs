@@ -123,7 +123,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (globalBindings.Count > 0)
                     foreach (Binding binding in globalBindings)
-                        Debug.LogWarning($"Saneject: Invalid global binding '{binding.ConcreteType.Name}' in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
+                        Debug.LogWarning($"Saneject: Invalid global binding ({binding.GetName()}) in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
 
                 stats.unusedBindings += globalBindings.Count;
             }
@@ -163,10 +163,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (UserSettings.LogUnusedBindings && unusedBindings.Count > 0)
                     foreach (Binding binding in unusedBindings)
-                        Debug.LogWarning(
-                            binding.InterfaceType != null
-                                ? $"Saneject: Unused binding '{binding.InterfaceType.Name}/{binding.ConcreteType.Name}' in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it."
-                                : $"Saneject: Unused binding '{binding.ConcreteType.Name}' in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it.", scope);
+                        Debug.LogWarning($"Saneject: Unused binding ({binding.GetName()}) in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it.", scope);
 
                 stats.unusedBindings += unusedBindings.Count;
             }
@@ -195,7 +192,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (scope.gameObject.IsPrefab())
                 {
-                    Debug.LogWarning($"Saneject: Global bindings found on prefab scope '{scope.gameObject.name}'. These are ignored because the system can only inject global bindings from scenes.", scope.gameObject);
+                    Debug.LogWarning($"Saneject: Global bindings found on prefab scope '{scope.gameObject.name}'. These are ignored because the system can only inject global bindings from scenes.", scope);
                     continue;
                 }
 
@@ -205,7 +202,7 @@ namespace Plugins.Saneject.Editor.Core
 
                     if (!resolved)
                     {
-                        Debug.LogError($"Saneject: Could not resolve global dependency in scope {scope.gameObject.name}");
+                        Debug.LogError($"Saneject: Could not resolve global dependency in scope '{scope.gameObject.name}'", scope);
                         continue;
                     }
 
@@ -219,7 +216,7 @@ namespace Plugins.Saneject.Editor.Core
                         if (field != null)
                             field.SetValue(sceneGlobalContainer, true);
                         else
-                            Debug.LogError("Saneject: Could not find 'createdByDependencyInjector' field.");
+                            Debug.LogError("Saneject: Could not find 'createdByDependencyInjector' field.", sceneGlobalContainer);
 
                         EditorSceneManager.MarkSceneDirty(go.scene);
                     }
@@ -315,16 +312,33 @@ namespace Plugins.Saneject.Editor.Core
                     {
                         serializedProperty.NullifyOrClearArray();
 
-                        string idString = !string.IsNullOrEmpty(injectId) ? $"(ID: {injectId}) " : string.Empty;
-                        string concreteName = concreteType != null ? concreteType.Name : string.Empty;
-                        string interfaceName = interfaceType != null ? $"{interfaceType.Name}" : string.Empty;
-                        string separator = concreteType != null && interfaceType != null ? "/" : string.Empty;
-                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding '{interfaceName}{separator}{concreteName}' {idString}in scope '{scope.name}'", scope);
+                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.name}'", scope);
+                        
                         stats.missingBindings++;
                     }
                 }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static string ConstructBindingName(
+            Type interfaceType,
+            Type concreteType,
+            string id)
+        {
+            string output = string.Empty;
+
+            if (interfaceType != null && concreteType != null)
+                output = $"{interfaceType.Name} -> {concreteType.Name}";
+            else if (interfaceType == null && concreteType != null)
+                output = $"{concreteType.Name}";
+            else if (interfaceType != null)
+                output = $"{interfaceType.Name}";
+
+            if (id != null)
+                output += $" | ID: {id}";
+
+            return output;
         }
 
         /// <summary>

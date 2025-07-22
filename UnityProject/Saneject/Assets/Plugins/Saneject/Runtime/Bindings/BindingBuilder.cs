@@ -27,7 +27,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             Type concreteType)
         {
             this.scope = scope;
-            binding = new Binding(null, concreteType);
+            binding = new Binding(null, concreteType, scope);
         }
 
         public BindingBuilder(
@@ -36,7 +36,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             Type concreteType)
         {
             this.scope = scope;
-            binding = new Binding(interfaceType, concreteType);
+            binding = new Binding(interfaceType, concreteType, scope);
         }
 
         #region DEFAULT (SCOPE) METHODS
