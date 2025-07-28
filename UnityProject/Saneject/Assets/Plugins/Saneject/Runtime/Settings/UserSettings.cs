@@ -16,7 +16,7 @@ namespace Plugins.Saneject.Runtime.Settings
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
-        
+
         public static bool AskBeforePrefabInjection
         {
             get => GetBool(defaultValue: true);

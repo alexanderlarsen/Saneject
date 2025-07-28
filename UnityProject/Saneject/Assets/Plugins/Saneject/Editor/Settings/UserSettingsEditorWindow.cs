@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Plugins.Saneject.Editor.Settings
 {
     /// <summary>
-    /// Editor window for configuring Saneject <see cref="UserSettings"/> in the Unity Editor.
+    /// Editor window for configuring Saneject <see cref="UserSettings" /> in the Unity Editor.
     /// Allows toggling editor and injection-related settings that affect Saneject's editor tooling and diagnostics.
     /// </summary>
     public class UserSettingsEditorWindow : EditorWindow
@@ -21,17 +21,21 @@ namespace Plugins.Saneject.Editor.Settings
             editorWindow.Show();
         }
 
-        private static void DrawToggleWithRepaint(
+        private static void DrawToggleWithTooltip(
             string label,
+            string tooltip,
             bool currentValue,
-            Action<bool> onChanged)
+            Action<bool> onChanged,
+            bool repaintInspectors = false)
         {
-            bool newValue = EditorGUILayout.ToggleLeft(label, currentValue);
+            bool newValue = EditorGUILayout.ToggleLeft(new GUIContent(label, tooltip), currentValue);
 
             if (newValue != currentValue)
             {
                 onChanged(newValue);
-                RepaintAllInspectors();
+
+                if (repaintInspectors)
+                    RepaintAllInspectors();
             }
         }
 
@@ -48,36 +52,79 @@ namespace Plugins.Saneject.Editor.Settings
 
             EditorGUILayout.LabelField("Injection", EditorStyles.boldLabel);
 
-            UserSettings.AskBeforeSceneInjection = EditorGUILayout.ToggleLeft("Ask Before Scene Injection", UserSettings.AskBeforeSceneInjection);
-            UserSettings.AskBeforePrefabInjection = EditorGUILayout.ToggleLeft("Ask Before Prefab Injection", UserSettings.AskBeforePrefabInjection);
+            DrawToggleWithTooltip(
+                label: "Ask Before Scene Injection",
+                tooltip: "Show a confirmation dialog before injecting dependencies into the scene.",
+                currentValue: UserSettings.AskBeforeSceneInjection,
+                onChanged: newValue => UserSettings.AskBeforeSceneInjection = newValue
+            );
+
+            DrawToggleWithTooltip(
+                label: "Ask Before Prefab Injection",
+                tooltip: "Show a confirmation dialog before injecting prefab dependencies.",
+                currentValue: UserSettings.AskBeforePrefabInjection,
+                onChanged: newValue => UserSettings.AskBeforePrefabInjection = newValue
+            );
 
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
 
-            DrawToggleWithRepaint(
-                "Show Injected Fields",
-                UserSettings.ShowInjectedFields,
-                newValue => UserSettings.ShowInjectedFields = newValue
+            DrawToggleWithTooltip(
+                label: "Show Injected Fields",
+                tooltip: "Show [Inject] fields in the Inspector.",
+                currentValue: UserSettings.ShowInjectedFields,
+                onChanged: newValue => UserSettings.ShowInjectedFields = newValue,
+                repaintInspectors: true
             );
 
-            DrawToggleWithRepaint(
-                "Show Help Boxes",
-                UserSettings.ShowHelpBoxes,
-                newValue => UserSettings.ShowHelpBoxes = newValue
+            DrawToggleWithTooltip(
+                label: "Show Help Boxes",
+                tooltip: "Show help boxes in the Inspector.",
+                currentValue: UserSettings.ShowHelpBoxes,
+                onChanged: newValue => UserSettings.ShowHelpBoxes = newValue,
+                repaintInspectors: true
             );
 
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Play Mode Logging (Editor Only)", EditorStyles.boldLabel);
 
-            UserSettings.LogProxyResolve = EditorGUILayout.ToggleLeft("Log On Proxy Instance Resolve", UserSettings.LogProxyResolve);
-            UserSettings.LogGlobalScopeRegistration = EditorGUILayout.ToggleLeft("Log Global Scope Register/Unregister", UserSettings.LogGlobalScopeRegistration);
+            DrawToggleWithTooltip(
+                label: "Log On Proxy Instance Resolve",
+                tooltip: "Log when a proxy instance is resolved at runtime.",
+                currentValue: UserSettings.LogProxyResolve,
+                onChanged: newValue => UserSettings.LogProxyResolve = newValue
+            );
+
+            DrawToggleWithTooltip(
+                label: "Log Global Scope Register/Unregister",
+                tooltip: "Log when objects are registered or unregistered with the global scope at runtime.",
+                currentValue: UserSettings.LogGlobalScopeRegistration,
+                onChanged: newValue => UserSettings.LogGlobalScopeRegistration = newValue
+            );
 
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Editor Logging", EditorStyles.boldLabel);
 
-            UserSettings.LogInjectionStats = EditorGUILayout.ToggleLeft("Log Injection Stats", UserSettings.LogInjectionStats);
-            UserSettings.LogPrefabSkippedDuringSceneInjection = EditorGUILayout.ToggleLeft("Log Prefab Skipped During Scene Injection", UserSettings.LogPrefabSkippedDuringSceneInjection);
-            UserSettings.LogUnusedBindings = EditorGUILayout.ToggleLeft("Log Unused Bindings", UserSettings.LogUnusedBindings);
+            DrawToggleWithTooltip(
+                label: "Log Injection Stats",
+                tooltip: "Log stats on injection complete: Number of scopes processed, global dependencies added, injected fields, missing bindings, unused bindings, and injection duration.",
+                currentValue: UserSettings.LogInjectionStats,
+                onChanged: newValue => UserSettings.LogInjectionStats = newValue
+            );
+
+            DrawToggleWithTooltip(
+                label: "Log Prefab Skipped During Scene Injection",
+                tooltip: "Log when a prefab is skipped during scene injection.",
+                currentValue: UserSettings.LogPrefabSkippedDuringSceneInjection,
+                onChanged: newValue => UserSettings.LogPrefabSkippedDuringSceneInjection = newValue
+            );
+
+            DrawToggleWithTooltip(
+                label: "Log Unused Bindings",
+                tooltip: "Log a message when a binding is unused during scene injection. This can happen when a binding is registered in a scope but never used in the scene.",
+                currentValue: UserSettings.LogUnusedBindings,
+                onChanged: newValue => UserSettings.LogUnusedBindings = newValue
+            );
 
             EditorGUILayout.EndScrollView();
         }
