@@ -53,10 +53,15 @@ namespace Plugins.Saneject.Demo.Scripts.UI.Enemy
 
     public partial class EnemyMarker : ISerializationCallbackReceiver
     {
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IMainCamera), isInjected: true, injectId: null)]
-        private UnityEngine.Object __mainCamera;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IMainCamera), isInjected: true, injectId: null)]
+        private Object __mainCamera;
 
-        public void OnBeforeSerialize() { }
+        public void OnBeforeSerialize()
+        {
+    #if UNITY_EDITOR
+            __mainCamera = mainCamera as Object;
+    #endif
+        }
 
         public void OnAfterDeserialize()
         {

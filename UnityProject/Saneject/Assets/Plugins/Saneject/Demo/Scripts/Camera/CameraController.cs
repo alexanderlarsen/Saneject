@@ -31,17 +31,20 @@ namespace Plugins.Saneject.Demo.Scripts.Camera
             return cam.WorldToScreenPoint(worldPosition);
         }
     }
-
+    
     /*
     Roslyn generated partial:
 
     public partial class CameraController : ISerializationCallbackReceiver
     {
         [SerializeField, InterfaceBackingField(interfaceType: typeof(ICameraFollowTarget), isInjected: true, injectId: null)]
-        private UnityEngine.Object __target;
+        private Object __target;
 
         public void OnBeforeSerialize()
         {
+    #if UNITY_EDITOR
+            __target = target as Object;
+    #endif
         }
 
         public void OnAfterDeserialize()

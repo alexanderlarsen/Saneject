@@ -62,19 +62,27 @@ namespace Plugins.Saneject.Demo.Scripts.UI.GameOver
 
     public partial class GameOverController : ISerializationCallbackReceiver
     {
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IGameStateObservable), isInjected: true, injectId: null)]
-        private UnityEngine.Object __gameStateObservable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IGameStateObservable), isInjected: true, injectId: null)]
+        private Object __gameStateObservable;
 
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IScoreObservable), isInjected: true, injectId: null)]
-        private UnityEngine.Object __scoreObservable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IScoreObservable), isInjected: true, injectId: null)]
+        private Object __scoreObservable;
 
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IEnemyObservable), isInjected: true, injectId: null)]
-        private UnityEngine.Object __enemyObservable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IEnemyObservable), isInjected: true, injectId: null)]
+        private Object __enemyObservable;
 
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(ISceneManager), isInjected: true, injectId: null)]
-        private UnityEngine.Object __sceneManager;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(ISceneManager), isInjected: true, injectId: null)]
+        private Object __sceneManager;
 
-        public void OnBeforeSerialize() { }
+        public void OnBeforeSerialize()
+        {
+    #if UNITY_EDITOR
+            __gameStateObservable = gameStateObservable as Object;
+            __scoreObservable = scoreObservable as Object;
+            __enemyObservable = enemyObservable as Object;
+            __sceneManager = sceneManager as Object;
+    #endif
+        }
 
         public void OnAfterDeserialize()
         {

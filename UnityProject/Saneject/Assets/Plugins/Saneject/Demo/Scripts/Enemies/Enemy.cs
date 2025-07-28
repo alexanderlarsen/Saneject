@@ -11,7 +11,6 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
     /// Note: Marked as <c>partial</c> since it uses <see cref="SerializeInterfaceAttribute" />.
     /// The Roslyn generator <c>SerializeInterfaceGenerator.dll</c> generates a partial to provide the serialized backing field and assignment logic.
     /// </summary>
-    [RequireComponent(typeof(CharacterController))]
     public partial class Enemy : MonoBehaviour, IEnemy
     {
         [Inject, SerializeInterface]
@@ -90,19 +89,20 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
     /*
     Roslyn generated partial:
 
-    public partial class Enemy : UnityEngine.ISerializationCallbackReceiver
+    public partial class Enemy : ISerializationCallbackReceiver
     {
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IEnemyCatchNotifiable), isInjected: true, injectId: null)]
-        private UnityEngine.Object __catchNotifiable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IEnemyEvadeTarget), isInjected: true, injectId: null)]
+        private Object __evadeTarget;
 
-         [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IEnemyEvadeTarget), isInjected: true, injectId: null)]
-        private UnityEngine.Object __evadeTarget;
-
-        public void OnBeforeSerialize() { }
+        public void OnBeforeSerialize()
+        {
+    #if UNITY_EDITOR
+            __evadeTarget = evadeTarget as Object;
+    #endif
+        }
 
         public void OnAfterDeserialize()
         {
-            catchNotifiable = __catchNotifiable as IEnemyCatchNotifiable;
             evadeTarget = __evadeTarget as IEnemyEvadeTarget;
         }
     }

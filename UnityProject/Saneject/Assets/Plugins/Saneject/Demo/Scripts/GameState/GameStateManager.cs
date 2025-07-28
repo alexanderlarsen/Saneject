@@ -38,17 +38,22 @@ namespace Plugins.Saneject.Demo.Scripts.GameState
     /*
     Roslyn generated partial:
 
-    public partial class GameStateManager : UnityEngine.ISerializationCallbackReceiver
+    public partial class GameStateManager : ISerializationCallbackReceiver
     {
-       [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IEnemyObservable), isInjected: true, injectId: null)]
-       private UnityEngine.Object __enemyObservable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IEnemyObservable), isInjected: true, injectId: null)]
+        private Object __enemyObservable;
 
-       public void OnBeforeSerialize() { }
+        public void OnBeforeSerialize()
+        {
+    #if UNITY_EDITOR
+            __enemyObservable = enemyObservable as Object;
+    #endif
+        }
 
-       public void OnAfterDeserialize()
-       {
-           enemyObservable = __enemyObservable as IEnemyObservable;
-       }
+        public void OnAfterDeserialize()
+        {
+            enemyObservable = __enemyObservable as IEnemyObservable;
+        }
     }
     */
 }

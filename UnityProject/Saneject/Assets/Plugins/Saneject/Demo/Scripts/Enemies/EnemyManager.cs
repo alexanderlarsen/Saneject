@@ -62,22 +62,34 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
                 enemy.OnEnemyCaught += OnEnemyCaught;
             }
         }
-
-        /*
-        Roslyn generated partial:
-
-        public partial class EnemyManager : UnityEngine.ISerializationCallbackReceiver
-        {
-            [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IScoreUpdater), isInjected: true, injectId: null)]
-            private UnityEngine.Object __scoreUpdater;
-
-            public void OnBeforeSerialize() { }
-
-            public void OnAfterDeserialize()
-            {
-                scoreUpdater = __scoreUpdater as IScoreUpdater;
-            }
-        }
-        */
     }
+    
+    /*
+    Roslyn generated partial:
+
+    public partial class EnemyManager : ISerializationCallbackReceiver
+    {
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IScoreUpdater), isInjected: true, injectId: null)]
+         private Object __scoreUpdater;
+
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IEnemy), isInjected: true, injectId: null)]
+        private Object[] __enemies;
+
+        public void OnBeforeSerialize()
+        {
+    #if UNITY_EDITOR
+            __scoreUpdater = scoreUpdater as UnityEngine.Object;
+            __enemies = enemies?.Cast<UnityEngine.Object>().ToArray();
+    #endif
+        }
+
+        public void OnAfterDeserialize()
+        {
+            scoreUpdater = __scoreUpdater as Plugins.Saneject.Demo.Scripts.Highscore.IScoreUpdater;
+            enemies = (__enemies ?? Array.Empty<UnityEngine.Object>())
+                    .Select(x => x as Plugins.Saneject.Demo.Scripts.Enemies.IEnemy)
+                    .ToArray();
+        }
+    }
+    */
 }

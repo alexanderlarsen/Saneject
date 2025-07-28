@@ -51,16 +51,23 @@ namespace Plugins.Saneject.Demo.Scripts.UI.HUD
 
     public partial class HUDController : ISerializationCallbackReceiver
     {
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IGameStateObservable), isInjected: true, injectId: null)]
-        private UnityEngine.Object __gameStateObservable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IGameStateObservable), isInjected: true, injectId: null)]
+        private Object __gameStateObservable;
 
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IScoreObservable), isInjected: true, injectId: null)]
-        private UnityEngine.Object __scoreObservable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IScoreObservable), isInjected: true, injectId: null)]
+        private Object __scoreObservable;
 
-        [UnityEngine.SerializeField, Saneject.Runtime.Attributes.InterfaceBackingField(interfaceType: typeof(IEnemyObservable), isInjected: true, injectId: null)]
-        private UnityEngine.Object __enemyObservable;
+        [SerializeField, InterfaceBackingField(interfaceType: typeof(IEnemyObservable), isInjected: true, injectId: null)]
+        private Object __enemyObservable;
 
-        public void OnBeforeSerialize() {}
+        public void OnBeforeSerialize()
+        {
+    #if UNITY_EDITOR
+            __gameStateObservable = gameStateObservable as Object;
+            __scoreObservable = scoreObservable as Object;
+            __enemyObservable = enemyObservable as Object;
+    #endif
+        }
 
         public void OnAfterDeserialize()
         {
