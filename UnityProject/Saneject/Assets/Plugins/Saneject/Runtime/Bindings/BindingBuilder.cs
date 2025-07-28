@@ -760,6 +760,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             return this;
         }
 
+        /// <summary>
+        /// Marks this binding as eligible for collection injection, allowing it to be resolved into array or list fields.
+        /// </summary>
         public BindingBuilder<T> AsCollection()
         {
             binding.MarkCollectionBinding();

@@ -37,6 +37,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool IsUsed { get; private set; }
         public bool IsCollection { get; private set; }
 
+        /// <summary>
+        /// Constructs a readable binding name used by the <c>DependencyInjector</c> for logging purposes,
+        /// including interface and concrete type names and an optional ID.
+        /// </summary>
         public static string ConstructBindingName(
             Type interfaceType,
             Type concreteType,
@@ -57,6 +61,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             return output;
         }
 
+        /// <summary>
+        /// Marks this binding as eligible for collection injection, allowing it to be resolved into array or list fields.
+        /// </summary>
         public void MarkCollectionBinding()
         {
             if (IsCollection)
