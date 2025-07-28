@@ -11,7 +11,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// Represents a user-defined binding between an interface and a concrete type in Saneject's DI system.
     /// Encapsulates dependency location rules as defined by <see cref="BindingBuilder{T}" />.
     /// </summary>
-    public class Binding
+    public class Binding : IEquatable<Binding>
     {
         private readonly Scope scope;
         private readonly List<Func<Object, bool>> filters = new();
@@ -214,6 +214,38 @@ namespace Plugins.Saneject.Runtime.Bindings
         public string GetName()
         {
             return ConstructBindingName(InterfaceType, ConcreteType, Id);
+        }
+
+        public bool Equals(Binding other)
+        {
+            if (other is null)
+                return false;
+
+            if (ReferenceEquals(this, other))
+                return true;
+
+            return Equals(scope, other.scope)
+                   && InterfaceType == other.InterfaceType
+                   && ConcreteType == other.ConcreteType
+                   && Id == other.Id
+                   && IsGlobal == other.IsGlobal
+                   && IsCollection == other.IsCollection;
+        }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is null)
+                return false;
+
+            if (ReferenceEquals(this, obj))
+                return true;
+
+            return obj.GetType() == GetType() && Equals((Binding)obj);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(scope, InterfaceType, ConcreteType, Id, IsGlobal, IsCollection);
         }
     }
 }

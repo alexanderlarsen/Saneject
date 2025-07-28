@@ -12,6 +12,7 @@ namespace Development.ReadOnlyCollectionDrawer
             Bind<TestMono>().AsGlobal().FromDescendants().WhereTransformSiblingIndexIs(2);
             Bind<ITest, TestMono>().AsCollection().FromDescendants();
             Bind<TestMono>().AsCollection().FromDescendants();
+            Bind<TestMono>().AsCollection().FromDescendants();
             Bind<Collider>().AsCollection().FromTargetSelf();
         }
     }

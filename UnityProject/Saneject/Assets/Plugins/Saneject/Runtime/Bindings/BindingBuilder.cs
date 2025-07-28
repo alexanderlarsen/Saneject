@@ -40,6 +40,8 @@ namespace Plugins.Saneject.Runtime.Bindings
             binding = new Binding(interfaceType, concreteType, scope);
         }
 
+        public event Action<Binding> OnFinalized;
+
         #region DEFAULT (SCOPE) METHODS
 
         /// <summary>
@@ -130,6 +132,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeSelf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -146,6 +149,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeParent)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -160,6 +164,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeAncestors)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -176,6 +181,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeFirstChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -192,6 +198,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeLastChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -208,6 +215,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeChildWithIndex)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -226,6 +234,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeDescendants)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -245,6 +254,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeSiblings)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -262,6 +272,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootSelf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -278,6 +289,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootFirstChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -294,6 +306,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootLastChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -310,6 +323,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootChildWithIndex)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -328,6 +342,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootDescendants)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -355,6 +370,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetSelf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -378,6 +394,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetParent)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -402,6 +419,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetAncestors)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -425,6 +443,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetFirstChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -448,6 +467,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetLastChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -471,6 +491,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetChildWithIndex)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -497,6 +518,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetDescendants)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -525,6 +547,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetSiblings)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -542,6 +565,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(From)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -558,6 +582,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromParentOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -572,6 +597,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromAncestorsOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -588,6 +614,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromFirstChildOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -604,6 +631,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromLastChildOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -622,6 +650,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromChildWithIndexOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -642,6 +671,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromDescendantsOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -661,6 +691,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromSiblingsOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -680,6 +711,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromAnywhereInScene)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -689,6 +721,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public void FromInstance(T instance)
         {
             binding.SetLocator(_ => instance.WrapInEnumerable());
+            OnFinalized?.Invoke(binding);
         }
 
         /// <summary>
@@ -697,6 +730,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public FilterableBindingBuilder<T> FromMethod(Func<T> method)
         {
             binding.SetLocator(_ => method?.Invoke().WrapInEnumerable());
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -706,6 +740,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public FilterableBindingBuilder<T> FromMethod(Func<IEnumerable<T>> method)
         {
             binding.SetLocator(_ => method?.Invoke());
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -719,6 +754,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 binding.SetLocator(_ => Resources.Load<T>(path).WrapInEnumerable());
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -732,6 +768,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 binding.SetLocator(_ => Resources.LoadAll<T>(path));
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
         }
 
@@ -746,8 +783,10 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 binding.SetLocator(_ => AssetDatabase.LoadAssetAtPath<T>(assetPath).WrapInEnumerable());
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
 #else
+            OnFinalized?.Invoke(binding);
             return null;
 #endif
         }
@@ -763,8 +802,10 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 binding.SetLocator(_ => AssetDatabase.LoadAllAssetsAtPath(assetPath).Where(asset => asset.GetType() == typeof(T)));
 
+            OnFinalized?.Invoke(binding);
             return new FilterableBindingBuilder<T>(binding, scope);
 #else
+            OnFinalized?.Invoke(binding);
             return null;
 #endif
         }
