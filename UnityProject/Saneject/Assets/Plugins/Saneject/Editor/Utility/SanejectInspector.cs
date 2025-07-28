@@ -76,6 +76,8 @@ namespace Plugins.Saneject.Editor.Utility
                             DrawReadOnlyCollection(interfaceProperty, interfaceType);
                         else
                             EditorGUILayout.PropertyField(interfaceProperty, new GUIContent(GetFormattedInterfaceLabel(field.Name, interfaceType)), true);
+
+                        ValidateInterfaceCollection(interfaceProperty, interfaceType);
                     }
                     else
                     {
@@ -253,7 +255,7 @@ namespace Plugins.Saneject.Editor.Utility
         }
 
         /// <summary>
-        /// Draws an object field for an interface reference, resolving the component type if needed.
+        /// Draws an object field for an interface reference. Tries to resolve component from GameObject if GameObject is assigned.
         /// </summary>
         public static void DrawInterfaceObjectField(
             SerializedProperty property,
@@ -267,11 +269,9 @@ namespace Plugins.Saneject.Editor.Utility
                 newValue = comp;
 
             if (newValue != null && !interfaceType.IsAssignableFrom(newValue.GetType()))
-            {
                 Debug.LogError($"Saneject: '{newValue.GetType().Name}' does not implement {interfaceType.Name}", newValue);
-                newValue = null;
-            }
 
+            // newValue = null;
             property.objectReferenceValue = newValue;
         }
 
@@ -378,6 +378,34 @@ namespace Plugins.Saneject.Editor.Utility
             }
 
             EditorGUI.indentLevel--;
+        }
+
+        /// <summary>
+        /// Validates that objects in a collection implements an interface type. Tries to resolve component from GameObject if GameObject is assigned.
+        /// </summary>
+        public static void ValidateInterfaceCollection(
+            SerializedProperty prop,
+            Type interfaceType)
+        {
+            if (!prop.isArray || prop.propertyType == SerializedPropertyType.String) return;
+
+            for (int i = 0; i < prop.arraySize; i++)
+            {
+                SerializedProperty property = prop.GetArrayElementAtIndex(i);
+
+                if (property.propertyType != SerializedPropertyType.ObjectReference)
+                    continue;
+
+                Object newValue = property.objectReferenceValue;
+
+                if (newValue is GameObject go && go.TryGetComponent(interfaceType, out Component comp))
+                    newValue = comp;
+
+                if (newValue != null && !interfaceType.IsAssignableFrom(newValue.GetType()))
+                    Debug.LogError($"Saneject: '{newValue.GetType().Name}' does not implement {interfaceType.Name}", newValue);
+
+                property.objectReferenceValue = newValue;
+            }
         }
     }
 }
