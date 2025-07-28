@@ -4,7 +4,6 @@ using Plugins.Saneject.Demo.Scripts.GameState;
 using Plugins.Saneject.Demo.Scripts.Highscore;
 using Plugins.Saneject.Demo.Scripts.PlayerSystems;
 using Plugins.Saneject.Runtime.Scopes;
-using UnityEngine;
 
 namespace Plugins.Saneject.Demo.Scripts.Scopes
 {
@@ -25,9 +24,9 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
             Bind<IScoreUpdater, ScoreManager>().FromScopeDescendants();
             Bind<IEnemyObservable, EnemyManager>().FromScopeDescendants();
 
-            Bind<UnityEngine.Camera>().FromAnywhereInScene();
+            Bind<IEnemy, Enemy>().AsCollection().FromTargetDescendants();
 
-            Bind<GameObject>().WithId("EnemyPrefab").FromAssetLoad("Assets/Plugins/Saneject/Demo/Prefabs/Enemy.prefab");
+            Bind<UnityEngine.Camera>().FromAnywhereInScene();
         }
     }
 }

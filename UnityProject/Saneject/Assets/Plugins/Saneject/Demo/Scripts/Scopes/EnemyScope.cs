@@ -19,7 +19,6 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
             Bind<Transform>().WithId("MarkerTarget").FromRootSelf();
             Bind<Image>().WithId("MarkerImage").FromTargetSelf().WhereTargetIs<EnemyMarker>();
 
-            Bind<IEnemyCatchNotifiable, EnemyManagerProxy>().FromAssetLoad("Assets/Plugins/Saneject/Demo/Proxies/EnemyManagerProxy.asset");
             Bind<IEnemyEvadeTarget, PlayerProxy>().FromAssetLoad("Assets/Plugins/Saneject/Demo/Proxies/PlayerProxy.asset");
             Bind<IMainCamera, CameraControllerProxy>().FromAssetLoad("Assets/Plugins/Saneject/Demo/Proxies/CameraControllerProxy.asset");
         }

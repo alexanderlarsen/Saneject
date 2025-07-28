@@ -1,5 +1,7 @@
-﻿using Plugins.Saneject.Runtime.Attributes;
+﻿using System;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
+using Random = UnityEngine.Random;
 
 namespace Plugins.Saneject.Demo.Scripts.Enemies
 {
@@ -10,11 +12,8 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
     /// The Roslyn generator <c>SerializeInterfaceGenerator.dll</c> generates a partial to provide the serialized backing field and assignment logic.
     /// </summary>
     [RequireComponent(typeof(CharacterController))]
-    public partial class Enemy : MonoBehaviour
+    public partial class Enemy : MonoBehaviour, IEnemy
     {
-        [Inject, SerializeInterface]
-        private IEnemyCatchNotifiable catchNotifiable;
-
         [Inject, SerializeInterface]
         private IEnemyEvadeTarget evadeTarget;
 
@@ -35,6 +34,10 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
 
         private Vector3 currentTarget;
         private float timer;
+
+        public event Action OnEnemyCaught;
+
+        public Transform Transform => transform;
 
         private void Start()
         {
@@ -79,7 +82,7 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
             if (!other.TryGetComponent(out IEnemyEvadeTarget _))
                 return;
 
-            catchNotifiable.NotifyEnemyCaught();
+            OnEnemyCaught?.Invoke();
             Destroy(gameObject);
         }
     }

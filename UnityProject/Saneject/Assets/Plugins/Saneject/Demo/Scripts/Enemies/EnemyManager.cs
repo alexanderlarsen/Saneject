@@ -12,19 +12,16 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
     /// Note: Marked as <c>partial</c> since it uses <see cref="SerializeInterfaceAttribute" />.
     /// The Roslyn generator <c>SerializeInterfaceGenerator.dll</c> generates a partial to provide the serialized backing field and assignment logic.
     /// </summary>
-    public partial class EnemyManager : MonoBehaviour, IEnemyObservable, IEnemyCatchNotifiable
+    public partial class EnemyManager : MonoBehaviour, IEnemyObservable
     {
         [Inject, SerializeInterface]
         private IScoreUpdater scoreUpdater;
 
-        [Inject("EnemyPrefab"), SerializeField]
-        private GameObject enemyPrefab;
+        [Inject, SerializeInterface]
+        private IEnemy[] enemies;
 
         [ReadOnly, SerializeField]
         private int enemiesLeft;
-
-        [SerializeField]
-        private int numEnemies = 6;
 
         public event Action<int> OnEnemiesLeftChanged;
 
@@ -33,10 +30,18 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
 
         private void Start()
         {
-            SpawnEnemies();
+            InitializeEnemies();
+            enemiesLeft = enemies.Length;
+            TotalEnemies = enemiesLeft;
         }
 
-        public void NotifyEnemyCaught()
+        private void OnDestroy()
+        {
+            foreach (IEnemy enemy in enemies)
+                enemy.OnEnemyCaught -= OnEnemyCaught;
+        }
+
+        private void OnEnemyCaught()
         {
             enemiesLeft--;
             OnEnemiesLeftChanged?.Invoke(enemiesLeft);
@@ -46,17 +51,16 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
                 Debug.Log("All enemies caught. You win!");
         }
 
-        private void SpawnEnemies()
+        private void InitializeEnemies()
         {
-            for (int i = 0; i < numEnemies; i++)
+            foreach (IEnemy enemy in enemies)
             {
                 Vector2 randomHorizontal = Random.insideUnitCircle;
                 Vector3 spawnPosition = new Vector3(randomHorizontal.x, 0, randomHorizontal.y) * 10;
-                Instantiate(enemyPrefab, spawnPosition, Quaternion.identity, transform);
+                enemy.Transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
+                enemy.Transform.SetParent(transform);
+                enemy.OnEnemyCaught += OnEnemyCaught;
             }
-
-            enemiesLeft = transform.childCount;
-            TotalEnemies = enemiesLeft;
         }
 
         /*
