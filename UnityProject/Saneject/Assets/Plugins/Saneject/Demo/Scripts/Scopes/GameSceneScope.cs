@@ -14,11 +14,11 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     {
         public override void Configure()
         {
-            Bind<Player>().AsGlobalSingleton().FromScopeDescendants();
-            Bind<EnemyManager>().AsGlobalSingleton().FromScopeDescendants();
-            Bind<ScoreManager>().AsGlobalSingleton().FromScopeDescendants();
-            Bind<CameraController>().AsGlobalSingleton().FromScopeDescendants();
-            Bind<GameStateManager>().AsGlobalSingleton().FromScopeDescendants();
+            Bind<Player>().AsGlobal().FromScopeDescendants();
+            Bind<EnemyManager>().AsGlobal().FromScopeDescendants();
+            Bind<ScoreManager>().AsGlobal().FromScopeDescendants();
+            Bind<CameraController>().AsGlobal().FromScopeDescendants();
+            Bind<GameStateManager>().AsGlobal().FromScopeDescendants();
 
             Bind<ICameraFollowTarget, Player>().FromScopeDescendants();
             Bind<IScoreUpdater, ScoreManager>().FromScopeDescendants();

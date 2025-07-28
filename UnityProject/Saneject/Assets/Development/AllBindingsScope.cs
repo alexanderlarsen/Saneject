@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Demo.Scripts.PlayerSystems;
+﻿using System;
+using Plugins.Saneject.Demo.Scripts.PlayerSystems;
 using Plugins.Saneject.Runtime.Scopes;
 
 namespace Development
@@ -56,9 +57,9 @@ namespace Development
 
             Bind<Player>().FromAnywhereInScene();
             Bind<Player>().FromInstance(null);
-            Bind<Player>().FromMethod(null);
+            Bind<Player>().FromMethod((Func<Player>)null);
 
-            Bind<Player>().WithId("").FromMethod(null);
+            Bind<Player>().WithId("").FromMethod((Func<Player>)null);
         }
     }
 }

@@ -74,11 +74,11 @@ namespace Tests.Editor.BindingResolution.Filtering
             {
                 Bind<InjectableService>()
                     .FromScopeDescendants(includeSelf: false)
-                    .WhereIsLastSibling();
+                    .WhereTransformIsLastSibling();
 
                 Bind<Transform>()
                     .FromScopeDescendants(includeSelf: false)
-                    .WhereIsLastSibling();
+                    .WhereTransformIsLastSibling();
 
                 Bind<GameObject>()
                     .FromResourcesAll("Test")

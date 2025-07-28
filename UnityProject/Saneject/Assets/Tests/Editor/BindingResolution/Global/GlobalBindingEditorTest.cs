@@ -62,7 +62,7 @@ namespace Tests.Editor.BindingResolution.Global
         {
             public override void Configure()
             {
-                Bind<InjectableService>().AsGlobalSingleton().FromAnywhereInScene();
+                Bind<InjectableService>().AsGlobal().FromAnywhereInScene();
             }
         }
     }

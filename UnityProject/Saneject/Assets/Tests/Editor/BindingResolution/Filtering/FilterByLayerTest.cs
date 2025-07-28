@@ -88,15 +88,15 @@ namespace Tests.Editor.BindingResolution.Filtering
             {
                 Bind<InjectableService>()
                     .FromScopeDescendants()
-                    .WhereLayerIs(filterLayer);
+                    .WhereGameObjectLayerIs(filterLayer);
 
                 Bind<Transform>()
                     .FromScopeDescendants()
-                    .WhereLayerIs(filterLayer);
+                    .WhereGameObjectLayerIs(filterLayer);
 
                 Bind<GameObject>()
                     .FromResourcesAll("Test")
-                    .WhereLayerIs(filterLayer);
+                    .WhereGameObjectLayerIs(filterLayer);
 
                 Bind<TestScriptableObject>()
                     .FromResourcesAll("Test")

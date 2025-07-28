@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
@@ -125,11 +126,11 @@ namespace Plugins.Saneject.Runtime.Bindings
         public FilterableBindingBuilder<T> FromScopeSelf()
         {
             if (typeof(Component).IsAssignableFrom(typeof(T)))
-                binding.SetLocator(_ => scope.transform.GetComponent<T>().WrapInEnumerable());
+                binding.SetLocator(_ => scope.transform.GetComponents<T>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeSelf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -140,12 +141,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     scope.transform.parent
-                        ? scope.transform.parent.GetComponent<T>().WrapInEnumerable()
+                        ? scope.transform.parent.GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeParent)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -159,7 +160,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeAncestors)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -170,12 +171,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     scope.transform.childCount > 0
-                        ? scope.transform.GetChild(0).GetComponent<T>().WrapInEnumerable()
+                        ? scope.transform.GetChild(0).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeFirstChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -186,12 +187,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     scope.transform.childCount > 0
-                        ? scope.transform.GetChild(scope.transform.childCount - 1).GetComponent<T>().WrapInEnumerable()
+                        ? scope.transform.GetChild(scope.transform.childCount - 1).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeLastChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -202,12 +203,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     index >= 0 && index < scope.transform.childCount
-                        ? scope.transform.GetChild(index).GetComponent<T>().WrapInEnumerable()
+                        ? scope.transform.GetChild(index).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeChildWithIndex)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -225,7 +226,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeDescendants)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -238,13 +239,13 @@ namespace Plugins.Saneject.Runtime.Bindings
                     scope.transform.parent
                         ? scope.transform.parent.Cast<Transform>()
                             .Where(t => t != scope.transform)
-                            .Select(t => t.GetComponent<T>())
+                            .SelectMany(t => t.GetComponents<T>())
                             .Where(c => c)
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromScopeSiblings)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         #endregion
@@ -257,11 +258,11 @@ namespace Plugins.Saneject.Runtime.Bindings
         public FilterableBindingBuilder<T> FromRootSelf()
         {
             if (typeof(Component).IsAssignableFrom(typeof(T)))
-                binding.SetLocator(_ => scope.transform.root.GetComponent<T>().WrapInEnumerable());
+                binding.SetLocator(_ => scope.transform.root.GetComponents<T>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootSelf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -272,12 +273,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     scope.transform.root.childCount > 0
-                        ? scope.transform.root.GetChild(0).GetComponent<T>().WrapInEnumerable()
+                        ? scope.transform.root.GetChild(0).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootFirstChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -288,12 +289,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     scope.transform.root.childCount > 0
-                        ? scope.transform.root.GetChild(scope.transform.root.childCount - 1).GetComponent<T>().WrapInEnumerable()
+                        ? scope.transform.root.GetChild(scope.transform.root.childCount - 1).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootLastChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -304,12 +305,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     index >= 0 && index < scope.transform.root.childCount
-                        ? scope.transform.root.GetChild(index).GetComponent<T>().WrapInEnumerable()
+                        ? scope.transform.root.GetChild(index).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootChildWithIndex)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -327,7 +328,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromRootDescendants)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         #endregion
@@ -346,7 +347,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
                 binding.SetLocator(injectionTarget =>
                     injectionTarget is Component comp
-                        ? comp.GetComponent<T>().WrapInEnumerable()
+                        ? comp.GetComponents<T>()
                         : Enumerable.Empty<Object>());
             }
             else
@@ -354,7 +355,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetSelf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -369,7 +370,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
                 binding.SetLocator(injectionTarget =>
                     injectionTarget is Component comp && comp.transform.parent
-                        ? comp.transform.parent.GetComponent<T>().WrapInEnumerable()
+                        ? comp.transform.parent.GetComponents<T>()
                         : Enumerable.Empty<Object>());
             }
             else
@@ -377,7 +378,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetParent)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -401,7 +402,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetAncestors)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -416,7 +417,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
                 binding.SetLocator(injectionTarget =>
                     injectionTarget is Component { transform: { childCount: > 0 } } comp
-                        ? comp.transform.GetChild(0).GetComponent<T>().WrapInEnumerable()
+                        ? comp.transform.GetChild(0).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             }
             else
@@ -424,7 +425,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetFirstChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -439,7 +440,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
                 binding.SetLocator(injectionTarget =>
                     injectionTarget is Component { transform: { childCount: > 0 } } comp
-                        ? comp.transform.GetChild(comp.transform.childCount - 1).GetComponent<T>().WrapInEnumerable()
+                        ? comp.transform.GetChild(comp.transform.childCount - 1).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             }
             else
@@ -447,7 +448,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetLastChild)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -462,7 +463,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
                 binding.SetLocator(injectionTarget =>
                     injectionTarget is Component comp && index >= 0 && index < comp.transform.childCount
-                        ? comp.transform.GetChild(index).GetComponent<T>().WrapInEnumerable()
+                        ? comp.transform.GetChild(index).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             }
             else
@@ -470,7 +471,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetChildWithIndex)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -496,7 +497,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetDescendants)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -514,7 +515,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         ? comp.transform.parent
                             ? comp.transform.parent.Cast<Transform>()
                                 .Where(t => t != comp.transform)
-                                .Select(t => t.GetComponent<T>())
+                                .SelectMany(t => t.GetComponents<T>())
                                 .Where(c => c)
                             : Enumerable.Empty<Object>()
                         : Enumerable.Empty<Object>());
@@ -524,7 +525,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 Debug.LogError($"Saneject: '{nameof(FromTargetSiblings)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
             }
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         #endregion
@@ -537,11 +538,11 @@ namespace Plugins.Saneject.Runtime.Bindings
         public FilterableBindingBuilder<T> From(Transform target)
         {
             if (typeof(Component).IsAssignableFrom(typeof(T)))
-                binding.SetLocator(_ => target.GetComponent<T>().WrapInEnumerable());
+                binding.SetLocator(_ => target.GetComponents<T>());
             else
                 Debug.LogError($"Saneject: '{nameof(From)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -552,12 +553,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     target.parent
-                        ? target.parent.GetComponent<T>().WrapInEnumerable()
+                        ? target.parent.GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromParentOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -571,7 +572,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromAncestorsOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -582,12 +583,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     target.childCount > 0
-                        ? target.GetChild(0).GetComponent<T>().WrapInEnumerable()
+                        ? target.GetChild(0).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromFirstChildOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -598,12 +599,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     target.childCount > 0
-                        ? target.GetChild(target.childCount - 1).GetComponent<T>().WrapInEnumerable()
+                        ? target.GetChild(target.childCount - 1).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromLastChildOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -616,12 +617,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Component).IsAssignableFrom(typeof(T)))
                 binding.SetLocator(_ =>
                     index >= 0 && index < target.childCount
-                        ? target.GetChild(index).GetComponent<T>().WrapInEnumerable()
+                        ? target.GetChild(index).GetComponents<T>()
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromChildWithIndexOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -641,7 +642,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromDescendantsOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -654,13 +655,13 @@ namespace Plugins.Saneject.Runtime.Bindings
                     target.parent
                         ? target.parent.Cast<Transform>()
                             .Where(t => t != target)
-                            .Select(t => t.GetComponent<T>())
+                            .SelectMany(t => t.GetComponents<T>())
                             .Where(c => c)
                         : Enumerable.Empty<Object>());
             else
                 Debug.LogError($"Saneject: '{nameof(FromSiblingsOf)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         #endregion
@@ -679,7 +680,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 Debug.LogError($"Saneject: '{nameof(FromAnywhereInScene)}' can only be used with Component types. '{typeof(T)}' is not a Component.", scope);
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -696,7 +697,16 @@ namespace Plugins.Saneject.Runtime.Bindings
         public FilterableBindingBuilder<T> FromMethod(Func<T> method)
         {
             binding.SetLocator(_ => method?.Invoke().WrapInEnumerable());
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
+        }
+
+        /// <summary>
+        /// Locate multiple <see cref="Component" />s using the provided method.
+        /// </summary>
+        public FilterableBindingBuilder<T> FromMethod(Func<IEnumerable<T>> method)
+        {
+            binding.SetLocator(_ => method?.Invoke());
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -709,7 +719,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 binding.SetLocator(_ => Resources.Load<T>(path).WrapInEnumerable());
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -722,7 +732,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 binding.SetLocator(_ => Resources.LoadAll<T>(path));
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
         }
 
         /// <summary>
@@ -736,7 +746,24 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 binding.SetLocator(_ => AssetDatabase.LoadAssetAtPath<T>(assetPath).WrapInEnumerable());
 
-            return new FilterableBindingBuilder<T>(binding);
+            return new FilterableBindingBuilder<T>(binding, scope);
+#else
+            return null;
+#endif
+        }
+
+        /// <summary>
+        /// Locate the <see cref="Object" /> asset at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAssetAtPath(string, System.Type)" />.
+        /// </summary>
+        public FilterableBindingBuilder<T> FromAssetLoadAll(string assetPath)
+        {
+#if UNITY_EDITOR
+            if (typeof(Component).IsAssignableFrom(typeof(T)))
+                Debug.LogError($"Saneject: '{nameof(FromAssetLoad)}' cannot be used with Component types. '{typeof(T)}' is a Component.", scope);
+            else
+                binding.SetLocator(_ => AssetDatabase.LoadAllAssetsAtPath(assetPath).Where(asset => asset.GetType() == typeof(T)));
+
+            return new FilterableBindingBuilder<T>(binding, scope);
 #else
             return null;
 #endif
@@ -754,7 +781,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Marks this binding as a global singleton, making it eligible for use in <see cref="Plugins.Saneject.Runtime.Global.GlobalScope" /> resolution by adding it to a <see cref="Plugins.Saneject.Runtime.Global.SceneGlobalContainer" />.
         /// </summary>
-        public BindingBuilder<T> AsGlobalSingleton()
+        public BindingBuilder<T> AsGlobal()
         {
             binding.MarkGlobal();
             return this;

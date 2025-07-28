@@ -96,19 +96,19 @@ namespace Tests.Editor.BindingResolution.Filtering
             {
                 Bind<InjectableService>()
                     .FromScopeDescendants()
-                    .WhereNameContains(filterSubstring);
+                    .WhereGameObjectNameContains(filterSubstring);
 
                 Bind<Transform>()
                     .FromScopeDescendants()
-                    .WhereNameContains(filterSubstring);
+                    .WhereGameObjectNameContains(filterSubstring);
 
                 Bind<GameObject>()
                     .FromResourcesAll("Test")
-                    .WhereNameContains("Prefab 2");
+                    .WhereGameObjectNameContains("Prefab 2");
 
                 Bind<TestScriptableObject>()
                     .FromResourcesAll("Test")
-                    .WhereNameContains("ScriptableObject 2");
+                    .WhereGameObjectNameContains("ScriptableObject 2");
             }
         }
     }

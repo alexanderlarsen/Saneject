@@ -7,6 +7,9 @@ namespace Development.ReadOnlyCollectionDrawer
 {
     public partial class SomeClass : MonoBehaviour
     {
+        [SerializeField, Inject]
+        private Collider[] boxColliders;
+
         [SerializeInterface, Inject]
         private ITest[] testArray;
 

@@ -313,14 +313,13 @@ namespace Plugins.Saneject.Editor.Core
                         serializedProperty.NullifyOrClearArray();
 
                         Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.name}'", scope);
-                        
+
                         stats.missingBindings++;
                     }
                 }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
-
 
         /// <summary>
         /// Returns true if the given field/property is eligible for injection and returns its metadata.

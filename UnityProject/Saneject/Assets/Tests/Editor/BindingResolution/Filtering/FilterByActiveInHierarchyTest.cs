@@ -72,11 +72,11 @@ namespace Tests.Editor.BindingResolution.Filtering
             {
                 Bind<InjectableService>()
                     .FromScopeDescendants()
-                    .WhereActiveInHierarchy();
+                    .WhereGameObjectActiveInHierarchy();
 
                 Bind<Transform>()
                     .FromScopeDescendants(includeSelf: false)
-                    .WhereActiveInHierarchy();
+                    .WhereGameObjectActiveInHierarchy();
 
                 Bind<GameObject>()
                     .FromResourcesAll("Test")
