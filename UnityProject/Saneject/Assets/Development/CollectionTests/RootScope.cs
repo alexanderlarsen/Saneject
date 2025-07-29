@@ -7,29 +7,43 @@ namespace Development.ReadOnlyCollectionDrawer
     {
         protected override void ConfigureBindings()
         {
-            BindGlobal<TestMono>()
-                .FromDescendants()
-                .WhereSiblingIndexIs(2);
+            // BindGlobal<TestMono>()
+            //     .FromDescendants()
+            //     .WhereSiblingIndexIs(2);
 
-            BindComponent<ITest, TestMono>()
+            // BindComponent<ITest, TestMono>()
+            //     .FromDescendants()
+            //     .WhereIsLastSibling();
+
+            // BindComponent<ITest>()
+            //     .FromDescendants()
+            //     .WhereIsLastSibling();
+
+            BindComponent<GameObject>()
                 .FromDescendants()
-                .WhereIsLastSibling();
+                .WhereIsFirstSibling();
 
             BindComponent<TestMono>()
-                .WithId("LOL")
                 .FromDescendants()
-                .WhereSiblingIndexIs(2);
+                .WhereIsFirstSibling();
 
-            BindMultipleComponents<ITest, TestMono>()
-                .FromDescendants();
+            BindMultipleComponents<ITest>()
+                .FromDescendants()
+                .Where(t => t is Component c && c.transform.GetSiblingIndex() % 2 == 0);
 
-            BindMultipleComponents<TestMono>()
-                .FromDescendants();
+            // BindComponent<TestMono>()
+            //     .WithId("LOL")
+            //     .FromDescendants()
+            //     .WhereSiblingIndexIs(2);
 
-            BindMultipleComponents<Collider>()
-                .FromTargetSelf();
-            
-            
+            // BindMultipleComponents<ITest, TestMono>()
+            //     .FromDescendants();
+            //
+            // BindMultipleComponents<TestMono>()
+            //     .FromDescendants();
+            //
+            // BindMultipleComponents<Collider>()
+            //     .FromTargetSelf();
         }
     }
 }

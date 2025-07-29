@@ -83,7 +83,6 @@ namespace Plugins.Saneject.Runtime.Bindings
         public AssetFilterBuilder<TAsset> FromResourcesAll(string path)
         {
             binding.SetLocator(_ => Resources.LoadAll<TAsset>(path));
-
             return new AssetFilterBuilder<TAsset>(binding, scope);
         }
 

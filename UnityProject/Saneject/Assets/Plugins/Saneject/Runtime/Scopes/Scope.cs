@@ -168,42 +168,50 @@ namespace Plugins.Saneject.Runtime.Scopes
         // TODO: Add BindComponent<TInterface>, BindAsset<TInterface>
 
         /// <summary>
-        /// Registers a binding for a single <typeparamref name="TConcrete" /> component type in this scope.
-        /// Use this for concrete <see cref="Component" />s you wish to inject directly.
+        /// Registers a binding for a single <typeparamref name="T" /> component or interface type in this scope.
+        /// Use this for concrete <see cref="Component" /> or interface you wish to inject directly.
         /// </summary>
-        /// <typeparam name="TConcrete">The concrete component type to bind.</typeparam>
+        /// <typeparam name="T">The concrete component type to bind.</typeparam>
         /// <returns>A fluent builder for configuring the component binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindComponent<TConcrete>() where TConcrete : Component
+        protected ComponentBindingBuilder<T> BindComponent<T>() where T : class
         {
-            Binding binding = new(null, typeof(TConcrete), this);
+            Binding binding = typeof(T).IsInterface
+                ? new Binding(typeof(T), null, this)
+                : new Binding(null, typeof(T), this);
+
+            binding.MarkComponentBinding();
             unvalidatedBindings.Add(binding);
-            return new ComponentBindingBuilder<TConcrete>(binding, this);
+            return new ComponentBindingBuilder<T>(binding, this);
         }
 
         /// <summary>
-        /// Registers a collection binding for <typeparamref name="TConcrete" /> component type in this scope.
+        /// Registers a collection binding for <typeparamref name="T" /> component type in this scope.
         /// Use this to inject all matching components as a collection.
         /// Shorthand for <see cref="BindMultipleComponents{TConcrete}" />.
         /// </summary>
-        /// <typeparam name="TConcrete">The concrete component type to bind as a collection.</typeparam>
+        /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindComponents<TConcrete>() where TConcrete : Component
+        protected ComponentBindingBuilder<T> BindComponents<T>() where T : class
         {
-            return BindMultipleComponents<TConcrete>();
+            return BindMultipleComponents<T>();
         }
 
         /// <summary>
-        /// Registers a collection binding for <typeparamref name="TConcrete" /> component type in this scope.
-        /// Use this to inject all matching components as a collection.
+        /// Registers a collection binding for <typeparamref name="T" /> component type in this scope.
+        /// Use this to inject all matching components or interfaces as a collection.
         /// </summary>
-        /// <typeparam name="TConcrete">The concrete component type to bind as a collection.</typeparam>
+        /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindMultipleComponents<TConcrete>() where TConcrete : Component
+        protected ComponentBindingBuilder<T> BindMultipleComponents<T>() where T : class
         {
-            Binding binding = new(null, typeof(TConcrete), this);
+            Binding binding = typeof(T).IsInterface
+                ? new Binding(typeof(T), null, this)
+                : new Binding(null, typeof(T), this);
+
+            binding.MarkComponentBinding();
             binding.MarkCollectionBinding();
             unvalidatedBindings.Add(binding);
-            return new ComponentBindingBuilder<TConcrete>(binding, this);
+            return new ComponentBindingBuilder<T>(binding, this);
         }
 
         /// <summary>
@@ -218,6 +226,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             where TInterface : class
         {
             Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            binding.MarkComponentBinding();
             unvalidatedBindings.Add(binding);
             return new ComponentBindingBuilder<TConcrete>(binding, this);
         }
@@ -249,6 +258,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             where TInterface : class
         {
             Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            binding.MarkComponentBinding();
             binding.MarkCollectionBinding();
             unvalidatedBindings.Add(binding);
             return new ComponentBindingBuilder<TConcrete>(binding, this);
@@ -263,6 +273,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         protected AssetBindingBuilder<TConcrete> BindAsset<TConcrete>() where TConcrete : Object
         {
             Binding binding = new(null, typeof(TConcrete), this);
+            binding.MarkAssetBinding();
             unvalidatedBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding, this);
         }
@@ -288,6 +299,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TConcrete>() where TConcrete : Object
         {
             Binding binding = new(null, typeof(TConcrete), this);
+            binding.MarkAssetBinding();
             binding.MarkCollectionBinding();
             unvalidatedBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding, this);
@@ -305,6 +317,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             where TInterface : class
         {
             Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            binding.MarkAssetBinding();
             unvalidatedBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding, this);
         }
@@ -336,6 +349,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             where TInterface : class
         {
             Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            binding.MarkAssetBinding();
             binding.MarkCollectionBinding();
             unvalidatedBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding, this);
@@ -351,6 +365,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         protected ComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component
         {
             Binding binding = new(null, typeof(TConcrete), this);
+            binding.MarkComponentBinding();
             binding.MarkGlobal();
             unvalidatedBindings.Add(binding);
             return new ComponentBindingBuilder<TConcrete>(binding, this);

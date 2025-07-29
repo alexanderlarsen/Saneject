@@ -40,6 +40,8 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool RequiresInjectionTarget { get; private set; }
         public bool IsUsed { get; private set; }
         public bool IsCollection { get; private set; }
+        public bool IsComponentBinding { get; private set; }
+        public bool IsAssetBinding { get; private set; }
 
         /// <summary>
         /// Constructs a readable binding name used by the <c>DependencyInjector</c> for logging purposes,
@@ -83,6 +85,34 @@ namespace Plugins.Saneject.Runtime.Bindings
             }
 
             IsCollection = true;
+        }
+
+        public void MarkComponentBinding()
+        {
+            if (IsAssetBinding)
+                throw new InvalidOperationException($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as an asset binding. This shouldn't be able to happen.");
+
+            if (IsComponentBinding)
+            {
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as a component binding. Ignoring this call.", scope);
+                return;
+            }
+
+            IsComponentBinding = true;
+        }
+
+        public void MarkAssetBinding()
+        {
+            if (IsComponentBinding)
+                throw new InvalidOperationException($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as a component binding. This shouldn't be able to happen.");
+
+            if (IsAssetBinding)
+            {
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as an asset binding. Ignoring this call.", scope);
+                return;
+            }
+
+            IsAssetBinding = true;
         }
 
         /// <summary>
@@ -252,27 +282,40 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             bool isValid = true;
 
+            if (IsComponentBinding && ConcreteType != null && !typeof(Component).IsAssignableFrom(ConcreteType))
+            {
+                string bindingType = $"{(IsCollection ? "Multiple component bindings" : "Component binding")}";
+
+                Debug.LogError($"Saneject: {bindingType} in '{scope.GetType().Name}' has an invalid type '{ConcreteType.Name}' that is not an interface or component.", scope);
+
+                isValid = false;
+            }
+
             if (InterfaceType is { IsInterface: false })
             {
                 Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' has an invalid interface type '{InterfaceType.FullName}' that is not an interface.", scope);
+
                 isValid = false;
             }
 
             if (IsGlobal && IsCollection)
             {
                 Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is both global and collection. This is not allowed.", scope);
+
                 isValid = false;
             }
 
             if (IsGlobal && !string.IsNullOrWhiteSpace(Id))
             {
                 Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' is not allowed to have an ID.", scope);
+
                 isValid = false;
             }
 
             if (locator == null)
             {
                 Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' does not have a locator (e.g., FromScopeSelf). This is required.", scope);
+
                 isValid = false;
             }
 
