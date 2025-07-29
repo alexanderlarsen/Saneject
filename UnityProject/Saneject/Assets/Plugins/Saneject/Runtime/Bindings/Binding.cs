@@ -252,7 +252,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             bool isValid = true;
 
-            if (!InterfaceType.IsInterface)
+            if (InterfaceType is { IsInterface: false })
             {
                 Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' has an invalid interface type '{InterfaceType.FullName}' that is not an interface.", scope);
                 isValid = false;
