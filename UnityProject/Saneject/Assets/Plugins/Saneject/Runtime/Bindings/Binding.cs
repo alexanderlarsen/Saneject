@@ -250,25 +250,33 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public bool IsValid()
         {
+            bool isValid = true;
+
+            if (!InterfaceType.IsInterface)
+            {
+                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' has an invalid interface type '{InterfaceType.FullName}' that is not an interface.", scope);
+                isValid = false;
+            }
+
             if (IsGlobal && IsCollection)
             {
                 Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is both global and collection. This is not allowed.", scope);
-                return false;
+                isValid = false;
             }
 
             if (IsGlobal && !string.IsNullOrWhiteSpace(Id))
             {
                 Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' is not allowed to have an ID.", scope);
-                return false;
+                isValid = false;
             }
 
             if (locator == null)
             {
                 Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' does not have a locator (e.g., FromScopeSelf). This is required.", scope);
-                return false;
+                isValid = false;
             }
 
-            return true;
+            return isValid;
         }
     }
 }
