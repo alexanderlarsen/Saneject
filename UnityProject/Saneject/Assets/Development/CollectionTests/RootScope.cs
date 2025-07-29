@@ -15,19 +15,22 @@ namespace Development.ReadOnlyCollectionDrawer
             //     .FromDescendants()
             //     .WhereIsLastSibling();
 
-            // BindComponent<ITest>()
-            //     .FromDescendants()
-            //     .WhereIsLastSibling();
-
-            BindComponent<GameObject>()
-                .FromDescendants()
-                .WhereIsFirstSibling();
-
             BindComponent<TestMono>()
                 .FromDescendants()
                 .WhereIsFirstSibling();
 
+            BindComponent<ITest>()
+                .FromDescendants()
+                .WhereIsLastSibling();
+
+            BindComponent<ITest, TestMono>()
+                .FromDescendants()
+                .WhereIsLastSibling();
+
             BindMultipleComponents<ITest>()
+                .FromDescendants();
+
+            BindMultipleComponents<ITest, TestMono>()
                 .FromDescendants()
                 .Where(t => t is Component c && c.transform.GetSiblingIndex() % 2 == 0);
 

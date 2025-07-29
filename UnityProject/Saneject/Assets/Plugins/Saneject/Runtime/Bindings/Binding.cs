@@ -246,38 +246,6 @@ namespace Plugins.Saneject.Runtime.Bindings
             return target != null && targetFilters.All(f => f.filter(target));
         }
 
-        public string GetName()
-        {
-            return ConstructBindingName(InterfaceType, ConcreteType, Id);
-        }
-
-        public bool Equals(Binding other)
-        {
-            if (other is null) return false;
-            if (ReferenceEquals(this, other)) return true;
-
-            return Equals(scope, other.scope)
-                   && InterfaceType == other.InterfaceType
-                   && ConcreteType == other.ConcreteType
-                   && Id == other.Id
-                   && IsGlobal == other.IsGlobal
-                   && IsCollection == other.IsCollection
-                   && targetFilters.Select(tf => tf.targetType)
-                       .OrderBy(t => t?.FullName)
-                       .SequenceEqual(other.targetFilters.Select(tf => tf.targetType)
-                           .OrderBy(t => t?.FullName));
-        }
-
-        public override int GetHashCode()
-        {
-            int hash = HashCode.Combine(scope, InterfaceType, ConcreteType, Id, IsGlobal, IsCollection);
-
-            foreach (Type targetType in targetFilters.Select(tf => tf.targetType).OrderBy(t => t?.FullName))
-                hash = HashCode.Combine(hash, targetType);
-
-            return hash;
-        }
-
         public bool IsValid()
         {
             bool isValid = true;
@@ -320,6 +288,49 @@ namespace Plugins.Saneject.Runtime.Bindings
             }
 
             return isValid;
+        }
+
+        public string GetName()
+        {
+            return ConstructBindingName(InterfaceType, ConcreteType, Id);
+        }
+
+        public bool Equals(Binding other)
+        {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            // two bindings conflict if they have the same interface (regardless of concrete)
+            // or, if neither has an interface, they must have the same concrete
+            bool typeMatch;
+
+            if (InterfaceType != null)
+                typeMatch = InterfaceType == other.InterfaceType;
+            else
+                typeMatch = ConcreteType == other.ConcreteType;
+
+            return Equals(scope, other.scope)
+                   && typeMatch
+                   && Id == other.Id
+                   && IsGlobal == other.IsGlobal
+                   && IsCollection == other.IsCollection
+                   && targetFilters.Select(tf => tf.targetType)
+                       .OrderBy(t => t?.FullName)
+                       .SequenceEqual(other.targetFilters.Select(tf => tf.targetType)
+                           .OrderBy(t => t?.FullName));
+        }
+
+        public override int GetHashCode()
+        {
+            // if this is an interface binding, hash only on InterfaceType,
+            // otherwise hash on ConcreteType
+            Type keyType = InterfaceType ?? ConcreteType;
+            int hash = HashCode.Combine(scope, keyType, Id, IsGlobal, IsCollection);
+
+            foreach (Type targetType in targetFilters.Select(tf => tf.targetType).OrderBy(t => t?.FullName))
+                hash = HashCode.Combine(hash, targetType);
+
+            return hash;
         }
     }
 }
