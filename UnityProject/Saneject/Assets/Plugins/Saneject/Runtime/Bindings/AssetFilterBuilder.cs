@@ -11,7 +11,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// Supports filtering by name, GameObject properties, custom predicates, and injection target type.
     /// Typically returned from asset binding methods such as <c>FromResources()</c> or <c>FromAssetLoad()</c>.
     /// </summary>
-    public class AssetFilterBuilder<TAsset> : BaseFilterBuilder<TAsset> where TAsset : Object
+    public class AssetFilterBuilder<TAsset> : BaseFilterBuilder where TAsset : Object
     {
         private readonly Binding binding;
         private readonly Scope scope;

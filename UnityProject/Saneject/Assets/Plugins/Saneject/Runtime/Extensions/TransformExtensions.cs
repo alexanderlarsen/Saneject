@@ -17,13 +17,13 @@ namespace Plugins.Saneject.Runtime.Extensions
         /// <returns>An <see cref="IEnumerable{T}" /> of matching components found in parents (and optionally self), ordered from nearest to furthest ancestor.</returns>
         public static IEnumerable<T> GetComponentsInParents<T>(
             this Transform transform,
-            bool includeSelf = false) where T : Object
+            bool includeSelf = false) where T : class
         {
             if (includeSelf)
             {
                 T selfComponent = transform.GetComponent<T>();
 
-                if (selfComponent)
+                if (selfComponent != null)
                     yield return selfComponent;
             }
 
@@ -33,7 +33,7 @@ namespace Plugins.Saneject.Runtime.Extensions
             {
                 T component = current.GetComponent<T>();
 
-                if (component)
+                if (component != null)
                     yield return component;
 
                 current = current.parent;

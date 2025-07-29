@@ -14,7 +14,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// Supports locating from the scope, injection target, custom transforms, scene-wide queries, or explicit instances.
     /// Typically returned from binding methods like <c>BindComponent&lt;TComponent&gt;()</c> or <c>BindMultipleComponents&lt;TComponent&gt;()</c>.
     /// </summary>
-    public class ComponentBindingBuilder<TComponent> where TComponent : Component
+    public class ComponentBindingBuilder<TComponent> where TComponent : class
     {
         private readonly Binding binding;
         private readonly Scope scope;
@@ -125,7 +125,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeSelf()
         {
-            binding.SetLocator(_ => scope.transform.GetComponents<TComponent>());
+            binding.SetLocator(_ => scope.transform
+                .GetComponents<TComponent>()
+                .Cast<Component>());
+
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
@@ -136,7 +139,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 scope.transform.parent
-                    ? scope.transform.parent.GetComponents<TComponent>()
+                    ? scope.transform.parent
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -148,7 +153,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeAncestors()
         {
-            binding.SetLocator(_ => scope.transform.GetComponentsInParents<TComponent>());
+            binding.SetLocator(_ => scope.transform
+                .GetComponentsInParents<TComponent>()
+                .Cast<Component>());
+
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
@@ -159,7 +167,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 scope.transform.childCount > 0
-                    ? scope.transform.GetChild(0).GetComponents<TComponent>()
+                    ? scope.transform
+                        .GetChild(0)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -172,7 +183,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 scope.transform.childCount > 0
-                    ? scope.transform.GetChild(scope.transform.childCount - 1).GetComponents<TComponent>()
+                    ? scope.transform
+                        .GetChild(scope.transform.childCount - 1)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -185,7 +199,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 index >= 0 && index < scope.transform.childCount
-                    ? scope.transform.GetChild(index).GetComponents<TComponent>()
+                    ? scope.transform
+                        .GetChild(index)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -199,9 +216,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 includeSelf
-                    ? scope.transform.GetComponentsInChildren<TComponent>(true)
+                    ? scope.transform
+                        .GetComponentsInChildren<TComponent>(true)
+                        .Cast<Component>()
                     : scope.transform.GetComponentsInChildren<TComponent>(true)
-                        .Where(t => t is Component c && c.gameObject != scope.gameObject));
+                        .Cast<Component>()
+                        .Where(c => c.gameObject != scope.gameObject));
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
@@ -216,6 +236,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                     ? scope.transform.parent.Cast<Transform>()
                         .Where(t => t != scope.transform)
                         .SelectMany(t => t.GetComponents<TComponent>())
+                        .Cast<Component>()
                         .Where(c => c)
                     : Enumerable.Empty<Object>());
 
@@ -231,7 +252,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromRootSelf()
         {
-            binding.SetLocator(_ => scope.transform.root.GetComponents<TComponent>());
+            binding.SetLocator(_ => scope.transform.root
+                .GetComponents<TComponent>()
+                .Cast<Component>());
+
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
@@ -242,7 +266,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 scope.transform.root.childCount > 0
-                    ? scope.transform.root.GetChild(0).GetComponents<TComponent>()
+                    ? scope.transform.root
+                        .GetChild(0)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -255,7 +282,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 scope.transform.root.childCount > 0
-                    ? scope.transform.root.GetChild(scope.transform.root.childCount - 1).GetComponents<TComponent>()
+                    ? scope.transform.root
+                        .GetChild(scope.transform.root.childCount - 1)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -268,7 +298,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 index >= 0 && index < scope.transform.root.childCount
-                    ? scope.transform.root.GetChild(index).GetComponents<TComponent>()
+                    ? scope.transform.root
+                        .GetChild(index)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -282,9 +315,13 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 includeSelf
-                    ? scope.transform.root.GetComponentsInChildren<TComponent>(true)
-                    : scope.transform.root.GetComponentsInChildren<TComponent>(true)
-                        .Where(t => t is Component c && c.gameObject != scope.transform.root.gameObject));
+                    ? scope.transform.root
+                        .GetComponentsInChildren<TComponent>(true)
+                        .Cast<Component>()
+                    : scope.transform.root
+                        .GetComponentsInChildren<TComponent>(true)
+                        .Cast<Component>()
+                        .Where(c => c.gameObject != scope.transform.root.gameObject));
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
@@ -303,7 +340,9 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component comp
-                    ? comp.GetComponents<TComponent>()
+                    ? comp
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -319,7 +358,9 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component comp && comp.transform.parent
-                    ? comp.transform.parent.GetComponents<TComponent>()
+                    ? comp.transform.parent
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -336,7 +377,9 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component comp
-                    ? comp.transform.GetComponentsInParents<TComponent>()
+                    ? comp.transform
+                        .GetComponentsInParents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -352,7 +395,10 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component { transform: { childCount: > 0 } } comp
-                    ? comp.transform.GetChild(0).GetComponents<TComponent>()
+                    ? comp.transform
+                        .GetChild(0)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -368,7 +414,10 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component { transform: { childCount: > 0 } } comp
-                    ? comp.transform.GetChild(comp.transform.childCount - 1).GetComponents<TComponent>()
+                    ? comp.transform
+                        .GetChild(comp.transform.childCount - 1)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -384,7 +433,10 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component comp && index >= 0 && index < comp.transform.childCount
-                    ? comp.transform.GetChild(index).GetComponents<TComponent>()
+                    ? comp.transform
+                        .GetChild(index)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -402,8 +454,13 @@ namespace Plugins.Saneject.Runtime.Bindings
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component comp
                     ? includeSelf
-                        ? comp.GetComponentsInChildren<TComponent>(true)
-                        : comp.GetComponentsInChildren<TComponent>(true).Where(t => t is Component c && c.gameObject != comp.gameObject)
+                        ? comp
+                            .GetComponentsInChildren<TComponent>(true)
+                            .Cast<Component>()
+                        : comp
+                            .GetComponentsInChildren<TComponent>(true)
+                            .Cast<Component>()
+                            .Where(c => c && c.gameObject != comp.gameObject)
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -423,6 +480,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         ? comp.transform.parent.Cast<Transform>()
                             .Where(t => t != comp.transform)
                             .SelectMany(t => t.GetComponents<TComponent>())
+                            .Cast<Component>()
                             .Where(c => c)
                         : Enumerable.Empty<Object>()
                     : Enumerable.Empty<Object>());
@@ -439,7 +497,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> From(Transform target)
         {
-            binding.SetLocator(_ => target.GetComponents<TComponent>());
+            binding.SetLocator(_ => target
+                .GetComponents<TComponent>()
+                .Cast<Component>());
+
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
@@ -450,7 +511,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 target.parent
-                    ? target.parent.GetComponents<TComponent>()
+                    ? target.parent
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -462,7 +525,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromAncestorsOf(Transform target)
         {
-            binding.SetLocator(_ => target.GetComponentsInParents<TComponent>());
+            binding.SetLocator(_ => target
+                .GetComponentsInParents<TComponent>()
+                .Cast<Component>());
+
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
@@ -473,7 +539,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 target.childCount > 0
-                    ? target.GetChild(0).GetComponents<TComponent>()
+                    ? target
+                        .GetChild(0)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -486,7 +555,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 target.childCount > 0
-                    ? target.GetChild(target.childCount - 1).GetComponents<TComponent>()
+                    ? target
+                        .GetChild(target.childCount - 1)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -501,7 +573,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 index >= 0 && index < target.childCount
-                    ? target.GetChild(index).GetComponents<TComponent>()
+                    ? target
+                        .GetChild(index)
+                        .GetComponents<TComponent>()
+                        .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -517,9 +592,13 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ =>
                 includeSelf
-                    ? target.GetComponentsInChildren<TComponent>(true)
-                    : target.GetComponentsInChildren<TComponent>(true)
-                        .Where(t => t is Component c && c.gameObject != target.gameObject));
+                    ? target
+                        .GetComponentsInChildren<TComponent>(true)
+                        .Cast<Component>()
+                    : target
+                        .GetComponentsInChildren<TComponent>(true)
+                        .Cast<Component>()
+                        .Where(c => c.gameObject != target.gameObject));
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
@@ -534,6 +613,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                     ? target.parent.Cast<Transform>()
                         .Where(t => t != target)
                         .SelectMany(t => t.GetComponents<TComponent>())
+                        .Cast<Component>()
                         .Where(c => c)
                     : Enumerable.Empty<Object>());
 
@@ -551,7 +631,10 @@ namespace Plugins.Saneject.Runtime.Bindings
             FindObjectsInactive findObjectsInactive = FindObjectsInactive.Include,
             FindObjectsSortMode sortMode = FindObjectsSortMode.None)
         {
-            binding.SetLocator(_ => Object.FindObjectsByType<TComponent>(findObjectsInactive, sortMode));
+            binding.SetLocator(_ => Object
+                .FindObjectsByType<Component>(findObjectsInactive, sortMode)
+                .Where(c => c.GetType() == typeof(TComponent)));
+
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
@@ -560,7 +643,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public void FromInstance(TComponent instance)
         {
-            binding.SetLocator(_ => instance.WrapInEnumerable());
+            binding.SetLocator(_ => instance.WrapInEnumerable().Cast<Component>());
         }
 
         /// <summary>
@@ -568,7 +651,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromMethod(Func<TComponent> method)
         {
-            binding.SetLocator(_ => method?.Invoke().WrapInEnumerable());
+            binding.SetLocator(_ => method?.Invoke().WrapInEnumerable().Cast<Component>());
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
@@ -577,7 +660,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromMethod(Func<IEnumerable<TComponent>> method)
         {
-            binding.SetLocator(_ => method?.Invoke());
+            binding.SetLocator(_ => method?.Invoke().Cast<Component>());
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 

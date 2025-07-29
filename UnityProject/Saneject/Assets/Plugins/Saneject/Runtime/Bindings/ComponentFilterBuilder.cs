@@ -10,7 +10,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// Supports filtering by GameObject state, transform hierarchy, component order, activation status, custom predicates, and injection target type.
     /// Returned from locator methods on <c>ComponentBindingBuilder&lt;TComponent&gt;</c>.
     /// </summary>
-    public class ComponentFilterBuilder<TComponent> : BaseFilterBuilder<TComponent> where TComponent : Component
+    public class ComponentFilterBuilder<TComponent> : BaseFilterBuilder where TComponent : class
     {
         private readonly Binding binding;
         private readonly Scope scope;

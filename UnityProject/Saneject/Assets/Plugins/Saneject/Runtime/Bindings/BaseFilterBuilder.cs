@@ -6,7 +6,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// Abstract base class providing shared helper methods for filter builders in Saneject.
     /// Used by filter builders to extract common Unity object data such as <see cref="Transform" />, <see cref="GameObject" />, and names from <see cref="UnityEngine.Object" /> instances.
     /// </summary>
-    public abstract class BaseFilterBuilder<T> where T : Object
+    public abstract class BaseFilterBuilder
     {
         #region STATIC HELPER METHODS
 

@@ -12,9 +12,9 @@ namespace Plugins.Saneject.Runtime.Extensions
         /// <summary>
         /// Wrap the <paramref name="item"/> in an <see cref="IEnumerable{T}"/> (empty if null).
         /// </summary>
-        public static IEnumerable<T> WrapInEnumerable<T>(this T item) where T : Object
+        public static IEnumerable<T> WrapInEnumerable<T>(this T item) where T : class
         {
-            return item ? new[] { item } : Enumerable.Empty<T>();
+            return item != null ? new[] { item } : Enumerable.Empty<T>();
         }
     }
 }

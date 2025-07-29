@@ -28,6 +28,8 @@ namespace Development.ReadOnlyCollectionDrawer
 
             BindMultipleComponents<Collider>()
                 .FromTargetSelf();
+            
+            
         }
     }
 }
