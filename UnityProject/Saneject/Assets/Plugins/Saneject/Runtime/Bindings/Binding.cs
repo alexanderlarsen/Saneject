@@ -5,6 +5,8 @@ using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+// ReSharper disable LoopCanBeConvertedToQuery
+
 // ReSharper disable NonReadonlyMemberInGetHashCode
 
 namespace Plugins.Saneject.Runtime.Bindings
@@ -248,7 +250,24 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public bool IsValid()
         {
-            // TODO: Add checks here for global, id, collection
+            if (IsGlobal && IsCollection)
+            {
+                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is both global and collection. This is not allowed.", scope);
+                return false;
+            }
+
+            if (IsGlobal && !string.IsNullOrWhiteSpace(Id))
+            {
+                Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' is not allowed to have an ID.", scope);
+                return false;
+            }
+
+            if (locator == null)
+            {
+                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' does not have a locator (e.g., FromScopeSelf). This is required.", scope);
+                return false;
+            }
+
             return true;
         }
     }
