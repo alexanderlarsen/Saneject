@@ -62,7 +62,7 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 
 - **Editor-time, deterministic injection:** Bindings are resolved in the editor, stored directly in serialized fields, including nested serialized classes.
 - **Fluent, scope-aware binding API:** Search hierarchy or project, filter by tag/layer/name, bind by type or ID.
-- **Fail-fast validation:** Flags missing/conflicting bindings and invalid setups (e.g., global inside prefabs) during editor injection pass.
+- **Non-blocking validation:** Reports all missing, conflicting, or invalid bindings in a single pass without halting injection flow, enabling faster iteration and debugging.
 - **Unified Scope component:** One Scope type handles both scenes and prefabs, with automatic context detection.
 - **Built-in caching & safety nets:** Redundant injections are cached, prefab scopes are skipped in scene injection, and unused bindings are reported.
 
