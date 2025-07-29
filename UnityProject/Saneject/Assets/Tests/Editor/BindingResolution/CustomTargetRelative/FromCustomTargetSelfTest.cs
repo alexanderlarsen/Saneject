@@ -48,10 +48,13 @@ namespace Tests.Editor.BindingResolution.CustomTargetRelative
         {
             public GameObject target;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().From(target.transform);
-                Bind<IInjectableService, InjectableService>().From(target.transform);
+                BindComponent<InjectableService>()
+                    .From(target.transform);
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .From(target.transform);
             }
         }
     }

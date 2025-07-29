@@ -6,60 +6,55 @@ namespace Development
 {
     public class AllBindingsScope : Scope
     {
-        public override void Configure()
+        protected override void ConfigureBindings()
         {
-            ResolveComponents();
-        }
+            BindComponent<Player>().FromSelf();
+            BindComponent<Player>().FromParent();
+            BindComponent<Player>().FromAncestors();
+            BindComponent<Player>().FromFirstChild();
+            BindComponent<Player>().FromLastChild();
+            BindComponent<Player>().FromChildWithIndex(0);
+            BindComponent<Player>().FromDescendants();
+            BindComponent<Player>().FromSiblings();
 
-        private void ResolveComponents()
-        {
-            Bind<Player>().FromSelf();
-            Bind<Player>().FromParent();
-            Bind<Player>().FromAncestors();
-            Bind<Player>().FromFirstChild();
-            Bind<Player>().FromLastChild();
-            Bind<Player>().FromChildWithIndex(0);
-            Bind<Player>().FromDescendants();
-            Bind<Player>().FromSiblings();
+            BindComponent<Player>().FromScopeSelf();
+            BindComponent<Player>().FromScopeParent();
+            BindComponent<Player>().FromScopeAncestors();
+            BindComponent<Player>().FromScopeFirstChild();
+            BindComponent<Player>().FromScopeLastChild();
+            BindComponent<Player>().FromScopeChildWithIndex(0);
+            BindComponent<Player>().FromScopeDescendants();
+            BindComponent<Player>().FromScopeSiblings();
 
-            Bind<Player>().FromScopeSelf();
-            Bind<Player>().FromScopeParent();
-            Bind<Player>().FromScopeAncestors();
-            Bind<Player>().FromScopeFirstChild();
-            Bind<Player>().FromScopeLastChild();
-            Bind<Player>().FromScopeChildWithIndex(0);
-            Bind<Player>().FromScopeDescendants();
-            Bind<Player>().FromScopeSiblings();
+            BindComponent<Player>().FromRootSelf();
+            BindComponent<Player>().FromRootFirstChild();
+            BindComponent<Player>().FromRootLastChild();
+            BindComponent<Player>().FromRootChildWithIndex(0);
+            BindComponent<Player>().FromRootDescendants();
 
-            Bind<Player>().FromRootSelf();
-            Bind<Player>().FromRootFirstChild();
-            Bind<Player>().FromRootLastChild();
-            Bind<Player>().FromRootChildWithIndex(0);
-            Bind<Player>().FromRootDescendants();
+            BindComponent<Player>().FromTargetSelf();
+            BindComponent<Player>().FromTargetParent();
+            BindComponent<Player>().FromTargetAncestors();
+            BindComponent<Player>().FromTargetFirstChild();
+            BindComponent<Player>().FromTargetLastChild();
+            BindComponent<Player>().FromTargetChildWithIndex(0);
+            BindComponent<Player>().FromTargetDescendants();
+            BindComponent<Player>().FromTargetSiblings();
 
-            Bind<Player>().FromTargetSelf();
-            Bind<Player>().FromTargetParent();
-            Bind<Player>().FromTargetAncestors();
-            Bind<Player>().FromTargetFirstChild();
-            Bind<Player>().FromTargetLastChild();
-            Bind<Player>().FromTargetChildWithIndex(0);
-            Bind<Player>().FromTargetDescendants();
-            Bind<Player>().FromTargetSiblings();
+            BindComponent<Player>().From(null);
+            BindComponent<Player>().FromParentOf(null);
+            BindComponent<Player>().FromAncestorsOf(null);
+            BindComponent<Player>().FromFirstChildOf(null);
+            BindComponent<Player>().FromLastChildOf(null);
+            BindComponent<Player>().FromChildWithIndexOf(null, 0);
+            BindComponent<Player>().FromDescendantsOf(null);
+            BindComponent<Player>().FromSiblingsOf(null);
 
-            Bind<Player>().From(null);
-            Bind<Player>().FromParentOf(null);
-            Bind<Player>().FromAncestorsOf(null);
-            Bind<Player>().FromFirstChildOf(null);
-            Bind<Player>().FromLastChildOf(null);
-            Bind<Player>().FromChildWithIndexOf(null, 0);
-            Bind<Player>().FromDescendantsOf(null);
-            Bind<Player>().FromSiblingsOf(null);
+            BindComponent<Player>().FromAnywhereInScene();
+            BindComponent<Player>().FromInstance(null);
+            BindComponent<Player>().FromMethod((Func<Player>)null);
 
-            Bind<Player>().FromAnywhereInScene();
-            Bind<Player>().FromInstance(null);
-            Bind<Player>().FromMethod((Func<Player>)null);
-
-            Bind<Player>().WithId("").FromMethod((Func<Player>)null);
+            BindComponent<Player>().WithId("").FromMethod((Func<Player>)null);
         }
     }
 }

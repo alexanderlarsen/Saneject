@@ -92,23 +92,23 @@ namespace Tests.Editor.BindingResolution.Filtering
         {
             public string filterSubstring;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants()
-                    .WhereGameObjectNameContains(filterSubstring);
+                    .WhereNameContains(filterSubstring);
 
-                Bind<Transform>()
+                BindComponent<Transform>()
                     .FromScopeDescendants()
-                    .WhereGameObjectNameContains(filterSubstring);
+                    .WhereNameContains(filterSubstring);
 
-                Bind<GameObject>()
+                BindAsset<GameObject>()
                     .FromResourcesAll("Test")
-                    .WhereGameObjectNameContains("Prefab 2");
+                    .WhereNameContains("Prefab 2");
 
-                Bind<TestScriptableObject>()
+                BindAsset<TestScriptableObject>()
                     .FromResourcesAll("Test")
-                    .WhereGameObjectNameContains("ScriptableObject 2");
+                    .WhereNameContains("ScriptableObject 2");
             }
         }
     }

@@ -80,15 +80,13 @@ namespace Tests.Editor.BindingResolution.Collection
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>()
-                    .AsCollection()
+                BindMultipleComponents<InjectableService>()
                     .FromDescendants()
                     .Where(service => service.gameObject.name is "Leaf1" or "Leaf2");
 
-                Bind<IInjectableService, InjectableService>()
-                    .AsCollection()
+                BindMultipleComponents<IInjectableService, InjectableService>()
                     .FromDescendants()
                     .Where(service => service.gameObject.name is "Leaf3" or "Leaf4");
             }

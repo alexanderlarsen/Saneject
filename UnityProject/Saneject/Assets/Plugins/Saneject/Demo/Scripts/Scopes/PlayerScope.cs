@@ -9,10 +9,13 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     /// </summary>
     public class PlayerScope : Scope
     {
-        public override void Configure()
+        protected override void ConfigureBindings()
         {
-            Bind<CharacterController>().FromScopeSelf();
-            Bind<PlayerInput>().FromScopeSelf();
+            BindComponent<CharacterController>()
+                .FromScopeSelf();
+
+            BindComponent<PlayerInput>()
+                .FromScopeSelf();
         }
     }
 }

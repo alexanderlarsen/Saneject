@@ -62,27 +62,26 @@ namespace Tests.Editor.BindingResolution.Filtering
         [Test]
         public void FiltersTransformByActiveInHierarchy()
         {
-            
             Assert.AreEqual("Active", testFilterComponent.transformTarget.name);
         }
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants()
-                    .WhereGameObjectActiveInHierarchy();
+                    .WhereActiveInHierarchy();
 
-                Bind<Transform>()
+                BindComponent<Transform>()
                     .FromScopeDescendants(includeSelf: false)
-                    .WhereGameObjectActiveInHierarchy();
+                    .WhereActiveInHierarchy();
 
-                Bind<GameObject>()
+                BindAsset<GameObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("Prefab 2");
 
-                Bind<TestScriptableObject>()
+                BindAsset<TestScriptableObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("TestScriptableObject 2");
             }

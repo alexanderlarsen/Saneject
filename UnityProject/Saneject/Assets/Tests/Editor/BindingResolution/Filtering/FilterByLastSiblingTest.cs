@@ -70,21 +70,21 @@ namespace Tests.Editor.BindingResolution.Filtering
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants(includeSelf: false)
-                    .WhereTransformIsLastSibling();
+                    .WhereIsLastSibling();
 
-                Bind<Transform>()
+                BindComponent<Transform>()
                     .FromScopeDescendants(includeSelf: false)
-                    .WhereTransformIsLastSibling();
+                    .WhereIsLastSibling();
 
-                Bind<GameObject>()
+                BindAsset<GameObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("Prefab 2");
 
-                Bind<TestScriptableObject>()
+                BindAsset<TestScriptableObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("TestScriptableObject 2");
             }

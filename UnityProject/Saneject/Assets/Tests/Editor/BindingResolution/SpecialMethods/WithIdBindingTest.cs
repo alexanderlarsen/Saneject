@@ -11,7 +11,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
     public class WithIdBindingTest
     {
         private GameObject consumer;
-        private Runtime.TestIdComponent target;
+        private TestIdComponent target;
 
         [SetUp]
         public void Setup()
@@ -34,7 +34,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
             ib.AddComponent<InjectableService>();
 
             consumer = new GameObject("Consumer");
-            target = consumer.AddComponent<Runtime.TestIdComponent>();
+            target = consumer.AddComponent<TestIdComponent>();
 
             TestScope testScope = consumer.AddComponent<TestScope>();
             testScope.serviceA = a;
@@ -65,12 +65,23 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
             public GameObject interfaceA;
             public GameObject interfaceB;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().WithId("A").From(serviceA.transform);
-                Bind<InjectableService>().WithId("B").From(serviceB.transform);
-                Bind<IInjectableService, InjectableService>().WithId("InterfaceA").From(interfaceA.transform);
-                Bind<IInjectableService, InjectableService>().WithId("InterfaceB").From(interfaceB.transform);
+                BindComponent<InjectableService>()
+                    .WithId("A")
+                    .From(serviceA.transform);
+
+                BindComponent<InjectableService>()
+                    .WithId("B")
+                    .From(serviceB.transform);
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .WithId("InterfaceA")
+                    .From(interfaceA.transform);
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .WithId("InterfaceB")
+                    .From(interfaceB.transform);
             }
         }
     }

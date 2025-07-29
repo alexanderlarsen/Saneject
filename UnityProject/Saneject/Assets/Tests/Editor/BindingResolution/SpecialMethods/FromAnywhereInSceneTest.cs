@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
 {
     public class FromAnywhereInSceneTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -24,7 +24,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
             dependencyHolder.AddComponent<InjectableService>();
 
             GameObject consumer = new("ConsumerObject");
-            testComponent = consumer.AddComponent<Runtime.TestComponent>();
+            testComponent = consumer.AddComponent<TestComponent>();
             consumer.AddComponent<TestScope>();
 
             DependencyInjector.InjectSceneDependencies();
@@ -44,10 +44,13 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromAnywhereInScene();
-                Bind<IInjectableService, InjectableService>().FromAnywhereInScene();
+                BindComponent<InjectableService>()
+                    .FromAnywhereInScene();
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromAnywhereInScene();
             }
         }
     }

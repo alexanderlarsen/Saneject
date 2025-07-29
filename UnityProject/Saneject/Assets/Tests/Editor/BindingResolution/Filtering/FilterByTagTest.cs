@@ -82,21 +82,21 @@ namespace Tests.Editor.BindingResolution.Filtering
         {
             public string filterTag;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants()
-                    .WhereGameObjectTagIs(filterTag);
+                    .WhereTagIs(filterTag);
 
-                Bind<Transform>()
+                BindComponent<Transform>()
                     .FromScopeDescendants()
-                    .WhereGameObjectTagIs(filterTag);
+                    .WhereTagIs(filterTag);
 
-                Bind<GameObject>()
+                BindAsset<GameObject>()
                     .FromResourcesAll("Test")
                     .WhereGameObjectTagIs("Test");
 
-                Bind<TestScriptableObject>()
+                BindAsset<TestScriptableObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("TestScriptableObject 2");
             }

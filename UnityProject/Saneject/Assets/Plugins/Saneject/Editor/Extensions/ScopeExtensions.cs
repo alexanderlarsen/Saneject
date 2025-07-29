@@ -34,15 +34,15 @@ namespace Plugins.Saneject.Editor.Extensions
         }
 
         /// <summary>
-        /// Sets parent scopes and calls <see cref="Scope.Configure" /> on each scope in the array.
+        /// Sets parent scopes and calls <see cref="Scope.ConfigureBindings" /> on each scope in the array.
         /// </summary>
         /// <param name="scopes">The array of scopes to configure.</param>
-        public static void Configure(this Scope[] scopes)
+        public static void Initialize(this Scope[] scopes)
         {
             foreach (Scope scope in scopes)
             {
                 scope.SetParentScope();
-                scope.Configure();
+                scope.Initialize();
             }
         }
 

@@ -55,7 +55,7 @@ namespace Plugins.Saneject.Editor.Core
             {
                 EditorUtility.DisplayProgressBar("Injection in progress", "Injecting all objects in scene", 0);
 
-                allScopes.Configure();
+                ScopeExtensions.Initialize(allScopes);
                 Scope[] rootScopes = allScopes.Where(scope => !scope.ParentScope).ToArray();
 
                 InjectionStats stats = new();
@@ -113,7 +113,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            allScopes.Configure();
+            ScopeExtensions.Initialize(allScopes);
 
             InjectionStats stats = new();
 

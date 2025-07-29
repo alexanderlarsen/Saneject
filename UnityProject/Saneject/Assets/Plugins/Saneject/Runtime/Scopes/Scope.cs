@@ -5,7 +5,6 @@ using System.Linq;
 using Plugins.Saneject.Runtime.Bindings;
 using UnityEngine;
 using Component = UnityEngine.Component;
-using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Runtime.Scopes
@@ -18,7 +17,13 @@ namespace Plugins.Saneject.Runtime.Scopes
     [DisallowMultipleComponent]
     public abstract class Scope : MonoBehaviour
     {
-        private readonly HashSet<Binding> bindings = new();
+        #region INTERNAL METHODS/FIELDS
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private HashSet<Binding> validBindings;
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private List<Binding> unvalidatedBindings;
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
@@ -26,15 +31,20 @@ namespace Plugins.Saneject.Runtime.Scopes
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Scope ParentScope { get; set; }
 
-        protected virtual void OnValidate()
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void Initialize()
         {
-            if ((hideFlags & HideFlags.DontSaveInBuild) == 0)
-                hideFlags |= HideFlags.DontSaveInBuild;
+            validBindings = new HashSet<Binding>();
+            unvalidatedBindings = new List<Binding>();
+            ConfigureBindings();
+            ValidateBindings();
         }
 
         /// <summary>
         /// Resolves all dependencies matching target type from scope.
+        /// For internal use by Saneject. Not intended for user code.
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public IEnumerable<Object> GetAllMatchingDependencies(
             Type interfaceType,
             Type concreteType,
@@ -53,14 +63,8 @@ namespace Plugins.Saneject.Runtime.Scopes
         [EditorBrowsable(EditorBrowsableState.Never)]
         public List<Binding> GetGlobalBindings()
         {
-            return bindings.Where(b => b.IsGlobal).ToList();
+            return validBindings.Where(b => b.IsGlobal).ToList();
         }
-
-        /// <summary>
-        /// For internal use by Saneject. Not intended for user code.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public abstract void Configure();
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
@@ -68,8 +72,9 @@ namespace Plugins.Saneject.Runtime.Scopes
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void Dispose()
         {
-            bindings.Clear();
             ParentScope = null;
+            validBindings = null;
+            unvalidatedBindings = null;
         }
 
         /// <summary>
@@ -78,60 +83,22 @@ namespace Plugins.Saneject.Runtime.Scopes
         [EditorBrowsable(EditorBrowsableState.Never)]
         public List<Binding> GetUnusedBindings()
         {
-            return bindings.Where(binding => !binding.IsUsed).ToList();
+            return validBindings.Where(binding => !binding.IsUsed).ToList();
         }
 
         /// <summary>
-        /// Registers a binding for the concrete type <typeparamref name="T" /> in this scope.
-        /// Use this to inject non-interface dependencies such as components, assets, or ScriptableObjects.
-        /// Supports collection bindings and global scope registration.
+        /// For internal use by Saneject. Not intended for user code.
         /// </summary>
-        /// <typeparam name="T">The concrete type to bind. Must inherit from <see cref="UnityEngine.Object" />.</typeparam>
-        /// <returns>A fluent builder for configuring the binding.</returns>
-        protected BindingBuilder<T> Bind<T>() where T : Object
+        private void ValidateBindings()
         {
-            BindingBuilder<T> builder = new(this, typeof(T));
-            builder.OnFinalized += HandleFinalized;
-            return builder;
-
-            void HandleFinalized(Binding binding)
+            foreach (Binding binding in unvalidatedBindings)
             {
-                builder.OnFinalized -= HandleFinalized;
-                AddBinding(binding);
+                if (!binding.IsValid())
+                    continue;
+
+                if (!validBindings.Add(binding))
+                    Debug.LogError($"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{binding.GetName()}'.");
             }
-        }
-
-        /// <summary>
-        /// Registers a binding from interface type <typeparamref name="TInterface" /> to concrete type <typeparamref name="TConcrete" />.
-        /// Enables injection of interfaces with a specified implementation.
-        /// Supports filtering, collection bindings, and global registration.
-        /// </summary>
-        /// <typeparam name="TInterface">The interface to inject.</typeparam>
-        /// <typeparam name="TConcrete">The concrete type to resolve. Must implement <typeparamref name="TInterface" /> and inherit from <see cref="UnityEngine.Object" />.</typeparam>
-        /// <returns>A fluent builder for configuring the binding.</returns>
-        protected BindingBuilder<TConcrete> Bind<TInterface, TConcrete>()
-            where TConcrete : Object, TInterface
-            where TInterface : class
-        {
-            BindingBuilder<TConcrete> builder = new(this, typeof(TInterface), typeof(TConcrete));
-            builder.OnFinalized += HandleFinalized;
-            return builder;
-
-            void HandleFinalized(Binding binding)
-            {
-                builder.OnFinalized -= HandleFinalized;
-                AddBinding(binding);
-            }
-        }
-
-        /// <summary>
-        /// Add the binding if it doesn't already exist in the tracked bindings. Otherwise throw an error.
-        /// </summary>
-        /// <param name="binding"></param>
-        private void AddBinding(Binding binding)
-        {
-            if (!bindings.Add(binding))
-                Debug.LogError($"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{binding.GetName()}'.");
         }
 
         /// <summary>
@@ -148,7 +115,7 @@ namespace Plugins.Saneject.Runtime.Scopes
                 throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
 
             // Find all matching bindings for the type
-            IEnumerable<Binding> matchingBindings = bindings.Where(binding =>
+            IEnumerable<Binding> matchingBindings = validBindings.Where(binding =>
                 !binding.IsGlobal &&
                 binding.InterfaceType == interfaceType &&
                 (binding.ConcreteType == concreteType || concreteType == null) && // skip concrete check if we have an interface
@@ -179,5 +146,216 @@ namespace Plugins.Saneject.Runtime.Scopes
                     injectionTarget)
                 : null;
         }
+
+        #endregion
+
+        #region USER-FACING METHODS
+
+        /// <summary>
+        /// Sets <see cref="HideFlags" /> to <see cref="HideFlags.DontSaveInBuild" />. If you override this method, call <c>base.OnValidate()</c> to strip <see cref="Scope" /> from build.
+        /// </summary>
+        protected virtual void OnValidate()
+        {
+            if ((hideFlags & HideFlags.DontSaveInBuild) == 0)
+                hideFlags |= HideFlags.DontSaveInBuild;
+        }
+
+        /// <summary>
+        /// Set up your bindings in this method.
+        /// </summary>
+        protected abstract void ConfigureBindings();
+
+        // TODO: Add BindComponent<TInterface>, BindAsset<TInterface>
+
+        /// <summary>
+        /// Registers a binding for a single <typeparamref name="TConcrete" /> component type in this scope.
+        /// Use this for concrete <see cref="Component" />s you wish to inject directly.
+        /// </summary>
+        /// <typeparam name="TConcrete">The concrete component type to bind.</typeparam>
+        /// <returns>A fluent builder for configuring the component binding.</returns>
+        protected ComponentBindingBuilder<TConcrete> BindComponent<TConcrete>() where TConcrete : Component
+        {
+            Binding binding = new(null, typeof(TConcrete), this);
+            unvalidatedBindings.Add(binding);
+            return new ComponentBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a collection binding for <typeparamref name="TConcrete" /> component type in this scope.
+        /// Use this to inject all matching components as a collection.
+        /// Shorthand for <see cref="BindMultipleComponents{TConcrete}" />.
+        /// </summary>
+        /// <typeparam name="TConcrete">The concrete component type to bind as a collection.</typeparam>
+        /// <returns>A fluent builder for configuring the component collection binding.</returns>
+        protected ComponentBindingBuilder<TConcrete> BindComponents<TConcrete>() where TConcrete : Component
+        {
+            return BindMultipleComponents<TConcrete>();
+        }
+
+        /// <summary>
+        /// Registers a collection binding for <typeparamref name="TConcrete" /> component type in this scope.
+        /// Use this to inject all matching components as a collection.
+        /// </summary>
+        /// <typeparam name="TConcrete">The concrete component type to bind as a collection.</typeparam>
+        /// <returns>A fluent builder for configuring the component collection binding.</returns>
+        protected ComponentBindingBuilder<TConcrete> BindMultipleComponents<TConcrete>() where TConcrete : Component
+        {
+            Binding binding = new(null, typeof(TConcrete), this);
+            binding.MarkCollectionBinding();
+            unvalidatedBindings.Add(binding);
+            return new ComponentBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a binding from interface type <typeparamref name="TInterface" /> to concrete component type <typeparamref name="TConcrete" />.
+        /// Use this to inject components via an interface abstraction.
+        /// </summary>
+        /// <typeparam name="TInterface">The interface type to inject.</typeparam>
+        /// <typeparam name="TConcrete">The concrete component type that implements the interface.</typeparam>
+        /// <returns>A fluent builder for configuring the component binding.</returns>
+        protected ComponentBindingBuilder<TConcrete> BindComponent<TInterface, TConcrete>()
+            where TConcrete : Component, TInterface
+            where TInterface : class
+        {
+            Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            unvalidatedBindings.Add(binding);
+            return new ComponentBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a collection binding from interface type <typeparamref name="TInterface" /> to concrete component type <typeparamref name="TConcrete" />.
+        /// Use this to inject multiple components implementing the interface as a collection.
+        /// Shorthand for <see cref="BindMultipleComponents{TInterface, TConcrete}" />.
+        /// </summary>
+        /// <typeparam name="TInterface">The interface type to inject.</typeparam>
+        /// <typeparam name="TConcrete">The concrete component type that implements the interface.</typeparam>
+        /// <returns>A fluent builder for configuring the component collection binding.</returns>
+        protected ComponentBindingBuilder<TConcrete> BindComponents<TInterface, TConcrete>()
+            where TConcrete : Component, TInterface
+            where TInterface : class
+        {
+            return BindMultipleComponents<TInterface, TConcrete>();
+        }
+
+        /// <summary>
+        /// Registers a collection binding from interface type <typeparamref name="TInterface" /> to concrete component type <typeparamref name="TConcrete" />.
+        /// Use this to inject multiple components implementing the interface as a collection.
+        /// </summary>
+        /// <typeparam name="TInterface">The interface type to inject.</typeparam>
+        /// <typeparam name="TConcrete">The concrete component type that implements the interface.</typeparam>
+        /// <returns>A fluent builder for configuring the component collection binding.</returns>
+        protected ComponentBindingBuilder<TConcrete> BindMultipleComponents<TInterface, TConcrete>()
+            where TConcrete : Component, TInterface
+            where TInterface : class
+        {
+            Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            binding.MarkCollectionBinding();
+            unvalidatedBindings.Add(binding);
+            return new ComponentBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a binding for a single asset of type <typeparamref name="TConcrete" />.
+        /// Use this to inject a specific asset (e.g. <see cref="Material" />, <see cref="Texture" />, etc.) by reference.
+        /// </summary>
+        /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind.</typeparam>
+        /// <returns>A fluent builder for configuring the asset binding.</returns>
+        protected AssetBindingBuilder<TConcrete> BindAsset<TConcrete>() where TConcrete : Object
+        {
+            Binding binding = new(null, typeof(TConcrete), this);
+            unvalidatedBindings.Add(binding);
+            return new AssetBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a collection binding for all assets of type <typeparamref name="TConcrete" />.
+        /// Use this to inject multiple assets (e.g. from a folder or group) as a collection.
+        /// Shorthand for <see cref="BindMultipleAssets{TConcrete}" />.
+        /// </summary>
+        /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind as a collection.</typeparam>
+        /// <returns>A fluent builder for configuring the asset collection binding.</returns>
+        protected AssetBindingBuilder<TConcrete> BindAssets<TConcrete>() where TConcrete : Object
+        {
+            return BindMultipleAssets<TConcrete>();
+        }
+
+        /// <summary>
+        /// Registers a collection binding for all assets of type <typeparamref name="TConcrete" />.
+        /// Use this to inject multiple assets (e.g. from a folder or group) as a collection.
+        /// </summary>
+        /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind as a collection.</typeparam>
+        /// <returns>A fluent builder for configuring the asset collection binding.</returns>
+        protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TConcrete>() where TConcrete : Object
+        {
+            Binding binding = new(null, typeof(TConcrete), this);
+            binding.MarkCollectionBinding();
+            unvalidatedBindings.Add(binding);
+            return new AssetBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a binding from interface type <typeparamref name="TInterface" /> to asset type <typeparamref name="TConcrete" />.
+        /// Use this to inject an asset by interface abstraction (e.g. ScriptableObject implementing an interface).
+        /// </summary>
+        /// <typeparam name="TInterface">The interface type to inject.</typeparam>
+        /// <typeparam name="TConcrete">The concrete asset type that implements the interface.</typeparam>
+        /// <returns>A fluent builder for configuring the asset binding.</returns>
+        protected AssetBindingBuilder<TConcrete> BindAsset<TInterface, TConcrete>()
+            where TConcrete : Object, TInterface
+            where TInterface : class
+        {
+            Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            unvalidatedBindings.Add(binding);
+            return new AssetBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a collection binding from interface type <typeparamref name="TInterface" /> to asset type <typeparamref name="TConcrete" />.
+        /// Use this to inject multiple assets implementing the interface as a collection.
+        /// Shorthand for <see cref="BindMultipleAssets{TInterface,TConcrete}" />.
+        /// </summary>
+        /// <typeparam name="TInterface">The interface type to inject.</typeparam>
+        /// <typeparam name="TConcrete">The concrete asset type that implements the interface.</typeparam>
+        /// <returns>A fluent builder for configuring the asset collection binding.</returns>
+        protected AssetBindingBuilder<TConcrete> BindAssets<TInterface, TConcrete>()
+            where TConcrete : Object, TInterface
+            where TInterface : class
+        {
+            return BindMultipleAssets<TInterface, TConcrete>();
+        }
+
+        /// <summary>
+        /// Registers a collection binding from interface type <typeparamref name="TInterface" /> to asset type <typeparamref name="TConcrete" />.
+        /// Use this to inject multiple assets implementing the interface as a collection.
+        /// </summary>
+        /// <typeparam name="TInterface">The interface type to inject.</typeparam>
+        /// <typeparam name="TConcrete">The concrete asset type that implements the interface.</typeparam>
+        /// <returns>A fluent builder for configuring the asset collection binding.</returns>
+        protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TInterface, TConcrete>()
+            where TConcrete : Object, TInterface
+            where TInterface : class
+        {
+            Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
+            binding.MarkCollectionBinding();
+            unvalidatedBindings.Add(binding);
+            return new AssetBindingBuilder<TConcrete>(binding, this);
+        }
+
+        /// <summary>
+        /// Registers a global binding for the scene component <typeparamref name="TConcrete" />.
+        /// Promotes the component into the global scope via <c>SceneGlobalContainer</c>.
+        /// Enables cross-scene access through global resolution (e.g., via <c>InterfaceProxyObject</c>).
+        /// </summary>
+        /// <typeparam name="TConcrete">The <see cref="Component" /> type to bind globally.</typeparam>
+        /// <returns>A fluent builder for configuring the global component binding.</returns>
+        protected ComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component
+        {
+            Binding binding = new(null, typeof(TConcrete), this);
+            binding.MarkGlobal();
+            unvalidatedBindings.Add(binding);
+            return new ComponentBindingBuilder<TConcrete>(binding, this);
+        }
+
+        #endregion
     }
 }

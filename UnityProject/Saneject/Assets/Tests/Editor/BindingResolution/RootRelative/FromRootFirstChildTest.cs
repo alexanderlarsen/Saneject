@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.RootRelative
 {
     public class FromRootFirstChildTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -30,7 +30,7 @@ namespace Tests.Editor.BindingResolution.RootRelative
             ;
 
             firstChild.AddComponent<InjectableService>();
-            testComponent = secondChild.AddComponent<Runtime.TestComponent>();
+            testComponent = secondChild.AddComponent<TestComponent>();
             secondChild.AddComponent<TestScope>();
 
             DependencyInjector.InjectSceneDependencies();
@@ -50,10 +50,13 @@ namespace Tests.Editor.BindingResolution.RootRelative
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromRootFirstChild();
-                Bind<IInjectableService, InjectableService>().FromRootFirstChild();
+                BindComponent<InjectableService>()
+                    .FromRootFirstChild();
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromRootFirstChild();
             }
         }
     }

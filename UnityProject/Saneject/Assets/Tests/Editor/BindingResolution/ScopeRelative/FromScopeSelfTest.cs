@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.ScopeRelative
 {
     public class FromScopeSelfTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -22,7 +22,7 @@ namespace Tests.Editor.BindingResolution.ScopeRelative
             GameObject gameObject = new("TestObject");
 
             gameObject.AddComponent<InjectableService>();
-            testComponent = gameObject.AddComponent<Runtime.TestComponent>();
+            testComponent = gameObject.AddComponent<TestComponent>();
             gameObject.AddComponent<TestScope>();
 
             DependencyInjector.InjectSceneDependencies();
@@ -42,10 +42,13 @@ namespace Tests.Editor.BindingResolution.ScopeRelative
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromScopeSelf();
-                Bind<IInjectableService, InjectableService>().FromScopeSelf();
+                BindComponent<InjectableService>()
+                    .FromScopeSelf();
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromScopeSelf();
             }
         }
     }

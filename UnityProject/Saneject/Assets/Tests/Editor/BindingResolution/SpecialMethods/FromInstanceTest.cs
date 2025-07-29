@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
 {
     public class FromInstanceTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -24,7 +24,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
             InjectableService instance = instanceHolder.AddComponent<InjectableService>();
 
             GameObject consumer = new("ConsumerObject");
-            testComponent = consumer.AddComponent<Runtime.TestComponent>();
+            testComponent = consumer.AddComponent<TestComponent>();
 
             TestScope scope = consumer.AddComponent<TestScope>();
             scope.instance = instance;
@@ -48,10 +48,13 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
         {
             public InjectableService instance;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromInstance(instance);
-                Bind<IInjectableService, InjectableService>().FromInstance(instance);
+                BindComponent<InjectableService>()
+                    .FromInstance(instance);
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromInstance(instance);
             }
         }
     }

@@ -12,21 +12,37 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     /// </summary>
     public class GameSceneScope : Scope
     {
-        public override void Configure()
+        protected override void ConfigureBindings()
         {
-            Bind<Player>().AsGlobal().FromScopeDescendants();
-            Bind<EnemyManager>().AsGlobal().FromScopeDescendants();
-            Bind<ScoreManager>().AsGlobal().FromScopeDescendants();
-            Bind<CameraController>().AsGlobal().FromScopeDescendants();
-            Bind<GameStateManager>().AsGlobal().FromScopeDescendants();
+            BindGlobal<Player>()
+                .FromScopeDescendants();
 
-            Bind<ICameraFollowTarget, Player>().FromScopeDescendants();
-            Bind<IScoreUpdater, ScoreManager>().FromScopeDescendants();
-            Bind<IEnemyObservable, EnemyManager>().FromScopeDescendants();
+            BindGlobal<EnemyManager>()
+                .FromScopeDescendants();
 
-            Bind<IEnemy, Enemy>().AsCollection().FromTargetDescendants();
+            BindGlobal<ScoreManager>()
+                .FromScopeDescendants();
 
-            Bind<UnityEngine.Camera>().FromAnywhereInScene();
+            BindGlobal<CameraController>()
+                .FromScopeDescendants();
+
+            BindGlobal<GameStateManager>()
+                .FromScopeDescendants();
+
+            BindComponent<ICameraFollowTarget, Player>()
+                .FromScopeDescendants();
+
+            BindComponent<IScoreUpdater, ScoreManager>()
+                .FromScopeDescendants();
+
+            BindComponent<IEnemyObservable, EnemyManager>()
+                .FromScopeDescendants();
+
+            BindComponent<UnityEngine.Camera>()
+                .FromAnywhereInScene();
+
+            BindMultipleComponents<IEnemy, Enemy>()
+                .FromTargetDescendants();
         }
     }
 }

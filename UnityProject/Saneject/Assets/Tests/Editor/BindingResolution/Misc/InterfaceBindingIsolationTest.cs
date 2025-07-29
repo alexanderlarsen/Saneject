@@ -44,9 +44,9 @@ namespace Tests.Editor.BindingResolution.Misc
 
         public class StrictConcreteScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<IInjectableService, InjectableService>()
+                BindComponent<IInjectableService, InjectableService>()
                     .FromDescendants();
             }
         }

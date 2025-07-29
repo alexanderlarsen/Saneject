@@ -115,21 +115,21 @@ namespace Tests.Editor.BindingResolution.Filtering
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants()
                     .Where(service => service.gameObject.name.Length > 10);
 
-                Bind<Transform>()
+                BindComponent<Transform>()
                     .FromScopeDescendants(includeSelf: false)
                     .Where(transform => transform.position.x > 3f);
 
-                Bind<GameObject>()
+                BindAsset<GameObject>()
                     .FromResourcesAll("Test")
                     .Where(prefab => prefab.name.Length > 7);
 
-                Bind<TestScriptableObject>()
+                BindAsset<TestScriptableObject>()
                     .FromResourcesAll("Test")
                     .Where(so => so.name.Contains("2"));
             }

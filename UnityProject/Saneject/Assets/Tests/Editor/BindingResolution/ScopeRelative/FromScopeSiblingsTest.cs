@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.ScopeRelative
 {
     public class FromScopeSiblingsTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -29,7 +29,7 @@ namespace Tests.Editor.BindingResolution.ScopeRelative
             siblingB.transform.SetParent(parent.transform);
 
             siblingA.AddComponent<InjectableService>();
-            testComponent = siblingB.AddComponent<Runtime.TestComponent>();
+            testComponent = siblingB.AddComponent<TestComponent>();
             siblingB.AddComponent<TestScope>();
 
             DependencyInjector.InjectSceneDependencies();
@@ -49,10 +49,13 @@ namespace Tests.Editor.BindingResolution.ScopeRelative
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromScopeSiblings();
-                Bind<IInjectableService, InjectableService>().FromScopeSiblings();
+                BindComponent<InjectableService>()
+                    .FromScopeSiblings();
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromScopeSiblings();
             }
         }
     }

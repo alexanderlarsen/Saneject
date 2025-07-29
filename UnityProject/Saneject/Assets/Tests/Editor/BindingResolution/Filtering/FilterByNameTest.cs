@@ -92,21 +92,21 @@ namespace Tests.Editor.BindingResolution.Filtering
         {
             public string filterName;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants()
                     .WhereNameIs(filterName);
 
-                Bind<Transform>()
+                BindComponent<Transform>()
                     .FromScopeDescendants()
                     .WhereNameIs(filterName);
 
-                Bind<GameObject>()
+                BindAsset<GameObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("Prefab 2");
 
-                Bind<TestScriptableObject>()
+                BindAsset<TestScriptableObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("TestScriptableObject 2");
             }

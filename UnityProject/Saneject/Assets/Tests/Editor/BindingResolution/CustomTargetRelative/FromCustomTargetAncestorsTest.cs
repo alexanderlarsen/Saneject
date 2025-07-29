@@ -37,7 +37,7 @@ namespace Tests.Editor.BindingResolution.CustomTargetRelative
             testScope.target = target;
 
             DependencyInjector.InjectSceneDependencies();
-        } 
+        }
 
         [Test]
         public void InjectsConcrete()
@@ -55,10 +55,13 @@ namespace Tests.Editor.BindingResolution.CustomTargetRelative
         {
             public GameObject target;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromAncestorsOf(target.transform);
-                Bind<IInjectableService, InjectableService>().FromAncestorsOf(target.transform);
+                BindComponent<InjectableService>()
+                    .FromAncestorsOf(target.transform);
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromAncestorsOf(target.transform);
             }
         }
     }

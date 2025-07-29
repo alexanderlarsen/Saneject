@@ -82,29 +82,29 @@ namespace Tests.Editor.BindingResolution.Filtering
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
                 // ServiceA only for TestFilterComponent
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants()
                     .WhereNameIs("ServiceA")
                     .WhereTargetIs<TestFilterComponent>();
 
                 // ServiceB only for AnotherTestComponent  
-                Bind<InjectableService>()
+                BindComponent<InjectableService>()
                     .FromScopeDescendants()
                     .WhereNameIs("ServiceB")
                     .WhereTargetIs<AnotherTestComponent>();
 
                 // Default bindings for other resources
-                Bind<Transform>()
+                BindComponent<Transform>()
                     .FromScopeDescendants(includeSelf: false);
 
-                Bind<GameObject>()
+                BindAsset<GameObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("Prefab 2");
 
-                Bind<TestScriptableObject>()
+                BindAsset<TestScriptableObject>()
                     .FromResourcesAll("Test")
                     .WhereNameIs("TestScriptableObject 2");
             }

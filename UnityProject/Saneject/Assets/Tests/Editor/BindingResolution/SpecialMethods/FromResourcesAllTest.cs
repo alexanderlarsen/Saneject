@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
 {
     public class FromResourcesAllTest
     {
-        private Runtime.TestScriptableObjectComponent target;
+        private TestScriptableObjectComponent target;
 
         [SetUp]
         public void Setup()
@@ -21,7 +21,7 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
                 .ToList().ForEach(Object.DestroyImmediate);
 
             GameObject consumer = new("Consumer");
-            target = consumer.AddComponent<Runtime.TestScriptableObjectComponent>();
+            target = consumer.AddComponent<TestScriptableObjectComponent>();
             consumer.AddComponent<TestScope>();
 
             DependencyInjector.InjectSceneDependencies();
@@ -41,10 +41,13 @@ namespace Tests.Editor.BindingResolution.SpecialMethods
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<TestScriptableObject>().FromResourcesAll("Test");
-                Bind<ITestScriptableObject, TestScriptableObject>().FromResourcesAll("Test");
+                BindAsset<TestScriptableObject>()
+                    .FromResourcesAll("Test");
+
+                BindAsset<ITestScriptableObject, TestScriptableObject>()
+                    .FromResourcesAll("Test");
             }
         }
     }

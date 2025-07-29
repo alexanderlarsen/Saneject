@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.RootRelative
 {
     public class FromRootDescendantsTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -28,7 +28,7 @@ namespace Tests.Editor.BindingResolution.RootRelative
             grandchild.transform.SetParent(child.transform);
 
             grandchild.AddComponent<InjectableService>(); // binding deep in descendants
-            testComponent = child.AddComponent<Runtime.TestComponent>();
+            testComponent = child.AddComponent<TestComponent>();
             child.AddComponent<TestScope>(); // scope is in the middle of the tree
 
             DependencyInjector.InjectSceneDependencies();
@@ -48,10 +48,13 @@ namespace Tests.Editor.BindingResolution.RootRelative
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromRootDescendants();
-                Bind<IInjectableService, InjectableService>().FromRootDescendants();
+                BindComponent<InjectableService>()
+                    .FromRootDescendants();
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromRootDescendants();
             }
         }
     }

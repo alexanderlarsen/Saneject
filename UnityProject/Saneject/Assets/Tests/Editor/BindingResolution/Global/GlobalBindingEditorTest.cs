@@ -60,9 +60,10 @@ namespace Tests.Editor.BindingResolution.Global
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().AsGlobal().FromAnywhereInScene();
+                BindGlobal<InjectableService>()
+                    .FromAnywhereInScene();
             }
         }
     }

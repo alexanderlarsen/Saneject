@@ -159,7 +159,6 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 5
   evadeDistance: 3
-  __catchNotifiable: {fileID: 11400000, guid: 0ef8fc17fe3feec4886015bd41e7bbf5, type: 2}
   __evadeTarget: {fileID: 11400000, guid: e54f004f87f4478499ec975bc94c8b6b, type: 2}
 --- !u!33 &8924227375775184379
 MeshFilter:

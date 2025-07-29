@@ -54,10 +54,13 @@ namespace Tests.Editor.BindingResolution.CustomTargetRelative
         {
             public GameObject target;
 
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromChildWithIndexOf(target.transform, 2);
-                Bind<IInjectableService, InjectableService>().FromChildWithIndexOf(target.transform, 2);
+                BindComponent<InjectableService>()
+                    .FromChildWithIndexOf(target.transform, 2);
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromChildWithIndexOf(target.transform, 2);
             }
         }
     }

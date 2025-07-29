@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.InjectionTargetRelative
 {
     public class FromTargetChildWithIndexTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -35,7 +35,7 @@ namespace Tests.Editor.BindingResolution.InjectionTargetRelative
             thirdChild.transform.SetParent(targetObject.transform);
 
             thirdChild.AddComponent<InjectableService>();
-            testComponent = targetObject.AddComponent<Runtime.TestComponent>();
+            testComponent = targetObject.AddComponent<TestComponent>();
             root.AddComponent<TestScope>();
 
             DependencyInjector.InjectSceneDependencies();
@@ -55,10 +55,13 @@ namespace Tests.Editor.BindingResolution.InjectionTargetRelative
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromTargetChildWithIndex(2);
-                Bind<IInjectableService, InjectableService>().FromTargetChildWithIndex(2);
+                BindComponent<InjectableService>()
+                    .FromTargetChildWithIndex(2);
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromTargetChildWithIndex(2);
             }
         }
     }

@@ -13,14 +13,25 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     /// </summary>
     public class EnemyScope : Scope
     {
-        public override void Configure()
+        protected override void ConfigureBindings()
         {
-            Bind<CharacterController>().FromScopeSelf();
-            Bind<Transform>().WithId("MarkerTarget").FromRootSelf();
-            Bind<Image>().WithId("MarkerImage").FromTargetSelf().WhereTargetIs<EnemyMarker>();
+            BindComponent<CharacterController>()
+                .FromScopeSelf();
 
-            Bind<IEnemyEvadeTarget, PlayerProxy>().FromAssetLoad("Assets/Plugins/Saneject/Demo/Proxies/PlayerProxy.asset");
-            Bind<IMainCamera, CameraControllerProxy>().FromAssetLoad("Assets/Plugins/Saneject/Demo/Proxies/CameraControllerProxy.asset");
+            BindComponent<Transform>()
+                .WithId("MarkerTarget")
+                .FromRootSelf();
+
+            BindComponent<Image>()
+                .WithId("MarkerImage")
+                .FromTargetSelf()
+                .WhereTargetIs<EnemyMarker>();
+
+            BindAsset<IEnemyEvadeTarget, PlayerProxy>()
+                .FromAssetLoad("Assets/Plugins/Saneject/Demo/Proxies/PlayerProxy.asset");
+
+            BindAsset<IMainCamera, CameraControllerProxy>()
+                .FromAssetLoad("Assets/Plugins/Saneject/Demo/Proxies/CameraControllerProxy.asset");
         }
     }
-}  
+}

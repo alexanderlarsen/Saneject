@@ -26,16 +26,34 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
         [SerializeField]
         private SceneManagerProxy sceneManagerProxy;
 
-        public override void Configure()
+        protected override void ConfigureBindings()
         {
-            Bind<IGameStateObservable, GameStateManagerProxy>().FromInstance(gameStateManagerProxy);
-            Bind<IScoreObservable, ScoreManagerProxy>().FromInstance(scoreManagerProxy);
-            Bind<IEnemyObservable, EnemyManagerProxy>().FromInstance(enemyManagerProxy);
-            Bind<ISceneManager, SceneManagerProxy>().FromInstance(sceneManagerProxy);
+            BindComponent<TextMeshProUGUI>()
+                .WithId("enemiesTmp")
+                .FromTargetDescendants()
+                .WhereNameIs("EnemiesTmp");
 
-            Bind<TextMeshProUGUI>().WithId("enemiesTmp").FromTargetDescendants().WhereNameIs("EnemiesTmp");
-            Bind<TextMeshProUGUI>().WithId("scoreTmp").FromTargetDescendants().WhereNameIs("ScoreTmp");
-            Bind<Button>().WithId("restartButton").FromTargetDescendants().WhereNameIs("RestartButton");
+            BindComponent<TextMeshProUGUI>()
+                .WithId("scoreTmp")
+                .FromTargetDescendants()
+                .WhereNameIs("ScoreTmp");
+
+            BindComponent<Button>()
+                .WithId("restartButton")
+                .FromTargetDescendants()
+                .WhereNameIs("RestartButton");
+
+            BindAsset<IGameStateObservable, GameStateManagerProxy>()
+                .FromInstance(gameStateManagerProxy);
+
+            BindAsset<IScoreObservable, ScoreManagerProxy>()
+                .FromInstance(scoreManagerProxy);
+
+            BindAsset<IEnemyObservable, EnemyManagerProxy>()
+                .FromInstance(enemyManagerProxy);
+
+            BindAsset<ISceneManager, SceneManagerProxy>()
+                .FromInstance(sceneManagerProxy);
         }
     }
 }

@@ -5,17 +5,19 @@ using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+// ReSharper disable NonReadonlyMemberInGetHashCode
+
 namespace Plugins.Saneject.Runtime.Bindings
 {
     /// <summary>
     /// Represents a user-defined binding between an interface and a concrete type in Saneject's DI system.
-    /// Encapsulates dependency location rules as defined by <see cref="BindingBuilder{T}" />.
+    /// Encapsulates dependency location rules as defined by <see cref="ComponentBindingBuilder{T}" />, <see cref="AssetBindingBuilder{T}" />, <see cref="ComponentFilterBuilder{T}" />, <see cref="AssetFilterBuilder{T}" />.
     /// </summary>
     public class Binding : IEquatable<Binding>
     {
         private readonly Scope scope;
         private readonly List<Func<Object, bool>> filters = new();
-        private readonly List<Func<Object, bool>> targetFilters = new();
+        private readonly List<(Func<Object, bool> filter, Type targetType)> targetFilters = new();
 
         private Func<Object, IEnumerable<Object>> locator;
 
@@ -168,9 +170,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Add a filter for injection targets. Only targets passing all target filters are valid for this binding.
         /// </summary>
         /// <param name="filter">Predicate to evaluate each injection target <see cref="UnityEngine.Object" />.</param>
-        public void AddTargetFilter(Func<Object, bool> filter)
+        /// <param name="targetType"></param>
+        public void AddTargetFilter(
+            Func<Object, bool> filter,
+            Type targetType)
         {
-            targetFilters.Add(filter);
+            targetFilters.Add((filter, targetType));
         }
 
         /// <summary>
@@ -184,7 +189,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             IsUsed = true;
 
-            if (targetFilters.Count > 0 && target != null && !targetFilters.All(f => f(target)))
+            if (targetFilters.Count > 0 && target != null && !targetFilters.All(f => f.filter(target)))
                 return null;
 
             if (RequiresInjectionTarget && target == null)
@@ -203,12 +208,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <returns>True if all target filters pass or no target filters exist, false otherwise.</returns>
         public bool PassesTargetFilters(Object target)
         {
-            // If no target filters, binding always passes
             if (targetFilters.Count == 0)
                 return true;
 
-            // If target filters exist but no target provided, binding fails & check if all target filters pass
-            return target != null && targetFilters.All(f => f(target));
+            return target != null && targetFilters.All(f => f.filter(target));
         }
 
         public string GetName()
@@ -218,34 +221,35 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public bool Equals(Binding other)
         {
-            if (other is null)
-                return false;
-
-            if (ReferenceEquals(this, other))
-                return true;
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
 
             return Equals(scope, other.scope)
                    && InterfaceType == other.InterfaceType
                    && ConcreteType == other.ConcreteType
                    && Id == other.Id
                    && IsGlobal == other.IsGlobal
-                   && IsCollection == other.IsCollection;
-        }
-
-        public override bool Equals(object obj)
-        {
-            if (obj is null)
-                return false;
-
-            if (ReferenceEquals(this, obj))
-                return true;
-
-            return obj.GetType() == GetType() && Equals((Binding)obj);
+                   && IsCollection == other.IsCollection
+                   && targetFilters.Select(tf => tf.targetType)
+                       .OrderBy(t => t?.FullName)
+                       .SequenceEqual(other.targetFilters.Select(tf => tf.targetType)
+                           .OrderBy(t => t?.FullName));
         }
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(scope, InterfaceType, ConcreteType, Id, IsGlobal, IsCollection);
+            int hash = HashCode.Combine(scope, InterfaceType, ConcreteType, Id, IsGlobal, IsCollection);
+
+            foreach (Type targetType in targetFilters.Select(tf => tf.targetType).OrderBy(t => t?.FullName))
+                hash = HashCode.Combine(hash, targetType);
+
+            return hash;
+        }
+
+        public bool IsValid()
+        {
+            // TODO: Add checks here for global, id, collection
+            return true;
         }
     }
 }

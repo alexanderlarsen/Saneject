@@ -10,7 +10,7 @@ namespace Tests.Editor.BindingResolution.RootRelative
 {
     public class FromRootLastChildTest
     {
-        private Runtime.TestComponent testComponent;
+        private TestComponent testComponent;
 
         [SetUp]
         public void Setup()
@@ -29,7 +29,7 @@ namespace Tests.Editor.BindingResolution.RootRelative
             lastChild.transform.SetParent(root.transform);
 
             lastChild.AddComponent<InjectableService>(); // Only last child has the service
-            testComponent = firstChild.AddComponent<Runtime.TestComponent>();
+            testComponent = firstChild.AddComponent<TestComponent>();
             firstChild.AddComponent<TestScope>();
 
             DependencyInjector.InjectSceneDependencies();
@@ -49,10 +49,13 @@ namespace Tests.Editor.BindingResolution.RootRelative
 
         public class TestScope : Scope
         {
-            public override void Configure()
+            protected override void ConfigureBindings()
             {
-                Bind<InjectableService>().FromRootLastChild();
-                Bind<IInjectableService, InjectableService>().FromRootLastChild();
+                BindComponent<InjectableService>()
+                    .FromRootLastChild();
+
+                BindComponent<IInjectableService, InjectableService>()
+                    .FromRootLastChild();
             }
         }
     }

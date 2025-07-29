@@ -121,7 +121,7 @@ namespace Plugins.Saneject.Editor.Settings
 
             DrawToggleWithTooltip(
                 label: "Log Unused Bindings",
-                tooltip: "Log a message when a binding is unused during scene injection. This can happen when a binding is registered in a scope but never used in the scene.",
+                tooltip: "Log a message when a binding is unused during injection. This can happen when a binding is registered in a scope but never used in the scene or prefab.",
                 currentValue: UserSettings.LogUnusedBindings,
                 onChanged: newValue => UserSettings.LogUnusedBindings = newValue
             );
