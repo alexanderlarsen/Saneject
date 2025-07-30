@@ -3,7 +3,7 @@
 Editor-time resolved serialized field dependency injection for Unity - keep your references visible, classes clean, ditch the runtime container.
 
 > ⚠️ **Beta Notice**  
-> Saneject is currently in beta. While the core functionality is stable, I’m looking for testers to help catch edge cases, bugs and polish the tooling. If you find issues or have feedback, please open an issue or reach out.
+> Saneject is currently in beta. The framework is functionally stable, but the API is still evolving during the beta phase. Expect some breaking changes until 1.0.0. I’m looking for testers to help catch edge cases, bugs and polish the tooling. If you find issues or have feedback, feel free to open an issue or reach out.
 
 ## Table of Contents
 
