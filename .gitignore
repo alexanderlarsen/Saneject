@@ -55,3 +55,4 @@
 *.pdb.meta
 *.mdb.meta
 crashlytics-build.properties
+/UnityProject/Saneject/Saneject.sln.DotSettings
