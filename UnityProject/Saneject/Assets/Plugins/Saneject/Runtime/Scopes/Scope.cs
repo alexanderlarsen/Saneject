@@ -165,8 +165,6 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         protected abstract void ConfigureBindings();
 
-        // TODO: Add BindComponent<TInterface>, BindAsset<TInterface>
-
         /// <summary>
         /// Registers a binding for a single <typeparamref name="T" /> component or interface type in this scope.
         /// Use this for concrete <see cref="Component" /> or interface you wish to inject directly.
