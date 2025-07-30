@@ -139,6 +139,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
                     {
                         string elementType = arr.ElementType.ToDisplayString();
+                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{fs.Name}\" />. You should not interact with the backing field directly.</summary>");
                         sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object[] {backing};");
                     }
                     else if (t is INamedTypeSymbol named && named.IsGenericType
@@ -146,10 +147,12 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                                                          && named.TypeArguments[0].TypeKind == TypeKind.Interface)
                     {
                         string elementType = named.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{fs.Name}\" />. You should not interact with the backing field directly.</summary>");
                         sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private List<UnityEngine.Object> {backing};");
                     }
                     else
                     {
+                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{fs.Name}\" />. You should not interact with the backing field directly.</summary>");
                         sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object {backing};");
                     }
                 }
@@ -166,6 +169,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
                     {
                         string elementType = arr.ElementType.ToDisplayString();
+                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{ps.Name}\" />. You should not interact with the backing field directly.</summary>");
                         sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object[] {backing};");
                     }
                     else if (t is INamedTypeSymbol named && named.IsGenericType
@@ -173,15 +177,18 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                                                          && named.TypeArguments[0].TypeKind == TypeKind.Interface)
                     {
                         string elementType = named.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{ps.Name}\" />. You should not interact with the backing field directly.</summary>");
                         sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private List<UnityEngine.Object> {backing};");
                     }
                     else
                     {
+                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{ps.Name}\" />. You should not interact with the backing field directly.</summary>");
                         sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object {backing};");
                     }
                 }
 
             sb.AppendLine();
+            sb.AppendLine("        /// <summary>Auto-generated method used by Saneject to sync interface -> backing field. You should not interact with the method directly.</summary>");
             sb.AppendLine("        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]");
             sb.AppendLine("        public void OnBeforeSerialize()");
             sb.AppendLine("        {");
@@ -224,6 +231,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
             sb.AppendLine("        #endif");
             sb.AppendLine("        }");
             sb.AppendLine();
+            sb.AppendLine("        /// <summary>Auto-generated method used by Saneject to sync backing field -> interface. You should not interact with the method directly.</summary>");
             sb.AppendLine("        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]");
             sb.AppendLine("        public void OnAfterDeserialize()");
             sb.AppendLine("        {");
