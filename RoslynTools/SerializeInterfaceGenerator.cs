@@ -139,18 +139,18 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
                     {
                         string elementType = arr.ElementType.ToDisplayString();
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id})] private UnityEngine.Object[] {backing};");
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object[] {backing};");
                     }
                     else if (t is INamedTypeSymbol named && named.IsGenericType
                                                          && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
                                                          && named.TypeArguments[0].TypeKind == TypeKind.Interface)
                     {
                         string elementType = named.TypeArguments[0].ToDisplayString();
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id})] private List<UnityEngine.Object> {backing};");
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private List<UnityEngine.Object> {backing};");
                     }
                     else
                     {
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {id})] private UnityEngine.Object {backing};");
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object {backing};");
                     }
                 }
 
@@ -166,22 +166,23 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
                     {
                         string elementType = arr.ElementType.ToDisplayString();
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv})] private UnityEngine.Object[] {backing};");
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object[] {backing};");
                     }
                     else if (t is INamedTypeSymbol named && named.IsGenericType
                                                          && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
                                                          && named.TypeArguments[0].TypeKind == TypeKind.Interface)
                     {
                         string elementType = named.TypeArguments[0].ToDisplayString();
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv})] private List<UnityEngine.Object> {backing};");
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private List<UnityEngine.Object> {backing};");
                     }
                     else
                     {
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {idv})] private UnityEngine.Object {backing};");
+                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object {backing};");
                     }
                 }
 
             sb.AppendLine();
+            sb.AppendLine("        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]");
             sb.AppendLine("        public void OnBeforeSerialize()");
             sb.AppendLine("        {");
             sb.AppendLine("        #if UNITY_EDITOR");
@@ -223,6 +224,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
             sb.AppendLine("        #endif");
             sb.AppendLine("        }");
             sb.AppendLine();
+            sb.AppendLine("        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]");
             sb.AppendLine("        public void OnAfterDeserialize()");
             sb.AppendLine("        {");
 
