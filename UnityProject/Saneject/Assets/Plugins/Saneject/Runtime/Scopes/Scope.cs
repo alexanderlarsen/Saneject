@@ -20,25 +20,16 @@ namespace Plugins.Saneject.Runtime.Scopes
         #region INTERNAL METHODS/FIELDS
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private HashSet<Binding> validBindings;
+        private readonly HashSet<Binding> validBindings = new();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private List<Binding> unvalidatedBindings;
+        private readonly List<Binding> unvalidatedBindings = new();
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public Scope ParentScope { get; set; }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Initialize()
-        {
-            validBindings = new HashSet<Binding>();
-            unvalidatedBindings = new List<Binding>();
-            ConfigureBindings();
-            ValidateBindings();
-        }
 
         /// <summary>
         /// Resolves all dependencies matching target type from scope.
@@ -73,8 +64,8 @@ namespace Plugins.Saneject.Runtime.Scopes
         public void Dispose()
         {
             ParentScope = null;
-            validBindings = null;
-            unvalidatedBindings = null;
+            validBindings.Clear();
+            unvalidatedBindings.Clear();
         }
 
         /// <summary>
@@ -89,7 +80,8 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
-        private void ValidateBindings()
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void ValidateBindings()
         {
             foreach (Binding binding in unvalidatedBindings)
             {
@@ -163,7 +155,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <summary>
         /// Set up your bindings in this method.
         /// </summary>
-        protected abstract void ConfigureBindings();
+        public abstract void ConfigureBindings();
 
         /// <summary>
         /// Registers a binding for a single <typeparamref name="T" /> component or interface type in this scope.
@@ -171,7 +163,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="T">The concrete component type to bind.</typeparam>
         /// <returns>A fluent builder for configuring the component binding.</returns>
-        protected ComponentBindingBuilder<T> BindComponent<T>() where T : class
+        public ComponentBindingBuilder<T> BindComponent<T>() where T : class
         {
             Binding binding = typeof(T).IsInterface
                 ? new Binding(typeof(T), null, this)
@@ -189,7 +181,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<T> BindComponents<T>() where T : class
+        public ComponentBindingBuilder<T> BindComponents<T>() where T : class
         {
             return BindMultipleComponents<T>();
         }
@@ -200,7 +192,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<T> BindMultipleComponents<T>() where T : class
+        public ComponentBindingBuilder<T> BindMultipleComponents<T>() where T : class
         {
             Binding binding = typeof(T).IsInterface
                 ? new Binding(typeof(T), null, this)
@@ -219,7 +211,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <typeparam name="TInterface">The interface type to inject.</typeparam>
         /// <typeparam name="TConcrete">The concrete component type that implements the interface.</typeparam>
         /// <returns>A fluent builder for configuring the component binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindComponent<TInterface, TConcrete>()
+        public ComponentBindingBuilder<TConcrete> BindComponent<TInterface, TConcrete>()
             where TConcrete : Component, TInterface
             where TInterface : class
         {
@@ -237,7 +229,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <typeparam name="TInterface">The interface type to inject.</typeparam>
         /// <typeparam name="TConcrete">The concrete component type that implements the interface.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindComponents<TInterface, TConcrete>()
+        public ComponentBindingBuilder<TConcrete> BindComponents<TInterface, TConcrete>()
             where TConcrete : Component, TInterface
             where TInterface : class
         {
@@ -251,7 +243,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <typeparam name="TInterface">The interface type to inject.</typeparam>
         /// <typeparam name="TConcrete">The concrete component type that implements the interface.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindMultipleComponents<TInterface, TConcrete>()
+        public ComponentBindingBuilder<TConcrete> BindMultipleComponents<TInterface, TConcrete>()
             where TConcrete : Component, TInterface
             where TInterface : class
         {
@@ -268,7 +260,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind.</typeparam>
         /// <returns>A fluent builder for configuring the asset binding.</returns>
-        protected AssetBindingBuilder<TConcrete> BindAsset<TConcrete>() where TConcrete : Object
+        public AssetBindingBuilder<TConcrete> BindAsset<TConcrete>() where TConcrete : Object
         {
             Binding binding = new(null, typeof(TConcrete), this);
             binding.MarkAssetBinding();
@@ -283,7 +275,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the asset collection binding.</returns>
-        protected AssetBindingBuilder<TConcrete> BindAssets<TConcrete>() where TConcrete : Object
+        public AssetBindingBuilder<TConcrete> BindAssets<TConcrete>() where TConcrete : Object
         {
             return BindMultipleAssets<TConcrete>();
         }
@@ -294,7 +286,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the asset collection binding.</returns>
-        protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TConcrete>() where TConcrete : Object
+        public AssetBindingBuilder<TConcrete> BindMultipleAssets<TConcrete>() where TConcrete : Object
         {
             Binding binding = new(null, typeof(TConcrete), this);
             binding.MarkAssetBinding();
@@ -310,7 +302,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <typeparam name="TInterface">The interface type to inject.</typeparam>
         /// <typeparam name="TConcrete">The concrete asset type that implements the interface.</typeparam>
         /// <returns>A fluent builder for configuring the asset binding.</returns>
-        protected AssetBindingBuilder<TConcrete> BindAsset<TInterface, TConcrete>()
+        public AssetBindingBuilder<TConcrete> BindAsset<TInterface, TConcrete>()
             where TConcrete : Object, TInterface
             where TInterface : class
         {
@@ -328,7 +320,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <typeparam name="TInterface">The interface type to inject.</typeparam>
         /// <typeparam name="TConcrete">The concrete asset type that implements the interface.</typeparam>
         /// <returns>A fluent builder for configuring the asset collection binding.</returns>
-        protected AssetBindingBuilder<TConcrete> BindAssets<TInterface, TConcrete>()
+        public AssetBindingBuilder<TConcrete> BindAssets<TInterface, TConcrete>()
             where TConcrete : Object, TInterface
             where TInterface : class
         {
@@ -342,7 +334,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <typeparam name="TInterface">The interface type to inject.</typeparam>
         /// <typeparam name="TConcrete">The concrete asset type that implements the interface.</typeparam>
         /// <returns>A fluent builder for configuring the asset collection binding.</returns>
-        protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TInterface, TConcrete>()
+        public AssetBindingBuilder<TConcrete> BindMultipleAssets<TInterface, TConcrete>()
             where TConcrete : Object, TInterface
             where TInterface : class
         {
@@ -360,7 +352,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="TConcrete">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component
+        public ComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component
         {
             Binding binding = new(null, typeof(TConcrete), this);
             binding.MarkComponentBinding();

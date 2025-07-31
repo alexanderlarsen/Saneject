@@ -286,6 +286,7 @@ namespace Plugins.Saneject.Editor.Core
             while (serializedProperty.NextVisible(enterChildren: true))
                 if (serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
                 {
+                    
                     bool isCollection = serializedProperty.isArray;
                     Object injectionTarget = serializedObject.targetObject;
 
@@ -312,7 +313,7 @@ namespace Plugins.Saneject.Editor.Core
                     {
                         serializedProperty.NullifyOrClearArray();
 
-                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.name}'", scope);
+                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.GetType().Name}'", scope);
 
                         stats.missingBindings++;
                     }

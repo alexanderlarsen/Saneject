@@ -13,7 +13,7 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     /// </summary>
     public class EnemyScope : Scope
     {
-        protected override void ConfigureBindings()
+        public override void ConfigureBindings()
         {
             BindComponent<CharacterController>()
                 .FromScopeSelf();

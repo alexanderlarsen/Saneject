@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Demo.Scripts.Enemies
     public partial class EnemyManager : MonoBehaviour, IEnemyObservable
     {
         [Inject, SerializeInterface]
-        private IScoreUpdater scoreUpdater;
+        private IScoreUpdater scoreUpdater; 
 
         [Inject, SerializeInterface]
         private IEnemy[] enemies;

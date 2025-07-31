@@ -42,7 +42,8 @@ namespace Plugins.Saneject.Editor.Extensions
             foreach (Scope scope in scopes)
             {
                 scope.SetParentScope();
-                scope.Initialize();
+                scope.ConfigureBindings();
+                scope.ValidateBindings();
             }
         }
 

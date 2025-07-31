@@ -6,7 +6,7 @@ namespace Development
 {
     public class AllBindingsScope : Scope
     {
-        protected override void ConfigureBindings()
+        public override void ConfigureBindings()
         {
             BindComponent<Player>().FromSelf();
             BindComponent<Player>().FromParent();

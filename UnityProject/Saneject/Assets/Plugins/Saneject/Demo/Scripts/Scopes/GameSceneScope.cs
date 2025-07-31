@@ -12,7 +12,7 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
     /// </summary>
     public class GameSceneScope : Scope
     {
-        protected override void ConfigureBindings()
+        public override void ConfigureBindings()
         {
             BindGlobal<Player>()
                 .FromScopeDescendants();

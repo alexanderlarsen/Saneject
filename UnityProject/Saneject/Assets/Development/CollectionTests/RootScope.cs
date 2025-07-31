@@ -5,7 +5,7 @@ namespace Development.ReadOnlyCollectionDrawer
 {
     public class RootScope : Scope
     {
-        protected override void ConfigureBindings()
+        public override void ConfigureBindings()
         {
             // BindGlobal<TestMono>()
             //     .FromDescendants()

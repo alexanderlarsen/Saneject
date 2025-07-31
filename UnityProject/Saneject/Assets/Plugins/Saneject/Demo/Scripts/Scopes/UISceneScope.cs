@@ -26,7 +26,7 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
         [SerializeField]
         private SceneManagerProxy sceneManagerProxy;
 
-        protected override void ConfigureBindings()
+        public override void ConfigureBindings()
         {
             BindComponent<TextMeshProUGUI>()
                 .WithId("enemiesTmp")
