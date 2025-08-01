@@ -641,9 +641,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Bind to the specified <see cref="Component" /> instance.
         /// </summary>
-        public void FromInstance(TComponent instance)
+        public ComponentFilterBuilder<TComponent> FromInstance(TComponent instance)
         {
             binding.SetLocator(_ => instance.WrapInEnumerable().Cast<Component>());
+            return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
         /// <summary>

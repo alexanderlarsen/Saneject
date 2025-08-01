@@ -40,33 +40,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         #endregion
 
-        #region PROJECT LOCATOR METHODS
-
-        /// <summary>
-        /// Bind to the specified <see cref="Object" /> instance.
-        /// </summary>
-        public void FromInstance(TAsset instance)
-        {
-            binding.SetLocator(_ => instance.WrapInEnumerable());
-        }
-
-        /// <summary>
-        /// Locate the <see cref="Object" /> using the provided method.
-        /// </summary>
-        public AssetFilterBuilder<TAsset> FromMethod(Func<TAsset> method)
-        {
-            binding.SetLocator(_ => method?.Invoke().WrapInEnumerable());
-            return new AssetFilterBuilder<TAsset>(binding, scope);
-        }
-
-        /// <summary>
-        /// Locate multiple <see cref="Object" />s using the provided method.
-        /// </summary>
-        public AssetFilterBuilder<TAsset> FromMethod(Func<IEnumerable<TAsset>> method)
-        {
-            binding.SetLocator(_ => method?.Invoke());
-            return new AssetFilterBuilder<TAsset>(binding, scope);
-        }
+        #region PROJECT FOLDER METHODS
 
         /// <summary>
         /// Locate the <see cref="Object" /> in a <see cref="Resources" /> folder at the specified path using <see cref="Resources.Load(string)" />.
@@ -110,6 +84,36 @@ namespace Plugins.Saneject.Runtime.Bindings
 #else
             return null;
 #endif
+        }
+
+        #endregion
+
+        #region SPECIAL METHODS
+
+        /// <summary>
+        /// Bind to the specified <see cref="Object" /> instance.
+        /// </summary>
+        public void FromInstance(TAsset instance)
+        {
+            binding.SetLocator(_ => instance.WrapInEnumerable());
+        }
+
+        /// <summary>
+        /// Locate the <see cref="Object" /> using the provided method.
+        /// </summary>
+        public AssetFilterBuilder<TAsset> FromMethod(Func<TAsset> method)
+        {
+            binding.SetLocator(_ => method?.Invoke().WrapInEnumerable());
+            return new AssetFilterBuilder<TAsset>(binding, scope);
+        }
+
+        /// <summary>
+        /// Locate multiple <see cref="Object" />s using the provided method.
+        /// </summary>
+        public AssetFilterBuilder<TAsset> FromMethod(Func<IEnumerable<TAsset>> method)
+        {
+            binding.SetLocator(_ => method?.Invoke());
+            return new AssetFilterBuilder<TAsset>(binding, scope);
         }
 
         #endregion

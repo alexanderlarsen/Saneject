@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
@@ -33,7 +34,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Behaviour).IsAssignableFrom(typeof(TComponent)))
                 binding.AddFilter(o => o is Behaviour { enabled: true });
             else
-                Debug.LogError($"Saneject: 'ComponentFilterBuilder<T>.{nameof(WhereComponentIndexIs)}()' can only be used with Behaviour types. '{typeof(TComponent)}' is not a Behaviour.", scope);
+                Debug.LogError($"Saneject: 'ComponentFilterBuilder<T>.{nameof(WhereIsEnabled)}()' can only be used with Behaviour types. '{typeof(TComponent)}' is not a Behaviour.", scope);
 
             return this;
         }
@@ -46,7 +47,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (typeof(Behaviour).IsAssignableFrom(typeof(TComponent)))
                 binding.AddFilter(o => o is Behaviour { isActiveAndEnabled: true });
             else
-                Debug.LogError($"Saneject: 'ComponentFilterBuilder<T>.{nameof(WhereComponentIndexIs)}()' can only be used with Behaviour types. '{typeof(TComponent)}' is not a Behaviour.", scope);
+                Debug.LogError($"Saneject: 'ComponentFilterBuilder<T>.{nameof(WhereIsActiveAndEnabled)}()' can only be used with Behaviour types. '{typeof(TComponent)}' is not a Behaviour.", scope);
 
             return this;
         }
@@ -56,29 +57,33 @@ namespace Plugins.Saneject.Runtime.Bindings
         #region COMPONENT METHODS
 
         /// <summary>
-        /// Filter to only search for <see cref="Component" />s with the given component index on their <see cref="GameObject" />.
+        /// Filter to only search for <see cref="Component" />s with the given component index on their <see cref="GameObject" />, excluding the Transform.
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereComponentIndexIs(int index)
         {
-            binding.AddFilter(o => o is Component component && component.GetComponentIndex() == index);
+            binding.AddFilter(o => o is Component component && component.GetComponentIndex() - 1 == index);
             return this;
         }
 
         /// <summary>
-        /// Filter to only search for <see cref="Component" />s that are the first component on their <see cref="GameObject" />.
+        /// Filter to only search for <see cref="Component" />s that are the first component on their <see cref="GameObject" />, excluding the Transform.
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereIsFirstComponentSibling()
         {
-            binding.AddFilter(o => o is Component component && component.GetComponentIndex() == 0);
+            binding.AddFilter(o => o is Component component && component.GetComponentIndex() - 1 == 0);
             return this;
         }
 
         /// <summary>
-        /// Filter to only search for <see cref="Component" />s that are the last component on their <see cref="GameObject" />.
+        /// Filter to only search for <see cref="Component" />s that are the last component on their <see cref="GameObject" />, excluding the Transform.
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereIsLastComponentSibling()
         {
-            binding.AddFilter(o => o is Component component && component.GetComponentIndex() == component.transform.childCount - 1);
+            binding.AddFilter(o =>
+                o is Component component &&
+                component.GetComponentIndex() - 1 ==
+                component.gameObject.GetComponents<Component>().Length - 2); // minus Transform
+            
             return this;
         }
 
