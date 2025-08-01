@@ -1,0 +1,33 @@
+name: Run Unity Edit Mode Tests
+
+on:
+  push:
+    branches: [dev]
+  pull_request:
+    branches: [dev]
+
+jobs:
+  test:
+    name: Run EditMode Tests
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Cache Library
+        uses: actions/cache@v3
+        with:
+          path: Library
+          key: Library-${{ hashFiles('**/Packages/packages-lock.json') }}
+
+      - name: Run Unity Tests
+        uses: game-ci/unity-test-runner@v3
+        with:
+          unityVersion: 6000.0.23f1
+          testMode: editmode
+
+      - name: Upload Test Results
+        uses: actions/upload-artifact@v3
+        with:
+          name: TestResults
+          path: artifacts
