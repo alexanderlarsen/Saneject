@@ -8,7 +8,7 @@ namespace Tests.Editor
     public class BaseTest
     {
         [SetUp]
-        public virtual void Setup()
+        public virtual void SetUp()
         {
         }
 

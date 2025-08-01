@@ -15,12 +15,19 @@ namespace Plugins.Saneject.Runtime.Global
     {
         private static readonly Dictionary<Type, Object> Instances = new();
 
+        private static bool allowUseInEditMode; 
+        
+        private static bool IsAllowed
+        {
+            get => Application.isPlaying || allowUseInEditMode;
+        }
+
         /// <summary>
         /// Remove all registered global instances. Only valid in Play Mode.
         /// </summary>
         public static void Clear()
         {
-            if (!Application.isPlaying)
+            if (!IsAllowed)
             {
                 Debug.LogWarning($"Saneject: {nameof(GlobalScope)} can only be used in Play Mode.");
                 return;
@@ -34,7 +41,7 @@ namespace Plugins.Saneject.Runtime.Global
         /// </summary>
         public static T Get<T>() where T : Object
         {
-            if (!Application.isPlaying)
+            if (!IsAllowed)
             {
                 Debug.LogWarning($"Saneject: {nameof(GlobalScope)} can only be used in Play Mode.");
                 return null;
@@ -56,7 +63,7 @@ namespace Plugins.Saneject.Runtime.Global
             Type type,
             Object instance)
         {
-            if (!Application.isPlaying)
+            if (!IsAllowed)
             {
                 Debug.LogWarning($"Saneject: {nameof(GlobalScope)} can only be used in Play Mode.");
                 return;
@@ -78,7 +85,7 @@ namespace Plugins.Saneject.Runtime.Global
         /// </summary>
         public static void Register<T>(T instance) where T : Object
         {
-            if (!Application.isPlaying)
+            if (!IsAllowed)
             {
                 Debug.LogWarning($"Saneject: {nameof(GlobalScope)} can only be used in Play Mode.");
                 return;
@@ -101,7 +108,7 @@ namespace Plugins.Saneject.Runtime.Global
         /// </summary>
         public static void Unregister(Type type)
         {
-            if (!Application.isPlaying)
+            if (!IsAllowed)
             {
                 Debug.LogWarning($"Saneject: {nameof(GlobalScope)} can only be used in Play Mode.");
                 return;
@@ -123,7 +130,7 @@ namespace Plugins.Saneject.Runtime.Global
         /// </summary>
         public static void Unregister<T>() where T : Object
         {
-            if (!Application.isPlaying)
+            if (!IsAllowed)
             {
                 Debug.LogWarning($"Saneject: {nameof(GlobalScope)} can only be used in Play Mode.");
                 return;
@@ -146,7 +153,7 @@ namespace Plugins.Saneject.Runtime.Global
         /// </summary>
         public static bool IsRegistered<T>() where T : Object
         {
-            if (!Application.isPlaying)
+            if (!IsAllowed)
             {
                 Debug.LogWarning($"Saneject: {nameof(GlobalScope)} can only be used in Play Mode.");
                 return false;

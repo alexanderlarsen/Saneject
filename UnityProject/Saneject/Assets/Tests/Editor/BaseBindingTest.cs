@@ -10,9 +10,9 @@ namespace Tests.Editor
 {
     public abstract class BaseBindingTest : BaseTest
     {
-        public override void Setup()
+        public override void SetUp()
         {
-            base.Setup();
+            base.SetUp();
             CreateHierarchy();
         }
 

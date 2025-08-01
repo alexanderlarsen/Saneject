@@ -13,9 +13,9 @@ namespace Tests.Editor.Bindings.Misc
         private Scope dummyScope;
 
         [SetUp]
-        public override void Setup()
+        public override void SetUp()
         {
-            base.Setup();
+            base.SetUp();
             dummyScope = new GameObject("Scope").AddComponent<TestScope>();
         }
 

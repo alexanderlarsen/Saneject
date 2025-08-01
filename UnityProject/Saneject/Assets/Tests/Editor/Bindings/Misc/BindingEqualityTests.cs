@@ -12,7 +12,7 @@ namespace Tests.Editor.Bindings.Misc
     {
         private Scope scopeA, scopeB;
 
-        public override void Setup()
+        public override void SetUp()
         {
             scopeA = new GameObject("ScopeA").AddComponent<TestScope>();
             scopeB = new GameObject("ScopeB").AddComponent<TestScope>();

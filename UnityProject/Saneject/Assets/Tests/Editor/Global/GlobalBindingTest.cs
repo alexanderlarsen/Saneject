@@ -9,9 +9,9 @@ using Tests.Runtime.Component;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Tests.Editor.Bindings.Global
+namespace Tests.Editor.Global
 {
-    public class GlobalBindingEditorTest : BaseBindingTest
+    public class GlobalBindingTest : BaseBindingTest
     {
         private GameObject root, globalObject;
 
