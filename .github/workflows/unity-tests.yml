@@ -6,6 +6,11 @@ on:
   pull_request:
     branches: [dev]
   workflow_dispatch:
+    inputs:
+      branch:
+        description: 'Branch to run workflow from'
+        required: false
+        default: dev
 
 jobs:
   test:
