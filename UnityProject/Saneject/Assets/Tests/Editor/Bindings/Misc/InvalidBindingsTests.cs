@@ -6,7 +6,7 @@ using Tests.Runtime.Asset;
 using Tests.Runtime.Component;
 using UnityEngine;
 
-namespace Tests.Editor.Bindings
+namespace Tests.Editor.Bindings.Misc
 {
     public class InvalidBindingTests : BaseTest
     {
