@@ -1,28 +1,33 @@
-name: Run Unity Edit Mode Tests
+name: Run Unity EditMode Tests
 
 on:
   push:
     branches: [dev]
   pull_request:
     branches: [dev]
-  workflow_dispatch:  # Allow manual runs from GitHub UI
+  workflow_dispatch:
 
 jobs:
   test:
+    name: Unity EditMode Tests
     runs-on: ubuntu-latest
 
     steps:
-      - uses: actions/checkout@v3
+      - uses: actions/checkout@v4
 
       - name: Cache Library
         uses: actions/cache@v3
         with:
-          path: Library
-          key: Library-${{ hashFiles('**/Packages/packages-lock.json') }}
+          path: UnityProject/Saneject/Library
+          key: Library-Saneject-${{ hashFiles('UnityProject/Saneject/Packages/packages-lock.json') }}
 
       - name: Run Unity Tests
         uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          projectPath: UnityProject/Saneject
           unityVersion: 6000.0.23f1
           testMode: editmode
           githubToken: ${{ secrets.GITHUB_TOKEN }}
