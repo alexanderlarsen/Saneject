@@ -6,7 +6,7 @@ using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Tests.Editor.Binding
+namespace Tests.Editor
 {
     public abstract class BaseBindingTest : BaseTest
     {

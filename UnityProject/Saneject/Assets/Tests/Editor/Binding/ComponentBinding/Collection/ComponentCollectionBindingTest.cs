@@ -3,8 +3,8 @@ using System.Linq;
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Core;
 using Tests.Runtime;
-using Tests.Runtime.Legacy;
 using UnityEngine;
+using ComponentCollectionRequester = Tests.Runtime.ComponentCollectionRequester;
 
 namespace Tests.Editor.Binding.ComponentBinding.Collection
 {

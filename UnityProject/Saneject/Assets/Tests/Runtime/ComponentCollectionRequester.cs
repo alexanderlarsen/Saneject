@@ -2,7 +2,7 @@
 using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
-namespace Tests.Runtime.Legacy
+namespace Tests.Runtime
 {
     public partial class ComponentCollectionRequester : MonoBehaviour
     {
