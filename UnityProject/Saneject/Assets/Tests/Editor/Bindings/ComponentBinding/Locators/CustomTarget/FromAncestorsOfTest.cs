@@ -54,6 +54,68 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.CustomTarget
             Assert.NotNull(requester.interfaceComponent);
         }
 
+        [Test]
+        public void InjectsConcrete_IncludeSelfTrue()
+        {
+            // Suppress errors from unbound dependencies
+            IgnoreErrorMessages();
+
+            // Add components
+            InjectableComponent injectable = grandchildA.AddComponent<InjectableComponent>();
+            ComponentRequester requester = rootB.AddComponent<ComponentRequester>();
+            TestScope scope = rootB.AddComponent<TestScope>();
+
+            // Set up bindings
+            BindComponent<InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform, includeSelf: true);
+
+            // Inject
+            DependencyInjector.InjectSceneDependencies();
+
+            // Assert
+            Assert.AreEqual(injectable, requester.concreteComponent);
+        }
+
+        [Test]
+        public void InjectsConcrete_IncludeSelfFalse()
+        {
+            // Suppress errors from unbound dependencies
+            IgnoreErrorMessages();
+
+            // Add components
+            grandchildA.AddComponent<InjectableComponent>();
+            ComponentRequester requester = rootB.AddComponent<ComponentRequester>();
+            TestScope scope = rootB.AddComponent<TestScope>();
+
+            // Set up bindings
+            BindComponent<InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform, includeSelf: false);
+
+            // Inject
+            DependencyInjector.InjectSceneDependencies();
+
+            // Assert
+            Assert.IsNull(requester.concreteComponent);
+        }
+
+        [Test]
+        public void DoesNotInject_WhenNoAncestors()
+        {
+            // Suppress errors from unbound dependencies
+            IgnoreErrorMessages();
+
+            // Add components
+            ComponentRequester requester = grandchildA.AddComponent<ComponentRequester>();
+            TestScope scope = grandchildA.AddComponent<TestScope>();
+
+            // Set up bindings
+            BindComponent<InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform, includeSelf: false);
+
+            // Inject
+            DependencyInjector.InjectSceneDependencies();
+
+            // Assert
+            Assert.IsNull(requester.concreteComponent);
+        }
+
         protected override void CreateHierarchy()
         {
             rootA = new GameObject();

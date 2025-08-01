@@ -65,9 +65,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
         /// Shorthand for <see cref="FromScopeAncestors" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromAncestors()
+        public ComponentFilterBuilder<TComponent> FromAncestors(bool includeSelf = false)
         {
-            return FromScopeAncestors();
+            return FromScopeAncestors(includeSelf);
         }
 
         /// <summary>
@@ -102,7 +102,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// Shorthand for <see cref="FromScopeDescendants" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromDescendants(bool includeSelf = true)
+        public ComponentFilterBuilder<TComponent> FromDescendants(bool includeSelf = false)
         {
             return FromScopeDescendants(includeSelf);
         }
@@ -151,10 +151,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Locate the <see cref="Component" /> on any ancestor <see cref="Transform" /> of the <see cref="Scope" />.
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromScopeAncestors()
+        public ComponentFilterBuilder<TComponent> FromScopeAncestors(bool includeSelf = false)
         {
             binding.SetLocator(_ => scope.transform
-                .GetComponentsInParents<TComponent>()
+                .GetComponentsInParents<TComponent>(includeSelf)
                 .Cast<Component>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -212,7 +212,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Locate the <see cref="Component" /> on any descendant <see cref="Transform" /> of the <see cref="Scope" />.
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromScopeDescendants(bool includeSelf = true)
+        public ComponentFilterBuilder<TComponent> FromScopeDescendants(bool includeSelf = false)
         {
             binding.SetLocator(_ =>
                 includeSelf
@@ -311,7 +311,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Locate the <see cref="Component" /> on any descendant <see cref="Transform" /> of the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />.
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromRootDescendants(bool includeSelf = true)
+        public ComponentFilterBuilder<TComponent> FromRootDescendants(bool includeSelf = false)
         {
             binding.SetLocator(_ =>
                 includeSelf
@@ -371,14 +371,14 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
         /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromTargetAncestors()
+        public ComponentFilterBuilder<TComponent> FromTargetAncestors(bool includeSelf = false)
         {
             binding.MarkRequireInjectionTarget();
 
             binding.SetLocator(injectionTarget =>
                 injectionTarget is Component comp
                     ? comp.transform
-                        .GetComponentsInParents<TComponent>()
+                        .GetComponentsInParents<TComponent>(includeSelf)
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
@@ -447,7 +447,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromTargetDescendants(bool includeSelf = true)
+        public ComponentFilterBuilder<TComponent> FromTargetDescendants(bool includeSelf = false)
         {
             binding.MarkRequireInjectionTarget();
 
@@ -523,10 +523,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Locate the <see cref="Component" /> on any ancestor <see cref="Transform" /> of the specified <see cref="Transform" />.
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromAncestorsOf(Transform target)
+        public ComponentFilterBuilder<TComponent> FromAncestorsOf(
+            Transform target,
+            bool includeSelf = false)
         {
             binding.SetLocator(_ => target
-                .GetComponentsInParents<TComponent>()
+                .GetComponentsInParents<TComponent>(includeSelf)
                 .Cast<Component>());
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
@@ -588,7 +590,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromDescendantsOf(
             Transform target,
-            bool includeSelf = true)
+            bool includeSelf = false)
         {
             binding.SetLocator(_ =>
                 includeSelf
