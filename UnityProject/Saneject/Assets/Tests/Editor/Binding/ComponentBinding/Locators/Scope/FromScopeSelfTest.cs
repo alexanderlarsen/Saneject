@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Locators.Scope
 {
-    public class FromScopeSelfTest : BaseBindingTest
+    public class FromScopeSelfTest : BaseTest
     {
         private GameObject root;
 

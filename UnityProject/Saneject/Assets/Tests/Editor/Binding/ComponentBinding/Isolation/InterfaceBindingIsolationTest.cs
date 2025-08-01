@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Isolation
 {
-    public class InterfaceBindingIsolationTest : BaseBindingTest
+    public class InterfaceBindingIsolationTest : BaseTest
     {
         private GameObject root, child, grandChild;
 

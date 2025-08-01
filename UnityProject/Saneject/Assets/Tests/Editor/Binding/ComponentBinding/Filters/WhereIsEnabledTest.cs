@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Filters
 {
-    public class WhereIsEnabledTest : BaseBindingTest
+    public class WhereIsEnabledTest : BaseTest
     {
         private GameObject root, enabledChild, disabledChild;
 

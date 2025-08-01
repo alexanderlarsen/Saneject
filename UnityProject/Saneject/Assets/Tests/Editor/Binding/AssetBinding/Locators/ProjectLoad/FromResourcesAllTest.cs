@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.AssetBinding.Locators.ProjectLoad
 {
-    public class FromResourcesAllTest : BaseBindingTest
+    public class FromResourcesAllTest : BaseTest
     {
         private GameObject root;
 

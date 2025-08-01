@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Tests.Editor.General
 {
-    public class ScopeResolutionTests : BaseBindingTest
+    public class ScopeResolutionTests : BaseTest
     {
         private GameObject root, child, grandchild;
 

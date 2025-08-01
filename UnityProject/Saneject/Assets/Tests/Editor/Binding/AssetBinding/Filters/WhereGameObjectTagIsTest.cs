@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.AssetBinding.Filters
 {
-    public class WhereGameObjectTagIsTest : BaseBindingTest
+    public class WhereGameObjectTagIsTest : BaseTest
     {
         private GameObject root;
 

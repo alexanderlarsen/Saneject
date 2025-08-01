@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.General
 {
-    public class NestedSerializableInjectionTest : BaseBindingTest
+    public class NestedSerializableInjectionTest : BaseTest
     {
         private GameObject root;
 

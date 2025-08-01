@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Filters
 {
-    public class WhereIsLastSiblingTest : BaseBindingTest
+    public class WhereIsLastSiblingTest : BaseTest
     {
         private GameObject root, childA, childB, childC;
 

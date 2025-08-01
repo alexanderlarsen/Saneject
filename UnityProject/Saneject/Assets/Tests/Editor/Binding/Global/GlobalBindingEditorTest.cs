@@ -10,7 +10,7 @@ using Object = UnityEngine.Object;
 
 namespace Tests.Editor.Binding.Global
 {
-    public class GlobalBindingEditorTest : BaseBindingTest
+    public class GlobalBindingEditorTest : BaseTest
     {
         private GameObject root, globalObject;
 

@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.AssetBinding.Collection
 {
-    public class AssetCollectionBindingTest : BaseBindingTest
+    public class AssetCollectionBindingTest : BaseTest
     {
         private GameObject root;
 

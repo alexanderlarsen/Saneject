@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
 {
-    public class FromMethodCollectionTest : BaseBindingTest
+    public class FromMethodCollectionTest : BaseTest
     {
         private GameObject root, childA, childB;
 

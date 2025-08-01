@@ -6,7 +6,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.AssetBinding.Locators.Special
 {
-    public class FromMethodCollectionTest : BaseBindingTest
+    public class FromMethodCollectionTest : BaseTest
     {
         private GameObject root;
 

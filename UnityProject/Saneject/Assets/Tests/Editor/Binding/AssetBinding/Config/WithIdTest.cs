@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.AssetBinding.Config
 {
-    public class WithIdTest : BaseBindingTest
+    public class WithIdTest : BaseTest
     {
         private GameObject root, child1, child2;
 

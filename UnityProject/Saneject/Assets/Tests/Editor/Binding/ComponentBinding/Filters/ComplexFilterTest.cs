@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Filters
 {
-    public class ComplexFilterTest : BaseBindingTest
+    public class ComplexFilterTest : BaseTest
     {
         private GameObject root, target, ignored1, ignored2;
 

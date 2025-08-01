@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Filters
 {
-    public class WhereInactiveSelfTest : BaseBindingTest
+    public class WhereInactiveSelfTest : BaseTest
     {
         private GameObject root, activeChild, inactiveChild;
 

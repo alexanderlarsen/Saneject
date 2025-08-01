@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.AssetBinding.Filters
 {
-    public class WhereCustomPredicateTest : BaseBindingTest
+    public class WhereCustomPredicateTest : BaseTest
     {
         private GameObject root;
 

@@ -8,7 +8,7 @@ using ComponentCollectionRequester = Tests.Runtime.ComponentCollectionRequester;
 
 namespace Tests.Editor.Binding.ComponentBinding.Collection
 {
-    public class ComponentCollectionBindingTest : BaseBindingTest
+    public class ComponentCollectionBindingTest : BaseTest
     {
         private GameObject root, child, grandChild1, grandChild2, grandChild3, grandChild4;
 

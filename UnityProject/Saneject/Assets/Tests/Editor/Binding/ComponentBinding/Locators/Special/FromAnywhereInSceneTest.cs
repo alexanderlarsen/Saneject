@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
 {
-    public class FromAnywhereInSceneTest : BaseBindingTest
+    public class FromAnywhereInSceneTest : BaseTest
     {
         private GameObject rootA;
         private GameObject rootB;

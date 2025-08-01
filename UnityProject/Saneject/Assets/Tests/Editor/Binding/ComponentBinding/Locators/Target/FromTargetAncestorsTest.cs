@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
 {
-    public class FromTargetAncestorsTest : BaseBindingTest
+    public class FromTargetAncestorsTest : BaseTest
     {
         private GameObject root, child, grandChild;
 
