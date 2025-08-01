@@ -5,7 +5,8 @@ on:
     branches: [dev]
   pull_request:
     branches: [dev]
-
+  workflow_dispatch:
+  
 jobs:
   test:
     name: Run EditMode Tests
