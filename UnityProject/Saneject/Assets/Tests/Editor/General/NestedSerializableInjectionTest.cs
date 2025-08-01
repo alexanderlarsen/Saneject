@@ -1,11 +1,13 @@
 ﻿using NUnit.Framework;
 using Plugins.Saneject.Editor.Core;
 using Tests.Runtime;
+using Tests.Runtime.Component;
+using Tests.Runtime.NestedSerializable;
 using UnityEngine;
 
 namespace Tests.Editor.General
 {
-    public class NestedSerializableInjectionTest : BaseTest
+    public class NestedSerializableInjectionTest : BaseBindingTest
     {
         private GameObject root;
 

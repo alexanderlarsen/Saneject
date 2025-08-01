@@ -4,6 +4,8 @@ using System.Reflection;
 using NUnit.Framework;
 using Plugins.Saneject.Runtime.Attributes;
 using Tests.Runtime;
+using ComponentRequester = Tests.Runtime.Component.ComponentRequester;
+using ComponentRequesterWithID = Tests.Runtime.Component.ComponentRequesterWithID;
 
 namespace Tests.Editor.SerializeInterface
 {

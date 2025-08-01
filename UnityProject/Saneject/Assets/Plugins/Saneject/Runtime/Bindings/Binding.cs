@@ -78,20 +78,11 @@ namespace Plugins.Saneject.Runtime.Bindings
                 return;
             }
 
-            if (IsGlobal)
-            {
-                Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' cannot be marked as a collection.", scope);
-                return;
-            }
-
             IsCollection = true;
         }
 
         public void MarkComponentBinding()
         {
-            if (IsAssetBinding)
-                throw new InvalidOperationException($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as an asset binding. This shouldn't be able to happen.");
-
             if (IsComponentBinding)
             {
                 Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as a component binding. Ignoring this call.", scope);
@@ -103,9 +94,6 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public void MarkAssetBinding()
         {
-            if (IsComponentBinding)
-                throw new InvalidOperationException($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as a component binding. This shouldn't be able to happen.");
-
             if (IsAssetBinding)
             {
                 Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as an asset binding. Ignoring this call.", scope);
@@ -121,15 +109,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <param name="newId">The custom ID string.</param>
         public void SetId(string newId)
         {
-            if (IsGlobal)
-            {
-                Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' cannot have an ID.", scope);
-                return;
-            }
-
             if (!string.IsNullOrWhiteSpace(Id))
             {
-                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has an ID '{Id}' and cannot have multiple IDs.", scope);
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has an ID '{Id}' and cannot have multiple IDs. Ignoring attempt to set ID to '{newId}'.", scope);
                 return;
             }
 
@@ -141,18 +123,9 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public void MarkGlobal()
         {
-            if (!string.IsNullOrWhiteSpace(Id))
-                Debug.LogWarning($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' cannot have an ID. Ignoring the ID.", scope);
-
             if (IsGlobal)
             {
                 Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as global. Ignoring this call.", scope);
-                return;
-            }
-
-            if (IsCollection)
-            {
-                Debug.LogError($"Saneject: Collection binding ({GetName()}) in scope '{scope.GetType().Name}' cannot be marked as global.", scope);
                 return;
             }
 
@@ -182,7 +155,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (this.locator != null)
             {
-                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has a locator and cannot specify multiple locators.", scope);
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has a locator and cannot specify multiple locators. Ignoring this call.", scope);
                 return;
             }
 

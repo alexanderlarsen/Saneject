@@ -2,11 +2,13 @@
 using System.Reflection;
 using NUnit.Framework;
 using Tests.Runtime;
+using Tests.Runtime.Component;
 using UnityEngine;
+using ComponentRequester = Tests.Runtime.Component.ComponentRequester;
 
 namespace Tests.Editor.SerializeInterface
 {
-    public class SerializationTests : BaseTest
+    public class SerializationTests : BaseBindingTest
     {
         private GameObject root;
         private ComponentRequester requester;

@@ -1,12 +1,14 @@
 ﻿using NUnit.Framework;
 using Plugins.Saneject.Editor.Core;
 using Tests.Runtime;
+using Tests.Runtime.Component;
 using UnityEditor;
 using UnityEngine;
+using ComponentRequester = Tests.Runtime.Component.ComponentRequester;
 
 namespace Tests.Editor.General
 {
-    public class ScopeResolutionTests : BaseTest
+    public class ScopeResolutionTests : BaseBindingTest
     {
         private GameObject root, child, grandchild;
 
