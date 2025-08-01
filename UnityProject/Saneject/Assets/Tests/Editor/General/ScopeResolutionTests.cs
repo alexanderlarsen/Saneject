@@ -4,7 +4,7 @@ using Tests.Runtime;
 using UnityEditor;
 using UnityEngine;
 
-namespace Tests.Editor.Scopes
+namespace Tests.Editor.General
 {
     public class ScopeResolutionTests : BaseBindingTest
     {
