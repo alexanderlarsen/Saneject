@@ -9,7 +9,6 @@ on:
 
 jobs:
   test:
-    name: Run EditMode Tests
     runs-on: ubuntu-latest
 
     steps:
@@ -22,13 +21,15 @@ jobs:
           key: Library-${{ hashFiles('**/Packages/packages-lock.json') }}
 
       - name: Run Unity Tests
-        uses: game-ci/unity-test-runner@v3
+        uses: game-ci/unity-test-runner@v4
         with:
           unityVersion: 6000.0.23f1
           testMode: editmode
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
 
       - name: Upload Test Results
         uses: actions/upload-artifact@v4
+        if: always()
         with:
           name: TestResults
           path: artifacts
