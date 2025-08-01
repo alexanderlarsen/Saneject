@@ -16,7 +16,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
             InjectableComponent passing = target.AddComponent<InjectableComponent>();
             InjectableComponent failing1 = ignored1.AddComponent<InjectableComponent>();
@@ -43,8 +43,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             ignored2.SetActive(false);
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromRootDescendants()
                 .WhereIsEnabled()
                 .WhereIsActiveAndEnabled()

@@ -21,7 +21,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
             TestScope scope = root.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromTargetAncestors();
+            BindComponent<InjectableComponent>(scope).FromTargetAncestors();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -42,7 +42,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
             TestScope scope = root.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>().FromTargetAncestors();
+            BindComponent<IInjectable, InjectableComponent>(scope).FromTargetAncestors();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -62,8 +62,8 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
             TestScope scope = root.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromTargetAncestors();
-            scope.BindComponent<IInjectable, InjectableComponent>().FromTargetAncestors();
+            BindComponent<InjectableComponent>(scope).FromTargetAncestors();
+            BindComponent<IInjectable, InjectableComponent>(scope).FromTargetAncestors();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

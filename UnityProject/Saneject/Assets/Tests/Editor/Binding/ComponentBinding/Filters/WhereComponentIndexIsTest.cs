@@ -22,7 +22,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             ComponentRequester requester = child.AddComponent<ComponentRequester>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .From(root.transform)
                 .WhereComponentIndexIs(1);
 
@@ -47,7 +47,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             ComponentRequester requester = child.AddComponent<ComponentRequester>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .From(root.transform)
                 .WhereComponentIndexIs(1);
 

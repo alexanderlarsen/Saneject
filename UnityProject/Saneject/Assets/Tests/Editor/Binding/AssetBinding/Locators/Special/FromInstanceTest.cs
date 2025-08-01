@@ -21,7 +21,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.Special
             InjectableScriptableObject instance = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            scope.BindAsset<InjectableScriptableObject>().FromInstance(instance);
+            BindAsset<InjectableScriptableObject>(scope).FromInstance(instance);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -42,7 +42,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.Special
             InjectableScriptableObject instance = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            scope.BindAsset<IInjectable, InjectableScriptableObject>().FromInstance(instance);
+            BindAsset<IInjectable, InjectableScriptableObject>(scope).FromInstance(instance);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

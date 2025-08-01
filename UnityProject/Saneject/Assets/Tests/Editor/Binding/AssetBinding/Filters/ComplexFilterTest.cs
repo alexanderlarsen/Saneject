@@ -20,7 +20,7 @@ namespace Tests.Editor.Binding.AssetBinding.Filters
             AssetRequester requester = root.AddComponent<AssetRequester>();
 
             // Set up bindings
-            scope.BindAsset<InjectableScriptableObject>()
+            BindAsset<InjectableScriptableObject>(scope)
                 .FromResourcesAll("Test")
                 .WhereNameContains("ScriptableObject") // "InjectableScriptableObject 2"
                 .WhereNameIs("InjectableScriptableObject 2")

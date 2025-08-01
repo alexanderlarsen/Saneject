@@ -27,7 +27,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
             componentB.name = "B";
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromMethod(() => new[] { componentA, componentB })
                 .WhereNameIs("B");
 
@@ -55,7 +55,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
             componentB.name = "B";
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromMethod(() => new List<InjectableComponent> { componentA, componentB })
                 .WhereNameIs("B");
 

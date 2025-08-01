@@ -23,11 +23,11 @@ namespace Tests.Editor.Binding.AssetBinding.Filters
             InjectableScriptableObject assetB = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            scope.BindAsset<InjectableScriptableObject>()
+            BindAsset<InjectableScriptableObject>(scope)
                 .FromInstance(assetA)
                 .WhereTargetIs<AssetRequester>();
 
-            scope.BindAsset<InjectableScriptableObject>()
+            BindAsset<InjectableScriptableObject>(scope)
                 .FromInstance(assetB)
                 .WhereTargetIs<AssetRequesterB>();
 
@@ -53,11 +53,11 @@ namespace Tests.Editor.Binding.AssetBinding.Filters
             InjectableScriptableObject assetB = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            scope.BindAsset<IInjectable, InjectableScriptableObject>()
+            BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromInstance(assetA)
                 .WhereTargetIs<AssetRequester>();
 
-            scope.BindAsset<IInjectable, InjectableScriptableObject>()
+            BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromInstance(assetB)
                 .WhereTargetIs<AssetRequesterB>();
 

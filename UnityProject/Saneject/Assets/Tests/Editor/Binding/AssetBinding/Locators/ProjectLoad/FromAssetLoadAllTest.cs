@@ -21,7 +21,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.ProjectLoad
             AssetRequester requester = root.AddComponent<AssetRequester>();
 
             // Set up bindings
-            scope.BindAsset<InjectableScriptableObject>()
+            BindAsset<InjectableScriptableObject>(scope)
                 .FromAssetLoadAll("Assets/Tests/Resources/Test/InjectableScriptableObject 1.asset")
                 .WhereNameIs("InjectableScriptableObject 1");
 
@@ -44,7 +44,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.ProjectLoad
             AssetRequester requester = root.AddComponent<AssetRequester>();
 
             // Set up bindings
-            scope.BindAsset<IInjectable, InjectableScriptableObject>()
+            BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromAssetLoadAll("Assets/Tests/Resources/Test/InjectableScriptableObject 2.asset")
                 .WhereNameIs("InjectableScriptableObject 2");
 

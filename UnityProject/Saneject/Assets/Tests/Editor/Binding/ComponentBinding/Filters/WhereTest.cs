@@ -16,15 +16,14 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
             childA.AddComponent<InjectableComponent>();
             InjectableComponent componentB = childB.AddComponent<InjectableComponent>(); // index 1
             childC.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromRootDescendants()
                 .Where(c => c.transform.GetSiblingIndex() % 2 == 1);
 
@@ -42,15 +41,14 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
             childA.AddComponent<InjectableComponent>();
             InjectableComponent componentB = childB.AddComponent<InjectableComponent>(); // index 1
             childC.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromRootDescendants()
                 .Where(c => c.transform.GetSiblingIndex() % 2 == 1);
 

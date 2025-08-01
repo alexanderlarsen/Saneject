@@ -20,7 +20,7 @@ namespace Tests.Editor.Binding.AssetBinding.Filters
             GameObjectRequester requester = root.AddComponent<GameObjectRequester>();
 
             // Set up bindings
-            scope.BindAsset<GameObject>()
+            BindAsset<GameObject>(scope)
                 .FromResourcesAll("Test")
                 .WhereGameObjectTagIs("Test");
 

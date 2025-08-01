@@ -21,7 +21,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Isolation
             grandChild.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromDescendants();
 
             // Inject

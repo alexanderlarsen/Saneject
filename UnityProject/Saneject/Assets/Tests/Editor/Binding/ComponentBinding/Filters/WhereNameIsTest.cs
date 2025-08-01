@@ -22,7 +22,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             TestScope scope = root.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromAnywhereInScene()
                 .WhereNameIs("InjectTarget");
 
@@ -46,7 +46,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             TestScope scope = root.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromAnywhereInScene()
                 .WhereNameIs("InjectTarget");
 

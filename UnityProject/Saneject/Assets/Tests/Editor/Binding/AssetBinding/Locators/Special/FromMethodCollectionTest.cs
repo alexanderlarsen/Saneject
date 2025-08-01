@@ -27,7 +27,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.Special
             assetB.name = "B";
 
             // Set up bindings
-            scope.BindAsset<InjectableScriptableObject>()
+            BindAsset<InjectableScriptableObject>(scope)
                 .FromMethod(() => new[] { assetA, assetB })
                 .WhereNameIs("B");
 
@@ -55,7 +55,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.Special
             assetB.name = "B";
 
             // Set up bindings
-            scope.BindAsset<IInjectable, InjectableScriptableObject>()
+            BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromMethod(() => new List<InjectableScriptableObject> { assetA, assetB })
                 .WhereNameIs("B");
 

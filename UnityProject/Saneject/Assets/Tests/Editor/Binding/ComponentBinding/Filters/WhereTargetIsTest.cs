@@ -23,11 +23,11 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             InjectableComponent componentB = child2.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromInstance(componentA)
                 .WhereTargetIs<ComponentRequester>();
 
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromInstance(componentB)
                 .WhereTargetIs<ComponentRequesterB>();
 
@@ -53,11 +53,11 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             InjectableComponent componentB = child2.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromInstance(componentA)
                 .WhereTargetIs<ComponentRequester>();
 
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromInstance(componentB)
                 .WhereTargetIs<ComponentRequesterB>();
 

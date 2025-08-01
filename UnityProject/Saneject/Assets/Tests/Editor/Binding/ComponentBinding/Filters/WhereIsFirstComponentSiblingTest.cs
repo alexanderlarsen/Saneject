@@ -22,7 +22,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             root.AddComponent<InjectableComponent>(); // This one should not be injected
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromScopeSelf()
                 .WhereIsFirstComponentSibling();
 
@@ -46,7 +46,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             root.AddComponent<InjectableComponent>(); // Should be ignored
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromScopeSelf()
                 .WhereIsFirstComponentSibling();
 

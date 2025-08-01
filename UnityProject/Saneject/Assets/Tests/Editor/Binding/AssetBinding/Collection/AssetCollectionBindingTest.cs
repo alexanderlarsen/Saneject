@@ -27,10 +27,10 @@ namespace Tests.Editor.Binding.AssetBinding.Collection
             InjectableScriptableObject assetD = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            scope.BindMultipleAssets<InjectableScriptableObject>()
+            BindMultipleAssets<InjectableScriptableObject>(scope)
                 .FromMethod(() => new[] { assetA, assetB });
 
-            scope.BindMultipleAssets<IInjectable, InjectableScriptableObject>()
+            BindMultipleAssets<IInjectable, InjectableScriptableObject>(scope)
                 .FromMethod(() => new List<InjectableScriptableObject> { assetC, assetD });
 
             // Inject
@@ -66,10 +66,10 @@ namespace Tests.Editor.Binding.AssetBinding.Collection
             assetD.name = "D";
 
             // Set up bindings
-            scope.BindMultipleAssets<InjectableScriptableObject>()
+            BindMultipleAssets<InjectableScriptableObject>(scope)
                 .FromMethod(() => new[] { assetA, assetB });
 
-            scope.BindMultipleAssets<IInjectable, InjectableScriptableObject>()
+            BindMultipleAssets<IInjectable, InjectableScriptableObject>(scope)
                 .FromMethod(() => new List<InjectableScriptableObject> { assetC, assetD });
 
             // Inject
@@ -100,10 +100,10 @@ namespace Tests.Editor.Binding.AssetBinding.Collection
             InjectableScriptableObject assetD = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            scope.BindMultipleAssets<InjectableScriptableObject>()
+            BindMultipleAssets<InjectableScriptableObject>(scope)
                 .FromMethod(() => new[] { assetA, assetB });
 
-            scope.BindMultipleAssets<IInjectable, InjectableScriptableObject>()
+            BindMultipleAssets<IInjectable, InjectableScriptableObject>(scope)
                 .FromMethod(() => new List<InjectableScriptableObject> { assetC, assetD });
 
             // Inject

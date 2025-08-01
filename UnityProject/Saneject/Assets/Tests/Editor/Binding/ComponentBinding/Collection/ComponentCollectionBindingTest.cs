@@ -27,11 +27,11 @@ namespace Tests.Editor.Binding.ComponentBinding.Collection
             grandChild4.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindMultipleComponents<InjectableComponent>()
+            BindMultipleComponents<InjectableComponent>(scope)
                 .FromDescendants()
                 .Where(service => service.gameObject == grandChild1 || service.gameObject == grandChild2);
 
-            scope.BindMultipleComponents<IInjectable, InjectableComponent>()
+            BindMultipleComponents<IInjectable, InjectableComponent>(scope)
                 .FromDescendants()
                 .Where(service => service.gameObject == grandChild3 || service.gameObject == grandChild4);
 
@@ -60,11 +60,11 @@ namespace Tests.Editor.Binding.ComponentBinding.Collection
             grandChild4.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindMultipleComponents<InjectableComponent>()
+            BindMultipleComponents<InjectableComponent>(scope)
                 .FromDescendants()
                 .Where(service => service.gameObject == grandChild1 || service.gameObject == grandChild2);
 
-            scope.BindMultipleComponents<IInjectable, InjectableComponent>()
+            BindMultipleComponents<IInjectable, InjectableComponent>(scope)
                 .FromDescendants()
                 .Where(service => service.gameObject == grandChild3 || service.gameObject == grandChild4);
 
@@ -95,11 +95,11 @@ namespace Tests.Editor.Binding.ComponentBinding.Collection
             grandChild4.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindMultipleComponents<InjectableComponent>()
+            BindMultipleComponents<InjectableComponent>(scope)
                 .FromDescendants()
                 .Where(service => service.gameObject == grandChild1 || service.gameObject == grandChild2);
 
-            scope.BindMultipleComponents<IInjectable, InjectableComponent>()
+            BindMultipleComponents<IInjectable, InjectableComponent>(scope)
                 .FromDescendants()
                 .Where(service => service.gameObject == grandChild3 || service.gameObject == grandChild4);
 

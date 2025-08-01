@@ -16,7 +16,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
             layerMatchChild.layer = 8;
             InjectableComponent component = layerMatchChild.AddComponent<InjectableComponent>();
@@ -24,8 +24,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             otherLayerChild.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromRootDescendants()
                 .WhereLayerIs(8);
 
@@ -43,7 +42,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
             layerMatchChild.layer = 8;
             InjectableComponent component = layerMatchChild.AddComponent<InjectableComponent>();
@@ -51,8 +50,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             otherLayerChild.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromRootDescendants()
                 .WhereLayerIs(8);
 

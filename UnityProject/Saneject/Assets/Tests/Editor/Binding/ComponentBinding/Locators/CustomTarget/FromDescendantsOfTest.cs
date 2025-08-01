@@ -22,7 +22,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.CustomTarget
             TestScope scope = rootB.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromDescendantsOf(rootA.transform);
+            BindComponent<InjectableComponent>(scope).FromDescendantsOf(rootA.transform);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -43,7 +43,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.CustomTarget
             TestScope scope = rootB.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>().FromDescendantsOf(rootA.transform);
+            BindComponent<IInjectable, InjectableComponent>(scope).FromDescendantsOf(rootA.transform);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

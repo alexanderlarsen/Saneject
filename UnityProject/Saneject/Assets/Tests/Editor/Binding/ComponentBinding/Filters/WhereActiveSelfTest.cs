@@ -16,15 +16,14 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
             InjectableComponent inactiveComponent = inactiveChild.AddComponent<InjectableComponent>();
             InjectableComponent activeComponent = activeChild.AddComponent<InjectableComponent>();
             inactiveChild.SetActive(false);
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromRootDescendants()
                 .WhereActiveSelf();
 
@@ -42,15 +41,14 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
             InjectableComponent inactiveComponent = inactiveChild.AddComponent<InjectableComponent>();
             InjectableComponent activeComponent = activeChild.AddComponent<InjectableComponent>();
             inactiveChild.SetActive(false);
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromRootDescendants()
                 .WhereActiveSelf();
 

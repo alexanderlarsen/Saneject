@@ -23,7 +23,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             disabledComponent.enabled = false;
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromRootDescendants()
                 .WhereIsEnabled();
 
@@ -49,7 +49,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             disabledComponent.enabled = false;
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromRootDescendants()
                 .WhereIsEnabled();
 

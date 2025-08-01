@@ -21,12 +21,11 @@ namespace Tests.Editor.Binding.Global
             IgnoreErrorMessages();
 
             // Add components
-            root.AddComponent<TestScope>();
+            TestScope scope = root.AddComponent<TestScope>();
             globalObject.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            root.GetComponent<TestScope>()
-                .BindGlobal<InjectableComponent>()
+            BindGlobal<InjectableComponent>(scope)
                 .FromAnywhereInScene();
 
             // Inject

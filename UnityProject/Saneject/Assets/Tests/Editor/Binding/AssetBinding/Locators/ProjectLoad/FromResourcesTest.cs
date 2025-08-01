@@ -20,7 +20,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.ProjectLoad
             AssetRequester requester = root.AddComponent<AssetRequester>();
 
             // Set up bindings
-            scope.BindAsset<InjectableScriptableObject>().FromResources("Test/InjectableScriptableObject 1");
+            BindAsset<InjectableScriptableObject>(scope).FromResources("Test/InjectableScriptableObject 1");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -41,7 +41,7 @@ namespace Tests.Editor.Binding.AssetBinding.Locators.ProjectLoad
             AssetRequester requester = root.AddComponent<AssetRequester>();
 
             // Set up bindings
-            scope.BindAsset<IInjectable, InjectableScriptableObject>().FromResources("Test/InjectableScriptableObject 2");
+            BindAsset<IInjectable, InjectableScriptableObject>(scope).FromResources("Test/InjectableScriptableObject 2");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

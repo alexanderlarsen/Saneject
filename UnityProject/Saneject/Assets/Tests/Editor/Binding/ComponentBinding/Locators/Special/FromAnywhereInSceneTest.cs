@@ -22,7 +22,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
             rootB.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromAnywhereInScene();
+            BindComponent<InjectableComponent>(scope).FromAnywhereInScene();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -43,7 +43,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
             rootB.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>().FromAnywhereInScene();
+            BindComponent<IInjectable, InjectableComponent>(scope).FromAnywhereInScene();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -63,8 +63,8 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
             ComponentRequester requester = rootA.AddComponent<ComponentRequester>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromAnywhereInScene();
-            scope.BindComponent<IInjectable, InjectableComponent>().FromAnywhereInScene();
+            BindComponent<InjectableComponent>(scope).FromAnywhereInScene();
+            BindComponent<IInjectable, InjectableComponent>(scope).FromAnywhereInScene();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

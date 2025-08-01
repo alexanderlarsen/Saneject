@@ -20,7 +20,7 @@ namespace Tests.Editor.Binding.AssetBinding.Filters
             AssetRequester requester = root.AddComponent<AssetRequester>();
 
             // Set up bindings
-            scope.BindAsset<InjectableScriptableObject>()
+            BindAsset<InjectableScriptableObject>(scope)
                 .FromResourcesAll("Test")
                 .Where(asset => asset.name.StartsWith("Injectable") && asset.name.EndsWith("2"));
 
@@ -44,7 +44,7 @@ namespace Tests.Editor.Binding.AssetBinding.Filters
             AssetRequester requester = root.AddComponent<AssetRequester>();
 
             // Set up bindings
-            scope.BindAsset<IInjectable, InjectableScriptableObject>()
+            BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromResourcesAll("Test")
                 .Where(asset => asset.name.StartsWith("Injectable") && asset.name.EndsWith("2"));
 

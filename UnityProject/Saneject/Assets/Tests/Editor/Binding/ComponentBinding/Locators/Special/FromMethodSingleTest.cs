@@ -21,7 +21,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
             TestScope scope = child.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromMethod(() => serviceInstance);
+            BindComponent<InjectableComponent>(scope).FromMethod(() => serviceInstance);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -42,7 +42,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
             TestScope scope = child.AddComponent<TestScope>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>().FromMethod(() => serviceInstance);
+            BindComponent<IInjectable, InjectableComponent>(scope).FromMethod(() => serviceInstance);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -55,7 +55,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
         {
             root = new GameObject();
             child = new GameObject();
-            
+
             child.transform.SetParent(root.transform);
         }
     }

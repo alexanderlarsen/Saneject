@@ -21,7 +21,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
             child.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromTargetSelf();
+            BindComponent<InjectableComponent>(scope).FromTargetSelf();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -42,7 +42,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
             child.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>().FromTargetSelf();
+            BindComponent<IInjectable, InjectableComponent>(scope).FromTargetSelf();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -62,8 +62,8 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
             ComponentRequester requester = child.AddComponent<ComponentRequester>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>().FromTargetSelf();
-            scope.BindComponent<IInjectable, InjectableComponent>().FromTargetSelf();
+            BindComponent<InjectableComponent>(scope).FromTargetSelf();
+            BindComponent<IInjectable, InjectableComponent>(scope).FromTargetSelf();
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

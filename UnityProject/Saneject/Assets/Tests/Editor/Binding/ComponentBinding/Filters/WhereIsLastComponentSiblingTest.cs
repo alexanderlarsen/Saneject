@@ -22,7 +22,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             InjectableComponent last = root.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<InjectableComponent>()
+            BindComponent<InjectableComponent>(scope)
                 .FromScopeSelf()
                 .WhereIsLastComponentSibling();
 
@@ -46,7 +46,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             InjectableComponent last = root.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            scope.BindComponent<IInjectable, InjectableComponent>()
+            BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromScopeSelf()
                 .WhereIsLastComponentSibling();
 
