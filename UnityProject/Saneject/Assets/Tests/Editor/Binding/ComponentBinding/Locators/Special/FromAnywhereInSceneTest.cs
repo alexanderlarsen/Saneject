@@ -18,7 +18,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
 
             // Add components
             TestScope scope = rootA.AddComponent<TestScope>();
-            Requester requester = rootA.AddComponent<Requester>();
+            ComponentRequester requester = rootA.AddComponent<ComponentRequester>();
             rootB.AddComponent<InjectableComponent>();
 
             // Set up bindings
@@ -39,7 +39,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
 
             // Add components
             TestScope scope = rootA.AddComponent<TestScope>();
-            Requester requester = rootA.AddComponent<Requester>();
+            ComponentRequester requester = rootA.AddComponent<ComponentRequester>();
             rootB.AddComponent<InjectableComponent>();
 
             // Set up bindings
@@ -60,7 +60,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Special
 
             // Add components
             TestScope scope = rootA.AddComponent<TestScope>();
-            Requester requester = rootA.AddComponent<Requester>();
+            ComponentRequester requester = rootA.AddComponent<ComponentRequester>();
 
             // Set up bindings
             scope.BindComponent<InjectableComponent>().FromAnywhereInScene();

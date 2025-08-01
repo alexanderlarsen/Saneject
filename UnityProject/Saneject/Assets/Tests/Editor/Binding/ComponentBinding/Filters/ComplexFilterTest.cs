@@ -17,7 +17,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
 
             // Add components
             root.AddComponent<TestScope>();
-            Requester requester = root.AddComponent<Requester>();
+            ComponentRequester requester = root.AddComponent<ComponentRequester>();
             InjectableComponent passing = target.AddComponent<InjectableComponent>();
             InjectableComponent failing1 = ignored1.AddComponent<InjectableComponent>();
             InjectableComponent failing2 = ignored2.AddComponent<InjectableComponent>();
@@ -54,7 +54,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
                 .WhereTagIs("Test")
                 .WhereLayerIs(3)
                 .WhereActiveInHierarchy()
-                .WhereTargetIs<Requester>()
+                .WhereTargetIs<ComponentRequester>()
                 .Where(c => c.enabled); // redundant on purpose
 
             // Inject

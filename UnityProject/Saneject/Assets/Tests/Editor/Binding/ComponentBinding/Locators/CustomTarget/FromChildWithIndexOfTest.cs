@@ -18,7 +18,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.CustomTarget
 
             // Add components
             grandChildA3.AddComponent<InjectableComponent>();
-            Requester requester = rootB.AddComponent<Requester>();
+            ComponentRequester requester = rootB.AddComponent<ComponentRequester>();
             TestScope scope = rootB.AddComponent<TestScope>();
 
             // Set up bindings
@@ -39,7 +39,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.CustomTarget
 
             // Add components
             childA.transform.GetChild(2).gameObject.AddComponent<InjectableComponent>();
-            Requester requester = rootB.AddComponent<Requester>();
+            ComponentRequester requester = rootB.AddComponent<ComponentRequester>();
             TestScope scope = rootB.AddComponent<TestScope>();
 
             // Set up bindings

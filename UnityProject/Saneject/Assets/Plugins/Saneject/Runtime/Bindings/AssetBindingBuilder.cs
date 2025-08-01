@@ -93,9 +93,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Bind to the specified <see cref="Object" /> instance.
         /// </summary>
-        public void FromInstance(TAsset instance)
+        public AssetFilterBuilder<TAsset> FromInstance(TAsset instance)
         {
             binding.SetLocator(_ => instance.WrapInEnumerable());
+            return new AssetFilterBuilder<TAsset>(binding, scope);
         }
 
         /// <summary>

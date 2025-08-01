@@ -17,7 +17,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
 
             // Add components
             root.AddComponent<TestScope>();
-            Requester requester = root.AddComponent<Requester>();
+            ComponentRequester requester = root.AddComponent<ComponentRequester>();
             childA.AddComponent<InjectableComponent>();
             childB.AddComponent<InjectableComponent>();
             InjectableComponent target = childC.AddComponent<InjectableComponent>();
@@ -43,7 +43,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
 
             // Add components
             root.AddComponent<TestScope>();
-            Requester requester = root.AddComponent<Requester>();
+            ComponentRequester requester = root.AddComponent<ComponentRequester>();
             childA.AddComponent<InjectableComponent>();
             childB.AddComponent<InjectableComponent>();
             InjectableComponent target = childC.AddComponent<InjectableComponent>();

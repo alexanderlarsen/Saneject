@@ -17,7 +17,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
 
             // Add components
             TestScope scope = root.AddComponent<TestScope>();
-            Requester requester = grandChild.AddComponent<Requester>();
+            ComponentRequester requester = grandChild.AddComponent<ComponentRequester>();
             child.AddComponent<InjectableComponent>();
 
             // Set up bindings
@@ -38,7 +38,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
 
             // Add components
             TestScope scope = root.AddComponent<TestScope>();
-            Requester requester = grandChild.AddComponent<Requester>();
+            ComponentRequester requester = grandChild.AddComponent<ComponentRequester>();
             child.AddComponent<InjectableComponent>();
 
             // Set up bindings
@@ -59,7 +59,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Target
 
             // Add components
             TestScope scope = root.AddComponent<TestScope>();
-            Requester requester = grandChild.AddComponent<Requester>();
+            ComponentRequester requester = grandChild.AddComponent<ComponentRequester>();
 
             // Set up bindings
             scope.BindComponent<InjectableComponent>().FromTargetParent();

@@ -18,7 +18,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             // Add components
             InjectableComponent target = childA.AddComponent<InjectableComponent>();
             childB.AddComponent<InjectableComponent>();
-            Requester requester = root.AddComponent<Requester>();
+            ComponentRequester requester = root.AddComponent<ComponentRequester>();
             TestScope scope = root.AddComponent<TestScope>();
 
             // Set up bindings
@@ -42,7 +42,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             // Add components
             InjectableComponent target = childA.AddComponent<InjectableComponent>();
             childB.AddComponent<InjectableComponent>();
-            Requester requester = root.AddComponent<Requester>();
+            ComponentRequester requester = root.AddComponent<ComponentRequester>();
             TestScope scope = root.AddComponent<TestScope>();
 
             // Set up bindings

@@ -1,0 +1,76 @@
+﻿using NUnit.Framework;
+using Plugins.Saneject.Editor.Core;
+using Tests.Runtime;
+using UnityEngine;
+
+namespace Tests.Editor.Binding.AssetBinding.Config
+{
+    public class WithIdTest : BaseBindingTest
+    {
+        private GameObject root, child1, child2;
+
+        [Test]
+        public void InjectsConcreteAssetByID()
+        {
+            // Suppress errors from unbound dependencies
+            IgnoreErrorMessages();
+
+            // Add components
+            TestScope scope = root.AddComponent<TestScope>();
+            AssetRequesterWithID requester = root.AddComponent<AssetRequesterWithID>();
+            InjectableScriptableObject assetA = ScriptableObject.CreateInstance<InjectableScriptableObject>();
+            InjectableScriptableObject assetB = ScriptableObject.CreateInstance<InjectableScriptableObject>();
+
+            // Set up bindings
+            scope.BindAsset<InjectableScriptableObject>().WithId("componentA").FromInstance(assetA);
+            scope.BindAsset<InjectableScriptableObject>().WithId("componentB").FromInstance(assetB);
+
+            // Inject
+            DependencyInjector.InjectSceneDependencies();
+
+            // Assert
+            Assert.NotNull(requester.concreteComponentA);
+            Assert.NotNull(requester.concreteComponentB);
+            Assert.AreEqual(assetA, requester.concreteComponentA);
+            Assert.AreEqual(assetB, requester.concreteComponentB);
+            Assert.AreNotEqual(requester.concreteComponentA, requester.concreteComponentB);
+        }
+
+        [Test]
+        public void InjectsInterfaceAssetByID()
+        {
+            // Suppress errors from unbound dependencies
+            IgnoreErrorMessages();
+
+            // Add components
+            TestScope scope = root.AddComponent<TestScope>();
+            AssetRequesterWithID requester = root.AddComponent<AssetRequesterWithID>();
+            InjectableScriptableObject assetA = ScriptableObject.CreateInstance<InjectableScriptableObject>();
+            InjectableScriptableObject assetB = ScriptableObject.CreateInstance<InjectableScriptableObject>();
+
+            // Set up bindings
+            scope.BindAsset<IInjectable, InjectableScriptableObject>().WithId("componentA").FromInstance(assetA);
+            scope.BindAsset<IInjectable, InjectableScriptableObject>().WithId("componentB").FromInstance(assetB);
+
+            // Inject
+            DependencyInjector.InjectSceneDependencies();
+
+            // Assert
+            Assert.NotNull(requester.interfaceComponentA);
+            Assert.NotNull(requester.interfaceComponentB);
+            Assert.AreEqual(assetA, requester.interfaceComponentA);
+            Assert.AreEqual(assetB, requester.interfaceComponentB);
+            Assert.AreNotEqual(requester.interfaceComponentA, requester.interfaceComponentB);
+        }
+
+        protected override void CreateHierarchy()
+        {
+            root = new GameObject();
+            child1 = new GameObject();
+            child2 = new GameObject();
+
+            child1.transform.SetParent(root.transform);
+            child2.transform.SetParent(root.transform);
+        }
+    }
+}

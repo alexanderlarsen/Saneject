@@ -17,7 +17,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Config
 
             // Add components
             TestScope scope = root.AddComponent<TestScope>();
-            RequesterWithID requester = root.AddComponent<RequesterWithID>();
+            ComponentRequesterWithID requester = root.AddComponent<ComponentRequesterWithID>();
             InjectableComponent componentA = child1.AddComponent<InjectableComponent>();
             InjectableComponent componentB = child2.AddComponent<InjectableComponent>();
 
@@ -44,7 +44,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Config
 
             // Add components
             TestScope scope = root.AddComponent<TestScope>();
-            RequesterWithID requester = root.AddComponent<RequesterWithID>();
+            ComponentRequesterWithID requester = root.AddComponent<ComponentRequesterWithID>();
             InjectableComponent componentA = child1.AddComponent<InjectableComponent>();
             InjectableComponent componentB = child2.AddComponent<InjectableComponent>();
 

@@ -16,7 +16,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Scope
             IgnoreErrorMessages();
 
             // Add components
-            Requester requester = child2.AddComponent<Requester>();
+            ComponentRequester requester = child2.AddComponent<ComponentRequester>();
             TestScope scope = child2.AddComponent<TestScope>();
             child1.AddComponent<InjectableComponent>();
 
@@ -37,7 +37,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Scope
             IgnoreErrorMessages();
 
             // Add components
-            Requester requester = child2.AddComponent<Requester>();
+            ComponentRequester requester = child2.AddComponent<ComponentRequester>();
             TestScope scope = child2.AddComponent<TestScope>();
             child1.AddComponent<InjectableComponent>();
 
@@ -58,7 +58,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Locators.Scope
             IgnoreErrorMessages();
 
             // Add components
-            Requester requester = child2.AddComponent<Requester>();
+            ComponentRequester requester = child2.AddComponent<ComponentRequester>();
             TestScope scope = child2.AddComponent<TestScope>();
             child2.AddComponent<InjectableComponent>(); // same object, not sibling
 

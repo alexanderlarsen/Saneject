@@ -18,7 +18,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             // Add components
             InjectableComponent first = root.AddComponent<InjectableComponent>();
             TestScope scope = root.AddComponent<TestScope>();
-            Requester requester = root.AddComponent<Requester>();
+            ComponentRequester requester = root.AddComponent<ComponentRequester>();
             root.AddComponent<InjectableComponent>(); // This one should not be injected
 
             // Set up bindings
@@ -42,7 +42,7 @@ namespace Tests.Editor.Binding.ComponentBinding.Filters
             // Add components
             InjectableComponent first = root.AddComponent<InjectableComponent>();
             TestScope scope = root.AddComponent<TestScope>();
-            Requester requester = root.AddComponent<Requester>();
+            ComponentRequester requester = root.AddComponent<ComponentRequester>();
             root.AddComponent<InjectableComponent>(); // Should be ignored
 
             // Set up bindings
