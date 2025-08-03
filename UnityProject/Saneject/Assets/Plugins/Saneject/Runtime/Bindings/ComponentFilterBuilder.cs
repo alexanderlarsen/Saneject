@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
@@ -83,7 +82,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 o is Component component &&
                 component.GetComponentIndex() - 1 ==
                 component.gameObject.GetComponents<Component>().Length - 2); // minus Transform
-            
+
             return this;
         }
 

@@ -158,50 +158,50 @@ namespace Plugins.Saneject.Runtime.Scopes
         public abstract void ConfigureBindings();
 
         /// <summary>
-        /// Registers a binding for a single <typeparamref name="T" /> component or interface type in this scope.
+        /// Registers a binding for a single <typeparamref name="TComponent" /> component or interface type in this scope.
         /// Use this for concrete <see cref="Component" /> or interface you wish to inject directly.
         /// </summary>
-        /// <typeparam name="T">The concrete component type to bind.</typeparam>
+        /// <typeparam name="TComponent">The concrete component type to bind.</typeparam>
         /// <returns>A fluent builder for configuring the component binding.</returns>
-        protected ComponentBindingBuilder<T> BindComponent<T>() where T : class
+        protected ComponentBindingBuilder<TComponent> BindComponent<TComponent>() where TComponent : class
         {
-            Binding binding = typeof(T).IsInterface
-                ? new Binding(typeof(T), null, this)
-                : new Binding(null, typeof(T), this);
+            Binding binding = typeof(TComponent).IsInterface
+                ? new Binding(typeof(TComponent), null, this)
+                : new Binding(null, typeof(TComponent), this);
 
             binding.MarkComponentBinding();
             unvalidatedBindings.Add(binding);
-            return new ComponentBindingBuilder<T>(binding, this);
+            return new ComponentBindingBuilder<TComponent>(binding, this);
         }
 
         /// <summary>
-        /// Registers a collection binding for <typeparamref name="T" /> component type in this scope.
+        /// Registers a collection binding for <typeparamref name="TComponent" /> component type in this scope.
         /// Use this to inject all matching components as a collection.
         /// Shorthand for <see cref="BindMultipleComponents{TConcrete}" />.
         /// </summary>
-        /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
+        /// <typeparam name="TComponent">The concrete component type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<T> BindComponents<T>() where T : class
+        protected ComponentBindingBuilder<TComponent> BindComponents<TComponent>() where TComponent : class
         {
-            return BindMultipleComponents<T>();
+            return BindMultipleComponents<TComponent>();
         }
 
         /// <summary>
-        /// Registers a collection binding for <typeparamref name="T" /> component type in this scope.
+        /// Registers a collection binding for <typeparamref name="TComponent" /> component type in this scope.
         /// Use this to inject all matching components or interfaces as a collection.
         /// </summary>
-        /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
+        /// <typeparam name="TComponent">The concrete component type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
-        protected ComponentBindingBuilder<T> BindMultipleComponents<T>() where T : class
+        protected ComponentBindingBuilder<TComponent> BindMultipleComponents<TComponent>() where TComponent : class
         {
-            Binding binding = typeof(T).IsInterface
-                ? new Binding(typeof(T), null, this)
-                : new Binding(null, typeof(T), this);
+            Binding binding = typeof(TComponent).IsInterface
+                ? new Binding(typeof(TComponent), null, this)
+                : new Binding(null, typeof(TComponent), this);
 
             binding.MarkComponentBinding();
             binding.MarkCollectionBinding();
             unvalidatedBindings.Add(binding);
-            return new ComponentBindingBuilder<T>(binding, this);
+            return new ComponentBindingBuilder<TComponent>(binding, this);
         }
 
         /// <summary>
@@ -346,19 +346,19 @@ namespace Plugins.Saneject.Runtime.Scopes
         }
 
         /// <summary>
-        /// Registers a global binding for the scene component <typeparamref name="TConcrete" />.
+        /// Registers a global binding for the scene component <typeparamref name="TComponent" />.
         /// Promotes the component into the global scope via <c>SceneGlobalContainer</c>.
         /// Enables cross-scene access through global resolution (e.g., via <c>InterfaceProxyObject</c>).
         /// </summary>
-        /// <typeparam name="TConcrete">The <see cref="Component" /> type to bind globally.</typeparam>
+        /// <typeparam name="TComponent">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>
-        protected ComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component
+        protected ComponentBindingBuilder<TComponent> BindGlobal<TComponent>() where TComponent : Component
         {
-            Binding binding = new(null, typeof(TConcrete), this);
+            Binding binding = new(null, typeof(TComponent), this);
             binding.MarkComponentBinding();
             binding.MarkGlobal();
             unvalidatedBindings.Add(binding);
-            return new ComponentBindingBuilder<TConcrete>(binding, this);
+            return new ComponentBindingBuilder<TComponent>(binding, this);
         }
 
         #endregion
