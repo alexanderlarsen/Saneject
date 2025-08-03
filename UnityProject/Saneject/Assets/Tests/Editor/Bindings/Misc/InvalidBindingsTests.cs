@@ -20,6 +20,18 @@ namespace Tests.Editor.Bindings.Misc
         }
 
         [Test]
+        public void AssetBinding_WithComponentType_IsInvalid()
+        {
+            IgnoreErrorMessages();
+
+            Binding binding = new(null, typeof(Transform), dummyScope);
+            binding.MarkAssetBinding();
+            binding.SetLocator(_ => null);
+
+            Assert.IsFalse(binding.IsValid(), "Asset binding with Component type should be invalid.");
+        }
+
+        [Test]
         public void ComponentBinding_WithNonComponentType_IsInvalid()
         {
             IgnoreErrorMessages();

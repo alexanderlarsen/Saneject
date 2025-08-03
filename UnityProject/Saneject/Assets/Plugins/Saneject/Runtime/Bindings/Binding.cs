@@ -223,9 +223,18 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             bool isValid = true;
 
+            if (IsAssetBinding && ConcreteType != null && typeof(Component).IsAssignableFrom(ConcreteType))
+            {
+                string bindingType = $"{(IsCollection ? "Multiple Asset binding" : "Single Asset binding")}";
+                
+                Debug.LogError($"Saneject: {bindingType} in '{scope.GetType().Name}' has an invalid type '{ConcreteType.Name}' that is a Component and not an Asset.", scope);
+                
+                isValid = false;
+            }
+
             if (IsComponentBinding && ConcreteType != null && !typeof(Component).IsAssignableFrom(ConcreteType))
             {
-                string bindingType = $"{(IsCollection ? "Multiple component bindings" : "Component binding")}";
+                string bindingType = $"{(IsCollection ? "Multiple Component binding" : "Single Component binding")}";
 
                 Debug.LogError($"Saneject: {bindingType} in '{scope.GetType().Name}' has an invalid type '{ConcreteType.Name}' that is not an interface or component.", scope);
 
