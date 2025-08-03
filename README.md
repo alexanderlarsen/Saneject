@@ -21,7 +21,7 @@ Editor-time resolved serialized field dependency injection for Unity - keep your
     - [How Saneject DI Works](#how-saneject-di-works)
     - [Runtime DI vs Saneject Comparison](#runtime-di-vs-saneject-comparison)
     - [Scopes & Resolution Order](#scopes--resolution-order)
-    - [Binding Methods](#binding-methods)
+    - [Binding API](#binding-api)
     - [Component Locator Methods](#component-locator-methods)
     - [Object Locator Methods](#object-locator-methods)
     - [Component Filter Methods](#component-filter-methods)
@@ -152,11 +152,11 @@ public class GameScope : Scope
     {
         // Look anywhere in the loaded scene for a GameManager and bind by interface.
         // Resolves via FindObjectsByType<GameManager>(FindObjectsInactive.Include, FindObjectsSortMode.None)) under the hood.
-        RegisterComponent<IGameStateObservable, GameManager>().FromAnywhereInScene();
+        BindComponent<IGameStateObservable, GameManager>().FromAnywhereInScene();
 
         // Grab CharacterController on the injection target (Player) transform.
         // Resolves via player.transform.GetComponent<CharacterController>() under the hood.
-        RegisterComponent<CharacterController>().FromTargetSelf();
+        BindComponent<CharacterController>().FromTargetSelf();
     }
 }
 ```
@@ -273,7 +273,7 @@ public class RootScope : Scope
 {
     public override void Configure()
     {
-        RegisterObject<IAudioService>().FromResources("Audio/Service");
+        BindAsset<IAudioService>().FromResources("Audio/Service");
     }
 }
 ```
@@ -284,7 +284,7 @@ public class EnemyScope : Scope
     public override void Configure()
     {
         // Enemy-local AIController only; no IAudioService here.
-        RegisterComponent<AIController>().FromScopeSelf();
+        BindComponent<AIController>().FromScopeSelf();
     }
 }
 ```
@@ -304,59 +304,63 @@ public class Enemy : MonoBehaviour
 
 > ℹ️ `Scope` uses `HideFlags.DontSaveInBuild` to strip it from builds, to prevent accidental usage at runtime.
 
-### Binding Methods
+### Binding API
 
-To start binding dependencies, create a new custom `Scope` and use one of the following `Register` methods to start a fluent builder.
+To start binding dependencies, create a new custom `Scope` and use one of the following `Bind` methods to start a fluent builder.
 
 #### Component Bindings
 
-Bind Components from scene/prefab hierarchy. Methods return a `ComponentBindingBuilder<T>` to define a locate strategy.
+Bind Components from scene/prefab hierarchy. Methods return a `ComponentBindingBuilder<TComponent>` to define a locate strategy.
 
-| Method                                       | Description                                                     |
-|----------------------------------------------|-----------------------------------------------------------------|
-| `RegisterComponent<T>()`                     | Bind a `Component` in the scene or prefab by its concrete type. |
-| `RegisterComponent<TInterface, TConcrete>()` | Bind by interface and resolve with `TConcrete`.                 |
+| Method                                                                                          | Description                                                                             |
+|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
+| `BindComponent<TComponent>()`                                                                   | Bind a `Component` and resolve by interface or concrete.                                |
+| `BindComponent<TInterface, TConcrete>()`                                                        | Bind a `Component` by `TInterface`and resolve with `TConcrete`.                         |
+| `BindComponents<TComponent>()`<br/>`BindMultipleComponents<TComponent>()`                       | Bind a `Component` collection (list/array) and resolve by interface or concrete.        |
+| `BindComponents<TInterface, TConcrete>()`<br/>`BindMultipleComponents<TInterface, TConcrete>()` | Bind a `Component` collection (list/array) by `TInterface`and resolve with `TConcrete`. |
+| `BindComponents<TInterface, TConcrete>()`<br/>`BindMultipleComponents<TInterface, TConcrete>()` | Bind a `Component` collection (list/array) by `TInterface`and resolve with `TConcrete`. |
 
-#### Object Bindings
+#### Asset Bindings
 
-Bind Project folder assets, e.g., prefabs, `ScriptableObjects`. Methods return an `ObjectBindingBuilder<T>` to define a locate strategy.
+Bind Project folder assets, e.g., prefabs, `ScriptableObjects`. Methods return an `AssetBindingBuilder<TAsset>` to define a locate strategy.
 
-| Method                                    | Description                                                               |
-|-------------------------------------------|---------------------------------------------------------------------------|
-| `RegisterObject<T>()`                     | Bind a `UnityEngine.Object` asset in the Project folder by concrete type. |
-| `RegisterObject<TInterface, TConcrete>()` | Bind by interface and resolve with `TConcrete` asset.                     |
+| Method                                                                                  | Description                                                                                            |
+|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
+| `BindAsset<TConcrete>()`                                                                | Bind a `UnityEngine.Object` asset and resolve by `TConcrete`.                                          |
+| `BindAsset<TInterface, TConcrete>()`                                                    | Bind a `UnityEngine.Object` asset by `TInterface`and resolve with `TConcrete`.                         |
+| `BindAssets<TConcrete>()`<br/>`BindMultipleAssets<TConcrete>()`                         | Bind a `UnityEngine.Object` asset collection (list/array) and resolve by `TConcrete`.                  |
+| `BindAssets<TInterface, TConcrete>()`<br/>`BindMultipleAssets<TInterface, TConcrete>()` | Bind a `UnityEngine.Object` asset collection (list/array) by `TInterface`and resolve with `TConcrete`. |
 
-#### Global Bindings
+#### Global Singleton Bindings
 
-Bind cross-scene singletons. Methods return a `ComponentBindingBuilder<T>` to define a locate strategy.
+Bind cross-scene singletons from scene instances. Methods return a `ComponentBindingBuilder<TComponent>` to define a locate strategy.
 
-| Method                         | Description                                                                                                                                                     |
-|--------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `RegisterGlobalComponent<T>()` | Promote a scene `Component` into `SceneGlobalContainer`.<br/>Registered in the global scope at startup for global resolution (e.g., via `InterfaceProxyObject`. |
-| `RegisterGlobalObject<T>()`    | Promote a scene `Object` into `SceneGlobalContainer`.<br/>Registered in the global scope at startup for global resolution (e.g., via `InterfaceProxyObject`.    |
+| Method                     | Description                                                                                                                                                     |
+|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `BindGlobal<TComponent>()` | Promote a scene `Component` into `SceneGlobalContainer`.<br/>Registered in the global scope at startup for global resolution (e.g., via `InterfaceProxyObject`. |
 
-### Component Locator Methods
+#### Component Locators
 
-Methods in `ComponentBindingBuilder<T> where T : UnityEngine.Component`. All methods return a `FilterableComponentBindingBuilder<T>` to filter found `Components`.
+Methods in `ComponentBindingBuilder<TComponent> where TComponent : UnityEngine.Component`. All methods return a `ComponentFilterBuilder<TComponent>` to filter found `Component`s.
 
-#### Scope-relative
+<u>Scope-Relative Component Locators</u>
 
-Looks for the `Component` from the `Scope` transform and its hierarchy.
+Looks for the `Component` from the `Scope` `Transform` and its hierarchy.
 
 | Method                                                                                         | Description                                                   |
 |------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
 | `FromScopeSelf()`<br/>`FromSelf()`                                                             | Component on the Scope’s own `Transform`.                     |
 | `FromScopeParent()`<br/>`FromParent()`                                                         | Component on the Scope’s direct parent.                       |
-| `FromScopeAncestors()`<br/>`FromAncestors()`                                                   | First match on any ancestor of the Scope (recursive upward).  |
+| `FromScopeAncestors(bool includeSelf = true)`<br/>`FromAncestors(bool includeSelf = true)`     | First match on any ancestor of the Scope (recursive upward).  |
 | `FromScopeFirstChild()`<br/>`FromFirstChild()`                                                 | Component on the Scope’s first direct child.                  |
 | `FromScopeLastChild()`<br/>`FromLastChild()`                                                   | Component on the Scope’s last direct child.                   |
 | `FromScopeChildWithIndex(int index)`<br/>`FromChildWithIndex(int index)`                       | Component on the child at the given index.                    |
 | `FromScopeDescendants(bool includeSelf = true)`<br/>`FromDescendants(bool includeSelf = true)` | Any descendant of the Scope.                                  |
 | `FromScopeSiblings()`<br/>`FromSiblings()`                                                     | Any sibling of the Scope (other children of the same parent). |
 
-#### Root-relative
+<u>Root-Relative Component Locators</u>
 
-Looks for the `Component` from the `Scope.transform.root` transform and its hierarchy.
+Looks for the `Component` from the `Scope.transform.root` `Transform` and its hierarchy.
 
 | Method                                         | Description                                       |
 |------------------------------------------------|---------------------------------------------------|
@@ -366,22 +370,22 @@ Looks for the `Component` from the `Scope.transform.root` transform and its hier
 | `FromRootChildWithIndex(int index)`            | Component on the root’s child at the given index. |
 | `FromRootDescendants(bool includeSelf = true)` | Any descendant of the root object.                |
 
-#### Injection-target-relative.
+<u>Injection-Target-Relative Component Locators</u>
 
-Looks for the `Component` from the injection target transform and its hierarchy. Injection target is the `Component` of a field/property marked with `[Inject]`, i.e., the `Component` requesting injection.
+Looks for the `Component` from the injection target `Transform` and its hierarchy. Injection target is the `Component` of a field/property marked with `[Inject]`, i.e., the `Component` requesting injection.
 
 | Method                                           | Description                                |
 |--------------------------------------------------|--------------------------------------------|
 | `FromTargetSelf()`                               | Component on the target’s own `Transform`. |
 | `FromTargetParent()`                             | Component on the target’s parent.          |
-| `FromTargetAncestors()`                          | First match on any ancestor of the target. |
+| `FromTargetAncestors(bool includeSelf = true)`   | First match on any ancestor of the target. |
 | `FromTargetFirstChild()`                         | Component on the target’s first child.     |
 | `FromTargetLastChild()`                          | Component on the target’s last child.      |
 | `FromTargetChildWithIndex(int index)`            | Component on the target’s child at index.  |
 | `FromTargetDescendants(bool includeSelf = true)` | Any descendant of the target.              |
 | `FromTargetSiblings()`                           | Any sibling of the target.                 |
 
-#### Arbitrary Transform target
+<u>Arbitrary Transform Target Component Locators</u>
 
 Looks for the `Component` from the specified `Transform` and its hierarchy.
 
@@ -389,64 +393,75 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 |----------------------------------------------------------------|--------------------------------------------|
 | `From(Transform target)`                                       | Component on a specific `Transform`.       |
 | `FromParentOf(Transform target)`                               | Component on the target’s parent.          |
-| `FromAncestorsOf(Transform target)`                            | First match on any ancestor of the target. |
+| `FromAncestorsOf(Transform target, bool includeSelf = true)`   | First match on any ancestor of the target. |
 | `FromFirstChildOf(Transform target)`                           | Component on the target’s first child.     |
 | `FromLastChildOf(Transform target)`                            | Component on the target’s last child.      |
 | `FromChildWithIndexOf(Transform target, int index)`            | Component on the target’s child at index.  |
 | `FromDescendantsOf(Transform target, bool includeSelf = true)` | Any descendant of the target.              |
 | `FromSiblingsOf(Transform target)`                             | Any sibling of the target.                 |
 
-#### Scene/Misc
+<u>Other Component Locators</u>
 
-| Method                       | Description                                                            |
-|------------------------------|------------------------------------------------------------------------|
-| `FromAnywhereInScene()`      | Finds the first matching component anywhere in the loaded scene.       |
-| `FromInstance(T instance)`   | Binds to an explicit instance.                                         |
-| `FromMethod(Func<T> method)` | Uses a custom factory method to supply the instance.                   |
-| `WithId(string id)`          | Assigns a custom ID for fields marked with `[Inject(id: "StringID")]`. |
+| Method                                             | Description                                                        |
+|----------------------------------------------------|--------------------------------------------------------------------|
+| `FromAnywhereInScene()`                            | Finds the first matching component anywhere in the loaded scene.   |
+| `FromInstance(TComponent instance)`                | Binds to an explicit instance.                                     |
+| `FromMethod(Func<TComponent> method)`              | Uses a custom predicate to supply a single instance.               |
+| `FromMethod(Func<IEnumerable<TComponent>> method)` | Uses a custom factory method to supply a collection of instances.  |
+| `WithId(string id)`                                | Assign a custom binding ID to match `[Inject(Id = "...")]` fields. |
 
-### Object Locator Methods
+### Asset Locators
 
-Methods in `ObjectBindingBuilder<T> where T : UnityEngine.Object`. All methods return a `FilterableObjectBindingBuilder<T>` to filter found `Components`.
+Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All methods return a `AssetFilterBuilder<TAsset>` to filter found `Object`s.
 
-| Method                            | Description                                                                             |
-|-----------------------------------|-----------------------------------------------------------------------------------------|
-| `FromInstance(T instance)`        | Bind to an explicit `Object` instance.                                                  |
-| `From(Func<T> factory)`           | Use a factory delegate to produce the instance at injection time.                       |
-| `FromResources(string path)`      | Load a single asset from a `Resources/` path via `Resources.Load`.                      |
-| `FromResourcesAll(string path)`   | Load all assets of type `T` at that path via `Resources.LoadAll`.                       |
-| `FromAnywhereInScene()`           | Find the first matching object of type `T` anywhere in the loaded scene.                |
-| `FromAssetLoad(string assetPath)` | Load an asset at the given path via `AssetDatabase.LoadAssetAtPath<T>()` (Editor only). |
-| `WithId(string id)`               | Assign a custom binding ID to match `[Inject(Id = "...")]` fields.                      |
+| Method                                         | Description                                                                                           |
+|------------------------------------------------|-------------------------------------------------------------------------------------------------------|
+| `FromResources(string path)`                   | Load a single asset of type `TAsset` from a `Resources/` path via `Resources.Load`.                   |
+| `FromResourcesAll(string path)`                | Load all assets of type `TAsset` at that path via `Resources.LoadAll`.                                |
+| `FromAssetLoad(string assetPath)`              | Load an asset of type `TAsset` at the given path via `AssetDatabase.LoadAssetAtPath<T>()`.            |
+| `FromAssetLoadAll(string assetPath)`           | Load multiple assets of type `TAsset` at the given path via `AssetDatabase.LoadAllAssetsAtPath<T>()`. |
+| `FromInstance(TAsset instance)`                | Bind to an explicit `Object` instance.                                                                |
+| `FromMethod(Func<TAsset> method)`              | Uses a custom predicate to supply a single instance.                                                  |
+| `FromMethod(Func<IEnumerable<TAsset>> method)` | Uses a custom factory method to supply a collection of instances.                                     |
+| `WithId(string id)`                            | Assign a custom binding ID to match `[Inject(Id = "...")]` fields.                                    |
 
-### Component Filter Methods
+### Component Filters
 
-Methods in `FilterableComponentBindingBuilder<T> where T : UnityEngine.Component`. Returns itself to allow chaining multiple filters.
+Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the hierarchy for precise and complex search strategies. All methods return the builder to enable method chaining.
 
-| Method                                | Description                                                        |
-|---------------------------------------|--------------------------------------------------------------------|
-| `WhereTargetIs<TTarget>()`            | Apply binding only when the injection target is of type `TTarget`. |
-| `WhereTagIs(string tag)`              | Include components whose `GameObject.tag` equals `tag`.            |
-| `WhereNameIs(string name)`            | Include components whose `GameObject.name` equals `name`.          |
-| `WhereNameContains(string substring)` | Include components whose `GameObject.name` contains `substring`.   |
-| `WhereLayerIs(int layer)`             | Include components on the specified `layer`.                       |
-| `WhereActiveInHierarchy()`            | Include components with active `GameObject`s.                      |
-| `WhereInactiveInHierarchy()`          | Include components with inactive `GameObject`s.                    |
-| `WhereSiblingIndexIs(int index)`      | Include components whose transform has the given sibling index.    |
-| `WhereIsFirstSibling()`               | Include components that are the first sibling.                     |
-| `WhereIsLastSibling()`                | Include components that are the last sibling.                      |
-| `Where(Func<T,bool> predicate)`       | Include components satisfying a custom predicate.                  |
+| Method                                   | Description                                                                                     |
+|------------------------------------------|-------------------------------------------------------------------------------------------------|
+| `WhereIsEnabled()`                       | Filters `Behaviour` components where `Behaviour.enabled` is true.                               |
+| `WhereIsActiveAndEnabled()`              | Filters `Behaviour` components where `Behaviour.isActiveAndEnabled` is true.                    |
+| `WhereComponentIndexIs(int index)`       | Filters components at a specific component index on their `GameObject` (excluding `Transform`). |
+| `WhereIsFirstComponentSibling()`         | Filters components that are the first component on their `GameObject` (excluding `Transform`).  |
+| `WhereIsLastComponentSibling()`          | Filters components that are the last component on their `GameObject` (excluding `Transform`).   |
+| `WhereNameIs(string name)`               | Filters components whose `GameObject.name` exactly matches `name`.                              |
+| `WhereNameContains(string substring)`    | Filters components whose `GameObject.name` includes the specified `substring`.                  |
+| `WhereTagIs(string tag)`                 | Filters components whose `GameObject.tag` equals `tag`.                                         |
+| `WhereLayerIs(int layer)`                | Filters components on a specific `layer`.                                                       |
+| `WhereActiveInHierarchy()`               | Filters components whose `GameObject` is active in hierarchy.                                   |
+| `WhereInactiveInHierarchy()`             | Filters components whose `GameObject` is inactive in hierarchy.                                 |
+| `WhereActiveSelf()`                      | Filters components whose `GameObject` is locally active.                                        |
+| `WhereInactiveSelf()`                    | Filters components whose `GameObject` is locally inactive.                                      |
+| `WhereSiblingIndexIs(int index)`         | Filters components with the specified sibling index in their parent's hierarchy.                |
+| `WhereIsFirstSibling()`                  | Filters components that are the first sibling in their parent's hierarchy.                      |
+| `WhereIsLastSibling()`                   | Filters components that are the last sibling in their parent's hierarchy.                       |
+| `Where(Func<TComponent,bool> predicate)` | Filters components using a custom predicate function.                                           |
+| `WhereTargetIs<TTarget>()`               | Applies binding only if the injection target matches type `TTarget`.                            |
 
-### Object Filter Methods
+### Asset Filters
 
-Methods in `FilterableObjectBindingBuilder<T> where T : UnityEngine.Object`. Returns itself to allow chaining multiple filters.
+Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in the project folder for precise and complex asset search strategies. All methods return the builder to enable method chaining.
 
-| Method                                | Description                                        |
-|---------------------------------------|----------------------------------------------------|
-| `WhereNameIs(string name)`            | Include objects whose `name` equals `name`.        |
-| `WhereNameContains(string substring)` | Include objects whose `name` contains `substring`. |
-| `Where(Func<T,bool> predicate)`       | Include objects satisfying a custom predicate.     |
-| `WhereIsOfType<TO>()`                 | Include only objects of subtype `TO`.              |
+| Method                                | Description                                                          |
+|---------------------------------------|----------------------------------------------------------------------|
+| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.               |
+| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.           |
+| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`.      |
+| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.                  |
+| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate function.                    |
+| `WhereTargetIs<TTarget>()`            | Applies binding only if the injection target matches type `TTarget`. |
 
 ### SerializeInterface
 
@@ -620,13 +635,13 @@ Now drag the `GameManagerProxy` asset into any `[SerializeInterface] IGameManage
 
 #### Resolve strategies
 
-| Resolve method                    | What it does                                                                                                                                                     |
-|-----------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `FromGlobalScope`                 | Pulls the instance from `GlobalScope`. Register it via `RegisterGlobalComponent` / `RegisterGlobalObject` in a `Scope`. No reflection, just a dictionary lookup. |
-| `FindInLoadedScenes`              | Uses `FindFirstObjectByType<T>(FindObjectsInactive.Include)` across all loaded scenes.                                                                           |
-| `FromComponentOnPrefab`           | Instantiates the given prefab and returns the component.                                                                                                         |
-| `FromNewComponentOnNewGameObject` | Creates a new `GameObject` and adds the component.                                                                                                               |
-| `ManualRegistration`              | You call `proxy.RegisterInstance(instance)` at runtime before the proxy is used.                                                                                 |
+| Resolve method                    | What it does                                                                                                               |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| `FromGlobalScope`                 | Pulls the instance from `GlobalScope`. Register it via `BindGlobal` in a `Scope`. No reflection, just a dictionary lookup. |
+| `FindInLoadedScenes`              | Uses `FindFirstObjectByType<T>(FindObjectsInactive.Include)` across all loaded scenes.                                     |
+| `FromComponentOnPrefab`           | Instantiates the given prefab and returns the component.                                                                   |
+| `FromNewComponentOnNewGameObject` | Creates a new `GameObject` and adds the component.                                                                         |
+| `ManualRegistration`              | You call `proxy.RegisterInstance(instance)` at runtime before the proxy is used.                                           |
 
 #### Performance note
 
@@ -642,20 +657,19 @@ If you’re in a **very** tight loop, extract the real instance via `proxy.GetIn
 The `GlobalScope` is a static service locator that `InterfaceProxyObject` can fetch from at near-zero cost (dictionary lookup).
 Use it to register scene objects or assets as cross-scene singletons. The `GlobalScope` can only hold one instance per unique type.
 
-Bindings are added via `RegisterGlobalComponent<T>()` or `RegisterGlobalObject<T>()` inside a `Scope`. This stores the binding into a `SceneGlobalContainer` component.
+Bindings are added via `BindGlobal<TComponent>()` inside a `Scope`. This stores the binding into a `SceneGlobalContainer` component.
 
 At runtime, on `Awake()` (with `[DefaultExecutionOrder(-10000)]`), the `SceneGlobalContainer` adds all its references to the `GlobalScope`.
 
 Only one `SceneGlobalContainer` is allowed per scene - it's created automatically during scene injection and manual creation is not allowed.
 
-#### Global Binding Methods
+#### Global Binding API
 
 Register global singletons in the `Scope` using the following methods.
 
-| Method                         | Description                                                              |
-|--------------------------------|--------------------------------------------------------------------------|
-| `RegisterGlobalComponent<T>()` | Adds a scene `Component` to the global scope via `SceneGlobalContainer`. |
-| `RegisterGlobalObject<T>()`    | Adds a scene `Object` (e.g., `ScriptableObject`) to the global scope.    |
+| Method                     | Description                                                              |
+|----------------------------|--------------------------------------------------------------------------|
+| `BindGlobal<TComponent>()` | Adds a scene `Component` to the global scope via `SceneGlobalContainer`. |
 
 #### GlobalScope API
 
