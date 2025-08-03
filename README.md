@@ -22,10 +22,6 @@ Editor-time resolved serialized field dependency injection for Unity - keep your
     - [Runtime DI vs Saneject Comparison](#runtime-di-vs-saneject-comparison)
     - [Scopes & Resolution Order](#scopes--resolution-order)
     - [Binding API](#binding-api)
-    - [Component Locator Methods](#component-locator-methods)
-    - [Object Locator Methods](#object-locator-methods)
-    - [Component Filter Methods](#component-filter-methods)
-    - [Object Filter Methods](#object-filter-methods)
     - [SerializeInterface](#serializeinterface)
     - [MonoBehaviourInspector](#monobehaviourinspector)
     - [SanejectInspector API](#sanejectinspector-api)
@@ -410,7 +406,7 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 | `FromMethod(Func<IEnumerable<TComponent>> method)` | Uses a custom factory method to supply a collection of instances.  |
 | `WithId(string id)`                                | Assign a custom binding ID to match `[Inject(Id = "...")]` fields. |
 
-### Asset Locators
+#### Asset Locators
 
 Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All methods return a `AssetFilterBuilder<TAsset>` to filter found `Object`s.
 
@@ -425,7 +421,7 @@ Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All 
 | `FromMethod(Func<IEnumerable<TAsset>> method)` | Uses a custom factory method to supply a collection of instances.                                     |
 | `WithId(string id)`                            | Assign a custom binding ID to match `[Inject(Id = "...")]` fields.                                    |
 
-### Component Filters
+#### Component Filters
 
 Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the hierarchy for precise and complex search strategies. All methods return the builder to enable method chaining.
 
@@ -450,7 +446,7 @@ Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the
 | `Where(Func<TComponent,bool> predicate)` | Filters components using a custom predicate function.                                           |
 | `WhereTargetIs<TTarget>()`               | Applies binding only if the injection target matches type `TTarget`.                            |
 
-### Asset Filters
+#### Asset Filters
 
 Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in the project folder for precise and complex asset search strategies. All methods return the builder to enable method chaining.
 
