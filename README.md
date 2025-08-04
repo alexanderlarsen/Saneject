@@ -525,51 +525,50 @@ For every `[SerializeInterface]` field the generator emits a hidden, serializabl
 ```csharp
 // User written class. 
 // Needs to be partial for source generator to extend it with another partial.
-public partial class SomeClass : MonoBehaviour
+public partial class Requester : MonoBehaviour
 {
-    [SerializeInterface]
-    ISomeInterface someInterface;
-    
-    [SerializeInterface]
-    ISomeInterface[] someInterfaceArray; 
+    [Inject, SerializeInterface]
+    private IService service;
+
+    [Inject, SerializeInterface]
+    private IService[] servicesArray;
 }
 ```
 
 ```csharp
 // Auto-generated partial.
-// Simplified code for demonstration purposes.
-public partial class SomeClass : ISerializationCallbackReceiver
+public partial class Requester : ISerializationCallbackReceiver
 {
-    [SerializeField, InterfaceBackingField(typeof(someInterface))]
-    private Object __someInterface; // Real serialized field
+    [SerializeField, InterfaceBackingField(interfaceType: typeof(IService), isInjected: true, injectId: null)]
+    private Object __service; // Real serialized field
     
-    [SerializeField, InterfaceBackingField(typeof(someInterface))]
-    private Object[] __someInterfaceArray; // Real serialized field
+    [SerializeField, InterfaceBackingField(interfaceType: typeof(IService), isInjected: true, injectId: null)]
+    private Object[] __servicesArray; // Real serialized field
 
     public void OnBeforeSerialize()
     {
-        // Sync interface fields into their hidden Object-backed fields so they serialize and show up in the Inspector.
+        // Sync interface fields into their Object-backed fields so they serialize and show up in the Inspector.
         #if UNITY_EDITOR
-        __someInterface = someInterface as Object;
-        __someInterfaceArray = someInterfaceArray?.Cast<UnityEngine.Object>().ToArray();
+        __service = service as Object;
+        __servicesArray = servicesArray?.Cast<UnityEngine.Object>().ToArray();
         #endif
     }
     
     public void OnAfterDeserialize()
     {
         // When Unity deserialization occurs, the Object is assigned to the actual interface field.
-        someInterface = __someInterface as ISomeInterface;
+        service = __service as IService;
         
-        someInterfaceArray = (__someInterfaceArray ?? Array.Empty<UnityEngine.Object>())
-                    .Select(x => x as ISomeInterface)
+        servicesArray = (__servicesArray ?? Array.Empty<UnityEngine.Object>())
+                    .Select(x => x as IService)
                     .ToArray();
     }
 }
 ```
 
-In the Inspector this appears as a standard object picker labelled “Some Interface (ISomeInterface)” that be handled manually - or used for dependency injection if you add `[Inject]` alongside `[SerializeInterface]`. If you plug in an `Object` that doesn’t implement the interface, the property drawer rejects it and clears the field.
+The generated backing fields make the interface fields show up in the Inspector as visible, serializable `Object` references, labeled with the interface type. In `[Inject, SerializeInterface]` cases, the field is grayed out and managed automatically by the DI system. If you remove `[Inject]`, it becomes a standard `Object` picker, and stays manually assignable. If a non-matching object is assigned, the field is cleared and set to `null`.
 
-![Interface field visible in the Inspector](Docs/SerializeInterfaceInspector.webp)
+![Interface field visible in the Inspector](Docs/SerializeInterfaceInspectorExample.webp)
 
 ### MonoBehaviourInspector
 
