@@ -785,12 +785,19 @@ A few helpful touches built into the inspector experience:
 
 ### User Settings
 
-Found under **Saneject → User Settings**, these let you customize editor and logging behavior:
+Found under **Saneject → User Settings**, these let you customize editor and logging behavior in the Unity Editor.
 
-- **Injection Prompts**: Ask before scene or prefab injection runs.
-- **Inspector Tweaks**: Toggle visibility of injected fields and help boxes.
-- **Play Mode Logging**: Log when a proxy resolves or global scope changes.
-- **Editor Logging**: Show injection stats, warn about unused bindings, or skipped prefab injection.
+| Setting                                     | Description                                                                                               |
+|---------------------------------------------|-----------------------------------------------------------------------------------------------------------|
+| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting dependencies into the scene.                                  |
+| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting prefab dependencies.                                          |
+| `Show Injected Fields`                      | Show `[Inject]` fields in the Inspector.                                                                  |
+| `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                  |
+| `Log On Proxy Instance Resolve`             | Log when a proxy resolves its target during Play Mode.                                                    |
+| `Log Global Scope Register/Unregister`      | Log when objects are registered or unregistered in the global scope during Play Mode.                     |
+| `Log Injection Stats`                       | Log a summary after injection: scopes processed, fields injected, globals added, unused/missing bindings. |
+| `Log Prefab Skipped During Scene Injection` | Log when a prefab is skipped during a scene injection pass.                                               |
+| `Log Unused Bindings`                       | Log when bindings are declared but never used in the current scene or prefab.                             |
 
 ## Limitations / Known Issues
 
