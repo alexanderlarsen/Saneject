@@ -22,6 +22,7 @@ Editor-time resolved serialized field dependency injection for Unity - keep your
     - [Runtime DI vs Saneject Comparison](#runtime-di-vs-saneject-comparison)
     - [Scopes & Resolution Order](#scopes--resolution-order)
     - [Binding API](#binding-api)
+    - [Binding Uniqueness](#binding-uniqueness)
     - [SerializeInterface](#serializeinterface)
     - [MonoBehaviourInspector](#monobehaviourinspector)
     - [SanejectInspector API](#sanejectinspector-api)
@@ -58,6 +59,8 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 
 - **Editor-time, deterministic injection:** Bindings are resolved in the editor, stored directly in serialized fields, including nested serialized classes.
 - **Fluent, scope-aware binding API:** Search hierarchy or project, filter by tag/layer/name, bind by type or ID.
+- **Collection binding support:** Inject arrays or lists with full support for filters, scoping, and binding IDs.
+- **Flexible filtering:** Query scene or asset bindings with filters for name, tag, layer, hierarchy, and custom predicates for advanced resolution logic.
 - **Non-blocking validation:** Reports all missing, conflicting, or invalid bindings in a single pass without halting injection flow, enabling faster iteration and debugging.
 - **Unified Scope component:** One Scope type handles both scenes and prefabs, with automatic context detection.
 - **Built-in caching & safety nets:** Redundant injections are cached, prefab scopes are skipped in scene injection, and unused bindings are reported.
@@ -65,6 +68,7 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 ### Serialization & Interfaces
 
 - **Interface serialization with Roslyn:** `[SerializeInterface] IMyInterface` fields show up in the Inspector.
+- **Serialized collections of interfaces:** Interface arrays and lists using `[SerializeInterface] IMyInterface[]` are fully supported, injectable and visible in the Inspector.
 - **Cross-scene / prefab references:** `InterfaceProxyObject` `ScriptableObjects` allow serialized references to objects Unity normally can’t link.
 - **Global Scope container:** Scene dependencies can be promoted to global singletons and resolved statically by proxies.
 
@@ -302,7 +306,15 @@ public class Enemy : MonoBehaviour
 
 ### Binding API
 
-To start binding dependencies, create a new custom `Scope` and use one of the following `Bind` methods to start a fluent builder.
+To start binding dependencies, create a custom `Scope` and use one of the following `Bind` methods to start a fluent builder.
+
+Bindings are shape-specific: single-value bindings won’t resolve collection (list/array) fields, and collection bindings won’t resolve single fields. The system validates these mismatches automatically and reports them during injection.
+
+You can bind dependencies in three ways, depending on how you want injection to work:
+
+- **Bind by interface**: Matches any component that implements the interface.
+- **Bind by concrete type**: Matches only components of that exact class.
+- **Bind an interface to a specific concrete type**: Ensures that only components of a specific type are used to fulfill an interface.
 
 #### Component Bindings
 
@@ -398,13 +410,13 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 
 <u>Other Component Locators</u>
 
-| Method                                             | Description                                                        |
-|----------------------------------------------------|--------------------------------------------------------------------|
-| `FromAnywhereInScene()`                            | Finds the first matching component anywhere in the loaded scene.   |
-| `FromInstance(TComponent instance)`                | Binds to an explicit instance.                                     |
-| `FromMethod(Func<TComponent> method)`              | Uses a custom predicate to supply a single instance.               |
-| `FromMethod(Func<IEnumerable<TComponent>> method)` | Uses a custom factory method to supply a collection of instances.  |
-| `WithId(string id)`                                | Assign a custom binding ID to match `[Inject(Id = "...")]` fields. |
+| Method                                             | Description                                                               |
+|----------------------------------------------------|---------------------------------------------------------------------------|
+| `FromAnywhereInScene()`                            | Finds the first matching component anywhere in the loaded scene.          |
+| `FromInstance(TComponent instance)`                | Binds to an explicit instance.                                            |
+| `FromMethod(Func<TComponent> method)`              | Uses a custom predicate to supply a single instance.                      |
+| `FromMethod(Func<IEnumerable<TComponent>> method)` | Uses a custom factory method to supply a collection of instances.         |
+| `WithId(string id)`                                | Assign a custom binding ID to match `[Inject(Id = "YourIdHere")]` fields. |
 
 #### Asset Locators
 
@@ -419,7 +431,7 @@ Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All 
 | `FromInstance(TAsset instance)`                | Bind to an explicit `Object` instance.                                                                |
 | `FromMethod(Func<TAsset> method)`              | Uses a custom predicate to supply a single instance.                                                  |
 | `FromMethod(Func<IEnumerable<TAsset>> method)` | Uses a custom factory method to supply a collection of instances.                                     |
-| `WithId(string id)`                            | Assign a custom binding ID to match `[Inject(Id = "...")]` fields.                                    |
+| `WithId(string id)`                            | Assign a custom binding ID to match `[Inject(Id = "YourIdHere")]` fields.                             |
 
 #### Component Filters
 
@@ -459,6 +471,47 @@ Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in t
 | `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate function.                    |
 | `WhereTargetIs<TTarget>()`            | Applies binding only if the injection target matches type `TTarget`. |
 
+### Binding Uniqueness
+
+Each binding you declare in a `Scope` must be unique. If two bindings in the same `Scope` conflict, meaning they target the same injection key, Saneject will log an error and ignore the duplicate.
+
+A binding is considered unique within a scope based on the following:
+
+- **Bound type**: Either the interface type (if provided) or the concrete type (if binding directly).
+- **Binding ID**: If set via `.WithId()` and matched with `[Inject(Id = "YourIdHere")]`.
+- **Binding shape**: Whether it's a single-value binding or a collection (`List<T>` or `T[]`).
+- **Global flag**: Whether the binding is marked as global.
+- **Target filters**: If the binding uses the target type filter `WhereTargetIs<T>()`.
+
+For example, the following two bindings are considered duplicates and will conflict:
+
+```csharp
+BindComponent<IMyService>();
+BindComponent<IMyService, MyServiceImpl>();
+```
+
+But the following combinations are allowed:
+
+```csharp
+// Interface and direct concrete binding
+BindComponent<IMyService>();
+BindComponent<MyServiceImpl>();
+
+// Same interface, but with a unique ID
+BindComponent<IMyService>();
+BindComponent<IMyService, MyServiceImpl>().WithId("Secondary");
+
+// Same interface, one single and one collection binding
+BindComponent<IMyService>();
+BindComponents<IMyService, MyServiceImpl>();
+
+// Same interface and ID, but different target filters
+BindComponent<IMyService>().WhereTargetIs<Player>();
+BindComponent<IMyService>().WhereTargetIs<Enemy>();
+```
+
+This uniqueness model ensures deterministic resolution and early conflict detection. Duplicate bindings are logged and skipped automatically.
+
 ### SerializeInterface
 
 #### Why Unity can’t “serialize an interface”
@@ -476,6 +529,9 @@ public partial class SomeClass : MonoBehaviour
 {
     [SerializeInterface]
     ISomeInterface someInterface;
+    
+    [SerializeInterface]
+    ISomeInterface[] someInterfaceArray; 
 }
 ```
 
@@ -486,18 +542,27 @@ public partial class SomeClass : ISerializationCallbackReceiver
 {
     [SerializeField, InterfaceBackingField(typeof(someInterface))]
     private Object __someInterface; // Real serialized field
+    
+    [SerializeField, InterfaceBackingField(typeof(someInterface))]
+    private Object[] __someInterfaceArray; // Real serialized field
 
     public void OnBeforeSerialize()
     {
+        // Sync interface fields into their hidden Object-backed fields so they serialize and show up in the Inspector.
         #if UNITY_EDITOR
         __someInterface = someInterface as Object;
+        __someInterfaceArray = someInterfaceArray?.Cast<UnityEngine.Object>().ToArray();
         #endif
     }
     
     public void OnAfterDeserialize()
     {
         // When Unity deserialization occurs, the Object is assigned to the actual interface field.
-        someInterface = __someInterface as ISomeInterface;        
+        someInterface = __someInterface as ISomeInterface;
+        
+        someInterfaceArray = (__someInterfaceArray ?? Array.Empty<UnityEngine.Object>())
+                    .Select(x => x as ISomeInterface)
+                    .ToArray();
     }
 }
 ```
@@ -512,10 +577,10 @@ Unity's default inspector draws serialized fields in declaration order, which ca
 
 `MonoBehaviourInspector` is a global `CustomEditor` for all `MonoBehaviour`s. It replaces Unity's default drawing with a call to `SanejectInspector.DrawAllSerializedFields`, which ensures:
 
-- Interface backing fields appear directly after their interface declarations
-- `[ReadOnly]` and `[Inject]` collections are shown non-editable
-- Nested `[Serializable]` objects are rendered recursively with correct order
-- Backing fields are never shown out of place or detached from their interfaces
+- Interface backing fields appear directly after their interface declarations.
+- `[Inject]` single type fields and collections are shown as non-editable.
+- Nested `[Serializable]` objects are rendered recursively with correct order.
+- Backing fields are never shown out of place or detached from their interfaces.
 
 > ⚠️ **Global MonoBehaviour Inspector Override**  
 > A `MonoBehaviourInspector.cs` file overrides all `MonoBehaviour` inspectors to enforce intended UX (read-only injected fields, correct interface order and more).
@@ -737,7 +802,6 @@ Found under **Saneject → User Settings**, these let you customize editor and l
 - Proxy-creation menu can be flaky. It relies on `SessionState` keys to survive a domain reload, and occasionally Unity clears them before the follow-up dialog appears. If that happens, the `.cs` proxy file is generated but no `.asset` is created, just run **Generate Interface Proxy** again on the script to finish the flow.
 - Circular dependency detection is not yet implemented.
 - Unity's object picker cannot filter by interface types in the Inspector.
-- Collection bindings (e.g. injecting `IEnumerable<T>`) is not supported yet.
 - Unity Package Manager (UPM) support is not yet available. Use `.unitypackage` or clone + copy for now. Planned for post-beta once the API and structure stabilize.
 
 ## Credits / Contribution
