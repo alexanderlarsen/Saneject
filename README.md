@@ -1,9 +1,20 @@
-# Saneject
+# Saneject - Unity Editor-Time DI
 
-Editor-time resolved serialized field dependency injection for Unity - keep your references visible, classes clean, ditch the runtime container.
+Editor-time resolved serialized field dependency injection for Unity. Keep your references visible, classes clean, ditch the runtime container.
 
 > ⚠️ **Beta Notice**  
-> Saneject is currently in beta. The framework is functionally stable, but the API is still evolving during the beta phase. Expect some breaking changes until 1.0.0. I’m looking for testers to help catch edge cases, bugs and polish the tooling. If you find issues or have feedback, feel free to open an issue or reach out.
+> Saneject is currently in beta. The framework is functionally stable, but the API is still evolving during the beta phase. Expect some breaking changes until 1.0.0.
+
+> 👋 **Tried it? Let me know!**
+>
+> I’m looking for testers to help catch edge cases, bugs and polish the tooling. If you’ve cloned or tested Saneject, even briefly, I’d love your thoughts.
+>
+> - Did anything work well?
+> - Was anything confusing or unclear?
+> - Did you hit any bugs or unexpected behavior?
+> - Is there something you expected that’s missing?
+>
+> Open an [Issue](https://github.com/alexanderlarsen/Saneject/issues) or drop a quick comment in [Discussions](https://github.com/alexanderlarsen/Saneject/discussions). No need to be formal!
 
 ## Table of Contents
 
@@ -308,7 +319,10 @@ public class Enemy : MonoBehaviour
 
 To start binding dependencies, create a custom `Scope` and use one of the following `Bind` methods to start a fluent builder.
 
-Bindings are shape-specific: single-value bindings won’t resolve collection (list/array) fields, and collection bindings won’t resolve single fields. The system validates these mismatches automatically and reports them during injection.
+A few rules:
+
+- **Field types must match bindings**: Interface bindings won't resolve concrete fields, and vice versa.
+- **Single vs. collections bindings must match**: Single-value bindings won’t resolve collection (list/array) fields, and collection bindings won’t resolve single fields. The system validates these mismatches automatically and reports them during injection.
 
 You can bind dependencies in three ways, depending on how you want injection to work:
 
@@ -479,7 +493,7 @@ A binding is considered unique within a scope based on the following:
 
 - **Bound type**: Either the interface type (if provided) or the concrete type (if binding directly).
 - **Binding ID**: If set via `.WithId()` and matched with `[Inject(Id = "YourIdHere")]`.
-- **Binding shape**: Whether it's a single-value binding or a collection (`List<T>` or `T[]`).
+- **Single vs collection**: Whether it's a single-value binding or a collection (`List<T>` or `T[]`).
 - **Global flag**: Whether the binding is marked as global.
 - **Target filters**: If the binding uses the target type filter `WhereTargetIs<T>()`.
 
@@ -817,7 +831,7 @@ Found under **Saneject → User Settings**, these let you customize editor and l
 - Unity's object picker cannot filter by interface types in the Inspector.
 - Unity Package Manager (UPM) support is not yet available. Use `.unitypackage` or clone + copy for now. Planned for post-beta once the API and structure stabilize.
 
-## Credits / Contribution
+## Credits
 
 Inspired by:
 
@@ -825,7 +839,11 @@ Inspired by:
 - [VContainer](https://github.com/hadashiA/VContainer)
 - [Serialize Interface Generator](https://github.com/SimonNordon4/serialize-interface-generator)
 
-Contributions are welcome. If you find bugs or have suggestions, feel free to open an issue. PRs are appreciated too. There’s no formal roadmap right now, but I’ll do my best to review what comes in.
+## Contribution
+
+There's no formal roadmap or contribution pipeline in place at the moment, but suggestions and issue reports are always appreciated.
+
+Feel free to open an [Issue](https://github.com/alexanderlarsen/Saneject/issues) or drop a quick comment in [Discussions](https://github.com/alexanderlarsen/Saneject/discussions).
 
 ## License
 
