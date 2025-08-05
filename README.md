@@ -1,4 +1,4 @@
-# Saneject - Unity Editor-Time DI
+# Saneject (0.7.0 beta)
 
 Editor-time resolved serialized field dependency injection for Unity. Keep your references visible, classes clean, ditch the runtime container.
 
@@ -74,7 +74,6 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 - **Flexible filtering:** Query scene or asset bindings with filters for name, tag, layer, hierarchy, and custom predicates for advanced resolution logic.
 - **Non-blocking validation:** Reports all missing, conflicting, or invalid bindings in a single pass without halting injection flow, enabling faster iteration and debugging.
 - **Unified Scope component:** One Scope type handles both scenes and prefabs, with automatic context detection.
-- **Built-in caching & safety nets:** Redundant injections are cached, prefab scopes are skipped in scene injection, and unused bindings are reported.
 
 ### Serialization & Interfaces
 
