@@ -364,7 +364,7 @@ Bind cross-scene singletons from scene instances. Methods return a `ComponentBin
 
 Methods in `ComponentBindingBuilder<TComponent> where TComponent : UnityEngine.Component`. All methods return a `ComponentFilterBuilder<TComponent>` to filter found `Component`s.
 
-<u>Scope-Relative Component Locators</u>
+Scope-Relative Component Locators:
 
 Looks for the `Component` from the `Scope` `Transform` and its hierarchy.
 
@@ -379,7 +379,7 @@ Looks for the `Component` from the `Scope` `Transform` and its hierarchy.
 | `FromScopeDescendants(bool includeSelf = true)`<br/>`FromDescendants(bool includeSelf = true)` | Any descendant of the Scope.                                  |
 | `FromScopeSiblings()`<br/>`FromSiblings()`                                                     | Any sibling of the Scope (other children of the same parent). |
 
-<u>Root-Relative Component Locators</u>
+Root-Relative Component Locators:
 
 Looks for the `Component` from the `Scope.transform.root` `Transform` and its hierarchy.
 
@@ -391,7 +391,7 @@ Looks for the `Component` from the `Scope.transform.root` `Transform` and its hi
 | `FromRootChildWithIndex(int index)`            | Component on the root’s child at the given index. |
 | `FromRootDescendants(bool includeSelf = true)` | Any descendant of the root object.                |
 
-<u>Injection-Target-Relative Component Locators</u>
+Injection-Target-Relative Component Locators:
 
 Looks for the `Component` from the injection target `Transform` and its hierarchy. Injection target is the `Component` of a field/property marked with `[Inject]`, i.e., the `Component` requesting injection.
 
@@ -406,7 +406,7 @@ Looks for the `Component` from the injection target `Transform` and its hierarch
 | `FromTargetDescendants(bool includeSelf = true)` | Any descendant of the target.              |
 | `FromTargetSiblings()`                           | Any sibling of the target.                 |
 
-<u>Arbitrary Transform Target Component Locators</u>
+Arbitrary Transform Target Component Locators:
 
 Looks for the `Component` from the specified `Transform` and its hierarchy.
 
@@ -421,7 +421,7 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 | `FromDescendantsOf(Transform target, bool includeSelf = true)` | Any descendant of the target.              |
 | `FromSiblingsOf(Transform target)`                             | Any sibling of the target.                 |
 
-<u>Other Component Locators</u>
+Other Component Locators:
 
 | Method                                             | Description                                                               |
 |----------------------------------------------------|---------------------------------------------------------------------------|
