@@ -10,8 +10,8 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
 {
     private static readonly DiagnosticDescriptor Rule = new(
         "INJ001",
-        "[Inject] fields must have [SerializeField] or [SerializeInterface]",
-        "Field '{0}' with [Inject] must also have [SerializeField] or [SerializeInterface]",
+        "[Inject] fields must have either [SerializeField], [SerializeInterface] or be public",
+        "Field '{0}' with [Inject] must have either [SerializeField], [SerializeInterface] or be public",
         "Injection",
         DiagnosticSeverity.Error,
         true);
@@ -39,7 +39,7 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
     {
         ISymbol symbol = context.Symbol;
         if (!HasAttribute(symbol, "Inject")) return;
-        if (HasAttribute(symbol, "SerializeField") || HasAttribute(symbol, "SerializeInterface")) return;
+        if (HasAttribute(symbol, "SerializeField") || HasAttribute(symbol, "SerializeInterface") || IsPublic(symbol)) return;
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, symbol.Locations[0], symbol.Name));
     }
@@ -48,7 +48,7 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
     {
         if (context.Symbol is not IFieldSymbol field) return;
         if (!HasAttribute(field, "SerializeInterface")) return;
-        
+
         ITypeSymbol typeSymbol = field.Type;
 
         // skip single‐interface
@@ -65,6 +65,11 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
             return;
 
         context.ReportDiagnostic(Diagnostic.Create(Rule2, field.Locations[0], field.Name, field.Type.Name));
+    }
+
+    private bool IsPublic(ISymbol symbol)
+    {
+        return symbol.DeclaredAccessibility == Accessibility.Public;
     }
 
     private bool HasAttribute(

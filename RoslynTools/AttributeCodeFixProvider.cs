@@ -10,27 +10,29 @@ using Microsoft.CodeAnalysis.CSharp.Syntax;
 
 namespace Saneject.Roslyn.CodeFixProviders;
 
-[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(InjectAttributeCodeFixProvider))]
-public class InjectAttributeCodeFixProvider : CodeFixProvider
+[ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AttributeCodeFixProvider))]
+public class AttributeCodeFixProvider : CodeFixProvider
 {
     public sealed override ImmutableArray<string> FixableDiagnosticIds =>
         ImmutableArray.Create("INJ001", "INJ002");
 
-    public sealed override FixAllProvider GetFixAllProvider() =>
-        WellKnownFixAllProviders.BatchFixer;
+    public sealed override FixAllProvider GetFixAllProvider()
+    {
+        return WellKnownFixAllProviders.BatchFixer;
+    }
 
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
-        var diagnostic = context.Diagnostics.First();
-        var root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
-        var node = root.FindNode(diagnostic.Location.SourceSpan);
+        Diagnostic diagnostic = context.Diagnostics.First();
+        SyntaxNode root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+        SyntaxNode node = root.FindNode(diagnostic.Location.SourceSpan);
 
         if (node is not VariableDeclaratorSyntax varDecl ||
             varDecl.Parent?.Parent is not FieldDeclarationSyntax fieldDecl)
             return;
 
-        var semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken);
-        var symbol = semanticModel.GetDeclaredSymbol(varDecl, context.CancellationToken) as IFieldSymbol;
+        SemanticModel semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken);
+        IFieldSymbol symbol = semanticModel.GetDeclaredSymbol(varDecl, context.CancellationToken) as IFieldSymbol;
         bool isInterface = symbol?.Type.TypeKind == TypeKind.Interface;
 
         switch (diagnostic.Id)
@@ -44,14 +46,20 @@ public class InjectAttributeCodeFixProvider : CodeFixProvider
                     diagnostic);
 
                 if (isInterface)
-                {
                     context.RegisterCodeFix(
                         CodeAction.Create(
                             "Add [SerializeInterface]",
                             c => AddAttributeAsync(context.Document, fieldDecl, "SerializeInterface", c),
                             "AddSerializeInterface"),
                         diagnostic);
-                }
+
+                context.RegisterCodeFix(
+                    CodeAction.Create(
+                        "Make field public",
+                        c => MakeFieldPublicAsync(context.Document, fieldDecl, c),
+                        "MakePublic"),
+                    diagnostic);
+
                 break;
 
             case "INJ002":
@@ -68,6 +76,7 @@ public class InjectAttributeCodeFixProvider : CodeFixProvider
                         c => ReplaceAttributeAsync(context.Document, fieldDecl, "SerializeInterface", "SerializeField", c),
                         "ReplaceSerializeInterface"),
                     diagnostic);
+
                 break;
         }
     }
@@ -78,30 +87,30 @@ public class InjectAttributeCodeFixProvider : CodeFixProvider
         string attribute,
         CancellationToken cancellationToken)
     {
-        var root = await document.GetSyntaxRootAsync(cancellationToken);
+        SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
 
-        var newAttribute = SyntaxFactory.Attribute(SyntaxFactory.IdentifierName(attribute));
-        var existingList = field.AttributeLists.FirstOrDefault();
+        AttributeSyntax newAttribute = SyntaxFactory.Attribute(SyntaxFactory.IdentifierName(attribute));
+        AttributeListSyntax existingList = field.AttributeLists.FirstOrDefault();
 
         SyntaxList<AttributeListSyntax> updatedLists;
 
         if (existingList != null)
         {
-            var mergedList = existingList.WithAttributes(
+            AttributeListSyntax mergedList = existingList.WithAttributes(
                 existingList.Attributes.Add(newAttribute));
 
             updatedLists = field.AttributeLists.Replace(existingList, mergedList);
         }
         else
         {
-            var newList = SyntaxFactory.AttributeList(
+            AttributeListSyntax newList = SyntaxFactory.AttributeList(
                 SyntaxFactory.SingletonSeparatedList(newAttribute));
 
             updatedLists = field.AttributeLists.Add(newList);
         }
 
-        var newField = field.WithAttributeLists(updatedLists);
-        var newRoot = root.ReplaceNode(field, newField);
+        FieldDeclarationSyntax newField = field.WithAttributeLists(updatedLists);
+        SyntaxNode newRoot = root.ReplaceNode(field, newField);
         return document.WithSyntaxRoot(newRoot);
     }
 
@@ -111,16 +120,16 @@ public class InjectAttributeCodeFixProvider : CodeFixProvider
         string attributeName,
         CancellationToken cancellationToken)
     {
-        var root = await document.GetSyntaxRootAsync(cancellationToken);
+        SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
 
-        var newAttrLists = SyntaxFactory.List(field.AttributeLists
+        SyntaxList<AttributeListSyntax> newAttrLists = SyntaxFactory.List(field.AttributeLists
             .Select(al => al.WithAttributes(
                 SyntaxFactory.SeparatedList(
                     al.Attributes.Where(attr => !IsMatchingAttribute(attr, attributeName)))))
             .Where(al => al.Attributes.Count > 0));
 
-        var newField = field.WithAttributeLists(newAttrLists);
-        var newRoot = root.ReplaceNode(field, newField);
+        FieldDeclarationSyntax newField = field.WithAttributeLists(newAttrLists);
+        SyntaxNode newRoot = root.ReplaceNode(field, newField);
         return document.WithSyntaxRoot(newRoot);
     }
 
@@ -131,9 +140,9 @@ public class InjectAttributeCodeFixProvider : CodeFixProvider
         string newAttribute,
         CancellationToken cancellationToken)
     {
-        var root = await document.GetSyntaxRootAsync(cancellationToken);
+        SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
 
-        var newAttrLists = SyntaxFactory.List(field.AttributeLists
+        SyntaxList<AttributeListSyntax> newAttrLists = SyntaxFactory.List(field.AttributeLists
             .Select(al => al.WithAttributes(
                 SyntaxFactory.SeparatedList(
                     al.Attributes.Select(attr =>
@@ -141,14 +150,28 @@ public class InjectAttributeCodeFixProvider : CodeFixProvider
                             ? attr.WithName(SyntaxFactory.IdentifierName(newAttribute))
                             : attr)))));
 
-        var newField = field.WithAttributeLists(newAttrLists);
-        var newRoot = root.ReplaceNode(field, newField);
+        FieldDeclarationSyntax newField = field.WithAttributeLists(newAttrLists);
+        SyntaxNode newRoot = root.ReplaceNode(field, newField);
         return document.WithSyntaxRoot(newRoot);
     }
 
-    private bool IsMatchingAttribute(AttributeSyntax attr, string name)
+    private bool IsMatchingAttribute(
+        AttributeSyntax attr,
+        string name)
     {
-        var id = attr.Name.ToString();
+        string id = attr.Name.ToString();
         return id == name || id == name + "Attribute";
+    }
+
+    private async Task<Document> MakeFieldPublicAsync(
+        Document document,
+        FieldDeclarationSyntax field,
+        CancellationToken cancellationToken)
+    {
+        SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
+        SyntaxTokenList newModifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+        FieldDeclarationSyntax newField = field.WithModifiers(newModifiers);
+        SyntaxNode newRoot = root.ReplaceNode(field, newField);
+        return document.WithSyntaxRoot(newRoot);
     }
 }

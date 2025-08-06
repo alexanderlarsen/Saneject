@@ -286,7 +286,6 @@ namespace Plugins.Saneject.Editor.Core
             while (serializedProperty.NextVisible(enterChildren: true))
                 if (serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
                 {
-                    
                     bool isCollection = serializedProperty.isArray;
                     Object injectionTarget = serializedObject.targetObject;
 
@@ -337,7 +336,10 @@ namespace Plugins.Saneject.Editor.Core
 
             FieldInfo field = serializedProperty.GetFieldInfo();
 
-            if (field == null || !field.IsDefined(typeof(SerializeField)))
+            if (field == null)
+                return false;
+
+            if (!field.IsDefined(typeof(SerializeField)) && !field.IsPublic)
                 return false;
 
             concreteType = serializedProperty.isArray ? field.FieldType.GetElementType() : field.FieldType;
