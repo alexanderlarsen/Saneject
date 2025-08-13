@@ -321,36 +321,37 @@ To start binding dependencies, create a custom `Scope` and use one of the follow
 A few rules:
 
 - **Field types must match bindings**: Interface bindings won't resolve concrete fields, and vice versa.
-- **Single vs. collections bindings must match**: Single-value bindings won’t resolve collection (list/array) fields, and collection bindings won’t resolve single fields. The system validates these mismatches automatically and reports them during injection.
+- **Single vs. collections bindings must match**: Single-value bindings won’t resolve collection (list/array) fields, and collection bindings won’t resolve single fields. The system validates everything automatically and reports missing bindings during injection.
 
 You can bind dependencies in three ways, depending on how you want injection to work:
 
 - **Bind by interface**: Matches any component that implements the interface.
-- **Bind by concrete type**: Matches only components of that exact class.
+- **Bind by concrete type**: Matches only components of that exact type.
 - **Bind an interface to a specific concrete type**: Ensures that only components of a specific type are used to fulfill an interface.
 
 #### Component Bindings
 
-Bind Components from scene/prefab hierarchy. Methods return a `ComponentBindingBuilder<TComponent>` to define a locate strategy.
+Bind Components from scene/prefab hierarchy. Methods return a `ComponentBindingBuilder` to define a locate strategy.
 
-| Method                                                                                          | Description                                                                             |
-|-------------------------------------------------------------------------------------------------|-----------------------------------------------------------------------------------------|
-| `BindComponent<TComponent>()`                                                                   | Bind a `Component` and resolve by interface or concrete.                                |
-| `BindComponent<TInterface, TConcrete>()`                                                        | Bind a `Component` by `TInterface`and resolve with `TConcrete`.                         |
-| `BindComponents<TComponent>()`<br/>`BindMultipleComponents<TComponent>()`                       | Bind a `Component` collection (list/array) and resolve by interface or concrete.        |
-| `BindComponents<TInterface, TConcrete>()`<br/>`BindMultipleComponents<TInterface, TConcrete>()` | Bind a `Component` collection (list/array) by `TInterface`and resolve with `TConcrete`. |
-| `BindComponents<TInterface, TConcrete>()`<br/>`BindMultipleComponents<TInterface, TConcrete>()` | Bind a `Component` collection (list/array) by `TInterface`and resolve with `TConcrete`. |
+| Method                                                                                          | Description                                                      |
+|-------------------------------------------------------------------------------------------------|------------------------------------------------------------------|
+| `BindComponent<T>()`                                                                            | `T` (interface/concrete) fields resolve to a `T` component.      |
+| `BindComponent<TInterface, TConcrete>()`                                                        | `TInterface` fields resolve to a `TConcrete` component.          |
+| `BindComponents<T>()`<br/>`BindMultipleComponents<T>()`                                         | `T` (interface/concrete) lists/arrays resolve to `T` components. |
+| `BindComponents<TInterface, TConcrete>()`<br/>`BindMultipleComponents<TInterface, TConcrete>()` | `TInterface` lists/arrays resolve to `TConcrete` components.     |
 
 #### Asset Bindings
 
 Bind Project folder assets, e.g., prefabs, `ScriptableObjects`. Methods return an `AssetBindingBuilder<TAsset>` to define a locate strategy.
 
-| Method                                                                                  | Description                                                                                            |
-|-----------------------------------------------------------------------------------------|--------------------------------------------------------------------------------------------------------|
-| `BindAsset<TConcrete>()`                                                                | Bind a `UnityEngine.Object` asset and resolve by `TConcrete`.                                          |
-| `BindAsset<TInterface, TConcrete>()`                                                    | Bind a `UnityEngine.Object` asset by `TInterface`and resolve with `TConcrete`.                         |
-| `BindAssets<TConcrete>()`<br/>`BindMultipleAssets<TConcrete>()`                         | Bind a `UnityEngine.Object` asset collection (list/array) and resolve by `TConcrete`.                  |
-| `BindAssets<TInterface, TConcrete>()`<br/>`BindMultipleAssets<TInterface, TConcrete>()` | Bind a `UnityEngine.Object` asset collection (list/array) by `TInterface`and resolve with `TConcrete`. |
+Single-generic asset bindings are concrete-only. Use the two-generic form to bind by interface.
+
+| Method                                                                                  | Description                                                                   |
+|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| `BindAsset<TConcrete>()`                                                                | `TConcrete` fields resolve to a `TConcrete` `UnityEngine.Object` asset.       |
+| `BindAsset<TInterface, TConcrete>()`                                                    | `TInterface` fields resolve to a `TConcrete` `UnityEngine.Object` asset.      |
+| `BindAssets<TConcrete>()`<br/>`BindMultipleAssets<TConcrete>()`                         | `TConcrete` list/arrays resolve to `TConcrete` `UnityEngine.Object` assets.   |
+| `BindAssets<TInterface, TConcrete>()`<br/>`BindMultipleAssets<TInterface, TConcrete>()` | `TInterface` lists/arrays resolve to `TConcrete` `UnityEngine.Object` assets. |
 
 #### Global Singleton Bindings
 
@@ -490,7 +491,7 @@ Each binding you declare in a `Scope` must be unique. If two bindings in the sam
 
 A binding is considered unique within a scope based on the following:
 
-- **Bound type**: Either the interface type (if provided) or the concrete type (if binding directly).
+- **Bound type**: If an interface type is provided, uniqueness is based only on the interface type (ignoring concrete). If no interface type is provided, uniqueness is based on the concrete type.
 - **Binding ID**: If set via `.WithId()` and matched with `[Inject(Id = "YourIdHere")]`.
 - **Single vs collection**: Whether it's a single-value binding or a collection (`List<T>` or `T[]`).
 - **Global flag**: Whether the binding is marked as global.
@@ -500,7 +501,7 @@ For example, the following two bindings are considered duplicates and will confl
 
 ```csharp
 BindComponent<IMyService>();
-BindComponent<IMyService, MyServiceImpl>();
+BindComponent<IMyService, MyServiceConcrete>();
 ```
 
 But the following combinations are allowed:
@@ -508,17 +509,17 @@ But the following combinations are allowed:
 ```csharp
 // Interface and direct concrete binding
 BindComponent<IMyService>();
-BindComponent<MyServiceImpl>();
+BindComponent<MyServiceConcrete>();
 
 // Same interface, but with a unique ID
 BindComponent<IMyService>();
-BindComponent<IMyService, MyServiceImpl>().WithId("Secondary");
+BindComponent<IMyService, MyServiceConcrete>().WithId("Secondary");
 
 // Same interface, one single and one collection binding
 BindComponent<IMyService>();
-BindComponents<IMyService, MyServiceImpl>();
+BindComponents<IMyService, MyServiceConcrete>();
 
-// Same interface and ID, but different target filters
+// Same interface but different target filters
 BindComponent<IMyService>().WhereTargetIs<Player>();
 BindComponent<IMyService>().WhereTargetIs<Enemy>();
 ```
