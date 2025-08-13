@@ -180,12 +180,16 @@ public class GameScope : Scope
 
 Saneject fills in the serialized fields. Press Play - no runtime container required.
 
-> ⚠️ **Global MonoBehaviour Inspector Override**  
-> A `MonoBehaviourInspector.cs` file overrides all `MonoBehaviour` inspectors to enforce intended UX (read-only injected fields, correct interface order and more).
->
-> If you need to use your own custom inspector or it causes issues with other plugins, you can safely delete this file and call `SanejectInspector.DrawAllSerializedFields(serializedObject, target)` from your own inspector. You can also use lower-level helpers from `SanejectInspector` for full control.
->
-> Saneject will still work if you delete it, but inspector UX will degrade. Use `SanejectInspector` methods directly in your own inspector for full control and to restore UX.
+> ⚠️ **Potential Inspector UX Conflicts**  
+> Saneject includes a `MonoBehaviourFallbackInspector` that ensures injected fields, `[SerializeInterface]` fields, and nested types are drawn with the intended UX by default.  
+> 
+> If your inspector looks wrong or incomplete, it’s likely another custom inspector or plugin is overriding Saneject’s fallback. In that case, you can restore the full Saneject layout inside your own inspector by calling:
+> ```csharp
+> SanejectInspector.DrawDefault(serializedObject, targets, target);
+> ```
+> For partial integration, you can call individual `SanejectInspector` methods to draw only what you need.
+> See [MonoBehaviour Fallback Inspector](#monobehaviour-fallback-inspector) and [Saneject Inspector API](#saneject-inspector-api) for details.
+
 
 ## Demo Game
 

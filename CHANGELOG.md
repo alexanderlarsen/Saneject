@@ -1,5 +1,11 @@
 ﻿# Saneject Changelog
 
+## Version x.x.x
+
+- Renamed `MonoBehaviourInspector` to `MonoBehaviourFallbackInspector` and made it a true fallback so it only applies when no more specific custom inspector exists.
+- Added `SanejectInspector` public API for integrating Saneject’s injection-aware inspector features into custom editors.
+- Introduced unified `SanejectInspector.DrawDefault` method to restore the full Saneject inspector UI/UX in a single call from any custom inspector.
+
 ## Version 0.7.1
 
 - Allow `[Inject]` attribute to be used with public fields without `[SerializeField]`.
