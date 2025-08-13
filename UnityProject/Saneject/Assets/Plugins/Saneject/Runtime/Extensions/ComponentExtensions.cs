@@ -17,5 +17,15 @@ namespace Plugins.Saneject.Runtime.Extensions
             else
                 Object.DestroyImmediate(component);
         }
+
+        public static int GetComponentIndexCompat(this Component component)
+        {
+#if UNITY_2023_1_OR_NEWER
+            return component.GetComponentIndex();
+#else
+            var all = component.gameObject.GetComponents<Component>();
+            return System.Array.IndexOf(all, component);
+#endif
+        }
     }
 }

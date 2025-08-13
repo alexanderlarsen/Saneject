@@ -1,4 +1,5 @@
 ﻿using System;
+using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
@@ -60,16 +61,16 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereComponentIndexIs(int index)
         {
-            binding.AddFilter(o => o is Component component && component.GetComponentIndex() - 1 == index);
+            binding.AddFilter(o => o is Component component && component.GetComponentIndexCompat() - 1 == index);
             return this;
-        } 
+        }
 
         /// <summary>
         /// Filter to only search for <see cref="Component" />s that are the first component on their <see cref="GameObject" />, excluding the Transform.
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereIsFirstComponentSibling()
         {
-            binding.AddFilter(o => o is Component component && component.GetComponentIndex() - 1 == 0);
+            binding.AddFilter(o => o is Component component && component.GetComponentIndexCompat() - 1 == 0);
             return this;
         }
 
@@ -80,7 +81,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.AddFilter(o =>
                 o is Component component &&
-                component.GetComponentIndex() - 1 ==
+                component.GetComponentIndexCompat() - 1 ==
                 component.gameObject.GetComponents<Component>().Length - 2); // minus Transform
 
             return this;
