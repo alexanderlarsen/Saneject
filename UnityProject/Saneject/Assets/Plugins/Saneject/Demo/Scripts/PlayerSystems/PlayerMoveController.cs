@@ -1,7 +1,6 @@
 ﻿using System;
 using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Plugins.Saneject.Demo.Scripts.PlayerSystems
 {
@@ -15,18 +14,11 @@ namespace Plugins.Saneject.Demo.Scripts.PlayerSystems
         [Inject, SerializeField]
         private CharacterController characterController;
 
-        [Inject, SerializeField]
-        private PlayerInput playerInput;
-
         [SerializeField]
         private float moveSpeed = 8;
 
-        private InputAction moveAction;
-
         public void Initialize()
         {
-            moveAction = playerInput.actions.FindActionMap("Player").FindAction("Move");
-
             // Reduce moveSpeed because moveInput is higher on touch than keyboard.
             if (Application.platform == RuntimePlatform.Android)
                 moveSpeed /= 10f;
@@ -34,7 +26,8 @@ namespace Plugins.Saneject.Demo.Scripts.PlayerSystems
 
         public void Move()
         {
-            Vector2 moveInput = moveAction.ReadValue<Vector2>();
+            // Use old input system for compatibility with old Unity versions:
+            Vector2 moveInput = new(Input.GetAxisRaw("Horizontal"), Input.GetAxisRaw("Vertical"));
             Vector3 moveDirection = new(moveInput.x, 0, moveInput.y);
             characterController.Move(moveDirection * (moveSpeed * Time.deltaTime));
         }
