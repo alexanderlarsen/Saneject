@@ -1,5 +1,10 @@
 ﻿# Saneject Changelog
 
+## Version 0.7.1
+
+- Allow `[Inject]` attribute to be used with public fields without `[SerializeField]`.
+- Small refactor in the `Scope` binding API: `BindComponent<TComponent>()` and single generic variations are now `BindComponent<T>()`, to make it clearer that `T` can be both interface and concrete.
+
 ## Version 0.7.0
 
 ### API Changes
