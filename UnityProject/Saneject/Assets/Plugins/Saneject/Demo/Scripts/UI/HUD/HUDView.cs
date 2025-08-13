@@ -1,8 +1,8 @@
 ﻿using System;
 using Plugins.Saneject.Demo.Scripts.UI.MVC;
 using Plugins.Saneject.Runtime.Attributes;
-using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Plugins.Saneject.Demo.Scripts.UI.HUD
 {
@@ -14,11 +14,11 @@ namespace Plugins.Saneject.Demo.Scripts.UI.HUD
     [Serializable]
     public class HUDView : ViewBase
     {
-        [Inject("enemiesTmp"), SerializeField]
-        private TextMeshProUGUI enemiesLeftTmp;
+        [Inject("enemiesLeftText"), SerializeField]
+        private Text enemiesLeftText;
 
-        [Inject("scoreTmp"), SerializeField]
-        private TextMeshProUGUI scoreTmp;
+        [Inject("scoreText"), SerializeField]
+        private Text scoreText;
 
         private int totalEnemies;
 
@@ -35,7 +35,7 @@ namespace Plugins.Saneject.Demo.Scripts.UI.HUD
         /// </summary>
         public void UpdateScore(int points)
         {
-            scoreTmp.text = $"Score: {points}";
+            scoreText.text = $"Score: {points}";
         }
 
         /// <summary>
@@ -43,7 +43,7 @@ namespace Plugins.Saneject.Demo.Scripts.UI.HUD
         /// </summary>
         public void UpdateEnemiesLeft(int enemiesLeft)
         {
-            enemiesLeftTmp.text = $"Enemies left: {enemiesLeft}/{totalEnemies}";
+            enemiesLeftText.text = $"Enemies left: {enemiesLeft}/{totalEnemies}";
         }
     }
 }

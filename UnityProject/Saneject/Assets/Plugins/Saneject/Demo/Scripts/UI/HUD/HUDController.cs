@@ -12,7 +12,7 @@ namespace Plugins.Saneject.Demo.Scripts.UI.HUD
     /// Note: This class is marked as <c>partial</c> because it uses <see cref="SerializeInterfaceAttribute" />.
     /// The Roslyn generator <c>SerializeInterfaceGenerator.dll</c> generates a matching partial that adds serialized backing fields and assigns them to the interface references.
     /// </summary>
-    public partial class HUDController : ControllerBase<HUDView>
+    public partial class HUDController : ControllerBase<HUDView> 
     {
         [Inject, SerializeInterface]
         private IGameStateObservable gameStateObservable;

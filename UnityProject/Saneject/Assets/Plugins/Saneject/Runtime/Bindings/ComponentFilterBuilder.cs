@@ -62,7 +62,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.AddFilter(o => o is Component component && component.GetComponentIndex() - 1 == index);
             return this;
-        }
+        } 
 
         /// <summary>
         /// Filter to only search for <see cref="Component" />s that are the first component on their <see cref="GameObject" />, excluding the Transform.
