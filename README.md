@@ -181,15 +181,14 @@ public class GameScope : Scope
 Saneject fills in the serialized fields. Press Play - no runtime container required.
 
 > ⚠️ **Potential Inspector UX Conflicts**  
-> Saneject includes a `MonoBehaviourFallbackInspector` that ensures injected fields, `[SerializeInterface]` fields, and nested types are drawn with the intended UX by default.  
-> 
+> Saneject includes a `MonoBehaviourFallbackInspector` that ensures injected fields, `[SerializeInterface]` fields, and nested types are drawn with the intended UX by default.
+>
 > If your inspector looks wrong or incomplete, it’s likely another custom inspector or plugin is overriding Saneject’s fallback. In that case, you can restore the full Saneject layout inside your own inspector by calling:
 > ```csharp
 > SanejectInspector.DrawDefault(serializedObject, targets, target);
 > ```
 > For partial integration, you can call individual `SanejectInspector` methods to draw only what you need.
 > See [MonoBehaviour Fallback Inspector](#monobehaviour-fallback-inspector) and [Saneject Inspector API](#saneject-inspector-api) for details.
-
 
 ## Demo Game
 
@@ -851,7 +850,6 @@ Found under **Saneject → User Settings**, these let you customize editor and l
     - Preprocessor fallback paths haven’t been added yet.
 - Platform coverage: so far tested on Windows (Mono + IL2CPP) and Android IL2CPP builds only.
 - Proxy-creation menu can be flaky. It relies on `SessionState` keys to survive a domain reload, and occasionally Unity clears them before the follow-up dialog appears. If that happens, the `.cs` proxy file is generated but no `.asset` is created, just run **Generate Interface Proxy** again on the script to finish the flow.
-- Circular dependency detection is not yet implemented.
 - Unity's object picker cannot filter by interface types in the Inspector.
 - Unity Package Manager (UPM) support is not yet available. Use `.unitypackage` or clone + copy for now. Planned for post-beta once the API and structure stabilize.
 
