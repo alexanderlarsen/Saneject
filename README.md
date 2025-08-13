@@ -1,4 +1,4 @@
-# Saneject (0.7.0 beta)
+# Saneject (0.7.1 beta)
 
 Editor-time resolved serialized field dependency injection for Unity. Keep your references visible, classes clean, ditch the runtime container.
 
