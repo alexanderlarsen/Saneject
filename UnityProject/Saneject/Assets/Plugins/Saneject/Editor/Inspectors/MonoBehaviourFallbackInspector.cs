@@ -11,15 +11,12 @@ namespace Plugins.Saneject.Editor.Inspectors
     /// You can safely remove this class and call <see cref="SanejectInspector.DrawAllSerializedFields" />
     /// in your own inspector to preserve correct field ordering.
     /// </summary>
-    [CustomEditor(typeof(MonoBehaviour), true), CanEditMultipleObjects]
-    public class MonoBehaviourInspector : UnityEditor.Editor
+    [CustomEditor(typeof(MonoBehaviour), true, isFallback = true), CanEditMultipleObjects]
+    public class MonoBehaviourFallbackInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
-            SanejectInspector.DrawMonoBehaviourScriptField(targets, target);
-            SanejectInspector.DrawAllSerializedFields(serializedObject, target);
-            serializedObject.ApplyModifiedProperties();
+            SanejectInspector.DrawDefault(serializedObject, targets, target);
         }
     }
 }

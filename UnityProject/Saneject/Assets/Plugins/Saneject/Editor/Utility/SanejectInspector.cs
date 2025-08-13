@@ -12,6 +12,20 @@ namespace Plugins.Saneject.Editor.Utility
     public static class SanejectInspector
     {
         /// <summary>
+        /// Draws the complete default Saneject MonoBehaviour inspector, including the script field, all serializable fields in declaration order, injection-aware read-only handling, custom UI and validation for [SerializeInterface] fields, and recursive drawing of nested serializable types.
+        /// </summary>
+        public static void DrawDefault(
+            SerializedObject serializedObject,
+            Object[] targets,
+            Object target)
+        {
+            serializedObject.Update();
+            DrawMonoBehaviourScriptField(targets, target);
+            DrawAllSerializedFields(serializedObject, target);
+            serializedObject.ApplyModifiedProperties();
+        } 
+
+        /// <summary>
         /// Draws the default script field at the top of a MonoBehaviour inspector.
         /// </summary>
         public static void DrawMonoBehaviourScriptField(
