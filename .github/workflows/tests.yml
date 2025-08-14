@@ -1,11 +1,5 @@
 name: tests
 on:
-  push:
-    branches:
-      - main
-    paths:
-      - 'UnityProject/Saneject/**'
-      - 'RoslynTools/**'
   pull_request:
     branches:
       - main
@@ -33,8 +27,7 @@ jobs:
         with:
           unityVersion: ${{ matrix.unity }}
           testMode: editmode
-          assemblyNames: Saneject.Tests.Editor
           projectPath: UnityProject/Saneject
-          customParameters: -nographics -quit
+          customParameters: -nographics -assemblyNames Saneject.Tests.Editor
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: "EditMode (${{ matrix.unity }})"
