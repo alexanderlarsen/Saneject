@@ -1,0 +1,21 @@
+﻿{
+  "name": "Saneject.Tests.Editor",
+  "rootNamespace": "",
+  "references": [
+    "Saneject.Runtime",
+    "Saneject.Editor",
+    "Saneject.Tests.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [
+    "Editor"
+  ],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": true,
+  "testAssemblies": true,
+  "noEngineReferences": false
+}
