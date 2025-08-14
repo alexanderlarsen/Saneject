@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Demo.Scripts.PlayerSystems
         private CharacterController characterController;
 
         [SerializeField]
-        private float moveSpeed = 8;
+        private float moveSpeed = 6;
 
         public void Initialize()
         {
