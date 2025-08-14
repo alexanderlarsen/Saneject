@@ -1,0 +1,30 @@
+name: CI unit tests
+on: [push, pull_request]
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        unity: [2022.3.12f1, 6000.0.23f1]
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Activate
+        uses: game-ci/unity-activate@v4
+        with:
+          unityVersion: ${{ matrix.unity }}
+          unityLicenses: ${{ secrets.UNITY_LICENSE }}
+
+      - name: EditMode tests
+        uses: game-ci/unity-test-runner@v4
+        with:
+          unityVersion: ${{ matrix.unity }}
+          testMode: editmode
+          customParameters: -nographics -quit
+          checkName: "EditMode (${{ matrix.unity }})"
+
+      - name: Deactivate
+        if: always()
+        uses: game-ci/unity-return-license@v4
