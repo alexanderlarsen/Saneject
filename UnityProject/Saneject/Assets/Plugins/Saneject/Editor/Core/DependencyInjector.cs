@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            if (UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
+            if (!Application.isBatchMode && UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
                 return;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -101,7 +101,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
+            if (!Application.isBatchMode && UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
                 return;
 
             Scope rootScope = startScope.FindRootScope();
