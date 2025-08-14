@@ -1,4 +1,6 @@
-# Saneject (0.7.1 beta)
+[![Tests](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml/badge.svg)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml) ![Unity](https://img.shields.io/badge/unity-2022.3.12+-black) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases)
+
+# Saneject
 
 Editor-time resolved serialized field dependency injection for Unity. Keep your references visible, classes clean, ditch the runtime container.
 
@@ -42,7 +44,8 @@ Editor-time resolved serialized field dependency injection for Unity. Keep your 
     - [Roslyn Tools in Saneject](#roslyn-tools-in-saneject)
     - [UX](#ux)
     - [User Settings](#user-settings)
-- [Limitations / Known Issues](#limitations--known-issues)
+- [Tested Unity Versions](#tested-unity-versions)
+- [Limitations & Known Issues](#limitations--known-issues)
 - [Credits](#credits)
 - [Contribution](#contribution)
 - [License](#license)
@@ -99,22 +102,22 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 
 ### Requirements
 
-| Requirement       | Description                                                                                                                  |
-|-------------------|------------------------------------------------------------------------------------------------------------------------------|
-| Unity Version     | Unity 6000.0.23f1 LTS or newer. Relies on C# Roslyn source generators. Earlier versions may work but are currently untested. |
-| Scripting Backend | Mono or IL2CPP                                                                                                               |
-| Platforms         | Editor-only tooling; runtime code is plain C#, so it runs on any platform Unity 6 supports                                   |
+| Requirement       | Description                                                                                            |
+|-------------------|--------------------------------------------------------------------------------------------------------|
+| Unity Version     | Unity 2022.3.12f1 LTS or newer. Roslyn source generators and analyzers do not work in earlier versions |
+| Scripting Backend | Mono or IL2CPP                                                                                         |
+| Platforms         | Editor-only tooling; runtime code is plain C#, so it runs on any platform Unity 6 supports             |
 
 > ⚠️ **Platform notice**  
 > Saneject’s runtime is just plain C# (no reflection, no dynamic code).  
-> It's tested on Windows + Android (Mono & IL2CPP) builds without issues, but other IL2CPP targets (iOS, WebGL, consoles) are not yet verified.
+> It's tested on Windows + Android (Mono & IL2CPP) builds without issues, but other targets (IL2CPP iOS, WebGL, consoles) are not yet verified.
 >
 > The only non-standard Unity moving parts are:
 >
 > - The Roslyn-generated partial classes compiled into your assemblies.
 > - `ISerializationCallbackReceiver` setting interface fields after deserialization.
 >
-> Both *should* work everywhere Unity does, but if you run into stripping/AOT quirks, please open an issue.
+> Both *should* work everywhere Unity does, but if you run into something, please open an issue.
 
 ### Installation
 
@@ -842,12 +845,24 @@ Found under **Saneject → User Settings**, these let you customize editor and l
 | `Log Prefab Skipped During Scene Injection` | Log when a prefab is skipped during a scene injection pass.                                               |
 | `Log Unused Bindings`                       | Log when bindings are declared but never used in the current scene or prefab.                             |
 
-## Limitations / Known Issues
+## Tested Unity Versions
 
-- Unity version support: Confirmed working on Unity 6000.0.23f1 LTS and newer. Older versions aren’t currently supported.
-    - Uses newer APIs like `FindObjectsByType<T>(FindObjectsInactive, FindObjectsSortMode)`, which don’t exist in older versions.
-    - Roslyn source generators didn’t run properly in 2022.2 when tested, despite Unity 2021.1+ claiming support. No deeper investigation has been done yet.
-    - Preprocessor fallback paths haven’t been added yet.
+Saneject is automatically tested in [CI](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml) against the following Unity editor versions:
+
+| Unity Version | Release Type | Notes                                                         |
+|---------------|--------------|---------------------------------------------------------------|
+| 2022.3.12f1   | LTS          | Minimum supported version for Roslyn generators and analyzers |
+| 2022.3.62f1   | LTS          | Latest 2022 LTS                                               |
+| 6000.0.23f1   | LTS          | Earliest Unity 6.0 LTS                                        |
+| 6000.0.55f1   | LTS          | Latest Unity 6.0 LTS                                          |
+| 6000.1.16f1   | Supported    | Latest Unity 6.1 (non-LTS) at the time of writing             |
+| 6000.2.0f1    | Supported    | Latest Unity 6.2 (non-LTS) at the time of writing             |
+
+In-between versions will likely work, but only the above are verified in automated tests.  
+Unity 2023 releases are skipped since they are all tech stream or beta.
+
+## Limitations & Known Issues
+
 - Platform coverage: so far tested on Windows (Mono + IL2CPP) and Android IL2CPP builds only.
 - Proxy-creation menu can be flaky. It relies on `SessionState` keys to survive a domain reload, and occasionally Unity clears them before the follow-up dialog appears. If that happens, the `.cs` proxy file is generated but no `.asset` is created, just run **Generate Interface Proxy** again on the script to finish the flow.
 - Unity's object picker cannot filter by interface types in the Inspector.
