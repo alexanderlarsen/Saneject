@@ -20,6 +20,7 @@ jobs:
         with:
           unityVersion: ${{ matrix.unity }}
           testMode: editmode
+          projectPath: UnityProject/Saneject
           customParameters: -nographics -quit
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: "EditMode (${{ matrix.unity }})"
