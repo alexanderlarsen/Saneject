@@ -1,4 +1,4 @@
-name: CI unit tests
+name: CI
 on: [push, pull_request]
 
 jobs:
@@ -7,24 +7,19 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        unity: [2022.3.12f1, 6000.0.23f1]
+        unity: [2022.3.12f1, 2022.3.62f1, 2023.2.20f1, 6000.0.23f1, 6000.0.55f1, 6000.1.16f1, 6000.2.0f1]
     steps:
       - uses: actions/checkout@v4
 
-      - name: Activate
-        uses: game-ci/unity-activate@v4
-        with:
-          unityVersion: ${{ matrix.unity }}
-          unityLicenses: ${{ secrets.UNITY_LICENSE }}
-
       - name: EditMode tests
         uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
           unityVersion: ${{ matrix.unity }}
           testMode: editmode
           customParameters: -nographics -quit
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: "EditMode (${{ matrix.unity }})"
-
-      - name: Deactivate
-        if: always()
-        uses: game-ci/unity-return-license@v4
