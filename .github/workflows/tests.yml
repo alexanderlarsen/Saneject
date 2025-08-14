@@ -33,6 +33,7 @@ jobs:
         with:
           unityVersion: ${{ matrix.unity }}
           testMode: editmode
+          assemblyNames: Saneject.Tests.Editor
           projectPath: UnityProject/Saneject
           customParameters: -nographics -quit
           githubToken: ${{ secrets.GITHUB_TOKEN }}
