@@ -1,0 +1,11 @@
+﻿{
+  "name": "Saneject.Runtime",
+  "rootNamespace": "Saneject",
+  "references": [],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": true,
+  "noEngineReferences": false
+}

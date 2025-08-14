@@ -1,0 +1,17 @@
+﻿{
+  "name": "Saneject.Tests.Runtime",
+  "rootNamespace": "",
+  "references": [
+    "Saneject.Runtime"
+  ],
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ],
+  "includePlatforms": [],
+  "excludePlatforms": [],
+  "allowUnsafeCode": false,
+  "overrideReferences": false,
+  "autoReferenced": true,
+  "testAssemblies": true,
+  "noEngineReferences": false
+}
