@@ -15,13 +15,6 @@ namespace Plugins.Saneject.Editor.Inspectors
     [CustomEditor(typeof(Scope), true), CanEditMultipleObjects]
     public class ScopeEditor : UnityEditor.Editor
     {
-        private Scope scope;
-
-        private void OnEnable()
-        {
-            scope = target as Scope;
-        }
-
         public override void OnInspectorGUI()
         {
             if (UserSettings.ShowHelpBoxes)

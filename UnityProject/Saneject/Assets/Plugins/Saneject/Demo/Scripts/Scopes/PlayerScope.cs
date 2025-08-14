@@ -1,6 +1,5 @@
 ﻿using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
-using UnityEngine.InputSystem;
 
 namespace Plugins.Saneject.Demo.Scripts.Scopes
 {
@@ -12,9 +11,6 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
         public override void ConfigureBindings()
         {
             BindComponent<CharacterController>()
-                .FromScopeSelf();
-
-            BindComponent<PlayerInput>()
                 .FromScopeSelf();
         }
     }

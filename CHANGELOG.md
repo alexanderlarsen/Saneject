@@ -1,5 +1,17 @@
 ﻿# Saneject Changelog
 
+## Version x.x.x
+
+- Renamed `MonoBehaviourInspector` to `MonoBehaviourFallbackInspector` and made it a true fallback so it only applies when no more specific custom inspector exists.
+- Added `SanejectInspector` public API for integrating Saneject’s injection-aware inspector features into custom editors.
+- Introduced unified `SanejectInspector.DrawDefault` method to restore the full Saneject inspector UI/UX in a single call from any custom inspector.
+
+### Backwards Compatibility
+
+- Swap `TextMeshProUGUI` components and references with `UnityEngine.UI.Text`.
+- Removed new Unity input system and updated demo scripts to use old input system.
+- Added extension `GetComponentIndexCompat` with preprocessor version check, so versions older than Unity 2022 versions don't call `component.GetComponentIndex()` that doesn't exist.
+
 ## Version 0.7.1
 
 - Allow `[Inject]` attribute to be used with public fields without `[SerializeField]`.

@@ -3,7 +3,6 @@ using Plugins.Saneject.Demo.Scripts.GameState;
 using Plugins.Saneject.Demo.Scripts.Highscore;
 using Plugins.Saneject.Demo.Scripts.SceneManagement;
 using Plugins.Saneject.Runtime.Scopes;
-using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -28,15 +27,15 @@ namespace Plugins.Saneject.Demo.Scripts.Scopes
 
         public override void ConfigureBindings()
         {
-            BindComponent<TextMeshProUGUI>()
-                .WithId("enemiesTmp")
+            BindComponent<Text>()
+                .WithId("enemiesLeftText")
                 .FromTargetDescendants()
-                .WhereNameIs("EnemiesTmp");
+                .WhereNameIs("EnemiesText");
 
-            BindComponent<TextMeshProUGUI>()
-                .WithId("scoreTmp")
+            BindComponent<Text>()
+                .WithId("scoreText")
                 .FromTargetDescendants()
-                .WhereNameIs("ScoreTmp");
+                .WhereNameIs("ScoreText");
 
             BindComponent<Button>()
                 .WithId("restartButton")

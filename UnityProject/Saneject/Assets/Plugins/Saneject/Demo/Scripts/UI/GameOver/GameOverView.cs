@@ -1,7 +1,6 @@
 ﻿using System;
 using Plugins.Saneject.Demo.Scripts.UI.MVC;
 using Plugins.Saneject.Runtime.Attributes;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
@@ -16,11 +15,11 @@ namespace Plugins.Saneject.Demo.Scripts.UI.GameOver
     [Serializable]
     public class GameOverView : ViewBase
     {
-        [Inject("enemiesTmp"), SerializeField]
-        private TextMeshProUGUI enemiesLeftTmp;
+        [Inject("enemiesLeftText"), SerializeField]
+        private Text enemiesLeftText;
 
-        [Inject("scoreTmp"), SerializeField]
-        private TextMeshProUGUI scoreTmp;
+        [Inject("scoreText"), SerializeField]
+        private Text scoreText;
 
         [Inject("restartButton"), SerializeField]
         private Button restartButton;
@@ -38,7 +37,7 @@ namespace Plugins.Saneject.Demo.Scripts.UI.GameOver
         /// </summary>
         public void UpdateScore(int points)
         {
-            scoreTmp.text = $"Score: {points}";
+            scoreText.text = $"Score: {points}";
         }
 
         /// <summary>
@@ -46,7 +45,7 @@ namespace Plugins.Saneject.Demo.Scripts.UI.GameOver
         /// </summary>
         public void UpdateEnemiesCaught(int enemiesLeft)
         {
-            enemiesLeftTmp.text = $"Enemies caught: {enemiesLeft}";
+            enemiesLeftText.text = $"Enemies caught: {enemiesLeft}";
         }
 
         public override void Dispose()
