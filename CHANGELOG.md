@@ -2,9 +2,7 @@
 
 ## Version 0.8.0
 
-### CI/Testing
-
-- Added automated test runs for oldest/newest 2022 LTS, 6.0 LTS, plus latest 6.1 and 6.2.
+Saneject is now confirmed to work from 2022.3.12f LTS.
 
 ### Backwards Compatibility
 
@@ -17,6 +15,10 @@
 - Renamed `MonoBehaviourInspector` to `MonoBehaviourFallbackInspector` and made it a true fallback so it only applies when no more specific custom inspector exists.
 - Added `SanejectInspector` public API for integrating Saneject’s injection-aware inspector features into custom editors.
 - Introduced unified `SanejectInspector.DrawDefault` method to restore the full Saneject inspector UI/UX in a single call from any custom inspector.
+
+### CI/Testing
+
+- Added automated test runs for oldest/newest 2022 LTS, 6.0 LTS, plus latest 6.1 and 6.2.
 
 ## Version 0.7.1
 
