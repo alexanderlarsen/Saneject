@@ -42,6 +42,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool IsCollection { get; private set; }
         public bool IsComponentBinding { get; private set; }
         public bool IsAssetBinding { get; private set; }
+        public bool IsProxyBinding { get; private set; }
 
         /// <summary>
         /// Constructs a readable binding name used by the <c>DependencyInjector</c> for logging purposes,
@@ -146,6 +147,24 @@ namespace Plugins.Saneject.Runtime.Bindings
             RequiresInjectionTarget = true;
         }
 
+        // TODO: Document
+        public void MarkResolveWithProxy()
+        {
+            if (RequiresInjectionTarget)
+            {
+                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked to resolve from proxy. Ignoring this call.", scope);
+                return;
+            }
+
+            IsProxyBinding = true;
+        }
+
+        // TODO: Document
+        public void MarkUsed()
+        {
+            IsUsed = true;
+        }
+
         /// <summary>
         /// Sets the method that locates candidate objects for dependency resolution.
         /// This delegate is invoked during injection passes.
@@ -192,8 +211,6 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <returns>The resolved dependency <see cref="UnityEngine.Object" />, or <c>null</c> if not found.</returns>
         public IEnumerable<Object> LocateDependencies(Object target = null)
         {
-            IsUsed = true;
-
             if (targetFilters.Count > 0 && target != null && !targetFilters.All(f => f.filter(target)))
                 return null;
 
@@ -219,6 +236,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             return target != null && targetFilters.All(f => f.filter(target));
         }
 
+        // TODO: Invalidate wrong resolve with proxy combinations
         public bool IsValid()
         {
             bool isValid = true;
@@ -226,9 +244,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (IsAssetBinding && ConcreteType != null && typeof(Component).IsAssignableFrom(ConcreteType))
             {
                 string bindingType = $"{(IsCollection ? "Multiple Asset binding" : "Single Asset binding")}";
-                
+
                 Debug.LogError($"Saneject: {bindingType} in '{scope.GetType().Name}' has an invalid type '{ConcreteType.Name}' that is a Component and not an Asset.", scope);
-                
+
                 isValid = false;
             }
 

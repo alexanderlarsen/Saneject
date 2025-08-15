@@ -32,20 +32,12 @@ namespace Plugins.Saneject.Runtime.Scopes
         public Scope ParentScope { get; set; }
 
         /// <summary>
-        /// Resolves all dependencies matching target type from scope.
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public IEnumerable<Object> GetAllMatchingDependencies(
-            Type interfaceType,
-            Type concreteType,
-            string injectId,
-            bool isCollection,
-            Object injectionTarget)
+        public IEnumerable<Binding> GetProxyBindings()
         {
-            Binding binding = GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
-            IEnumerable<Object> resolved = binding?.LocateDependencies(injectionTarget);
-            return resolved;
+            return validBindings.Where(binding => binding.IsProxyBinding);
         }
 
         /// <summary>
@@ -96,7 +88,8 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
-        private Binding GetBindingRecursiveUpwards(
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Binding GetBindingRecursiveUpwards(
             Type interfaceType,
             Type concreteType,
             string injectId,

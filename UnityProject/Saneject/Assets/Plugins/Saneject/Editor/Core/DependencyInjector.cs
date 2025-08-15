@@ -4,6 +4,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Editor.Util;
 using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Extensions;
@@ -57,6 +58,9 @@ namespace Plugins.Saneject.Editor.Core
 
                 ScopeExtensions.Initialize(allScopes);
                 Scope[] rootScopes = allScopes.Where(scope => !scope.ParentScope).ToArray();
+
+                IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
+                proxyBindings.CreateMissingProxyStubs();
 
                 InjectionStats stats = new();
 
@@ -115,6 +119,9 @@ namespace Plugins.Saneject.Editor.Core
 
             ScopeExtensions.Initialize(allScopes);
 
+            IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
+            proxyBindings.CreateMissingProxyStubs();
+
             InjectionStats stats = new();
 
             foreach (Scope scope in allScopes)
@@ -148,6 +155,31 @@ namespace Plugins.Saneject.Editor.Core
 
             allScopes.Dispose();
             EditorUtility.ClearProgressBar();
+        }
+
+        private static void CreateMissingProxyStubs(this IEnumerable<Binding> proxyBindings)
+        {
+            List<Type> types = proxyBindings.Select(binding => binding.ConcreteType).ToList();
+
+            if (!types.Any())
+                return;
+
+            int createCount = 0;
+
+            foreach (Type type in types)
+            {
+                ProxyUtils.CreateProxyStub(type, out bool didCreate);
+
+                if (didCreate)
+                    createCount++;
+            }
+
+            if (createCount == 0)
+                return;
+
+            SessionState.SetInt("Saneject.ProxyStubCount", createCount);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
 
         /// <summary>
@@ -284,41 +316,72 @@ namespace Plugins.Saneject.Editor.Core
             SerializedProperty serializedProperty = serializedObject.GetIterator();
 
             while (serializedProperty.NextVisible(enterChildren: true))
-                if (serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
+            {
+                if (!serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
+                    continue;
+
+                bool isCollection = serializedProperty.isArray;
+                Object injectionTarget = serializedObject.targetObject;
+                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
+
+                if (binding == null)
                 {
-                    bool isCollection = serializedProperty.isArray;
-                    Object injectionTarget = serializedObject.targetObject;
+                    ReportMissing("Missing " + (isCollection ? "collection" : "single type") + " binding", interfaceType, concreteType, injectId);
+                    continue;
+                }
 
-                    Object[] dependencies = scope.GetAllMatchingDependencies(
-                            interfaceType,
-                            concreteType,
-                            injectId,
-                            isCollection,
-                            injectionTarget)
-                        ?.ToArray();
+                binding.MarkUsed();
 
-                    bool foundDependencies = dependencies is { Length: > 0 };
+                if (binding.IsProxyBinding)
+                {
+                    Type proxyType = ProxyUtils.GetProxyTypeFromConcreteType(binding.ConcreteType);
 
-                    if (foundDependencies)
+                    if (proxyType != null)
                     {
-                        if (isCollection)
-                            serializedProperty.SetCollection(dependencies);
-                        else
-                            serializedProperty.objectReferenceValue = dependencies.FirstOrDefault();
-
+                        serializedProperty.objectReferenceValue = ProxyUtils.GetOrCreateProxyAsset(proxyType);
                         stats.injectedFields++;
                     }
                     else
                     {
-                        serializedProperty.NullifyOrClearArray();
-
-                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.GetType().Name}'", scope);
-
-                        stats.missingBindings++;
+                        ReportMissing($"Proxy type not found for {binding.ConcreteType}. It may not be compiled yet.", interfaceType, concreteType, injectId);
                     }
+
+                    continue;
                 }
 
+                Object[] dependencies = binding.LocateDependencies(injectionTarget).ToArray();
+
+                if (dependencies.Length > 0)
+                {
+                    if (isCollection)
+                        serializedProperty.SetCollection(dependencies);
+                    else
+                        serializedProperty.objectReferenceValue = dependencies.FirstOrDefault();
+
+                    stats.injectedFields++;
+                    continue;
+                }
+
+                ReportMissing("Missing " + (isCollection ? "collection" : "single type") + " binding", interfaceType, concreteType, injectId);
+            }
+
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+            return;
+
+            void ReportMissing(
+                string message,
+                Type interfaceType,
+                Type concreteType,
+                string injectId)
+            {
+                serializedProperty.NullifyOrClearArray();
+
+                Debug.LogError(
+                    $"Saneject: {message} ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.GetType().Name}'",
+                    scope);
+
+                stats.missingBindings++;
+            }
         }
 
         /// <summary>

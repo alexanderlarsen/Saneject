@@ -1,0 +1,135 @@
+﻿using System;
+using System.IO;
+using System.Linq;
+using System.Reflection;
+using UnityEditor;
+using UnityEngine;
+
+namespace Plugins.Saneject.Editor.Util
+{
+    // TODO: Document
+    public static class ProxyUtils
+    {
+        public static void CreateProxyStub(
+            Type concreteType,
+            out bool wasStubCreated)
+        {
+            if (concreteType == null)
+                throw new ArgumentNullException(nameof(concreteType));
+
+            if (!typeof(MonoBehaviour).IsAssignableFrom(concreteType))
+                throw new ArgumentException($"{concreteType.FullName} is not a MonoBehaviour.", nameof(concreteType));
+
+            // Collect relevant public interfaces
+            Type[] interfaces = concreteType
+                .GetInterfaces()
+                .Where(i => i.IsPublic && !i.IsGenericType && i != typeof(IDisposable) && i != typeof(ISerializationCallbackReceiver))
+                .Distinct()
+                .ToArray();
+
+            if (interfaces.Length == 0)
+                throw new InvalidOperationException($"{concreteType.Name} does not implement any public interfaces.");
+
+            string ns = concreteType.Namespace ?? "Global";
+            string proxyName = concreteType.Name + "Proxy";
+
+            // Locate the folder of the original script
+            string scriptPath = AssetDatabase.FindAssets($"{concreteType.Name} t:MonoScript")
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .FirstOrDefault(p => Path.GetFileNameWithoutExtension(p) == concreteType.Name);
+
+            if (string.IsNullOrEmpty(scriptPath))
+                throw new FileNotFoundException($"Could not locate script file for type {concreteType.FullName}.");
+
+            string folder = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/");
+            string proxyScriptPath = $"{folder}/{proxyName}.cs";
+
+            if (!File.Exists(proxyScriptPath))
+            {
+                string code =
+                    $@"using Plugins.Saneject.Runtime.Attributes;
+using Plugins.Saneject.Runtime.InterfaceProxy;
+
+namespace {ns}
+{{
+    [GenerateInterfaceProxy]
+    public partial class {proxyName} : InterfaceProxyObject<{concreteType.FullName}>
+    {{
+    }}
+}}";
+
+                File.WriteAllText(proxyScriptPath, code);
+                AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
+                wasStubCreated = true;
+            }
+            else
+            {
+                wasStubCreated = false;
+            }
+        }
+
+        public static ScriptableObject GetOrCreateProxyAsset(Type proxyType)
+        {
+            if (proxyType == null)
+                throw new ArgumentNullException(nameof(proxyType));
+
+            if (!typeof(ScriptableObject).IsAssignableFrom(proxyType))
+                throw new ArgumentException($"{proxyType.FullName} is not a ScriptableObject.", nameof(proxyType));
+
+            // Search for an existing asset of this type anywhere in the project
+            string[] guids = AssetDatabase.FindAssets($"t:{proxyType.Name}");
+
+            foreach (string guid in guids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+                ScriptableObject existing = AssetDatabase.LoadAssetAtPath(path, proxyType) as ScriptableObject;
+
+                if (existing)
+                    return existing;
+            }
+
+            // Ensure folder exists
+            const string proxiesFolder = "Assets/Saneject/Proxies";
+
+            if (!AssetDatabase.IsValidFolder(proxiesFolder))
+            {
+                const string sanejectFolder = "Assets/Saneject";
+
+                if (!AssetDatabase.IsValidFolder(sanejectFolder))
+                    AssetDatabase.CreateFolder("Assets", "Saneject");
+
+                AssetDatabase.CreateFolder(sanejectFolder, "Proxies");
+            }
+
+            // Create new asset in default folder
+            string proxyAssetPath = $"{proxiesFolder}/{proxyType.Name}.asset";
+            ScriptableObject instance = ScriptableObject.CreateInstance(proxyType);
+            AssetDatabase.CreateAsset(instance, proxyAssetPath);
+            AssetDatabase.SaveAssets();
+
+            Debug.Log($"Saneject: Created proxy at path '{proxyAssetPath}'.", instance);
+
+            return instance;
+        }
+
+        public static Type GetProxyTypeFromConcreteType(Type concreteType)
+        {
+            string ns = concreteType.Namespace ?? "Global";
+            string proxyFullName = ns + "." + concreteType.Name + "Proxy";
+
+            return AppDomain.CurrentDomain.GetAssemblies()
+                .SelectMany(a =>
+                {
+                    try
+                    {
+                        return a.GetTypes();
+                    }
+                    catch (ReflectionTypeLoadException e)
+                    {
+                        return e.Types.Where(t => t != null);
+                    }
+                })
+                .FirstOrDefault(t => t.FullName == proxyFullName && typeof(ScriptableObject).IsAssignableFrom(t));
+        }
+    }
+}

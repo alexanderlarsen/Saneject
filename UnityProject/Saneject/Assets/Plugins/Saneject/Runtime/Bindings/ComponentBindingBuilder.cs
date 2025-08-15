@@ -667,6 +667,13 @@ namespace Plugins.Saneject.Runtime.Bindings
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
+        // TODO: Document
+        public void FromProxy()
+        {
+            binding.MarkResolveWithProxy();
+            binding.SetLocator(_ => null);
+        }
+
         #endregion
     }
 }
