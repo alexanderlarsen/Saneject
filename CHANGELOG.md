@@ -1,4 +1,8 @@
 ﻿# Saneject Changelog
+ 
+## Version 0.8.3
+
+- Fixed bug where `SceneGlobalContainer` failed to unregister from `GlobalScope` on scene unload if the instance was null.
 
 ## Version 0.8.2
 
