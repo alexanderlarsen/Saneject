@@ -13,12 +13,14 @@ namespace Plugins.Saneject.Runtime.Global
         [SerializeField]
         private Object instance;
 
+        private Type cachedType;
+
         public GlobalBinding(Object obj)
         {
             instance = obj;
         }
 
-        public Type Type => instance != null ? instance.GetType() : null;
+        public Type Type => cachedType ??= instance.GetType();
         public Object Instance => instance;
     }
 }
