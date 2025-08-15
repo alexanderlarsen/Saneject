@@ -121,11 +121,11 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 
 ### Installation
 
-| Install Method                           | Instruction                                                                                                                                                                                                    |
-|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Unity Package                            | 1. Grab the latest `unitypackage` from the [Releases page](https://github.com/alexanderlarsen/Saneject/releases)<br>2. Double-click → import.                                                                  |
-| Unity Package Manager (latest)           | 1. Open Unity Package Manager.<br>2. Click the + button and "Add package from git URL".<br>3. Copy-paste:<br>`https://github.com/alexanderlarsen/Saneject.git?path=Assets/Plugins/Saneject`<br>4. Press Enter. |
-| Unity Package Manager (specific version) | Same steps as above, but include version after `#` to lock to that version.<br>Example:<br>`https://github.com/alexanderlarsen/Saneject.git#0.8.2?path=Assets/Plugins/Saneject`                                |
+| Install Method                           | Instruction                                                                                                                                                                                                                          |
+|------------------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Unity Package                            | 1. Grab the latest `unitypackage` from the [Releases page](https://github.com/alexanderlarsen/Saneject/releases)<br>2. Double-click → import.                                                                                        |
+| Unity Package Manager (latest)           | 1. Open Unity Package Manager.<br>2. Click the + button and "Add package from git URL".<br>3. Copy-paste:<br>`https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Assets/Plugins/Saneject`<br>4. Press Enter. |
+| Unity Package Manager (specific version) | Same steps as above, but include version after `#` to lock to that version.<br>Example:<br>`https://github.com/alexanderlarsen/Saneject.git#0.8.2?path=UnityProject/Saneject/Assets/Plugins/Saneject`                                |
 
 ### Hello Saneject (Basic Example)
 

@@ -5,7 +5,7 @@
 ### Packaging
 - Added Unity Package Manager (UPM) support.
 - Package can now be installed directly via Git URL:  
-  `https://github.com/alexanderlarsen/Saneject.git?path=Assets/Plugins/Saneject`
+  `https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Assets/Plugins/Saneject`
 - No changes to runtime or editor functionality.
 
 ## Version 0.8.1

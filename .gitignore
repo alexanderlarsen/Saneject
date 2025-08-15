@@ -1,4 +1,4 @@
-# ───────── Unity demo project ─────────
+# ───────── Unity ─────────
 /UnityProject/Saneject/[Ll]ibrary/
 /UnityProject/Saneject/[Tt]emp/
 /UnityProject/Saneject/[Oo]bj/
@@ -56,3 +56,6 @@
 *.mdb.meta
 crashlytics-build.properties
 /UnityProject/Saneject/Saneject.sln.DotSettings
+
+# ───────── Dev ─────────
+/UnityProject/Saneject/Assets/Dev/*
