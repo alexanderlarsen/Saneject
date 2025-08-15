@@ -12,7 +12,7 @@
   "samples": [
     {
       "displayName": "Demo Game",
-      "description": "Three-scene demo showing Saneject usage: cross-scene/prefab refs via SerializeInterface, scene/prefab scopes, global scope, UI, and game loop. Gameplay: chase and catch enemies. To run: add StartScene, GameScene, UIScene to Build Settings (in order), open StartScene, press Play.",
+      "description": "Three-scene demo showing Saneject usage: cross-scene/prefab refs via SerializeInterface, scene/prefab scopes, global scope, UI, and game loop. To run: add StartScene, GameScene, UIScene to Build Settings (in order), open StartScene, press Play. If scripts show as missing in older Unity versions, right-click the Samples folder and select Reimport.",
       "path": "Samples~/DemoGame"
     }
   ]
