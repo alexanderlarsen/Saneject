@@ -3,20 +3,24 @@
 ## Version 0.8.2
 
 ### Packaging
+
 - Added Unity Package Manager (UPM) support.
 - Package can now be installed directly via Git URL:  
   `https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Assets/Plugins/Saneject`
 - No changes to runtime or editor functionality.
+- Fixed a bug in `SceneGlobalContainer` that made it break in sample imported via UPM.
 
 ## Version 0.8.1
 
 ### CI/Testing
+
 - Added assembly definition files for runtime and test code to ensure CI discovers and runs tests consistently across Unity versions.
 - Moved test `Resources` folder into a folder covered by an assembly definition so `Resources.Load` works in CI.
 - Updated test setup to automatically bypass injection confirmation prompts when running in batch mode, fixing mass test failures in CI.
 - Confirmed automated tests now pass for all supported Unity versions.
 
 ### Editor
+
 - No functional changes to runtime/editor features, only improvements to test reliability and CI integration.
 
 ## Version 0.8.0
