@@ -121,11 +121,11 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 
 ### Installation
 
-| Install Method              | Instruction                                                                                                                                                                                                                                                                            |
-|-----------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| Unity Package               | Grab the latest `unitypackage` from the [Releases page](https://github.com/alexanderlarsen/Saneject/releases) → double-click → import.                                                                                                                                                 |
-| Clone + Copy                | 1. Clone the repo somewhere outside your project<br> `git clone https://github.com/alexanderlarsen/Saneject.git`<br><br> 2. Copy Saneject plugin folder into your own project<br> `cp -r Saneject/UnityProject/Saneject/Assets/Plugins/Saneject <YourUnityProjectRoot>/Assets/Plugins` |
-| Unity Package Manager (UPM) | Currently unsupported but I'll get it up and running later.                                                                                                                                                                                                                            |
+| Install Method                           | Instruction                                                                                                                                                                                                    |
+|------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| Unity Package                            | 1. Grab the latest `unitypackage` from the [Releases page](https://github.com/alexanderlarsen/Saneject/releases)<br>2. Double-click → import.                                                                  |
+| Unity Package Manager (latest)           | 1. Open Unity Package Manager.<br>2. Click the + button and "Add package from git URL".<br>3. Copy-paste:<br>`https://github.com/alexanderlarsen/Saneject.git?path=Assets/Plugins/Saneject`<br>4. Press Enter. |
+| Unity Package Manager (specific version) | Same steps as above, but include version after `#` to lock to that version.<br>Example:<br>`https://github.com/alexanderlarsen/Saneject.git#0.8.2?path=Assets/Plugins/Saneject`                                |
 
 ### Hello Saneject (Basic Example)
 
@@ -195,7 +195,14 @@ Saneject fills in the serialized fields. Press Play - no runtime container requi
 
 ## Demo Game
 
-A small three-scene demo game lives in `Assets/Plugins/Saneject/Demo`. It shows how to use Saneject in a real (but simple) game setup:
+A small three-scene demo.
+
+Location by install method:
+
+- `.unitypackage`: `Assets/Plugins/Saneject/Samples/DemoGame`
+- UPM/Git URL → Import from the Package Manager Samples tab → `Assets/Samples/Saneject/<version>/DemoGame`
+
+It shows how to use Saneject in a real (but simple) game setup:
 
 - Cross-scene and prefab references using `SerializeInterface` and interface proxies
 - Scene and prefab `Scopes` with different bindings
@@ -214,8 +221,6 @@ Gameplay: chase enemies as they evade you. Catch them all to win and restart.
 
 2. Open `StartScene`
 3. Press Play.
-
-Requires **TextMesh Pro essentials** for the UI to work.
 
 The demo should be fairly self-explanatory and can be used as a code/setup study to understand how to structure bindings, scopes, and proxies.
 
@@ -866,7 +871,6 @@ Unity 2023 releases are skipped since they are all tech stream or beta.
 - Platform coverage: so far tested on Windows (Mono + IL2CPP) and Android IL2CPP builds only.
 - Proxy-creation menu can be flaky. It relies on `SessionState` keys to survive a domain reload, and occasionally Unity clears them before the follow-up dialog appears. If that happens, the `.cs` proxy file is generated but no `.asset` is created, just run **Generate Interface Proxy** again on the script to finish the flow.
 - Unity's object picker cannot filter by interface types in the Inspector.
-- Unity Package Manager (UPM) support is not yet available. Use `.unitypackage` or clone + copy for now. Planned for post-beta once the API and structure stabilize.
 
 ## Credits
 

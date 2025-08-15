@@ -1,0 +1,19 @@
+{
+  "name": "com.alexanderlarsen.saneject",
+  "author": "Alexander Larsen",
+  "displayName": "Saneject",
+  "version": "0.8.2",
+  "description": "Unity Editor dependency injection framework for scenes and prefabs. Bind and resolve your dependencies entirely in the Editor with an inspector-first workflow, including full support for serialized interfaces. No runtime container, no extra lifecycles. Just fast, deterministic DI that feels native to Unity.",
+  "documentationUrl": "https://github.com/alexanderlarsen/Saneject/blob/main/README.md",
+  "changelogUrl": "https://github.com/alexanderlarsen/Saneject/blob/main/CHANGELOG.md",
+  "licensesUrl": "https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE",
+  "unity": "2022.3",
+  "unityRelease": "12f1",
+  "samples": [
+    {
+      "displayName": "Demo Game",
+      "description": "Three-scene demo showing Saneject usage: cross-scene/prefab refs via SerializeInterface, scene/prefab scopes, global scope, UI, and game loop. Gameplay: chase and catch enemies. To run: add StartScene, GameScene, UIScene to Build Settings (in order), open StartScene, press Play.",
+      "path": "Samples~/DemoGame"
+    }
+  ]
+}

@@ -10,6 +10,7 @@ on:
       
 jobs:
   tests:
+    if: github.actor != 'github-actions[bot]'
     runs-on: ubuntu-latest
     strategy:
       fail-fast: false
