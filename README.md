@@ -183,7 +183,7 @@ public class GameScope : Scope
 
 Saneject fills in the serialized fields. Press Play - no runtime container required.
 
-> ⚠️ **Potential Inspector UX Conflicts**  
+> ⚠️️ **Potential Inspector UX Conflicts**  
 > Saneject includes a `MonoBehaviourFallbackInspector` that ensures injected fields, `[SerializeInterface]` fields, and nested types are drawn with the intended UX by default.
 >
 > If your inspector looks wrong or incomplete, it’s likely another custom inspector or plugin is overriding Saneject’s fallback. In that case, you can restore the full Saneject layout inside your own inspector by calling:
@@ -195,12 +195,12 @@ Saneject fills in the serialized fields. Press Play - no runtime container requi
 
 ## Demo Game
 
-A small three-scene demo.
+> ⚠️ **Missing sample refs in older Unity versions**
+>
+> Some older Unity versions, such as 2022.3.12f1, have a bug that can break script references in sample prefabs or scenes when importing samples via the Package Manager. If this happens, right-click the **Samples** folder and then **Reimport** to refresh all references.  
+> More details: https://discussions.unity.com/t/broken-script-references-on-updating-custom-package-through-package-manager-and-committing-it-to-git/910632/7
 
-Location by install method:
-
-- `.unitypackage`: `Assets/Plugins/Saneject/Samples/DemoGame`
-- UPM/Git URL → Import from the Package Manager Samples tab → `Assets/Samples/Saneject/<version>/DemoGame`
+A small three-scene demo where you chase enemies as they evade you. Catch them all to win and restart.
 
 It shows how to use Saneject in a real (but simple) game setup:
 
@@ -209,7 +209,10 @@ It shows how to use Saneject in a real (but simple) game setup:
 - Global scope usage
 - Basic UI and game loop
 
-Gameplay: chase enemies as they evade you. Catch them all to win and restart.
+Location by install method:
+
+- `.unitypackage` → `Assets/Plugins/Saneject/Samples/DemoGame`
+- UPM/Git URL → Import from the Package Manager Samples tab → `Assets/Samples/Saneject/<version>/DemoGame`
 
 **To run it:**
 
