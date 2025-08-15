@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -20,7 +21,7 @@ namespace Plugins.Saneject.Runtime.Global
     [DefaultExecutionOrder(-10000)]
     public class SceneGlobalContainer : MonoBehaviour
     {
-        [SerializeField]
+        [SerializeField, Attributes.ReadOnly]
         private List<GlobalBinding> globalBindings = new();
 
         /// <summary>
@@ -39,28 +40,6 @@ namespace Plugins.Saneject.Runtime.Global
         {
             foreach (GlobalBinding binding in globalBindings)
                 GlobalScope.Unregister(binding.Type);
-        }
-
-        /// <summary>
-        /// Serializable data for one global binding: stores the type and the <see cref="Object" /> instance.
-        /// </summary>
-        [Serializable]
-        private class GlobalBinding
-        {
-            [SerializeField]
-            private string typeName;
-
-            [SerializeField]
-            private Object instance;
-
-            public GlobalBinding(Object obj)
-            {
-                instance = obj;
-                typeName = obj.GetType().AssemblyQualifiedName;
-            }
-
-            public Type Type => Type.GetType(typeName);
-            public Object Instance => instance;
         }
 
 #if UNITY_EDITOR

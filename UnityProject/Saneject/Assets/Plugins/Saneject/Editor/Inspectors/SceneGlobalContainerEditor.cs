@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Reflection;
 using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
@@ -32,30 +34,30 @@ namespace Plugins.Saneject.Editor.Inspectors
             if (bindingsProp.arraySize == 0)
                 EditorGUILayout.LabelField("[No global objects currently registered in this scene]", EditorStyles.wordWrappedLabel);
 
-            EditorGUILayout.LabelField(
-                "References",
-                EditorStyles.boldLabel);
-
-            for (int i = 0; i < bindingsProp.arraySize; i++)
+            using (new EditorGUI.DisabledScope(true))
             {
-                SerializedProperty bindingProp = bindingsProp.GetArrayElementAtIndex(i);
-                SerializedProperty typeNameProp = bindingProp.FindPropertyRelative("typeName");
-                SerializedProperty instanceProp = bindingProp.FindPropertyRelative("instance");
+                SceneGlobalContainer container = (SceneGlobalContainer)target;
 
-                string typeName = "(Invalid Type)";
+                if (typeof(SceneGlobalContainer)
+                        .GetField("globalBindings", BindingFlags.NonPublic | BindingFlags.Instance)
+                        ?.GetValue(container) is IList bindings)
+                    foreach (object binding in bindings)
+                    {
+                        PropertyInfo typeProp = binding.GetType().GetProperty("Type", BindingFlags.Public | BindingFlags.Instance);
+                        PropertyInfo instanceProp = binding.GetType().GetProperty("Instance", BindingFlags.Public | BindingFlags.Instance);
 
-                if (!string.IsNullOrEmpty(typeNameProp.stringValue))
-                {
-                    Type type = Type.GetType(typeNameProp.stringValue);
+                        if (typeProp == null)
+                            continue;
 
-                    if (type != null)
-                        typeName = type.Name;
-                }
+                        if (instanceProp == null)
+                            continue;
 
-                using (new EditorGUI.DisabledScope(true))
-                {
-                    EditorGUILayout.ObjectField(typeName, instanceProp.objectReferenceValue, typeof(Object), true);
-                }
+                        Type type = (Type)typeProp.GetValue(binding);
+                        Object instance = (Object)instanceProp.GetValue(binding);
+
+                        // Draw however you want
+                        EditorGUILayout.ObjectField(type?.Name ?? "(Invalid Type)", instance, typeof(Object), true);
+                    }
             }
 
             serializedObject.ApplyModifiedProperties();
