@@ -1,0 +1,42 @@
+# This workflow runs on pushes to the main branch.
+# It exists to improve the Unity package samples workflow:
+# - In Unity packages, samples must be stored in a folder named `Samples~` so UPM will exclude them from the main package and expose them in the Package Manager "Samples" UI.
+# - In development, working inside a `Samples~` folder is inconvenient because Unity hides it in the Project view, making it harder to edit scenes/prefabs.
+# - To solve this, the folder is called `Samples` in the repo during normal development (visible in Unity).
+# - On push to main, this workflow automatically renames `Samples` to `Samples~` for correct UPM packaging.
+# - It also deletes the `Samples.meta` file to avoid Unity creating an empty `Samples` folder when importing the package.
+# This make it easy to work with visible samples locally, while published packages follow Unity's requirements.
+
+name: Fix Samples~ folder
+
+on:
+  push:
+    branches:
+      - main
+
+jobs:
+  rename-samples:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout repo
+        uses: actions/checkout@v4
+
+      - name: Rename Samples to Samples~ and remove folder meta
+        run: |
+          SAMPLES_PATH="UnityProject/Saneject/Assets/Plugins/Saneject/Samples"
+          if [ -d "$SAMPLES_PATH" ]; then
+            mv "$SAMPLES_PATH" "${SAMPLES_PATH}~"
+          fi
+
+          META_PATH="${SAMPLES_PATH}.meta"
+          if [ -f "$META_PATH" ]; then
+            rm "$META_PATH"
+          fi
+
+      - name: Commit changes
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add -A
+          git commit -m "chore: rename Samples to Samples~ for UPM and remove Samples.meta" || echo "No changes"
+          git push
