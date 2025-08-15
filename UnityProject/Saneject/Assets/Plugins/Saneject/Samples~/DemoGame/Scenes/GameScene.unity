@@ -119,6 +119,67 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &278480782
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 278480784}
+  - component: {fileID: 278480783}
+  m_Layer: 0
+  m_Name: SceneGlobalContainer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &278480783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278480782}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4fc23f65d0d943be83178defc43e5484, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalBindings:
+  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems.Player, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    instance: {fileID: 142810265356923021}
+  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.Enemies.EnemyManager, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    instance: {fileID: 2874387223255488611}
+  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.Highscore.ScoreManager, Assembly-CSharp-firstpass,
+      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    instance: {fileID: 15540888646719327}
+  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.Camera.CameraController,
+      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    instance: {fileID: 274076467875348428}
+  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.GameState.GameStateManager,
+      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
+    instance: {fileID: 559519672}
+  createdByDependencyInjector: 1
+--- !u!4 &278480784
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 278480782}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &345728943
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -602,67 +663,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 807967c59f124e67b11a0a22e885cbbe, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &2101007472
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 2101007474}
-  - component: {fileID: 2101007473}
-  m_Layer: 0
-  m_Name: SceneGlobalContainer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &2101007473
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101007472}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fc23f65d0d943be83178defc43e5484, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalBindings:
-  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems.Player, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    instance: {fileID: 142810265356923021}
-  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.Enemies.EnemyManager, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    instance: {fileID: 2874387223255488611}
-  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.Highscore.ScoreManager, Assembly-CSharp-firstpass,
-      Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    instance: {fileID: 15540888646719327}
-  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.Camera.CameraController,
-      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    instance: {fileID: 274076467875348428}
-  - typeName: Plugins.Saneject.Samples.DemoGame.Scripts.GameState.GameStateManager,
-      Assembly-CSharp-firstpass, Version=0.0.0.0, Culture=neutral, PublicKeyToken=null
-    instance: {fileID: 559519672}
-  createdByDependencyInjector: 1
---- !u!4 &2101007474
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2101007472}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &15540888646719327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1301,4 +1301,4 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 7250975890217056284}
-  - {fileID: 2101007474}
+  - {fileID: 278480784}
