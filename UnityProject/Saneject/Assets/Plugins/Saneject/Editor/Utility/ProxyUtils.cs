@@ -85,8 +85,10 @@ namespace {ns}
             return File.Exists(proxyScriptPath);
         }
 
-        public static ScriptableObject GetOrCreateProxyAsset(Type proxyType)
+        public static ScriptableObject GetOrCreateProxyAsset(Type proxyType, out bool createdNew)
         {
+            createdNew = false;
+            
             if (proxyType == null)
                 throw new ArgumentNullException(nameof(proxyType));
 
@@ -125,7 +127,7 @@ namespace {ns}
             AssetDatabase.SaveAssets();
 
             Debug.Log($"Saneject: Created proxy asset at path '{proxyAssetPath}'.", instance);
-
+            createdNew = true;
             return instance;
         }
 

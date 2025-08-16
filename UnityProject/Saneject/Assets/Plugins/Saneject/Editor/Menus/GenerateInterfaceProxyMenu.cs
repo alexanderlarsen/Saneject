@@ -1,167 +1,131 @@
 ﻿using System;
-using System.IO;
 using System.Linq;
+using System.Reflection;
+using Plugins.Saneject.Editor.Util;
 using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Menus
 {
     /// <summary>
-    /// Provides a context menu item for generating interface proxy classes and assets for <see cref="MonoBehaviour" /> types.
-    /// Handles both proxy C# code generation and corresponding <see cref="ScriptableObject" /> proxy asset creation.
+    /// Context menu for generating interface proxy stubs and assets.
+    /// Uses ProxyUtils for all heavy lifting. Keeps SessionState so we can finish after a reload.
     /// </summary>
     public static class GenerateInterfaceProxyMenu
     {
-        private const string ProxyTypeNameKey = "ProxyDialogFlow.ProxyTypeName";
-        private const string ProxyAssetPathKey = "ProxyDialogFlow.ProxyAssetPath";
+        private const string ProxyTypeNameKey = "Saneject.ProxyDialogFlow.ProxyTypeName";
 
-        /// <summary>
-        /// Validates whether the "Generate Interface Proxy" menu item should be enabled.
-        /// Only enabled for <see cref="MonoScript" /> objects that represent a <see cref="MonoBehaviour" /> with public interfaces.
-        /// </summary>
         [MenuItem("Assets/Generate Interface Proxy", true)]
         private static bool GenerateInterfaceProxy_Validate()
         {
-            return Selection.activeObject is MonoScript ms &&
-                   ms.GetClass() is Type t &&
-                   typeof(MonoBehaviour).IsAssignableFrom(t);
+            return Selection.activeObject is MonoScript ms
+                   && ms.GetClass() is { } t
+                   && typeof(MonoBehaviour).IsAssignableFrom(t);
         }
 
-        /// <summary>
-        /// Displays dialogs to create an interface proxy class and a corresponding <see cref="ScriptableObject" /> asset.
-        /// Handles class creation, interface discovery, and asset instantiation.
-        /// </summary>
         [MenuItem("Assets/Generate Interface Proxy")]
         private static void GenerateInterfaceProxy()
         {
-            MonoScript script = (MonoScript)Selection.activeObject;
+            if (Selection.activeObject is not MonoScript script) return;
             Type mbType = script.GetClass();
             if (mbType == null) return;
 
-            string ns = mbType.Namespace ?? "Global";
-            string proxyName = mbType.Name + "Proxy";
-            string proxyFullName = ns + "." + proxyName;
-            string scriptPath = AssetDatabase.GetAssetPath(script);
-            string folder = Path.GetDirectoryName(scriptPath).Replace("\\", "/");
-            string proxyScriptPath = $"{folder}/{proxyName}.cs";
-            string proxyAssetPath = $"{folder}/{proxyName}.asset";
-
-            // Check for interfaces (for dialog)
+            // Discover public, non-generic interfaces (same filter used in ProxyUtils)
             Type[] interfaces = mbType.GetInterfaces()
                 .Where(i => i.IsPublic && !i.IsGenericType && i != typeof(IDisposable) && i != typeof(ISerializationCallbackReceiver))
-                .Distinct().ToArray();
+                .Distinct()
+                .ToArray();
 
             if (interfaces.Length == 0)
             {
                 EditorUtility.DisplayDialog(
-                    "No Interfaces",
-                    $"{mbType.Name} doesn't implement any public interfaces.",
+                    "Saneject: No Interfaces",
+                    $"{mbType.Name} doesn't implement any public interfaces, which is required for proxy forwarding.",
                     "OK");
 
                 return;
             }
 
-            string interfaceList = string.Join("\n", interfaces.Select(i => i.Name));
+            // Build full proxy type name for post-reload lookup
+            string ns = mbType.Namespace ?? "Global";
+            string proxyFullName = $"{ns}.{mbType.Name}Proxy";
 
-            // Step 1: Ask to create class if not exists
-            if (!File.Exists(proxyScriptPath))
+            // If stub is missing, ask to create it and trigger a compile
+            if (!ProxyUtils.DoesProxyStubExist(mbType))
             {
+                string interfaceList = string.Join("\n", interfaces.Select(i => i.Name));
+
                 bool gen = EditorUtility.DisplayDialog(
-                    "Generate Interface Proxy",
+                    "Saneject: Generate Interface Proxy",
                     $"Generate a proxy for '{mbType.Name}' forwarding:\n\n{interfaceList}",
                     "Yes", "No");
 
                 if (!gen) return;
 
-                string code =
-                    $@"using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
-
-namespace {ns}
-{{
-    [GenerateInterfaceProxy]
-    public partial class {proxyName} : InterfaceProxyObject<{mbType.FullName}>
-    {{
-    }}
-}}";
-
-                File.WriteAllText(proxyScriptPath, code);
-                AssetDatabase.Refresh();
-
-                // Store intent for after compilation
+                // Create stub + mark intent, then force a refresh (domain reload)
+                ProxyUtils.CreateProxyStub(mbType);
                 SessionState.SetString(ProxyTypeNameKey, proxyFullName);
-                SessionState.SetString(ProxyAssetPathKey, proxyAssetPath);
-
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
                 return;
             }
 
-            // If class exists, proceed as before
-            ProceedToAssetDialog(proxyFullName, proxyAssetPath);
+            // Stub already exists; try to create/reuse the asset immediately
+            ProceedToAsset(proxyFullName);
         }
 
         [InitializeOnLoadMethod]
         private static void AfterReload()
         {
             string proxyTypeName = SessionState.GetString(ProxyTypeNameKey, "");
-            string proxyAssetPath = SessionState.GetString(ProxyAssetPathKey, "");
 
-            if (string.IsNullOrEmpty(proxyTypeName) || string.IsNullOrEmpty(proxyAssetPath))
+            if (string.IsNullOrEmpty(proxyTypeName))
                 return;
 
-            // Try to find compiled type
-            Type proxyType = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
-                .FirstOrDefault(t => t.FullName == proxyTypeName && typeof(ScriptableObject).IsAssignableFrom(t));
-
-            if (proxyType != null)
-                ProceedToAssetDialog(proxyTypeName, proxyAssetPath);
+            // Try to finish the asset creation after compilation
+            ProceedToAsset(proxyTypeName);
         }
 
-        private static void ProceedToAssetDialog(
-            string proxyTypeName,
-            string proxyAssetPath)
+        private static void ProceedToAsset(string proxyTypeName)
         {
-            // Find the new type
+            // Clear intent first so a failure here doesn't loop forever
+            SessionState.EraseString(ProxyTypeNameKey);
+
+            // Find compiled type (ProxyUtils expects a Type)
             Type proxyType = AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a => a.GetTypes())
+                .SelectMany(a =>
+                {
+                    try
+                    {
+                        return a.GetTypes();
+                    }
+                    catch (ReflectionTypeLoadException e)
+                    {
+                        return e.Types.Where(t => t != null);
+                    }
+                })
                 .FirstOrDefault(t => t.FullName == proxyTypeName && typeof(ScriptableObject).IsAssignableFrom(t));
 
             if (proxyType == null)
-                return; // Still not compiled
-
-            // Check for asset
-            bool assetExists = File.Exists(proxyAssetPath);
-
-            // Clean up state
-            SessionState.EraseString(ProxyTypeNameKey);
-            SessionState.EraseString(ProxyAssetPathKey);
-
-            if (assetExists)
             {
-                EditorUtility.DisplayDialog(
-                    "Asset Already Exists",
-                    "ScriptableObject asset already exists for this proxy class.",
-                    "OK");
-
+                // Still compiling or something went wrong; user can run menu again later
+                Debug.LogWarning($"Saneject: Proxy type '{proxyTypeName}' not found after reload. Try the menu again once compilation completes.");
                 return;
             }
 
-            // Ask to create asset
-            if (EditorUtility.DisplayDialog(
-                    "Create Proxy Asset",
-                    $"Create a ScriptableObject asset for '{proxyType.Name}'?",
-                    "Yes", "No"))
-            {
-                ScriptableObject inst = ScriptableObject.CreateInstance(proxyType);
-                AssetDatabase.CreateAsset(inst, proxyAssetPath);
-                AssetDatabase.SaveAssets();
-                Selection.activeObject = inst;
+            // Create or reuse the asset via ProxyUtils (stored under Assets/Saneject/Proxies by default)
+            ScriptableObject asset = ProxyUtils.GetOrCreateProxyAsset(proxyType, out bool createdNew);
+            Selection.activeObject = asset;
+            EditorGUIUtility.PingObject(asset);
+            
+            string message = createdNew
+                ? $"Proxy asset for '{proxyType.Name}' was generated."
+                : $"Proxy script and asset for '{proxyType.Name}' already exists.";
 
-                EditorUtility.DisplayDialog(
-                    "Asset Created",
-                    "ScriptableObject asset created.",
-                    "OK");
-            }
+            EditorUtility.DisplayDialog(
+                "Saneject: Proxy Ready",
+                message,
+                "OK");
         }
     }
 }

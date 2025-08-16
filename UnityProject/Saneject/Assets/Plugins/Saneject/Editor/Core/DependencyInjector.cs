@@ -165,7 +165,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
 
             string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
-            
+
             EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{typesToCreate.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
 
             typesToCreate.ForEach(ProxyUtils.CreateProxyStub);
@@ -330,7 +330,7 @@ namespace Plugins.Saneject.Editor.Core
 
                     if (proxyType != null)
                     {
-                        serializedProperty.objectReferenceValue = ProxyUtils.GetOrCreateProxyAsset(proxyType);
+                        serializedProperty.objectReferenceValue = ProxyUtils.GetOrCreateProxyAsset(proxyType, out bool _);
                         stats.injectedFields++;
                     }
                     else
