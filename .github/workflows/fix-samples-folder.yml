@@ -5,7 +5,6 @@
 # - To solve this, the folder is called `Samples` in the repo during normal development (visible in Unity).
 # - On push to main, this workflow automatically renames `Samples` to `Samples~` for correct UPM packaging.
 # - It also deletes the `Samples.meta` file to avoid Unity creating an empty `Samples` folder when importing the package.
-# This make it easy to work with visible samples locally, while published packages follow Unity's requirements.
 
 name: Fix Samples~ folder
 
@@ -38,5 +37,5 @@ jobs:
           git config user.name "github-actions[bot]"
           git config user.email "github-actions[bot]@users.noreply.github.com"
           git add -A
-          git commit -m "chore: rename Samples to Samples~ for UPM and remove Samples.meta" || echo "No changes"
+          git commit -m "Rename Samples to Samples~ for UPM and remove Samples.meta" || echo "No changes"
           git push
