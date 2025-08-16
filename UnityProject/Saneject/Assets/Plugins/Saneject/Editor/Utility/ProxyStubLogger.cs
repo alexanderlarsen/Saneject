@@ -15,11 +15,13 @@ namespace Plugins.Saneject.Editor.Core
         {
             int count = SessionState.GetInt("Saneject.ProxyStubCount", 0);
 
-            if (count > 0)
-            {
-                Debug.LogWarning($"Saneject: {count} proxy scripts generated. Unity recompiled scripts, which stopped the injection pass. Click Inject again to complete.");
-                SessionState.EraseInt("Saneject.ProxyStubCount");
-            }
+            if (count <= 0)
+                return;
+
+            string scriptsWord = count == 1 ? "script" : "scripts";
+
+            Debug.LogWarning($"Saneject: {count} proxy {scriptsWord} generated. Unity has recompiled and stopped the injection pass. Click 'Inject' again to complete.");
+            SessionState.EraseInt("Saneject.ProxyStubCount");
         }
     }
 }

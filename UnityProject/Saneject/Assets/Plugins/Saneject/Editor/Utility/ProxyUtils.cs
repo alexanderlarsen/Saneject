@@ -10,9 +10,7 @@ namespace Plugins.Saneject.Editor.Util
     // TODO: Document
     public static class ProxyUtils
     {
-        public static void CreateProxyStub(
-            Type concreteType,
-            out bool wasStubCreated)
+        public static void CreateProxyStub(Type concreteType)
         {
             if (concreteType == null)
                 throw new ArgumentNullException(nameof(concreteType));
@@ -44,10 +42,11 @@ namespace Plugins.Saneject.Editor.Util
             string folder = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/");
             string proxyScriptPath = $"{folder}/{proxyName}.cs";
 
-            if (!File.Exists(proxyScriptPath))
-            {
-                string code =
-                    $@"using Plugins.Saneject.Runtime.Attributes;
+            if (File.Exists(proxyScriptPath))
+                return;
+
+            string code =
+                $@"using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.InterfaceProxy;
 
 namespace {ns}
@@ -58,14 +57,32 @@ namespace {ns}
     }}
 }}";
 
-                File.WriteAllText(proxyScriptPath, code);
-                AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
-                wasStubCreated = true;
-            }
-            else
-            {
-                wasStubCreated = false;
-            }
+            File.WriteAllText(proxyScriptPath, code);
+            AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
+        }
+
+        public static bool DoesProxyStubExist(Type concreteType)
+        {
+            if (concreteType == null)
+                throw new ArgumentNullException(nameof(concreteType));
+
+            if (!typeof(MonoBehaviour).IsAssignableFrom(concreteType))
+                throw new ArgumentException($"{concreteType.FullName} is not a MonoBehaviour.", nameof(concreteType));
+
+            string proxyName = concreteType.Name + "Proxy";
+
+            // Locate the folder of the original script
+            string scriptPath = AssetDatabase.FindAssets($"{concreteType.Name} t:MonoScript")
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .FirstOrDefault(p => Path.GetFileNameWithoutExtension(p) == concreteType.Name);
+
+            if (string.IsNullOrEmpty(scriptPath))
+                throw new FileNotFoundException($"Could not locate script file for type {concreteType.FullName}.");
+
+            string folder = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/");
+            string proxyScriptPath = $"{folder}/{proxyName}.cs";
+
+            return File.Exists(proxyScriptPath);
         }
 
         public static ScriptableObject GetOrCreateProxyAsset(Type proxyType)
@@ -107,7 +124,7 @@ namespace {ns}
             AssetDatabase.CreateAsset(instance, proxyAssetPath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log($"Saneject: Created proxy at path '{proxyAssetPath}'.", instance);
+            Debug.Log($"Saneject: Created proxy asset at path '{proxyAssetPath}'.", instance);
 
             return instance;
         }

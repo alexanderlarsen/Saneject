@@ -35,11 +35,11 @@ namespace Plugins.Saneject.Editor.Core
         {
             if (Application.isPlaying)
             {
-                EditorUtility.DisplayDialog("Inject Scene Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
 
-            if (!Application.isBatchMode && UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
+            if (!Application.isBatchMode && UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
                 return;
 
             Stopwatch stopwatch = Stopwatch.StartNew();
@@ -54,7 +54,7 @@ namespace Plugins.Saneject.Editor.Core
 
             try
             {
-                EditorUtility.DisplayProgressBar("Injection in progress", "Injecting all objects in scene", 0);
+                EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in scene", 0);
 
                 ScopeExtensions.Initialize(allScopes);
                 Scope[] rootScopes = allScopes.Where(scope => !scope.ParentScope).ToArray();
@@ -101,11 +101,11 @@ namespace Plugins.Saneject.Editor.Core
 
             if (Application.isPlaying)
             {
-                EditorUtility.DisplayDialog("Inject Prefab Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
 
-            if (!Application.isBatchMode && UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
+            if (!Application.isBatchMode && UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
                 return;
 
             Scope rootScope = startScope.FindRootScope();
@@ -135,7 +135,7 @@ namespace Plugins.Saneject.Editor.Core
                 stats.unusedBindings += globalBindings.Count;
             }
 
-            EditorUtility.DisplayProgressBar("Injection in progress", "Injecting prefab dependencies", 0);
+            EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting prefab dependencies", 0);
             Stopwatch stopwatch = Stopwatch.StartNew();
 
             try
@@ -159,25 +159,17 @@ namespace Plugins.Saneject.Editor.Core
 
         private static void CreateMissingProxyStubs(this IEnumerable<Binding> proxyBindings)
         {
-            List<Type> types = proxyBindings.Select(binding => binding.ConcreteType).ToList();
+            List<Type> typesToCreate = proxyBindings.Select(binding => binding.ConcreteType).Where(type => !ProxyUtils.DoesProxyStubExist(type)).ToList();
 
-            if (!types.Any())
+            if (typesToCreate.Count == 0)
                 return;
 
-            int createCount = 0;
+            string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
+            
+            EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{typesToCreate.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
 
-            foreach (Type type in types)
-            {
-                ProxyUtils.CreateProxyStub(type, out bool didCreate);
-
-                if (didCreate)
-                    createCount++;
-            }
-
-            if (createCount == 0)
-                return;
-
-            SessionState.SetInt("Saneject.ProxyStubCount", createCount);
+            typesToCreate.ForEach(ProxyUtils.CreateProxyStub);
+            SessionState.SetInt("Saneject.ProxyStubCount", typesToCreate.Count);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
