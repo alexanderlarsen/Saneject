@@ -115,17 +115,21 @@ namespace Plugins.Saneject.Editor.Menus
 
             // Create or reuse the asset via ProxyUtils (stored under Assets/Saneject/Proxies by default)
             ScriptableObject asset = ProxyUtils.GetOrCreateProxyAsset(proxyType, out bool createdNew);
-            Selection.activeObject = asset;
-            EditorGUIUtility.PingObject(asset);
-            
+
             string message = createdNew
-                ? $"Proxy asset for '{proxyType.Name}' was generated."
+                ? $"Proxy generated for '{proxyType.Name}'."
                 : $"Proxy script and asset for '{proxyType.Name}' already exists.";
 
             EditorUtility.DisplayDialog(
                 "Saneject: Proxy Ready",
                 message,
                 "OK");
+
+            if (createdNew)
+                AssetDatabase.Refresh();
+
+            Selection.activeObject = asset;
+            EditorGUIUtility.PingObject(asset);
         }
     }
 }

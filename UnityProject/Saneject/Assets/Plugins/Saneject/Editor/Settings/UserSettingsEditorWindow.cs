@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Editor.Settings
             editorWindow.Show();
         }
 
-        private static void DrawToggleWithTooltip(
+        private static void DrawToggle(
             string label,
             string tooltip,
             bool currentValue,
@@ -39,6 +39,52 @@ namespace Plugins.Saneject.Editor.Settings
             }
         }
 
+        private static void DrawPathPicker(
+            string label,
+            string tooltip,
+            string currentPath,
+            Action<string> onChanged,
+            bool repaintInspectors = false)
+        {
+            EditorGUILayout.LabelField(new GUIContent(label, tooltip));
+            EditorGUILayout.BeginHorizontal();
+
+            EditorGUILayout.TextField(
+                string.IsNullOrEmpty(currentPath) ? "<none>" : currentPath,
+                EditorStyles.textField,
+                GUILayout.Height(EditorGUIUtility.singleLineHeight)
+            );
+
+            if (GUILayout.Button("...", GUILayout.Width(30)))
+            {
+                string absProjectPath = Application.dataPath; // full path to Assets/
+                string selected = EditorUtility.OpenFolderPanel("Select Folder", absProjectPath, "");
+
+                if (!string.IsNullOrEmpty(selected))
+                {
+                    if (selected.StartsWith(absProjectPath))
+                    {
+                        string relPath = "Assets" + selected.Substring(absProjectPath.Length);
+
+                        if (relPath != currentPath)
+                        {
+                            onChanged(relPath);
+                            AssetDatabase.Refresh();
+
+                            if (repaintInspectors)
+                                RepaintAllInspectors();
+                        }
+                    }
+                    else
+                    {
+                        Debug.LogWarning("Selected folder is not inside this project's Assets folder.");
+                    }
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+        }
+
         private static void RepaintAllInspectors()
         {
             foreach (EditorWindow window in Resources.FindObjectsOfTypeAll<EditorWindow>())
@@ -52,14 +98,14 @@ namespace Plugins.Saneject.Editor.Settings
 
             EditorGUILayout.LabelField("Injection", EditorStyles.boldLabel);
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Ask Before Scene Injection",
                 tooltip: "Show a confirmation dialog before injecting dependencies into the scene.",
                 currentValue: UserSettings.AskBeforeSceneInjection,
                 onChanged: newValue => UserSettings.AskBeforeSceneInjection = newValue
             );
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Ask Before Prefab Injection",
                 tooltip: "Show a confirmation dialog before injecting prefab dependencies.",
                 currentValue: UserSettings.AskBeforePrefabInjection,
@@ -69,7 +115,7 @@ namespace Plugins.Saneject.Editor.Settings
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Show Injected Fields",
                 tooltip: "Show [Inject] fields in the Inspector.",
                 currentValue: UserSettings.ShowInjectedFields,
@@ -77,7 +123,7 @@ namespace Plugins.Saneject.Editor.Settings
                 repaintInspectors: true
             );
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Show Help Boxes",
                 tooltip: "Show help boxes in the Inspector.",
                 currentValue: UserSettings.ShowHelpBoxes,
@@ -88,14 +134,14 @@ namespace Plugins.Saneject.Editor.Settings
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Play Mode Logging (Editor Only)", EditorStyles.boldLabel);
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Log On Proxy Instance Resolve",
                 tooltip: "Log when a proxy instance is resolved at runtime.",
                 currentValue: UserSettings.LogProxyResolve,
                 onChanged: newValue => UserSettings.LogProxyResolve = newValue
             );
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Log Global Scope Register/Unregister",
                 tooltip: "Log when objects are registered or unregistered with the global scope at runtime.",
                 currentValue: UserSettings.LogGlobalScopeRegistration,
@@ -105,26 +151,35 @@ namespace Plugins.Saneject.Editor.Settings
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Editor Logging", EditorStyles.boldLabel);
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Log Injection Stats",
                 tooltip: "Log stats on injection complete: Number of scopes processed, global dependencies added, injected fields, missing bindings, unused bindings, and injection duration.",
                 currentValue: UserSettings.LogInjectionStats,
                 onChanged: newValue => UserSettings.LogInjectionStats = newValue
             );
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Log Prefab Skipped During Scene Injection",
                 tooltip: "Log when a prefab is skipped during scene injection.",
                 currentValue: UserSettings.LogPrefabSkippedDuringSceneInjection,
                 onChanged: newValue => UserSettings.LogPrefabSkippedDuringSceneInjection = newValue
             );
 
-            DrawToggleWithTooltip(
+            DrawToggle(
                 label: "Log Unused Bindings",
                 tooltip: "Log a message when a binding is unused during injection. This can happen when a binding is registered in a scope but never used in the scene or prefab.",
                 currentValue: UserSettings.LogUnusedBindings,
                 onChanged: newValue => UserSettings.LogUnusedBindings = newValue
             );
+
+            EditorGUILayout.Space(10);
+            EditorGUILayout.LabelField("Proxy Generation", EditorStyles.boldLabel);
+
+            DrawPathPicker(
+                label: "Generated Proxy Asset Folder",
+                tooltip: "Folder where the generated proxy assets will be saved.",
+                currentPath: UserSettings.ProxyAssetGenerationFolder,
+                onChanged: path => UserSettings.ProxyAssetGenerationFolder = path);
 
             EditorGUILayout.EndScrollView();
         }

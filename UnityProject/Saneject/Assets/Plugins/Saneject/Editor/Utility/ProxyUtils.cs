@@ -2,6 +2,7 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 
@@ -85,10 +86,12 @@ namespace {ns}
             return File.Exists(proxyScriptPath);
         }
 
-        public static ScriptableObject GetOrCreateProxyAsset(Type proxyType, out bool createdNew)
+        public static ScriptableObject GetOrCreateProxyAsset(
+            Type proxyType,
+            out bool createdNew)
         {
             createdNew = false;
-            
+
             if (proxyType == null)
                 throw new ArgumentNullException(nameof(proxyType));
 
@@ -108,25 +111,31 @@ namespace {ns}
             }
 
             // Ensure folder exists
-            const string proxiesFolder = "Assets/Saneject/Proxies";
+            string targetFolder = UserSettings.ProxyAssetGenerationFolder.TrimEnd('/');
 
-            if (!AssetDatabase.IsValidFolder(proxiesFolder))
+            if (!AssetDatabase.IsValidFolder(targetFolder))
             {
-                const string sanejectFolder = "Assets/Saneject";
+                string[] parts = targetFolder.Split('/');
+                string currentPath = parts[0];
 
-                if (!AssetDatabase.IsValidFolder(sanejectFolder))
-                    AssetDatabase.CreateFolder("Assets", "Saneject");
+                for (int i = 1; i < parts.Length; i++)
+                {
+                    string nextPath = $"{currentPath}/{parts[i]}";
 
-                AssetDatabase.CreateFolder(sanejectFolder, "Proxies");
+                    if (!AssetDatabase.IsValidFolder(nextPath))
+                        AssetDatabase.CreateFolder(currentPath, parts[i]);
+
+                    currentPath = nextPath;
+                }
             }
 
-            // Create new asset in default folder
-            string proxyAssetPath = $"{proxiesFolder}/{proxyType.Name}.asset";
+            // Create new asset in user-defined folder
+            string proxyAssetPath = $"{targetFolder}/{proxyType.Name}.asset";
             ScriptableObject instance = ScriptableObject.CreateInstance(proxyType);
             AssetDatabase.CreateAsset(instance, proxyAssetPath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log($"Saneject: Created proxy asset at path '{proxyAssetPath}'.", instance);
+            Debug.Log($"Created proxy asset at path '{proxyAssetPath}'.", instance);
             createdNew = true;
             return instance;
         }
