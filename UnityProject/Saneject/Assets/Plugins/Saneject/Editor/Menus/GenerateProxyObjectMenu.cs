@@ -11,20 +11,20 @@ namespace Plugins.Saneject.Editor.Menus
     /// Context menu for generating interface proxy stubs and assets.
     /// Uses ProxyUtils for all heavy lifting. Keeps SessionState so we can finish after a reload.
     /// </summary>
-    public static class GenerateInterfaceProxyMenu
+    public static class GenerateProxyObjectMenu
     {
         private const string ProxyTypeNameKey = "Saneject.ProxyDialogFlow.ProxyTypeName";
 
-        [MenuItem("Assets/Generate Interface Proxy", true)]
-        private static bool GenerateInterfaceProxy_Validate()
+        [MenuItem("Assets/Generate Proxy Object", true)]
+        private static bool GenerateProxyObject_Validate()
         {
             return Selection.activeObject is MonoScript ms
                    && ms.GetClass() is { } t
                    && typeof(MonoBehaviour).IsAssignableFrom(t);
         }
 
-        [MenuItem("Assets/Generate Interface Proxy")]
-        private static void GenerateInterfaceProxy()
+        [MenuItem("Assets/Generate Proxy Object")]
+        private static void GenerateProxyObject()
         {
             if (Selection.activeObject is not MonoScript script) return;
             Type mbType = script.GetClass();
@@ -39,7 +39,7 @@ namespace Plugins.Saneject.Editor.Menus
             if (interfaces.Length == 0)
             {
                 EditorUtility.DisplayDialog(
-                    "Saneject: No Interfaces",
+                    "Saneject: Generate Proxy Object",
                     $"{mbType.Name} doesn't implement any public interfaces, which is required for proxy forwarding.",
                     "OK");
 
@@ -56,7 +56,7 @@ namespace Plugins.Saneject.Editor.Menus
                 string interfaceList = string.Join("\n", interfaces.Select(i => i.Name));
 
                 bool gen = EditorUtility.DisplayDialog(
-                    "Saneject: Generate Interface Proxy",
+                    "Saneject: Generate Proxy Object",
                     $"Generate a proxy for '{mbType.Name}' forwarding:\n\n{interfaceList}",
                     "Yes", "No");
 
@@ -121,7 +121,7 @@ namespace Plugins.Saneject.Editor.Menus
                 : $"Proxy script and asset for '{proxyType.Name}' already exists.";
 
             EditorUtility.DisplayDialog(
-                "Saneject: Proxy Ready",
+                "Saneject: Generate Proxy Object",
                 message,
                 "OK");
 

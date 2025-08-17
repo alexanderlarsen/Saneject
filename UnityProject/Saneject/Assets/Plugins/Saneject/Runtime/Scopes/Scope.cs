@@ -341,7 +341,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <summary>
         /// Registers a global binding for the scene component <typeparamref name="T" />.
         /// Promotes the component into the global scope via <c>SceneGlobalContainer</c>.
-        /// Enables cross-scene access through global resolution (e.g., via <c>InterfaceProxyObject</c>).
+        /// Enables cross-scene access through global resolution (e.g., via <c>ProxyObject</c>).
         /// </summary>
         /// <typeparam name="T">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>

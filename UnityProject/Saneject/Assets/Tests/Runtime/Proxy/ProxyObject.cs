@@ -1,10 +1,10 @@
 ﻿using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 
 namespace Tests.Runtime.Proxy
 {
-    [GenerateInterfaceProxy]
-    public partial class ProxyObject : InterfaceProxyObject<ProxyTarget>
+    [GenerateProxyObject]
+    public partial class ProxyObject : ProxyObject<ProxyTarget>
     {
     }
 }

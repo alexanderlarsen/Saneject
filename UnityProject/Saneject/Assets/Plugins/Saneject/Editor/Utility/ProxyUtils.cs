@@ -48,12 +48,12 @@ namespace Plugins.Saneject.Editor.Util
 
             string code =
                 $@"using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 
 namespace {ns}
 {{
-    [GenerateInterfaceProxy]
-    public partial class {proxyName} : InterfaceProxyObject<{concreteType.FullName}>
+    [GenerateProxyObject]
+    public partial class {proxyName} : ProxyObject<{concreteType.FullName}>
     {{
     }}
 }}";

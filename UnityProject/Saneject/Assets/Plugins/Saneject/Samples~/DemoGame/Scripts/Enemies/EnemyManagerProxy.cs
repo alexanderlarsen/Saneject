@@ -1,5 +1,5 @@
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
@@ -8,8 +8,8 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
     /// Enables cross-scene or cross-prefab serialization of <see cref="IEnemyObservable" /> and <see cref="IEnemyCatchNotifiable" /> references.
     /// The Roslyn generator generates a <c>partial class</c> implementing the interfaces and forwards all calls/events to the resolved <see cref="EnemyManager" /> instance at runtime.
     /// </summary>
-    [GenerateInterfaceProxy]
-    public partial class EnemyManagerProxy : InterfaceProxyObject<EnemyManager>
+    [GenerateProxyObject]
+    public partial class EnemyManagerProxy : ProxyObject<EnemyManager>
     {
     }
 

@@ -17,8 +17,8 @@
     <ItemGroup>
         <PackageReference Include="Microsoft.CodeAnalysis.CSharp" Version="4.3.1" PrivateAssets="all"/>
         <PackageReference Include="Microsoft.CodeAnalysis.Analyzers" Version="3.3.4" PrivateAssets="all"/>
-        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.1" PrivateAssets="all" />
-        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.3.1" PrivateAssets="all" />
+        <PackageReference Include="Microsoft.CodeAnalysis.CSharp.Workspaces" Version="4.3.1" PrivateAssets="all"/>
+        <PackageReference Include="Microsoft.CodeAnalysis.Workspaces.Common" Version="4.3.1" PrivateAssets="all"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(Module)' == 'SerializeInterface'">
@@ -26,7 +26,7 @@
     </ItemGroup>
 
     <ItemGroup Condition="'$(Module)' == 'InterfaceProxy'">
-        <Compile Include="InterfaceProxyGenerator.cs"/>
+        <Compile Include="ProxyObjectGenerator.cs"/>
     </ItemGroup>
 
     <ItemGroup Condition="'$(Module)' == 'AttributesAnalyzer'">
@@ -39,7 +39,7 @@
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Module)' == 'InterfaceProxy'">
-        <AssemblyName>InterfaceProxyGenerator</AssemblyName>
+        <AssemblyName>ProxyObjectGenerator</AssemblyName>
     </PropertyGroup>
 
     <PropertyGroup Condition="'$(Module)' == 'AttributesAnalyzer'">
