@@ -41,11 +41,14 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             // Application.isBatchMode is true when run from CI tests.
-            if (!Application.isBatchMode && UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
-                return;
+            if (!Application.isBatchMode)
+            {
+                if (UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
+                    return;
 
-            if (!Application.isBatchMode && UserSettings.ClearLogsOnInjection)
-                ConsoleUtils.ClearLog();
+                if (UserSettings.ClearLogsOnInjection)
+                    ConsoleUtils.ClearLog();
+            }
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             Scope[] allScopes = Object.FindObjectsByType<Scope>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(scope => !scope.gameObject.IsPrefab()).ToArray();
@@ -111,11 +114,14 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             // Application.isBatchMode is true when run from CI tests.
-            if (!Application.isBatchMode && UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
-                return;
+            if (!Application.isBatchMode)
+            {
+                if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
+                    return;
 
-            if (!Application.isBatchMode && UserSettings.ClearLogsOnInjection)
-                ConsoleUtils.ClearLog();
+                if (UserSettings.ClearLogsOnInjection)
+                    ConsoleUtils.ClearLog();
+            }
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             Scope rootScope = startScope.FindRootScope();
