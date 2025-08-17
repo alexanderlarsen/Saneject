@@ -6,6 +6,9 @@ namespace Plugins.Saneject.Runtime.Bindings
 {
     public static class BindingIdentityHelper
     {
+        /// <summary>
+        /// Gets the identity string of a known/declared binding.
+        /// </summary>
         public static string GetBindingIdentity(this Binding binding)
         {
             return GetBindingIdentity(
@@ -21,7 +24,41 @@ namespace Plugins.Saneject.Runtime.Bindings
             );
         }
 
-        public static string GetBindingIdentity(
+        /// <summary>
+        /// Gets the identity from an expected but unknown/missing binding. Constructed in the DependencyInjector based on field info at the current injection step.
+        /// </summary>
+        public static string GetUndeclaredBindingIdentity(
+            bool isCollection,
+            Type interfaceType,
+            Type concreteType,
+            string id,
+            Scope scope)
+        {
+            StringBuilder sb = new();
+            sb.Append("[");
+
+            if (interfaceType != null && concreteType != null)
+                sb.Append($"{interfaceType.Name}/{concreteType.Name}");
+            else if (interfaceType == null && concreteType != null)
+                sb.Append($"{concreteType.Name}");
+            else if (interfaceType != null)
+                sb.Append($"{interfaceType.Name}");
+            else
+                sb.Append("null/null");
+
+            sb.Append(" | ");
+            sb.Append(isCollection ? "Collection" : "Single");
+
+            if (id != null)
+                sb.Append($" | Id: {id} ");
+
+            sb.Append($" | Nearest scope: {scope.GetType().Name}");
+            sb.Append("]");
+
+            return sb.ToString();
+        }
+
+        private static string GetBindingIdentity(
             bool isGlobal,
             bool isAsset,
             bool isComponent,
@@ -59,37 +96,6 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             if (id != null)
                 sb.Append($" | Id: {id}");
-
-            sb.Append($" | Scope: {scope.GetType().Name}");
-            sb.Append("]");
-
-            return sb.ToString();
-        }
-
-        public static string GetPartialBindingIdentity(
-            bool isCollection,
-            Type interfaceType,
-            Type concreteType,
-            string id,
-            Scope scope)
-        {
-            StringBuilder sb = new();
-            sb.Append("[");
-
-            if (interfaceType != null && concreteType != null)
-                sb.Append($"{interfaceType.Name}/{concreteType.Name}");
-            else if (interfaceType == null && concreteType != null)
-                sb.Append($"{concreteType.Name}");
-            else if (interfaceType != null)
-                sb.Append($"{interfaceType.Name}");
-            else
-                sb.Append("null/null");
-
-            sb.Append(" | ");
-            sb.Append(isCollection ? "Collection" : "Single");
-
-            if (id != null)
-                sb.Append($" | Id: {id} ");
 
             sb.Append($" | Scope: {scope.GetType().Name}");
             sb.Append("]");

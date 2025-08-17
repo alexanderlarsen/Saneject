@@ -333,7 +333,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (binding == null)
                 {
-                    Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetPartialBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+                    Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}", scope);
 
                     continue;
                 }
@@ -351,7 +351,7 @@ namespace Plugins.Saneject.Editor.Core
                     }
                     else
                     {
-                        Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetPartialBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+                        Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
                     }
 
                     continue;
@@ -370,7 +370,7 @@ namespace Plugins.Saneject.Editor.Core
                     continue;
                 }
 
-                Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetPartialBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+                Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
             }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
