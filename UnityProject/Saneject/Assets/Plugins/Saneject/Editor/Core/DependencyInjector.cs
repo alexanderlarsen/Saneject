@@ -40,7 +40,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // /Application.isBatchMode is true when run from unit tests.
+            // Application.isBatchMode is true when run from CI tests.
             if (!Application.isBatchMode && UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
                 return;
 
@@ -110,7 +110,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // /Application.isBatchMode is true when run from unit tests.
+            // Application.isBatchMode is true when run from CI tests.
             if (!Application.isBatchMode && UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
                 return;
 
