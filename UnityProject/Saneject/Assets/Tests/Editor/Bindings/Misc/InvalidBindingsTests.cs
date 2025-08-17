@@ -1,4 +1,5 @@
 ﻿using NUnit.Framework;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Scopes;
 using Tests.Runtime;
@@ -28,7 +29,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkAssetBinding();
             binding.SetLocator(_ => null);
 
-            Assert.IsFalse(binding.IsValid(), "Asset binding with Component type should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Asset binding with Component type should be invalid.");
         }
 
         [Test]
@@ -40,7 +41,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkComponentBinding();
             binding.SetLocator(_ => null); // Set to avoid no-locator fail
 
-            Assert.IsFalse(binding.IsValid(), "Component binding with non-Component type should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Component binding with non-Component type should be invalid.");
         }
 
         [Test]
@@ -54,7 +55,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkGlobal();
             binding.SetLocator(_ => null);
 
-            Assert.IsFalse(binding.IsValid(), "Global + collection binding should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Global + collection binding should be invalid.");
         }
 
         [Test]
@@ -68,7 +69,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.SetId("someId");
             binding.SetLocator(_ => null);
 
-            Assert.IsFalse(binding.IsValid(), "Global binding with ID should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Global binding with ID should be invalid.");
         }
 
         [Test]
@@ -80,7 +81,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkAssetBinding();
             binding.SetLocator(_ => null);
 
-            Assert.IsFalse(binding.IsValid(), "Binding with interfaceType not being interface should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Binding with interfaceType not being interface should be invalid.");
         }
 
         [Test]
@@ -92,7 +93,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkComponentBinding();
             // No SetLocator
 
-            Assert.IsFalse(binding.IsValid(), "Binding without locator should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Binding without locator should be invalid.");
         }
 
         [Test]
@@ -104,7 +105,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkAssetBinding();
             // No SetLocator
 
-            Assert.IsFalse(binding.IsValid(), "Asset binding without locator should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Asset binding without locator should be invalid.");
         }
 
         [Test]
@@ -118,7 +119,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkGlobal();
             binding.SetLocator(_ => null);
 
-            Assert.IsFalse(binding.IsValid(), "Global asset collection binding should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Global asset collection binding should be invalid.");
         }
 
         [Test]
@@ -131,7 +132,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.MarkCollectionBinding();
             binding.SetLocator(_ => null);
 
-            Assert.IsFalse(binding.IsValid(), "Collection binding with invalid concrete type should be invalid.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Collection binding with invalid concrete type should be invalid.");
         }
     }
 }

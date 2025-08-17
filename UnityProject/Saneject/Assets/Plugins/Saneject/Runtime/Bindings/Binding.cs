@@ -17,7 +17,6 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// </summary>
     public class Binding : IEquatable<Binding>
     {
-        private readonly Scope scope;
         private readonly List<Func<Object, bool>> filters = new();
         private readonly List<(Func<Object, bool> filter, Type targetType)> targetFilters = new();
 
@@ -28,13 +27,16 @@ namespace Plugins.Saneject.Runtime.Bindings
             Type concreteType,
             Scope scope)
         {
-            this.scope = scope;
+            Scope = scope;
             InterfaceType = interfaceType;
             ConcreteType = concreteType;
         }
 
         public Type InterfaceType { get; }
         public Type ConcreteType { get; }
+
+        public Scope Scope { get; }
+        public bool HasLocator => locator != null;
         public string Id { get; private set; }
         public bool IsGlobal { get; private set; }
         public bool RequiresInjectionTarget { get; private set; }
@@ -48,26 +50,6 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Constructs a readable binding name used by the <c>DependencyInjector</c> for logging purposes,
         /// including interface and concrete type names and an optional ID.
         /// </summary>
-        public static string ConstructBindingName(
-            Type interfaceType,
-            Type concreteType,
-            string id)
-        {
-            string output = string.Empty;
-
-            if (interfaceType != null && concreteType != null)
-                output = $"{interfaceType.Name} -> {concreteType.Name}";
-            else if (interfaceType == null && concreteType != null)
-                output = $"{concreteType.Name}";
-            else if (interfaceType != null)
-                output = $"{interfaceType.Name}";
-
-            if (id != null)
-                output += $" | ID: {id}";
-
-            return output;
-        }
-
         /// <summary>
         /// Marks this binding as eligible for collection injection, allowing it to be resolved into array or list fields.
         /// </summary>
@@ -75,7 +57,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsCollection)
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as a collection binding. Ignoring this call.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as a collection binding. Ignoring this call.", Scope);
                 return;
             }
 
@@ -86,7 +68,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsComponentBinding)
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as a component binding. Ignoring this call.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as a component binding. Ignoring this call.", Scope);
                 return;
             }
 
@@ -97,7 +79,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsAssetBinding)
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as an asset binding. Ignoring this call.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as an asset binding. Ignoring this call.", Scope);
                 return;
             }
 
@@ -112,7 +94,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (!string.IsNullOrWhiteSpace(Id))
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has an ID '{Id}' and cannot have multiple IDs. Ignoring attempt to set ID to '{newId}'.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} already has an ID '{Id}' and cannot have multiple IDs. Ignoring attempt to set ID to '{newId}'.", Scope);
                 return;
             }
 
@@ -126,7 +108,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsGlobal)
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as global. Ignoring this call.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as global. Ignoring this call.", Scope);
                 return;
             }
 
@@ -140,19 +122,21 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (RequiresInjectionTarget)
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked as requiring an injection target. Ignoring this call.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as requiring an injection target. Ignoring this call.", Scope);
                 return;
             }
 
             RequiresInjectionTarget = true;
         }
 
-        // TODO: Document
+        /// <summary>
+        /// Tells the DI system to resolve this binding with a ProxyObject. The ProxyObject script and asset will be created at injection time, if they don't already exist. If they exist, the first found asset instance will be used.
+        /// </summary>
         public void MarkResolveWithProxy()
         {
-            if (RequiresInjectionTarget)
+            if (IsProxyBinding)
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is already marked to resolve from proxy. Ignoring this call.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked to resolve from proxy. Ignoring this call.", Scope);
                 return;
             }
 
@@ -174,7 +158,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (this.locator != null)
             {
-                Debug.LogWarning($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' already has a locator and cannot specify multiple locators. Ignoring this call.", scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} already has a locator and cannot specify multiple locators. Ignoring this call.", Scope);
                 return;
             }
 
@@ -236,65 +220,6 @@ namespace Plugins.Saneject.Runtime.Bindings
             return target != null && targetFilters.All(f => f.filter(target));
         }
 
-        // TODO: Invalidate wrong resolve with proxy combinations
-        public bool IsValid()
-        {
-            bool isValid = true;
-
-            if (IsAssetBinding && ConcreteType != null && typeof(Component).IsAssignableFrom(ConcreteType))
-            {
-                string bindingType = $"{(IsCollection ? "Multiple Asset binding" : "Single Asset binding")}";
-
-                Debug.LogError($"Saneject: {bindingType} in '{scope.GetType().Name}' has an invalid type '{ConcreteType.Name}' that is a Component and not an Asset.", scope);
-
-                isValid = false;
-            }
-
-            if (IsComponentBinding && ConcreteType != null && !typeof(Component).IsAssignableFrom(ConcreteType))
-            {
-                string bindingType = $"{(IsCollection ? "Multiple Component binding" : "Single Component binding")}";
-
-                Debug.LogError($"Saneject: {bindingType} in '{scope.GetType().Name}' has an invalid type '{ConcreteType.Name}' that is not an interface or component.", scope);
-
-                isValid = false;
-            }
-
-            if (InterfaceType is { IsInterface: false })
-            {
-                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' has an invalid interface type '{InterfaceType.FullName}' that is not an interface.", scope);
-
-                isValid = false;
-            }
-
-            if (IsGlobal && IsCollection)
-            {
-                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' is both global and collection. This is not allowed.", scope);
-
-                isValid = false;
-            }
-
-            if (IsGlobal && !string.IsNullOrWhiteSpace(Id))
-            {
-                Debug.LogError($"Saneject: Global binding ({GetName()}) in scope '{scope.GetType().Name}' is not allowed to have an ID.", scope);
-
-                isValid = false;
-            }
-
-            if (locator == null)
-            {
-                Debug.LogError($"Saneject: Binding ({GetName()}) in scope '{scope.GetType().Name}' does not have a locator (e.g., FromScopeSelf). This is required.", scope);
-
-                isValid = false;
-            }
-
-            return isValid;
-        }
-
-        public string GetName()
-        {
-            return ConstructBindingName(InterfaceType, ConcreteType, Id);
-        }
-
         public bool Equals(Binding other)
         {
             if (other is null) return false;
@@ -309,7 +234,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             else
                 typeMatch = ConcreteType == other.ConcreteType;
 
-            return Equals(scope, other.scope)
+            return Equals(Scope, other.Scope)
                    && typeMatch
                    && Id == other.Id
                    && IsGlobal == other.IsGlobal
@@ -325,7 +250,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             // if this is an interface binding, hash only on InterfaceType,
             // otherwise hash on ConcreteType
             Type keyType = InterfaceType ?? ConcreteType;
-            int hash = HashCode.Combine(scope, keyType, Id, IsGlobal, IsCollection);
+            int hash = HashCode.Combine(Scope, keyType, Id, IsGlobal, IsCollection);
 
             foreach (Type targetType in targetFilters.Select(tf => tf.targetType).OrderBy(t => t?.FullName))
                 hash = HashCode.Combine(hash, targetType);

@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
 using UnityEngine;
 using Component = UnityEngine.Component;
@@ -77,11 +78,11 @@ namespace Plugins.Saneject.Runtime.Scopes
         {
             foreach (Binding binding in unvalidatedBindings)
             {
-                if (!binding.IsValid())
+                if (!BindingValidator.IsBindingValid(binding))
                     continue;
 
                 if (!validBindings.Add(binding))
-                    Debug.LogError($"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{binding.GetName()}'.");
+                    Debug.LogError($"Saneject: Duplicate binding {binding.GetBindingIdentity()}.", this);
             }
         }
 

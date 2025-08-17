@@ -11,6 +11,7 @@ using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
+using Saneject.Plugins.Saneject.Editor.Utility;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -39,8 +40,12 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            // /Application.isBatchMode is true when run from unit tests.
             if (!Application.isBatchMode && UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
                 return;
+
+            if (!Application.isBatchMode && UserSettings.ClearLogsOnInjection)
+                ConsoleUtils.ClearLog();
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             Scope[] allScopes = Object.FindObjectsByType<Scope>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(scope => !scope.gameObject.IsPrefab()).ToArray();
@@ -105,9 +110,14 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            // /Application.isBatchMode is true when run from unit tests.
             if (!Application.isBatchMode && UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
                 return;
 
+            if (!Application.isBatchMode && UserSettings.ClearLogsOnInjection)
+                ConsoleUtils.ClearLog();
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
             Scope rootScope = startScope.FindRootScope();
             Scope[] allScopes = rootScope.GetComponentsInChildren<Scope>();
 
@@ -130,13 +140,12 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (globalBindings.Count > 0)
                     foreach (Binding binding in globalBindings)
-                        Debug.LogWarning($"Saneject: Invalid global binding ({binding.GetName()}) in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
+                        Debug.LogWarning($"Saneject: Invalid global binding {binding.GetBindingIdentity()} in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
 
                 stats.unusedBindings += globalBindings.Count;
             }
 
             EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting prefab dependencies", 0);
-            Stopwatch stopwatch = Stopwatch.StartNew();
 
             try
             {
@@ -187,7 +196,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (UserSettings.LogUnusedBindings && unusedBindings.Count > 0)
                     foreach (Binding binding in unusedBindings)
-                        Debug.LogWarning($"Saneject: Unused binding ({binding.GetName()}) in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it.", scope);
+                        Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingIdentity()}. If you don't plan to use this binding, you can safely remove it.", scope);
 
                 stats.unusedBindings += unusedBindings.Count;
             }
@@ -216,7 +225,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (scope.gameObject.IsPrefab())
                 {
-                    Debug.LogWarning($"Saneject: Global bindings found on prefab scope '{scope.gameObject.name}'. These are ignored because the system can only inject global bindings from scenes.", scope);
+                    Debug.LogWarning($"Saneject: Global bindings found on prefab scope '{scope.GetType().Name}'. These are ignored because the system can only inject global bindings from scenes.", scope);
                     continue;
                 }
 
@@ -318,7 +327,8 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (binding == null)
                 {
-                    ReportMissing("Missing " + (isCollection ? "collection" : "single type") + " binding", interfaceType, concreteType, injectId);
+                    Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetPartialBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+
                     continue;
                 }
 
@@ -335,7 +345,7 @@ namespace Plugins.Saneject.Editor.Core
                     }
                     else
                     {
-                        ReportMissing($"Proxy type not found for {binding.ConcreteType}. It may not be compiled yet.", interfaceType, concreteType, injectId);
+                        Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetPartialBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
                     }
 
                     continue;
@@ -354,26 +364,10 @@ namespace Plugins.Saneject.Editor.Core
                     continue;
                 }
 
-                ReportMissing("Missing " + (isCollection ? "collection" : "single type") + " binding", interfaceType, concreteType, injectId);
+                Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetPartialBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
             }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
-            return;
-
-            void ReportMissing(
-                string message,
-                Type interfaceType,
-                Type concreteType,
-                string injectId)
-            {
-                serializedProperty.NullifyOrClearArray();
-
-                Debug.LogError(
-                    $"Saneject: {message} ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.GetType().Name}'",
-                    scope);
-
-                stats.missingBindings++;
-            }
         }
 
         /// <summary>

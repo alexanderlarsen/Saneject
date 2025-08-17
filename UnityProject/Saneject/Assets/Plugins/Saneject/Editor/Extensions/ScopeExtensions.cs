@@ -9,6 +9,20 @@ namespace Plugins.Saneject.Editor.Extensions
     public static class ScopeExtensions
     {
         /// <summary>
+        /// Sets parent scopes and calls <see cref="Scope.ConfigureBindings" /> on each scope in the array.
+        /// </summary>
+        /// <param name="scopes">The array of scopes to configure.</param>
+        public static void Initialize(this Scope[] scopes)
+        {
+            foreach (Scope scope in scopes)
+            {
+                scope.SetParentScope();
+                scope.ConfigureBindings();
+                scope.ValidateBindings();
+            }
+        }
+
+        /// <summary>
         /// Traverses the <see cref="Scope.ParentScope" /> chain and returns the root scope.
         /// </summary>
         /// <param name="startScope">The scope to start from.</param>
@@ -31,20 +45,6 @@ namespace Plugins.Saneject.Editor.Extensions
         {
             foreach (Scope scope in scopes)
                 scope.Dispose();
-        }
-
-        /// <summary>
-        /// Sets parent scopes and calls <see cref="Scope.ConfigureBindings" /> on each scope in the array.
-        /// </summary>
-        /// <param name="scopes">The array of scopes to configure.</param>
-        public static void Initialize(this Scope[] scopes)
-        {
-            foreach (Scope scope in scopes)
-            {
-                scope.SetParentScope();
-                scope.ConfigureBindings();
-                scope.ValidateBindings();
-            }
         }
 
         /// <summary>

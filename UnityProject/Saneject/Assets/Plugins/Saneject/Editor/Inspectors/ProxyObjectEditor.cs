@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Settings;
-using Saneject.Plugins.Saneject.Proxy;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

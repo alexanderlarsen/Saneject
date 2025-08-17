@@ -67,9 +67,14 @@ namespace Plugins.Saneject.Runtime.Settings
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
+
+        public static bool ClearLogsOnInjection
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
         
         // Proxy Generation
-
         public static string ProxyAssetGenerationFolder
         {
             get => GetString(defaultValue: "Assets/Generated");

@@ -1,7 +1,6 @@
 ﻿using System;
 using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Settings;
-using Saneject.Plugins.Saneject.Proxy;
 using UnityEngine;
 
 namespace Plugins.Saneject.Runtime.Proxy
@@ -43,7 +42,7 @@ namespace Plugins.Saneject.Runtime.Proxy
         }
 
         /// <summary>
-        /// Manually register an instance for this proxy. Only required for <see cref="ResolveMethod.ManualRegistration"/> resolve method.
+        /// Manually register an instance for this proxy. Only required for <see cref="ResolveMethod.ManualRegistration" /> resolve method.
         /// </summary>
         public void RegisterInstance(TConcrete instance)
         {
@@ -59,7 +58,7 @@ namespace Plugins.Saneject.Runtime.Proxy
         }
 
         /// <summary>
-        /// Returns the resolved concrete instance as <typeparamref name="T"/>, or null if not resolved.
+        /// Returns the resolved concrete instance as <typeparamref name="T" />, or null if not resolved.
         /// Use if you need to access or cache the direct instance for performance-critical scenarios.
         /// </summary>
         /// <returns>The concrete instance cast to T.</returns>
