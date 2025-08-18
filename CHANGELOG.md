@@ -1,5 +1,27 @@
 ﻿# Saneject Changelog
- 
+
+## Version 0.9.0
+
+### New Features
+
+- Added `BindComponent<TInterface, TConcrete>().FromProxy()` binding locator that greatly simplifies working with proxies. At injection time, the system will create the stub and proxy asset instance for you and inject the asset. This is now the recommended workflow for normal use cases. Much faster and less context-switching than creating manual instances, as multiple proxies can be created declaratively in one injection pass.
+- For advanced use cases, you can still create manual proxy ScriptableObject instances with different resolution strategies. This workflow has been improved as well. Previously it was a tedious multi-step process per proxy (generate stub, domain reload, wait, generate asset). Now both stub and proxy asset generate in one click.
+- User settings: customizable path for generated proxy output.
+- User settings: toggle to clear log before injection, useful for seeing only logs related to the current context.
+
+### Changes
+
+- Renamed `InterfaceProxyObject` to `ProxyObject` for simplicity and conciseness. Required coordinated renames across Roslyn, code generation, and stub generation.
+- Refactored binding validation into a separate `BindingValidator` class instead of having it inside the `Binding` itself.
+- Wrote a `BindingIdentityHelper` that constructs a consistent binding identity string for logging, making logs more scannable.
+- Cleaned up and streamlined log and validation messages.
+- Updated demo game to use `FromProxy()`.
+
+### Validation & Testing
+
+- Added new validation checks related to the `FromProxy()` method.
+- Added unit test for `FromProxy()`. Stub generation cannot be tested directly, since it triggers a domain reload (which kills the test process), but loading and creating the proxy asset is verified in CI.
+
 ## Version 0.8.3
 
 - Fixed bug where `SceneGlobalContainer` failed to unregister from `GlobalScope` on scene unload if the instance was null.
