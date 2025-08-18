@@ -2,7 +2,7 @@
   "name": "com.alexanderlarsen.saneject",
   "author": "Alexander Larsen",
   "displayName": "Saneject",
-  "version": "0.8.3",
+  "version": "0.9.0",
   "description": "Unity Editor dependency injection framework for scenes and prefabs. Bind and resolve your dependencies entirely in the Editor with an inspector-first workflow, including full support for serialized interfaces. No runtime container, no extra lifecycles. Just fast, deterministic DI that feels native to Unity.",
   "documentationUrl": "https://github.com/alexanderlarsen/Saneject/blob/main/README.md",
   "changelogUrl": "https://github.com/alexanderlarsen/Saneject/blob/main/CHANGELOG.md",
