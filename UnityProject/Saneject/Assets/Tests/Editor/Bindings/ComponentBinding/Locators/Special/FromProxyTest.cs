@@ -39,7 +39,8 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
 
-            Assert.IsFalse(AssetDatabase.AssetPathExists(path));
+            bool assetExists = AssetDatabase.LoadAssetAtPath<Object>(path) != null;
+            Assert.IsFalse(assetExists);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
