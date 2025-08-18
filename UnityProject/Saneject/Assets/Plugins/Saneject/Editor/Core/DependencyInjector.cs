@@ -80,8 +80,10 @@ namespace Plugins.Saneject.Editor.Core
                 allScopes.LogUnusedBindings(stats);
                 stopwatch.Stop();
 
+                int invalidBindingsCount = allScopes.Sum(scope => scope.InvalidBindingsCount);
+
                 if (UserSettings.LogInjectionStats)
-                    Debug.Log($"Saneject: Scene injection complete | {allScopes.Length} scopes processed | {stats.injectedGlobal} global dependencies | {stats.injectedFields} injected fields | {stats.missingBindings} missing bindings | {stats.unusedBindings} unused bindings | Completed in {stopwatch.ElapsedMilliseconds} ms");
+                    Debug.Log($"Saneject: Scene injection complete | {allScopes.Length} scopes processed | {stats.injectedGlobal} global dependencies | {stats.injectedFields} injected fields | {stats.missingBindings} missing bindings | {stats.unusedBindings} unused bindings | Invalid bindings: {invalidBindingsCount} | Completed in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
@@ -139,18 +141,6 @@ namespace Plugins.Saneject.Editor.Core
             proxyBindings.CreateMissingProxyStubs();
 
             InjectionStats stats = new();
-
-            foreach (Scope scope in allScopes)
-            {
-                List<Binding> globalBindings = scope.GetGlobalBindings();
-
-                if (globalBindings.Count > 0)
-                    foreach (Binding binding in globalBindings)
-                        Debug.LogWarning($"Saneject: Invalid global binding {binding.GetBindingIdentity()} in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
-
-                stats.unusedBindings += globalBindings.Count;
-            }
-
             EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting prefab dependencies", 0);
 
             try
@@ -159,8 +149,10 @@ namespace Plugins.Saneject.Editor.Core
                 allScopes.LogUnusedBindings(stats);
                 stopwatch.Stop();
 
+                int invalidBindingsCount = allScopes.Sum(scope => scope.InvalidBindingsCount);
+
                 if (UserSettings.LogInjectionStats)
-                    Debug.Log($"Saneject: Prefab injection complete | {allScopes.Length} scopes processed | {stats.injectedFields} injected fields | {stats.missingBindings} missing bindings | {stats.unusedBindings} unused bindings | Completed in {stopwatch.ElapsedMilliseconds} ms");
+                    Debug.Log($"Saneject: Prefab injection complete | {allScopes.Length} scopes processed | {stats.injectedFields} injected fields | {stats.missingBindings} missing bindings | {stats.unusedBindings} unused bindings | Invalid bindings: {invalidBindingsCount} | Completed in {stopwatch.ElapsedMilliseconds} ms");
             }
             catch (Exception e)
             {
@@ -244,6 +236,8 @@ namespace Plugins.Saneject.Editor.Core
                         Debug.LogError($"Saneject: Could not resolve global dependency in scope '{scope.gameObject.name}'", scope);
                         continue;
                     }
+
+                    globalBinding.MarkUsed();
 
                     if (!sceneGlobalContainer)
                     {

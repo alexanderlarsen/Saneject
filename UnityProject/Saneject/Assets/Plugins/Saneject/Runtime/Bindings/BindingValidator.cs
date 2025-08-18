@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Runtime.Bindings;
+﻿using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Runtime.Bindings;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Utility
@@ -122,6 +123,16 @@ namespace Plugins.Saneject.Editor.Utility
                 Debug.LogError(
                     $"Saneject: Invalid binding {binding.GetBindingIdentity()}." +
                     $" Concrete type '{binding.ConcreteType.Name}' does not implement interface '{binding.InterfaceType.Name}'.",
+                    binding.Scope);
+
+                isValid = false;
+            }
+
+            if (binding.IsGlobal && binding.Scope.gameObject.IsPrefab())
+            {
+                Debug.LogError(
+                    $"Saneject: Invalid binding {binding.GetBindingIdentity()}." +
+                    " Global bindings cannot be used in prefabs, because the system can only inject global components from scenes.",
                     binding.Scope);
 
                 isValid = false;

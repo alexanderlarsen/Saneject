@@ -1,15 +1,19 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using System.Linq;
+using System.Reflection;
+using NUnit.Framework;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Scopes;
 using Tests.Runtime;
 using Tests.Runtime.Asset;
 using Tests.Runtime.Component;
+using UnityEditor;
 using UnityEngine;
 
 namespace Tests.Editor.Bindings.Misc
 {
-    public class InvalidBindingTests : BaseTest
+    public class InvalidBindingTests : BaseBindingTest
     {
         private Scope dummyScope;
 
@@ -133,6 +137,37 @@ namespace Tests.Editor.Bindings.Misc
             binding.SetLocator(_ => null);
 
             Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Collection binding with invalid concrete type should be invalid.");
+        }
+
+        [Test]
+        public void GlobalBinding_OnPrefab_IsInvalid()
+        {
+            IgnoreErrorMessages();
+
+            GameObject prefab = Resources.Load<GameObject>("Test/Prefab 1");
+            GameObject instance = (GameObject)PrefabUtility.InstantiatePrefab(prefab);
+
+            // Add components
+            TestScope scope = instance.AddComponent<TestScope>();
+            InjectableComponent injectableComponent = instance.AddComponent<InjectableComponent>();
+
+            // Set up binding
+            BindGlobal<InjectableComponent>(scope).FromInstance(injectableComponent);
+
+            // Grab unvalidatedBindings directly via reflection
+            FieldInfo field = typeof(Scope).GetField("unvalidatedBindings", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Assert.IsNotNull(field, "Field 'unvalidatedBindings' should not be null.");
+
+            IEnumerable unvalidated = (IEnumerable)field.GetValue(scope);
+            Binding binding = unvalidated.Cast<Binding>().FirstOrDefault();
+
+            Assert.IsNotNull(binding, "Binding shouldn't be null.");
+            Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Global binding on prefab instance should be invalid.");
+        }
+
+        protected override void CreateHierarchy()
+        {
         }
     }
 }

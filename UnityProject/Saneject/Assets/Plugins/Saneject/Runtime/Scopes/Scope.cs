@@ -26,6 +26,9 @@ namespace Plugins.Saneject.Runtime.Scopes
         [EditorBrowsable(EditorBrowsableState.Never)]
         private readonly List<Binding> unvalidatedBindings = new();
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public int InvalidBindingsCount => unvalidatedBindings.Count - validBindings.Count;
+        
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
