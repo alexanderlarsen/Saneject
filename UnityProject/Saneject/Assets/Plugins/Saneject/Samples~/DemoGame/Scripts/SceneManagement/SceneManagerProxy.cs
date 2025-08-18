@@ -1,5 +1,5 @@
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
 {
@@ -8,8 +8,8 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
     /// Enables cross-scene or cross-prefab serialization of <see cref="ISceneManager" /> references.
     /// The Roslyn generator generates a <c>partial class</c> implementing the interfaces and forwards all calls/events to the resolved <see cref="SceneManager" /> instance at runtime.
     /// </summary>
-    [GenerateInterfaceProxy]
-    public partial class SceneManagerProxy : InterfaceProxyObject<SceneManager>
+    [GenerateProxyObject]
+    public partial class SceneManagerProxy : ProxyObject<SceneManager>
     {
     }
 

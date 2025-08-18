@@ -1,5 +1,5 @@
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
 {
@@ -8,8 +8,8 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
     /// Enables cross-scene or cross-prefab serialization of <see cref="IMainCamera" /> references.
     /// The Roslyn generator generates a <c>partial class</c> implementing the interfaces and forwards all calls/events to the resolved <see cref="Samples.DemoGame.Scripts.Camera.CameraController" /> instance at runtime.
     /// </summary>
-    [GenerateInterfaceProxy]
-    public partial class CameraControllerProxy : InterfaceProxyObject<CameraController>
+    [GenerateProxyObject]
+    public partial class CameraControllerProxy : ProxyObject<CameraController>
     {
     }
 

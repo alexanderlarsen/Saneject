@@ -4,9 +4,8 @@ using System.Linq;
 using System.Reflection;
 using NUnit.Framework;
 using Tests.Runtime.Proxy;
-using ProxyObject = Tests.Runtime.Proxy.ProxyObject;
 
-namespace Tests.Editor.InterfaceProxyObject
+namespace Tests.Editor.ProxyObject
 {
     public class ProxyGenerationTests
     {
@@ -21,7 +20,7 @@ namespace Tests.Editor.InterfaceProxyObject
         [SetUp]
         public void Setup()
         {
-            proxyType = typeof(ProxyObject);
+            proxyType = typeof(TestProxyObject);
         }
 
         [Test]

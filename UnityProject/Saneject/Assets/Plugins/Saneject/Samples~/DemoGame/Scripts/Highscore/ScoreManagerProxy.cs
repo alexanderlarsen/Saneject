@@ -1,5 +1,5 @@
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Highscore
 {
@@ -8,8 +8,8 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Highscore
     /// Enables cross-scene or cross-prefab serialization of <see cref="IScoreObservable" /> and <see cref="IScoreUpdater" /> references.
     /// The Roslyn generator generates a <c>partial class</c> implementing the interfaces and forwards all calls/events to the resolved <see cref="ScoreManager" /> instance at runtime.
     /// </summary>
-    [GenerateInterfaceProxy]
-    public partial class ScoreManagerProxy : InterfaceProxyObject<ScoreManager>
+    [GenerateProxyObject]
+    public partial class ScoreManagerProxy : ProxyObject<ScoreManager>
     {
     }
 

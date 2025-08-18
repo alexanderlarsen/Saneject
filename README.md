@@ -37,9 +37,9 @@ Editor-time resolved serialized field dependency injection for Unity. Keep your 
     - [Binding API](#binding-api)
     - [Binding Uniqueness](#binding-uniqueness)
     - [SerializeInterface](#serializeinterface)
+    - [Proxy Object](#proxy-object)
     - [MonoBehaviour Fallback Inspector](#monobehaviour-fallback-inspector)
     - [Saneject Inspector API](#saneject-inspector-api)
-    - [Interface Proxy Object](#interface-proxy-object)
     - [Global Scope](#global-scope)
     - [Roslyn Tools in Saneject](#roslyn-tools-in-saneject)
     - [UX](#ux)
@@ -56,15 +56,15 @@ Saneject is a middle-ground between hand-wiring references and a full runtime DI
 
 ## Why Another DI Tool?
 
-| Pain Point                                                                                       | How Saneject Helps                                                                                                                                                                             |
-|--------------------------------------------------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| We want structured dependency management but don’t want to commit to a full runtime DI workflow. | Saneject offers DI-style binding syntax and organisation without a runtime container - you keep editor-time determinism, default Unity lifecycle and Inspector visibility.                     |
-| “We want to see what’s wired where in the Inspector.”                                            | All references are regular serialized fields. Nothing is hidden behind a runtime graph.                                                                                                        |
-| Interfaces can’t be dragged into the Inspector.                                                  | Saneject’s Roslyn generator adds safe interface-backing fields with Inspector support. `[SerializeInterface] IMyInterface myInterface` shows up as a proper serialized field.                  |
-| Runtime DI lifecycles can feel opaque or fight Unity’s own Awake/Start order.                    | Everything is set and serialized in the editor. Unity’s normal lifecycle stays untouched.                                                                                                      |
-| Large reflection-heavy containers add startup cost.                                              | Saneject resolves once in the editor - zero reflection or allocation at runtime.                                                                                                               |
-| Can’t serialize references between scenes or from a scene into prefabs.                          | `InterfaceProxyObject`, a Roslyn generated `ScriptableObject`, can be referenced anywhere like any asset. At runtime, it resolves and forwards to a real scene instance with minimal overhead. |
-| Mixed teams (artists/designers) struggle with code-only installers.                              | Bindings live in Scope scripts as simple, declarative C#. Fields are regular serialized fields marked with `[Inject]`, and field visibility can be toggled from settings.                      |
+| Pain Point                                                                                       | How Saneject Helps                                                                                                                                                                    |
+|--------------------------------------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| We want structured dependency management but don’t want to commit to a full runtime DI workflow. | Saneject offers DI-style binding syntax and organisation without a runtime container - you keep editor-time determinism, default Unity lifecycle and Inspector visibility.            |
+| “We want to see what’s wired where in the Inspector.”                                            | All references are regular serialized fields. Nothing is hidden behind a runtime graph.                                                                                               |
+| Interfaces can’t be dragged into the Inspector.                                                  | Saneject’s Roslyn generator adds safe interface-backing fields with Inspector support. `[SerializeInterface] IMyInterface myInterface` shows up as a proper serialized field.         |
+| Runtime DI lifecycles can feel opaque or fight Unity’s own Awake/Start order.                    | Everything is set and serialized in the editor. Unity’s normal lifecycle stays untouched.                                                                                             |
+| Large reflection-heavy containers add startup cost.                                              | Saneject resolves once in the editor - zero reflection or allocation at runtime.                                                                                                      |
+| Can’t serialize references between scenes or from a scene into prefabs.                          | `ProxyObject`, a Roslyn generated `ScriptableObject`, can be referenced anywhere like any asset. At runtime, it resolves and forwards to a real scene instance with minimal overhead. |
+| Mixed teams (artists/designers) struggle with code-only installers.                              | Bindings live in Scope scripts as simple, declarative C#. Fields are regular serialized fields marked with `[Inject]`, and field visibility can be toggled from settings.             |
 
 Saneject isn’t meant to replace full runtime frameworks like Zenject or VContainer. It’s an alternative workflow for projects that value determinism, Inspector visibility, and minimal runtime overhead.
 
@@ -83,7 +83,7 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 
 - **Interface serialization with Roslyn:** `[SerializeInterface] IMyInterface` fields show up in the Inspector.
 - **Serialized collections of interfaces:** Interface arrays and lists using `[SerializeInterface] IMyInterface[]` are fully supported, injectable and visible in the Inspector.
-- **Cross-scene / prefab references:** `InterfaceProxyObject` `ScriptableObjects` allow serialized references to objects Unity normally can’t link.
+- **Cross-scene / prefab references:** `ProxyObject` `ScriptableObjects` allow serialized references to objects Unity normally can’t link.
 - **Global Scope container:** Scene dependencies can be promoted to global singletons and resolved statically by proxies.
 
 ### Performance & Runtime
@@ -256,14 +256,14 @@ Saneject flips the model: you still declare bindings in code (via a `Scope`), bu
 
 ### Scopes & Resolution Order
 
-| **Concept**               | **What it Means in Saneject**                                                                                                                                                                                                                                                                                                         |
-|---------------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Scope component**       | A `MonoBehaviour` that declares bindings for how to resolve dependencies in `Components` **below** its `Transform`.                                                                                                                                                                                                                   |
-| **Root-scope scan**       | No matter which `Scope` you start the injection on, Saneject walks up to the top-most Scope first, then injects downward once.                                                                                                                                                                                                        |
-| **Resolution fallback**   | When a binding isn’t found in the current `Scope`, the injector climbs upward through parent `Scopes` until it finds one (or fails).                                                                                                                                                                                                  |
-| **Scene Scope**           | Lives on a (non-prefab) scene `GameObject`. Can bind to any `Component` or `Object` in the scene or project folder, including prefabs.                                                                                                                                                                                                |
-| **Prefab Scope**          | Lives on a prefab. Can bind to any `Component` or `Object` in the prefab itself or project folder. Prefab Scopes present in the scene are skipped during scene injection, to keep the prefab self-contained.<br><br>Need a scene reference inside a prefab? Use an `InterfaceProxyObject` `ScriptableObject` and inject that instead. |
-| **Scene vs Prefab Scope** | Same `Component` but the DI system treats them as different contexts.                                                                                                                                                                                                                                                                 |
+| **Concept**               | **What it Means in Saneject**                                                                                                                                                                                                                                                                                                |
+|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| **Scope component**       | A `MonoBehaviour` that declares bindings for how to resolve dependencies in `Components` **below** its `Transform`.                                                                                                                                                                                                          |
+| **Root-scope scan**       | No matter which `Scope` you start the injection on, Saneject walks up to the top-most Scope first, then injects downward once.                                                                                                                                                                                               |
+| **Resolution fallback**   | When a binding isn’t found in the current `Scope`, the injector climbs upward through parent `Scopes` until it finds one (or fails).                                                                                                                                                                                         |
+| **Scene Scope**           | Lives on a (non-prefab) scene `GameObject`. Can bind to any `Component` or `Object` in the scene or project folder, including prefabs.                                                                                                                                                                                       |
+| **Prefab Scope**          | Lives on a prefab. Can bind to any `Component` or `Object` in the prefab itself or project folder. Prefab Scopes present in the scene are skipped during scene injection, to keep the prefab self-contained.<br><br>Need a scene reference inside a prefab? Use an `ProxyObject` `ScriptableObject` and inject that instead. |
+| **Scene vs Prefab Scope** | Same `Component` but the DI system treats them as different contexts.                                                                                                                                                                                                                                                        |
 
 An example of how scoped resolution works (code below):
 
@@ -291,7 +291,7 @@ flowchart TD
 
 `AIController` is resolved directly from `EnemyScope`, so no fallback is needed.
 
-Any scopes that live on prefabs (like `UIScope` above) are skipped during a scene-wide injection pass - they get their own dependencies when the prefab is injected in isolation, or you can inject scene objects into a prefab via an `InterfaceProxyObject`.
+Any scopes that live on prefabs (like `UIScope` above) are skipped during a scene-wide injection pass - they get their own dependencies when the prefab is injected in isolation, or you can inject scene objects into a prefab via an `ProxyObject`.
 
 ```csharp
 public class RootScope : Scope
@@ -372,9 +372,9 @@ Single-generic asset bindings are concrete-only. Use the two-generic form to bin
 
 Bind cross-scene singletons from scene instances. Methods return a `ComponentBindingBuilder<TComponent>` to define a locate strategy.
 
-| Method                     | Description                                                                                                                                                     |
-|----------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `BindGlobal<TComponent>()` | Promote a scene `Component` into `SceneGlobalContainer`.<br/>Registered in the global scope at startup for global resolution (e.g., via `InterfaceProxyObject`. |
+| Method                     | Description                                                                                                                                            |
+|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `BindGlobal<TComponent>()` | Promote a scene `Component` into `SceneGlobalContainer`.<br/>Registered in the global scope at startup for global resolution (e.g., via `ProxyObject`. |
 
 #### Component Locators
 
@@ -437,15 +437,16 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 | `FromDescendantsOf(Transform target, bool includeSelf = true)` | Any descendant of the target.              |
 | `FromSiblingsOf(Transform target)`                             | Any sibling of the target.                 |
 
-Other Component Locators:
+Other Component Locators & Special Methods:
 
-| Method                                             | Description                                                               |
-|----------------------------------------------------|---------------------------------------------------------------------------|
-| `FromAnywhereInScene()`                            | Finds the first matching component anywhere in the loaded scene.          |
-| `FromInstance(TComponent instance)`                | Binds to an explicit instance.                                            |
-| `FromMethod(Func<TComponent> method)`              | Uses a custom predicate to supply a single instance.                      |
-| `FromMethod(Func<IEnumerable<TComponent>> method)` | Uses a custom factory method to supply a collection of instances.         |
-| `WithId(string id)`                                | Assign a custom binding ID to match `[Inject(Id = "YourIdHere")]` fields. |
+| Method                                             | Description                                                                                                                                                                                              |
+|----------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `FromAnywhereInScene()`                            | Finds the first matching component anywhere in the loaded scene.                                                                                                                                         |
+| `FromInstance(TComponent instance)`                | Binds to an explicit instance.                                                                                                                                                                           |
+| `FromMethod(Func<TComponent> method)`              | Uses a custom predicate to supply a single instance.                                                                                                                                                     |
+| `FromMethod(Func<IEnumerable<TComponent>> method)` | Uses a custom factory method to supply a collection of instances.                                                                                                                                        |
+| `FromProxy()`                                      | Automatically creates or locates a proxy object for `TConcrete`, a weak reference that resolves to a concrete `Component` at runtime, enabling cross-boundary references (e.g. between scenes, prefabs). |
+| `WithId(string id)`                                | Assign a custom binding ID to match `[Inject(Id = "YourIdHere")]` fields.                                                                                                                                |
 
 #### Asset Locators
 
@@ -599,6 +600,130 @@ The generated backing fields make the interface fields show up in the Inspector 
 
 ![Interface field visible in the Inspector](Docs/SerializeInterfaceInspectorExample.webp)
 
+### Proxy Object
+
+`ProxyObject<T>` is a special Roslyn-generated `ScriptableObject` that:
+
+- Implements every interface on `T` at compile-time.
+- Generates forwarding code for all method calls, property gets/sets, and event subscriptions at compile-time.
+- The actual `T` instance is resolved at runtime – cheaply if using `BindGlobal<TComponent>` to register it to the `GlobalScope`.
+
+Why? Unity can’t serialize direct references to scene objects across scenes or into prefabs. The proxy asset is serializable, so you assign it in the Inspector or inject it. At runtime, it finds and links to the actual instance the first time it’s used. This makes it ideal for cross-context injections.
+
+Think of it as a serializable weak reference that resolves quickly at runtime. Whenever you need to inject a `Component` from outside the current serialization context, just bind like this:
+
+`BindComponent<IInterface, Concrete>().FromProxy()`
+
+At injection time, this will:
+
+- Generate a proxy script implementing all interfaces of `Concrete` (if one doesn’t already exist).
+- Cause a Unity domain reload if a new script is created (stopping the current injection pass).
+- On the next injection, create a `ScriptableObject` proxy asset at `Assets/Generated` (if one doesn’t already exist).
+- Reuse the first found proxy asset if it already exists somewhere in the project.
+
+```mermaid
+flowchart TD
+Proxy["GameManagerProxy : IGameManager (ScriptableObject)"]
+PauseMenuUI["PauseMenuUI (Prefab)"]
+
+subgraph "Scene A"
+GameManager["GameManager : IGameManager (Scene instance)"]
+end
+
+subgraph "Scene B"
+EnemySpawner["EnemySpawner (Scene instance)"]
+end
+
+EnemySpawner -->|References IGameManager| Proxy
+PauseMenuUI  -->|References IGameManager| Proxy
+Proxy -->|Forwards calls| GameManager
+```
+
+> ⚠️ Mermaid diagrams don’t render in the GitHub mobile app. Use a browser to see them properly.
+
+#### Manually creating a proxy
+
+`FromProxy()` always reuses a single proxy asset per type project-wide. For advanced cases (like different resolution strategies per object), you can add more manually:
+
+Right-click any `MonoScript` that implements one or more interfaces and select Select **Generate Proxy Object**.
+
+This creates:
+
+- A proxy script for the class.
+- A proxy `ScriptableObject` asset in `Assets/Generated` (path is configurable in settings).
+
+Or write the stub manually and create the proxy `ScriptableObject` with **right-click project folders → Create → Saneject → Proxy**.
+
+Example interface:
+
+```csharp
+public interface IGameManager
+{
+    bool IsGameOver { get; }
+    void RestartGame();
+}
+```
+
+Concrete class:
+
+```csharp
+public class GameManager : MonoBehaviour, IGameManager
+{
+    public bool IsGameOver { get; private set; }
+    public void RestartGame() { }
+}
+```
+
+Generated stub (once per class):
+
+```csharp
+[GenerateProxyObject]
+public partial class GameManagerProxy : ProxyObject<GameManager> { }
+```
+
+Roslyn-generated proxy forwarding:
+
+```csharp
+public partial class GameManagerProxy : IGameManager
+{
+    public bool IsGameOver
+    {
+        get
+        {
+            if (!instance) instance = ResolveInstance();
+            return instance.IsGameOver;
+        }
+    }
+
+    public void RestartGame()
+    {
+        if (!instance) instance = ResolveInstance();
+        instance.RestartGame();
+    }
+}
+```
+
+Now you can drag the `GameManagerProxy` asset into any `[SerializeInterface] IGameManager` field, whether it’s in a scene, a prefab, or resolved through injection.
+
+#### Resolve strategies
+
+| Resolve method                    | What it does                                                                                                               |
+|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------|
+| `FromGlobalScope`                 | Pulls the instance from `GlobalScope`. Register it via `BindGlobal` in a `Scope`. No reflection, just a dictionary lookup. |
+| `FindInLoadedScenes`              | Uses `FindFirstObjectByType<T>(FindObjectsInactive.Include)` across all loaded scenes.                                     |
+| `FromComponentOnPrefab`           | Instantiates the given prefab and returns the component.                                                                   |
+| `FromNewComponentOnNewGameObject` | Creates a new `GameObject` and adds the component.                                                                         |
+| `ManualRegistration`              | You call `proxy.RegisterInstance(instance)` at runtime before the proxy is used.                                           |
+
+#### Performance note
+
+The proxy resolves on first access and caches the instance. If the instance becomes null on scene load or otherwise, the proxy will try resolving it again on next access.
+
+Each forwarded call includes a null-check, making it roughly 8x slower than a direct call - but we’re talking nanoseconds per call.
+
+In testing, one million proxy calls in one frame to a trivial method cost ~5 ms on a desktop PC.  
+If you’re in a **very** tight loop, extract the real instance via `proxy.GetInstanceAs<TConcrete>()` and call it directly.
+
 ### MonoBehaviour Fallback Inspector
 
 Unity’s default inspector draws fields in declaration order, but Roslyn-generated interface backing fields live in a partial class, which normally causes them to appear at the bottom of the Inspector. This breaks expected grouping and makes injected interfaces harder to interpret.
@@ -663,113 +788,9 @@ Or call specific parts of it:
 
 These utilities are useful for building custom inspectors, advanced tooling, or partial field drawing while preserving Saneject’s behavior and layout.
 
-### Interface Proxy Object
-
-`InterfaceProxyObject<T>` is a Roslyn-generated `ScriptableObject` that:
-
-- Implements every interface on `T` at compile-time.
-- Forwards calls, property gets/sets, and event subscriptions to a concrete `T` instance resolved at runtime.
-
-Why? Unity can’t serialize a scene object reference between scenes (or from a scene into a prefab). The proxy asset is serializable, so you assign it in the Editor and at runtime it locates the real instance the first time it’s used.
-
-```mermaid
-flowchart TD
-  Proxy["GameManagerProxy : IGameManager (ScriptableObject)"]
-  PauseMenuUI["PauseMenuUI (Prefab)"]
-
-  subgraph "Scene A"
-    GameManager["GameManager : IGameManager (Scene instance)"]
-  end
-
-  subgraph "Scene B"
-    EnemySpawner["EnemySpawner (Scene instance)"]
-  end
-
-
-  EnemySpawner -->|References IGameManager| Proxy
-  PauseMenuUI  -->|References IGameManager| Proxy
-  Proxy -->|Forwards calls| GameManager
-```
-
-> ⚠️ Last time I checked, Mermaid diagrams don’t render in the GitHub mobile app. Use a browser to view them properly.
-
-#### Creating a proxy
-
-1. Right-click any `MonoScript` that implements one or more interfaces (or code the stub manually as shown below).
-2. Choose **Generate Interface Proxy**.
-3. Click **Yes** on both dialogs (creates the partial class and an asset instance).
-
-Example:
-
-```csharp
-public interface IGameManager 
-{
-    bool IsGameOver { get; }
-    void RestartGame();
-}
-```
-
-```csharp
-public class GameManager : MonoBehaviour, IGameManager
-{
-    public bool IsGameOver { get; private set; }
-    public void RestartGame() { }
-}
-```
-
-Generated stub (generated once by editor script):
-
-```csharp
-[GenerateInterfaceProxy]
-public partial class GameManagerProxy : InterfaceProxyObject<GameManager> { }
-```
-
-Roslyn-generated proxy forwarding:
-
-```csharp
-public partial class GameManagerProxy : IGameManager
-{
-    public bool IsGameOver
-    {
-        get
-        {
-            if (!instance) instance = ResolveInstance();
-            return instance.IsGameOver;
-        }
-    }
-    
-    public void RestartGame()
-    {
-        if (!instance) instance = ResolveInstance();
-        instance.RestartGame();
-    }
-}
-```
-
-Now drag the `GameManagerProxy` asset into any `[SerializeInterface] IGameManager` field, in any scene or prefab or inject it.
-
-#### Resolve strategies
-
-| Resolve method                    | What it does                                                                                                               |
-|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| `FromGlobalScope`                 | Pulls the instance from `GlobalScope`. Register it via `BindGlobal` in a `Scope`. No reflection, just a dictionary lookup. |
-| `FindInLoadedScenes`              | Uses `FindFirstObjectByType<T>(FindObjectsInactive.Include)` across all loaded scenes.                                     |
-| `FromComponentOnPrefab`           | Instantiates the given prefab and returns the component.                                                                   |
-| `FromNewComponentOnNewGameObject` | Creates a new `GameObject` and adds the component.                                                                         |
-| `ManualRegistration`              | You call `proxy.RegisterInstance(instance)` at runtime before the proxy is used.                                           |
-
-#### Performance note
-
-The proxy resolves on first access and caches the instance. If the instance becomes null on scene load or otherwise, the proxy will try resolving it again on next access.
-
-Each forwarded call includes a null-check, making it roughly 8x slower than a direct call - but we’re talking nanoseconds per call.
-
-In testing, one million proxy calls in one frame to a trivial method cost ~5 ms on a desktop PC.  
-If you’re in a **very** tight loop, extract the real instance via `proxy.GetInstanceAs<TConcrete>()` and call it directly.
-
 ### Global Scope
 
-The `GlobalScope` is a static service locator that `InterfaceProxyObject` can fetch from at near-zero cost (dictionary lookup).
+The `GlobalScope` is a static service locator that `ProxyObject` can fetch from at near-zero cost (dictionary lookup).
 Use it to register scene objects or assets as cross-scene singletons. The `GlobalScope` can only hold one instance per unique type.
 
 Bindings are added via `BindGlobal<TComponent>()` inside a `Scope`. This stores the binding into a `SceneGlobalContainer` component.
@@ -796,7 +817,7 @@ Register global singletons in the `Scope` using the following methods.
 | `GlobalScope.IsRegistered<T>()` | Returns `true` if an instance of type `T` is in the global scope. |
 | `GlobalScope.Clear()`           | Clears all global registrations (Play Mode only).                 |
 
-If you're using `InterfaceProxyObject`, global registration is one of the ways to resolve its target instance.
+If you're using `ProxyObject`, global registration is one of the ways to resolve its target instance.
 
 💡 You can toggle logging for global registration under **Saneject → User Settings → Logging**.
 
@@ -813,7 +834,7 @@ Saneject ships with three Roslyn tool DLLs (in `Saneject/RoslynLibs`):
 | DLL                                 | Type               | Purpose                                                                                                                                                             |
 |-------------------------------------|--------------------|---------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **SerializeInterfaceGenerator.dll** | Source Generator   | Generates hidden backing fields and serialization hooks for `[SerializeInterface]` members.                                                                         |
-| **InterfaceProxyGenerator.dll**     | Source Generator   | Emits proxy classes that forward interface calls to backing fields (via `InterfaceProxyObject<T>`).                                                                 |
+| **ProxyObjectGenerator.dll**        | Source Generator   | Emits proxy classes that forward interface calls to backing fields (via `ProxyObject<T>`).                                                                          |
 | **AttributesAnalyzer.dll**          | Analyzer + CodeFix | Validates field decoration rules for `[Inject]`, `[SerializeField]`, and `[SerializeInterface]`. Includes context-aware quick fixes in supported IDEs (like Rider). |
 
 Unity’s official Roslyn analyzer documentation (including setup instructions):  
@@ -832,7 +853,7 @@ A few helpful touches built into the inspector experience:
 - The `Scope` type (Scene, Prefab) is shown in its inspector for clarity.
 - Interface proxies list which interfaces they implement.
 - Help boxes on all Saneject components explain what they do.
-- Right-click any `MonoScript` to generate an `InterfaceProxyObject`.
+- Right-click any `MonoScript` to generate an `ProxyObject`.
 - `Scope` uses `HideFlags.DontSaveInBuild` so it won’t end up in builds by mistake.
 - Internal `Scope` methods are hidden from IntelliSense using `[EditorBrowsable(EditorBrowsableState.Never)]`.
 - Provides a `[ReadOnly]` attribute (unrelated to DI) you can use to gray out non-DI fields in the Inspector.
@@ -841,17 +862,19 @@ A few helpful touches built into the inspector experience:
 
 Found under **Saneject → User Settings**, these let you customize editor and logging behavior in the Unity Editor.
 
-| Setting                                     | Description                                                                                               |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------|
-| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting dependencies into the scene.                                  |
-| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting prefab dependencies.                                          |
-| `Show Injected Fields`                      | Show `[Inject]` fields in the Inspector.                                                                  |
-| `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                  |
-| `Log On Proxy Instance Resolve`             | Log when a proxy resolves its target during Play Mode.                                                    |
-| `Log Global Scope Register/Unregister`      | Log when objects are registered or unregistered in the global scope during Play Mode.                     |
-| `Log Injection Stats`                       | Log a summary after injection: scopes processed, fields injected, globals added, unused/missing bindings. |
-| `Log Prefab Skipped During Scene Injection` | Log when a prefab is skipped during a scene injection pass.                                               |
-| `Log Unused Bindings`                       | Log when bindings are declared but never used in the current scene or prefab.                             |
+| Setting                                     | Description                                                                                                                      |
+|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
+| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting dependencies into the scene.                                                         |
+| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting prefab dependencies.                                                                 |
+| `Show Injected Fields`                      | Show `[Inject]` fields in the Inspector.                                                                                         |
+| `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                                         |
+| `Log On Proxy Instance Resolve`             | Log when a proxy resolves its target during Play Mode.                                                                           |
+| `Log Global Scope Register/Unregister`      | Log when objects are registered or unregistered in the global scope during Play Mode.                                            |
+| `Log Injection Stats`                       | Log a summary after injection: scopes processed, fields injected, globals added, unused/missing bindings.                        |
+| `Log Prefab Skipped During Scene Injection` | Log when a prefab is skipped during a scene injection pass.                                                                      |
+| `Log Unused Bindings`                       | Log when bindings are declared but never used in the current scene or prefab.                                                    |
+| `Clear Logs On Injection`                   | Clear console logs before injection starts. Useful for seeing missing/invalid bindings etc. for the current injection pass only. |
+| `Generated Proxy Asset Folder`              | Folder to save proxy assets auto-generated by the system.                                                                        |
 
 ## Tested Unity Versions
 
@@ -872,8 +895,6 @@ Unity 2023 releases are skipped since they are all tech stream or beta.
 ## Limitations & Known Issues
 
 - Platform coverage: so far tested on Windows (Mono + IL2CPP) and Android IL2CPP builds only.
-- Proxy-creation menu can be flaky. It relies on `SessionState` keys to survive a domain reload, and occasionally Unity clears them before the follow-up dialog appears. If that happens, the `.cs` proxy file is generated but no `.asset` is created, just run **Generate Interface Proxy** again on the script to finish the flow.
-- Unity's object picker cannot filter by interface types in the Inspector.
 
 ## Credits
 

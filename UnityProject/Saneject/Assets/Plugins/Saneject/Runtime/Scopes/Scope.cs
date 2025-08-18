@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
 using UnityEngine;
 using Component = UnityEngine.Component;
@@ -32,20 +33,12 @@ namespace Plugins.Saneject.Runtime.Scopes
         public Scope ParentScope { get; set; }
 
         /// <summary>
-        /// Resolves all dependencies matching target type from scope.
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public IEnumerable<Object> GetAllMatchingDependencies(
-            Type interfaceType,
-            Type concreteType,
-            string injectId,
-            bool isCollection,
-            Object injectionTarget)
+        public IEnumerable<Binding> GetProxyBindings()
         {
-            Binding binding = GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
-            IEnumerable<Object> resolved = binding?.LocateDependencies(injectionTarget);
-            return resolved;
+            return validBindings.Where(binding => binding.IsProxyBinding);
         }
 
         /// <summary>
@@ -85,18 +78,19 @@ namespace Plugins.Saneject.Runtime.Scopes
         {
             foreach (Binding binding in unvalidatedBindings)
             {
-                if (!binding.IsValid())
+                if (!BindingValidator.IsBindingValid(binding))
                     continue;
 
                 if (!validBindings.Add(binding))
-                    Debug.LogError($"Saneject: Scope '{GetType().Name}' has duplicate bindings for '{binding.GetName()}'.");
+                    Debug.LogError($"Saneject: Duplicate binding {binding.GetBindingIdentity()}.", this);
             }
         }
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
-        private Binding GetBindingRecursiveUpwards(
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public Binding GetBindingRecursiveUpwards(
             Type interfaceType,
             Type concreteType,
             string injectId,
@@ -348,7 +342,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// <summary>
         /// Registers a global binding for the scene component <typeparamref name="T" />.
         /// Promotes the component into the global scope via <c>SceneGlobalContainer</c>.
-        /// Enables cross-scene access through global resolution (e.g., via <c>InterfaceProxyObject</c>).
+        /// Enables cross-scene access through global resolution (e.g., via <c>ProxyObject</c>).
         /// </summary>
         /// <typeparam name="T">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>

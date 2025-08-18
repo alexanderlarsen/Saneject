@@ -68,6 +68,41 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
+        public static bool ClearLogsOnInjection
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
+        // Proxy Generation
+        public static string ProxyAssetGenerationFolder
+        {
+            get => GetString(defaultValue: "Assets/Generated");
+            set => SetString(value);
+        }
+
+        private static string GetString(
+            string defaultValue,
+            [CallerMemberName] string propertyName = null)
+        {
+#if UNITY_EDITOR
+            string key = $"UserSettings_{propertyName}";
+            return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetString(key);
+#else
+            return string.Empty;
+#endif
+        }
+
+        private static void SetString(
+            string value,
+            [CallerMemberName] string propertyName = null)
+        {
+#if UNITY_EDITOR
+            string key = $"UserSettings_{propertyName}";
+            EditorPrefs.SetString(key, value);
+#endif
+        }
+
         private static bool GetBool(
             bool defaultValue,
             [CallerMemberName] string propertyName = null)

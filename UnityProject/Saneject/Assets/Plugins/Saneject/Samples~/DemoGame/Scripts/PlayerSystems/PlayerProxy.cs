@@ -1,5 +1,5 @@
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
 
@@ -10,8 +10,8 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems
     /// Enables cross-scene or cross-prefab serialization of <see cref="ICameraFollowTarget" /> and <see cref="IEnemyEvadeTarget" /> references.
     /// The Roslyn generator generates a <c>partial class</c> implementing the interfaces and forwards all calls/events to the resolved <see cref="Player" /> instance at runtime.
     /// </summary>
-    [GenerateInterfaceProxy]
-    public partial class PlayerProxy : InterfaceProxyObject<Player>
+    [GenerateProxyObject]
+    public partial class PlayerProxy : ProxyObject<Player>
     {
     }
 

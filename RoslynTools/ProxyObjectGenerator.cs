@@ -8,7 +8,7 @@ using Microsoft.CodeAnalysis.Text;
 namespace Saneject.Roslyn.Generators;
 
 [Generator]
-public class InterfaceProxyGenerator : ISourceGenerator
+public class ProxyObjectGenerator : ISourceGenerator
 {
     public void Initialize(GeneratorInitializationContext context)
     {
@@ -21,8 +21,8 @@ public class InterfaceProxyGenerator : ISourceGenerator
             return;
 
         Compilation compilation = context.Compilation;
-        INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName("Plugins.Saneject.Runtime.Attributes.GenerateInterfaceProxyAttribute");
-        INamedTypeSymbol proxyBaseSymbol = compilation.GetTypeByMetadataName("Plugins.Saneject.Runtime.InterfaceProxy.InterfaceProxyObject`1");
+        INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName("Plugins.Saneject.Runtime.Attributes.GenerateProxyObjectAttribute");
+        INamedTypeSymbol proxyBaseSymbol = compilation.GetTypeByMetadataName("Plugins.Saneject.Runtime.Proxy.ProxyObject`1");
 
         if (attrSymbol is null || proxyBaseSymbol is null)
             return;
@@ -75,7 +75,7 @@ public class InterfaceProxyGenerator : ISourceGenerator
                 sb.AppendLine("{");
             }
 
-            sb.AppendLine($"    [CreateAssetMenu(fileName = \"{classSymbol.Name}\", menuName = \"Saneject/Proxy/{classSymbol.Name}\")]");
+            sb.AppendLine($"    [CreateAssetMenu(fileName = \"{classSymbol.Name}\", menuName = \"Saneject/ProxyObject/{classSymbol.Name}\")]");
             sb.AppendLine($"    public partial class {classSymbol.Name} : {string.Join(", ", interfaces.Select(i => i.ToDisplayString()))}");
             sb.AppendLine("    {");
 
@@ -198,7 +198,7 @@ public class InterfaceProxyGenerator : ISourceGenerator
         {
             if (node is ClassDeclarationSyntax cds &&
                 cds.AttributeLists.Any(al =>
-                    al.Attributes.Any(a => a.Name.ToString().Contains("GenerateInterfaceProxy"))))
+                    al.Attributes.Any(a => a.Name.ToString().Contains("GenerateProxyObject"))))
                 Candidates.Add(cds);
         }
     }

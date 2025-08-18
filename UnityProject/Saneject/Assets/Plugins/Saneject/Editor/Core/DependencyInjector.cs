@@ -4,12 +4,14 @@ using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
 using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Editor.Util;
 using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
+using Saneject.Plugins.Saneject.Editor.Utility;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -34,12 +36,19 @@ namespace Plugins.Saneject.Editor.Core
         {
             if (Application.isPlaying)
             {
-                EditorUtility.DisplayDialog("Inject Scene Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
 
-            if (!Application.isBatchMode && UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
-                return;
+            // Application.isBatchMode is true when run from CI tests.
+            if (!Application.isBatchMode)
+            {
+                if (UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
+                    return;
+
+                if (UserSettings.ClearLogsOnInjection)
+                    ConsoleUtils.ClearLog();
+            }
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             Scope[] allScopes = Object.FindObjectsByType<Scope>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(scope => !scope.gameObject.IsPrefab()).ToArray();
@@ -53,10 +62,13 @@ namespace Plugins.Saneject.Editor.Core
 
             try
             {
-                EditorUtility.DisplayProgressBar("Injection in progress", "Injecting all objects in scene", 0);
+                EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in scene", 0);
 
                 ScopeExtensions.Initialize(allScopes);
                 Scope[] rootScopes = allScopes.Where(scope => !scope.ParentScope).ToArray();
+
+                IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
+                proxyBindings.CreateMissingProxyStubs();
 
                 InjectionStats stats = new();
 
@@ -97,13 +109,21 @@ namespace Plugins.Saneject.Editor.Core
 
             if (Application.isPlaying)
             {
-                EditorUtility.DisplayDialog("Inject Prefab Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
 
-            if (!Application.isBatchMode && UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
-                return;
+            // Application.isBatchMode is true when run from CI tests.
+            if (!Application.isBatchMode)
+            {
+                if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
+                    return;
 
+                if (UserSettings.ClearLogsOnInjection)
+                    ConsoleUtils.ClearLog();
+            }
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
             Scope rootScope = startScope.FindRootScope();
             Scope[] allScopes = rootScope.GetComponentsInChildren<Scope>();
 
@@ -115,6 +135,9 @@ namespace Plugins.Saneject.Editor.Core
 
             ScopeExtensions.Initialize(allScopes);
 
+            IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
+            proxyBindings.CreateMissingProxyStubs();
+
             InjectionStats stats = new();
 
             foreach (Scope scope in allScopes)
@@ -123,13 +146,12 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (globalBindings.Count > 0)
                     foreach (Binding binding in globalBindings)
-                        Debug.LogWarning($"Saneject: Invalid global binding ({binding.GetName()}) in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
+                        Debug.LogWarning($"Saneject: Invalid global binding {binding.GetBindingIdentity()} in prefab scope '{scope.GetType().Name}'. Global bindings on prefab scopes are ignored because the system can only inject global bindings from scenes.", scope);
 
                 stats.unusedBindings += globalBindings.Count;
             }
 
-            EditorUtility.DisplayProgressBar("Injection in progress", "Injecting prefab dependencies", 0);
-            Stopwatch stopwatch = Stopwatch.StartNew();
+            EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting prefab dependencies", 0);
 
             try
             {
@@ -150,6 +172,23 @@ namespace Plugins.Saneject.Editor.Core
             EditorUtility.ClearProgressBar();
         }
 
+        private static void CreateMissingProxyStubs(this IEnumerable<Binding> proxyBindings)
+        {
+            List<Type> typesToCreate = proxyBindings.Select(binding => binding.ConcreteType).Where(type => !ProxyUtils.DoesProxyScriptExist(type)).ToList();
+
+            if (typesToCreate.Count == 0)
+                return;
+
+            string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
+
+            EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{typesToCreate.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
+
+            typesToCreate.ForEach(ProxyUtils.GenerateProxyScript);
+            SessionState.SetInt("Saneject.ProxyStubCount", typesToCreate.Count);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
         /// <summary>
         /// Logs warnings about any bindings that were configured but not actually used during injection.
         /// </summary>
@@ -163,7 +202,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (UserSettings.LogUnusedBindings && unusedBindings.Count > 0)
                     foreach (Binding binding in unusedBindings)
-                        Debug.LogWarning($"Saneject: Unused binding ({binding.GetName()}) in scope '{scope.name}'. If you don't plan to use this binding, you can safely remove it.", scope);
+                        Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingIdentity()}. If you don't plan to use this binding, you can safely remove it.", scope);
 
                 stats.unusedBindings += unusedBindings.Count;
             }
@@ -192,7 +231,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (scope.gameObject.IsPrefab())
                 {
-                    Debug.LogWarning($"Saneject: Global bindings found on prefab scope '{scope.gameObject.name}'. These are ignored because the system can only inject global bindings from scenes.", scope);
+                    Debug.LogWarning($"Saneject: Global bindings found on prefab scope '{scope.GetType().Name}'. These are ignored because the system can only inject global bindings from scenes.", scope);
                     continue;
                 }
 
@@ -284,39 +323,55 @@ namespace Plugins.Saneject.Editor.Core
             SerializedProperty serializedProperty = serializedObject.GetIterator();
 
             while (serializedProperty.NextVisible(enterChildren: true))
-                if (serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
+            {
+                if (!serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
+                    continue;
+
+                bool isCollection = serializedProperty.isArray;
+                Object injectionTarget = serializedObject.targetObject;
+                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
+
+                if (binding == null)
                 {
-                    bool isCollection = serializedProperty.isArray;
-                    Object injectionTarget = serializedObject.targetObject;
+                    Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}", scope);
 
-                    Object[] dependencies = scope.GetAllMatchingDependencies(
-                            interfaceType,
-                            concreteType,
-                            injectId,
-                            isCollection,
-                            injectionTarget)
-                        ?.ToArray();
+                    continue;
+                }
 
-                    bool foundDependencies = dependencies is { Length: > 0 };
+                binding.MarkUsed();
 
-                    if (foundDependencies)
+                if (binding.IsProxyBinding)
+                {
+                    Type proxyType = ProxyUtils.GetProxyTypeFromConcreteType(binding.ConcreteType);
+
+                    if (proxyType != null)
                     {
-                        if (isCollection)
-                            serializedProperty.SetCollection(dependencies);
-                        else
-                            serializedProperty.objectReferenceValue = dependencies.FirstOrDefault();
-
+                        serializedProperty.objectReferenceValue = ProxyUtils.GetFirstOrCreateProxyAsset(proxyType, out bool _);
                         stats.injectedFields++;
                     }
                     else
                     {
-                        serializedProperty.NullifyOrClearArray();
-
-                        Debug.LogError($"Saneject: Missing {(isCollection ? "collection" : "single type")} binding ({Binding.ConstructBindingName(interfaceType, concreteType, injectId)}) in scope '{scope.GetType().Name}'", scope);
-
-                        stats.missingBindings++;
+                        Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
                     }
+
+                    continue;
                 }
+
+                Object[] dependencies = binding.LocateDependencies(injectionTarget).ToArray();
+
+                if (dependencies.Length > 0)
+                {
+                    if (isCollection)
+                        serializedProperty.SetCollection(dependencies);
+                    else
+                        serializedProperty.objectReferenceValue = dependencies.FirstOrDefault();
+
+                    stats.injectedFields++;
+                    continue;
+                }
+
+                Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+            }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }

@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Reflection;
-using Plugins.Saneject.Runtime.InterfaceProxy;
+using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -9,11 +9,11 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Editor.Inspectors
 {
     /// <summary>
-    /// Custom inspector for <see cref="InterfaceProxyObjectBase" />.
+    /// Custom inspector for <see cref="ProxyObjectBase" />.
     /// Displays configuration and runtime info for interface proxy ScriptableObjects.
     /// </summary>
-    [CustomEditor(typeof(InterfaceProxyObjectBase), true)]
-    public class InterfaceProxyObjectEditor : UnityEditor.Editor
+    [CustomEditor(typeof(ProxyObjectBase), true)]
+    public class ProxyObjectEditor : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Editor.Inspectors
                 EditorGUILayout.HelpBox(
                     "• Allows serialization of interface-based references across scenes and prefabs.\n" +
                     "• Resolves or instantiates the actual object using the selected method at runtime.\n" +
-                    "• A source generator (InterfaceProxyGenerator.dll) implements all interfaces and forwards calls to the real instance.\n" +
+                    "• A source generator (ProxyObjectGenerator.dll) implements all interfaces and forwards calls to the real instance.\n" +
                     "• Use the proxy like the real object - just through its interfaces.\n" +
                     "• To make the proxy as inexpensive as possible, it only tries to resolve the instance once at runtime, the first time you access it.",
                     MessageType.None, true);

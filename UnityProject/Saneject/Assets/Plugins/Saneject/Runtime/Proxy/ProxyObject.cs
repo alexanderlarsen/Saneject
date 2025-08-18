@@ -3,15 +3,15 @@ using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEngine;
 
-namespace Plugins.Saneject.Runtime.InterfaceProxy
+namespace Plugins.Saneject.Runtime.Proxy
 {
     /// <summary>
     /// Enables serialization of interface references to Unity objects between scenes and prefabs.
-    /// Use this as a base for proxies generated via Roslyn (see InterfaceProxyGenerator.dll), which implement all interfaces on the concrete type at compile time and forwards methods, properties and events to a concrete instance located at runtime.
+    /// Use this as a base for proxies generated via Roslyn (see ProxyObjectGenerator.dll), which implement all interfaces on the concrete type at compile time and forwards methods, properties and events to a concrete instance located at runtime.
     /// Assign the proxy asset to a serialized interface field (e.g., <c>[SerializeInterface] IMyInterface myInterface</c>) at editor-time, and at runtime, the proxy resolves to the real instance using your chosen strategy.
     /// For details and usage examples, see the README.
     /// </summary>
-    public abstract class InterfaceProxyObject<TConcrete> : InterfaceProxyObjectBase
+    public abstract class ProxyObject<TConcrete> : ProxyObjectBase
         where TConcrete : Component
     {
         [NonSerialized]
@@ -23,7 +23,7 @@ namespace Plugins.Saneject.Runtime.InterfaceProxy
              "FindInLoadedScenes: Finds the first matching component in any loaded scene using FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include).\n\n" +
              "FromComponentOnPrefab: Instantiates a prefab and finds the target component.\n\n" +
              "FromNewComponentOnNewGameObject: Creates a new GameObject and adds the component.\n\n" +
-             "ManualRegistration: You must call InterfaceProxyObject.RegisterInstance() at runtime.")]
+             "ManualRegistration: You must call ProxyObject.RegisterInstance() at runtime.")]
         private ResolveMethod resolveMethod;
 
         [SerializeField, Tooltip("The prefab from which to get the concrete instance.")]
@@ -42,7 +42,7 @@ namespace Plugins.Saneject.Runtime.InterfaceProxy
         }
 
         /// <summary>
-        /// Manually register an instance for this proxy. Only required for <see cref="ResolveMethod.ManualRegistration"/> resolve method.
+        /// Manually register an instance for this proxy. Only required for <see cref="ResolveMethod.ManualRegistration" /> resolve method.
         /// </summary>
         public void RegisterInstance(TConcrete instance)
         {
@@ -58,7 +58,7 @@ namespace Plugins.Saneject.Runtime.InterfaceProxy
         }
 
         /// <summary>
-        /// Returns the resolved concrete instance as <typeparamref name="T"/>, or null if not resolved.
+        /// Returns the resolved concrete instance as <typeparamref name="T" />, or null if not resolved.
         /// Use if you need to access or cache the direct instance for performance-critical scenarios.
         /// </summary>
         /// <returns>The concrete instance cast to T.</returns>

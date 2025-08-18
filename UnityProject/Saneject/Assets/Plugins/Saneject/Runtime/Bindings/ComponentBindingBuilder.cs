@@ -667,6 +667,15 @@ namespace Plugins.Saneject.Runtime.Bindings
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
 
+        /// <summary>
+        /// Creates or locates a <see cref="Plugins.Saneject.Runtime.Proxy.ProxyObject{TConcrete}"/> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component"/> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
+        /// </summary>
+        public void FromProxy()
+        {
+            binding.MarkResolveWithProxy();
+            binding.SetLocator(_ => null);
+        }
+
         #endregion
     }
 }

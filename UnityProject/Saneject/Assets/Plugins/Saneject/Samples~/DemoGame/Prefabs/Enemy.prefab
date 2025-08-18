@@ -142,8 +142,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99be87a0bc894393bbe93525168cd721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  playerProxy: {fileID: 11400000, guid: e54f004f87f4478499ec975bc94c8b6b, type: 2}
-  cameraControllerProxy: {fileID: 11400000, guid: 0c27dd2ff21ff4b44885d928d9c0c952, type: 2}
 --- !u!114 &1028328457214396874
 MonoBehaviour:
   m_ObjectHideFlags: 0

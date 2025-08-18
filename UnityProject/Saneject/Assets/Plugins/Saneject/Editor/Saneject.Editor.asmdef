@@ -1,15 +1,18 @@
-﻿{
-  "name": "Saneject.Editor",
-  "rootNamespace": "Saneject",
-  "references": [
-    "Saneject.Runtime"
-  ],
-  "includePlatforms": [
-    "Editor"
-  ],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "autoReferenced": true,
-  "noEngineReferences": false
+{
+    "name": "Saneject.Editor",
+    "rootNamespace": "",
+    "references": [
+        "Saneject.Runtime"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
 }
