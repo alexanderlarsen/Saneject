@@ -20,7 +20,7 @@ namespace Tests.Editor.ProxyObject
         [SetUp]
         public void Setup()
         {
-            proxyType = typeof(Runtime.Proxy.ProxyObject);
+            proxyType = typeof(TestProxyObject);
         }
 
         [Test]

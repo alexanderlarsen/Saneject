@@ -2,23 +2,32 @@
 using System.IO;
 using System.Linq;
 using System.Reflection;
+using System.Text.RegularExpressions;
+using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Util
 {
+    /// <summary>
+    /// Utilities for generating and resolving proxy scripts and assets for Saneject.
+    /// </summary>
     public static class ProxyUtils
     {
+        /// <summary>
+        /// Generates a proxy MonoBehaviour script for the given type if one does not already exist.
+        /// </summary>
         public static void GenerateProxyScript(Type concreteType)
         {
-            if (concreteType == null)
-                throw new ArgumentNullException(nameof(concreteType));
+            if (concreteType == null) throw new ArgumentNullException(nameof(concreteType));
 
             if (!typeof(MonoBehaviour).IsAssignableFrom(concreteType))
                 throw new ArgumentException($"{concreteType.FullName} is not a MonoBehaviour.", nameof(concreteType));
 
-            // Collect relevant public interfaces
+            if (DoesProxyScriptExist(concreteType))
+                return;
+
             Type[] interfaces = concreteType
                 .GetInterfaces()
                 .Where(i => i.IsPublic && !i.IsGenericType && i != typeof(IDisposable) && i != typeof(ISerializationCallbackReceiver))
@@ -28,10 +37,6 @@ namespace Plugins.Saneject.Editor.Util
             if (interfaces.Length == 0)
                 throw new InvalidOperationException($"{concreteType.Name} does not implement any public interfaces.");
 
-            string ns = concreteType.Namespace ?? "Global";
-            string proxyName = concreteType.Name + "Proxy";
-
-            // Locate the folder of the original script
             string scriptPath = AssetDatabase.FindAssets($"{concreteType.Name} t:MonoScript")
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .FirstOrDefault(p => Path.GetFileNameWithoutExtension(p) == concreteType.Name);
@@ -40,6 +45,8 @@ namespace Plugins.Saneject.Editor.Util
                 throw new FileNotFoundException($"Could not locate script file for type {concreteType.FullName}.");
 
             string folder = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/");
+            string ns = concreteType.Namespace ?? "Global";
+            string proxyName = concreteType.Name + "Proxy";
             string proxyScriptPath = $"{folder}/{proxyName}.cs";
 
             if (File.Exists(proxyScriptPath))
@@ -61,17 +68,19 @@ namespace {ns}
             AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
         }
 
+        /// <summary>
+        /// Returns true if a proxy exists for the given type, either compiled or as source in the same folder.
+        /// </summary>
         public static bool DoesProxyScriptExist(Type concreteType)
         {
-            if (concreteType == null)
-                throw new ArgumentNullException(nameof(concreteType));
+            if (concreteType == null) throw new ArgumentNullException(nameof(concreteType));
 
             if (!typeof(MonoBehaviour).IsAssignableFrom(concreteType))
                 throw new ArgumentException($"{concreteType.FullName} is not a MonoBehaviour.", nameof(concreteType));
 
-            string proxyName = concreteType.Name + "Proxy";
+            if (HasCompiledProxyTypeFor(concreteType))
+                return true;
 
-            // Locate the folder of the original script
             string scriptPath = AssetDatabase.FindAssets($"{concreteType.Name} t:MonoScript")
                 .Select(AssetDatabase.GUIDToAssetPath)
                 .FirstOrDefault(p => Path.GetFileNameWithoutExtension(p) == concreteType.Name);
@@ -80,36 +89,60 @@ namespace {ns}
                 throw new FileNotFoundException($"Could not locate script file for type {concreteType.FullName}.");
 
             string folder = Path.GetDirectoryName(scriptPath)?.Replace("\\", "/");
-            string proxyScriptPath = $"{folder}/{proxyName}.cs";
 
-            return File.Exists(proxyScriptPath);
+            if (string.IsNullOrEmpty(folder))
+                return false;
+
+            string[] monoScriptGuids = AssetDatabase.FindAssets("t:MonoScript", new[] { folder });
+
+            foreach (string guid in monoScriptGuids)
+            {
+                string path = AssetDatabase.GUIDToAssetPath(guid);
+
+                if (!path.EndsWith(".cs", StringComparison.OrdinalIgnoreCase))
+                    continue;
+
+                string code;
+
+                try
+                {
+                    code = File.ReadAllText(path);
+                }
+                catch
+                {
+                    continue;
+                }
+
+                if (SourceDeclaresProxyOf(code, concreteType))
+                    return true;
+            }
+
+            return false;
         }
 
+        /// <summary>
+        /// Returns the first existing proxy asset of the given type, or creates one if none exist.
+        /// </summary>
         public static ScriptableObject GetFirstOrCreateProxyAsset(
             Type proxyType,
             out bool createdNew)
         {
             createdNew = false;
 
-            if (proxyType == null)
-                throw new ArgumentNullException(nameof(proxyType));
+            if (proxyType == null) throw new ArgumentNullException(nameof(proxyType));
 
             if (!typeof(ScriptableObject).IsAssignableFrom(proxyType))
                 throw new ArgumentException($"{proxyType.FullName} is not a ScriptableObject.", nameof(proxyType));
 
-            // Search for an existing asset of this type anywhere in the project
             string[] guids = AssetDatabase.FindAssets($"t:{proxyType.Name}");
 
             foreach (string guid in guids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
                 ScriptableObject existing = AssetDatabase.LoadAssetAtPath(path, proxyType) as ScriptableObject;
-
-                if (existing)
-                    return existing;
+                if (existing) return existing;
             }
 
-            // Ensure folder exists
             string targetFolder = UserSettings.ProxyAssetGenerationFolder.TrimEnd('/');
 
             if (!AssetDatabase.IsValidFolder(targetFolder))
@@ -128,7 +161,6 @@ namespace {ns}
                 }
             }
 
-            // Create new asset in user-defined folder
             string proxyAssetPath = $"{targetFolder}/{proxyType.Name}.asset";
             ScriptableObject instance = ScriptableObject.CreateInstance(proxyType);
             AssetDatabase.CreateAsset(instance, proxyAssetPath);
@@ -139,24 +171,70 @@ namespace {ns}
             return instance;
         }
 
+        /// <summary>
+        /// Finds a compiled proxy type for the given concrete type, or null if none exists.
+        /// </summary>
         public static Type GetProxyTypeFromConcreteType(Type concreteType)
         {
-            string ns = concreteType.Namespace ?? "Global";
-            string proxyFullName = ns + "." + concreteType.Name + "Proxy";
+            if (concreteType == null) return null;
 
-            return AppDomain.CurrentDomain.GetAssemblies()
-                .SelectMany(a =>
+            foreach (Assembly asm in AppDomain.CurrentDomain.GetAssemblies())
+            {
+                Type[] types;
+
+                try
                 {
-                    try
-                    {
-                        return a.GetTypes();
-                    }
-                    catch (ReflectionTypeLoadException e)
-                    {
-                        return e.Types.Where(t => t != null);
-                    }
-                })
-                .FirstOrDefault(t => t.FullName == proxyFullName && typeof(ScriptableObject).IsAssignableFrom(t));
+                    types = asm.GetTypes();
+                }
+                catch (ReflectionTypeLoadException e)
+                {
+                    types = e.Types.Where(t => t != null).ToArray();
+                }
+
+                foreach (Type t in types)
+                    if (typeof(ScriptableObject).IsAssignableFrom(t) && InheritsProxyOf(t, concreteType))
+                        return t;
+            }
+
+            return null;
+        }
+
+        private static bool HasCompiledProxyTypeFor(Type concreteType)
+        {
+            return GetProxyTypeFromConcreteType(concreteType) != null;
+        }
+
+        private static bool InheritsProxyOf(
+            Type candidate,
+            Type concreteType)
+        {
+            for (Type t = candidate; t != null && t != typeof(object); t = t.BaseType)
+            {
+                if (!t.IsGenericType) continue;
+                Type def = t.GetGenericTypeDefinition();
+
+                if (def == typeof(ProxyObject<>))
+                {
+                    Type arg = t.GetGenericArguments()[0];
+                    if (arg == concreteType) return true;
+                }
+            }
+
+            return false;
+        }
+
+        private static bool SourceDeclaresProxyOf(
+            string code,
+            Type concreteType)
+        {
+            string fq = Regex.Escape(concreteType.FullName);
+            string nameOnly = Regex.Escape(concreteType.Name);
+            fq = fq.Replace(@"\+", @"(\+|\.)");
+
+            string patternFq = @"\:\s*ProxyObject\s*<\s*(global::\s*)?" + fq + @"\s*>";
+            string patternNameOnly = @"\:\s*ProxyObject\s*<\s*(global::\s*)?" + nameOnly + @"\s*>";
+
+            return Regex.IsMatch(code, patternFq) || Regex.IsMatch(code, patternNameOnly);
         }
     }
 }
