@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Text;
+using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
 
 namespace Plugins.Saneject.Runtime.Bindings
@@ -97,7 +98,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (id != null)
                 sb.Append($" | Id: {id}");
 
-            sb.Append($" | Scope: {scope.GetType().Name}");
+            sb.Append($" | {(scope.gameObject.IsPrefab() ? "Prefab" : "Scene")} scope: {scope.GetType().Name}");
             sb.Append("]");
 
             return sb.ToString();

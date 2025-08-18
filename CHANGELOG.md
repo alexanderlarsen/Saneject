@@ -1,5 +1,23 @@
 ﻿# Saneject Changelog
 
+## Version 0.9.1
+
+### Changes
+
+- Move global binding prefab validation out of `DependencyInjector` and into `BindingValidator`.
+
+### Fixes
+
+- Fix global bindings always flagged as unused.
+- Display invalid bindings count in injection stats log.
+
+### Tests
+
+Wrote new tests:
+
+- Test that global binding on prefab scope is correctly invalidated.
+- Test that all used bindings are correctly marked `IsUsed = true`.
+
 ## Version 0.9.0
 
 ### New Features
