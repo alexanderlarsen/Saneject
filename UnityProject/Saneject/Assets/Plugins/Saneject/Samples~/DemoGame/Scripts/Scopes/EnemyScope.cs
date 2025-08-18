@@ -1,11 +1,10 @@
 ﻿using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems;
 using UnityEngine;
 using UnityEngine.UI;
-using CameraControllerProxy = Plugins.Saneject.Samples.DemoGame.Scripts.Camera.CameraControllerProxy;
 using EnemyMarker = Plugins.Saneject.Samples.DemoGame.Scripts.UI.Enemy.EnemyMarker;
-using PlayerProxy = Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems.PlayerProxy;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {
@@ -14,12 +13,6 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
     /// </summary>
     public class EnemyScope : Scope
     {
-        [SerializeField]
-        private PlayerProxy playerProxy;
-
-        [SerializeField]
-        private CameraControllerProxy cameraControllerProxy;
-
         public override void ConfigureBindings()
         {
             BindComponent<CharacterController>()
@@ -34,11 +27,11 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
                 .FromTargetSelf()
                 .WhereTargetIs<EnemyMarker>();
 
-            BindAsset<IEnemyEvadeTarget, PlayerProxy>()
-                .FromInstance(playerProxy);
+            BindComponent<IEnemyEvadeTarget, Player>()
+                .FromProxy();
 
-            BindAsset<IMainCamera, CameraControllerProxy>()
-                .FromInstance(cameraControllerProxy);
+            BindComponent<IMainCamera, CameraController>()
+                .FromProxy();
         }
     }
 }

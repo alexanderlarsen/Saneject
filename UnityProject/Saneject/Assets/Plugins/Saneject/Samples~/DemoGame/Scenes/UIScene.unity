@@ -982,10 +982,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee2d343d1ed4075a05dcef0984fe258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  gameStateManagerProxy: {fileID: 11400000, guid: 34c43b50d0d21f245a6fcf715b166c46, type: 2}
-  scoreManagerProxy: {fileID: 11400000, guid: a18faf9235da59a4ca14b01009406dcb, type: 2}
-  enemyManagerProxy: {fileID: 11400000, guid: 0ef8fc17fe3feec4886015bd41e7bbf5, type: 2}
-  sceneManagerProxy: {fileID: 11400000, guid: b4350c50f0558ef4eaef944c03853ad1, type: 2}
 --- !u!4 &1801980457
 Transform:
   m_ObjectHideFlags: 0
