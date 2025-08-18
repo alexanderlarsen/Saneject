@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Editor.Menus
             string proxyFullName = $"{ns}.{mbType.Name}Proxy";
 
             // If stub is missing, ask to create it and trigger a compile
-            if (!ProxyUtils.DoesProxyStubExist(mbType))
+            if (!ProxyUtils.DoesProxyScriptExist(mbType))
             {
                 string interfaceList = string.Join("\n", interfaces.Select(i => i.Name));
 
@@ -63,7 +63,7 @@ namespace Plugins.Saneject.Editor.Menus
                 if (!gen) return;
 
                 // Create stub + mark intent, then force a refresh (domain reload)
-                ProxyUtils.CreateProxyStub(mbType);
+                ProxyUtils.GenerateProxyScript(mbType);
                 SessionState.SetString(ProxyTypeNameKey, proxyFullName);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
@@ -114,7 +114,7 @@ namespace Plugins.Saneject.Editor.Menus
             }
 
             // Create or reuse the asset via ProxyUtils (stored under Assets/Saneject/Proxies by default)
-            ScriptableObject asset = ProxyUtils.GetOrCreateProxyAsset(proxyType, out bool createdNew);
+            ScriptableObject asset = ProxyUtils.GetFirstOrCreateProxyAsset(proxyType, out bool createdNew);
 
             string message = createdNew
                 ? $"Proxy generated for '{proxyType.Name}'."

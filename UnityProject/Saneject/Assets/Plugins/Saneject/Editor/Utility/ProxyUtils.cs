@@ -8,10 +8,9 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Util
 {
-    // TODO: Document
     public static class ProxyUtils
     {
-        public static void CreateProxyStub(Type concreteType)
+        public static void GenerateProxyScript(Type concreteType)
         {
             if (concreteType == null)
                 throw new ArgumentNullException(nameof(concreteType));
@@ -62,7 +61,7 @@ namespace {ns}
             AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
         }
 
-        public static bool DoesProxyStubExist(Type concreteType)
+        public static bool DoesProxyScriptExist(Type concreteType)
         {
             if (concreteType == null)
                 throw new ArgumentNullException(nameof(concreteType));
@@ -86,7 +85,7 @@ namespace {ns}
             return File.Exists(proxyScriptPath);
         }
 
-        public static ScriptableObject GetOrCreateProxyAsset(
+        public static ScriptableObject GetFirstOrCreateProxyAsset(
             Type proxyType,
             out bool createdNew)
         {

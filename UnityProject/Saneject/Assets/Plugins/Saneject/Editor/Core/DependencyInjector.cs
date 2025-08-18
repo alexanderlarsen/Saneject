@@ -174,7 +174,7 @@ namespace Plugins.Saneject.Editor.Core
 
         private static void CreateMissingProxyStubs(this IEnumerable<Binding> proxyBindings)
         {
-            List<Type> typesToCreate = proxyBindings.Select(binding => binding.ConcreteType).Where(type => !ProxyUtils.DoesProxyStubExist(type)).ToList();
+            List<Type> typesToCreate = proxyBindings.Select(binding => binding.ConcreteType).Where(type => !ProxyUtils.DoesProxyScriptExist(type)).ToList();
 
             if (typesToCreate.Count == 0)
                 return;
@@ -183,7 +183,7 @@ namespace Plugins.Saneject.Editor.Core
 
             EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{typesToCreate.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
 
-            typesToCreate.ForEach(ProxyUtils.CreateProxyStub);
+            typesToCreate.ForEach(ProxyUtils.GenerateProxyScript);
             SessionState.SetInt("Saneject.ProxyStubCount", typesToCreate.Count);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
@@ -346,7 +346,7 @@ namespace Plugins.Saneject.Editor.Core
 
                     if (proxyType != null)
                     {
-                        serializedProperty.objectReferenceValue = ProxyUtils.GetOrCreateProxyAsset(proxyType, out bool _);
+                        serializedProperty.objectReferenceValue = ProxyUtils.GetFirstOrCreateProxyAsset(proxyType, out bool _);
                         stats.injectedFields++;
                     }
                     else

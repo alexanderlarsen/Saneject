@@ -143,7 +143,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             IsProxyBinding = true;
         }
 
-        // TODO: Document
+        /// <summary>
+        /// Called by the <c>DependencyInjector</c> to mark the binding as used when consumed, so the system can log unused bindings after injection.
+        /// </summary>
         public void MarkUsed()
         {
             IsUsed = true;
@@ -219,7 +221,10 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             return target != null && targetFilters.All(f => f.filter(target));
         }
-
+        
+        /// <summary>
+        /// Custom equality comparison to determine if the binding is unique or a duplicate based on system rules.
+        /// </summary>
         public bool Equals(Binding other)
         {
             if (other is null) return false;
