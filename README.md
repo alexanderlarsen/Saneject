@@ -4,6 +4,8 @@
   <img src="Docs/logo-light.webp" alt="Saneject logo" width="300">
 </picture>
 
+<br>
+
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
 [![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
