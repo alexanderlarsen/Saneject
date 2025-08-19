@@ -2,10 +2,10 @@
 
 <img src="Docs/Logo.webp" alt="Saneject" width="300">
 
-![Unity](https://img.shields.io/badge/Unity-2022.3.12+-white)
+![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff6d6d)
+[![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
+[![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
-![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)
-![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)
 
 Dependency injection the Unity way.
 
