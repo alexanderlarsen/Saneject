@@ -1,10 +1,10 @@
-<picture>
-  <source media="(prefers-color-scheme: dark)" srcset="Docs/logo-light.webp">
-  <source media="(prefers-color-scheme: light)" srcset="Docs/logo-dark.webp">
-  <img src="Docs/logo-light.webp" alt="Saneject logo" width="300">
-</picture>
-
-&nbsp;
+<p>
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="Docs/logo-light.webp">
+      <source media="(prefers-color-scheme: light)" srcset="Docs/logo-dark.webp">
+      <img src="Docs/logo-light.webp" alt="Saneject logo" width="300">
+    </picture>
+</p>
 
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
