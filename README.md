@@ -1,8 +1,17 @@
-[![Tests](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml/badge.svg)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml) ![Unity](https://img.shields.io/badge/unity-2022.3.12+-black) ![GitHub release (latest by date)](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases)
+<br>
 
-![Saneject logo](Docs/Logo.webp)
+<img src="Docs/Logo.webp" alt="Saneject" width="300">
 
-Editor-time resolved serialized field dependency injection for Unity. Keep your references visible, classes clean, ditch the runtime container.
+![Unity](https://img.shields.io/badge/Unity-2022.3.12+-white)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
+![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)
+![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)
+
+Dependency injection the Unity way.
+
+Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the inspector, including serialized interfaces and cross-scene/prefab references.
+
+No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
 
 > ⚠️ **Beta notice**  
 > Saneject is currently in beta. The framework is functionally stable, but the API may still change during the beta phase. Expect some breaking changes until 1.0.0.
