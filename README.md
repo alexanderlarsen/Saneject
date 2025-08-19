@@ -1,5 +1,3 @@
-<br>
-
 <img src="Docs/Logo.webp" alt="Saneject" width="300">
 
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff6d6d)
