@@ -1,4 +1,8 @@
-<img src="Docs/Logo.webp" alt="Saneject" width="300">
+<picture>
+  <source media="(prefers-color-scheme: dark)" srcset="Docs/logo-light.webp">
+  <source media="(prefers-color-scheme: light)" srcset="Docs/logo-dark.webp">
+  <img src="Docs/logo-light.webp" alt="Saneject logo" width="300">
+</picture>
 
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
@@ -239,7 +243,7 @@ The sample is provided as a reference project and can be studied to see how bind
 
 It contains a small three-scene game where the player (green bean) chases enemies (red beans) while they try to evade. When all enemies are caught, the game is over and restart UI appears. It's intentionally kept minimal so you can study the setup and learn Saneject’s core concepts without distractions.
 
-![Screenshot of Saneject sample game](Docs/SampleGameScreenshot.webp)
+![Screenshot of Saneject sample game](Docs/sample-game-screenshot.webp)
 
 It shows how to use Saneject in a real (but simple) game setup:
 
@@ -662,7 +666,7 @@ With `[Inject, SerializeInterface]`, fields are grayed out and auto-managed by S
 
 Without `[Inject]`, they behave as regular `Object` fields you can assign manually. If you assign an object that doesn’t implement the required interface, the field is cleared to `null`.
 
-![Interface field visible in the Inspector](Docs/SerializeInterfaceInspectorExample.webp)
+![Interface field visible in the Inspector](Docs/serialize-interface-inspector-example.webp)
 
 ### ProxyObject
 
