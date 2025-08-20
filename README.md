@@ -68,6 +68,8 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [Scopes & resolution order](#scopes--resolution-order)
     - [Binding uniqueness](#binding-uniqueness)
     - [Context isolation](#context-isolation)
+        - [How it works](#how-it-works)
+        - [Turning it off](#turning-it-off)
     - [SerializeInterface](#serializeinterface)
         - [Why Unity can’t “serialize an interface”](#why-unity-cant-serialize-an-interface)
         - [What the Saneject Roslyn generator adds](#what-the-saneject-roslyn-generator-adds)
@@ -624,7 +626,7 @@ Both are compared:
 
 Any mismatches are discarded before assignment, and the rejection is logged with the binding signature for transparency.
 
-#### User Settings
+#### Turning it off
 
 This behavior can be controlled in **User Settings** with the toggle **Filter By Same Context**:
 
