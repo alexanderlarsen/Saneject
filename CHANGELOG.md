@@ -1,5 +1,26 @@
 ﻿# Saneject Changelog
 
+## Version 0.10.0
+
+### Features
+
+- Added new user setting **Filter By Same Context** (default: enabled).
+    - When enabled, Saneject filters out prefab components when injecting into scene objects, and filters out scene components when injecting into prefabs. This enforces context isolation and avoids broken references.
+    - When disabled, scene ↔ prefab references are allowed as an escape hatch. This is not recommended because such links are not serialized reliably — removing a prefab instance from the scene will silently break the dependency.
+    - For proper cross-context references, the recommended workflow is to use **ProxyObjects** (`BindComponent<TInterface, TConcrete>().FromProxy()`).
+
+### Changes
+
+- Improved error logging when a binding fails to resolve:
+    - Logs now include candidate types that were rejected due to scene/prefab context mismatch.
+    - Error messages provide guidance to either use ProxyObjects or disable context filtering in user settings (with a warning).
+- Cleaner dev UX for injection errors: all rejected candidates for a binding are reported together in a single message instead of spamming per-candidate logs.
+- Rename `BindingIdentityHelper` to `BindingSignatureHelper` and refactor related methods.
+
+### Tests
+
+- Added **ContextFilteringTests** to verify that scene ↔ prefab resolution is blocked when filtering is enabled, and allowed when filtering is disabled.
+
 ## Version 0.9.1
 
 ### Changes
