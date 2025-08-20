@@ -67,6 +67,7 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [Runtime DI vs Saneject](#runtime-di-vs-saneject)
     - [Scopes & resolution order](#scopes--resolution-order)
     - [Binding uniqueness](#binding-uniqueness)
+    - [Context isolation](#context-isolation)
     - [SerializeInterface](#serializeinterface)
         - [Why Unity can’t “serialize an interface”](#why-unity-cant-serialize-an-interface)
         - [What the Saneject Roslyn generator adds](#what-the-saneject-roslyn-generator-adds)
@@ -595,6 +596,42 @@ BindComponent<IMyService>().WhereTargetIs<Enemy>();
 ```
 
 This uniqueness model ensures deterministic resolution and early conflict detection. Duplicate bindings are logged and skipped automatically.
+
+### Context isolation
+
+By default, Saneject enforces *context isolation* when resolving dependencies, meaning preventing references across contexts Unity can't serialize, such as scene ↔ prefab or prefab ↔ prefab, which will break when the prefab isn't present in the scene.
+
+When context isolation is enabled (recommended):
+
+- Scene objects only resolve to other objects in the same scene.
+- Prefab instances only resolve to other components within the same prefab instance.
+- Prefab assets only resolve within their own asset root.
+- Cross-context candidates (scene ↔ prefab, prefab ↔ prefab, prefab asset ↔ prefab instance, etc.) are filtered out with a clear log message.
+
+#### How it works
+
+For each `[Inject]` field, Saneject determines the *context key* of both sides:
+
+- **Injection target (field owner):** the object declaring the `[Inject]` field.
+- **Candidate dependency:** each object that could satisfy the binding.
+
+Both are compared:
+
+- If the target is a scene object, only candidates from the same scene are allowed.
+- If the target is a prefab instance, only candidates from that exact prefab instance root are allowed.
+- If the target is a prefab asset, only candidates from that prefab asset root are allowed.
+- ScriptableObjects and other project assets are not restricted.
+
+Any mismatches are discarded before assignment, and the rejection is logged with the binding signature for transparency.
+
+#### User Settings
+
+This behavior can be controlled in **User Settings** with the toggle **Filter By Same Context**:
+
+- **On (default)**: Cross-context links are blocked. Use `ProxyObjects` if you need to connect a scene to a prefab or bridge between prefabs.
+- **Off**: Cross-context links are allowed. This is generally unsafe, but can be useful in rare advanced workflows.
+
+For most cases, leave this enabled and rely on `ProxyObjects` for legitimate cross-context references.
 
 ### SerializeInterface
 

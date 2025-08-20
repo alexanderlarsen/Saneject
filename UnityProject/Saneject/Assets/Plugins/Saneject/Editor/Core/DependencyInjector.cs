@@ -381,7 +381,7 @@ namespace Plugins.Saneject.Editor.Core
                     string typeList = string.Join(", ", rejectedTypes.Select(t => t.Name));
 
                     errorMessageBuilder.AppendLine(
-                        $"Candidates rejected due to scene/prefab context mismatch: {typeList}.");
+                        $"Candidates rejected due to scene/prefab or prefab/prefab context mismatch: {typeList}.");
 
                     errorMessageBuilder.AppendLine(
                         "Use ProxyObjects for proper cross-context references, or disable filtering in User Settings (not recommended).");
@@ -393,6 +393,11 @@ namespace Plugins.Saneject.Editor.Core
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
         }
 
+        /// <summary>
+        /// Ensures that only dependencies from the same context as the injection target are kept.
+        /// Scene objects only match within the same scene, prefab instances only within their root,
+        /// and prefab assets only within their asset root. ScriptableObjects and other assets are unaffected.
+        /// </summary>
         private static Object[] FilterBySameContext(
             this Object[] objects,
             SerializedObject serializedObject,
@@ -403,23 +408,68 @@ namespace Plugins.Saneject.Editor.Core
             if (objects.Length == 0)
                 return objects;
 
-            bool targetIsPrefab = serializedObject.targetObject is Component c && c.gameObject.IsPrefab();
+            object targetContext = GetContextKey(serializedObject.targetObject);
             List<Object> filtered = new();
 
             foreach (Object obj in objects)
             {
                 if (obj is Component comp)
-                    if (comp.gameObject.IsPrefab() != targetIsPrefab)
+                {
+                    object candidateContext = GetContextKey(comp);
+
+                    // Reject if they don't share the same context
+                    if (!Equals(targetContext, candidateContext))
                     {
                         rejectedTypes ??= new HashSet<Type>();
                         rejectedTypes.Add(comp.GetType());
                         continue;
                     }
+                }
 
+                // Non-Component objects (ScriptableObjects, etc.) are always valid
                 filtered.Add(obj);
             }
 
             return filtered.ToArray();
+        }
+
+        /// <summary>
+        /// Returns a context "key" that uniquely identifies whether an object belongs
+        /// to a scene, a prefab instance, or a prefab asset. Prefab assets and their
+        /// instances normalize to the same prefab asset root so they are treated as
+        /// one context.
+        /// </summary>
+        private static object GetContextKey(Object obj)
+        {
+            if (obj is Component component)
+            {
+                GameObject gameObject = component.gameObject;
+
+                // Prefab instance in the scene
+                GameObject instanceRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
+
+                if (instanceRoot)
+                {
+                    // Normalize to the prefab asset root
+                    GameObject prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(instanceRoot);
+
+                    // Fallback: if no source asset, just return the instance root
+                    return prefabAsset ? prefabAsset : instanceRoot;
+                }
+
+                // Prefab asset in the Project window
+                if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
+                {
+                    GameObject assetRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
+                    return assetRoot ? assetRoot : gameObject; // fallback
+                }
+
+                // Scene object, use its scene
+                return gameObject.scene;
+            }
+
+            // Assets (ScriptableObjects, etc.) have no scene/prefab restriction
+            return null;
         }
 
         /// <summary>
