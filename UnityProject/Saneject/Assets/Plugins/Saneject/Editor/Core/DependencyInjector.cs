@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
+using System.Text;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Util;
 using Plugins.Saneject.Runtime.Attributes;
@@ -194,7 +195,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (UserSettings.LogUnusedBindings && unusedBindings.Count > 0)
                     foreach (Binding binding in unusedBindings)
-                        Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingIdentity()}. If you don't plan to use this binding, you can safely remove it.", scope);
+                        Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingSignature()}. If you don't plan to use this binding, you can safely remove it.", scope);
 
                 stats.unusedBindings += unusedBindings.Count;
             }
@@ -321,14 +322,15 @@ namespace Plugins.Saneject.Editor.Core
                 if (!serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
                     continue;
 
+                serializedProperty.NullifyOrClearArray();
+
                 bool isCollection = serializedProperty.isArray;
                 Object injectionTarget = serializedObject.targetObject;
                 Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
 
                 if (binding == null)
                 {
-                    Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}", scope);
-
+                    Debug.LogError($"Saneject: Missing binding {BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, injectId, scope)}", scope);
                     continue;
                 }
 
@@ -345,13 +347,18 @@ namespace Plugins.Saneject.Editor.Core
                     }
                     else
                     {
-                        Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+                        Debug.LogError($"Saneject: Missing ProxyObject<{binding.ConcreteType.Name}> for binding {binding.GetBindingSignature()}", scope);
                     }
 
                     continue;
                 }
 
                 Object[] dependencies = binding.LocateDependencies(injectionTarget).ToArray();
+
+                HashSet<Type> rejectedTypes = null;
+
+                if (UserSettings.FilterBySameContext)
+                    dependencies = dependencies.FilterBySameContext(serializedObject, out rejectedTypes);
 
                 if (dependencies.Length > 0)
                 {
@@ -364,10 +371,55 @@ namespace Plugins.Saneject.Editor.Core
                     continue;
                 }
 
-                Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+                StringBuilder errorMessageBuilder = new();
+
+                errorMessageBuilder.AppendLine(
+                    $"Saneject: Binding failed to locate a dependency {binding.GetBindingSignature()}.");
+
+                if (rejectedTypes is { Count: > 0 })
+                {
+                    string typeList = string.Join(", ", rejectedTypes.Select(t => t.Name));
+
+                    errorMessageBuilder.AppendLine(
+                        $"Candidates rejected due to scene/prefab context mismatch: {typeList}.");
+
+                    errorMessageBuilder.AppendLine(
+                        "Use ProxyObjects for proper cross-context references, or disable filtering in User Settings (not recommended).");
+                }
+
+                Debug.LogError(errorMessageBuilder.ToString(), scope);
             }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+        }
+
+        private static Object[] FilterBySameContext(
+            this Object[] objects,
+            SerializedObject serializedObject,
+            out HashSet<Type> rejectedTypes)
+        {
+            rejectedTypes = null;
+
+            if (objects.Length == 0)
+                return objects;
+
+            bool targetIsPrefab = serializedObject.targetObject is Component c && c.gameObject.IsPrefab();
+            List<Object> filtered = new();
+
+            foreach (Object obj in objects)
+            {
+                if (obj is Component comp)
+                    if (comp.gameObject.IsPrefab() != targetIsPrefab)
+                    {
+                        rejectedTypes ??= new HashSet<Type>();
+                        rejectedTypes.Add(comp.GetType());
+                        continue;
+                    }
+
+                filtered.Add(obj);
+            }
+
+            return filtered.ToArray();
         }
 
         /// <summary>

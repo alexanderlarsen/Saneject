@@ -112,6 +112,14 @@ namespace Plugins.Saneject.Editor.Settings
                 onChanged: newValue => UserSettings.AskBeforePrefabInjection = newValue
             );
 
+            DrawToggle(
+                label: "Filter By Same Context",
+                tooltip:
+                "Filters out prefab components when injecting into scene objects, and filters out scene components when injecting into prefabs. This enforces context isolation. Disabling is not recommended: These links depend on a prefab being present in the scene and will break if the prefab is removed or reused somewhere else. Use ProxyObjects (BindComponent<IInterface, Concrete>().FromProxy()) for proper cross-context references. Only disable if you explicitly want scene ↔ prefab links that exist only in the current scene.",
+                currentValue: UserSettings.FilterBySameContext,
+                onChanged: newValue => UserSettings.FilterBySameContext = newValue
+            );
+
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
 
