@@ -85,7 +85,7 @@ namespace Plugins.Saneject.Runtime.Scopes
                     continue;
 
                 if (!validBindings.Add(binding))
-                    Debug.LogError($"Saneject: Duplicate binding {binding.GetBindingIdentity()}.", this);
+                    Debug.LogError($"Saneject: Duplicate binding {binding.GetBindingSignature()}.", this);
             }
         }
 

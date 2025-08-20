@@ -194,7 +194,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (UserSettings.LogUnusedBindings && unusedBindings.Count > 0)
                     foreach (Binding binding in unusedBindings)
-                        Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingIdentity()}. If you don't plan to use this binding, you can safely remove it.", scope);
+                        Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingSignature()}. If you don't plan to use this binding, you can safely remove it.", scope);
 
                 stats.unusedBindings += unusedBindings.Count;
             }
@@ -327,8 +327,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (binding == null)
                 {
-                    Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}", scope);
-
+                    Debug.LogError($"Saneject: Missing binding {BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, injectId, scope)}", scope);
                     continue;
                 }
 
@@ -345,7 +344,7 @@ namespace Plugins.Saneject.Editor.Core
                     }
                     else
                     {
-                        Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+                        Debug.LogError($"Saneject: Missing ProxyObject<{binding.ConcreteType.Name}> for binding {binding.GetBindingSignature()}", scope);
                     }
 
                     continue;
@@ -364,7 +363,7 @@ namespace Plugins.Saneject.Editor.Core
                     continue;
                 }
 
-                Debug.LogError($"Saneject: Missing binding {BindingIdentityHelper.GetUndeclaredBindingIdentity(isCollection, interfaceType, concreteType, injectId, scope)}");
+                Debug.LogError($"Saneject: Binding failed to locate a dependency {binding.GetBindingSignature()}", scope);
             }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();

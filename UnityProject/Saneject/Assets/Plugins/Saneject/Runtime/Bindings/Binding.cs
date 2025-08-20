@@ -57,7 +57,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsCollection)
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as a collection binding. Ignoring this call.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} is already marked as a collection binding. Ignoring this call.", Scope);
                 return;
             }
 
@@ -68,7 +68,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsComponentBinding)
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as a component binding. Ignoring this call.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} is already marked as a component binding. Ignoring this call.", Scope);
                 return;
             }
 
@@ -79,7 +79,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsAssetBinding)
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as an asset binding. Ignoring this call.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} is already marked as an asset binding. Ignoring this call.", Scope);
                 return;
             }
 
@@ -94,7 +94,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (!string.IsNullOrWhiteSpace(Id))
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} already has an ID '{Id}' and cannot have multiple IDs. Ignoring attempt to set ID to '{newId}'.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} already has an ID '{Id}' and cannot have multiple IDs. Ignoring attempt to set ID to '{newId}'.", Scope);
                 return;
             }
 
@@ -108,7 +108,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsGlobal)
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as global. Ignoring this call.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} is already marked as global. Ignoring this call.", Scope);
                 return;
             }
 
@@ -122,7 +122,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (RequiresInjectionTarget)
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked as requiring an injection target. Ignoring this call.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} is already marked as requiring an injection target. Ignoring this call.", Scope);
                 return;
             }
 
@@ -136,7 +136,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (IsProxyBinding)
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} is already marked to resolve from proxy. Ignoring this call.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} is already marked to resolve from proxy. Ignoring this call.", Scope);
                 return;
             }
 
@@ -160,7 +160,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             if (this.locator != null)
             {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingIdentity()} already has a locator and cannot specify multiple locators. Ignoring this call.", Scope);
+                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} already has a locator and cannot specify multiple locators. Ignoring this call.", Scope);
                 return;
             }
 

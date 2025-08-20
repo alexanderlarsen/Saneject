@@ -5,14 +5,14 @@ using Plugins.Saneject.Runtime.Scopes;
 
 namespace Plugins.Saneject.Runtime.Bindings
 {
-    public static class BindingIdentityHelper
+    public static class BindingSignatureHelper
     {
         /// <summary>
         /// Gets the identity string of a known/declared binding.
         /// </summary>
-        public static string GetBindingIdentity(this Binding binding)
+        public static string GetBindingSignature(this Binding binding)
         {
-            return GetBindingIdentity(
+            return GetBindingSignature(
                 binding.IsGlobal,
                 binding.IsAssetBinding,
                 binding.IsComponentBinding,
@@ -28,7 +28,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Gets the identity from an expected but unknown/missing binding. Constructed in the DependencyInjector based on field info at the current injection step.
         /// </summary>
-        public static string GetUndeclaredBindingIdentity(
+        public static string GetPartialBindingSignature(
             bool isCollection,
             Type interfaceType,
             Type concreteType,
@@ -59,7 +59,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             return sb.ToString();
         }
 
-        private static string GetBindingIdentity(
+        private static string GetBindingSignature(
             bool isGlobal,
             bool isAsset,
             bool isComponent,
