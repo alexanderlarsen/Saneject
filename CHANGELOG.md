@@ -16,6 +16,7 @@
     - Error messages provide guidance to either use ProxyObjects or disable context filtering in user settings (with a warning).
 - Cleaner dev UX for injection errors: all rejected candidates for a binding are reported together in a single message instead of spamming per-candidate logs.
 - Rename `BindingIdentityHelper` to `BindingSignatureHelper` and refactor related methods.
+- Add checker material to sample game ground plane to make player movement visible.
 
 ### Tests
 
