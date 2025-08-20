@@ -4,7 +4,9 @@ using Plugins.Saneject.Runtime.Settings;
 using Tests.Runtime;
 using Tests.Runtime.Component;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Tests.Editor.General
 {
@@ -24,7 +26,7 @@ namespace Tests.Editor.General
         public override void TearDown()
         {
             base.TearDown();
-            UserSettings.FilterBySameContext = prevFilterBySameContext;
+            UserSettings.FilterBySameContext = true;
         }
 
         [Test]
@@ -36,13 +38,12 @@ namespace Tests.Editor.General
             TestScope scope = sceneRoot.AddComponent<TestScope>();
             ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
 
-            // Prefab instance with InjectableComponent
             GameObject prefabInstance = PrefabUtility.InstantiatePrefab(
-                Resources.Load<GameObject>("Test/Prefab 1")) as GameObject;
+                Resources.Load<GameObject>("Test/Prefab 2")) as GameObject;
 
             InjectableComponent injectable = prefabInstance.AddComponent<InjectableComponent>();
 
-            // Bind explicitly to that instance
+            // Bind the actual prefab instance explicitly
             BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable);
 
             DependencyInjector.InjectSceneDependencies();
@@ -60,13 +61,12 @@ namespace Tests.Editor.General
             TestScope scope = sceneRoot.AddComponent<TestScope>();
             ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
 
-            // Prefab instance with InjectableComponent
             GameObject prefabInstance = PrefabUtility.InstantiatePrefab(
-                Resources.Load<GameObject>("Test/Prefab 1")) as GameObject;
+                Resources.Load<GameObject>("Test/Prefab 2")) as GameObject;
 
             InjectableComponent injectable = prefabInstance.AddComponent<InjectableComponent>();
 
-            // Bind explicitly to that instance
+            // Bind the actual prefab instance explicitly
             BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable);
 
             DependencyInjector.InjectSceneDependencies();
@@ -75,6 +75,55 @@ namespace Tests.Editor.General
                 "Scene requester should resolve from prefab instance when filtering is disabled.");
         }
 
+        [Test]
+        public void RejectsDifferentPrefabInstances_WhenFilteringEnabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.FilterBySameContext = true;
+
+            TestScope scope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
+
+            GameObject prefab1 = PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/Prefab 2")) as GameObject;
+
+            prefab1.AddComponent<InjectableComponent>();
+
+            GameObject prefab2 = PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/Prefab 2")) as GameObject;
+
+            InjectableComponent injectable2 = prefab2.AddComponent<InjectableComponent>();
+
+            // Bind to a specific instance (different root than requester)
+            BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable2);
+
+            DependencyInjector.InjectSceneDependencies();
+
+            Assert.IsNull(requester.interfaceComponent,
+                "Requester should not resolve from a different prefab instance when filtering is enabled.");
+        }
+
+        [Test]
+        public void RejectsPrefabAsset_WhenFilteringEnabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.FilterBySameContext = true;
+
+            TestScope scope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
+
+            GameObject prefabAsset = Resources.Load<GameObject>("Test/Prefab 2");
+            InjectableComponent injectableOnAsset = prefabAsset.AddComponent<InjectableComponent>();
+
+            // Bind directly to the asset component (editor-only scenario)
+            BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectableOnAsset);
+
+            DependencyInjector.InjectSceneDependencies();
+
+            Assert.IsNull(requester.interfaceComponent,
+                "Requester should not resolve from a prefab asset when filtering is enabled.");
+        }
+        
         protected override void CreateHierarchy()
         {
             sceneRoot = new GameObject("SceneRoot");

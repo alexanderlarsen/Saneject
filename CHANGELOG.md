@@ -1,5 +1,22 @@
 ﻿# Saneject Changelog
 
+## Version 0.10.1
+
+### Changes
+
+- Added **prefab-to-prefab isolation** to context filtering.
+    - Prefab instances can no longer resolve components from other prefab instances.
+    - Prefab assets can no longer resolve components from other prefab assets.
+    - This ensures prefab-scoped dependencies remain stable and do not leak across unrelated prefabs.
+
+### Tests
+
+- Extended **ContextFilteringTests** to cover:
+    - Rejection of cross-prefab references when filtering is enabled.
+    - Rejection of prefab asset references when filtering is enabled.
+    - Confirmation that cross-context links are allowed when filtering is disabled.
+- Verified prefab isolation does not interfere with scene or proxy workflows.
+
 ## Version 0.10.0
 
 ### Features
