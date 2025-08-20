@@ -23,6 +23,12 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
+        public static bool FilterBySameContext
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
         // Inspector
         public static bool ShowInjectedFields
         {
@@ -73,7 +79,7 @@ namespace Plugins.Saneject.Runtime.Settings
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
-        
+
         // Proxy Generation
         public static string ProxyAssetGenerationFolder
         {
