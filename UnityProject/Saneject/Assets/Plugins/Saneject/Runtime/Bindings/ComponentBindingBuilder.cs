@@ -635,7 +635,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ => Object
                 .FindObjectsByType<Component>(findObjectsInactive, sortMode)
-                .Where(c => c.GetType() == typeof(TComponent)));
+                .OfType<TComponent>()
+                .Cast<Component>());
+            
+            // binding.SetLocator(_ => Object
+            //     .FindObjectsByType<Component>(findObjectsInactive, sortMode)
+            //     .Where(c => c.GetType() == typeof(TComponent)));
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }

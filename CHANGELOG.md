@@ -1,5 +1,11 @@
 ﻿# Saneject Changelog
 
+## Version 0.10.2
+
+### Fixes
+
+- Fixed a bug that prevented interface only component binding (`BindComponent<IInterface>().FromAnywhereInScene()`) from working.
+
 ## Version 0.10.1
 
 ### Changes
