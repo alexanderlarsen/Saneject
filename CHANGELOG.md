@@ -4,7 +4,7 @@
 
 ### Fixes
 
-- Fixed a bug that prevented interface only component binding (`BindComponent<IInterface>().FromAnywhereInScene()`) from working.
+- Fixed a bug that prevented interface only binding `BindComponent<IInterface>().FromAnywhereInScene()` from working.
 
 ## Version 0.10.1
 
