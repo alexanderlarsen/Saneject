@@ -88,6 +88,8 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [User settings](#user-settings)
 - [Tested Unity versions](#tested-unity-versions)
 - [Limitations](#limitations)
+- [Possible additions](#possible-additions)
+- [Future explorations](#future-explorations)
 - [Credits](#credits)
 - [Contribution](#contribution)
 - [License](#license)
