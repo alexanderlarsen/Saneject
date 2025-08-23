@@ -22,12 +22,12 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
 
 > 👋 **Tried it? Let me know**
 >
-> I’m looking for testers to help catch edge cases, bugs and polish the tooling. If you’ve cloned or tested Saneject, even briefly, I’d love your thoughts.
+> I'm looking for testers to help catch edge cases, bugs and polish the tooling. If you've cloned or tested Saneject, even briefly, I'd love your thoughts.
 >
 > - Did anything work well?
 > - Was anything confusing or unclear?
 > - Did you hit any bugs or unexpected behavior?
-> - Is there something you expected that’s missing?
+> - Is there something you expected that's missing?
 >
 > Open an [Issue](https://github.com/alexanderlarsen/Saneject/issues) or drop a quick comment in [Discussions](https://github.com/alexanderlarsen/Saneject/discussions). No need to be formal!
 
@@ -71,7 +71,7 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
         - [How it works](#how-it-works)
         - [Turning it off](#turning-it-off)
     - [SerializeInterface](#serializeinterface)
-        - [Why Unity can’t “serialize an interface”](#why-unity-cant-serialize-an-interface)
+        - [Why Unity can't "serialize an interface"](#why-unity-cant-serialize-an-interface)
         - [What the Saneject Roslyn generator adds](#what-the-saneject-roslyn-generator-adds)
     - [ProxyObject](#proxyobject)
         - [Auto-generation](#auto-generation)
@@ -94,21 +94,21 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
 
 ## What is this?
 
-Saneject is a middle-ground between hand-wiring references and a full runtime DI container. It resolves dependencies in the Unity Editor using familiar DI syntax and workflows, writes them straight into serialized fields (including interfaces), and keeps your classes free of `GetComponent`, static singletons, manual look-ups, etc. At runtime it’s just regular, serialized Unity objects. No reflection, no container, no startup hit.
+Saneject is a middle-ground between hand-wiring references and a full runtime DI container. It resolves dependencies in the Unity Editor using familiar DI syntax and workflows, writes them straight into serialized fields (including interfaces), and keeps your classes free of `GetComponent`, static singletons, manual look-ups, etc. At runtime it's just regular, serialized Unity objects. No reflection, no container, no startup hit.
 
 ## Why another DI tool?
 
 | Pain point                                                                                         | How Saneject helps                                                                                                                                                                              |
 |----------------------------------------------------------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| "We want structured dependency management but don’t want to commit to a full runtime DI workflow." | Saneject offers DI-style binding syntax and organisation without a runtime container. You keep editor-time determinism, default Unity lifecycle and Inspector visibility.                       |
-| “We want to see what’s wired where in the Inspector.”                                              | All references are regular serialized fields. Nothing is hidden behind a runtime graph.                                                                                                         |
-| "Interfaces can’t be dragged into the Inspector."                                                  | Saneject’s Roslyn generator adds safe interface-backing fields with Inspector support. `[SerializeInterface] IMyInterface myInterface` shows up as a proper serialized field.                   |
-| "Runtime DI lifecycles can feel opaque or fight Unity’s own Awake/Start order."                    | Everything is set and serialized in the editor. Unity’s normal lifecycle stays untouched.                                                                                                       |
+| "We want structured dependency management but don't want to commit to a full runtime DI workflow." | Saneject offers DI-style binding syntax and organisation without a runtime container. You keep editor-time determinism, default Unity lifecycle and Inspector visibility.                       |
+| "We want to see what's wired where in the Inspector."                                              | All references are regular serialized fields. Nothing is hidden behind a runtime graph.                                                                                                         |
+| "Interfaces can't be dragged into the Inspector."                                                  | Saneject's Roslyn generator adds safe interface-backing fields with Inspector support. `[SerializeInterface] IMyInterface myInterface` shows up as a proper serialized field.                   |
+| "Runtime DI lifecycles can feel opaque or fight Unity's own Awake/Start order."                    | Everything is set and serialized in the editor. Unity's normal lifecycle stays untouched.                                                                                                       |
 | "Large reflection-heavy containers add startup cost."                                              | Saneject resolves once in the editor. Zero runtime reflection or allocation at runtime.                                                                                                         |
-| "Can’t serialize references between scenes or from a scene into prefabs."                          | `ProxyObject`, a Roslyn generated `ScriptableObject`, can be referenced anywhere like any asset. At runtime, it resolves and forwards all calls to a real scene instance with minimal overhead. |
+| "Can't serialize references between scenes or from a scene into prefabs."                          | `ProxyObject`, a Roslyn generated `ScriptableObject`, can be referenced anywhere like any asset. At runtime, it resolves and forwards all calls to a real scene instance with minimal overhead. |
 | "Non-dev team members struggle with code-only installers and like visible dependencies."           | Bindings live in `Scope` scripts as simple, declarative C#. Fields are regular serialized fields marked with `[Inject]`, and field visibility can be toggled from settings.                     |
 
-Saneject isn’t meant to replace full runtime frameworks like Zenject or VContainer. It’s an alternative workflow for projects that value determinism, Inspector visibility, and minimal runtime overhead.
+Saneject isn't meant to replace full runtime frameworks like Zenject or VContainer. It's an alternative workflow for projects that value determinism, Inspector visibility, and minimal runtime overhead.
 
 ## Features
 
@@ -126,7 +126,7 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 - **Interface serialization with Roslyn:** `[SerializeInterface] IMyInterface` fields show up in the Inspector.
 - **Serialized collections of interfaces:** Interface arrays and lists, e.g., `[SerializeInterface] IMyInterface[]`, are fully supported, injectable and visible in the Inspector too.
 - **No more interface class wrappers:** Write plain `[SerializeInterface] IMyInterface foo` instead of wrapping in `Interface<TInterface> foo` and unwrapping with `foo.Value`.
-- **Cross-scene / prefab references:** `ProxyObject` `ScriptableObjects` allow serialized references to objects Unity normally can’t link.
+- **Cross-scene / prefab references:** `ProxyObject` `ScriptableObjects` allow serialized references to objects Unity normally can't link.
 - **Global Scope:** Scene dependencies can be promoted to global singletons at editor-time and resolved statically by proxies at runtime.
 
 ### Performance & runtime
@@ -152,7 +152,7 @@ Saneject isn’t meant to replace full runtime frameworks like Zenject or VConta
 | Platforms         | Editor-only tooling; runtime code is plain C#, so it runs on any platform Unity supports                          |
 
 > ⚠️ **Platform notice**  
-> Saneject’s runtime is just plain C# (no reflection, no dynamic code).  
+> Saneject's runtime is just plain C# (no reflection, no dynamic code).  
 > It's tested on Windows + Android (Mono & IL2CPP) builds without issues, but other targets (IL2CPP iOS, WebGL, consoles) are not yet verified.
 >
 > The only non-standard Unity moving parts are:
@@ -230,7 +230,7 @@ Saneject fills in the serialized fields. Press Play, no runtime container requir
 > ⚠️️ **Potential inspector conflicts**  
 > Saneject includes a `MonoBehaviourFallbackInspector` that ensures injected fields, `[SerializeInterface]` fields, and nested types are drawn with the intended UI/UX by default.
 >
-> If your inspector looks wrong or incomplete, it’s likely another custom inspector or plugin overriding Saneject’s inspector. In that case, you can restore the full Saneject layout inside your own inspector by calling:
+> If your inspector looks wrong or incomplete, it's likely another custom inspector or plugin overriding Saneject's inspector. In that case, you can restore the full Saneject layout inside your own inspector by calling:
 > ```csharp
 > SanejectInspector.DrawDefault(serializedObject, targets, target);
 > ```
@@ -246,14 +246,14 @@ Saneject fills in the serialized fields. Press Play, no runtime container requir
 
 The sample is provided as a reference project and can be studied to see how bindings, scopes, and proxies work together in practice.
 
-It contains a small three-scene game where the player (green bean) chases enemies (red beans) while they try to evade. When all enemies are caught, the game is over and restart UI appears. It's intentionally kept minimal so you can study the setup and learn Saneject’s core concepts without distractions.
+It contains a small three-scene game where the player (green bean) chases enemies (red beans) while they try to evade. When all enemies are caught, the game is over and restart UI appears. It's intentionally kept minimal so you can study the setup and learn Saneject's core concepts without distractions.
 
 ![Screenshot of Saneject sample game](Docs/sample-game-screenshot.webp)
 
 It shows how to use Saneject in a real (but simple) game setup:
 
 - **Multiple levels of binding**: Shows how you can declare bindings at different granularities (scene-wide, prefab-local, or object-local) so each piece only knows about what it needs.
-- **Cross-scene and prefab references**: Demonstrates how to connect systems that live in different scenes or inside prefabs using `SerializeInterface` and proxies, without breaking Unity’s prefab isolation.
+- **Cross-scene and prefab references**: Demonstrates how to connect systems that live in different scenes or inside prefabs using `SerializeInterface` and proxies, without breaking Unity's prefab isolation.
 - **Global scope usage**: Core systems like the game manager or score tracker are promoted to globals, making them easily accessible across the whole project without resorting to singletons.
 - **UI integration**: The sample UI is wired entirely through interfaces in an MVC-like pattern, so buttons and text elements update automatically from gameplay state, cleanly separated from game logic.
 - **Game loop orchestration**: Player, enemies, and UI are stitched together through DI so that chasing, scoring, and restarting the game all happen through clear, testable contracts instead of hard references.
@@ -283,7 +283,7 @@ To start binding dependencies, create a custom `Scope` and use one of the follow
 A few rules:
 
 - **Field types must match bindings**: Interface bindings won't resolve concrete fields, and vice versa.
-- **Single vs. collections bindings must match**: Single-value bindings won’t resolve collection (list/array) fields, and collection bindings won’t resolve single fields. The system validates everything automatically and reports missing/invalid bindings during injection.
+- **Single vs. collections bindings must match**: Single-value bindings won't resolve collection (list/array) fields, and collection bindings won't resolve single fields. The system validates everything automatically and reports missing/invalid bindings during injection.
 
 You can bind dependencies in three ways, depending on how you want injection to work:
 
@@ -333,11 +333,11 @@ Looks for the `Component` from the `Scope` `Transform` and its hierarchy.
 
 | Method                                                                                         | Description                                                   |
 |------------------------------------------------------------------------------------------------|---------------------------------------------------------------|
-| `FromScopeSelf()`<br/>`FromSelf()`                                                             | Component on the Scope’s own `Transform`.                     |
-| `FromScopeParent()`<br/>`FromParent()`                                                         | Component on the Scope’s direct parent.                       |
+| `FromScopeSelf()`<br/>`FromSelf()`                                                             | Component on the Scope's own `Transform`.                     |
+| `FromScopeParent()`<br/>`FromParent()`                                                         | Component on the Scope's direct parent.                       |
 | `FromScopeAncestors(bool includeSelf = true)`<br/>`FromAncestors(bool includeSelf = true)`     | First match on any ancestor of the Scope (recursive upward).  |
-| `FromScopeFirstChild()`<br/>`FromFirstChild()`                                                 | Component on the Scope’s first direct child.                  |
-| `FromScopeLastChild()`<br/>`FromLastChild()`                                                   | Component on the Scope’s last direct child.                   |
+| `FromScopeFirstChild()`<br/>`FromFirstChild()`                                                 | Component on the Scope's first direct child.                  |
+| `FromScopeLastChild()`<br/>`FromLastChild()`                                                   | Component on the Scope's last direct child.                   |
 | `FromScopeChildWithIndex(int index)`<br/>`FromChildWithIndex(int index)`                       | Component on the child at the given index.                    |
 | `FromScopeDescendants(bool includeSelf = true)`<br/>`FromDescendants(bool includeSelf = true)` | Any descendant of the Scope.                                  |
 | `FromScopeSiblings()`<br/>`FromSiblings()`                                                     | Any sibling of the Scope (other children of the same parent). |
@@ -349,9 +349,9 @@ Looks for the `Component` from the `Scope.transform.root` `Transform` and its hi
 | Method                                         | Description                                       |
 |------------------------------------------------|---------------------------------------------------|
 | `FromRootSelf()`                               | Component on the scene root object itself.        |
-| `FromRootFirstChild()`                         | Component on the root’s first direct child.       |
-| `FromRootLastChild()`                          | Component on the root’s last direct child.        |
-| `FromRootChildWithIndex(int index)`            | Component on the root’s child at the given index. |
+| `FromRootFirstChild()`                         | Component on the root's first direct child.       |
+| `FromRootLastChild()`                          | Component on the root's last direct child.        |
+| `FromRootChildWithIndex(int index)`            | Component on the root's child at the given index. |
 | `FromRootDescendants(bool includeSelf = true)` | Any descendant of the root object.                |
 
 #### Injection target-relative component locators
@@ -360,12 +360,12 @@ Looks for the `Component` from the injection target `Transform` and its hierarch
 
 | Method                                           | Description                                |
 |--------------------------------------------------|--------------------------------------------|
-| `FromTargetSelf()`                               | Component on the target’s own `Transform`. |
-| `FromTargetParent()`                             | Component on the target’s parent.          |
+| `FromTargetSelf()`                               | Component on the target's own `Transform`. |
+| `FromTargetParent()`                             | Component on the target's parent.          |
 | `FromTargetAncestors(bool includeSelf = true)`   | First match on any ancestor of the target. |
-| `FromTargetFirstChild()`                         | Component on the target’s first child.     |
-| `FromTargetLastChild()`                          | Component on the target’s last child.      |
-| `FromTargetChildWithIndex(int index)`            | Component on the target’s child at index.  |
+| `FromTargetFirstChild()`                         | Component on the target's first child.     |
+| `FromTargetLastChild()`                          | Component on the target's last child.      |
+| `FromTargetChildWithIndex(int index)`            | Component on the target's child at index.  |
 | `FromTargetDescendants(bool includeSelf = true)` | Any descendant of the target.              |
 | `FromTargetSiblings()`                           | Any sibling of the target.                 |
 
@@ -376,11 +376,11 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 | Method                                                         | Description                                |
 |----------------------------------------------------------------|--------------------------------------------|
 | `From(Transform target)`                                       | Component on a specific `Transform`.       |
-| `FromParentOf(Transform target)`                               | Component on the target’s parent.          |
+| `FromParentOf(Transform target)`                               | Component on the target's parent.          |
 | `FromAncestorsOf(Transform target, bool includeSelf = true)`   | First match on any ancestor of the target. |
-| `FromFirstChildOf(Transform target)`                           | Component on the target’s first child.     |
-| `FromLastChildOf(Transform target)`                            | Component on the target’s last child.      |
-| `FromChildWithIndexOf(Transform target, int index)`            | Component on the target’s child at index.  |
+| `FromFirstChildOf(Transform target)`                           | Component on the target's first child.     |
+| `FromLastChildOf(Transform target)`                            | Component on the target's last child.      |
+| `FromChildWithIndexOf(Transform target, int index)`            | Component on the target's child at index.  |
 | `FromDescendantsOf(Transform target, bool includeSelf = true)` | Any descendant of the target.              |
 | `FromSiblingsOf(Transform target)`                             | Any sibling of the target.                 |
 
@@ -482,7 +482,7 @@ Saneject flips the model: you still declare bindings in code (via a `Scope`), bu
 |---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
 | **Scope component**       | A `MonoBehaviour` that declares bindings for how to resolve dependencies in `Components` **below** its `Transform`.                                                                                                                                                                                                          |
 | **Root-scope scan**       | No matter which `Scope` you start the injection on, Saneject walks up to the top-most Scope first, then injects downward once.                                                                                                                                                                                               |
-| **Resolution fallback**   | When a binding isn’t found in the current `Scope`, the injector climbs upward through parent `Scopes` until it finds one (or fails).                                                                                                                                                                                         |
+| **Resolution fallback**   | When a binding isn't found in the current `Scope`, the injector climbs upward through parent `Scopes` until it finds one (or fails).                                                                                                                                                                                         |
 | **Scene Scope**           | Lives on a (non-prefab) scene `GameObject`. Can bind to any `Component` or `Object` in the scene or project folder, including prefabs.                                                                                                                                                                                       |
 | **Prefab Scope**          | Lives on a prefab. Can bind to any `Component` or `Object` in the prefab itself or project folder. Prefab Scopes present in the scene are skipped during scene injection, to keep the prefab self-contained.<br><br>Need a scene reference inside a prefab? Use an `ProxyObject` `ScriptableObject` and inject that instead. |
 | **Scene vs prefab Scope** | Same `Component` but the DI system treats them as different contexts.                                                                                                                                                                                                                                                        |
@@ -507,7 +507,7 @@ flowchart TD
   end
 ```
 
-> ⚠️ Last time I checked, Mermaid diagrams don’t render in the GitHub mobile app. Use a browser to view them properly.
+> ⚠️ Last time I checked, Mermaid diagrams don't render in the GitHub mobile app. Use a browser to view them properly.
 
 `DependencyInjector` (injection passes) first queries `EnemyScope` for `IAudioService` but a binding isn't defined there, so the request bubbles up to `RootScope` which has the binding and provides the `Object`.
 
@@ -637,9 +637,9 @@ For most cases, leave this enabled and rely on `ProxyObjects` for legitimate cro
 
 ### SerializeInterface
 
-#### Why Unity can’t “serialize an interface”
+#### Why Unity can't "serialize an interface"
 
-Unity’s serializer only supports a restricted set of types:
+Unity's serializer only supports a restricted set of types:
 
 - Primitive value types (`int`, `float`, `bool`, etc.)
 - Enums and strings
@@ -647,7 +647,7 @@ Unity’s serializer only supports a restricted set of types:
 - Structs marked `[Serializable]`
 - References to `UnityEngine.Object` subclasses (`Component`, `ScriptableObject`, etc.)
 
-Interfaces don’t fit into any of these categories. They’re just contracts, not concrete data or Unity objects, so Unity has nothing it can actually write. As a result, fields typed as an interface are skipped entirely by the serializer.
+Interfaces don't fit into any of these categories. They're just contracts, not concrete data or Unity objects, so Unity has nothing it can actually write. As a result, fields typed as an interface are skipped entirely by the serializer.
 
 #### What the Saneject Roslyn generator adds
 
@@ -705,7 +705,7 @@ The generated backing fields make interface members appear in the Inspector like
 
 With `[Inject, SerializeInterface]`, fields are grayed out and auto-managed by Saneject.
 
-Without `[Inject]`, they behave as regular `Object` fields you can assign manually. If you assign an object that doesn’t implement the required interface, the field is cleared to `null`.
+Without `[Inject]`, they behave as regular `Object` fields you can assign manually. If you assign an object that doesn't implement the required interface, the field is cleared to `null`.
 
 ![Interface field visible in the Inspector](Docs/serialize-interface-inspector-example.webp)
 
@@ -717,7 +717,7 @@ Without `[Inject]`, they behave as regular `Object` fields you can assign manual
 - Generates forwarding code for all method calls, property gets/sets, and event subscriptions at compile-time.
 - The actual `T` instance is resolved at runtime – cheaply if using `BindGlobal<TComponent>` to register it to the `GlobalScope`.
 
-Why? Unity can’t serialize direct references to scene objects across scenes or into prefabs. The proxy asset is serializable, so you assign it in the Inspector or inject it. At runtime, it finds and links to the actual instance the first time it’s used. This makes it ideal for cross-context injections.
+Why? Unity can't serialize direct references to scene objects across scenes or into prefabs. The proxy asset is serializable, so you assign it in the Inspector or inject it. At runtime, it finds and links to the actual instance the first time it's used. This makes it ideal for cross-context injections.
 
 #### Auto-generation
 
@@ -727,9 +727,9 @@ Think of it as a serializable weak reference that resolves quickly at runtime. W
 
 At injection time, this will:
 
-- Generate a proxy script implementing all interfaces of `Concrete` (if one doesn’t already exist).
+- Generate a proxy script implementing all interfaces of `Concrete` (if one doesn't already exist).
 - Trigger a standard Unity script recompilation if a new proxy script has to be generated, stopping the current injection pass. In this case, click Inject again to continue.
-- Create a `ScriptableObject` proxy asset at `Assets/Generated` (if one doesn’t already exist).
+- Create a `ScriptableObject` proxy asset at `Assets/Generated` (if one doesn't already exist).
 - Reuse the first found proxy asset if it already exists somewhere in the project.
 
 #### Manual generation
@@ -765,7 +765,7 @@ PauseMenuUI  -->|References IGameManager| Proxy
 Proxy -->|Forwards calls| GameManager
 ```
 
-> ⚠️ Mermaid diagrams don’t render in the GitHub mobile app. Use a browser to see them properly.
+> ⚠️ Mermaid diagrams don't render in the GitHub mobile app. Use a browser to see them properly.
 
 Example interface:
 
@@ -816,7 +816,7 @@ public partial class GameManagerProxy : IGameManager
 }
 ```
 
-Now you can drag the `GameManagerProxy` asset into any `[SerializeInterface] IGameManager` field, whether it’s in a scene, a prefab, or resolved through injection.
+Now you can drag the `GameManagerProxy` asset into any `[SerializeInterface] IGameManager` field, whether it's in a scene, a prefab, or resolved through injection.
 
 #### Resolve strategies
 
@@ -830,7 +830,7 @@ Now you can drag the `GameManagerProxy` asset into any `[SerializeInterface] IGa
 
 #### Performance note
 
-The proxy resolves its target the first time it’s accessed and then caches it. If the cached instance goes null (for example, after a scene reload), the proxy will resolve it again automatically.
+The proxy resolves its target the first time it's accessed and then caches it. If the cached instance goes null (for example, after a scene reload), the proxy will resolve it again automatically.
 
 Forwarded calls include a null-check, which makes them about 8x slower than a direct call. In practice that means nanoseconds of overhead, which is negligible outside of extremely tight loops.
 
@@ -838,12 +838,12 @@ In a stress test, one million proxy calls in a single frame to a trivial method 
 
 ### MonoBehaviour fallback inspector
 
-Unity’s default inspector draws fields in declaration order, but Roslyn-generated interface backing fields live in a partial class, which normally causes them to appear at the bottom of the Inspector. This breaks expected grouping and makes injected interfaces harder to interpret.
+Unity's default inspector draws fields in declaration order, but Roslyn-generated interface backing fields live in a partial class, which normally causes them to appear at the bottom of the Inspector. This breaks expected grouping and makes injected interfaces harder to interpret.
 
 `MonoBehaviourFallbackInspector` is a global fallback custom `Editor` for all `MonoBehaviour`s.  
-It is only used when no more specific inspector exists for the target type, ensuring Saneject’s intended UI/UX is always applied by default.
+It is only used when no more specific inspector exists for the target type, ensuring Saneject's intended UI/UX is always applied by default.
 
-It replaces Unity’s default drawing logic with a call to `SanejectInspector.DrawDefault`, which:
+It replaces Unity's default drawing logic with a call to `SanejectInspector.DrawDefault`, which:
 
 - Draws the script field and all serializable fields and interfaces in correct declaration order, including base types.
 - Applies custom UI for `[SerializeInterface]` fields, with type labels, collection support, and validation.
@@ -852,9 +852,9 @@ It replaces Unity’s default drawing logic with a call to `SanejectInspector.Dr
 - Validates assigned interface types and resolves from `GameObject`s when possible.
 - Omits non-serialized, backing-only, or hidden fields by default.
 
-If you create your own inspector for a specific type or a catch-all `Editor` for `MonoBehaviour`, Unity will use that instead of Saneject's `MonoBehaviourFallbackInspector`. In that case, Saneject’s inspector features won’t apply unless you explicitly call back into it.
+If you create your own inspector for a specific type or a catch-all `Editor` for `MonoBehaviour`, Unity will use that instead of Saneject's `MonoBehaviourFallbackInspector`. In that case, Saneject's inspector features won't apply unless you explicitly call back into it.
 
-You can completely restore Saneject’s inspector behavior inside your custom editor by calling:
+You can completely restore Saneject's inspector behavior inside your custom editor by calling:
 
 ```csharp
 SanejectInspector.DrawDefault(serializedObject, targets, target);
@@ -878,7 +878,7 @@ Or call specific parts of it:
 | Method                         | Description                                                                                                                      |
 |--------------------------------|----------------------------------------------------------------------------------------------------------------------------------|
 | `DrawMonoBehaviourScriptField` | Draws the default non-editable script field at the top of a MonoBehaviour inspector.                                             |
-| `DrawAllSerializedFields`      | Draws all serializable fields on the given target using Saneject’s ordering, visibility, and injection-aware logic.              |
+| `DrawAllSerializedFields`      | Draws all serializable fields on the given target using Saneject's ordering, visibility, and injection-aware logic.              |
 | `DrawSerializedField`          | Draws a single serialized field with support for interface backing, read-only handling, and nested types.                        |
 | `TryGetInterfaceBackingInfo`   | Attempts to find the interface backing field and resolve its concrete element type for a `[SerializeInterface]` field.           |
 | `IsReadOnly`                   | Returns true if a field should be drawn as read-only due to `[Inject]` or `[ReadOnly]`.                                          |
@@ -896,7 +896,7 @@ Or call specific parts of it:
 | `DrawNestedSerializable`       | Recursively draws the contents of a nested serializable object using the same field rules.                                       |
 | `ValidateInterfaceCollection`  | Validates that objects in a collection implement a required interface type, resolving components from `GameObject`s if possible. |
 
-These utilities are useful for building custom inspectors, advanced tooling, or partial field drawing while preserving Saneject’s behavior and layout.
+These utilities are useful for building custom inspectors, advanced tooling, or partial field drawing while preserving Saneject's behavior and layout.
 
 ### GlobalScope
 
@@ -947,10 +947,10 @@ Saneject ships with three Roslyn tool DLLs (in `Saneject/RoslynLibs`):
 | **ProxyObjectGenerator.dll**        | Source generator    | Emits proxy classes for types marked with `[GenerateProxyObject]`. Each proxy is a `ScriptableObject` that implements the same interfaces and forwards all calls to the resolved runtime instance. |
 | **AttributesAnalyzer.dll**          | Analyzer + code fix | Validates field decoration rules for `[Inject]`, `[SerializeField]`, and `[SerializeInterface]`. Includes context-aware quick fixes in supported IDEs (like Rider).                                |
 
-Unity’s official Roslyn analyzer documentation (including setup instructions):  
+Unity's official Roslyn analyzer documentation (including setup instructions):  
 <https://docs.unity3d.com/Manual/roslyn-analyzers.html>
 
-Use that guide if you want to plug in custom Roslyn tooling or integrate Saneject’s tools in other project structures.
+Use that guide if you want to plug in custom Roslyn tooling or integrate Saneject's tools in other project structures.
 
 Roslyn source code is in the [RoslynTools](RoslynTools) folder.
 
@@ -991,7 +991,24 @@ Unity 2023 releases are skipped since they are tech stream builds (not long-term
 
 ## Limitations
 
-- Platform coverage: currently verified on Windows (Mono + IL2CPP) and Android (IL2CPP). Other platforms are untested.
+- No support for injecting plain C# objects (POCOs) directly into other objects due to Unity's serialization limits.  
+  Injection into serializable POCOs nested inside `MonoBehaviour`s is supported.
+- Platform coverage is currently verified on Windows (Mono + IL2CPP) and Android (IL2CPP). Other platforms remain untested.
+
+## Possible additions
+
+These are features that could be added if there’s interest.
+
+- Asset binding by interface only, `BindAsset<IMyInterface>()`. Useful for injecting collections of different `ScriptableObject`s that implement the same interface.
+
+## Future explorations
+
+These are research ideas and experiments that may or may not make it into Saneject.
+
+- Editor-time POCO injection via `[SerializeReference]`.
+- Project-wide "one click" injection: process all scenes and prefabs in one go. Difficult to get right but could be a power feature.
+- Circular dependency detection: Currently not possible because injection runs one scene or prefab at a time. A project-wide injection pass would enable it, and it could be configurable (ignore, warn, block).
+- Interface-aware object picker. Unity's built-in picker can't filter by interface, so this would require a fully custom object picker. A bit niche now that `[Inject]` fields are grayed out and not pickable, but it would make `[SerializeInterface]` feel more native if people want to use it without `[Inject]`.
 
 ## Credits
 
