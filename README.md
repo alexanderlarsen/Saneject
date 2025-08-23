@@ -994,14 +994,14 @@ Unity 2023 releases are skipped since they are tech stream builds (not long-term
 ## Limitations
 
 - No support for injecting plain C# objects (POCOs) directly into other objects due to Unity's serialization limits.  
-  Injection into serializable POCOs nested inside `MonoBehaviour`s is supported.
+  Injection into serializable POCOs nested inside `MonoBehaviour` is supported.
 - Platform coverage is currently verified on Windows (Mono + IL2CPP) and Android (IL2CPP). Other platforms remain untested.
 
 ## Possible additions
 
 These are features that could be added if there’s interest.
 
-- Asset binding by interface only, `BindAsset<IMyInterface>()`. Useful for injecting collections of different `ScriptableObject`s that implement the same interface.
+- Asset binding by interface only, `BindAsset<IMyInterface>()`. Useful for injecting collections of different `ScriptableObject` that implement the same interface.
 
 ## Future explorations
 
