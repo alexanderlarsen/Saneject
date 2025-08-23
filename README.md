@@ -993,8 +993,6 @@ Unity 2023 releases are skipped since they are tech stream builds (not long-term
 
 ## Limitations
 
-## Limitations
-
 - Injecting plain C# objects (POCOs) directly into other objects is not supported due to Unity's serialization limits. Injection *into* serializable POCOs nested inside `MonoBehaviour` is supported.
 - Verified on Windows (Mono + IL2CPP) and Android (IL2CPP). Other platforms remain untested.
 
