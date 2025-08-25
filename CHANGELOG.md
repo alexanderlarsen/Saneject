@@ -1,5 +1,15 @@
 ﻿# Saneject Changelog
 
+## Version 0.11.0
+
+### Features
+
+- Added `FromFolder` asset binding locator that loads all assets of a given type from a project folder and its subfolders.
+
+### Tests
+
+- Added unit tests for `FromFolder` covering both concrete and interface bindings.
+
 ## Version 0.10.2
 
 ### Fixes

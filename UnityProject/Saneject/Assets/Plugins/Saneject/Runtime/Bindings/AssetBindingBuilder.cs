@@ -3,9 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
-using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
+
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace Plugins.Saneject.Runtime.Bindings
 {
@@ -74,7 +77,8 @@ namespace Plugins.Saneject.Runtime.Bindings
         }
 
         /// <summary>
-        /// Locate the <see cref="Object" /> asset at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAssetAtPath(string, System.Type)" />.
+        /// Locate all sub-assets of type <see cref="Object" /> in a single asset file
+        /// at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAllAssetsAtPath(string)" />.
         /// </summary>
         public AssetFilterBuilder<TAsset> FromAssetLoadAll(string assetPath)
         {
@@ -83,6 +87,27 @@ namespace Plugins.Saneject.Runtime.Bindings
             return new AssetFilterBuilder<TAsset>(binding, scope);
 #else
             return null;
+#endif
+        }
+
+        /// <summary>
+        /// Locate all <see cref="Object" />s of type <typeparamref name="TAsset" /> in the specified folder
+        /// using <see cref="UnityEditor.AssetDatabase.FindAssets(string, string[])" />.
+        /// </summary>
+        public AssetFilterBuilder<TAsset> FromFolder(string folderPath)
+        {
+#if UNITY_EDITOR
+            folderPath = folderPath.TrimEnd('/');
+
+            binding.SetLocator(_ =>
+                AssetDatabase.FindAssets($"t:{typeof(TAsset).Name}", new[] { folderPath })
+                    .Select(AssetDatabase.GUIDToAssetPath)
+                    .Select(AssetDatabase.LoadAssetAtPath<TAsset>)
+                    .Where(x => x));
+
+            return new AssetFilterBuilder<TAsset>(binding, scope);
+#else
+    return null;
 #endif
         }
 
