@@ -637,10 +637,6 @@ namespace Plugins.Saneject.Runtime.Bindings
                 .FindObjectsByType<Component>(findObjectsInactive, sortMode)
                 .OfType<TComponent>()
                 .Cast<Component>());
-            
-            // binding.SetLocator(_ => Object
-            //     .FindObjectsByType<Component>(findObjectsInactive, sortMode)
-            //     .Where(c => c.GetType() == typeof(TComponent)));
 
             return new ComponentFilterBuilder<TComponent>(binding, scope);
         }
@@ -673,7 +669,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         }
 
         /// <summary>
-        /// Creates or locates a <see cref="Plugins.Saneject.Runtime.Proxy.ProxyObject{TConcrete}"/> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component"/> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
+        /// Creates or locates a <see cref="Plugins.Saneject.Runtime.Proxy.ProxyObject{TConcrete}" /> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component" /> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
         /// </summary>
         public void FromProxy()
         {

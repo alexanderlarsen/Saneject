@@ -401,16 +401,17 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 
 Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All methods return a `AssetFilterBuilder<TAsset>` to filter found `Object` instances.
 
-| Method                                         | Description                                                                                           |
-|------------------------------------------------|-------------------------------------------------------------------------------------------------------|
-| `FromResources(string path)`                   | Load a single asset of type `TAsset` from a `Resources/` path via `Resources.Load`.                   |
-| `FromResourcesAll(string path)`                | Load all assets of type `TAsset` at that path via `Resources.LoadAll`.                                |
-| `FromAssetLoad(string assetPath)`              | Load an asset of type `TAsset` at the given path via `AssetDatabase.LoadAssetAtPath<T>()`.            |
-| `FromAssetLoadAll(string assetPath)`           | Load multiple assets of type `TAsset` at the given path via `AssetDatabase.LoadAllAssetsAtPath<T>()`. |
-| `FromInstance(TAsset instance)`                | Bind to an explicit `Object` instance.                                                                |
-| `FromMethod(Func<TAsset> method)`              | Uses a custom predicate to supply a single instance.                                                  |
-| `FromMethod(Func<IEnumerable<TAsset>> method)` | Uses a custom factory method to supply a collection of instances.                                     |
-| `WithId(string id)`                            | Assign a custom binding ID to match `[Inject("YourIdHere")]` fields.                                  |
+| Method                                         | Description                                                                                                                                                          |
+|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `FromResources(string path)`                   | Load a single asset of type `TAsset` from a `Resources/` path via `Resources.Load`.                                                                                  |
+| `FromResourcesAll(string path)`                | Load all assets of type `TAsset` at that path via `Resources.LoadAll`.                                                                                               |
+| `FromAssetLoad(string assetPath)`              | Load an asset of type `TAsset` at the given path via `AssetDatabase.LoadAssetAtPath<T>()`.                                                                           |
+| `FromAssetLoadAll(string assetPath)`           | Load all sub-assets of type `TAsset` inside a single asset file via `AssetDatabase.LoadAllAssetsAtPath<T>()` (e.g. Sprites in a texture, Meshes or Clips in an FBX). |
+| `FromFolder(string folderPath)`                | Load all assets of type `TAsset` from the specified project folder and its subfolders via `AssetDatabase.FindAssets`.                                                |
+| `FromInstance(TAsset instance)`                | Bind to an explicit `Object` instance.                                                                                                                               |
+| `FromMethod(Func<TAsset> method)`              | Uses a custom predicate to supply a single instance.                                                                                                                 |
+| `FromMethod(Func<IEnumerable<TAsset>> method)` | Uses a custom factory method to supply a collection of instances.                                                                                                    |
+| `WithId(string id)`                            | Assign a custom binding ID to match `[Inject("YourIdHere")]` fields.                                                                                                 |
 
 ### Component filters
 
@@ -996,7 +997,7 @@ Unity 2023 releases are skipped since they are tech stream builds (not long-term
 - Injecting plain C# objects (POCOs) directly into other objects is not supported due to Unity's serialization limits. Injection *into* serializable POCOs nested inside `MonoBehaviour` is supported.
 - Verified on Windows (Mono + IL2CPP) and Android (IL2CPP). Other platforms remain untested.
 
-For design trade-offs compared to runtime DI frameworks, see [Runtime DI vs Saneject](#runtime-di-vs-saneject).
+For trade-offs compared to runtime DI frameworks, see [Runtime DI vs Saneject](#runtime-di-vs-saneject).
 
 ## Possible additions
 
