@@ -1,5 +1,17 @@
 ﻿# Saneject Changelog
 
+## Version 0.12.0
+
+### Features
+
+- Injection error logs now include the full path to the injected field, making it easier to pinpoint where a failure occurred.
+- Injection stats now track the number of missing dependencies in addition to missing and invalid bindings.
+- Added log severity levels (Info, Warning, Error) to injection stats logs.
+
+### Fixes
+
+- Fixed an issue where missing dependencies were not counted correctly in the injection stats.
+
 ## Version 0.11.0
 
 ### Features

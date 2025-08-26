@@ -36,7 +36,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             Scope scope)
         {
             StringBuilder sb = new();
-            sb.Append("[");
+            sb.Append("[Binding: ");
 
             if (interfaceType != null && concreteType != null)
                 sb.Append($"{interfaceType.Name}/{concreteType.Name}");
@@ -71,7 +71,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             Scope scope)
         {
             StringBuilder sb = new();
-            sb.Append("[");
+            sb.Append("[Binding: ");
 
             if (interfaceType != null && concreteType != null)
                 sb.Append($"{interfaceType.Name}/{concreteType.Name}");
