@@ -7,6 +7,10 @@
 - Injection error logs now include the full path to the injected field, making it easier to pinpoint where a failure occurred.
 - Injection stats now track the number of missing dependencies in addition to missing and invalid bindings.
 - Added log severity levels (Info, Warning, Error) to injection stats logs.
+- Added a new Scope creation tool:
+    - Available via `Saneject/Create New Scope` or `Assets/Create/Saneject/Create New Scope`.
+    - Generates a new `Scope` class with the correct boilerplate code.
+    - Namespace generation can be toggled in **User Settings** with the option **Generate Scope Namespace From Folder** (uses folder path relative to `Assets/`).
 
 ### Fixes
 

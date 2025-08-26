@@ -196,6 +196,16 @@ namespace Plugins.Saneject.Editor.Settings
                 currentPath: UserSettings.ProxyAssetGenerationFolder,
                 onChanged: path => UserSettings.ProxyAssetGenerationFolder = path);
 
+            EditorGUILayout.Space(10);
+            EditorGUILayout.LabelField("Scope File Generation", EditorStyles.boldLabel);
+
+            DrawToggle(
+                label: "Generate Scope Namespace From Folder",
+                tooltip: "When enabled, a new Scope created via 'Assets/Create/Saneject/Scope' gets a namespace matching its folder path (relative to Assets). When disabled, the Scope is created without a namespace.",
+                currentValue: UserSettings.GenerateScopeNamespaceFromFolder,
+                onChanged: newValue => UserSettings.GenerateScopeNamespaceFromFolder = newValue
+            );
+
             EditorGUILayout.EndScrollView();
         }
     }

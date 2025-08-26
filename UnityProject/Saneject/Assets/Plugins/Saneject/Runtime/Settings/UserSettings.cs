@@ -87,6 +87,13 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetString(value);
         }
 
+        // Scope File Generation
+        public static bool GenerateScopeNamespaceFromFolder
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
         private static string GetString(
             string defaultValue,
             [CallerMemberName] string propertyName = null)
