@@ -768,7 +768,7 @@ PauseMenuUI  -->|References IGameManager| Proxy
 Proxy -->|Forwards calls| GameManager
 ```
 
-> ⚠️ Mermaid diagrams don't render in the GitHub mobile app. Use a browser to see them properly.
+> ⚠️ Last time I checked, Mermaid diagrams don't render in the GitHub mobile app. Use a browser to view them properly.
 
 Example interface:
 
