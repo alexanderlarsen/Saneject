@@ -135,15 +135,11 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            ScopeExtensions.Initialize(allScopes);
+
             try
             {
                 EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in hierarchy", 0);
-
-                ScopeExtensions.Initialize(allScopes);
-
-                Scope[] rootScopes = allScopes
-                    .Where(scope => !scope.ParentScope)
-                    .ToArray();
 
                 IEnumerable<Binding> proxyBindings = allScopes
                     .SelectMany(scope => scope.GetProxyBindings());
@@ -153,10 +149,7 @@ namespace Plugins.Saneject.Editor.Core
                 InjectionStats stats = new();
 
                 allScopes.ConfigureGlobalBindings(stats);
-
-                foreach (Scope root in rootScopes)
-                    root.InjectFromRoot(stats, isPrefabInjection: false);
-
+                rootScope.InjectFromRoot(stats, isPrefabInjection: false);
                 allScopes.LogUnusedBindings(stats);
                 stopwatch.Stop();
 

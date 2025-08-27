@@ -131,10 +131,10 @@ namespace Plugins.Saneject.Editor.Settings
             EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
 
             DrawToggle(
-                label: "Show Injected Fields",
-                tooltip: "Show [Inject] fields in the Inspector.",
-                currentValue: UserSettings.ShowInjectedFields,
-                onChanged: newValue => UserSettings.ShowInjectedFields = newValue,
+                label: "Show Injected Fields/Properties",
+                tooltip: "Show [Inject] fields and [field: Inject] auto-properties in the Inspector.",
+                currentValue: UserSettings.ShowInjectedFieldsProperties,
+                onChanged: newValue => UserSettings.ShowInjectedFieldsProperties = newValue,
                 repaintInspectors: true
             );
 

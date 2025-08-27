@@ -23,7 +23,7 @@ namespace Plugins.Saneject.Editor.Utility
             DrawMonoBehaviourScriptField(targets, target);
             DrawAllSerializedFields(serializedObject, target);
             serializedObject.ApplyModifiedProperties();
-        } 
+        }
 
         /// <summary>
         /// Draws the default script field at the top of a MonoBehaviour inspector.
@@ -71,7 +71,7 @@ namespace Plugins.Saneject.Editor.Utility
             {
                 if (IsSerializeInterfaceField(field))
                 {
-                    if (!UserSettings.ShowInjectedFields) return;
+                    if (!UserSettings.ShowInjectedFieldsProperties) return;
 
                     if (!TryGetInterfaceBackingInfo(field, serializedObject, out SerializedProperty interfaceProperty, out Type interfaceType, parent)) return;
 
@@ -140,14 +140,14 @@ namespace Plugins.Saneject.Editor.Utility
             out Type interfaceType,
             SerializedProperty parent = null)
         {
-            string backingName = "__" + field.Name;
+            string logical = GetLogicalName(field);
+            string backingName = "__" + logical;
 
             property = parent == null
                 ? serializedObject.FindProperty(backingName)
                 : parent.FindPropertyRelative(backingName);
 
             interfaceType = null;
-
             if (property == null) return false;
 
             Type fieldType = field.FieldType;
@@ -332,9 +332,9 @@ namespace Plugins.Saneject.Editor.Utility
             if (field.Name == "m_Script") return false;
             if (field.IsDefined(typeof(NonSerializedAttribute), false)) return false;
             if (field.IsDefined(typeof(HideInInspector), false)) return false;
-            if (field.Name.StartsWith("<")) return false;
+            // if (field.Name.StartsWith("<")) return false;
             if (field.IsDefined(typeof(InterfaceBackingFieldAttribute), false)) return false;
-            if (HasInject(field) && !UserSettings.ShowInjectedFields) return false;
+            if (HasInject(field) && !UserSettings.ShowInjectedFieldsProperties) return false;
 
             return field.IsPublic
                    || field.IsDefined(typeof(SerializeField), false)
@@ -420,6 +420,24 @@ namespace Plugins.Saneject.Editor.Utility
 
                 property.objectReferenceValue = newValue;
             }
+        }
+
+        /// <summary>
+        /// Returns the logical name of a field, stripping compiler auto-property
+        /// backing syntax (&lt;Name&gt;k__BackingField) when present.
+        /// </summary>
+        public static string GetLogicalName(FieldInfo field)
+        {
+            string n = field.Name;
+
+            // Handle auto-property backing fields: <Name>k__BackingField
+            if (n.Length > 0 && n[0] == '<')
+            {
+                int end = n.IndexOf(">k__BackingField", StringComparison.Ordinal);
+                if (end > 1) return n.Substring(1, end - 1); // "InterfaceB1"
+            }
+
+            return n;
         }
     }
 }

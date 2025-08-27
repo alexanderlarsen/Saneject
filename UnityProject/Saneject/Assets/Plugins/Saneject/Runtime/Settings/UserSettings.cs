@@ -36,7 +36,7 @@ namespace Plugins.Saneject.Runtime.Settings
         }
 
         // Inspector
-        public static bool ShowInjectedFields
+        public static bool ShowInjectedFieldsProperties
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);

@@ -918,6 +918,7 @@ Or call specific parts of it:
 | `IsNestedSerializable`         | Returns true if a type is a non-Unity serializable reference type suitable for nested drawing.                                   |
 | `DrawNestedSerializable`       | Recursively draws the contents of a nested serializable object using the same field rules.                                       |
 | `ValidateInterfaceCollection`  | Validates that objects in a collection implement a required interface type, resolving components from `GameObject`s if possible. |
+| `GetLogicalName`               | Returns the logical name of a field, stripping compiler auto-property backing syntax (`<Name>k__BackingField`) when present.     |
 
 These utilities are useful for building custom inspectors, advanced tooling, or partial field drawing while preserving Saneject's behavior and layout.
 
@@ -987,7 +988,7 @@ Found under `Saneject/User Settings`, these let you customize editor and logging
 | `Ask Before Hierarchy Injection`            | Show a confirmation dialog before injecting dependencies into a single scene hierarchy (excluding prefabs present in the hierarchy).                                                                                                          |
 | `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting dependencies into a prefab.                                                                                                                                                                       |
 | `Filter By Same Context`                    | Enforce context isolation during injection. Scene objects only resolve with other scene objects, and prefab objects only resolve within their own prefab. Cross-context references are filtered out unless this is disabled in User Settings. |
-| `Show Injected Fields`                      | Show `[Inject]` fields in the Inspector.                                                                                                                                                                                                      |
+| `Show Injected Fields/Properties`           | Show `[Inject]` fields and `[field: Inject]` auto-properties in the Inspector.                                                                                                                                                                |
 | `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                                                                                                                                                      |
 | `Log On Proxy Instance Resolve`             | Log when a proxy resolves its target during Play Mode.                                                                                                                                                                                        |
 | `Log Global Scope Register/Unregister`      | Log when objects are registered or unregistered in the global scope during Play Mode.                                                                                                                                                         |

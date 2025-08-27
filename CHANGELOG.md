@@ -29,6 +29,9 @@
 ### Fixes
 
 - Fixed an issue where missing dependencies were not counted correctly in the injection stats.
+- Restored property drawing for `[field: ...]` auto-properties in `SanejectInspector`, so `[SerializeField]` and `[SerializeInterface]` properties (with or without `[Inject]`, including in nested classes) now draw correctly again.
+
+Ask ChatGPT
 
 ## Version 0.11.0
 
