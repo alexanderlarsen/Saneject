@@ -18,7 +18,8 @@ namespace Plugins.Saneject.Runtime.Bindings
     public class Binding : IEquatable<Binding>
     {
         private readonly List<Func<Object, bool>> filters = new();
-        private readonly List<(Func<Object, bool> filter, Type targetType)> targetFilters = new();
+        private readonly List<(Func<Object, bool> filter, Type injectionTargetType)> injectionTargetFilters = new();
+        private readonly List<(Func<string, bool> filter, string injectionTargetMemberName)> injectionTargetMemberNameFilters = new();
 
         private Func<Object, IEnumerable<Object>> locator;
 
@@ -180,30 +181,47 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Add a filter for injection targets. Only targets passing all target filters are valid for this binding.
         /// </summary>
         /// <param name="filter">Predicate to evaluate each injection target <see cref="UnityEngine.Object" />.</param>
-        /// <param name="targetType"></param>
-        public void AddTargetFilter(
+        /// <param name="injectionTargetType">The type that this filter is associated with. Used for binding equality comparison.</param>
+        public void AddInjectionTargetFilter(
             Func<Object, bool> filter,
-            Type targetType)
+            Type injectionTargetType)
         {
-            targetFilters.Add((filter, targetType));
+            injectionTargetFilters.Add((filter, injectionTargetType));
+        }
+
+        /// <summary>
+        /// Adds a filter that matches against the name of the injection target member (field or property) being resolved.
+        /// </summary>
+        /// <param name="filter">
+        /// Predicate that evaluates the target member name. The member name is passed as a string.
+        /// </param>
+        /// <param name="injectionTargetMemberName">
+        /// The raw member name string this filter is associated with. Used for binding equality comparison.
+        /// </param>
+        public void AddInjectionTargetMemberNameFilter(
+            Func<string, bool> filter,
+            string injectionTargetMemberName)
+        {
+            injectionTargetMemberNameFilters.Add((filter, injectionTargetMemberName));
         }
 
         /// <summary>
         /// Locate and return the dependency <see cref="UnityEngine.Object" />, applying all filters. Returns <c>null</c> if no suitable object is found.
         /// </summary>
-        /// <param name="target">
+        /// <param name="injectionTarget">
         /// The injection target <see cref="UnityEngine.Object" /> to evaluate target filters against (optional; required if <see cref="RequiresInjectionTarget" /> is true).
         /// </param>
         /// <returns>The resolved dependency <see cref="UnityEngine.Object" />, or <c>null</c> if not found.</returns>
-        public IEnumerable<Object> LocateDependencies(Object target = null)
+        public IEnumerable<Object> LocateDependencies(Object injectionTarget = null)
         {
-            if (targetFilters.Count > 0 && target != null && !targetFilters.All(f => f.filter(target)))
-                return null;
+            //TODO: Keep an eye on this:
+            // if (injectionTargetFilters.Count > 0 && injectionTarget != null && !injectionTargetFilters.Any(f => f.filter(injectionTarget)))
+            //     return null;
+            //
+            // if (RequiresInjectionTarget && injectionTarget == null)
+            //     return null;
 
-            if (RequiresInjectionTarget && target == null)
-                return null;
-
-            IEnumerable<Object> all = locator(target) ?? Enumerable.Empty<Object>();
+            IEnumerable<Object> all = locator(injectionTarget) ?? Enumerable.Empty<Object>();
             IEnumerable<Object> filtered = all.Where(obj => obj != null && filters.All(filter => filter(obj)));
 
             return filtered;
@@ -214,40 +232,62 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         /// <param name="target">The injection target to evaluate against target filters.</param>
         /// <returns>True if all target filters pass or no target filters exist, false otherwise.</returns>
-        public bool PassesTargetFilters(Object target)
+        public bool PassesInjectionTargetFilters(Object target)
         {
-            if (targetFilters.Count == 0)
+            if (injectionTargetFilters.Count == 0)
                 return true;
 
-            return target != null && targetFilters.All(f => f.filter(target));
+            return target != null && injectionTargetFilters.Any(f => f.filter(target));
         }
-        
+
+        /// <summary>
+        /// Checks whether the given injection target member name passes this binding's member name filters.
+        /// </summary>
+        /// <param name="targetMemberName">
+        /// The name of the field or property on the injection target being considered for injection.
+        /// </param>
+        /// <returns>
+        /// True if any filter accepts the member name, or if no member name filters are defined.
+        /// False if filters are defined but none match.
+        /// </returns>
+        public bool PassesMemberNameFilters(string targetMemberName)
+        {
+            if (injectionTargetMemberNameFilters.Count == 0)
+                return true;
+
+            return !string.IsNullOrWhiteSpace(targetMemberName) && injectionTargetMemberNameFilters.Any(f => f.filter(targetMemberName));
+        }
+
         /// <summary>
         /// Custom equality comparison to determine if the binding is unique or a duplicate based on system rules.
         /// </summary>
+        // Equals (replace your current implementation)
         public bool Equals(Binding other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            // two bindings conflict if they have the same interface (regardless of concrete)
-            // or, if neither has an interface, they must have the same concrete
-            bool typeMatch;
+            // Core signature (unchanged)
+            bool typeMatch = InterfaceType != null
+                ? InterfaceType == other.InterfaceType
+                : ConcreteType == other.ConcreteType;
 
-            if (InterfaceType != null)
-                typeMatch = InterfaceType == other.InterfaceType;
-            else
-                typeMatch = ConcreteType == other.ConcreteType;
+            if (!(Equals(Scope, other.Scope)
+                  && typeMatch
+                  && Id == other.Id
+                  && IsGlobal == other.IsGlobal
+                  && IsCollection == other.IsCollection))
+                return false;
 
-            return Equals(Scope, other.Scope)
-                   && typeMatch
-                   && Id == other.Id
-                   && IsGlobal == other.IsGlobal
-                   && IsCollection == other.IsCollection
-                   && targetFilters.Select(tf => tf.targetType)
-                       .OrderBy(t => t?.FullName)
-                       .SequenceEqual(other.targetFilters.Select(tf => tf.targetType)
-                           .OrderBy(t => t?.FullName));
+            // Overlap-based equality for filters:
+            IEnumerable<Type> myTargetTypes = injectionTargetFilters.Select(tf => tf.injectionTargetType);
+            IEnumerable<Type> otherTargetTypes = other.injectionTargetFilters.Select(tf => tf.injectionTargetType);
+
+            IEnumerable<string> myMemberNames = injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
+            IEnumerable<string> otherMemberNames = other.injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
+
+            return TargetsOverlapForEquality(myTargetTypes, otherTargetTypes)
+                   && MemberNamesOverlapForEquality(myMemberNames, otherMemberNames);
         }
 
         public override int GetHashCode()
@@ -257,10 +297,49 @@ namespace Plugins.Saneject.Runtime.Bindings
             Type keyType = InterfaceType ?? ConcreteType;
             int hash = HashCode.Combine(Scope, keyType, Id, IsGlobal, IsCollection);
 
-            foreach (Type targetType in targetFilters.Select(tf => tf.targetType).OrderBy(t => t?.FullName))
-                hash = HashCode.Combine(hash, targetType);
+            // To satisfy (Equals => same hash), don't hash the exact contents of filters,
+            // only whether they are empty or not. Collisions are fine.
+            bool hasTargetFilters = injectionTargetFilters.Any();
+            bool hasMemberNameFilters = injectionTargetMemberNameFilters.Any();
 
+            hash = HashCode.Combine(hash, hasTargetFilters ? 1 : 0, hasMemberNameFilters ? 1 : 0);
             return hash;
+        }
+
+        private static bool TargetsOverlapForEquality(
+            IEnumerable<Type> a,
+            IEnumerable<Type> b)
+        {
+            // Empty means "no restriction" – do NOT treat as equal to non-empty.
+            List<Type> aList = a?.Where(t => t != null).Distinct().ToList() ?? new List<Type>();
+            List<Type> bList = b?.Where(t => t != null).Distinct().ToList() ?? new List<Type>();
+
+            if (aList.Count == 0 || bList.Count == 0)
+                return aList.Count == 0 && bList.Count == 0;
+
+            foreach (Type t1 in aList)
+                foreach (Type t2 in bList)
+                    if (t1.IsAssignableFrom(t2) || t2.IsAssignableFrom(t1))
+                        return true;
+
+            return false;
+        }
+
+        private static bool MemberNamesOverlapForEquality(
+            IEnumerable<string> a,
+            IEnumerable<string> b)
+        {
+            HashSet<string> aSet = new(a?.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
+            HashSet<string> bSet = new(b?.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
+
+            if (aSet.Count == 0 || bSet.Count == 0)
+                return aSet.Count == 0 && bSet.Count == 0;
+
+            foreach (string name in aSet)
+                if (bSet.Contains(name))
+                    return true;
+
+            return false;
         }
     }
 }

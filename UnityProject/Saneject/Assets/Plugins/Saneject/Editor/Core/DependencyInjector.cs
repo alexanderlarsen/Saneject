@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Util;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Extensions;
@@ -52,7 +53,11 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            Scope[] allScopes = Object.FindObjectsByType<Scope>(FindObjectsInactive.Include, FindObjectsSortMode.None).Where(scope => !scope.gameObject.IsPrefab()).ToArray();
+
+            Scope[] allScopes = Object
+                .FindObjectsByType<Scope>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                .Where(scope => !scope.gameObject.IsPrefab())
+                .ToArray();
 
             if (allScopes.Length <= 0)
             {
@@ -66,10 +71,24 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in scene", 0);
 
                 ScopeExtensions.Initialize(allScopes);
-                Scope[] rootScopes = allScopes.Where(scope => !scope.ParentScope).ToArray();
 
-                IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
-                proxyBindings.CreateMissingProxyStubs();
+                Scope[] rootScopes = allScopes
+                    .Where(scope => !scope.ParentScope)
+                    .ToArray();
+
+                IEnumerable<Binding> proxyBindings = allScopes
+                    .SelectMany(scope => scope.GetProxyBindings());
+
+                proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
+
+                if (isProxyCreationPending)
+                {
+                    stopwatch.Stop();
+                    allScopes.Dispose();
+                    EditorUtility.ClearProgressBar();
+                    Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
+                    return;
+                }
 
                 InjectionStats stats = new();
 
@@ -81,10 +100,87 @@ namespace Plugins.Saneject.Editor.Core
                 allScopes.LogUnusedBindings(stats);
                 stopwatch.Stop();
 
-                int invalidBindingsCount = allScopes.Sum(scope => scope.InvalidBindingsCount);
+                if (UserSettings.LogInjectionStats)
+                {
+                    stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
+                    stats.LogStats("Full scene", allScopes.Length, stopwatch.ElapsedMilliseconds);
+                }
+            }
+            catch (Exception e)
+            {
+                stopwatch.Stop();
+                Debug.LogException(e);
+            }
+
+            allScopes.Dispose();
+            EditorUtility.ClearProgressBar();
+        }
+
+        public static void InjectSingleHierarchyDependencies(Scope startScope)
+        {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
+            // Application.isBatchMode is true when run from CI tests.
+            if (!Application.isBatchMode)
+            {
+                if (UserSettings.AskBeforeHierarchyInjection && !EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Are you sure you want to inject all dependencies in the hierarchy?", "Yes", "Cancel"))
+                    return;
+
+                if (UserSettings.ClearLogsOnInjection)
+                    ConsoleUtils.ClearLog();
+            }
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            Scope rootScope = startScope.FindRootScope();
+
+            Scope[] allScopes = rootScope
+                .GetComponentsInChildren<Scope>()
+                .Where(scope => !scope.gameObject.IsPrefab())
+                .ToArray();
+
+            if (allScopes.Length <= 0)
+            {
+                Debug.LogWarning("Saneject: No scopes found in hierarchy. Nothing to inject.");
+                stopwatch.Stop();
+                return;
+            }
+
+            ScopeExtensions.Initialize(allScopes);
+
+            try
+            {
+                EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in hierarchy", 0);
+
+                IEnumerable<Binding> proxyBindings = allScopes
+                    .SelectMany(scope => scope.GetProxyBindings());
+
+                proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
+
+                if (isProxyCreationPending)
+                {
+                    stopwatch.Stop();
+                    allScopes.Dispose();
+                    EditorUtility.ClearProgressBar();
+                    Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
+                    return;
+                }
+
+                InjectionStats stats = new();
+
+                allScopes.ConfigureGlobalBindings(stats);
+                rootScope.InjectFromRoot(stats, isPrefabInjection: false);
+                allScopes.LogUnusedBindings(stats);
+                stopwatch.Stop();
 
                 if (UserSettings.LogInjectionStats)
-                    Debug.Log($"Saneject: Scene injection complete | {allScopes.Length} scopes processed | {stats.injectedGlobal} global dependencies | {stats.injectedFields} injected fields | {stats.missingBindings} missing bindings | {stats.unusedBindings} unused bindings | Invalid bindings: {invalidBindingsCount} | Completed in {stopwatch.ElapsedMilliseconds} ms");
+                {
+                    stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
+                    stats.LogStats($"Single scene hierarchy [{rootScope.gameObject.name}]", allScopes.Length, stopwatch.ElapsedMilliseconds);
+                }
             }
             catch (Exception e)
             {
@@ -139,7 +235,16 @@ namespace Plugins.Saneject.Editor.Core
             ScopeExtensions.Initialize(allScopes);
 
             IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
-            proxyBindings.CreateMissingProxyStubs();
+            proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
+
+            if (isProxyCreationPending)
+            {
+                stopwatch.Stop();
+                allScopes.Dispose();
+                EditorUtility.ClearProgressBar();
+                Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
+                return;
+            }
 
             InjectionStats stats = new();
             EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting prefab dependencies", 0);
@@ -150,10 +255,11 @@ namespace Plugins.Saneject.Editor.Core
                 allScopes.LogUnusedBindings(stats);
                 stopwatch.Stop();
 
-                int invalidBindingsCount = allScopes.Sum(scope => scope.InvalidBindingsCount);
-
                 if (UserSettings.LogInjectionStats)
-                    Debug.Log($"Saneject: Prefab injection complete | {allScopes.Length} scopes processed | {stats.injectedFields} injected fields | {stats.missingBindings} missing bindings | {stats.unusedBindings} unused bindings | Invalid bindings: {invalidBindingsCount} | Completed in {stopwatch.ElapsedMilliseconds} ms");
+                {
+                    stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
+                    stats.LogStats($"Prefab [{rootScope.gameObject.name}]", allScopes.Length, stopwatch.ElapsedMilliseconds);
+                }
             }
             catch (Exception e)
             {
@@ -165,12 +271,20 @@ namespace Plugins.Saneject.Editor.Core
             EditorUtility.ClearProgressBar();
         }
 
-        private static void CreateMissingProxyStubs(this IEnumerable<Binding> proxyBindings)
+        private static void CreateMissingProxyStubs(
+            this IEnumerable<Binding> proxyBindings,
+            out bool isProxyCreationPending)
         {
-            List<Type> typesToCreate = proxyBindings.Select(binding => binding.ConcreteType).Where(type => !ProxyUtils.DoesProxyScriptExist(type)).ToList();
+            isProxyCreationPending = false;
+
+            List<Type> typesToCreate = proxyBindings
+                .Select(binding => binding.ConcreteType)
+                .Where(type => !ProxyUtils.DoesProxyScriptExist(type)).ToList();
 
             if (typesToCreate.Count == 0)
                 return;
+
+            isProxyCreationPending = true;
 
             string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
 
@@ -197,7 +311,7 @@ namespace Plugins.Saneject.Editor.Core
                     foreach (Binding binding in unusedBindings)
                         Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingSignature()}. If you don't plan to use this binding, you can safely remove it.", scope);
 
-                stats.unusedBindings += unusedBindings.Count;
+                stats.numUnusedBindings += unusedBindings.Count;
             }
         }
 
@@ -230,7 +344,9 @@ namespace Plugins.Saneject.Editor.Core
 
                 foreach (Binding globalBinding in globalBindings)
                 {
-                    Object resolved = globalBinding.LocateDependencies().FirstOrDefault();
+                    Object resolved = globalBinding
+                        .LocateDependencies()
+                        .FirstOrDefault();
 
                     if (!resolved)
                     {
@@ -256,7 +372,7 @@ namespace Plugins.Saneject.Editor.Core
                     }
 
                     sceneGlobalContainer.Add(resolved);
-                    stats.injectedGlobal++;
+                    stats.numInjectedGlobal++;
                 }
             }
         }
@@ -326,11 +442,13 @@ namespace Plugins.Saneject.Editor.Core
 
                 bool isCollection = serializedProperty.isArray;
                 Object injectionTarget = serializedObject.targetObject;
-                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
+                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget, serializedProperty.GetDisplayName());
+                string injectedFieldSignature = $"[Injected field path: {NamePathUtils.GetInjectedFieldPath(serializedObject, serializedProperty)}]";
 
                 if (binding == null)
                 {
-                    Debug.LogError($"Saneject: Missing binding {BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, injectId, scope)}", scope);
+                    Debug.LogError($"Saneject: Missing binding {BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, injectId, scope)} {injectedFieldSignature}", scope);
+                    stats.numMissingBindings++;
                     continue;
                 }
 
@@ -343,11 +461,12 @@ namespace Plugins.Saneject.Editor.Core
                     if (proxyType != null)
                     {
                         serializedProperty.objectReferenceValue = ProxyUtils.GetFirstOrCreateProxyAsset(proxyType, out bool _);
-                        stats.injectedFields++;
+                        stats.numInjectedFields++;
                     }
                     else
                     {
-                        Debug.LogError($"Saneject: Missing ProxyObject<{binding.ConcreteType.Name}> for binding {binding.GetBindingSignature()}", scope);
+                        Debug.LogError($"Saneject: Missing ProxyObject<{binding.ConcreteType.Name}> for binding {binding.GetBindingSignature()} {injectedFieldSignature}", scope);
+                        stats.numMissingDependencies++;
                     }
 
                     continue;
@@ -367,14 +486,14 @@ namespace Plugins.Saneject.Editor.Core
                     else
                         serializedProperty.objectReferenceValue = dependencies.FirstOrDefault();
 
-                    stats.injectedFields++;
+                    stats.numInjectedFields++;
                     continue;
                 }
 
                 StringBuilder errorMessageBuilder = new();
 
                 errorMessageBuilder.AppendLine(
-                    $"Saneject: Binding failed to locate a dependency {binding.GetBindingSignature()}.");
+                    $"Saneject: Binding failed to locate a dependency {binding.GetBindingSignature()} {injectedFieldSignature}.");
 
                 if (rejectedTypes is { Count: > 0 })
                 {
@@ -387,6 +506,7 @@ namespace Plugins.Saneject.Editor.Core
                         "Use ProxyObjects for proper cross-context references, or disable filtering in User Settings (not recommended).");
                 }
 
+                stats.numMissingDependencies++;
                 Debug.LogError(errorMessageBuilder.ToString(), scope);
             }
 
@@ -441,35 +561,41 @@ namespace Plugins.Saneject.Editor.Core
         /// </summary>
         private static object GetContextKey(Object obj)
         {
-            if (obj is Component component)
-            {
-                GameObject gameObject = component.gameObject;
+            if (obj is not Component component)
+                return null; // unrestricted (ScriptableObjects, etc.)
 
-                // Prefab instance in the scene
-                GameObject instanceRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
+            GameObject go = component.gameObject;
+
+            // 1) Prefab INSTANCE
+            if (PrefabUtility.IsPartOfPrefabInstance(go))
+            {
+                GameObject instanceRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
 
                 if (instanceRoot)
                 {
-                    // Normalize to the prefab asset root
                     GameObject prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(instanceRoot);
-
-                    // Fallback: if no source asset, just return the instance root
-                    return prefabAsset ? prefabAsset : instanceRoot;
+                    return prefabAsset ? (Object)prefabAsset : instanceRoot;
                 }
 
-                // Prefab asset in the Project window
-                if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
-                {
-                    GameObject assetRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
-                    return assetRoot ? assetRoot : gameObject; // fallback
-                }
-
-                // Scene object, use its scene
-                return gameObject.scene;
+                return go.scene; // fallback
             }
 
-            // Assets (ScriptableObjects, etc.) have no scene/prefab restriction
-            return null;
+            // 2) Prefab ASSET in Project window
+            if (PrefabUtility.IsPartOfPrefabAsset(go))
+                // The root of the prefab asset is just its transform.root
+                return go.transform.root.gameObject;
+
+            // 3) Open Prefab Stage
+            PrefabStage stage = PrefabStageUtility.GetPrefabStage(go);
+
+            if (stage && stage.prefabContentsRoot)
+            {
+                GameObject asset = PrefabUtility.GetCorrespondingObjectFromSource(stage.prefabContentsRoot);
+                return asset ? (Object)asset : stage.prefabContentsRoot;
+            }
+
+            // 4) Scene object
+            return go.scene;
         }
 
         /// <summary>
@@ -514,17 +640,6 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Class for collecting injection stats for logging purposes.
-        /// </summary>
-        private class InjectionStats
-        {
-            public int injectedGlobal;
-            public int injectedFields;
-            public int missingBindings;
-            public int unusedBindings;
         }
     }
 }

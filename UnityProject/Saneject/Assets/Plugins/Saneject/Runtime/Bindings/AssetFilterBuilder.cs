@@ -89,7 +89,19 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         public AssetFilterBuilder<TAsset> WhereTargetIs<TTarget>()
         {
-            binding.AddTargetFilter(obj => obj is TTarget, typeof(TTarget));
+            binding.AddInjectionTargetFilter(obj => obj is TTarget, typeof(TTarget));
+            return this;
+        }
+
+        /// <summary>
+        /// Filter to only resolve dependencies using this binding when the injection target
+        /// member (field or property) has one of the specified names.
+        /// </summary>
+        public AssetFilterBuilder<TAsset> WhereMemberNameIs(params string[] memberNames)
+        {
+            foreach (string memberName in memberNames)
+                binding.AddInjectionTargetMemberNameFilter(name => name == memberName, memberName);
+
             return this;
         }
 

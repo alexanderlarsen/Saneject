@@ -66,13 +66,15 @@ namespace Plugins.Saneject.Editor.Inspectors
             {
                 if (GUILayout.Button("Inject Prefab Dependencies"))
                     foreach (Object t in targets)
-                        if (t is Scope s)
-                            DependencyInjector.InjectPrefabDependencies(s);
+                        if (t is Scope scope)
+                            DependencyInjector.InjectPrefabDependencies(scope);
             }
             else if (hasScene)
             {
-                if (GUILayout.Button("Inject All Scene Dependencies"))
-                    DependencyInjector.InjectSceneDependencies();
+                if (GUILayout.Button("Inject Hierarchy Dependencies"))
+                    foreach (Object t in targets)
+                        if (t is Scope scope)
+                            DependencyInjector.InjectSingleHierarchyDependencies(scope);
             }
 
             EditorGUI.EndDisabledGroup();

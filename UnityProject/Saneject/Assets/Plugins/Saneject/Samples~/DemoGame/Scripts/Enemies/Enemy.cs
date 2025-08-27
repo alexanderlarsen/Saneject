@@ -34,7 +34,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
         private Vector3 currentTarget;
         private float timer;
 
-        public event Action OnEnemyCaught;
+        public event Action<IEnemy> OnEnemyCaught;
 
         public Transform Transform => transform;
 
@@ -81,7 +81,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
             if (!other.TryGetComponent(out IEnemyEvadeTarget _))
                 return;
 
-            OnEnemyCaught?.Invoke();
+            OnEnemyCaught?.Invoke(this);
             Destroy(gameObject);
         }
     }

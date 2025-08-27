@@ -1,5 +1,44 @@
 ﻿# Saneject Changelog
 
+## Version 0.12.0
+
+### Features
+
+- Injection error logs now include the full path to the injected field, making it easier to pinpoint where a failure occurred.
+- Injection stats now track the number of missing dependencies in addition to missing and invalid bindings.
+- Added log severity levels (Info, Warning, Error) to injection stats logs.
+- Added a new Scope creation tool:
+    - Available via `Saneject/Create New Scope` or `Assets/Create/Saneject/Create New Scope`.
+    - Generates a new `Scope` class with the correct boilerplate code.
+    - Namespace generation can be toggled in **User Settings** with the option **Generate Scope Namespace From Folder** (uses folder path relative to `Assets/`).
+- Added new **`WhereMemberNameIs`** filter for component and asset bindings:
+    - This allows bindings to target specific injected fields or properties by name for fine-grained control and can in many case replace ID boilerplate.
+    - Unit tests added for both component and asset versions.
+
+### Changes
+
+- Binding target filters (`WhereTargetIs<T>`) now evaluate with **`Any`** instead of **`All`**.  
+  This allows chaining multiple filters to mean “inject into `T1` **or** `T2`” instead of requiring all filters simultaneously.
+- Binding uniqueness & equality updated:
+    - `Binding.Equals` now treats **target-type** and **member-name** filters as **overlap-based** (subset/superset considered equal if they can apply to the same injection site).
+    - `GetHashCode` was adjusted accordingly (hash depends on presence of these filters rather than their full contents).
+    - This tightens duplicate detection: e.g., `WhereTargetIs<MonoA>()` is considered a duplicate of `WhereTargetIs<MonoA>().WhereTargetIs<MonoB>()`; same for `WhereMemberNameIs("monoA")` vs `WhereMemberNameIs("monoA","monoB")`.
+    - Added/updated unit tests to cover overlap equality for both target-type and member-name filters, including assignability (base/derived) cases.
+- Scope inspector **Inject** button now injects only the selected hierarchy instead of the entire scene. This makes it easier to process smaller hierarchies and view context-relevant logs. Full-scene injection is still available via scene right-click and the **Saneject** menu.
+- Fully abort injection when proxy script creation is pending
+    - Updated `CreateMissingProxyStubs` to return a flag when proxy generation is required.
+    - Injection now aborts early if proxies are pending, since Unity recompilation halts the process anyway.
+    - Reduces irrelevant logs during proxy generation by deferring them until the next injection pass.
+    - Improved progress display and clarity of messages when proxy creation interrupts injection.
+- Updated sample game `EnemyManager`: now spawns enemies from a prefab at runtime instead of injecting scene children, keeping the sample compatible with context filtering enabled and aligned with recommended usage.
+
+### Fixes
+
+- Fixed an issue where missing dependencies were not counted correctly in the injection stats.
+- Restored property drawing for `[field: ...]` auto-properties in `SanejectInspector`, so `[SerializeField]` and `[SerializeInterface]` properties (with or without `[Inject]`, including in nested classes) now draw correctly again.
+- Fixed a bug in **FilterBySameContext** where prefab asset injection (via Inspector on a prefab selected in the Project window) incorrectly treated child objects as separate contexts. Now all components inside a prefab asset normalize to the prefab asset root, ensuring they are considered part of the same context. This fixes broken injection when pressing **Inject** on a prefab asset without opening the prefab.
+- Fixed singular/plural words in injection stats logs.
+
 ## Version 0.11.0
 
 ### Features

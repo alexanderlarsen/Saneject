@@ -17,6 +17,12 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
+        public static bool AskBeforeHierarchyInjection
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
         public static bool AskBeforePrefabInjection
         {
             get => GetBool(defaultValue: true);
@@ -30,7 +36,7 @@ namespace Plugins.Saneject.Runtime.Settings
         }
 
         // Inspector
-        public static bool ShowInjectedFields
+        public static bool ShowInjectedFieldsProperties
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
@@ -85,6 +91,13 @@ namespace Plugins.Saneject.Runtime.Settings
         {
             get => GetString(defaultValue: "Assets/Generated");
             set => SetString(value);
+        }
+
+        // Scope File Generation
+        public static bool GenerateScopeNamespaceFromFolder
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
         }
 
         private static string GetString(

@@ -221,11 +221,16 @@ public class GameScope : Scope
 }
 ```
 
+> 💡 Scope boilerplate classes can be created via `Saneject/Create New Scope`
+> or `Assets/Create/Saneject/Create New Scope`.
+>
+> Namespace generation can be toggled in `User Settings/Generate Scope Namespace From Folder`.
+
 5. Run dependency injection using either method:
 
-- **Scope inspector:** Inject Scene Dependencies button
-- **Hierarchy context menu:** Right-click hierarchy panel → Inject Scene Dependencies
-- **Unity main menu bar:** Saneject → Inject Scene Dependencies
+- **Scope inspector:** `Inject Hierarchy Dependencies` button
+- **Hierarchy context menu:** Right-click hierarchy panel → `Inject Scene Dependencies`
+- **Unity main menu bar:** `Saneject/Inject Scene Dependencies`
 
 Saneject fills in the serialized fields. Press Play, no runtime container required.
 
@@ -437,19 +442,21 @@ Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the
 | `WhereIsLastSibling()`                   | Filters components that are the last sibling in their parent's hierarchy.                       |
 | `Where(Func<TComponent,bool> predicate)` | Filters components using a custom predicate.                                                    |
 | `WhereTargetIs<TTarget>()`               | Applies binding only if the injection target matches type `TTarget`.                            |
+| `WhereMemberNameIs(params string[])`     | Applies binding only if the injected field or property has one of the specified member names.   |
 
 ### Asset filters
 
 Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in the project folder for precise and complex asset search strategies. All methods return the builder itself to enable method chaining.
 
-| Method                                | Description                                                          |
-|---------------------------------------|----------------------------------------------------------------------|
-| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.               |
-| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.           |
-| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`.      |
-| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.                  |
-| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate.                             |
-| `WhereTargetIs<TTarget>()`            | Applies binding only if the injection target matches type `TTarget`. |
+| Method                                | Description                                                                                   |
+|---------------------------------------|-----------------------------------------------------------------------------------------------|
+| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.                                        |
+| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.                                    |
+| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`.                               |
+| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.                                           |
+| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate.                                                      |
+| `WhereTargetIs<TTarget>()`            | Applies binding only if the injection target matches type `TTarget`.                          |
+| `WhereMemberNameIs(params string[])`  | Applies binding only if the injected field or property has one of the specified member names. |
 
 ## Deep dive
 
@@ -565,6 +572,15 @@ A binding is considered unique within a scope based on the following:
 - **Single vs collection**: Whether it's a single-value binding or a collection (`List<T>` or `T[]`).
 - **Global flag**: Whether the binding is marked as global.
 - **Target filters**: If the binding uses the target type filter `WhereTargetIs<T>()`.
+- **Member name filters**: If the binding uses the member filter `WhereMemberNameIs(...)`.
+
+**Overlap rule (important):**
+
+When determining duplicates, target and member-name filters are compared by overlap, not by full-set equality.
+
+- **Target filters:** two bindings overlap if any target types are the same or assignable (base/derived).
+- **Member-name filters:** two bindings overlap if they share at least one member name.
+- **Empty target/member filter**: is treated as a generic binding and does not overlap a filtered binding for uniqueness (so a general binding can coexist with a targeted one).
 
 For example, the following two bindings are considered duplicates and will conflict:
 
@@ -598,6 +614,10 @@ BindComponents<IMyService, MyServiceConcrete>();
 // Same interface but different target filters
 BindComponent<IMyService>().WhereTargetIs<Player>();
 BindComponent<IMyService>().WhereTargetIs<Enemy>();
+
+// Same interface but different member name filters
+BindComponent<IMyService>().WhereMemberNameIs("serviceA");
+BindComponent<IMyService>().WhereMemberNameIs("serviceB");
 ```
 
 This uniqueness model ensures deterministic resolution and early conflict detection. Duplicate bindings are logged and skipped automatically.
@@ -746,7 +766,7 @@ This creates:
 - A proxy script for the class.
 - A proxy `ScriptableObject` asset in `Assets/Generated` (path is configurable in settings).
 
-Or write the stub manually and create the proxy `ScriptableObject` with **right-click project folders → Create → Saneject → Proxy**.
+Or write the stub manually and create the proxy `ScriptableObject` with right-click project folders → `Create/Saneject/Proxy`.
 
 #### Example
 
@@ -768,7 +788,7 @@ PauseMenuUI  -->|References IGameManager| Proxy
 Proxy -->|Forwards calls| GameManager
 ```
 
-> ⚠️ Mermaid diagrams don't render in the GitHub mobile app. Use a browser to see them properly.
+> ⚠️ Last time I checked, Mermaid diagrams don't render in the GitHub mobile app. Use a browser to view them properly.
 
 Example interface:
 
@@ -932,7 +952,7 @@ Register global singletons in the `Scope` using the following methods.
 
 If you're using `ProxyObject`, global registration is one of the ways to resolve its target instance.
 
-💡 You can toggle logging for global registration under **Saneject → User Settings → Logging**.
+💡 You can toggle logging for global registration under `Saneject/User Settings/Editor Logging`.
 
 ### Roslyn tools
 
@@ -959,14 +979,15 @@ Roslyn source code is in the [RoslynTools](RoslynTools) folder.
 
 ### User settings
 
-Found under **Saneject → User Settings**, these let you customize editor and logging behavior in the Unity Editor.
+Found under `Saneject/User Settings`, these let you customize editor and logging behavior in the Unity Editor.
 
 | Setting                                     | Description                                                                                                                                                                                                                                   |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting dependencies into the scene.                                                                                                                                                                      |
-| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting prefab dependencies.                                                                                                                                                                              |
+| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting all dependencies into the full scene (excluding prefabs present in the scene).                                                                                                                    |
+| `Ask Before Hierarchy Injection`            | Show a confirmation dialog before injecting dependencies into a single scene hierarchy (excluding prefabs present in the hierarchy).                                                                                                          |
+| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting dependencies into a prefab.                                                                                                                                                                       |
 | `Filter By Same Context`                    | Enforce context isolation during injection. Scene objects only resolve with other scene objects, and prefab objects only resolve within their own prefab. Cross-context references are filtered out unless this is disabled in User Settings. |
-| `Show Injected Fields`                      | Show `[Inject]` fields in the Inspector.                                                                                                                                                                                                      |
+| `Show Injected Fields/Properties`           | Show `[Inject]` fields and `[field: Inject]` auto-properties in the Inspector.                                                                                                                                                                |
 | `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                                                                                                                                                      |
 | `Log On Proxy Instance Resolve`             | Log when a proxy resolves its target during Play Mode.                                                                                                                                                                                        |
 | `Log Global Scope Register/Unregister`      | Log when objects are registered or unregistered in the global scope during Play Mode.                                                                                                                                                         |
@@ -975,6 +996,7 @@ Found under **Saneject → User Settings**, these let you customize editor and l
 | `Log Unused Bindings`                       | Log when bindings are declared but never used in the current scene or prefab.                                                                                                                                                                 |
 | `Clear Logs On Injection`                   | Clear console logs before injection starts. Useful for seeing missing/invalid bindings etc. for the current injection pass only.                                                                                                              |
 | `Generated Proxy Asset Folder`              | Folder to save proxy assets auto-generated by the system.                                                                                                                                                                                     |
+| `Generate Scope Namespace From Folder`      | If enabled, new Scopes created via the editor menu get a namespace matching their folder path (relative to `Assets/`). When disabled, Scopes are generated without a namespace.                                                               |
 
 ## Tested Unity versions
 

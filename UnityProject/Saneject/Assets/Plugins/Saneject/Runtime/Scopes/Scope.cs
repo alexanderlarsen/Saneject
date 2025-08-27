@@ -28,7 +28,7 @@ namespace Plugins.Saneject.Runtime.Scopes
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         public int InvalidBindingsCount => unvalidatedBindings.Count - validBindings.Count;
-        
+
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
@@ -98,7 +98,8 @@ namespace Plugins.Saneject.Runtime.Scopes
             Type concreteType,
             string injectId,
             bool isCollection,
-            Object injectionTarget)
+            Object injectionTarget,
+            string targetMemberName)
         {
             if (Application.isPlaying)
                 throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
@@ -114,7 +115,9 @@ namespace Plugins.Saneject.Runtime.Scopes
             // If we have an injection target, try to find a binding that passes target filters
             if (injectionTarget != null)
             {
-                foreach (Binding binding in matchingBindings.Where(binding => binding.PassesTargetFilters(injectionTarget)))
+                foreach (Binding binding in matchingBindings
+                             .Where(binding => binding.PassesInjectionTargetFilters(injectionTarget))
+                             .Where(binding => binding.PassesMemberNameFilters(targetMemberName)))
                     return binding;
             }
             else
@@ -132,7 +135,8 @@ namespace Plugins.Saneject.Runtime.Scopes
                     concreteType,
                     injectId,
                     isCollection,
-                    injectionTarget)
+                    injectionTarget,
+                    targetMemberName)
                 : null;
         }
 

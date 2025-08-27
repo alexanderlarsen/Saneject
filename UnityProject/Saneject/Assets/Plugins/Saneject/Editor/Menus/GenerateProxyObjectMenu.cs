@@ -23,7 +23,7 @@ namespace Plugins.Saneject.Editor.Menus
                    && typeof(MonoBehaviour).IsAssignableFrom(t);
         }
 
-        [MenuItem("Assets/Generate Proxy Object")]
+        [MenuItem("Assets/Generate Proxy Object", false)]
         private static void GenerateProxyObject()
         {
             if (Selection.activeObject is not MonoScript script) return;
