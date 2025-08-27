@@ -12,6 +12,11 @@
     - Generates a new `Scope` class with the correct boilerplate code.
     - Namespace generation can be toggled in **User Settings** with the option **Generate Scope Namespace From Folder** (uses folder path relative to `Assets/`).
 
+### Changes
+
+- Binding target filters (`WhereTargetIs<T>`) now evaluate with **`Any`** instead of **`All`**.  
+  This allows chaining multiple filters to mean “inject into `T1` **or** `T2`” instead of requiring all filters simultaneously.
+
 ### Fixes
 
 - Fixed an issue where missing dependencies were not counted correctly in the injection stats.

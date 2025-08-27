@@ -221,7 +221,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             return target != null && targetFilters.Any(f => f.filter(target));
         }
-        
+
         /// <summary>
         /// Custom equality comparison to determine if the binding is unique or a duplicate based on system rules.
         /// </summary>
