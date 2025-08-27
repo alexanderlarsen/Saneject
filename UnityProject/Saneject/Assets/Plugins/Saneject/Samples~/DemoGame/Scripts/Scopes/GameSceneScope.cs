@@ -3,8 +3,8 @@ using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
 using Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems;
+using UnityEngine;
 using CameraController = Plugins.Saneject.Samples.DemoGame.Scripts.Camera.CameraController;
-using Enemy = Plugins.Saneject.Samples.DemoGame.Scripts.Enemies.Enemy;
 using EnemyManager = Plugins.Saneject.Samples.DemoGame.Scripts.Enemies.EnemyManager;
 using GameStateManager = Plugins.Saneject.Samples.DemoGame.Scripts.GameState.GameStateManager;
 
@@ -44,8 +44,10 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
             BindComponent<UnityEngine.Camera>()
                 .FromAnywhereInScene();
 
-            BindMultipleComponents<IEnemy, Enemy>()
-                .FromTargetDescendants();
+            BindAsset<GameObject>()
+                .FromAssetLoad("Assets/Plugins/Saneject/Samples/DemoGame/Prefabs/Enemy.prefab")
+                .WhereTargetIs<EnemyManager>()
+                .WhereMemberNameIs("enemyPrefab");
         }
     }
 }

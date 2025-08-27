@@ -30,6 +30,7 @@
     - Injection now aborts early if proxies are pending, since Unity recompilation halts the process anyway.
     - Reduces irrelevant logs during proxy generation by deferring them until the next injection pass.
     - Improved progress display and clarity of messages when proxy creation interrupts injection.
+- Updated sample game `EnemyManager`: now spawns enemies from a prefab at runtime instead of injecting scene children, keeping the sample compatible with context filtering enabled and aligned with recommended usage.
 
 ### Fixes
 

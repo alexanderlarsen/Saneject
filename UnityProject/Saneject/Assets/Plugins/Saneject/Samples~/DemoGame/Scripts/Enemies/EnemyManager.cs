@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
 using UnityEngine;
@@ -17,50 +18,55 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
         [Inject, SerializeInterface]
         private IScoreUpdater scoreUpdater;
 
-        [Inject, SerializeInterface]
-        private IEnemy[] enemies;
+        [Inject, SerializeField]
+        private GameObject enemyPrefab;
 
-        [ReadOnly, SerializeField]
-        private int enemiesLeft;
+        [ReadOnly, SerializeInterface]
+        private List<IEnemy> activeEnemies;
+
+        [SerializeField]
+        private int numStartingEnemies = 10;
 
         public event Action<int> OnEnemiesLeftChanged;
 
-        public int EnemiesLeft => enemiesLeft;
+        public int EnemiesLeft => activeEnemies.Count;
         public int TotalEnemies { get; private set; }
 
         private void Start()
         {
             InitializeEnemies();
-            enemiesLeft = enemies.Length;
-            TotalEnemies = enemiesLeft;
         }
 
         private void OnDestroy()
         {
-            foreach (IEnemy enemy in enemies)
+            foreach (IEnemy enemy in activeEnemies)
                 enemy.OnEnemyCaught -= OnEnemyCaught;
         }
 
-        private void OnEnemyCaught()
+        private void OnEnemyCaught(IEnemy enemy)
         {
-            enemiesLeft--;
-            OnEnemiesLeftChanged?.Invoke(enemiesLeft);
+            activeEnemies.Remove(enemy);
+            OnEnemiesLeftChanged?.Invoke(EnemiesLeft);
             scoreUpdater.AddPoints(Random.Range(1, 10));
 
-            if (enemiesLeft <= 0)
+            if (EnemiesLeft <= 0)
                 Debug.Log("All enemies caught. You win!");
         }
 
         private void InitializeEnemies()
         {
-            foreach (IEnemy enemy in enemies)
+            for (int i = 0; i < numStartingEnemies; i++)
             {
+                IEnemy enemy = Instantiate(enemyPrefab, transform).GetComponent<IEnemy>();
                 Vector2 randomHorizontal = Random.insideUnitCircle;
                 Vector3 spawnPosition = new Vector3(randomHorizontal.x, 0, randomHorizontal.y) * 10;
                 enemy.Transform.SetPositionAndRotation(spawnPosition, Quaternion.identity);
                 enemy.Transform.SetParent(transform);
                 enemy.OnEnemyCaught += OnEnemyCaught;
+                activeEnemies.Add(enemy);
             }
+
+            TotalEnemies = activeEnemies.Count;
         }
     }
 
@@ -69,26 +75,26 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 
     public partial class EnemyManager : ISerializationCallbackReceiver
     {
-        [SerializeField, InterfaceBackingField(interfaceType: typeof(IScoreUpdater), isInjected: true, injectId: null)]
-         private Object __scoreUpdater;
+        [SerializeField, InterfaceBackingField(typeof(IScoreUpdater), true, null), EditorBrowsable(EditorBrowsableState.Never)]
+        private Object __scoreUpdater;
 
-        [SerializeField, InterfaceBackingField(interfaceType: typeof(IEnemy), isInjected: true, injectId: null)]
-        private Object[] __enemies;
+        [SerializeField, InterfaceBackingField(typeof(IEnemy), false, null), EditorBrowsable(EditorBrowsableState.Never)]
+        private List<Object> __activeEnemies;
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnBeforeSerialize()
         {
-    #if UNITY_EDITOR
-            __scoreUpdater = scoreUpdater as UnityEngine.Object;
-            __enemies = enemies?.Cast<UnityEngine.Object>().ToArray();
-    #endif
+#if UNITY_EDITOR
+            __scoreUpdater = scoreUpdater as Object;
+            __activeEnemies = activeEnemies?.Cast<Object>().ToList();
+#endif
         }
 
+        [EditorBrowsable(EditorBrowsableState.Never)]
         public void OnAfterDeserialize()
         {
-            scoreUpdater = __scoreUpdater as Plugins.Saneject.Demo.Scripts.Highscore.IScoreUpdater;
-            enemies = (__enemies ?? Array.Empty<UnityEngine.Object>())
-                    .Select(x => x as Plugins.Saneject.Demo.Scripts.Enemies.IEnemy)
-                    .ToArray();
+            scoreUpdater = __scoreUpdater as IScoreUpdater;
+            activeEnemies = (__activeEnemies ?? new List<Object>()).Select(x => x as IEnemy).ToList();
         }
     }
     */
