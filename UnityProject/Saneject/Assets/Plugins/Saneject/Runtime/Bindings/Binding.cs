@@ -18,7 +18,8 @@ namespace Plugins.Saneject.Runtime.Bindings
     public class Binding : IEquatable<Binding>
     {
         private readonly List<Func<Object, bool>> filters = new();
-        private readonly List<(Func<Object, bool> filter, Type targetType)> targetFilters = new();
+        private readonly List<(Func<Object, bool> filter, Type injectionTargetType)> injectionTargetFilters = new();
+        private readonly List<(Func<string, bool> filter, string injectionTargetMemberName)> injectionTargetMemberNameFilters = new();
 
         private Func<Object, IEnumerable<Object>> locator;
 
@@ -180,30 +181,47 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Add a filter for injection targets. Only targets passing all target filters are valid for this binding.
         /// </summary>
         /// <param name="filter">Predicate to evaluate each injection target <see cref="UnityEngine.Object" />.</param>
-        /// <param name="targetType"></param>
-        public void AddTargetFilter(
+        /// <param name="injectionTargetType">The type that this filter is associated with. Used for binding equality comparison.</param>
+        public void AddInjectionTargetFilter(
             Func<Object, bool> filter,
-            Type targetType)
+            Type injectionTargetType)
         {
-            targetFilters.Add((filter, targetType));
+            injectionTargetFilters.Add((filter, injectionTargetType));
+        }
+
+        /// <summary>
+        /// Adds a filter that matches against the name of the injection target member (field or property) being resolved.
+        /// </summary>
+        /// <param name="filter">
+        /// Predicate that evaluates the target member name. The member name is passed as a string.
+        /// </param>
+        /// <param name="injectionTargetMemberName">
+        /// The raw member name string this filter is associated with. Used for binding equality comparison.
+        /// </param>
+        public void AddInjectionTargetMemberNameFilter(
+            Func<string, bool> filter,
+            string injectionTargetMemberName)
+        {
+            injectionTargetMemberNameFilters.Add((filter, injectionTargetMemberName));
         }
 
         /// <summary>
         /// Locate and return the dependency <see cref="UnityEngine.Object" />, applying all filters. Returns <c>null</c> if no suitable object is found.
         /// </summary>
-        /// <param name="target">
+        /// <param name="injectionTarget">
         /// The injection target <see cref="UnityEngine.Object" /> to evaluate target filters against (optional; required if <see cref="RequiresInjectionTarget" /> is true).
         /// </param>
         /// <returns>The resolved dependency <see cref="UnityEngine.Object" />, or <c>null</c> if not found.</returns>
-        public IEnumerable<Object> LocateDependencies(Object target = null)
+        public IEnumerable<Object> LocateDependencies(Object injectionTarget = null)
         {
-            if (targetFilters.Count > 0 && target != null && !targetFilters.Any(f => f.filter(target)))
-                return null;
+            //TODO: Keep an eye on this:
+            // if (injectionTargetFilters.Count > 0 && injectionTarget != null && !injectionTargetFilters.Any(f => f.filter(injectionTarget)))
+            //     return null;
+            //
+            // if (RequiresInjectionTarget && injectionTarget == null)
+            //     return null;
 
-            if (RequiresInjectionTarget && target == null)
-                return null;
-
-            IEnumerable<Object> all = locator(target) ?? Enumerable.Empty<Object>();
+            IEnumerable<Object> all = locator(injectionTarget) ?? Enumerable.Empty<Object>();
             IEnumerable<Object> filtered = all.Where(obj => obj != null && filters.All(filter => filter(obj)));
 
             return filtered;
@@ -214,12 +232,30 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         /// <param name="target">The injection target to evaluate against target filters.</param>
         /// <returns>True if all target filters pass or no target filters exist, false otherwise.</returns>
-        public bool PassesTargetFilters(Object target)
+        public bool PassesInjectionTargetFilters(Object target)
         {
-            if (targetFilters.Count == 0)
+            if (injectionTargetFilters.Count == 0)
                 return true;
 
-            return target != null && targetFilters.Any(f => f.filter(target));
+            return target != null && injectionTargetFilters.Any(f => f.filter(target));
+        }
+
+        /// <summary>
+        /// Checks whether the given injection target member name passes this binding's member name filters.
+        /// </summary>
+        /// <param name="targetMemberName">
+        /// The name of the field or property on the injection target being considered for injection.
+        /// </param>
+        /// <returns>
+        /// True if any filter accepts the member name, or if no member name filters are defined.
+        /// False if filters are defined but none match.
+        /// </returns>
+        public bool PassesMemberNameFilters(string targetMemberName)
+        {
+            if (injectionTargetMemberNameFilters.Count == 0)
+                return true;
+
+            return !string.IsNullOrWhiteSpace(targetMemberName) && injectionTargetMemberNameFilters.Any(f => f.filter(targetMemberName));
         }
 
         /// <summary>
@@ -244,10 +280,14 @@ namespace Plugins.Saneject.Runtime.Bindings
                    && Id == other.Id
                    && IsGlobal == other.IsGlobal
                    && IsCollection == other.IsCollection
-                   && targetFilters.Select(tf => tf.targetType)
+                   && injectionTargetFilters.Select(tf => tf.injectionTargetType)
                        .OrderBy(t => t?.FullName)
-                       .SequenceEqual(other.targetFilters.Select(tf => tf.targetType)
-                           .OrderBy(t => t?.FullName));
+                       .SequenceEqual(other.injectionTargetFilters.Select(tf => tf.injectionTargetType)
+                           .OrderBy(t => t?.FullName))
+                   && injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName)
+                       .OrderBy(n => n)
+                       .SequenceEqual(other.injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName)
+                           .OrderBy(n => n));
         }
 
         public override int GetHashCode()
@@ -257,8 +297,15 @@ namespace Plugins.Saneject.Runtime.Bindings
             Type keyType = InterfaceType ?? ConcreteType;
             int hash = HashCode.Combine(Scope, keyType, Id, IsGlobal, IsCollection);
 
-            foreach (Type targetType in targetFilters.Select(tf => tf.targetType).OrderBy(t => t?.FullName))
+            foreach (Type targetType in injectionTargetFilters
+                         .Select(tf => tf.injectionTargetType)
+                         .OrderBy(t => t?.FullName))
                 hash = HashCode.Combine(hash, targetType);
+
+            foreach (string memberName in injectionTargetMemberNameFilters
+                         .Select(f => f.injectionTargetMemberName)
+                         .OrderBy(n => n))
+                hash = HashCode.Combine(hash, memberName);
 
             return hash;
         }

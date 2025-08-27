@@ -341,7 +341,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 bool isCollection = serializedProperty.isArray;
                 Object injectionTarget = serializedObject.targetObject;
-                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget);
+                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget, serializedProperty.GetDisplayName());
                 string injectedFieldSignature = $"[Injected field: {GetInjectedFieldPath(serializedObject, serializedProperty)}]";
 
                 if (binding == null)
@@ -429,7 +429,11 @@ namespace Plugins.Saneject.Editor.Core
             InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field?.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
 
             if (interfaceBackingFieldAttribute != null)
-                propertyPath = propertyPath.TrimStart('_');
+            {
+                string[] split = propertyPath.Split('.');
+                split[^1] = split[^1].TrimStart('_');
+                propertyPath = string.Join(".", split);
+            }
 
             return $"{goPath}/{component.GetType().Name}/{propertyPath}";
         }
@@ -441,6 +445,26 @@ namespace Plugins.Saneject.Editor.Core
         private static string GetHierarchyPath(this Transform transform)
         {
             return !transform.parent ? transform.name : $"{transform.parent.GetHierarchyPath()}/{transform.name}";
+        }
+
+        /// <summary>
+        /// Returns a display-friendly name for the given <see cref="SerializedProperty" />.
+        /// If the property represents an auto-generated interface backing field,
+        /// the leading underscore is removed so the name matches the original user-defined field.
+        /// </summary>
+        /// <param name="serializedProperty">
+        /// The <see cref="SerializedProperty" /> to extract the display name from.
+        /// </param>
+        /// <returns>
+        /// The display-ready property name, with leading underscores trimmed when backing
+        /// fields are detected; otherwise the original property name.
+        /// </returns>
+        private static string GetDisplayName(this SerializedProperty serializedProperty)
+        {
+            string name = serializedProperty.name;
+            FieldInfo field = serializedProperty?.GetFieldInfo();
+            InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field?.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
+            return interfaceBackingFieldAttribute != null ? name.TrimStart('_') : name;
         }
 
         /// <summary>

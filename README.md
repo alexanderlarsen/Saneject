@@ -442,19 +442,21 @@ Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the
 | `WhereIsLastSibling()`                   | Filters components that are the last sibling in their parent's hierarchy.                       |
 | `Where(Func<TComponent,bool> predicate)` | Filters components using a custom predicate.                                                    |
 | `WhereTargetIs<TTarget>()`               | Applies binding only if the injection target matches type `TTarget`.                            |
+| `WhereMemberNameIs(params string[])`     | Applies binding only if the injected field or property has one of the specified member names.   |
 
 ### Asset filters
 
 Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in the project folder for precise and complex asset search strategies. All methods return the builder itself to enable method chaining.
 
-| Method                                | Description                                                          |
-|---------------------------------------|----------------------------------------------------------------------|
-| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.               |
-| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.           |
-| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`.      |
-| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.                  |
-| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate.                             |
-| `WhereTargetIs<TTarget>()`            | Applies binding only if the injection target matches type `TTarget`. |
+| Method                                | Description                                                                                   |
+|---------------------------------------|-----------------------------------------------------------------------------------------------|
+| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.                                        |
+| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.                                    |
+| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`.                               |
+| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.                                           |
+| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate.                                                      |
+| `WhereTargetIs<TTarget>()`            | Applies binding only if the injection target matches type `TTarget`.                          |
+| `WhereMemberNameIs(params string[])`  | Applies binding only if the injected field or property has one of the specified member names. |
 
 ## Deep dive
 
@@ -570,6 +572,7 @@ A binding is considered unique within a scope based on the following:
 - **Single vs collection**: Whether it's a single-value binding or a collection (`List<T>` or `T[]`).
 - **Global flag**: Whether the binding is marked as global.
 - **Target filters**: If the binding uses the target type filter `WhereTargetIs<T>()`.
+- **Member name filters**: If the binding uses the member filter `WhereMemberNameIs(...)`.
 
 For example, the following two bindings are considered duplicates and will conflict:
 
@@ -603,6 +606,10 @@ BindComponents<IMyService, MyServiceConcrete>();
 // Same interface but different target filters
 BindComponent<IMyService>().WhereTargetIs<Player>();
 BindComponent<IMyService>().WhereTargetIs<Enemy>();
+
+// Same interface but different member name filters
+BindComponent<IMyService>().WhereMemberNameIs("serviceA");
+BindComponent<IMyService>().WhereMemberNameIs("serviceB");
 ```
 
 This uniqueness model ensures deterministic resolution and early conflict detection. Duplicate bindings are logged and skipped automatically.

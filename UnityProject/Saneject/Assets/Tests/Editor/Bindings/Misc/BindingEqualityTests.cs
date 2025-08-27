@@ -68,10 +68,10 @@ namespace Tests.Editor.Bindings.Misc
         public void Bindings_WithDifferentTargetTypes_AreNotEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddTargetFilter(_ => true, typeof(Component));
+            a.AddInjectionTargetFilter(_ => true, typeof(Component));
 
             Binding b = MakeBinding(scopeA);
-            b.AddTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
 
             Assert.AreNotEqual(a, b);
         }
@@ -80,12 +80,12 @@ namespace Tests.Editor.Bindings.Misc
         public void Bindings_WithSameTargetTypes_DifferentOrder_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddTargetFilter(_ => true, typeof(Transform));
-            a.AddTargetFilter(_ => true, typeof(MeshRenderer));
+            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            a.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
 
             Binding b = MakeBinding(scopeA);
-            b.AddTargetFilter(_ => true, typeof(MeshRenderer));
-            b.AddTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -148,12 +148,12 @@ namespace Tests.Editor.Bindings.Misc
             HashSet<Binding> set = new();
 
             Binding a = MakeBinding(scopeA);
-            a.AddTargetFilter(_ => true, typeof(Transform));
-            a.AddTargetFilter(_ => true, typeof(MeshRenderer));
+            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            a.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
 
             Binding b = MakeBinding(scopeA);
-            b.AddTargetFilter(_ => true, typeof(MeshRenderer));
-            b.AddTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
 
             bool addedA = set.Add(a);
             bool addedB = set.Add(b);
@@ -169,11 +169,11 @@ namespace Tests.Editor.Bindings.Misc
             HashSet<Binding> set = new();
 
             Binding a = MakeBinding(scopeA);
-            a.AddTargetFilter(_ => true, typeof(Transform));
+            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
 
             Binding b = MakeBinding(scopeA);
-            b.AddTargetFilter(_ => true, typeof(Transform));
-            b.AddTargetFilter(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
 
             set.Add(a);
             set.Add(b);

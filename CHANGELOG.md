@@ -11,6 +11,9 @@
     - Available via `Saneject/Create New Scope` or `Assets/Create/Saneject/Create New Scope`.
     - Generates a new `Scope` class with the correct boilerplate code.
     - Namespace generation can be toggled in **User Settings** with the option **Generate Scope Namespace From Folder** (uses folder path relative to `Assets/`).
+- Added new **`WhereMemberNameIs`** filter for component and asset bindings:
+    - This allows bindings to target specific injected fields or properties by name for fine-grained control and can in many case replace ID boilerplate.
+    - Unit tests added for both component and asset versions.
 
 ### Changes
 
