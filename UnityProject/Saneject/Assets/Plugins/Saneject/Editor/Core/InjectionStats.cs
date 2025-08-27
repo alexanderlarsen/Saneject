@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Text;
+using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Core
 {
@@ -26,20 +27,43 @@ namespace Plugins.Saneject.Editor.Core
             int numScopesProcessed,
             long elapsedMilliseconds)
         {
-            string message = $"Saneject: {injectionType} injection complete | {numScopesProcessed} scopes processed | {numInjectedGlobal} global dependencies | {numInjectedFields} injected fields | {numMissingBindings} missing bindings | {numInvalidBindings} invalid bindings | {numUnusedBindings} unused bindings | {numMissingDependencies} missing dependencies | Completed in {elapsedMilliseconds} ms";
+            StringBuilder sb = new();
+
+            sb.Append("Saneject: ");
+            sb.Append(injectionType);
+            sb.Append(" injection complete | ");
+            sb.Append(numScopesProcessed);
+            sb.Append(numScopesProcessed == 1 ? " scope processed | " : " scopes processed | ");
+            sb.Append(numInjectedGlobal);
+            sb.Append(numInjectedGlobal == 1 ? " global dependency | " : " global dependencies | ");
+            sb.Append(numInjectedFields);
+            sb.Append(numInjectedFields == 1 ? " injected field | " : " injected fields | ");
+            sb.Append(numMissingBindings);
+            sb.Append(numMissingBindings == 1 ? " missing binding | " : " missing bindings | ");
+            sb.Append(numInvalidBindings);
+            sb.Append(numInvalidBindings == 1 ? " invalid binding | " : " invalid bindings | ");
+            sb.Append(numUnusedBindings);
+            sb.Append(numUnusedBindings == 1 ? " unused binding | " : " unused bindings | ");
+            sb.Append(numMissingDependencies);
+            sb.Append(numMissingDependencies == 1 ? " missing dependency | " : " missing dependencies | ");
+            sb.Append("Completed in ");
+            sb.Append(elapsedMilliseconds);
+            sb.Append(" ms");
+
+            string log = sb.ToString();
 
             switch (GetLogSeverity())
             {
                 case LogSeverity.Info:
-                    Debug.Log(message);
+                    Debug.Log(log);
                     break;
 
                 case LogSeverity.Warning:
-                    Debug.LogWarning(message);
+                    Debug.LogWarning(log);
                     break;
 
                 case LogSeverity.Error:
-                    Debug.LogError(message);
+                    Debug.LogError(log);
                     break;
             }
         }
