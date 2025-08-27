@@ -561,35 +561,41 @@ namespace Plugins.Saneject.Editor.Core
         /// </summary>
         private static object GetContextKey(Object obj)
         {
-            if (obj is Component component)
-            {
-                GameObject gameObject = component.gameObject;
+            if (obj is not Component component)
+                return null; // unrestricted (ScriptableObjects, etc.)
 
-                // Prefab instance in the scene
-                GameObject instanceRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
+            GameObject go = component.gameObject;
+
+            // 1) Prefab INSTANCE
+            if (PrefabUtility.IsPartOfPrefabInstance(go))
+            {
+                GameObject instanceRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
 
                 if (instanceRoot)
                 {
-                    // Normalize to the prefab asset root
                     GameObject prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(instanceRoot);
-
-                    // Fallback: if no source asset, just return the instance root
-                    return prefabAsset ? prefabAsset : instanceRoot;
+                    return prefabAsset ? (Object)prefabAsset : instanceRoot;
                 }
 
-                // Prefab asset in the Project window
-                if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
-                {
-                    GameObject assetRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(gameObject);
-                    return assetRoot ? assetRoot : gameObject; // fallback
-                }
-
-                // Scene object, use its scene
-                return gameObject.scene;
+                return go.scene; // fallback
             }
 
-            // Assets (ScriptableObjects, etc.) have no scene/prefab restriction
-            return null;
+            // 2) Prefab ASSET in Project window
+            if (PrefabUtility.IsPartOfPrefabAsset(go))
+                // The root of the prefab asset is just its transform.root
+                return go.transform.root.gameObject;
+
+            // 3) Open Prefab Stage
+            PrefabStage stage = PrefabStageUtility.GetPrefabStage(go);
+
+            if (stage && stage.prefabContentsRoot)
+            {
+                GameObject asset = PrefabUtility.GetCorrespondingObjectFromSource(stage.prefabContentsRoot);
+                return asset ? (Object)asset : stage.prefabContentsRoot;
+            }
+
+            // 4) Scene object
+            return go.scene;
         }
 
         /// <summary>

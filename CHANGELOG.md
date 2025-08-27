@@ -35,8 +35,7 @@
 
 - Fixed an issue where missing dependencies were not counted correctly in the injection stats.
 - Restored property drawing for `[field: ...]` auto-properties in `SanejectInspector`, so `[SerializeField]` and `[SerializeInterface]` properties (with or without `[Inject]`, including in nested classes) now draw correctly again.
-
-Ask ChatGPT
+- Fixed a bug in **FilterBySameContext** where prefab asset injection (via Inspector on a prefab selected in the Project window) incorrectly treated child objects as separate contexts. Now all components inside a prefab asset normalize to the prefab asset root, ensuring they are considered part of the same context. This fixes broken injection when pressing **Inject** on a prefab asset without opening the prefab.
 
 ## Version 0.11.0
 
