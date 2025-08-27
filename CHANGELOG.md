@@ -19,6 +19,11 @@
 
 - Binding target filters (`WhereTargetIs<T>`) now evaluate with **`Any`** instead of **`All`**.  
   This allows chaining multiple filters to mean “inject into `T1` **or** `T2`” instead of requiring all filters simultaneously.
+- Binding uniqueness & equality updated:
+    - `Binding.Equals` now treats **target-type** and **member-name** filters as **overlap-based** (subset/superset considered equal if they can apply to the same injection site).
+    - `GetHashCode` was adjusted accordingly (hash depends on presence of these filters rather than their full contents).
+    - This tightens duplicate detection: e.g., `WhereTargetIs<MonoA>()` is considered a duplicate of `WhereTargetIs<MonoA>().WhereTargetIs<MonoB>()`; same for `WhereMemberNameIs("monoA")` vs `WhereMemberNameIs("monoA","monoB")`.
+    - Added/updated unit tests to cover overlap equality for both target-type and member-name filters, including assignability (base/derived) cases.
 
 ### Fixes
 

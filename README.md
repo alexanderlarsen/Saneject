@@ -574,6 +574,14 @@ A binding is considered unique within a scope based on the following:
 - **Target filters**: If the binding uses the target type filter `WhereTargetIs<T>()`.
 - **Member name filters**: If the binding uses the member filter `WhereMemberNameIs(...)`.
 
+**Overlap rule (important):**
+
+When determining duplicates, target and member-name filters are compared by overlap, not by full-set equality.
+
+- **Target filters:** two bindings overlap if any target types are the same or assignable (base/derived).
+- **Member-name filters:** two bindings overlap if they share at least one member name.
+- **Empty target/member filter**: is treated as a generic binding and does not overlap a filtered binding for uniqueness (so a general binding can coexist with a targeted one).
+
 For example, the following two bindings are considered duplicates and will conflict:
 
 ```csharp

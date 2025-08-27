@@ -261,33 +261,33 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Custom equality comparison to determine if the binding is unique or a duplicate based on system rules.
         /// </summary>
+        // Equals (replace your current implementation)
         public bool Equals(Binding other)
         {
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            // two bindings conflict if they have the same interface (regardless of concrete)
-            // or, if neither has an interface, they must have the same concrete
-            bool typeMatch;
+            // Core signature (unchanged)
+            bool typeMatch = InterfaceType != null
+                ? InterfaceType == other.InterfaceType
+                : ConcreteType == other.ConcreteType;
 
-            if (InterfaceType != null)
-                typeMatch = InterfaceType == other.InterfaceType;
-            else
-                typeMatch = ConcreteType == other.ConcreteType;
+            if (!(Equals(Scope, other.Scope)
+                  && typeMatch
+                  && Id == other.Id
+                  && IsGlobal == other.IsGlobal
+                  && IsCollection == other.IsCollection))
+                return false;
 
-            return Equals(Scope, other.Scope)
-                   && typeMatch
-                   && Id == other.Id
-                   && IsGlobal == other.IsGlobal
-                   && IsCollection == other.IsCollection
-                   && injectionTargetFilters.Select(tf => tf.injectionTargetType)
-                       .OrderBy(t => t?.FullName)
-                       .SequenceEqual(other.injectionTargetFilters.Select(tf => tf.injectionTargetType)
-                           .OrderBy(t => t?.FullName))
-                   && injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName)
-                       .OrderBy(n => n)
-                       .SequenceEqual(other.injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName)
-                           .OrderBy(n => n));
+            // Overlap-based equality for filters:
+            IEnumerable<Type> myTargetTypes = injectionTargetFilters.Select(tf => tf.injectionTargetType);
+            IEnumerable<Type> otherTargetTypes = other.injectionTargetFilters.Select(tf => tf.injectionTargetType);
+
+            IEnumerable<string> myMemberNames = injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
+            IEnumerable<string> otherMemberNames = other.injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
+
+            return TargetsOverlapForEquality(myTargetTypes, otherTargetTypes)
+                   && MemberNamesOverlapForEquality(myMemberNames, otherMemberNames);
         }
 
         public override int GetHashCode()
@@ -297,17 +297,49 @@ namespace Plugins.Saneject.Runtime.Bindings
             Type keyType = InterfaceType ?? ConcreteType;
             int hash = HashCode.Combine(Scope, keyType, Id, IsGlobal, IsCollection);
 
-            foreach (Type targetType in injectionTargetFilters
-                         .Select(tf => tf.injectionTargetType)
-                         .OrderBy(t => t?.FullName))
-                hash = HashCode.Combine(hash, targetType);
+            // To satisfy (Equals => same hash), don't hash the exact contents of filters,
+            // only whether they are empty or not. Collisions are fine.
+            bool hasTargetFilters = injectionTargetFilters.Any();
+            bool hasMemberNameFilters = injectionTargetMemberNameFilters.Any();
 
-            foreach (string memberName in injectionTargetMemberNameFilters
-                         .Select(f => f.injectionTargetMemberName)
-                         .OrderBy(n => n))
-                hash = HashCode.Combine(hash, memberName);
-
+            hash = HashCode.Combine(hash, hasTargetFilters ? 1 : 0, hasMemberNameFilters ? 1 : 0);
             return hash;
+        }
+
+        private static bool TargetsOverlapForEquality(
+            IEnumerable<Type> a,
+            IEnumerable<Type> b)
+        {
+            // Empty means "no restriction" – do NOT treat as equal to non-empty.
+            List<Type> aList = a?.Where(t => t != null).Distinct().ToList() ?? new List<Type>();
+            List<Type> bList = b?.Where(t => t != null).Distinct().ToList() ?? new List<Type>();
+
+            if (aList.Count == 0 || bList.Count == 0)
+                return aList.Count == 0 && bList.Count == 0;
+
+            foreach (Type t1 in aList)
+                foreach (Type t2 in bList)
+                    if (t1.IsAssignableFrom(t2) || t2.IsAssignableFrom(t1))
+                        return true;
+
+            return false;
+        }
+
+        private static bool MemberNamesOverlapForEquality(
+            IEnumerable<string> a,
+            IEnumerable<string> b)
+        {
+            HashSet<string> aSet = new(a?.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
+            HashSet<string> bSet = new(b?.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
+
+            if (aSet.Count == 0 || bSet.Count == 0)
+                return aSet.Count == 0 && bSet.Count == 0;
+
+            foreach (string name in aSet)
+                if (bSet.Contains(name))
+                    return true;
+
+            return false;
         }
     }
 }
