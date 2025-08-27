@@ -23,18 +23,35 @@ namespace Plugins.Saneject.Editor.Extensions
         }
 
         /// <summary>
-        /// Traverses the <see cref="Scope.ParentScope" /> chain and returns the root scope.
+        /// Walks up to the root-most <see cref="Scope" />. If the start scope lives on a prefab instance,
+        /// the walk stops at that prefab instance root (does not cross into the scene root).
         /// </summary>
-        /// <param name="startScope">The scope to start from.</param>
-        /// <returns>The root-most parent scope.</returns>
         public static Scope FindRootScope(this Scope startScope)
         {
-            Scope rootScope = startScope;
+            Scope current = startScope;
+            bool clampToPrefab = current.gameObject.IsPrefab();
 
-            while (rootScope.ParentScope)
-                rootScope = rootScope.ParentScope;
+            while (true)
+            {
+                Transform parent = current.transform.parent;
 
-            return rootScope;
+                if (!parent)
+                    break;
+
+                // If we started inside a prefab, don't cross out of it.
+                if (clampToPrefab && !parent.gameObject.IsPrefab())
+                    break;
+
+                // Start lookup from the parent, not from 'current' (GetComponentInParent includes self). 
+                Scope next = parent.GetComponentInParent<Scope>(true);
+
+                if (!next || next == current)
+                    break;
+
+                current = next;
+            }
+
+            return current;
         }
 
         /// <summary>

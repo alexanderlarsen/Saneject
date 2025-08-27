@@ -78,7 +78,16 @@ namespace Plugins.Saneject.Editor.Core
                 IEnumerable<Binding> proxyBindings = allScopes
                     .SelectMany(scope => scope.GetProxyBindings());
 
-                proxyBindings.CreateMissingProxyStubs();
+                proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
+
+                if (isProxyCreationPending)
+                {
+                    stopwatch.Stop();
+                    allScopes.Dispose();
+                    EditorUtility.ClearProgressBar();
+                    Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
+                    return;
+                }
 
                 InjectionStats stats = new();
 
@@ -126,7 +135,11 @@ namespace Plugins.Saneject.Editor.Core
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             Scope rootScope = startScope.FindRootScope();
-            Scope[] allScopes = rootScope.GetComponentsInChildren<Scope>();
+
+            Scope[] allScopes = rootScope
+                .GetComponentsInChildren<Scope>()
+                .Where(scope => !scope.gameObject.IsPrefab())
+                .ToArray();
 
             if (allScopes.Length <= 0)
             {
@@ -144,7 +157,16 @@ namespace Plugins.Saneject.Editor.Core
                 IEnumerable<Binding> proxyBindings = allScopes
                     .SelectMany(scope => scope.GetProxyBindings());
 
-                proxyBindings.CreateMissingProxyStubs();
+                proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
+
+                if (isProxyCreationPending)
+                {
+                    stopwatch.Stop();
+                    allScopes.Dispose();
+                    EditorUtility.ClearProgressBar();
+                    Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
+                    return;
+                }
 
                 InjectionStats stats = new();
 
@@ -212,7 +234,16 @@ namespace Plugins.Saneject.Editor.Core
             ScopeExtensions.Initialize(allScopes);
 
             IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
-            proxyBindings.CreateMissingProxyStubs();
+            proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
+
+            if (isProxyCreationPending)
+            {
+                stopwatch.Stop();
+                allScopes.Dispose();
+                EditorUtility.ClearProgressBar();
+                Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
+                return;
+            }
 
             InjectionStats stats = new();
             EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting prefab dependencies", 0);
@@ -239,14 +270,20 @@ namespace Plugins.Saneject.Editor.Core
             EditorUtility.ClearProgressBar();
         }
 
-        private static void CreateMissingProxyStubs(this IEnumerable<Binding> proxyBindings)
+        private static void CreateMissingProxyStubs(
+            this IEnumerable<Binding> proxyBindings,
+            out bool isProxyCreationPending)
         {
+            isProxyCreationPending = false;
+
             List<Type> typesToCreate = proxyBindings
                 .Select(binding => binding.ConcreteType)
                 .Where(type => !ProxyUtils.DoesProxyScriptExist(type)).ToList();
 
             if (typesToCreate.Count == 0)
                 return;
+
+            isProxyCreationPending = true;
 
             string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
 
