@@ -918,7 +918,6 @@ Or call specific parts of it:
 | `IsNestedSerializable`         | Returns true if a type is a non-Unity serializable reference type suitable for nested drawing.                                   |
 | `DrawNestedSerializable`       | Recursively draws the contents of a nested serializable object using the same field rules.                                       |
 | `ValidateInterfaceCollection`  | Validates that objects in a collection implement a required interface type, resolving components from `GameObject`s if possible. |
-| `GetLogicalName`               | Returns the logical name of a field, stripping compiler auto-property backing syntax (`<Name>k__BackingField`) when present.     |
 
 These utilities are useful for building custom inspectors, advanced tooling, or partial field drawing while preserving Saneject's behavior and layout.
 

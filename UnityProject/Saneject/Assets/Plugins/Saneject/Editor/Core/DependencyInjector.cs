@@ -6,6 +6,7 @@ using System.Reflection;
 using System.Text;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Util;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Extensions;
@@ -442,7 +443,7 @@ namespace Plugins.Saneject.Editor.Core
                 bool isCollection = serializedProperty.isArray;
                 Object injectionTarget = serializedObject.targetObject;
                 Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget, serializedProperty.GetDisplayName());
-                string injectedFieldSignature = $"[Injected field: {GetInjectedFieldPath(serializedObject, serializedProperty)}]";
+                string injectedFieldSignature = $"[Injected field path: {NamePathUtils.GetInjectedFieldPath(serializedObject, serializedProperty)}]";
 
                 if (binding == null)
                 {
@@ -510,61 +511,6 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
-        }
-
-        /// <summary>
-        /// Builds a slash-separated path to an injected field or property,
-        /// combining GameObject hierarchy, component type, and property path.
-        /// Example: "Root/MonoA/monoB".
-        /// </summary>
-        private static string GetInjectedFieldPath(
-            SerializedObject serializedObject,
-            SerializedProperty serializedProperty)
-        {
-            Component component = (Component)serializedObject.targetObject;
-            string goPath = component.transform.GetHierarchyPath();
-            string propertyPath = serializedProperty.propertyPath;
-
-            FieldInfo field = serializedProperty?.GetFieldInfo();
-            InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field?.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
-
-            if (interfaceBackingFieldAttribute != null)
-            {
-                string[] split = propertyPath.Split('.');
-                split[^1] = split[^1].TrimStart('_');
-                propertyPath = string.Join(".", split);
-            }
-
-            return $"{goPath}/{component.GetType().Name}/{propertyPath}";
-        }
-
-        /// <summary>
-        /// Returns the full GameObject hierarchy path from the scene root to this transform.
-        /// Example: "Root/Child/Leaf".
-        /// </summary>
-        private static string GetHierarchyPath(this Transform transform)
-        {
-            return !transform.parent ? transform.name : $"{transform.parent.GetHierarchyPath()}/{transform.name}";
-        }
-
-        /// <summary>
-        /// Returns a display-friendly name for the given <see cref="SerializedProperty" />.
-        /// If the property represents an auto-generated interface backing field,
-        /// the leading underscore is removed so the name matches the original user-defined field.
-        /// </summary>
-        /// <param name="serializedProperty">
-        /// The <see cref="SerializedProperty" /> to extract the display name from.
-        /// </param>
-        /// <returns>
-        /// The display-ready property name, with leading underscores trimmed when backing
-        /// fields are detected; otherwise the original property name.
-        /// </returns>
-        private static string GetDisplayName(this SerializedProperty serializedProperty)
-        {
-            string name = serializedProperty.name;
-            FieldInfo field = serializedProperty?.GetFieldInfo();
-            InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field?.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
-            return interfaceBackingFieldAttribute != null ? name.TrimStart('_') : name;
         }
 
         /// <summary>
@@ -688,59 +634,6 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             return false;
-        }
-
-        /// <summary>
-        /// Class for collecting injection stats for logging purposes.
-        /// </summary>
-        private class InjectionStats
-        {
-            public int numInjectedGlobal;
-            public int numInjectedFields;
-            public int numMissingBindings;
-            public int numUnusedBindings;
-            public int numInvalidBindings;
-            public int numMissingDependencies;
-
-            private enum LogSeverity
-            {
-                Info,
-                Warning,
-                Error
-            }
-
-            public void LogStats(
-                string injectionType,
-                int numScopesProcessed,
-                long elapsedMilliseconds)
-            {
-                string message = $"Saneject: {injectionType} injection complete | {numScopesProcessed} scopes processed | {numInjectedGlobal} global dependencies | {numInjectedFields} injected fields | {numMissingBindings} missing bindings | {numInvalidBindings} invalid bindings | {numUnusedBindings} unused bindings | {numMissingDependencies} missing dependencies | Completed in {elapsedMilliseconds} ms";
-
-                switch (GetLogSeverity())
-                {
-                    case LogSeverity.Info:
-                        Debug.Log(message);
-                        break;
-
-                    case LogSeverity.Warning:
-                        Debug.LogWarning(message);
-                        break;
-
-                    case LogSeverity.Error:
-                        Debug.LogError(message);
-                        break;
-                }
-            }
-
-            private LogSeverity GetLogSeverity()
-            {
-                int totalErrors = numMissingBindings + numInvalidBindings + numMissingDependencies;
-
-                if (totalErrors > 0)
-                    return LogSeverity.Error;
-
-                return numUnusedBindings > 0 ? LogSeverity.Warning : LogSeverity.Info;
-            }
         }
     }
 }

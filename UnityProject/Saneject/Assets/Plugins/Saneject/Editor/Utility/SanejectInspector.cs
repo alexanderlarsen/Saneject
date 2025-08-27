@@ -140,7 +140,7 @@ namespace Plugins.Saneject.Editor.Utility
             out Type interfaceType,
             SerializedProperty parent = null)
         {
-            string logical = GetLogicalName(field);
+            string logical = NamePathUtils.GetLogicalName(field);
             string backingName = "__" + logical;
 
             property = parent == null
@@ -420,24 +420,6 @@ namespace Plugins.Saneject.Editor.Utility
 
                 property.objectReferenceValue = newValue;
             }
-        }
-
-        /// <summary>
-        /// Returns the logical name of a field, stripping compiler auto-property
-        /// backing syntax (&lt;Name&gt;k__BackingField) when present.
-        /// </summary>
-        public static string GetLogicalName(FieldInfo field)
-        {
-            string n = field.Name;
-
-            // Handle auto-property backing fields: <Name>k__BackingField
-            if (n.Length > 0 && n[0] == '<')
-            {
-                int end = n.IndexOf(">k__BackingField", StringComparison.Ordinal);
-                if (end > 1) return n.Substring(1, end - 1); // "InterfaceB1"
-            }
-
-            return n;
         }
     }
 }
