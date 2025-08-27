@@ -197,7 +197,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <returns>The resolved dependency <see cref="UnityEngine.Object" />, or <c>null</c> if not found.</returns>
         public IEnumerable<Object> LocateDependencies(Object target = null)
         {
-            if (targetFilters.Count > 0 && target != null && !targetFilters.All(f => f.filter(target)))
+            if (targetFilters.Count > 0 && target != null && !targetFilters.Any(f => f.filter(target)))
                 return null;
 
             if (RequiresInjectionTarget && target == null)
@@ -219,7 +219,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (targetFilters.Count == 0)
                 return true;
 
-            return target != null && targetFilters.All(f => f.filter(target));
+            return target != null && targetFilters.Any(f => f.filter(target));
         }
         
         /// <summary>
