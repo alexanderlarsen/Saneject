@@ -228,7 +228,7 @@ public class GameScope : Scope
 
 5. Run dependency injection using either method:
 
-- **Scope inspector:** `Inject Scene Dependencies` button
+- **Scope inspector:** `Inject Hierarchy Dependencies` button
 - **Hierarchy context menu:** Right-click hierarchy panel → `Inject Scene Dependencies`
 - **Unity main menu bar:** `Saneject/Inject Scene Dependencies`
 
@@ -983,8 +983,9 @@ Found under `Saneject/User Settings`, these let you customize editor and logging
 
 | Setting                                     | Description                                                                                                                                                                                                                                   |
 |---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting dependencies into the scene.                                                                                                                                                                      |
-| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting prefab dependencies.                                                                                                                                                                              |
+| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting all dependencies into the full scene (excluding prefabs present in the scene).                                                                                                                    |
+| `Ask Before Hierarchy Injection`            | Show a confirmation dialog before injecting dependencies into a single scene hierarchy (excluding prefabs present in the hierarchy).                                                                                                          |
+| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting dependencies into a prefab.                                                                                                                                                                       |
 | `Filter By Same Context`                    | Enforce context isolation during injection. Scene objects only resolve with other scene objects, and prefab objects only resolve within their own prefab. Cross-context references are filtered out unless this is disabled in User Settings. |
 | `Show Injected Fields`                      | Show `[Inject]` fields in the Inspector.                                                                                                                                                                                                      |
 | `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                                                                                                                                                      |

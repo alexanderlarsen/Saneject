@@ -93,7 +93,77 @@ namespace Plugins.Saneject.Editor.Core
                 if (UserSettings.LogInjectionStats)
                 {
                     stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
-                    stats.LogStats("Scene", allScopes.Length, stopwatch.ElapsedMilliseconds);
+                    stats.LogStats("Full scene", allScopes.Length, stopwatch.ElapsedMilliseconds);
+                }
+            }
+            catch (Exception e)
+            {
+                stopwatch.Stop();
+                Debug.LogException(e);
+            }
+
+            allScopes.Dispose();
+            EditorUtility.ClearProgressBar();
+        }
+
+        public static void InjectSingleHierarchyDependencies(Scope startScope)
+        {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
+            // Application.isBatchMode is true when run from CI tests.
+            if (!Application.isBatchMode)
+            {
+                if (UserSettings.AskBeforeHierarchyInjection && !EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Are you sure you want to inject all dependencies in the hierarchy?", "Yes", "Cancel"))
+                    return;
+
+                if (UserSettings.ClearLogsOnInjection)
+                    ConsoleUtils.ClearLog();
+            }
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            Scope rootScope = startScope.FindRootScope();
+            Scope[] allScopes = rootScope.GetComponentsInChildren<Scope>();
+
+            if (allScopes.Length <= 0)
+            {
+                Debug.LogWarning("Saneject: No scopes found in hierarchy. Nothing to inject.");
+                stopwatch.Stop();
+                return;
+            }
+
+            try
+            {
+                EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in hierarchy", 0);
+
+                ScopeExtensions.Initialize(allScopes);
+
+                Scope[] rootScopes = allScopes
+                    .Where(scope => !scope.ParentScope)
+                    .ToArray();
+
+                IEnumerable<Binding> proxyBindings = allScopes
+                    .SelectMany(scope => scope.GetProxyBindings());
+
+                proxyBindings.CreateMissingProxyStubs();
+
+                InjectionStats stats = new();
+
+                allScopes.ConfigureGlobalBindings(stats);
+
+                foreach (Scope root in rootScopes)
+                    root.InjectFromRoot(stats, isPrefabInjection: false);
+
+                allScopes.LogUnusedBindings(stats);
+                stopwatch.Stop();
+
+                if (UserSettings.LogInjectionStats)
+                {
+                    stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
+                    stats.LogStats($"Single scene hierarchy [{rootScope.gameObject.name}]", allScopes.Length, stopwatch.ElapsedMilliseconds);
                 }
             }
             catch (Exception e)
@@ -163,7 +233,7 @@ namespace Plugins.Saneject.Editor.Core
                 if (UserSettings.LogInjectionStats)
                 {
                     stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
-                    stats.LogStats("Prefab", allScopes.Length, stopwatch.ElapsedMilliseconds);
+                    stats.LogStats($"Prefab [{rootScope.gameObject.name}]", allScopes.Length, stopwatch.ElapsedMilliseconds);
                 }
             }
             catch (Exception e)

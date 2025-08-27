@@ -100,14 +100,21 @@ namespace Plugins.Saneject.Editor.Settings
 
             DrawToggle(
                 label: "Ask Before Scene Injection",
-                tooltip: "Show a confirmation dialog before injecting dependencies into the scene.",
+                tooltip: "Show a confirmation dialog before injecting all dependencies into the full scene (excluding prefabs present in the scene).",
                 currentValue: UserSettings.AskBeforeSceneInjection,
                 onChanged: newValue => UserSettings.AskBeforeSceneInjection = newValue
             );
 
             DrawToggle(
+                label: "Ask Before Hierarchy Injection",
+                tooltip: "Show a confirmation dialog before injecting dependencies into a single scene hierarchy (excluding prefabs present in the hierarchy).",
+                currentValue: UserSettings.AskBeforeHierarchyInjection,
+                onChanged: newValue => UserSettings.AskBeforeHierarchyInjection = newValue
+            );
+
+            DrawToggle(
                 label: "Ask Before Prefab Injection",
-                tooltip: "Show a confirmation dialog before injecting prefab dependencies.",
+                tooltip: "Show a confirmation dialog before injecting dependencies into a prefab.",
                 currentValue: UserSettings.AskBeforePrefabInjection,
                 onChanged: newValue => UserSettings.AskBeforePrefabInjection = newValue
             );

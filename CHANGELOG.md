@@ -24,6 +24,7 @@
     - `GetHashCode` was adjusted accordingly (hash depends on presence of these filters rather than their full contents).
     - This tightens duplicate detection: e.g., `WhereTargetIs<MonoA>()` is considered a duplicate of `WhereTargetIs<MonoA>().WhereTargetIs<MonoB>()`; same for `WhereMemberNameIs("monoA")` vs `WhereMemberNameIs("monoA","monoB")`.
     - Added/updated unit tests to cover overlap equality for both target-type and member-name filters, including assignability (base/derived) cases.
+- Scope inspector **Inject** button now injects only the selected hierarchy instead of the entire scene. This makes it easier to process smaller hierarchies and view context-relevant logs. Full-scene injection is still available via scene right-click and the **Saneject** menu.
 
 ### Fixes
 
