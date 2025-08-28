@@ -164,7 +164,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   __enemyObservable: {fileID: 2874387223255488611}
---- !u!1 &1017693045
+--- !u!1 &934774674
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -172,8 +172,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 1017693047}
-  - component: {fileID: 1017693046}
+  - component: {fileID: 934774676}
+  - component: {fileID: 934774675}
   m_Layer: 0
   m_Name: SceneGlobalContainer
   m_TagString: Untagged
@@ -181,13 +181,13 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &1017693046
+--- !u!114 &934774675
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017693045}
+  m_GameObject: {fileID: 934774674}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 4fc23f65d0d943be83178defc43e5484, type: 3}
@@ -200,13 +200,13 @@ MonoBehaviour:
   - instance: {fileID: 274076467875348428}
   - instance: {fileID: 559519672}
   createdByDependencyInjector: 1
---- !u!4 &1017693047
+--- !u!4 &934774676
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1017693045}
+  m_GameObject: {fileID: 934774674}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
@@ -842,4 +842,4 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 7250975890217056284}
-  - {fileID: 1017693047}
+  - {fileID: 934774676}
