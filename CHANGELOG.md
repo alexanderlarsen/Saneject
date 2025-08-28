@@ -16,7 +16,7 @@
 - Moved `WhereTargetIs` and `WhereMemberNameIs` out of filter builders and into binding builders. Filters should constrain dependency *candidates*, while these methods constrain the *injection target*.
 - Renamed them to `ToTarget` and `ToMember` for clarity. Added overloads to support both singular and multiple qualifiers.
 - Updated all internal references and tests to use the new qualifier methods.
-- Updated sample game bindings to use the qualifiers.
+- Updated sample game bindings to use the qualifiers where applicable.
 
 #### Switch global bindings to dedicated GlobalBindingBuilder
 
