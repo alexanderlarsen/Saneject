@@ -353,13 +353,13 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="T">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>
-        protected ComponentBindingBuilder<T> BindGlobal<T>() where T : Component
+        protected GlobalBindingBuilder<T> BindGlobal<T>() where T : Component
         {
             Binding binding = new(null, typeof(T), this);
             binding.MarkComponentBinding();
             binding.MarkGlobal();
             unvalidatedBindings.Add(binding);
-            return new ComponentBindingBuilder<T>(binding, this);
+            return new GlobalBindingBuilder<T>(binding, this);
         }
 
         #endregion

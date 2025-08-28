@@ -42,10 +42,10 @@ namespace Tests.Editor
             return Call<Scope, ComponentBindingBuilder<TConcrete>>(scope, nameof(BindMultipleComponents), typeof(TInterface), typeof(TConcrete));
         }
 
-        protected ComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>(Scope scope)
+        protected GlobalBindingBuilder<TConcrete> BindGlobal<TConcrete>(Scope scope)
             where TConcrete : Component
         {
-            return Call<Scope, ComponentBindingBuilder<TConcrete>>(scope, nameof(BindGlobal), typeof(TConcrete));
+            return Call<Scope, GlobalBindingBuilder<TConcrete>>(scope, nameof(BindGlobal), typeof(TConcrete));
         }
 
         protected AssetBindingBuilder<T> BindAsset<T>(Scope scope)
