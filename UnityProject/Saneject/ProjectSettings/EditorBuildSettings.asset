@@ -5,13 +5,13 @@ EditorBuildSettings:
   m_ObjectHideFlags: 0
   serializedVersion: 2
   m_Scenes:
-  - enabled: 1
+  - enabled: 0
     path: Assets/Plugins/Saneject/Samples/DemoGame/StartScene.unity
     guid: 15d7f5558018bbb42a18f6ec8141f383
-  - enabled: 1
+  - enabled: 0
     path: Assets/Plugins/Saneject/Samples/DemoGame/Scenes/GameScene.unity
     guid: aa011174a9d382c4aa562d4014794a47
-  - enabled: 1
+  - enabled: 0
     path: Assets/Plugins/Saneject/Samples/DemoGame/Scenes/UIScene.unity
     guid: 51d3d79ee5eba1341a73cecefb1ef13b
   m_configObjects:

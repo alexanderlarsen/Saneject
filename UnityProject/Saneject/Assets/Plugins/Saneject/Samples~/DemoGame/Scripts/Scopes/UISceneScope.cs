@@ -3,6 +3,7 @@ using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
 using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
 using Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver;
 using UnityEngine.UI;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
@@ -25,7 +26,8 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
                 .WhereNameIs("ScoreText");
 
             BindComponent<Button>()
-                .ToID("restartButton")
+                .ToTarget<GameOverController>()
+                .ToMember("restartButton")
                 .FromTargetDescendants()
                 .WhereNameIs("RestartButton");
 
