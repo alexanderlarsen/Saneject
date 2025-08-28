@@ -17,12 +17,14 @@ Resolve everything in the Editor with familiar DI syntax while keeping dependenc
 
 No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
 
+> 🚀 Install, learn the basics and inject your first scene in 5 minutes → [Jump to Quick Start](#quick-start)
+
 > ⚠️ **Beta notice**  
-> Saneject is currently in beta. The framework is functionally stable, but the API may still change during the beta phase. Expect some breaking changes until 1.0.0.
+> Saneject is currently in beta. The core is mostly stable, but I still iterate and occasionally uncover quirks or bugs. The API may also change a bit during this phase, so expect some breaking changes until 1.0.0.
 >
-> It was originally developed to power *Tails*, a VR Snake game I’m working on, and is now being actively integrated there, which helps uncover real-world quirks, refine the UX, and prove the system’s value in a production setting.
+> The framework was originally developed to power [Tails](https://www.youtube.com/playlist?list=PLeSb1exZWazIzm3UXsKb7iJG6MgkaIvSQ), a VR Snake game I’m building with a friend, and is now being actively integrated there, which lets me uncover edge cases, refine the UX, and prove the system in a real production setting.
 >
-> Saneject will remain in beta until I’m satisfied with its stability, usability and ergonomics in production.
+> Saneject will remain in beta until I’m satisfied with its stability, usability, and ergonomics in production.
 
 > 👋 **Tried it? Let me know**
 >
@@ -153,22 +155,11 @@ Saneject isn't meant to replace full runtime frameworks like Zenject or VContain
 
 ### Requirements
 
-| Requirement       | Description                                                                                                       |
-|-------------------|-------------------------------------------------------------------------------------------------------------------|
-| Unity version     | Unity 2022.3.12f1 LTS or newer. Saneject's Roslyn source generators and analyzers do not work in earlier versions |
-| Scripting backend | Mono or IL2CPP                                                                                                    |
-| Platforms         | Editor-only tooling; runtime code is plain C#, so it runs on any platform Unity supports                          |
-
-> ⚠️ **Platform notice**  
-> Saneject's runtime is just plain C# (no reflection, no dynamic code).  
-> It's tested on Windows + Android (Mono & IL2CPP) builds without issues, but other targets (IL2CPP iOS, WebGL, consoles) are not yet verified.
->
-> The only non-standard Unity moving parts are:
->
-> - The Roslyn-generated partial classes compiled into your assemblies.
-> - `ISerializationCallbackReceiver` setting interface fields after deserialization.
->
-> Both *should* work everywhere Unity does, but if you run into something, please open an issue.
+| Requirement       | Description                                                                                                                                         |
+|-------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| Unity version     | Unity 2022.3.12f1 LTS or newer. Saneject's Roslyn source generators and analyzers do not work in earlier versions                                   |
+| Scripting backend | Mono or IL2CPP                                                                                                                                      |
+| Platforms         | Editor-only tooling; runtime code is plain C#, so it should run on any platform Unity supports but only tested on Windows + Android (Mono & IL2CPP) |
 
 ### Installation
 
