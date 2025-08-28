@@ -148,7 +148,7 @@ namespace Plugins.Saneject.Editor.Utility
                 isValid = false;
             }
 
-            if (binding.IsGlobal && !string.IsNullOrWhiteSpace(binding.Id))
+            if (binding.IsGlobal && binding.Ids is { Length: > 0 })
             {
                 Debug.LogError(
                     $"Saneject: Invalid binding {binding.GetBindingSignature()}." +

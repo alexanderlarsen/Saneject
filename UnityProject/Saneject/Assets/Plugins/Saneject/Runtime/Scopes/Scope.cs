@@ -109,7 +109,6 @@ namespace Plugins.Saneject.Runtime.Scopes
                 !binding.IsGlobal &&
                 binding.InterfaceType == interfaceType &&
                 (binding.ConcreteType == concreteType || concreteType == null) && // skip concrete check if we have an interface
-                binding.Id == injectId &&
                 binding.IsCollection == isCollection);
 
             // If we have an injection target, try to find a binding that passes target filters
@@ -117,7 +116,8 @@ namespace Plugins.Saneject.Runtime.Scopes
             {
                 foreach (Binding binding in matchingBindings
                              .Where(binding => binding.PassesInjectionTargetQualifiers(injectionTarget))
-                             .Where(binding => binding.PassesMemberNameQualifiers(targetMemberName)))
+                             .Where(binding => binding.PassesMemberNameQualifiers(targetMemberName))
+                             .Where(binding => binding.PassesIdQualifiers(injectId)))
                     return binding;
             }
             else

@@ -37,10 +37,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// Only injection targets annotated with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />
         /// that specify the same ID will resolve using this binding.
         /// </summary>
-        /// <param name="id">The identifier to match against injection targets.</param>
-        public AssetBindingBuilder<TAsset> ToID(string id)
+        /// <param name="ids">The identifiers to match against injection targets.</param>
+        public AssetBindingBuilder<TAsset> ToID(params string[] ids)
         {
-            binding.SetId(id);
+            foreach (string id in ids)
+                binding.AddIdQualifier(fieldId => fieldId == id, id);
+
             return this;
         }
 

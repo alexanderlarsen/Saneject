@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 binding.IsCollection,
                 binding.InterfaceType,
                 binding.ConcreteType,
-                binding.Id,
+                binding.Ids,
                 binding.Scope
             );
         }
@@ -32,7 +32,6 @@ namespace Plugins.Saneject.Runtime.Bindings
             bool isCollection,
             Type interfaceType,
             Type concreteType,
-            string id,
             Scope scope)
         {
             StringBuilder sb = new();
@@ -50,9 +49,6 @@ namespace Plugins.Saneject.Runtime.Bindings
             sb.Append(" | ");
             sb.Append(isCollection ? "Collection" : "Single");
 
-            if (id != null)
-                sb.Append($" | Id: {id} ");
-
             sb.Append($" | Nearest scope: {scope.GetType().Name}");
             sb.Append("]");
 
@@ -67,7 +63,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             bool isCollection,
             Type interfaceType,
             Type concreteType,
-            string id,
+            string[] ids,
             Scope scope)
         {
             StringBuilder sb = new();
@@ -95,8 +91,12 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (isProxy)
                 sb.Append(", Proxy");
 
-            if (id != null)
-                sb.Append($" | Id: {id}");
+            if (ids is { Length: > 0 })
+            {
+                sb.Append(" | ");
+                sb.Append(ids.Length == 1 ? "ID: " : "IDs: ");
+                sb.Append(string.Join(", ", ids));
+            }
 
             sb.Append($" | {(scope.gameObject.IsPrefab() ? "Prefab" : "Scene")} scope: {scope.GetType().Name}");
             sb.Append("]");
