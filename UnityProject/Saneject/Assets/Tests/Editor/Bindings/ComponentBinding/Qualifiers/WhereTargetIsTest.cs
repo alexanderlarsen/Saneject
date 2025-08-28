@@ -6,7 +6,7 @@ using UnityEngine;
 using ComponentRequester = Tests.Runtime.Component.ComponentRequester;
 using ComponentRequesterB = Tests.Runtime.Component.ComponentRequesterB;
 
-namespace Tests.Editor.Bindings.ComponentBinding.Filters
+namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
 {
     public class WhereTargetIsTest : BaseBindingTest
     {
@@ -27,12 +27,12 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
 
             // Set up bindings
             BindComponent<InjectableComponent>(scope)
-                .FromInstance(componentA)
-                .WhereTargetIs<ComponentRequester>();
+                .ToTarget<ComponentRequester>()
+                .FromInstance(componentA);
 
             BindComponent<InjectableComponent>(scope)
-                .FromInstance(componentB)
-                .WhereTargetIs<ComponentRequesterB>();
+                .ToTarget<ComponentRequesterB>()
+                .FromInstance(componentB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -57,12 +57,12 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
 
             // Set up bindings
             BindComponent<IInjectable, InjectableComponent>(scope)
-                .FromInstance(componentA)
-                .WhereTargetIs<ComponentRequester>();
+                .ToTarget<ComponentRequester>()
+                .FromInstance(componentA);
 
             BindComponent<IInjectable, InjectableComponent>(scope)
-                .FromInstance(componentB)
-                .WhereTargetIs<ComponentRequesterB>();
+                .ToTarget<ComponentRequesterB>()
+                .FromInstance(componentB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

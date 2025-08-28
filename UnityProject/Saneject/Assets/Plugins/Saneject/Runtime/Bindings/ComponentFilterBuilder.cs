@@ -212,28 +212,6 @@ namespace Plugins.Saneject.Runtime.Bindings
             return this;
         }
 
-        /// <summary>
-        /// Filter to only resolve dependencies using this binding when the injection target is of type <typeparamref name="TTarget" />.
-        /// Injection target is the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
-        /// </summary>
-        public ComponentFilterBuilder<TComponent> WhereTargetIs<TTarget>()
-        {
-            binding.AddInjectionTargetFilter(obj => obj is TTarget, typeof(TTarget));
-            return this;
-        }
-
-        /// <summary>
-        /// Filter to only resolve dependencies using this binding when the injection target
-        /// member (field or property) has one of the specified names.
-        /// </summary>
-        public ComponentFilterBuilder<TComponent> WhereMemberNameIs(params string[] memberNames)
-        {
-            foreach (string memberName in memberNames)
-                binding.AddInjectionTargetMemberNameFilter(name => name == memberName, memberName);
-
-            return this;
-        }
-
         #endregion
     }
 }

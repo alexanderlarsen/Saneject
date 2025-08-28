@@ -18,8 +18,8 @@ namespace Plugins.Saneject.Runtime.Bindings
     public class Binding : IEquatable<Binding>
     {
         private readonly List<Func<Object, bool>> filters = new();
-        private readonly List<(Func<Object, bool> filter, Type injectionTargetType)> injectionTargetFilters = new();
-        private readonly List<(Func<string, bool> filter, string injectionTargetMemberName)> injectionTargetMemberNameFilters = new();
+        private readonly List<(Func<Object, bool> qualifier, Type targetType)> injectionTargetQualifiers = new();
+        private readonly List<(Func<string, bool> qualifier, string memberName)> injectionTargetMemberQualifiers = new();
 
         private Func<Object, IEnumerable<Object>> locator;
 
@@ -180,29 +180,29 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Add a filter for injection targets. Only targets passing all target filters are valid for this binding.
         /// </summary>
-        /// <param name="filter">Predicate to evaluate each injection target <see cref="UnityEngine.Object" />.</param>
-        /// <param name="injectionTargetType">The type that this filter is associated with. Used for binding equality comparison.</param>
-        public void AddInjectionTargetFilter(
-            Func<Object, bool> filter,
-            Type injectionTargetType)
+        /// <param name="qualifier">Predicate to evaluate each injection target <see cref="UnityEngine.Object" />.</param>
+        /// <param name="targetType">The type that this filter is associated with. Used for binding equality comparison.</param>
+        public void AddInjectionTargetQualifier(
+            Func<Object, bool> qualifier,
+            Type targetType)
         {
-            injectionTargetFilters.Add((filter, injectionTargetType));
+            injectionTargetQualifiers.Add((qualifier, targetType));
         }
 
         /// <summary>
         /// Adds a filter that matches against the name of the injection target member (field or property) being resolved.
         /// </summary>
-        /// <param name="filter">
+        /// <param name="qualifier">
         /// Predicate that evaluates the target member name. The member name is passed as a string.
         /// </param>
-        /// <param name="injectionTargetMemberName">
+        /// <param name="memberName">
         /// The raw member name string this filter is associated with. Used for binding equality comparison.
         /// </param>
-        public void AddInjectionTargetMemberNameFilter(
-            Func<string, bool> filter,
-            string injectionTargetMemberName)
+        public void AddInjectionTargetMemberQualifier(
+            Func<string, bool> qualifier,
+            string memberName)
         {
-            injectionTargetMemberNameFilters.Add((filter, injectionTargetMemberName));
+            injectionTargetMemberQualifiers.Add((qualifier, memberName));
         }
 
         /// <summary>
@@ -232,12 +232,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         /// <param name="target">The injection target to evaluate against target filters.</param>
         /// <returns>True if all target filters pass or no target filters exist, false otherwise.</returns>
-        public bool PassesInjectionTargetFilters(Object target)
+        public bool PassesInjectionTargetQualifiers(Object target)
         {
-            if (injectionTargetFilters.Count == 0)
+            if (injectionTargetQualifiers.Count == 0)
                 return true;
 
-            return target != null && injectionTargetFilters.Any(f => f.filter(target));
+            return target != null && injectionTargetQualifiers.Any(f => f.qualifier(target));
         }
 
         /// <summary>
@@ -250,12 +250,12 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// True if any filter accepts the member name, or if no member name filters are defined.
         /// False if filters are defined but none match.
         /// </returns>
-        public bool PassesMemberNameFilters(string targetMemberName)
+        public bool PassesMemberNameQualifiers(string targetMemberName)
         {
-            if (injectionTargetMemberNameFilters.Count == 0)
+            if (injectionTargetMemberQualifiers.Count == 0)
                 return true;
 
-            return !string.IsNullOrWhiteSpace(targetMemberName) && injectionTargetMemberNameFilters.Any(f => f.filter(targetMemberName));
+            return !string.IsNullOrWhiteSpace(targetMemberName) && injectionTargetMemberQualifiers.Any(f => f.qualifier(targetMemberName));
         }
 
         /// <summary>
@@ -280,11 +280,11 @@ namespace Plugins.Saneject.Runtime.Bindings
                 return false;
 
             // Overlap-based equality for filters:
-            IEnumerable<Type> myTargetTypes = injectionTargetFilters.Select(tf => tf.injectionTargetType);
-            IEnumerable<Type> otherTargetTypes = other.injectionTargetFilters.Select(tf => tf.injectionTargetType);
+            IEnumerable<Type> myTargetTypes = injectionTargetQualifiers.Select(tf => tf.targetType);
+            IEnumerable<Type> otherTargetTypes = other.injectionTargetQualifiers.Select(tf => tf.targetType);
 
-            IEnumerable<string> myMemberNames = injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
-            IEnumerable<string> otherMemberNames = other.injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
+            IEnumerable<string> myMemberNames = injectionTargetMemberQualifiers.Select(f => f.memberName);
+            IEnumerable<string> otherMemberNames = other.injectionTargetMemberQualifiers.Select(f => f.memberName);
 
             return TargetsOverlapForEquality(myTargetTypes, otherTargetTypes)
                    && MemberNamesOverlapForEquality(myMemberNames, otherMemberNames);
@@ -299,8 +299,8 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             // To satisfy (Equals => same hash), don't hash the exact contents of filters,
             // only whether they are empty or not. Collisions are fine.
-            bool hasTargetFilters = injectionTargetFilters.Any();
-            bool hasMemberNameFilters = injectionTargetMemberNameFilters.Any();
+            bool hasTargetFilters = injectionTargetQualifiers.Any();
+            bool hasMemberNameFilters = injectionTargetMemberQualifiers.Any();
 
             hash = HashCode.Combine(hash, hasTargetFilters ? 1 : 0, hasMemberNameFilters ? 1 : 0);
             return hash;

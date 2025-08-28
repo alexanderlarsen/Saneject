@@ -30,14 +30,56 @@ namespace Plugins.Saneject.Runtime.Bindings
             this.scope = scope;
         }
 
-        #region CONFIG METHODS
+        #region QUALIFIER METHODS
 
         /// <summary>
-        /// Set the binding ID for resolution of fields/properties with the same ID in their <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Qualifies this binding with an ID.
+        /// Only injection targets annotated with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />
+        /// that specify the same ID will resolve using this binding.
         /// </summary>
-        public AssetBindingBuilder<TAsset> WithId(string id)
+        /// <param name="id">The identifier to match against injection targets.</param>
+        public AssetBindingBuilder<TAsset> ToID(string id)
         {
             binding.SetId(id);
+            return this;
+        }
+
+        /// <summary>
+        /// Qualifies this binding to apply only when the injection target is of the given type.
+        /// The injection target is the <see cref="Component" /> that owns the field or property
+        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// </summary>
+        /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
+        public AssetBindingBuilder<TAsset> ToTarget<TTarget>()
+        {
+            binding.AddInjectionTargetQualifier(obj => obj is TTarget, typeof(TTarget));
+            return this;
+        }
+
+        /// <summary>
+        /// Qualifies this binding to apply only when the injection target is one of the specified types.
+        /// The injection target is the <see cref="Component" /> that owns the field or property
+        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// </summary>
+        /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
+        public AssetBindingBuilder<TAsset> ToTarget(params Type[] targetTypes)
+        {
+            foreach (Type t in targetTypes)
+                binding.AddInjectionTargetQualifier(obj => t.IsInstanceOfType(obj), t);
+
+            return this;
+        }
+
+        /// <summary>
+        /// Qualifies this binding to apply only when the injection target member (field or property)
+        /// has one of the specified names.
+        /// </summary>
+        /// <param name="memberNames">The field or property names on the injection target that this binding should apply to.</param>
+        public AssetBindingBuilder<TAsset> ToMember(params string[] memberNames)
+        {
+            foreach (string memberName in memberNames)
+                binding.AddInjectionTargetMemberQualifier(name => name == memberName, memberName);
+
             return this;
         }
 

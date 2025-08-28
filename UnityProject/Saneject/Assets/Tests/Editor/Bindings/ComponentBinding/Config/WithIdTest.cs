@@ -24,8 +24,8 @@ namespace Tests.Editor.Bindings.ComponentBinding.Config
             InjectableComponent componentB = child2.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            BindComponent<InjectableComponent>(scope).WithId("componentA").FromInstance(componentA);
-            BindComponent<InjectableComponent>(scope).WithId("componentB").FromInstance(componentB);
+            BindComponent<InjectableComponent>(scope).ToID("componentA").FromInstance(componentA);
+            BindComponent<InjectableComponent>(scope).ToID("componentB").FromInstance(componentB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -51,8 +51,8 @@ namespace Tests.Editor.Bindings.ComponentBinding.Config
             InjectableComponent componentB = child2.AddComponent<InjectableComponent>();
 
             // Set up bindings
-            BindComponent<IInjectable, InjectableComponent>(scope).WithId("componentA").FromInstance(componentA);
-            BindComponent<IInjectable, InjectableComponent>(scope).WithId("componentB").FromInstance(componentB);
+            BindComponent<IInjectable, InjectableComponent>(scope).ToID("componentA").FromInstance(componentA);
+            BindComponent<IInjectable, InjectableComponent>(scope).ToID("componentB").FromInstance(componentB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

@@ -23,10 +23,10 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
 
             // Set up bindings
             BindAsset<InjectableScriptableObject>(scope)
+                .ToTarget<AssetRequester>()
                 .FromResourcesAll("Test")
                 .WhereNameContains("ScriptableObject") // "InjectableScriptableObject 2"
                 .WhereNameIs("InjectableScriptableObject 2")
-                .WhereTargetIs<AssetRequester>()
                 .Where(asset => !asset.name.EndsWith("1") && !asset.name.EndsWith("3"));
 
             // Inject 

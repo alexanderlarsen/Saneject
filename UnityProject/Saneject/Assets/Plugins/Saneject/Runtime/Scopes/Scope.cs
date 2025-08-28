@@ -116,8 +116,8 @@ namespace Plugins.Saneject.Runtime.Scopes
             if (injectionTarget != null)
             {
                 foreach (Binding binding in matchingBindings
-                             .Where(binding => binding.PassesInjectionTargetFilters(injectionTarget))
-                             .Where(binding => binding.PassesMemberNameFilters(targetMemberName)))
+                             .Where(binding => binding.PassesInjectionTargetQualifiers(injectionTarget))
+                             .Where(binding => binding.PassesMemberNameQualifiers(targetMemberName)))
                     return binding;
             }
             else

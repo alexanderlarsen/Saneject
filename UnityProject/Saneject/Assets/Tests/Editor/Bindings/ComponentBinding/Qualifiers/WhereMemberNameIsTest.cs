@@ -5,7 +5,7 @@ using Tests.Runtime.Component;
 using UnityEngine;
 using ComponentRequester = Tests.Runtime.Component.ComponentRequester;
 
-namespace Tests.Editor.Bindings.ComponentBinding.Filters
+namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
 {
     public class WhereMemberNameIsTest : BaseBindingTest
     {
@@ -24,8 +24,8 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
 
             // Set up bindings
             BindComponent<InjectableComponent>(scope)
-                .FromInstance(target)
-                .WhereMemberNameIs(nameof(ComponentRequester.concreteComponent));
+                .ToMember(nameof(ComponentRequester.concreteComponent))
+                .FromInstance(target);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -47,8 +47,8 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
 
             // Set up bindings
             BindComponent<IInjectable, InjectableComponent>(scope)
-                .FromInstance(target)
-                .WhereMemberNameIs(nameof(ComponentRequester.interfaceComponent));
+                .ToMember(nameof(ComponentRequester.interfaceComponent))
+                .FromInstance(target);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -70,8 +70,8 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
 
             // Set up bindings (filter does not match any member)
             BindComponent<InjectableComponent>(scope)
-                .FromInstance(target)
-                .WhereMemberNameIs("NonExistentMember");
+                .ToMember("NonExistentMember")
+                .FromInstance(target);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

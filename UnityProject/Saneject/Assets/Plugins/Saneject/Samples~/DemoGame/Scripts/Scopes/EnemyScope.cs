@@ -19,13 +19,13 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
                 .FromScopeSelf();
 
             BindComponent<Transform>()
-                .WithId("MarkerTarget")
+                .ToID("MarkerTarget")
                 .FromRootSelf();
 
             BindComponent<Image>()
-                .WithId("MarkerImage")
-                .FromTargetSelf()
-                .WhereTargetIs<EnemyMarker>();
+                .ToID("MarkerImage")
+                .ToTarget<EnemyMarker>()
+                .FromTargetSelf();
 
             BindComponent<IEnemyEvadeTarget, Player>()
                 .FromProxy();

@@ -73,10 +73,10 @@ namespace Tests.Editor.Bindings.Misc
         {
             // Rigidbody vs Transform → no assignability either way → disjoint
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Rigidbody));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Rigidbody));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreNotEqual(a, b);
         }
@@ -85,12 +85,12 @@ namespace Tests.Editor.Bindings.Misc
         public void TargetFilters_SameTypes_DifferentOrder_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            a.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -101,11 +101,11 @@ namespace Tests.Editor.Bindings.Misc
         {
             // {Transform} overlaps with {Transform, MeshRenderer} → equal
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -116,10 +116,10 @@ namespace Tests.Editor.Bindings.Misc
         {
             // Component (base) vs Transform (derived) → assignability overlap → equal
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Component));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Component));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreEqual(a, b);
         }
@@ -130,7 +130,7 @@ namespace Tests.Editor.Bindings.Misc
             Binding a = MakeBinding(scopeA); // no target filters
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreNotEqual(a, b);
         }
@@ -141,10 +141,10 @@ namespace Tests.Editor.Bindings.Misc
         public void MemberNameFilters_Disjoint_AreNotEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(name => name == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(name => name == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(name => name == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(name => name == "monoB", "monoB");
 
             Assert.AreNotEqual(a, b);
         }
@@ -153,12 +153,12 @@ namespace Tests.Editor.Bindings.Misc
         public void MemberNameFilters_SameNames_DifferentOrder_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(name => name == "monoA", "monoA");
-            a.AddInjectionTargetMemberNameFilter(name => name == "monoB", "monoB");
+            a.AddInjectionTargetMemberQualifier(name => name == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(name => name == "monoB", "monoB");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(name => name == "monoB", "monoB");
-            b.AddInjectionTargetMemberNameFilter(name => name == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(name => name == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(name => name == "monoA", "monoA");
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -168,11 +168,11 @@ namespace Tests.Editor.Bindings.Misc
         public void MemberNameFilters_SupersetOverlaps_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB");
 
             Assert.AreEqual(a, b);
         }
@@ -183,7 +183,7 @@ namespace Tests.Editor.Bindings.Misc
             Binding a = MakeBinding(scopeA); // no member-name filters
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Assert.AreNotEqual(a, b);
         }
@@ -194,14 +194,14 @@ namespace Tests.Editor.Bindings.Misc
         public void CombinedFilters_BothOverlap_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer)); // superset
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB"); // superset
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer)); // superset
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB"); // superset
 
             Assert.AreEqual(a, b, "Both target-types and member-names overlap → equal.");
         }
@@ -210,12 +210,12 @@ namespace Tests.Editor.Bindings.Misc
         public void CombinedFilters_OneOverlaps_OtherDisjoint_AreNotEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform)); // overlaps on targets
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB"); // disjoint on names
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform)); // overlaps on targets
+            b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB"); // disjoint on names
 
             Assert.AreNotEqual(a, b, "Both dimensions must overlap for equality.");
         }
@@ -228,11 +228,11 @@ namespace Tests.Editor.Bindings.Misc
             HashSet<Binding> set = new();
 
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
 
             bool addedA = set.Add(a);
             bool addedB = set.Add(b);
@@ -248,11 +248,11 @@ namespace Tests.Editor.Bindings.Misc
             HashSet<Binding> set = new();
 
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB");
 
             bool addedA = set.Add(a);
             bool addedB = set.Add(b);

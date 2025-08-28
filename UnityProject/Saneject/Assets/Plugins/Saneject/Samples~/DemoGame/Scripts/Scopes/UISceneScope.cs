@@ -15,17 +15,17 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
         public override void ConfigureBindings()
         {
             BindComponent<Text>()
-                .WithId("enemiesLeftText")
+                .ToID("enemiesLeftText")
                 .FromTargetDescendants()
                 .WhereNameIs("EnemiesText");
 
             BindComponent<Text>()
-                .WithId("scoreText")
+                .ToID("scoreText")
                 .FromTargetDescendants()
                 .WhereNameIs("ScoreText");
 
             BindComponent<Button>()
-                .WithId("restartButton")
+                .ToID("restartButton")
                 .FromTargetDescendants()
                 .WhereNameIs("RestartButton");
 
