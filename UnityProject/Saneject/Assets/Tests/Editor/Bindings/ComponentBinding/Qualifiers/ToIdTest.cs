@@ -5,9 +5,9 @@ using Tests.Runtime.Component;
 using UnityEngine;
 using ComponentRequesterWithID = Tests.Runtime.Component.ComponentRequesterWithID;
 
-namespace Tests.Editor.Bindings.ComponentBinding.Config
+namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
 {
-    public class WithIdTest : BaseBindingTest
+    public class ToIdTest : BaseBindingTest
     {
         private GameObject root, child1, child2;
 
@@ -64,6 +64,31 @@ namespace Tests.Editor.Bindings.ComponentBinding.Config
             Assert.AreEqual(requester.interfaceComponentB, componentB);
             Assert.AreNotEqual(requester.interfaceComponentA, requester.interfaceComponentB);
         }
+        
+        [Test]
+        public void NonIdBindingDoesNotInjectIntoIdField()
+        {
+            // Suppress errors from unbound dependencies
+            IgnoreErrorMessages();
+
+            // Add components
+            TestScope scope = root.AddComponent<TestScope>();
+            ComponentRequesterWithID requester = root.AddComponent<ComponentRequesterWithID>();
+            InjectableComponent component = child1.AddComponent<InjectableComponent>();
+
+            // Set up a binding WITHOUT ID
+            BindComponent<InjectableComponent>(scope).FromInstance(component);
+
+            // Inject
+            DependencyInjector.InjectSceneDependencies();
+
+            // Assert – ID fields should remain null because no matching ID binding exists
+            Assert.IsNull(requester.concreteComponentA);
+            Assert.IsNull(requester.concreteComponentB);
+            Assert.IsNull(requester.interfaceComponentA);
+            Assert.IsNull(requester.interfaceComponentB);
+        }
+
 
         protected override void CreateHierarchy()
         {

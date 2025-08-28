@@ -5,9 +5,9 @@ using Tests.Runtime.Asset;
 using UnityEngine;
 using AssetRequesterWithID = Tests.Runtime.Asset.AssetRequesterWithID;
 
-namespace Tests.Editor.Bindings.AssetBinding.Config
+namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
 {
-    public class WithIdTest : BaseBindingTest
+    public class ToIdTest : BaseBindingTest
     {
         private GameObject root, child1, child2;
 
@@ -63,6 +63,30 @@ namespace Tests.Editor.Bindings.AssetBinding.Config
             Assert.AreEqual(assetA, requester.interfaceComponentA);
             Assert.AreEqual(assetB, requester.interfaceComponentB);
             Assert.AreNotEqual(requester.interfaceComponentA, requester.interfaceComponentB);
+        }
+
+        [Test]
+        public void NonIdBindingDoesNotInjectIntoIdAssetField()
+        {
+            // Suppress errors from unbound dependencies
+            IgnoreErrorMessages();
+
+            // Add components
+            TestScope scope = root.AddComponent<TestScope>();
+            AssetRequesterWithID requester = root.AddComponent<AssetRequesterWithID>();
+            InjectableScriptableObject asset = ScriptableObject.CreateInstance<InjectableScriptableObject>();
+
+            // Set up a binding WITHOUT ID
+            BindAsset<InjectableScriptableObject>(scope).FromInstance(asset);
+
+            // Inject
+            DependencyInjector.InjectSceneDependencies();
+
+            // Assert – ID fields should remain null because no matching ID binding exists
+            Assert.IsNull(requester.concreteComponentA);
+            Assert.IsNull(requester.concreteComponentB);
+            Assert.IsNull(requester.interfaceComponentA);
+            Assert.IsNull(requester.interfaceComponentB);
         }
 
         protected override void CreateHierarchy()

@@ -8,7 +8,7 @@ using AssetRequesterB = Tests.Runtime.Asset.AssetRequesterB;
 
 namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
 {
-    public class WhereTargetIsTest : BaseBindingTest
+    public class ToTargetTest : BaseBindingTest
     {
         private GameObject root, child1, child2, child3, child4, child5, child6;
 

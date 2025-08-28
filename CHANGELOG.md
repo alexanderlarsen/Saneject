@@ -1,5 +1,16 @@
 ﻿# Saneject Changelog
 
+## Version 0.13.1
+
+### Fixes
+
+- Fixed a bug where fields marked with `[Inject("id")]` could be resolved by bindings without an ID.  
+  Now ID-qualified fields only match bindings that explicitly declare the same ID, ensuring deterministic injection.
+
+### Tests
+
+- Added unit tests for both component and asset bindings to assert that non-ID bindings do not resolve into ID-qualified fields.
+
 ## Version 0.13.0
 
 ### Changes

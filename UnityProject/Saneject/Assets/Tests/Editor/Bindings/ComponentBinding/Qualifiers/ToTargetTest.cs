@@ -8,7 +8,7 @@ using ComponentRequesterB = Tests.Runtime.Component.ComponentRequesterB;
 
 namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
 {
-    public class WhereTargetIsTest : BaseBindingTest
+    public class ToTargetTest : BaseBindingTest
     {
         private GameObject root, child1, child2, child3, child4, child5, child6;
 
