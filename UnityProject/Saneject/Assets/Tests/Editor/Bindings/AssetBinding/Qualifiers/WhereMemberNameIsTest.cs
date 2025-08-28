@@ -5,7 +5,7 @@ using Tests.Runtime.Asset;
 using UnityEngine;
 using AssetRequester = Tests.Runtime.Asset.AssetRequester;
 
-namespace Tests.Editor.Bindings.AssetBinding.Filters
+namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
 {
     public class WhereMemberNameIsTest : BaseBindingTest
     {
@@ -24,8 +24,8 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
 
             // Set up bindings
             BindAsset<InjectableScriptableObject>(scope)
-                .FromInstance(asset)
-                .WhereMemberNameIs(nameof(AssetRequester.concreteAsset));
+                .ToMember(nameof(AssetRequester.concreteAsset))
+                .FromInstance(asset);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -47,8 +47,8 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
 
             // Set up bindings
             BindAsset<IInjectable, InjectableScriptableObject>(scope)
-                .FromInstance(asset)
-                .WhereMemberNameIs(nameof(AssetRequester.interfaceAsset));
+                .ToMember(nameof(AssetRequester.interfaceAsset))
+                .FromInstance(asset);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -70,8 +70,8 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
 
             // Set up bindings (filter does not match any member)
             BindAsset<InjectableScriptableObject>(scope)
-                .FromInstance(asset)
-                .WhereMemberNameIs("NonExistentMember");
+                .ToMember("NonExistentMember")
+                .FromInstance(asset);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

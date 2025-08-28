@@ -109,15 +109,15 @@ namespace Plugins.Saneject.Runtime.Scopes
                 !binding.IsGlobal &&
                 binding.InterfaceType == interfaceType &&
                 (binding.ConcreteType == concreteType || concreteType == null) && // skip concrete check if we have an interface
-                binding.Id == injectId &&
                 binding.IsCollection == isCollection);
 
             // If we have an injection target, try to find a binding that passes target filters
             if (injectionTarget != null)
             {
                 foreach (Binding binding in matchingBindings
-                             .Where(binding => binding.PassesInjectionTargetFilters(injectionTarget))
-                             .Where(binding => binding.PassesMemberNameFilters(targetMemberName)))
+                             .Where(binding => binding.PassesInjectionTargetQualifiers(injectionTarget))
+                             .Where(binding => binding.PassesMemberNameQualifiers(targetMemberName))
+                             .Where(binding => binding.PassesIdQualifiers(injectId)))
                     return binding;
             }
             else
@@ -353,13 +353,13 @@ namespace Plugins.Saneject.Runtime.Scopes
         /// </summary>
         /// <typeparam name="T">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>
-        protected ComponentBindingBuilder<T> BindGlobal<T>() where T : Component
+        protected GlobalBindingBuilder<T> BindGlobal<T>() where T : Component
         {
             Binding binding = new(null, typeof(T), this);
             binding.MarkComponentBinding();
             binding.MarkGlobal();
             unvalidatedBindings.Add(binding);
-            return new ComponentBindingBuilder<T>(binding, this);
+            return new GlobalBindingBuilder<T>(binding, this);
         }
 
         #endregion

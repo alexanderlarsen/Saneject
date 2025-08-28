@@ -66,13 +66,12 @@ namespace Tests.Editor.Bindings.Misc
         public void GlobalBinding_WithId_IsInvalid()
         {
             IgnoreErrorMessages();
-
+            const string id = "someId";
             Binding binding = new(typeof(IInjectable), typeof(InjectableComponent), dummyScope);
             binding.MarkComponentBinding();
             binding.MarkGlobal();
-            binding.SetId("someId");
+            binding.AddIdQualifier(fieldId => fieldId == id, id);
             binding.SetLocator(_ => null);
-
             Assert.IsFalse(BindingValidator.IsBindingValid(binding), "Global binding with ID should be invalid.");
         }
 

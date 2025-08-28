@@ -52,18 +52,20 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [Location by install method](#location-by-install-method)
     - [To run it](#to-run-it)
 - [Binding API](#binding-api)
-    - [Component bindings](#component-bindings)
-    - [Asset bindings](#asset-bindings)
-    - [Global singleton bindings](#global-singleton-bindings)
-    - [Component locators](#component-locators)
-        - [Scope-relative component locators](#scope-relative-component-locators)
-        - [Root-relative component locators](#root-relative-component-locators)
-        - [Injection target-relative component locators](#injection-target-relative-component-locators)
-        - [Arbitrary transform target component locators](#arbitrary-transform-target-component-locators)
-        - [Other component locators & special methods](#other-component-locators--special-methods)
-    - [Asset locators](#asset-locators)
-    - [Component filters](#component-filters)
-    - [Asset filters](#asset-filters)
+    - [Component binding](#component-binding)
+        - [Component binding target qualifiers](#component-binding-target-qualifiers)
+        - [Component locators](#component-locators)
+            - [Scope-relative component locators](#scope-relative-component-locators)
+            - [Root-relative component locators](#root-relative-component-locators)
+            - [Injection target-relative component locators](#injection-target-relative-component-locators)
+            - [Arbitrary transform target component locators](#arbitrary-transform-target-component-locators)
+            - [Special component locators](#special-component-locators)
+        - [Component filters](#component-filters)
+    - [Asset binding](#asset-binding)
+        - [Asset binding target qualifiers](#asset-binding-target-qualifiers)
+        - [Asset locators](#asset-locators)
+        - [Asset filters](#asset-filters)
+    - [Global singleton binding](#global-singleton-binding)
 - [Deep dive](#deep-dive)
     - [What is dependency injection?](#what-is-dependency-injection)
     - [How runtime DI typically works](#how-runtime-di-typically-works)
@@ -302,7 +304,7 @@ You can bind dependencies in three ways, depending on how you want injection to 
 - **Bind by concrete type**: Matches only objects of that exact type.
 - **Bind an interface to a specific concrete type**: Ensures that only objects of a specific type are used to fulfill an interface.
 
-### Component bindings
+### Component binding
 
 Bind `Component` from scene/prefab hierarchy. Methods return a `ComponentBindingBuilder` to define a locate strategy.
 
@@ -313,28 +315,19 @@ Bind `Component` from scene/prefab hierarchy. Methods return a `ComponentBinding
 | `BindComponents<T>()`<br/>`BindMultipleComponents<T>()`                                         | `T` (interface/concrete) lists/arrays resolve to `T` components. |
 | `BindComponents<TInterface, TConcrete>()`<br/>`BindMultipleComponents<TInterface, TConcrete>()` | `TInterface` lists/arrays resolve to `TConcrete` components.     |
 
-### Asset bindings
+#### Component binding target qualifiers
 
-Bind project folder assets, e.g., prefabs, `ScriptableObject`. Methods return an `AssetBindingBuilder<TAsset>` to define a locate strategy.
+Methods in `ComponentBindingBuilder<TComponent> where TComponent : UnityEngine.Component`.  
+Qualifiers restrict when a binding applies based on the injection target or its ID.  
+If you add more than one, the binding will match whenever **any** of them apply.
 
-Single-generic asset bindings are concrete-only. Use the two-generic form to bind by interface.
+| Method                                              | Description                                                                                                                         |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `ToTarget<TTarget>()`<br/>`ToTarget(params Type[])` | Applies binding only if the injection target (class requesting injection) is of the given type(s).                                  |
+| `ToId(params string[])`                             | Applies binding only if the injection target member (field or property) has one of the specified IDs (from `[Inject(Id = "...")]`). |
+| `ToMember(params string[])`                         | Applies binding only if the injection target member (field or property) has one of the specified names.                             |
 
-| Method                                                                                  | Description                                                                   |
-|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
-| `BindAsset<TConcrete>()`                                                                | `TConcrete` fields resolve to a `TConcrete` `UnityEngine.Object` asset.       |
-| `BindAsset<TInterface, TConcrete>()`                                                    | `TInterface` fields resolve to a `TConcrete` `UnityEngine.Object` asset.      |
-| `BindAssets<TConcrete>()`<br/>`BindMultipleAssets<TConcrete>()`                         | `TConcrete` list/arrays resolve to `TConcrete` `UnityEngine.Object` assets.   |
-| `BindAssets<TInterface, TConcrete>()`<br/>`BindMultipleAssets<TInterface, TConcrete>()` | `TInterface` lists/arrays resolve to `TConcrete` `UnityEngine.Object` assets. |
-
-### Global singleton bindings
-
-Bind cross-scene singletons from scene instances. Methods return a `ComponentBindingBuilder<TComponent>` to define a locate strategy.
-
-| Method                     | Description                                                                                                                                            |
-|----------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `BindGlobal<TComponent>()` | Promote a scene `Component` into `SceneGlobalContainer`.<br/>Registered in the global scope at startup for global resolution (e.g., via `ProxyObject`. |
-
-### Component locators
+#### Component locators
 
 Methods in `ComponentBindingBuilder<TComponent> where TComponent : UnityEngine.Component`. All methods return a `ComponentFilterBuilder<TComponent>` to filter found `Component`s.
 
@@ -353,7 +346,7 @@ Looks for the `Component` from the `Scope` `Transform` and its hierarchy.
 | `FromScopeDescendants(bool includeSelf = true)`<br/>`FromDescendants(bool includeSelf = true)` | Any descendant of the Scope.                                  |
 | `FromScopeSiblings()`<br/>`FromSiblings()`                                                     | Any sibling of the Scope (other children of the same parent). |
 
-#### Root-relative component locators
+##### Root-relative component locators
 
 Looks for the `Component` from the `Scope.transform.root` `Transform` and its hierarchy.
 
@@ -365,7 +358,7 @@ Looks for the `Component` from the `Scope.transform.root` `Transform` and its hi
 | `FromRootChildWithIndex(int index)`            | Component on the root's child at the given index. |
 | `FromRootDescendants(bool includeSelf = true)` | Any descendant of the root object.                |
 
-#### Injection target-relative component locators
+##### Injection target-relative component locators
 
 Looks for the `Component` from the injection target `Transform` and its hierarchy. Injection target is the `Component` of a field/property marked with `[Inject]`, i.e., the `Component` requesting injection.
 
@@ -380,7 +373,7 @@ Looks for the `Component` from the injection target `Transform` and its hierarch
 | `FromTargetDescendants(bool includeSelf = true)` | Any descendant of the target.              |
 | `FromTargetSiblings()`                           | Any sibling of the target.                 |
 
-#### Arbitrary transform target component locators
+##### Arbitrary transform target component locators
 
 Looks for the `Component` from the specified `Transform` and its hierarchy.
 
@@ -395,7 +388,7 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 | `FromDescendantsOf(Transform target, bool includeSelf = true)` | Any descendant of the target.              |
 | `FromSiblingsOf(Transform target)`                             | Any sibling of the target.                 |
 
-#### Other component locators & special methods
+##### Special component locators
 
 | Method                                             | Description                                                                                                                                                                                               |
 |----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -404,25 +397,8 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 | `FromMethod(Func<TComponent> method)`              | Uses a custom predicate to supply a single instance.                                                                                                                                                      |
 | `FromMethod(Func<IEnumerable<TComponent>> method)` | Uses a custom factory method to supply a collection of instances.                                                                                                                                         |
 | `FromProxy()`                                      | Automatically creates or locates a `ProxyObject` for `TConcrete`, a weak reference that resolves to a concrete `Component` at runtime, enabling cross-boundary references (e.g. between scenes, prefabs). |
-| `WithId(string id)`                                | Assign a custom binding ID to match `[Inject("YourIdHere")]` fields.                                                                                                                                      |
 
-### Asset locators
-
-Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All methods return a `AssetFilterBuilder<TAsset>` to filter found `Object` instances.
-
-| Method                                         | Description                                                                                                                                                          |
-|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `FromResources(string path)`                   | Load a single asset of type `TAsset` from a `Resources/` path via `Resources.Load`.                                                                                  |
-| `FromResourcesAll(string path)`                | Load all assets of type `TAsset` at that path via `Resources.LoadAll`.                                                                                               |
-| `FromAssetLoad(string assetPath)`              | Load an asset of type `TAsset` at the given path via `AssetDatabase.LoadAssetAtPath<T>()`.                                                                           |
-| `FromAssetLoadAll(string assetPath)`           | Load all sub-assets of type `TAsset` inside a single asset file via `AssetDatabase.LoadAllAssetsAtPath<T>()` (e.g. Sprites in a texture, Meshes or Clips in an FBX). |
-| `FromFolder(string folderPath)`                | Load all assets of type `TAsset` from the specified project folder and its subfolders via `AssetDatabase.FindAssets`.                                                |
-| `FromInstance(TAsset instance)`                | Bind to an explicit `Object` instance.                                                                                                                               |
-| `FromMethod(Func<TAsset> method)`              | Uses a custom predicate to supply a single instance.                                                                                                                 |
-| `FromMethod(Func<IEnumerable<TAsset>> method)` | Uses a custom factory method to supply a collection of instances.                                                                                                    |
-| `WithId(string id)`                            | Assign a custom binding ID to match `[Inject("YourIdHere")]` fields.                                                                                                 |
-
-### Component filters
+#### Component filters
 
 Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the hierarchy for precise and complex search strategies. All methods return the builder itself to enable method chaining.
 
@@ -445,22 +421,75 @@ Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the
 | `WhereIsFirstSibling()`                  | Filters components that are the first sibling in their parent's hierarchy.                      |
 | `WhereIsLastSibling()`                   | Filters components that are the last sibling in their parent's hierarchy.                       |
 | `Where(Func<TComponent,bool> predicate)` | Filters components using a custom predicate.                                                    |
-| `WhereTargetIs<TTarget>()`               | Applies binding only if the injection target matches type `TTarget`.                            |
-| `WhereMemberNameIs(params string[])`     | Applies binding only if the injected field or property has one of the specified member names.   |
 
-### Asset filters
+### Asset binding
+
+Bind project folder assets, e.g., prefabs, `ScriptableObject`. Methods return an `AssetBindingBuilder<TAsset>` to define a locate strategy.
+
+Single-generic asset bindings are concrete-only. Use the two-generic form to bind by interface.
+
+| Method                                                                                  | Description                                                                   |
+|-----------------------------------------------------------------------------------------|-------------------------------------------------------------------------------|
+| `BindAsset<TConcrete>()`                                                                | `TConcrete` fields resolve to a `TConcrete` `UnityEngine.Object` asset.       |
+| `BindAsset<TInterface, TConcrete>()`                                                    | `TInterface` fields resolve to a `TConcrete` `UnityEngine.Object` asset.      |
+| `BindAssets<TConcrete>()`<br/>`BindMultipleAssets<TConcrete>()`                         | `TConcrete` list/arrays resolve to `TConcrete` `UnityEngine.Object` assets.   |
+| `BindAssets<TInterface, TConcrete>()`<br/>`BindMultipleAssets<TInterface, TConcrete>()` | `TInterface` lists/arrays resolve to `TConcrete` `UnityEngine.Object` assets. |
+
+### Asset binding target qualifiers
+
+Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`.  
+Qualifiers restrict when a binding applies based on the injection target or its ID.  
+If you add more than one, the binding will match whenever **any** of them apply.
+
+| Method                                              | Description                                                                                                                         |
+|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
+| `ToTarget<TTarget>()`<br/>`ToTarget(params Type[])` | Applies binding only if the injection target (class requesting injection) is of the given type(s).                                  |
+| `ToId(params string[])`                             | Applies binding only if the injection target member (field or property) has one of the specified IDs (from `[Inject(Id = "...")]`). |
+| `ToMember(params string[])`                         | Applies binding only if the injection target member (field or property) has one of the specified names.                             |
+
+#### Asset locators
+
+Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All methods return a `AssetFilterBuilder<TAsset>` to filter found `Object` instances.
+
+| Method                                         | Description                                                                                                                                                          |
+|------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `FromResources(string path)`                   | Load a single asset of type `TAsset` from a `Resources/` path via `Resources.Load`.                                                                                  |
+| `FromResourcesAll(string path)`                | Load all assets of type `TAsset` at that path via `Resources.LoadAll`.                                                                                               |
+| `FromAssetLoad(string assetPath)`              | Load an asset of type `TAsset` at the given path via `AssetDatabase.LoadAssetAtPath<T>()`.                                                                           |
+| `FromAssetLoadAll(string assetPath)`           | Load all sub-assets of type `TAsset` inside a single asset file via `AssetDatabase.LoadAllAssetsAtPath<T>()` (e.g. Sprites in a texture, Meshes or Clips in an FBX). |
+| `FromFolder(string folderPath)`                | Load all assets of type `TAsset` from the specified project folder and its subfolders via `AssetDatabase.FindAssets`.                                                |
+| `FromInstance(TAsset instance)`                | Bind to an explicit `Object` instance.                                                                                                                               |
+| `FromMethod(Func<TAsset> method)`              | Uses a custom predicate to supply a single instance.                                                                                                                 |
+| `FromMethod(Func<IEnumerable<TAsset>> method)` | Uses a custom factory method to supply a collection of instances.                                                                                                    |
+
+#### Asset filters
 
 Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in the project folder for precise and complex asset search strategies. All methods return the builder itself to enable method chaining.
 
-| Method                                | Description                                                                                   |
-|---------------------------------------|-----------------------------------------------------------------------------------------------|
-| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.                                        |
-| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.                                    |
-| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`.                               |
-| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.                                           |
-| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate.                                                      |
-| `WhereTargetIs<TTarget>()`            | Applies binding only if the injection target matches type `TTarget`.                          |
-| `WhereMemberNameIs(params string[])`  | Applies binding only if the injected field or property has one of the specified member names. |
+| Method                                | Description                                                     |
+|---------------------------------------|-----------------------------------------------------------------|
+| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.          |
+| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.      |
+| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`. |
+| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.             |
+| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate.                        |
+
+### Global singleton binding
+
+Bind cross-scene singletons from scene instances. Methods return a `GlobalBindingBuilder<TComponent>`.
+
+The `GlobalBindingBuilder<TComponent>` is a locator API identical to [Component locators](#component-locators),  
+but with two important differences:
+
+- **No qualifiers** (`ToId`, `ToTarget`, `ToMember`): Global bindings are not injected into specific targets. Instead, they are stored in a `SceneGlobalContainer` (a scene object) and then promoted to the global scope at runtime. Because there is no injection target, qualifiers don’t apply.
+- **No proxy binding (`.FromProxy()`)**: Proxies are already global by nature. They can be injected from any context and resolve their target from the global scope. Registering a proxy itself as a global would be redundant and potentially misleading, so this method is excluded.
+
+Just like `ComponentBindingBuilder<TComponent>`, locator methods on `GlobalBindingBuilder<TComponent>` still return a `ComponentFilterBuilder<TComponent>`,  
+so you can filter candidate components with the usual filter methods (`WhereTagIs`, `WhereNameIs`, etc.).
+
+| Method                     | Description                                                              |
+|----------------------------|--------------------------------------------------------------------------|
+| `BindGlobal<TComponent>()` | Adds a scene `Component` to the global scope via `SceneGlobalContainer`. |
 
 ## Deep dive
 
@@ -572,19 +601,20 @@ Each binding you declare in a `Scope` must be unique. If two bindings in the sam
 A binding is considered unique within a scope based on the following:
 
 - **Bound type**: If an interface type is provided, uniqueness is based only on the interface type (ignoring concrete). If no interface type is provided, uniqueness is based on the concrete type.
-- **Binding ID**: If set via `.WithId()` and matched with `[Inject("YourIdHere")]`.
+- **ID qualifiers**: If set via `.ToId("...")` and matched with `[Inject(Id = "...")]`.
 - **Single vs collection**: Whether it's a single-value binding or a collection (`List<T>` or `T[]`).
 - **Global flag**: Whether the binding is marked as global.
-- **Target filters**: If the binding uses the target type filter `WhereTargetIs<T>()`.
-- **Member name filters**: If the binding uses the member filter `WhereMemberNameIs(...)`.
+- **Target qualifiers**: If the binding uses `ToTarget<T>()`.
+- **Member-name qualifiers**: If the binding uses `ToMember(...)`.
 
 **Overlap rule (important):**
 
-When determining duplicates, target and member-name filters are compared by overlap, not by full-set equality.
+When determining duplicates, target, member-name, and ID qualifiers are compared by overlap, not by full-set equality.
 
-- **Target filters:** two bindings overlap if any target types are the same or assignable (base/derived).
-- **Member-name filters:** two bindings overlap if they share at least one member name.
-- **Empty target/member filter**: is treated as a generic binding and does not overlap a filtered binding for uniqueness (so a general binding can coexist with a targeted one).
+- **Target qualifiers:** two bindings overlap if any target types are the same or assignable (base/derived).
+- **Member-name qualifiers:** two bindings overlap if they share at least one member name.
+- **ID qualifiers:** two bindings overlap if they share at least one ID string.
+- **Empty qualifier set**: is treated as a generic binding and does not overlap a filtered binding for uniqueness (so a general binding can coexist with a targeted one).
 
 For example, the following two bindings are considered duplicates and will conflict:
 
@@ -609,19 +639,19 @@ BindComponent<MyServiceConcrete>();
 
 // Same interface, but with a unique ID
 BindComponent<IMyService>();
-BindComponent<IMyService, MyServiceConcrete>().WithId("Secondary");
+BindComponent<IMyService, MyServiceConcrete>().ToID("Secondary");
 
 // Same interface, one single and one collection binding
 BindComponent<IMyService>();
 BindComponents<IMyService, MyServiceConcrete>();
 
 // Same interface but different target filters
-BindComponent<IMyService>().WhereTargetIs<Player>();
-BindComponent<IMyService>().WhereTargetIs<Enemy>();
+BindComponent<IMyService>().ToTarget<Player>();
+BindComponent<IMyService>().ToTarget<Enemy>();
 
 // Same interface but different member name filters
-BindComponent<IMyService>().WhereMemberNameIs("serviceA");
-BindComponent<IMyService>().WhereMemberNameIs("serviceB");
+BindComponent<IMyService>().ToMember("serviceA");
+BindComponent<IMyService>().ToMember("serviceB");
 ```
 
 This uniqueness model ensures deterministic resolution and early conflict detection. Duplicate bindings are logged and skipped automatically.

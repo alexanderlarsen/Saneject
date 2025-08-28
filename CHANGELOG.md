@@ -1,5 +1,30 @@
 ﻿# Saneject Changelog
 
+## Version 0.13.0
+
+### Changes
+
+#### Make binding ID a qualifier with multiple match support
+
+- Converted binding ID from a single string into a qualifier set, aligned with target and member qualifiers.
+- IDs can now stack via `.ToId("A", "B")` and the binding will match if **any** of the IDs match, just like the other qualifiers.
+- Updated binding equality rules: bindings with overlapping IDs are treated as duplicates to preserve deterministic resolution.
+- Extended unit tests to cover equality and HashSet deduplication behavior for bindings with multiple and overlapping IDs.
+
+#### Introduce target qualifier methods (ToTarget, ToMember)
+
+- Moved `WhereTargetIs` and `WhereMemberNameIs` out of filter builders and into binding builders. Filters should constrain dependency *candidates*, while these methods constrain the *injection target*.
+- Renamed them to `ToTarget` and `ToMember` for clarity. Added overloads to support both singular and multiple qualifiers.
+- Updated all internal references and tests to use the new qualifier methods.
+- Updated sample game bindings to use the qualifiers where applicable.
+
+#### Switch global bindings to dedicated GlobalBindingBuilder
+
+- Added `GlobalBindingBuilder<TComponent>` to replace `ComponentBindingBuilder` for global bindings.
+- Global bindings do not support qualifiers (`ToId`, `ToTarget`, `ToMember`) or `.FromProxy()`, since globals are promoted into a `SceneGlobalContainer` and proxies already resolve from the global scope.
+- Locator methods remain identical to component bindings and still return a `ComponentFilterBuilder<TComponent>` so filters work the same way.
+- Updated `Scope` API and tests to use the new builder for `BindGlobal<T>()`.
+
 ## Version 0.12.0
 
 ### Features

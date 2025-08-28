@@ -18,7 +18,7 @@ namespace Tests.Editor.Bindings.Misc
             scopeB = new GameObject("ScopeB").AddComponent<TestScope>();
         }
 
-        // ---------- Core signature (no filters) ----------
+        // ---------- Core signature (no qualifiers/filters) ----------
 
         [Test]
         public void Bindings_WithSameCoreAndNoFilters_AreEqual()
@@ -66,17 +66,17 @@ namespace Tests.Editor.Bindings.Misc
             Assert.AreNotEqual(a, b);
         }
 
-        // ---------- Target-type filter equality (overlap semantics) ----------
+        // ---------- Target-type qualifier equality (overlap semantics) ----------
 
         [Test]
         public void TargetFilters_DisjointTypes_AreNotEqual()
         {
             // Rigidbody vs Transform → no assignability either way → disjoint
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Rigidbody));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Rigidbody));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreNotEqual(a, b);
         }
@@ -85,12 +85,12 @@ namespace Tests.Editor.Bindings.Misc
         public void TargetFilters_SameTypes_DifferentOrder_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            a.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -101,11 +101,11 @@ namespace Tests.Editor.Bindings.Misc
         {
             // {Transform} overlaps with {Transform, MeshRenderer} → equal
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -116,10 +116,10 @@ namespace Tests.Editor.Bindings.Misc
         {
             // Component (base) vs Transform (derived) → assignability overlap → equal
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Component));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Component));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreEqual(a, b);
         }
@@ -127,24 +127,24 @@ namespace Tests.Editor.Bindings.Misc
         [Test]
         public void TargetFilters_EmptyVsNonEmpty_AreNotEqual()
         {
-            Binding a = MakeBinding(scopeA); // no target filters
+            Binding a = MakeBinding(scopeA); // no target qualifiers
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Assert.AreNotEqual(a, b);
         }
 
-        // ---------- Member-name filter equality (overlap semantics) ----------
+        // ---------- Member-name qualifier equality (overlap semantics) ----------
 
         [Test]
         public void MemberNameFilters_Disjoint_AreNotEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(name => name == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(name => name == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(name => name == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(name => name == "monoB", "monoB");
 
             Assert.AreNotEqual(a, b);
         }
@@ -153,12 +153,12 @@ namespace Tests.Editor.Bindings.Misc
         public void MemberNameFilters_SameNames_DifferentOrder_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(name => name == "monoA", "monoA");
-            a.AddInjectionTargetMemberNameFilter(name => name == "monoB", "monoB");
+            a.AddInjectionTargetMemberQualifier(name => name == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(name => name == "monoB", "monoB");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(name => name == "monoB", "monoB");
-            b.AddInjectionTargetMemberNameFilter(name => name == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(name => name == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(name => name == "monoA", "monoA");
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -168,11 +168,11 @@ namespace Tests.Editor.Bindings.Misc
         public void MemberNameFilters_SupersetOverlaps_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB");
 
             Assert.AreEqual(a, b);
         }
@@ -180,44 +180,97 @@ namespace Tests.Editor.Bindings.Misc
         [Test]
         public void MemberNameFilters_EmptyVsNonEmpty_AreNotEqual()
         {
-            Binding a = MakeBinding(scopeA); // no member-name filters
+            Binding a = MakeBinding(scopeA); // no member-name qualifiers
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Assert.AreNotEqual(a, b);
         }
 
-        // ---------- Combined: both target-type and member-name filters ----------
+        // ---------- ID qualifier equality (overlap semantics) ----------
 
         [Test]
-        public void CombinedFilters_BothOverlap_AreEqual()
+        public void IdQualifiers_Disjoint_AreNotEqual()
         {
-            Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            Binding a = MakeBinding(scopeA, id: "A");
+            Binding b = MakeBinding(scopeA, id: "B");
 
-            Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer)); // superset
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB"); // superset
-
-            Assert.AreEqual(a, b, "Both target-types and member-names overlap → equal.");
+            Assert.AreNotEqual(a, b);
         }
 
         [Test]
-        public void CombinedFilters_OneOverlaps_OtherDisjoint_AreNotEqual()
+        public void IdQualifiers_SameIds_DifferentOrder_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            a.AddIdQualifier(id => id == "A", "A");
+            a.AddIdQualifier(id => id == "B", "B");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform)); // overlaps on targets
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB"); // disjoint on names
+            b.AddIdQualifier(id => id == "B", "B");
+            b.AddIdQualifier(id => id == "A", "A");
 
-            Assert.AreNotEqual(a, b, "Both dimensions must overlap for equality.");
+            Assert.AreEqual(a, b);
+            Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
+        }
+
+        [Test]
+        public void IdQualifiers_SupersetOverlaps_AreEqual()
+        {
+            Binding a = MakeBinding(scopeA);
+            a.AddIdQualifier(id => id == "A", "A");
+
+            Binding b = MakeBinding(scopeA);
+            b.AddIdQualifier(id => id == "A", "A");
+            b.AddIdQualifier(id => id == "B", "B");
+
+            Assert.AreEqual(a, b);
+        }
+
+        [Test]
+        public void IdQualifiers_EmptyVsNonEmpty_AreNotEqual()
+        {
+            Binding a = MakeBinding(scopeA); // no id qualifiers
+            Binding b = MakeBinding(scopeA, id: "A");
+
+            Assert.AreNotEqual(a, b);
+        }
+
+        // ---------- Combined: target-type, member-name, and ID qualifiers ----------
+
+        [Test]
+        public void CombinedQualifiers_AllThreeOverlap_AreEqual()
+        {
+            Binding a = MakeBinding(scopeA);
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            a.AddIdQualifier(id => id == "A", "A");
+
+            Binding b = MakeBinding(scopeA);
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer)); // superset
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB"); // superset
+            b.AddIdQualifier(id => id == "A", "A");
+            b.AddIdQualifier(id => id == "B", "B"); // superset
+
+            Assert.AreEqual(a, b, "Targets, member-names, and IDs all overlap → equal.");
+        }
+
+        [Test]
+        public void CombinedQualifiers_TwoOverlap_OneDisjoint_AreNotEqual()
+        {
+            Binding a = MakeBinding(scopeA);
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            a.AddIdQualifier(id => id == "A", "A");
+
+            Binding b = MakeBinding(scopeA);
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform)); // overlaps on target
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA"); // overlaps on member
+            b.AddIdQualifier(id => id == "B", "B"); // disjoint on ID
+
+            Assert.AreNotEqual(a, b, "All qualifier dimensions must overlap for equality.");
         }
 
         // ---------- HashSet behavior (dedupe) ----------
@@ -228,17 +281,17 @@ namespace Tests.Editor.Bindings.Misc
             HashSet<Binding> set = new();
 
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetFilter(_ => true, typeof(Transform));
+            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetFilter(_ => true, typeof(Transform));
-            b.AddInjectionTargetFilter(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
 
             bool addedA = set.Add(a);
             bool addedB = set.Add(b);
 
             Assert.IsTrue(addedA);
-            Assert.IsFalse(addedB, "Overlapping target filters (subset/superset) should be considered equal for HashSet dedupe.");
+            Assert.IsFalse(addedB, "Overlapping target qualifiers (subset/superset) should be considered equal for HashSet dedupe.");
             Assert.AreEqual(1, set.Count);
         }
 
@@ -248,17 +301,37 @@ namespace Tests.Editor.Bindings.Misc
             HashSet<Binding> set = new();
 
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
+            a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoA", "monoA");
-            b.AddInjectionTargetMemberNameFilter(n => n == "monoB", "monoB");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
+            b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB");
 
             bool addedA = set.Add(a);
             bool addedB = set.Add(b);
 
             Assert.IsTrue(addedA);
-            Assert.IsFalse(addedB, "Overlapping member-name filters (subset/superset) should be considered equal for HashSet dedupe.");
+            Assert.IsFalse(addedB, "Overlapping member-name qualifiers (subset/superset) should be considered equal for HashSet dedupe.");
+            Assert.AreEqual(1, set.Count);
+        }
+
+        [Test]
+        public void HashSet_Dedupes_OnOverlappingIdQualifiers()
+        {
+            HashSet<Binding> set = new();
+
+            Binding a = MakeBinding(scopeA);
+            a.AddIdQualifier(id => id == "A", "A");
+
+            Binding b = MakeBinding(scopeA);
+            b.AddIdQualifier(id => id == "A", "A");
+            b.AddIdQualifier(id => id == "B", "B");
+
+            bool addedA = set.Add(a);
+            bool addedB = set.Add(b);
+
+            Assert.IsTrue(addedA);
+            Assert.IsFalse(addedB, "Overlapping ID qualifiers (subset/superset) should be considered equal for HashSet dedupe.");
             Assert.AreEqual(1, set.Count);
         }
 
@@ -271,7 +344,7 @@ namespace Tests.Editor.Bindings.Misc
             set.Add(MakeBinding(scopeA, id: "a"));
             set.Add(MakeBinding(scopeB, id: "a"));
 
-            // Same scope but different IDs
+            // Same scope but different (non-overlapping) IDs
             set.Add(MakeBinding(scopeA, id: "b"));
 
             Assert.AreEqual(3, set.Count);
@@ -315,7 +388,7 @@ namespace Tests.Editor.Bindings.Misc
             binding.SetLocator(_ => null);
 
             if (id != null)
-                binding.SetId(id);
+                binding.AddIdQualifier(fieldId => fieldId == id, id);
 
             if (isGlobal)
                 binding.MarkGlobal();

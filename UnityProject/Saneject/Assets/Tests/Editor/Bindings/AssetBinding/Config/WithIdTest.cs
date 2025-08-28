@@ -24,8 +24,8 @@ namespace Tests.Editor.Bindings.AssetBinding.Config
             InjectableScriptableObject assetB = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            BindAsset<InjectableScriptableObject>(scope).WithId("componentA").FromInstance(assetA);
-            BindAsset<InjectableScriptableObject>(scope).WithId("componentB").FromInstance(assetB);
+            BindAsset<InjectableScriptableObject>(scope).ToID("componentA").FromInstance(assetA);
+            BindAsset<InjectableScriptableObject>(scope).ToID("componentB").FromInstance(assetB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -51,8 +51,8 @@ namespace Tests.Editor.Bindings.AssetBinding.Config
             InjectableScriptableObject assetB = ScriptableObject.CreateInstance<InjectableScriptableObject>();
 
             // Set up bindings
-            BindAsset<IInjectable, InjectableScriptableObject>(scope).WithId("componentA").FromInstance(assetA);
-            BindAsset<IInjectable, InjectableScriptableObject>(scope).WithId("componentB").FromInstance(assetB);
+            BindAsset<IInjectable, InjectableScriptableObject>(scope).ToID("componentA").FromInstance(assetA);
+            BindAsset<IInjectable, InjectableScriptableObject>(scope).ToID("componentB").FromInstance(assetB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

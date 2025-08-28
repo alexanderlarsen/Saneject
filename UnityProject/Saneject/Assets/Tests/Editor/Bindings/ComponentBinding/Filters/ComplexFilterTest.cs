@@ -46,6 +46,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
 
             // Set up bindings
             BindComponent<InjectableComponent>(scope)
+                .ToTarget<ComponentRequester>()
                 .FromRootDescendants()
                 .WhereIsEnabled()
                 .WhereIsActiveAndEnabled()
@@ -55,7 +56,6 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .WhereTagIs("Test")
                 .WhereLayerIs(3)
                 .WhereActiveInHierarchy()
-                .WhereTargetIs<ComponentRequester>()
                 .Where(c => c.enabled); // redundant on purpose
 
             // Inject

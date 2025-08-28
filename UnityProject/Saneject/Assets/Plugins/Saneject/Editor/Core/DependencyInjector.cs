@@ -443,11 +443,11 @@ namespace Plugins.Saneject.Editor.Core
                 bool isCollection = serializedProperty.isArray;
                 Object injectionTarget = serializedObject.targetObject;
                 Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget, serializedProperty.GetDisplayName());
-                string injectedFieldSignature = $"[Injected field path: {NamePathUtils.GetInjectedFieldPath(serializedObject, serializedProperty)}]";
+                string injectedFieldSignature = FieldSignatureHelper.GetInjectedFieldSignature(serializedObject, serializedProperty, injectId);
 
                 if (binding == null)
                 {
-                    Debug.LogError($"Saneject: Missing binding {BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, injectId, scope)} {injectedFieldSignature}", scope);
+                    Debug.LogError($"Saneject: Missing binding {BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, scope)} {injectedFieldSignature}", scope);
                     stats.numMissingBindings++;
                     continue;
                 }

@@ -18,8 +18,9 @@ namespace Plugins.Saneject.Runtime.Bindings
     public class Binding : IEquatable<Binding>
     {
         private readonly List<Func<Object, bool>> filters = new();
-        private readonly List<(Func<Object, bool> filter, Type injectionTargetType)> injectionTargetFilters = new();
-        private readonly List<(Func<string, bool> filter, string injectionTargetMemberName)> injectionTargetMemberNameFilters = new();
+        private readonly List<(Func<Object, bool> qualifier, Type targetType)> injectionTargetQualifiers = new();
+        private readonly List<(Func<string, bool> qualifier, string memberName)> injectionTargetMemberQualifiers = new();
+        private readonly List<(Func<string, bool> qualifier, string id)> idQualifiers = new();
 
         private Func<Object, IEnumerable<Object>> locator;
 
@@ -38,7 +39,7 @@ namespace Plugins.Saneject.Runtime.Bindings
 
         public Scope Scope { get; }
         public bool HasLocator => locator != null;
-        public string Id { get; private set; }
+        public string[] Ids => idQualifiers?.Select(q => q.id).ToArray();
         public bool IsGlobal { get; private set; }
         public bool RequiresInjectionTarget { get; private set; }
         public bool IsUsed { get; private set; }
@@ -85,21 +86,6 @@ namespace Plugins.Saneject.Runtime.Bindings
             }
 
             IsAssetBinding = true;
-        }
-
-        /// <summary>
-        /// Sets a custom ID for this binding to match against fields marked with <c>[Inject(Id = "...")]</c>.
-        /// </summary>
-        /// <param name="newId">The custom ID string.</param>
-        public void SetId(string newId)
-        {
-            if (!string.IsNullOrWhiteSpace(Id))
-            {
-                Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} already has an ID '{Id}' and cannot have multiple IDs. Ignoring attempt to set ID to '{newId}'.", Scope);
-                return;
-            }
-
-            Id = newId;
         }
 
         /// <summary>
@@ -178,31 +164,46 @@ namespace Plugins.Saneject.Runtime.Bindings
         }
 
         /// <summary>
-        /// Add a filter for injection targets. Only targets passing all target filters are valid for this binding.
+        /// Adds a target-type qualifier for this binding.
         /// </summary>
-        /// <param name="filter">Predicate to evaluate each injection target <see cref="UnityEngine.Object" />.</param>
-        /// <param name="injectionTargetType">The type that this filter is associated with. Used for binding equality comparison.</param>
-        public void AddInjectionTargetFilter(
-            Func<Object, bool> filter,
-            Type injectionTargetType)
+        /// <param name="qualifier">Predicate to evaluate the injection target object.</param>
+        /// <param name="targetType">Target type used for equality checks.</param>
+        public void AddInjectionTargetQualifier(
+            Func<Object, bool> qualifier,
+            Type targetType)
         {
-            injectionTargetFilters.Add((filter, injectionTargetType));
+            injectionTargetQualifiers.Add((qualifier, targetType));
         }
 
         /// <summary>
-        /// Adds a filter that matches against the name of the injection target member (field or property) being resolved.
+        /// Adds a member-name qualifier for this binding.
         /// </summary>
-        /// <param name="filter">
-        /// Predicate that evaluates the target member name. The member name is passed as a string.
-        /// </param>
-        /// <param name="injectionTargetMemberName">
-        /// The raw member name string this filter is associated with. Used for binding equality comparison.
-        /// </param>
-        public void AddInjectionTargetMemberNameFilter(
-            Func<string, bool> filter,
-            string injectionTargetMemberName)
+        /// <param name="qualifier">Predicate to evaluate the member name.</param>
+        /// <param name="memberName">Member name used for equality checks.</param>
+        public void AddInjectionTargetMemberQualifier(
+            Func<string, bool> qualifier,
+            string memberName)
         {
-            injectionTargetMemberNameFilters.Add((filter, injectionTargetMemberName));
+            injectionTargetMemberQualifiers.Add((qualifier, memberName));
+        }
+
+        /// <summary>
+        /// Adds an ID qualifier to restrict this binding by injection site ID.
+        /// </summary>
+        /// <param name="qualifier">Predicate that evaluates the injection site's ID string.</param>
+        /// <param name="id">The raw ID string for equality and duplicate checks.</param>
+        public void AddIdQualifier(
+            Func<string, bool> qualifier,
+            string id)
+        {
+            foreach (string existingId in idQualifiers.Select(q => q.id))
+                if (existingId == id)
+                {
+                    Debug.LogWarning($"Saneject: Binding {this.GetBindingSignature()} already has an ID '{existingId}' and cannot have multiple identical IDs. Ignoring attempt to set ID to '{id}'.", Scope);
+                    return;
+                }
+
+            idQualifiers.Add((qualifier, id));
         }
 
         /// <summary>
@@ -214,16 +215,8 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <returns>The resolved dependency <see cref="UnityEngine.Object" />, or <c>null</c> if not found.</returns>
         public IEnumerable<Object> LocateDependencies(Object injectionTarget = null)
         {
-            //TODO: Keep an eye on this:
-            // if (injectionTargetFilters.Count > 0 && injectionTarget != null && !injectionTargetFilters.Any(f => f.filter(injectionTarget)))
-            //     return null;
-            //
-            // if (RequiresInjectionTarget && injectionTarget == null)
-            //     return null;
-
             IEnumerable<Object> all = locator(injectionTarget) ?? Enumerable.Empty<Object>();
             IEnumerable<Object> filtered = all.Where(obj => obj != null && filters.All(filter => filter(obj)));
-
             return filtered;
         }
 
@@ -232,30 +225,38 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// </summary>
         /// <param name="target">The injection target to evaluate against target filters.</param>
         /// <returns>True if all target filters pass or no target filters exist, false otherwise.</returns>
-        public bool PassesInjectionTargetFilters(Object target)
+        public bool PassesInjectionTargetQualifiers(Object target)
         {
-            if (injectionTargetFilters.Count == 0)
+            if (injectionTargetQualifiers.Count == 0)
                 return true;
 
-            return target != null && injectionTargetFilters.Any(f => f.filter(target));
+            return target != null && injectionTargetQualifiers.Any(f => f.qualifier(target));
         }
 
         /// <summary>
-        /// Checks whether the given injection target member name passes this binding's member name filters.
+        /// Checks if this binding's member-name qualifiers pass for the given name.
         /// </summary>
-        /// <param name="targetMemberName">
-        /// The name of the field or property on the injection target being considered for injection.
-        /// </param>
-        /// <returns>
-        /// True if any filter accepts the member name, or if no member name filters are defined.
-        /// False if filters are defined but none match.
-        /// </returns>
-        public bool PassesMemberNameFilters(string targetMemberName)
+        /// <param name="targetMemberName">Field or property name on the injection target.</param>
+        /// <returns>True if any qualifier matches or none exist, false otherwise.</returns>
+        public bool PassesMemberNameQualifiers(string targetMemberName)
         {
-            if (injectionTargetMemberNameFilters.Count == 0)
+            if (injectionTargetMemberQualifiers.Count == 0)
                 return true;
 
-            return !string.IsNullOrWhiteSpace(targetMemberName) && injectionTargetMemberNameFilters.Any(f => f.filter(targetMemberName));
+            return !string.IsNullOrWhiteSpace(targetMemberName) && injectionTargetMemberQualifiers.Any(f => f.qualifier(targetMemberName));
+        }
+
+        /// <summary>
+        /// Checks if this binding's ID qualifiers pass for the given ID.
+        /// </summary>
+        /// <param name="id">The injection site ID string.</param>
+        /// <returns>True if any qualifier matches or none exist, false otherwise.</returns>
+        public bool PassesIdQualifiers(string id)
+        {
+            if (idQualifiers.Count == 0)
+                return true;
+
+            return !string.IsNullOrWhiteSpace(id) && idQualifiers.Any(f => f.qualifier(id));
         }
 
         /// <summary>
@@ -267,27 +268,30 @@ namespace Plugins.Saneject.Runtime.Bindings
             if (other is null) return false;
             if (ReferenceEquals(this, other)) return true;
 
-            // Core signature (unchanged)
+            // Core signature
             bool typeMatch = InterfaceType != null
                 ? InterfaceType == other.InterfaceType
                 : ConcreteType == other.ConcreteType;
 
             if (!(Equals(Scope, other.Scope)
                   && typeMatch
-                  && Id == other.Id
                   && IsGlobal == other.IsGlobal
                   && IsCollection == other.IsCollection))
                 return false;
 
-            // Overlap-based equality for filters:
-            IEnumerable<Type> myTargetTypes = injectionTargetFilters.Select(tf => tf.injectionTargetType);
-            IEnumerable<Type> otherTargetTypes = other.injectionTargetFilters.Select(tf => tf.injectionTargetType);
+            // Overlap-based equality for qualifiers
+            IEnumerable<Type> myTargetTypes = injectionTargetQualifiers.Select(tf => tf.targetType);
+            IEnumerable<Type> otherTargetTypes = other.injectionTargetQualifiers.Select(tf => tf.targetType);
 
-            IEnumerable<string> myMemberNames = injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
-            IEnumerable<string> otherMemberNames = other.injectionTargetMemberNameFilters.Select(f => f.injectionTargetMemberName);
+            IEnumerable<string> myMemberNames = injectionTargetMemberQualifiers.Select(f => f.memberName);
+            IEnumerable<string> otherMemberNames = other.injectionTargetMemberQualifiers.Select(f => f.memberName);
+
+            IEnumerable<string> myIds = idQualifiers.Select(f => f.id);
+            IEnumerable<string> otherIds = other.idQualifiers.Select(f => f.id);
 
             return TargetsOverlapForEquality(myTargetTypes, otherTargetTypes)
-                   && MemberNamesOverlapForEquality(myMemberNames, otherMemberNames);
+                   && MemberNamesOverlapForEquality(myMemberNames, otherMemberNames)
+                   && IdsOverlapForEquality(myIds, otherIds);
         }
 
         public override int GetHashCode()
@@ -295,14 +299,19 @@ namespace Plugins.Saneject.Runtime.Bindings
             // if this is an interface binding, hash only on InterfaceType,
             // otherwise hash on ConcreteType
             Type keyType = InterfaceType ?? ConcreteType;
-            int hash = HashCode.Combine(Scope, keyType, Id, IsGlobal, IsCollection);
+            int hash = HashCode.Combine(Scope, keyType, IsGlobal, IsCollection);
 
-            // To satisfy (Equals => same hash), don't hash the exact contents of filters,
+            // To satisfy (Equals => same hash), don't hash the exact contents of qualifiers,
             // only whether they are empty or not. Collisions are fine.
-            bool hasTargetFilters = injectionTargetFilters.Any();
-            bool hasMemberNameFilters = injectionTargetMemberNameFilters.Any();
+            bool hasTargetQualifiers = injectionTargetQualifiers.Any();
+            bool hasMemberQualifiers = injectionTargetMemberQualifiers.Any();
+            bool hasIdQualifiers = idQualifiers.Any();
 
-            hash = HashCode.Combine(hash, hasTargetFilters ? 1 : 0, hasMemberNameFilters ? 1 : 0);
+            hash = HashCode.Combine(hash,
+                hasTargetQualifiers ? 1 : 0,
+                hasMemberQualifiers ? 1 : 0,
+                hasIdQualifiers ? 1 : 0);
+
             return hash;
         }
 
@@ -337,6 +346,23 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             foreach (string name in aSet)
                 if (bSet.Contains(name))
+                    return true;
+
+            return false;
+        }
+
+        private static bool IdsOverlapForEquality(
+            IEnumerable<string> a,
+            IEnumerable<string> b)
+        {
+            HashSet<string> aSet = new(a?.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
+            HashSet<string> bSet = new(b?.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
+
+            if (aSet.Count == 0 || bSet.Count == 0)
+                return aSet.Count == 0 && bSet.Count == 0;
+
+            foreach (string id in aSet)
+                if (bSet.Contains(id))
                     return true;
 
             return false;

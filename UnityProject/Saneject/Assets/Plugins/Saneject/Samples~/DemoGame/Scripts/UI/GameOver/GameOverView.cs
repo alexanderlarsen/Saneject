@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver
         [Inject("scoreText"), SerializeField]
         private Text scoreText;
 
-        [Inject("restartButton"), SerializeField]
+        [Inject, SerializeField]
         private Button restartButton;
 
         /// <summary>

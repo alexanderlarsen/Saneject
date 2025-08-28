@@ -3,6 +3,7 @@ using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
 using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
 using Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver;
 using UnityEngine.UI;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
@@ -15,17 +16,18 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
         public override void ConfigureBindings()
         {
             BindComponent<Text>()
-                .WithId("enemiesLeftText")
+                .ToID("enemiesLeftText")
                 .FromTargetDescendants()
                 .WhereNameIs("EnemiesText");
 
             BindComponent<Text>()
-                .WithId("scoreText")
+                .ToID("scoreText")
                 .FromTargetDescendants()
                 .WhereNameIs("ScoreText");
 
             BindComponent<Button>()
-                .WithId("restartButton")
+                .ToTarget<GameOverController>()
+                .ToMember("restartButton")
                 .FromTargetDescendants()
                 .WhereNameIs("RestartButton");
 

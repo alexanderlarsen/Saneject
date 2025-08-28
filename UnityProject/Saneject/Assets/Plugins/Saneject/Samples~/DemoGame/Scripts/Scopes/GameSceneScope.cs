@@ -45,9 +45,9 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
                 .FromAnywhereInScene();
 
             BindAsset<GameObject>()
-                .FromAssetLoad("Assets/Plugins/Saneject/Samples/DemoGame/Prefabs/Enemy.prefab")
-                .WhereTargetIs<EnemyManager>()
-                .WhereMemberNameIs("enemyPrefab");
+                .ToTarget<EnemyManager>()
+                .ToMember("enemyPrefab")
+                .FromAssetLoad("Assets/Plugins/Saneject/Samples/DemoGame/Prefabs/Enemy.prefab");
         }
     }
 }

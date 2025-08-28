@@ -15,10 +15,10 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.Enemy
         [Inject, SerializeInterface]
         private IMainCamera mainCamera;
 
-        [Inject("MarkerTarget"), SerializeField]
+        [Inject, SerializeField]
         private Transform markerTarget;
 
-        [Inject("MarkerImage"), SerializeField]
+        [Inject, SerializeField]
         private Image markerImage;
 
         [SerializeField]

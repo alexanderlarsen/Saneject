@@ -14,74 +14,18 @@ namespace Plugins.Saneject.Runtime.Bindings
     /// Supports locating from the scope, injection target, custom transforms, scene-wide queries, or explicit instances.
     /// Typically returned from binding methods like <c>BindComponent&lt;TComponent&gt;()</c> or <c>BindMultipleComponents&lt;TComponent&gt;()</c>.
     /// </summary>
-    public class ComponentBindingBuilder<TComponent> where TComponent : class
+    public class GlobalBindingBuilder<TComponent> where TComponent : class
     {
         private readonly Binding binding;
         private readonly Scope scope;
 
-        public ComponentBindingBuilder(
+        public GlobalBindingBuilder(
             Binding binding,
             Scope scope)
         {
             this.binding = binding;
             this.scope = scope;
         }
-
-        #region QUALIFIER METHODS
-
-        /// <summary>
-        /// Qualifies this binding with an ID.
-        /// Only injection targets annotated with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />
-        /// that specify the same ID will resolve using this binding.
-        /// </summary>
-        /// <param name="ids">The identifiers to match against injection targets.</param>
-        public ComponentBindingBuilder<TComponent> ToID(params string[] ids)
-        {
-            foreach (string id in ids)
-                binding.AddIdQualifier(fieldId => fieldId == id, id);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Qualifies this binding to apply only when the injection target is of the given type.
-        /// The injection target is the <see cref="Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
-        /// </summary>
-        /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
-        public ComponentBindingBuilder<TComponent> ToTarget<TTarget>()
-        {
-            binding.AddInjectionTargetQualifier(obj => obj is TTarget, typeof(TTarget));
-            return this;
-        }
-
-        /// <summary>
-        /// Qualifies this binding to apply only when the injection target is one of the specified types.
-        /// The injection target is the <see cref="Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
-        /// </summary>
-        /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
-        public ComponentBindingBuilder<TComponent> ToTarget(params Type[] targetTypes)
-        {
-            foreach (Type t in targetTypes)
-                binding.AddInjectionTargetQualifier(obj => t.IsInstanceOfType(obj), t);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Qualifies this binding to apply only when the injection target member (field or property) has one of the specified names.
-        /// </summary>
-        /// <param name="memberNames">The field or property names on the injection target that this binding should apply to.</param>
-        public ComponentBindingBuilder<TComponent> ToMember(params string[] memberNames)
-        {
-            foreach (string memberName in memberNames)
-                binding.AddInjectionTargetMemberQualifier(name => name == memberName, memberName);
-
-            return this;
-        }
-
-        #endregion
 
         #region DEFAULT (SCOPE) LOCATOR METHODS
 
@@ -709,15 +653,6 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
             binding.SetLocator(_ => method?.Invoke().Cast<Component>());
             return new ComponentFilterBuilder<TComponent>(binding, scope);
-        }
-
-        /// <summary>
-        /// Creates or locates a <see cref="Plugins.Saneject.Runtime.Proxy.ProxyObject{TConcrete}" /> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component" /> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
-        /// </summary>
-        public void FromProxy()
-        {
-            binding.MarkResolveWithProxy();
-            binding.SetLocator(_ => null);
         }
 
         #endregion

@@ -6,7 +6,7 @@ using UnityEngine;
 using AssetRequester = Tests.Runtime.Asset.AssetRequester;
 using AssetRequesterB = Tests.Runtime.Asset.AssetRequesterB;
 
-namespace Tests.Editor.Bindings.AssetBinding.Filters
+namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
 {
     public class WhereTargetIsTest : BaseBindingTest
     {
@@ -27,12 +27,12 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
 
             // Set up bindings
             BindAsset<InjectableScriptableObject>(scope)
-                .FromInstance(assetA)
-                .WhereTargetIs<AssetRequester>();
+                .ToTarget<AssetRequester>()
+                .FromInstance(assetA);
 
             BindAsset<InjectableScriptableObject>(scope)
-                .FromInstance(assetB)
-                .WhereTargetIs<AssetRequesterB>();
+                .ToTarget<AssetRequesterB>()
+                .FromInstance(assetB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -57,12 +57,12 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
 
             // Set up bindings
             BindAsset<IInjectable, InjectableScriptableObject>(scope)
-                .FromInstance(assetA)
-                .WhereTargetIs<AssetRequester>();
+                .ToTarget<AssetRequester>()
+                .FromInstance(assetA);
 
             BindAsset<IInjectable, InjectableScriptableObject>(scope)
-                .FromInstance(assetB)
-                .WhereTargetIs<AssetRequesterB>();
+                .ToTarget<AssetRequesterB>()
+                .FromInstance(assetB);
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
