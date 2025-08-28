@@ -23,7 +23,7 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
 > ⚠️ **Beta notice**  
 > Saneject is currently in beta. The core is mostly stable, but I still iterate and occasionally uncover quirks or bugs. The API may also change a bit during this phase, so expect some breaking changes until 1.0.0.
 >
-> The framework was originally developed to power [Tails](https://www.youtube.com/playlist?list=PLeSb1exZWazIzm3UXsKb7iJG6MgkaIvSQ), a VR Snake game I’m building with a friend, and is now being actively integrated there, which lets me uncover edge cases, refine the UX, and prove the system in a real production setting.
+> The framework was originally developed to power [Tails ↗](https://www.youtube.com/playlist?list=PLeSb1exZWazIzm3UXsKb7iJG6MgkaIvSQ), a VR Snake game I’m building with a friend, and is now being actively integrated there, which lets me uncover edge cases, refine the UX, and prove the system in a real production setting.
 >
 > Saneject will remain in beta until I’m satisfied with its stability, usability, and ergonomics in production.
 
