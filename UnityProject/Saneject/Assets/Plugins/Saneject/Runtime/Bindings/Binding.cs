@@ -254,7 +254,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool PassesIdQualifiers(string id)
         {
             if (idQualifiers.Count == 0)
-                return true;
+                return string.IsNullOrWhiteSpace(id);
 
             return !string.IsNullOrWhiteSpace(id) && idQualifiers.Any(f => f.qualifier(id));
         }

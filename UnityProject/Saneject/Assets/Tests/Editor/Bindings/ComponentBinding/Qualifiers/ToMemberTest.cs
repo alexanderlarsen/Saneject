@@ -7,7 +7,7 @@ using ComponentRequester = Tests.Runtime.Component.ComponentRequester;
 
 namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
 {
-    public class WhereMemberNameIsTest : BaseBindingTest
+    public class ToMemberTest : BaseBindingTest
     {
         private GameObject root;
 

@@ -7,7 +7,7 @@ using AssetRequester = Tests.Runtime.Asset.AssetRequester;
 
 namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
 {
-    public class WhereMemberNameIsTest : BaseBindingTest
+    public class ToMemberTest : BaseBindingTest
     {
         private GameObject root;
 
