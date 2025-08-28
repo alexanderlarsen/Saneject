@@ -17,8 +17,8 @@ Resolve everything in the Editor with familiar DI syntax while keeping dependenc
 
 No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
 
-> 🚀 **Quick Start**  
-> Install, learn the basics and inject your first scene in 5 minutes → [Jump to Quick Start](#quick-start)
+> 🚀 **Quick start**  
+> Install, learn the basics and inject your first scene in 5 minutes → [Jump to quick start](#quick-start)
 
 > ⚠️ **Beta notice**  
 > Saneject is currently in beta. The core is mostly stable, but I still iterate and occasionally uncover quirks or bugs. The API may also change a bit during this phase, so expect some breaking changes until 1.0.0.
