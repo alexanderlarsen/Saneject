@@ -478,16 +478,16 @@ Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in t
 
 Bind cross-scene singletons from scene instances. Methods return a `GlobalBindingBuilder<TComponent>`.
 
+| Method                     | Description                                                              |
+|----------------------------|--------------------------------------------------------------------------|
+| `BindGlobal<TComponent>()` | Adds a scene `Component` to the global scope via `SceneGlobalContainer`. |
+
 The `GlobalBindingBuilder<TComponent>` is a locator API identical to [Component locators](#component-locators), but with two important differences:
 
 - **No qualifiers** (`ToId`, `ToTarget`, `ToMember`): Global bindings are not injected into specific targets. Instead, they are stored in a `SceneGlobalContainer` (a scene object) and then promoted to the global scope at runtime. Because there is no injection target, qualifiers don’t apply.
 - **No proxy binding (`.FromProxy()`)**: Proxies are already global by nature. They can be injected from any context and resolve their target from the global scope. Registering a proxy itself as a global would be redundant and potentially misleading, so this method is excluded.
 
 Just like `ComponentBindingBuilder<TComponent>`, locator methods on `GlobalBindingBuilder<TComponent>` still return a `ComponentFilterBuilder<TComponent>`, so you can filter candidate components with the usual filter methods (`WhereTagIs`, `WhereNameIs`, etc.).
-
-| Method                     | Description                                                              |
-|----------------------------|--------------------------------------------------------------------------|
-| `BindGlobal<TComponent>()` | Adds a scene `Component` to the global scope via `SceneGlobalContainer`. |
 
 ## Deep dive
 
