@@ -67,6 +67,30 @@ namespace Plugins.Saneject.Editor.Utility
         }
 
         /// <summary>
+        /// Returns the logical name of a field, stripping compiler auto-property
+        /// backing syntax (&lt;Name&gt;k__BackingField) when present.
+        /// </summary>
+        public static string GetLogicalName(FieldInfo field)
+        {
+            string n = field.Name;
+
+            // Handle auto-property backing fields: <Name>k__BackingField
+            if (n.Length > 0 && n[0] == '<')
+            {
+                int end = n.IndexOf(">k__BackingField", StringComparison.Ordinal);
+                if (end > 1) return n.Substring(1, end - 1); // "InterfaceB1"
+            }
+
+            return n;
+        }
+
+        public static string GetComponentPath(this Component component)
+        {
+            string goPath = component.transform.GetHierarchyPath();
+            return $"{goPath}/{component.GetType().Name}";
+        }
+
+        /// <summary>
         /// Returns the logical segment name: if the segment is a C# compiler
         /// auto-property backing field (&lt;Name&gt;k__BackingField) return "Name";
         /// otherwise return the segment unchanged. Safe for non-backing segments
@@ -92,24 +116,6 @@ namespace Plugins.Saneject.Editor.Utility
         private static string GetHierarchyPath(this Transform transform)
         {
             return !transform.parent ? transform.name : $"{transform.parent.GetHierarchyPath()}/{transform.name}";
-        }
-        
-        /// <summary>
-        /// Returns the logical name of a field, stripping compiler auto-property
-        /// backing syntax (&lt;Name&gt;k__BackingField) when present.
-        /// </summary>
-        public static string GetLogicalName(FieldInfo field)
-        {
-            string n = field.Name;
-
-            // Handle auto-property backing fields: <Name>k__BackingField
-            if (n.Length > 0 && n[0] == '<')
-            {
-                int end = n.IndexOf(">k__BackingField", StringComparison.Ordinal);
-                if (end > 1) return n.Substring(1, end - 1); // "InterfaceB1"
-            }
-
-            return n;
         }
     }
 }

@@ -1,4 +1,6 @@
 ﻿using Plugins.Saneject.Editor.Utility;
+using Plugins.Saneject.Runtime.Scopes;
+using Saneject.Plugins.Saneject.Editor.Utility;
 using UnityEditor;
 using UnityEngine;
 
@@ -17,6 +19,20 @@ namespace Plugins.Saneject.Editor.Inspectors
         public override void OnInspectorGUI()
         {
             SanejectInspector.DrawDefault(serializedObject, targets, target);
+        }
+
+        [MenuItem("CONTEXT/Component/Filter Logs By This Component")]
+        private static void FilterBindingLogsForComponent(MenuCommand command)
+        {
+            Component comp = (Component)command.context;
+
+            if (comp is Scope scope)
+            {
+                ConsoleUtils.SetSearch($"{scope.GetType().Name}");
+                return;
+            }
+
+            ConsoleUtils.SetSearch($"{comp.GetComponentPath()}");
         }
     }
 }

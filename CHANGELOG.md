@@ -1,5 +1,15 @@
 ﻿# Saneject Changelog
 
+## Version 0.14.0
+
+### Features
+
+- Added contextual right-click menu item in the Inspector: **Filter Logs By This Component**.  
+  Copies the component’s full transform path into the Console search bar.
+    - For regular components, filters logs by their hierarchy path.
+    - For `Scope` components, automatically filters by the scope’s type name.  
+      This makes it easy to isolate errors and warnings for a single component or scope in large projects.
+
 ## Version 0.13.1
 
 ### Fixes
