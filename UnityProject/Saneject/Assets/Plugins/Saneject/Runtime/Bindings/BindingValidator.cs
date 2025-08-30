@@ -22,17 +22,6 @@ namespace Plugins.Saneject.Editor.Utility
         {
             bool isValid = true;
 
-            // Concrete must be instantiable
-            if (binding.ConcreteType is { IsAbstract: true })
-            {
-                Debug.LogError(
-                    $"Saneject: Invalid binding {binding.GetBindingSignature()}." +
-                    $" Concrete type '{binding.ConcreteType?.Name}' is abstract. Injected components must be non-abstract.",
-                    binding.Scope);
-
-                isValid = false;
-            }
-
             if (binding.IsProxyBinding)
             {
                 if (!binding.IsComponentBinding)

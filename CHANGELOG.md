@@ -1,5 +1,11 @@
 ﻿# Saneject Changelog
 
+## Version 0.15.0
+
+### Changes
+
+- Allow injecting abstract `UnityEngine.Object` types, aligning with Unity’s own `GetComponent` APIs.
+
 ## Version 0.14.0
 
 ### Features
