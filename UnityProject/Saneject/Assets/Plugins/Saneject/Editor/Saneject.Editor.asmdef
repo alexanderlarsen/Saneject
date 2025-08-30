@@ -2,7 +2,7 @@
     "name": "Saneject.Editor",
     "rootNamespace": "",
     "references": [
-        "Saneject.Runtime"
+        "GUID:6709c1cfc2b446caa4818124a6c473b8"
     ],
     "includePlatforms": [
         "Editor"

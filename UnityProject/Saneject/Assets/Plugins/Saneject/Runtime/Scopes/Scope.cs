@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
-using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
 using UnityEngine;
 using Component = UnityEngine.Component;
@@ -266,7 +265,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             Binding binding = new(null, typeof(TConcrete), this);
             binding.MarkAssetBinding();
             unvalidatedBindings.Add(binding);
-            return new AssetBindingBuilder<TConcrete>(binding, this);
+            return new AssetBindingBuilder<TConcrete>(binding);
         }
 
         /// <summary>
@@ -293,7 +292,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             binding.MarkAssetBinding();
             binding.MarkCollectionBinding();
             unvalidatedBindings.Add(binding);
-            return new AssetBindingBuilder<TConcrete>(binding, this);
+            return new AssetBindingBuilder<TConcrete>(binding);
         }
 
         /// <summary>
@@ -310,7 +309,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             Binding binding = new(typeof(TInterface), typeof(TConcrete), this);
             binding.MarkAssetBinding();
             unvalidatedBindings.Add(binding);
-            return new AssetBindingBuilder<TConcrete>(binding, this);
+            return new AssetBindingBuilder<TConcrete>(binding);
         }
 
         /// <summary>
@@ -343,7 +342,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             binding.MarkAssetBinding();
             binding.MarkCollectionBinding();
             unvalidatedBindings.Add(binding);
-            return new AssetBindingBuilder<TConcrete>(binding, this);
+            return new AssetBindingBuilder<TConcrete>(binding);
         }
 
         /// <summary>

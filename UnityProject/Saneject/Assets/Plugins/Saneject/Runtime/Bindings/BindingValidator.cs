@@ -1,8 +1,7 @@
 ﻿using Plugins.Saneject.Editor.Extensions;
-using Plugins.Saneject.Runtime.Bindings;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.Utility
+namespace Plugins.Saneject.Runtime.Bindings
 {
     /// <summary>
     /// Validates user-declared <see cref="Binding" />s against Saneject’s rules.

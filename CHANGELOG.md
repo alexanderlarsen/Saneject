@@ -5,6 +5,22 @@
 ### Changes
 
 - Allow injecting abstract `UnityEngine.Object` types, aligning with Unity’s own `GetComponent` APIs.
+- Simplified the filter surface API for component and asset bindings:
+    - Removed built-in syntactic sugar methods (`WhereNameIs`, `WhereSiblingIndexIs`, etc.).
+    - Added more hierarchy predicate-based base methods (`Where`, `WhereComponent`, `WhereTransform`, `WhereGameObject`, etc.).
+    - **Benefits:** smaller API surface while retaining flexibility, less mental load, more powerful composition.
+    - **Trade-off:** slightly more boilerplate when writing filters.
+    - To mitigate boilerplate:
+        - The filter system is now extensible with **user-defined syntactic sugar** methods.
+        - Developers can implement only the helpers they need, keeping the API lean while retaining ergonomics.
+        - Example sugar helpers are provided as an importable **UPM sample** (“Component Filter Extensions”) demonstrating how to extend the filter API (works the same way for both component and asset filters).
+
+### Tests
+
+- Added new tests for `ComponentFilterBuilder` base and relation methods, covering both concrete and interface bindings.
+- Added tests for `AssetFilterBuilder` to ensure consistent behavior across asset filters.
+- Added tests for the included sample extension methods.
+- Removed old tests for deprecated sugar methods.
 
 ## Version 0.14.0
 

@@ -24,7 +24,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.ProjectLoad
             // Set up bindings
             BindAsset<InjectableScriptableObject>(scope)
                 .FromResourcesAll("Test")
-                .WhereNameIs("InjectableScriptableObject 2");
+                .Where(a => a.name == "InjectableScriptableObject 2");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -47,7 +47,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.ProjectLoad
             // Set up bindings
             BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromResourcesAll("Test")
-                .WhereNameIs("InjectableScriptableObject 3");
+                .Where(a => a.name == "InjectableScriptableObject 3");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

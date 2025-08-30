@@ -7,12 +7,12 @@ using AssetRequester = Tests.Runtime.Asset.AssetRequester;
 
 namespace Tests.Editor.Bindings.AssetBinding.Filters
 {
-    public class WhereNameContainsTest : BaseBindingTest
+    public class AssetFilterBuilderTest : BaseBindingTest
     {
         private GameObject root;
 
         [Test]
-        public void InjectsConcrete_WhenNameContains()
+        public void InjectsConcrete_UsingWhere()
         {
             // Suppress errors from unbound dependencies
             IgnoreErrorMessages();
@@ -24,19 +24,19 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
             // Set up bindings
             BindAsset<InjectableScriptableObject>(scope)
                 .FromResourcesAll("Test")
-                .WhereNameContains("Object 1");
+                .Where(asset => asset.name.StartsWith("Injectable") && asset.name.EndsWith("2"));
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
 
             // Assert
-            InjectableScriptableObject expected = Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 1");
-            Assert.AreEqual(expected, requester.concreteAsset);
+            InjectableScriptableObject expected = Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 2");
             Assert.NotNull(requester.concreteAsset);
+            Assert.AreEqual(expected, requester.concreteAsset);
         }
 
         [Test]
-        public void InjectsInterface_WhenNameContains()
+        public void InjectsInterface_UsingWhere()
         {
             // Suppress errors from unbound dependencies
             IgnoreErrorMessages();
@@ -48,15 +48,15 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
             // Set up bindings
             BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromResourcesAll("Test")
-                .WhereNameContains("Object 2");
+                .Where(asset => asset.name.StartsWith("Injectable") && asset.name.EndsWith("2"));
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
 
             // Assert
             InjectableScriptableObject expected = Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 2");
-            Assert.AreEqual(expected, requester.interfaceAsset);
             Assert.NotNull(requester.interfaceAsset);
+            Assert.AreEqual(expected, requester.interfaceAsset);
         }
 
         protected override void CreateHierarchy()

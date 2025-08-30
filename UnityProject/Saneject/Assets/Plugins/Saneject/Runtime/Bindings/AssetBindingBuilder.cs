@@ -20,14 +20,10 @@ namespace Plugins.Saneject.Runtime.Bindings
     public class AssetBindingBuilder<TAsset> where TAsset : Object
     {
         private readonly Binding binding;
-        private readonly Scope scope;
 
-        public AssetBindingBuilder(
-            Binding binding,
-            Scope scope)
+        public AssetBindingBuilder(Binding binding)
         {
             this.binding = binding;
-            this.scope = scope;
         }
 
         #region QUALIFIER METHODS
@@ -95,7 +91,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public AssetFilterBuilder<TAsset> FromResources(string path)
         {
             binding.SetLocator(_ => Resources.Load<TAsset>(path).WrapInEnumerable());
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
         }
 
         /// <summary>
@@ -104,7 +100,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public AssetFilterBuilder<TAsset> FromResourcesAll(string path)
         {
             binding.SetLocator(_ => Resources.LoadAll<TAsset>(path));
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
         }
 
         /// <summary>
@@ -114,7 +110,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
 #if UNITY_EDITOR
             binding.SetLocator(_ => AssetDatabase.LoadAssetAtPath<TAsset>(assetPath).WrapInEnumerable());
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
 #else
             return null;
 #endif
@@ -128,7 +124,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         {
 #if UNITY_EDITOR
             binding.SetLocator(_ => AssetDatabase.LoadAllAssetsAtPath(assetPath).Where(asset => asset.GetType() == typeof(TAsset)));
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
 #else
             return null;
 #endif
@@ -149,7 +145,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                     .Select(AssetDatabase.LoadAssetAtPath<TAsset>)
                     .Where(x => x));
 
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
 #else
     return null;
 #endif
@@ -165,7 +161,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public AssetFilterBuilder<TAsset> FromInstance(TAsset instance)
         {
             binding.SetLocator(_ => instance.WrapInEnumerable());
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
         }
 
         /// <summary>
@@ -174,7 +170,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public AssetFilterBuilder<TAsset> FromMethod(Func<TAsset> method)
         {
             binding.SetLocator(_ => method?.Invoke().WrapInEnumerable());
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
         }
 
         /// <summary>
@@ -183,7 +179,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public AssetFilterBuilder<TAsset> FromMethod(Func<IEnumerable<TAsset>> method)
         {
             binding.SetLocator(_ => method?.Invoke());
-            return new AssetFilterBuilder<TAsset>(binding, scope);
+            return new AssetFilterBuilder<TAsset>(binding);
         }
 
         #endregion

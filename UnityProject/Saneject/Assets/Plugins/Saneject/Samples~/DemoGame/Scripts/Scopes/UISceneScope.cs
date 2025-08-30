@@ -18,18 +18,18 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
             BindComponent<Text>()
                 .ToID("enemiesLeftText")
                 .FromTargetDescendants()
-                .WhereNameIs("EnemiesText");
+                .WhereGameObject(go => go.name == "EnemiesText");
 
             BindComponent<Text>()
                 .ToID("scoreText")
                 .FromTargetDescendants()
-                .WhereNameIs("ScoreText");
+                .WhereGameObject(go => go.name == "ScoreText");
 
             BindComponent<Button>()
                 .ToTarget<GameOverController>()
                 .ToMember("restartButton")
                 .FromTargetDescendants()
-                .WhereNameIs("RestartButton");
+                .WhereGameObject(go => go.name == "RestartButton");
 
             BindComponent<IGameStateObservable, GameStateManager>()
                 .FromProxy();
