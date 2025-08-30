@@ -1,8 +1,7 @@
 ﻿using Plugins.Saneject.Editor.Extensions;
-using Plugins.Saneject.Runtime.Bindings;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.Utility
+namespace Plugins.Saneject.Runtime.Bindings
 {
     /// <summary>
     /// Validates user-declared <see cref="Binding" />s against Saneject’s rules.
@@ -21,17 +20,6 @@ namespace Plugins.Saneject.Editor.Utility
         public static bool IsBindingValid(Binding binding)
         {
             bool isValid = true;
-
-            // Concrete must be instantiable
-            if (binding.ConcreteType is { IsAbstract: true })
-            {
-                Debug.LogError(
-                    $"Saneject: Invalid binding {binding.GetBindingSignature()}." +
-                    $" Concrete type '{binding.ConcreteType?.Name}' is abstract. Injected components must be non-abstract.",
-                    binding.Scope);
-
-                isValid = false;
-            }
 
             if (binding.IsProxyBinding)
             {

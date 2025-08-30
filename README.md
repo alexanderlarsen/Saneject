@@ -392,27 +392,26 @@ Looks for the `Component` from the specified `Transform` and its hierarchy.
 
 #### Component filters
 
-Methods in `ComponentFilterBuilder<TComponent>` allow querying and filtering the hierarchy for precise and complex search strategies. All methods return the builder itself to enable method chaining.
+`ComponentFilterBuilder<TComponent>` provides a fluent API for filtering candidates when binding components.  
+All methods return the builder itself to support chaining.
 
-| Method                                   | Description                                                                                     |
-|------------------------------------------|-------------------------------------------------------------------------------------------------|
-| `WhereIsEnabled()`                       | Filters `Behaviour` components where `Behaviour.enabled` is true.                               |
-| `WhereIsActiveAndEnabled()`              | Filters `Behaviour` components where `Behaviour.isActiveAndEnabled` is true.                    |
-| `WhereComponentIndexIs(int index)`       | Filters components at a specific component index on their `GameObject` (excluding `Transform`). |
-| `WhereIsFirstComponentSibling()`         | Filters components that are the first component on their `GameObject` (excluding `Transform`).  |
-| `WhereIsLastComponentSibling()`          | Filters components that are the last component on their `GameObject` (excluding `Transform`).   |
-| `WhereNameIs(string name)`               | Filters components whose `GameObject.name` exactly matches `name`.                              |
-| `WhereNameContains(string substring)`    | Filters components whose `GameObject.name` includes the specified `substring`.                  |
-| `WhereTagIs(string tag)`                 | Filters components whose `GameObject.tag` equals `tag`.                                         |
-| `WhereLayerIs(int layer)`                | Filters components on a specific `layer`.                                                       |
-| `WhereActiveInHierarchy()`               | Filters components whose `GameObject` is active in hierarchy.                                   |
-| `WhereInactiveInHierarchy()`             | Filters components whose `GameObject` is inactive in hierarchy.                                 |
-| `WhereActiveSelf()`                      | Filters components whose `GameObject` is locally active.                                        |
-| `WhereInactiveSelf()`                    | Filters components whose `GameObject` is locally inactive.                                      |
-| `WhereSiblingIndexIs(int index)`         | Filters components with the specified sibling index in their parent's hierarchy.                |
-| `WhereIsFirstSibling()`                  | Filters components that are the first sibling in their parent's hierarchy.                      |
-| `WhereIsLastSibling()`                   | Filters components that are the last sibling in their parent's hierarchy.                       |
-| `Where(Func<TComponent,bool> predicate)` | Filters components using a custom predicate.                                                    |
+| Method                                                    | Description                                                                                                                  |
+|-----------------------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
+| `Where(Func<TComponent,bool> predicate)`                  | Filters candidates using a predicate on `TComponent`.                                                                        |
+| `WhereComponent(Func<Component,bool> predicate)`          | Filters candidates using a predicate on the underlying `Component`. Useful if `TComponent` is an interface or abstract type. |
+| `WhereTransform(Func<Transform,bool> predicate)`          | Filters candidates using a predicate on their `Transform`.                                                                   |
+| `WhereGameObject(Func<GameObject,bool> predicate)`        | Filters candidates using a predicate on their `GameObject`.                                                                  |
+| `WhereParent(Func<Transform,bool> predicate)`             | Filters candidates based on their immediate parent `Transform`.                                                              |
+| `WhereAnyAncestor(Func<Transform,bool> predicate, ...)`   | Filters candidates if any ancestor `Transform` matches the predicate.                                                        |
+| `WhereRoot(Func<Transform,bool> predicate)`               | Filters candidates based on their root `Transform`.                                                                          |
+| `WhereAnyChild(Func<Transform,bool> predicate)`           | Filters candidates if any direct child `Transform` matches the predicate.                                                    |
+| `WhereChildAt(int index, Func<Transform,bool> predicate)` | Filters candidates if the child at the specified index matches the predicate.                                                |
+| `WhereFirstChild(Func<Transform,bool> predicate)`         | Filters candidates if their first child matches the predicate.                                                               |
+| `WhereLastChild(Func<Transform,bool> predicate)`          | Filters candidates if their last child matches the predicate.                                                                |
+| `WhereAnyDescendant(Func<Transform,bool> predicate, ...)` | Filters candidates if any descendant `Transform` matches the predicate.                                                      |
+| `WhereAnySibling(Func<Transform,bool> predicate)`         | Filters candidates if any sibling `Transform` (excluding itself) matches.                                                    |
+
+> 💡 The sample `ComponentFilterExtensions` demonstrates how to extend the filtering system and write your own helper methods for increased flexibility and reduced boilerplate.
 
 ### Asset binding
 
@@ -456,15 +455,14 @@ Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`. All 
 
 #### Asset filters
 
-Methods in `AssetFilterBuilder<TAsset>` allow querying and filtering assets in the project folder for precise and complex asset search strategies. All methods return the builder itself to enable method chaining.
+`AssetFilterBuilder<TAsset>` provides a fluent API for filtering assets when binding.  
+All methods return the builder itself to support chaining.
 
-| Method                                | Description                                                     |
-|---------------------------------------|-----------------------------------------------------------------|
-| `WhereGameObjectTagIs(string tag)`    | Filters `GameObject` assets whose `tag` matches `tag`.          |
-| `WhereGameObjectLayerIs(int layer)`   | Filters `GameObject` assets whose `layer` matches `layer`.      |
-| `WhereNameContains(string substring)` | Filters assets whose `name` contains the specified `substring`. |
-| `WhereNameIs(string name)`            | Filters assets whose `name` exactly matches `name`.             |
-| `Where(Func<TAsset,bool> predicate)`  | Filters assets using a custom predicate.                        |
+| Method                               | Description                                          |
+|--------------------------------------|------------------------------------------------------|
+| `Where(Func<TAsset,bool> predicate)` | Filters assets using a custom predicate on `TAsset`. |
+
+> 💡 The sample `ComponentFilterExtensions` demonstrates how to extend the filtering system and write your own helper methods for increased flexibility and reduced boilerplate.
 
 ### Global singleton binding
 

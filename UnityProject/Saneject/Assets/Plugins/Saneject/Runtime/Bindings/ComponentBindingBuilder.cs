@@ -172,7 +172,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 .GetComponents<TComponent>()
                 .Cast<Component>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -187,7 +187,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -200,7 +200,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 .GetComponentsInParents<TComponent>(includeSelf)
                 .Cast<Component>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -216,7 +216,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -232,7 +232,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -248,7 +248,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -266,7 +266,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                         .Where(c => c.gameObject != scope.gameObject));
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -283,7 +283,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Where(c => c)
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         #endregion
@@ -299,7 +299,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 .GetComponents<TComponent>()
                 .Cast<Component>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -315,7 +315,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -331,7 +331,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -347,7 +347,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -366,7 +366,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                         .Where(c => c.gameObject != scope.transform.root.gameObject));
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         #endregion
@@ -388,7 +388,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -406,7 +406,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -425,7 +425,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -444,7 +444,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -463,7 +463,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -482,7 +482,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -506,7 +506,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                             .Where(c => c && c.gameObject != comp.gameObject)
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -528,7 +528,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         : Enumerable.Empty<Object>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         #endregion
@@ -544,7 +544,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 .GetComponents<TComponent>()
                 .Cast<Component>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -559,7 +559,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -574,7 +574,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 .GetComponentsInParents<TComponent>(includeSelf)
                 .Cast<Component>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -590,7 +590,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -606,7 +606,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -624,7 +624,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -645,7 +645,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Cast<Component>()
                         .Where(c => c.gameObject != target.gameObject));
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -662,7 +662,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                         .Where(c => c)
                     : Enumerable.Empty<Object>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         #endregion
@@ -681,7 +681,7 @@ namespace Plugins.Saneject.Runtime.Bindings
                 .OfType<TComponent>()
                 .Cast<Component>());
 
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -690,7 +690,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public ComponentFilterBuilder<TComponent> FromInstance(TComponent instance)
         {
             binding.SetLocator(_ => instance.WrapInEnumerable().Cast<Component>());
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -699,7 +699,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public ComponentFilterBuilder<TComponent> FromMethod(Func<TComponent> method)
         {
             binding.SetLocator(_ => method?.Invoke().WrapInEnumerable().Cast<Component>());
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>
@@ -708,7 +708,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public ComponentFilterBuilder<TComponent> FromMethod(Func<IEnumerable<TComponent>> method)
         {
             binding.SetLocator(_ => method?.Invoke().Cast<Component>());
-            return new ComponentFilterBuilder<TComponent>(binding, scope);
+            return new ComponentFilterBuilder<TComponent>(binding);
         }
 
         /// <summary>

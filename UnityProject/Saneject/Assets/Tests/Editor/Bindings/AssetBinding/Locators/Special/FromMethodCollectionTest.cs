@@ -31,7 +31,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.Special
             // Set up bindings
             BindAsset<InjectableScriptableObject>(scope)
                 .FromMethod(() => new[] { assetA, assetB })
-                .WhereNameIs("B");
+                .Where(a => a.name == "B");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -59,7 +59,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.Special
             // Set up bindings
             BindAsset<IInjectable, InjectableScriptableObject>(scope)
                 .FromMethod(() => new List<InjectableScriptableObject> { assetA, assetB })
-                .WhereNameIs("B");
+                .Where(a => a.name == "B");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();

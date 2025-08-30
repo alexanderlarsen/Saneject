@@ -1,21 +1,27 @@
-﻿{
-  "name": "Saneject.Tests.Editor",
-  "rootNamespace": "",
-  "references": [
-    "Saneject.Runtime",
-    "Saneject.Editor",
-    "Saneject.Tests.Runtime"
-  ],
-  "optionalUnityReferences": [
-    "TestAssemblies"
-  ],
-  "includePlatforms": [
-    "Editor"
-  ],
-  "excludePlatforms": [],
-  "allowUnsafeCode": false,
-  "overrideReferences": false,
-  "autoReferenced": true,
-  "testAssemblies": true,
-  "noEngineReferences": false
+{
+    "name": "Saneject.Tests.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:6709c1cfc2b446caa4818124a6c473b8",
+        "GUID:728b1107dc5548b68d74a99008c891db",
+        "GUID:9bf62cac55024769b00a7a6cd1e5a3c5",
+        "GUID:a6a96630a66f43ae9ba372c417b804be",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
 }

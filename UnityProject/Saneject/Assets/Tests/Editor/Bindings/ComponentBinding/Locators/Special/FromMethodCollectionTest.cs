@@ -31,7 +31,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
             // Set up bindings
             BindComponent<InjectableComponent>(scope)
                 .FromMethod(() => new[] { componentA, componentB })
-                .WhereNameIs("B");
+                .WhereGameObject(g => g.name == "B");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
@@ -59,7 +59,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
             // Set up bindings
             BindComponent<IInjectable, InjectableComponent>(scope)
                 .FromMethod(() => new List<InjectableComponent> { componentA, componentB })
-                .WhereNameIs("B");
+                .WhereGameObject(g => g.name == "B");
 
             // Inject
             DependencyInjector.InjectSceneDependencies();
