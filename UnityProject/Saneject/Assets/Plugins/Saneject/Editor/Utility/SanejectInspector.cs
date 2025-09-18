@@ -73,7 +73,9 @@ namespace Plugins.Saneject.Editor.Utility
                 {
                     if (!UserSettings.ShowInjectedFieldsProperties) return;
 
-                    if (!TryGetInterfaceBackingInfo(field, serializedObject, out SerializedProperty interfaceProperty, out Type interfaceType, parent)) return;
+                    if (!TryGetInterfaceBackingInfo(field, serializedObject,
+                            out SerializedProperty interfaceProperty,
+                            out Type interfaceType, parent)) return;
 
                     if (!interfaceType.IsInterface)
                     {
@@ -84,18 +86,30 @@ namespace Plugins.Saneject.Editor.Utility
                         return;
                     }
 
+                    // Use tooltip from the raw interface field if present
+                    string tooltip = field.GetCustomAttribute<TooltipAttribute>()?.tooltip
+                                     ?? interfaceProperty.tooltip;
+
                     if (IsCollection(interfaceProperty))
                     {
                         if (isReadOnly)
-                            DrawReadOnlyCollection(interfaceProperty, interfaceType);
+                        {
+                            DrawReadOnlyCollection(interfaceProperty, interfaceType, tooltip);
+                        }
                         else
-                            EditorGUILayout.PropertyField(interfaceProperty, new GUIContent(GetFormattedInterfaceLabel(field.Name, interfaceType)), true);
+                        {
+                            GUIContent gc = new(
+                                GetFormattedInterfaceLabel(field.Name, interfaceType),
+                                tooltip);
+
+                            EditorGUILayout.PropertyField(interfaceProperty, gc, true);
+                        }
 
                         ValidateInterfaceCollection(interfaceProperty, interfaceType);
                     }
                     else
                     {
-                        DrawInterfaceObjectField(interfaceProperty, interfaceType);
+                        DrawInterfaceObjectField(interfaceProperty, interfaceType, tooltip);
                     }
 
                     return;
@@ -116,7 +130,8 @@ namespace Plugins.Saneject.Editor.Utility
                         return;
                     }
 
-                    EditorGUILayout.PropertyField(property, true);
+                    GUIContent gc = new(property.displayName, property.tooltip);
+                    EditorGUILayout.PropertyField(property, gc, true);
                     return;
                 }
 
@@ -126,7 +141,8 @@ namespace Plugins.Saneject.Editor.Utility
                     return;
                 }
 
-                EditorGUILayout.PropertyField(property, true);
+                GUIContent content = new(property.displayName, property.tooltip);
+                EditorGUILayout.PropertyField(property, content, true);
             }
         }
 
@@ -200,7 +216,8 @@ namespace Plugins.Saneject.Editor.Utility
         /// </summary>
         public static void DrawReadOnlyCollection(
             SerializedProperty prop,
-            Type interfaceType = null)
+            Type interfaceType = null,
+            string tooltipOverride = null)
         {
             Rect fullRect = GUILayoutUtility.GetRect(
                 1f,
@@ -219,12 +236,13 @@ namespace Plugins.Saneject.Editor.Utility
             prop.isExpanded = EditorGUI.Foldout(foldoutRect, prop.isExpanded, GUIContent.none, true);
             Rect labelRect = new(foldoutRect.x + 1, foldoutRect.y, foldoutRect.width - 1, foldoutRect.height);
 
-            EditorGUI.LabelField(
-                labelRect,
+            GUIContent labelContent = new(
                 interfaceType != null
                     ? GetFormattedInterfaceLabel(prop.name, interfaceType)
-                    : ObjectNames.NicifyVariableName($"{prop.name}"),
-                EditorStyles.boldLabel);
+                    : ObjectNames.NicifyVariableName(prop.name),
+                tooltipOverride ?? prop.tooltip);
+
+            EditorGUI.LabelField(labelRect, labelContent, EditorStyles.boldLabel);
 
             Rect countRect = new(fullRect.xMax - 48, fullRect.y, 48, fullRect.height);
             EditorGUI.IntField(countRect, GUIContent.none, prop.arraySize);
@@ -245,23 +263,24 @@ namespace Plugins.Saneject.Editor.Utility
                 {
                     SerializedProperty element = prop.GetArrayElementAtIndex(i);
                     string label = $"Element {i}";
+                    GUIContent elementContent = new(label, element.tooltip);
 
                     switch (element.propertyType)
                     {
                         case SerializedPropertyType.ObjectReference:
-                            EditorGUILayout.ObjectField(label, element.objectReferenceValue, typeof(Object), false);
+                            EditorGUILayout.ObjectField(elementContent, element.objectReferenceValue, typeof(Object), false);
                             break;
                         case SerializedPropertyType.String:
-                            EditorGUILayout.TextField(label, element.stringValue);
+                            EditorGUILayout.TextField(elementContent, element.stringValue);
                             break;
                         case SerializedPropertyType.Integer:
-                            EditorGUILayout.IntField(label, element.intValue);
+                            EditorGUILayout.IntField(elementContent, element.intValue);
                             break;
                         case SerializedPropertyType.Float:
-                            EditorGUILayout.FloatField(label, element.floatValue);
+                            EditorGUILayout.FloatField(elementContent, element.floatValue);
                             break;
                         default:
-                            EditorGUILayout.PropertyField(element, new GUIContent(label), true);
+                            EditorGUILayout.PropertyField(element, elementContent, true);
                             break;
                     }
                 }
@@ -273,9 +292,13 @@ namespace Plugins.Saneject.Editor.Utility
         /// </summary>
         public static void DrawInterfaceObjectField(
             SerializedProperty property,
-            Type interfaceType)
+            Type interfaceType,
+            string tooltipOverride = null)
         {
-            GUIContent label = new(GetFormattedInterfaceLabel(property.name, interfaceType));
+            GUIContent label = new(
+                GetFormattedInterfaceLabel(property.name, interfaceType),
+                tooltipOverride ?? property.tooltip);
+
             Object oldValue = property.objectReferenceValue;
             Object newValue = EditorGUILayout.ObjectField(label, oldValue, typeof(Object), true);
 
@@ -285,7 +308,6 @@ namespace Plugins.Saneject.Editor.Utility
             if (newValue != null && !interfaceType.IsAssignableFrom(newValue.GetType()))
                 Debug.LogError($"Saneject: '{newValue.GetType().Name}' does not implement {interfaceType.Name}", newValue);
 
-            // newValue = null;
             property.objectReferenceValue = newValue;
         }
 
@@ -332,7 +354,6 @@ namespace Plugins.Saneject.Editor.Utility
             if (field.Name == "m_Script") return false;
             if (field.IsDefined(typeof(NonSerializedAttribute), false)) return false;
             if (field.IsDefined(typeof(HideInInspector), false)) return false;
-            // if (field.Name.StartsWith("<")) return false;
             if (field.IsDefined(typeof(InterfaceBackingFieldAttribute), false)) return false;
             if (HasInject(field) && !UserSettings.ShowInjectedFieldsProperties) return false;
 
@@ -342,7 +363,7 @@ namespace Plugins.Saneject.Editor.Utility
         }
 
         /// <summary>
-        /// Returns the element type of a collection type (array or List<>).
+        /// Returns the element type of a collection type (array or List).
         /// </summary>
         public static Type GetElementType(Type fieldType)
         {
@@ -376,7 +397,7 @@ namespace Plugins.Saneject.Editor.Utility
         {
             property.isExpanded = EditorGUILayout.Foldout(
                 property.isExpanded,
-                ObjectNames.NicifyVariableName(property.name),
+                new GUIContent(ObjectNames.NicifyVariableName(property.name), property.tooltip),
                 true);
 
             if (!property.isExpanded) return;

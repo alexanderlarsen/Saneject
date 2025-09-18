@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
-using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Extensions;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -51,18 +50,16 @@ namespace Plugins.Saneject.Runtime.Global
         /// Editor-only; not used at runtime.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void Add(Object obj)
+        public bool Add(Object obj)
         {
             Type objType = obj.GetType();
 
             if (globalBindings.Exists(binding => binding.Type == objType))
-            {
-                Debug.LogError($"Saneject: GlobalSceneRegistry can only contain one binding for type '{objType}'");
-                return;
-            }
+                return false;
 
             GlobalBinding binding = new(obj);
             globalBindings.Add(binding);
+            return true;
         }
 
         private void OnValidate()

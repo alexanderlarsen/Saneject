@@ -1,5 +1,32 @@
 ﻿# Saneject Changelog
 
+## Version 0.16.0
+
+### Features
+
+- Display scope path in Inspector
+    - Shows the chain of parent scopes from the topmost scope down to the current one.
+    - Added a **Show Scope Path** toggle in User Settings.
+    - Includes jump-to-scope buttons for quick navigation.
+- Inspector tooltip support for `[SerializeInterface]`
+    - `[Tooltip]` text on a `[SerializeInterface]` field is now reflected on its generated backing field.
+- Binding identity strings now list the names of their targets and members, making log messages clearer and helping distinguish bindings whose uniqueness comes from those specific targets or members.
+- Added global binding context filtering
+    - Skip prefab components by default when registering in SceneGlobalContainer (can be turned off in user settings - but not recommended).
+    - Injection logic now tracks invalid bindings for clearer debugging.
+- Added MonoBehaviour script field to inspectors
+    - Both `ScopeEditor` and `SceneGlobalContainerEditor` now show the standard “Script” field with improved spacing and headers.
+
+### Fixes
+
+- Nicified type names in `SceneGlobalContainerEditor` inspector – raw type names are now shown with user-friendly formatting and spaces, matching the default Unity inspector.
+
+### Improvements
+
+- Enhanced error handling and logging for global dependency resolution
+    - Error messages include the global binding identity for better debugging clarity.
+    - Duplicate bindings and resolution failures now provide more detailed context.
+
 ## Version 0.15.0
 
 ### Changes

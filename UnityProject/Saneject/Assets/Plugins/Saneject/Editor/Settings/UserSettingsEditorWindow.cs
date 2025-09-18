@@ -145,6 +145,14 @@ namespace Plugins.Saneject.Editor.Settings
                 onChanged: newValue => UserSettings.ShowHelpBoxes = newValue,
                 repaintInspectors: true
             );
+            
+            DrawToggle(
+                label: "Show Scope Path",
+                tooltip: "Display the path of parent scopes from the topmost scope down to this one in the Inspector.",
+                currentValue: UserSettings.ShowScopePath,
+                onChanged: newValue => UserSettings.ShowScopePath = newValue,
+                repaintInspectors: true
+            );
 
             EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Play Mode Logging (Editor Only)", EditorStyles.boldLabel);

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
@@ -19,6 +20,8 @@ namespace Plugins.Saneject.Editor.Inspectors
     {
         public override void OnInspectorGUI()
         {
+            SanejectInspector.DrawMonoBehaviourScriptField(targets, target);
+
             if (UserSettings.ShowHelpBoxes)
                 EditorGUILayout.HelpBox(
                     $"• {nameof(SceneGlobalContainer)} is managed automatically by Saneject.\n" +
@@ -33,6 +36,10 @@ namespace Plugins.Saneject.Editor.Inspectors
 
             if (bindingsProp.arraySize == 0)
                 EditorGUILayout.LabelField("[No global objects currently registered in this scene]", EditorStyles.wordWrappedLabel);
+
+            EditorGUILayout.Space(8);
+
+            EditorGUILayout.LabelField("Global Scene Objects", EditorStyles.boldLabel);
 
             using (new EditorGUI.DisabledScope(true))
             {
@@ -55,8 +62,8 @@ namespace Plugins.Saneject.Editor.Inspectors
                         Type type = (Type)typeProp.GetValue(binding);
                         Object instance = (Object)instanceProp.GetValue(binding);
 
-                        // Draw however you want
-                        EditorGUILayout.ObjectField(type?.Name ?? "(Invalid Type)", instance, typeof(Object), true);
+                        string displayName = type != null ? ObjectNames.NicifyVariableName(type.Name) : "(Invalid Type)";
+                        EditorGUILayout.ObjectField(displayName, instance, typeof(Object), true);
                     }
             }
 
