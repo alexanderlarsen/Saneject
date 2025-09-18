@@ -55,8 +55,8 @@ namespace Plugins.Saneject.Editor.Inspectors
                         Type type = (Type)typeProp.GetValue(binding);
                         Object instance = (Object)instanceProp.GetValue(binding);
 
-                        // Draw however you want
-                        EditorGUILayout.ObjectField(type?.Name ?? "(Invalid Type)", instance, typeof(Object), true);
+                        string displayName = type != null ? ObjectNames.NicifyVariableName(type.Name) : "(Invalid Type)";
+                        EditorGUILayout.ObjectField(displayName, instance, typeof(Object), true);
                     }
             }
 
