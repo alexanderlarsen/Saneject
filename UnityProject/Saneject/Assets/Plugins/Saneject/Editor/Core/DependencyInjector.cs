@@ -350,7 +350,7 @@ namespace Plugins.Saneject.Editor.Core
 
                     if (!resolved)
                     {
-                        Debug.LogError($"Saneject: Could not resolve global dependency in scope '{scope.gameObject.name}'", scope);
+                        Debug.LogError($"Saneject: Global binding failed to locate a dependency {globalBinding.GetBindingSignature()}.", scope);
                         continue;
                     }
 
