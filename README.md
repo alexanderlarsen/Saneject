@@ -79,6 +79,7 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [Context isolation](#context-isolation)
         - [How it works](#how-it-works)
         - [Turning it off](#turning-it-off)
+        - [Global bindings and context filtering](#global-bindings-and-context-filtering)
     - [SerializeInterface](#serializeinterface)
         - [Why Unity can't "serialize an interface"](#why-unity-cant-serialize-an-interface)
         - [What the Saneject Roslyn generator adds](#what-the-saneject-roslyn-generator-adds)
