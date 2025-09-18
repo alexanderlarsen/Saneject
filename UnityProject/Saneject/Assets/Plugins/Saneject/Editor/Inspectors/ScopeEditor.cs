@@ -34,6 +34,8 @@ namespace Plugins.Saneject.Editor.Inspectors
 
         public override void OnInspectorGUI()
         {
+            SanejectInspector.DrawMonoBehaviourScriptField(targets, target);
+            
             if (UserSettings.ShowHelpBoxes)
                 EditorGUILayout.HelpBox(
                     "• Two scope types: Prefab and Scene (both managed by this Scope component).\n" +
