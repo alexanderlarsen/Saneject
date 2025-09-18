@@ -48,6 +48,16 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool IsAssetBinding { get; private set; }
         public bool IsProxyBinding { get; private set; }
 
+        public string[] GetTargetNames()
+        {
+            return injectionTargetQualifiers.Select(f => f.targetType.Name).ToArray();
+        }
+        
+        public string[] GetMemberNames()
+        {
+            return injectionTargetMemberQualifiers.Select(f => f.memberName).ToArray();
+        }
+        
         /// <summary>
         /// Constructs a readable binding name used by the <c>DependencyInjector</c> for logging purposes,
         /// including interface and concrete type names and an optional ID.

@@ -21,7 +21,9 @@ namespace Plugins.Saneject.Runtime.Bindings
                 binding.InterfaceType,
                 binding.ConcreteType,
                 binding.Ids,
-                binding.Scope
+                binding.Scope,
+                binding.GetTargetNames(),
+                binding.GetMemberNames()
             );
         }
 
@@ -64,7 +66,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             Type interfaceType,
             Type concreteType,
             string[] ids,
-            Scope scope)
+            Scope scope,
+            string[] targetNames,
+            string[] memberNames)
         {
             StringBuilder sb = new();
             sb.Append("[Binding: ");
@@ -96,6 +100,20 @@ namespace Plugins.Saneject.Runtime.Bindings
                 sb.Append(" | ");
                 sb.Append(ids.Length == 1 ? "ID: " : "IDs: ");
                 sb.Append(string.Join(", ", ids));
+            }
+
+            if (targetNames is { Length: > 0 })
+            {
+                sb.Append(" | ");
+                sb.Append(targetNames.Length == 1 ? "To target: " : "To targets: ");
+                sb.Append(string.Join(", ", targetNames));
+            }
+
+            if (memberNames is { Length: > 0 })
+            {
+                sb.Append(" | ");
+                sb.Append(memberNames.Length == 1 ? "To member: " : "To members: ");
+                sb.Append(string.Join(", ", memberNames));
             }
 
             sb.Append($" | {(scope.gameObject.IsPrefab() ? "Prefab" : "Scene")} scope: {scope.GetType().Name}");
