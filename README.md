@@ -10,7 +10,7 @@
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
 [![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](LICENSE)
- 
+
 Dependency injection the Unity way.
 
 Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the inspector, including serialized interfaces and cross-scene/prefab references.
@@ -679,6 +679,17 @@ This behavior can be controlled in **User Settings** with the toggle **Filter By
 - **Off**: Cross-context links are allowed. This is generally unsafe, but can be useful in rare advanced workflows.
 
 For most cases, leave this enabled and rely on `ProxyObjects` for legitimate cross-context references.
+
+#### Global bindings and context filtering
+
+The same context rules also apply to global bindings.
+
+When **Filter By Same Context** is enabled:
+
+- Prefab components are automatically filtered out when resolving global bindings, so only scene objects in the same context can be promoted to the global scope.
+- This prevents accidentally registering prefab components that might be missing at runtime.
+
+Disabling the setting removes that safeguard and allows prefab components to be registered globally, which can break if the prefab is not present when the game runs.
 
 ### SerializeInterface
 
