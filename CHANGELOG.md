@@ -9,6 +9,7 @@
     - Added `Show Scope Path` option to `UserSettings` to toggle parent scope path visibility.
     - Jump-to-scope buttons per path item for easier navigation in the hierarchy.
 - Inspector support to reflect `[Tooltip]` from the original `[SerializeInterface]` field onto its generated backing field, for both single references and collections.
+- Binding identity strings now list the names of their targets and members, making log messages clearer and helping distinguish bindings whose uniqueness comes from those specific targets or members.
 
 ## Fixes
 
