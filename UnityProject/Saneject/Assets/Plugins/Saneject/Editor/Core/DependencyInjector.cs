@@ -348,13 +348,21 @@ namespace Plugins.Saneject.Editor.Core
                         .LocateDependencies()
                         .FirstOrDefault();
 
-                    if (!resolved)
+                    globalBinding.MarkUsed();
+
+                    if (UserSettings.FilterBySameContext && resolved is Component component && component.gameObject.IsPrefab())
                     {
-                        Debug.LogError($"Saneject: Global binding failed to locate a dependency {globalBinding.GetBindingSignature()}.", scope);
+                        Debug.LogError($"Saneject: Global binding failed to locate a dependency {globalBinding.GetBindingSignature()}. Candidate rejected due to scene/prefab context mismatch: '{resolved.name}.{resolved.GetType().Name}'. Inject a non-prefab component, or disable filtering in User Settings (not recommended).");
+                        stats.numMissingDependencies++;
                         continue;
                     }
 
-                    globalBinding.MarkUsed();
+                    if (!resolved)
+                    {
+                        Debug.LogError($"Saneject: Global binding failed to locate a dependency {globalBinding.GetBindingSignature()}.", scope);
+                        stats.numMissingDependencies++;
+                        continue;
+                    }
 
                     if (!sceneGlobalContainer)
                     {
@@ -371,8 +379,15 @@ namespace Plugins.Saneject.Editor.Core
                         EditorSceneManager.MarkSceneDirty(go.scene);
                     }
 
-                    sceneGlobalContainer.Add(resolved);
-                    stats.numInjectedGlobal++;
+                    if (sceneGlobalContainer.Add(resolved))
+                    {
+                        stats.numInjectedGlobal++;
+                    }
+                    else
+                    {
+                        Debug.LogError($"Saneject: Global binding dependency type '{globalBinding.ConcreteType}'' already added to SceneGlobalContainer {globalBinding.GetBindingSignature()}.", scope);
+                        stats.numInvalidBindings++;
+                    }
                 }
             }
         }
