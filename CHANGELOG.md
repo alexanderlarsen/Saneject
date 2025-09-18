@@ -1,5 +1,11 @@
 ﻿# Saneject Changelog
 
+## Version 0.16.0
+
+### Changes
+
+- Added inspector support to reflect `[Tooltip]` from the original `[SerializeInterface]` field onto its generated backing field, for both single references and collections.
+
 ## Version 0.15.0
 
 ### Changes
