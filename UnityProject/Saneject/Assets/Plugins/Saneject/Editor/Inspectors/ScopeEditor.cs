@@ -23,13 +23,11 @@ namespace Plugins.Saneject.Editor.Inspectors
         {
             BuildScopeHierarchy();
             EditorApplication.hierarchyChanged += BuildScopeHierarchy;
-            Debug.Log("OnEnable");
         }
 
         private void OnDisable()
         {
             EditorApplication.hierarchyChanged -= BuildScopeHierarchy;
-            Debug.Log("OnDisable");
         }
 
         public override void OnInspectorGUI()
