@@ -1,10 +1,12 @@
-﻿using Plugins.Saneject.Editor.Core;
+﻿using System.Collections.Generic;
+using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Editor.Inspectors
 {
@@ -15,6 +17,21 @@ namespace Plugins.Saneject.Editor.Inspectors
     [CustomEditor(typeof(Scope), true), CanEditMultipleObjects]
     public class ScopeEditor : UnityEditor.Editor
     {
+        private readonly List<(string text, Scope scope)> scopeHierarchy = new();
+
+        private void OnEnable()
+        {
+            BuildScopeHierarchy();
+            EditorApplication.hierarchyChanged += BuildScopeHierarchy;
+            Debug.Log("OnEnable");
+        }
+
+        private void OnDisable()
+        {
+            EditorApplication.hierarchyChanged -= BuildScopeHierarchy;
+            Debug.Log("OnDisable");
+        }
+
         public override void OnInspectorGUI()
         {
             if (UserSettings.ShowHelpBoxes)
@@ -49,6 +66,53 @@ namespace Plugins.Saneject.Editor.Inspectors
             string label = mixed ? "Mixed" : hasPrefab ? "Prefab" : "Scene";
             EditorGUILayout.LabelField("Scope Type", label);
 
+            if (UserSettings.ShowScopePath)
+                for (int i = 0; i < scopeHierarchy.Count; i++)
+                {
+                    (string text, Scope scope) = scopeHierarchy[i];
+
+                    EditorGUILayout.BeginHorizontal();
+
+                    EditorGUILayout.LabelField(i == 0 ? "Scope Path" : " ",
+                        GUILayout.Width(EditorGUIUtility.labelWidth));
+
+                    EditorGUILayout.LabelField(text,
+                        i == scopeHierarchy.Count - 1 ? EditorStyles.boldLabel : EditorStyles.label);
+
+                    if (i != scopeHierarchy.Count - 1)
+                    {
+                        Texture icon = EditorGUIUtility.IconContent("d_GameObject Icon").image;
+
+                        if (GUILayout.Button(new GUIContent("", $"Jump to {scope.gameObject.name} GameObject"), GUILayout.Width(18), GUILayout.Height(18)))
+                        {
+                            Selection.activeObject = scope.gameObject;
+                            EditorGUIUtility.PingObject(scope.gameObject);
+                        }
+
+                        Rect r = GUILayoutUtility.GetLastRect();
+
+                        if (Event.current.type == EventType.Repaint)
+                        {
+                            const float padTop = 3f;
+                            const float padRight = 2f;
+                            const float padBottom = 3f;
+                            const float padLeft = 3f;
+
+                            GUI.DrawTexture(
+                                new Rect(
+                                    r.x + padLeft,
+                                    r.y + padTop,
+                                    r.width - (padLeft + padRight),
+                                    r.height - (padTop + padBottom)
+                                ),
+                                icon,
+                                ScaleMode.ScaleToFit);
+                        }
+                    }
+
+                    EditorGUILayout.EndHorizontal();
+                }
+
             SanejectInspector.DrawAllSerializedFields(serializedObject, target);
 
             if (Application.isPlaying)
@@ -80,6 +144,29 @@ namespace Plugins.Saneject.Editor.Inspectors
             EditorGUI.EndDisabledGroup();
 
             serializedObject.ApplyModifiedProperties();
+        }
+
+        private void BuildScopeHierarchy()
+        {
+            if (!UserSettings.ShowScopePath)
+                return;
+
+            scopeHierarchy.Clear();
+
+            Component current = target as Component;
+
+            while (current != null)
+            {
+                if (current.TryGetComponent(out Scope scope))
+                    scopeHierarchy.Add((
+                        $"{scope.gameObject.name} ({scope.GetType().Name})",
+                        scope
+                    ));
+
+                current = current.transform.parent;
+            }
+
+            scopeHierarchy.Reverse();
         }
     }
 }

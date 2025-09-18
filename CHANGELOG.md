@@ -2,9 +2,17 @@
 
 ## Version 0.16.0
 
-### Changes
+### Features
 
-- Added inspector support to reflect `[Tooltip]` from the original `[SerializeInterface]` field onto its generated backing field, for both single references and collections.
+- Display scope path in `Scope` Inspector
+    - Implemented scope path visualization in `ScopeEditor` Inspector, showing the path from the topmost scope to the current one.
+    - Added `Show Scope Path` option to `UserSettings` to toggle parent scope path visibility.
+    - Jump-to-scope buttons per path item for easier navigation in the hierarchy.
+- Inspector support to reflect `[Tooltip]` from the original `[SerializeInterface]` field onto its generated backing field, for both single references and collections.
+
+## Fixes
+
+- Display friendly type names in `SceneGlobalContainerEditor` inspector, raw type names are now shown with user-friendly formatting and spaces, matching the default Unity inspector.
 
 ## Version 0.15.0
 

@@ -48,6 +48,12 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
+        public static bool ShowScopePath
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
         // Play Mode Logging
         public static bool LogProxyResolve
         {
