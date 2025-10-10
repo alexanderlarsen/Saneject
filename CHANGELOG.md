@@ -2,7 +2,7 @@
 
 ## Version 0.16.1
 
-### Maintenance
+### Security patch
 
 - Upgraded the project to Unity 6000.0.59f2 to address the Unity security vulnerability [CVE-2025-59489](https://unity.com/security/sept-2025-01).
 - This update ensures the project uses a patched Unity runtime that resolves the untrusted search path issue.
