@@ -1,5 +1,14 @@
 ﻿# Saneject Changelog
 
+## Version 0.16.1
+
+### Maintenance
+
+- Upgraded the project to Unity 6000.0.59f2 to address the Unity security vulnerability [CVE-2025-59489](https://unity.com/security/sept-2025-01).
+- This update ensures the project uses a patched Unity runtime that resolves the untrusted search path issue.
+- This change only affects users who clone and open the Unity project directly using the previous Unity version listed in ProjectSettings. Opening the project with the updated Unity 6000.0.59f2 or later is safe.
+- Users who install Saneject via UPM or a .unitypackage file are not affected and don’t need to take any action.
+
 ## Version 0.16.0
 
 ### Features
