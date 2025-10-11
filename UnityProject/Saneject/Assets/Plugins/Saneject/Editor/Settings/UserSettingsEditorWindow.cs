@@ -148,7 +148,7 @@ namespace Plugins.Saneject.Editor.Settings
             
             DrawToggle(
                 label: "Show Scope Path",
-                tooltip: "Display the path of parent scopes from the topmost scope down to this one in the Inspector.",
+                tooltip: "Display scope path, from ancestor scopes down to the selected scope, in the scope inspector.",
                 currentValue: UserSettings.ShowScopePath,
                 onChanged: newValue => UserSettings.ShowScopePath = newValue,
                 repaintInspectors: true
