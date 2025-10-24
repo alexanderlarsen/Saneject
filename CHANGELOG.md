@@ -1,5 +1,11 @@
 ﻿# Saneject Changelog
 
+## Version 0.17.0
+
+### Features
+
+- `ToTarget<T>` now correctly supports nested serializable classes. Previously it only evaluated against the root `MonoBehaviour`, but it now recognizes and targets nested class instances as well.
+
 ## Version 0.16.1
 
 ### Security patch

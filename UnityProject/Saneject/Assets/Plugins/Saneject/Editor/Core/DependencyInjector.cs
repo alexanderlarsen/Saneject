@@ -42,7 +42,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // Application.isBatchMode is true when run from CI tests.
+            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
             if (!Application.isBatchMode)
             {
                 if (UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
@@ -124,7 +124,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // Application.isBatchMode is true when run from CI tests.
+            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
             if (!Application.isBatchMode)
             {
                 if (UserSettings.AskBeforeHierarchyInjection && !EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Are you sure you want to inject all dependencies in the hierarchy?", "Yes", "Cancel"))
@@ -212,7 +212,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // Application.isBatchMode is true when run from CI tests.
+            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
             if (!Application.isBatchMode)
             {
                 if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
@@ -453,11 +453,13 @@ namespace Plugins.Saneject.Editor.Core
                 if (!serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
                     continue;
 
-                serializedProperty.NullifyOrClearArray();
+                serializedProperty.Clear();
 
                 bool isCollection = serializedProperty.isArray;
                 Object injectionTarget = serializedObject.targetObject;
-                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget, serializedProperty.GetDisplayName());
+                Type injectionTargetType = serializedProperty.GetDeclaringType(serializedObject.targetObject);
+
+                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, serializedProperty.GetDisplayName(), injectionTargetType);
                 string injectedFieldSignature = FieldSignatureHelper.GetInjectedFieldSignature(serializedObject, serializedProperty, injectId);
 
                 if (binding == null)

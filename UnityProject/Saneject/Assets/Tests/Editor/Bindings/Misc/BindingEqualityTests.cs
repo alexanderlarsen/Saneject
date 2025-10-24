@@ -73,10 +73,10 @@ namespace Tests.Editor.Bindings.Misc
         {
             // Rigidbody vs Transform → no assignability either way → disjoint
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetQualifier(_ => true, typeof(Rigidbody));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(Rigidbody));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
 
             Assert.AreNotEqual(a, b);
         }
@@ -85,12 +85,12 @@ namespace Tests.Editor.Bindings.Misc
         public void TargetFilters_SameTypes_DifferentOrder_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
-            a.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(MeshRenderer));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -101,11 +101,11 @@ namespace Tests.Editor.Bindings.Misc
         {
             // {Transform} overlaps with {Transform, MeshRenderer} → equal
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
-            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(MeshRenderer));
 
             Assert.AreEqual(a, b);
             Assert.AreEqual(a.GetHashCode(), b.GetHashCode());
@@ -116,10 +116,10 @@ namespace Tests.Editor.Bindings.Misc
         {
             // Component (base) vs Transform (derived) → assignability overlap → equal
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetQualifier(_ => true, typeof(Component));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(Component));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
 
             Assert.AreEqual(a, b);
         }
@@ -130,7 +130,7 @@ namespace Tests.Editor.Bindings.Misc
             Binding a = MakeBinding(scopeA); // no target qualifiers
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
 
             Assert.AreNotEqual(a, b);
         }
@@ -242,13 +242,13 @@ namespace Tests.Editor.Bindings.Misc
         public void CombinedQualifiers_AllThreeOverlap_AreEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
             a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
             a.AddIdQualifier(id => id == "A", "A");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
-            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer)); // superset
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(MeshRenderer)); // superset
             b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
             b.AddInjectionTargetMemberQualifier(n => n == "monoB", "monoB"); // superset
             b.AddIdQualifier(id => id == "A", "A");
@@ -261,12 +261,12 @@ namespace Tests.Editor.Bindings.Misc
         public void CombinedQualifiers_TwoOverlap_OneDisjoint_AreNotEqual()
         {
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
             a.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA");
             a.AddIdQualifier(id => id == "A", "A");
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform)); // overlaps on target
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform)); // overlaps on target
             b.AddInjectionTargetMemberQualifier(n => n == "monoA", "monoA"); // overlaps on member
             b.AddIdQualifier(id => id == "B", "B"); // disjoint on ID
 
@@ -281,11 +281,11 @@ namespace Tests.Editor.Bindings.Misc
             HashSet<Binding> set = new();
 
             Binding a = MakeBinding(scopeA);
-            a.AddInjectionTargetQualifier(_ => true, typeof(Transform));
+            a.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
 
             Binding b = MakeBinding(scopeA);
-            b.AddInjectionTargetQualifier(_ => true, typeof(Transform));
-            b.AddInjectionTargetQualifier(_ => true, typeof(MeshRenderer));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(Transform));
+            b.AddInjectionTargetTypeQualifier(_ => true, typeof(MeshRenderer));
 
             bool addedA = set.Add(a);
             bool addedB = set.Add(b);
