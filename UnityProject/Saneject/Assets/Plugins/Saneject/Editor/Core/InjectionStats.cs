@@ -10,6 +10,7 @@ namespace Plugins.Saneject.Editor.Core
     {
         public int numInjectedGlobal;
         public int numInjectedFields;
+        public int numInjectedMethods;
         public int numMissingBindings;
         public int numUnusedBindings;
         public int numInvalidBindings;
@@ -38,6 +39,8 @@ namespace Plugins.Saneject.Editor.Core
             sb.Append(numInjectedGlobal == 1 ? " global dependency | " : " global dependencies | ");
             sb.Append(numInjectedFields);
             sb.Append(numInjectedFields == 1 ? " injected field | " : " injected fields | ");
+            sb.Append(numInjectedMethods);
+            sb.Append(numInjectedMethods == 1 ? " injected method | " : " injected methods | ");
             sb.Append(numMissingBindings);
             sb.Append(numMissingBindings == 1 ? " missing binding | " : " missing bindings | ");
             sb.Append(numInvalidBindings);

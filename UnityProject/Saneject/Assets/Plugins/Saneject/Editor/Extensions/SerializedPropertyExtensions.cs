@@ -133,5 +133,55 @@ namespace Plugins.Saneject.Editor.Extensions
 
             return null;
         }
+        
+        /// <summary>
+        /// Gets the actual value of a SerializedProperty using reflection.
+        /// </summary>
+        public static object GetValue(this SerializedProperty property)
+        {
+            object obj = property.serializedObject.targetObject;
+            string path = property.propertyPath;
+            
+            string[] fieldNames = path.Replace(".Array.data[", "[").Split('.');
+            
+            foreach (string fieldName in fieldNames)
+            {
+                if (obj == null)
+                    return null;
+                
+                Type objType = obj.GetType();
+                
+                // Handle array/list elements
+                if (fieldName.Contains("["))
+                {
+                    int index = int.Parse(fieldName.Substring(fieldName.IndexOf('[') + 1, fieldName.IndexOf(']') - fieldName.IndexOf('[') - 1));
+                    string arrayFieldName = fieldName.Substring(0, fieldName.IndexOf('['));
+                    
+                    FieldInfo arrayField = objType.GetField(arrayFieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    
+                    if (arrayField == null)
+                        return null;
+                    
+                    object arrayObj = arrayField.GetValue(obj);
+                    
+                    if (arrayObj is System.Collections.IList list && index < list.Count)
+                        obj = list[index];
+                    else
+                        return null;
+                }
+                else
+                {
+                    // Handle regular fields
+                    FieldInfo field = objType.GetField(fieldName, BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+                    
+                    if (field == null)
+                        return null;
+                    
+                    obj = field.GetValue(obj);
+                }
+            }
+            
+            return obj;
+        }
     }
 }
