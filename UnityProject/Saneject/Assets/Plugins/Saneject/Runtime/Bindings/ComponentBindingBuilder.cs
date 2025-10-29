@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
         public ComponentBindingBuilder<TComponent> ToTarget<TTarget>()
         {
-            binding.AddInjectionTargetQualifier(obj => obj is TTarget, typeof(TTarget));
+            binding.AddInjectionTargetTypeQualifier(type => type == typeof(TTarget), typeof(TTarget));
             return this;
         }
 
@@ -64,7 +64,7 @@ namespace Plugins.Saneject.Runtime.Bindings
         public ComponentBindingBuilder<TComponent> ToTarget(params Type[] targetTypes)
         {
             foreach (Type t in targetTypes)
-                binding.AddInjectionTargetQualifier(obj => t.IsInstanceOfType(obj), t);
+                binding.AddInjectionTargetTypeQualifier(type => type == t, t);
 
             return this;
         }

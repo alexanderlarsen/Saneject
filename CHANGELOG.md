@@ -1,5 +1,26 @@
 ﻿# Saneject Changelog
 
+## Version 0.17.0
+
+### Features
+
+- `ToTarget<T>` now correctly supports nested serializable classes. Previously it only evaluated against the root `MonoBehaviour`, but it now recognizes and targets nested class instances as well.
+- Added **method injection** support (`[Inject]` on methods). Useful for configuration or injection into third party components.
+    - Supports single, array, and `List<T>` parameters.
+    - Works alongside field injection - methods are invoked after fields are injected.
+    - Fully supported in nested `[Serializable]` classes.
+    - Parameters participate in full binding resolution (context filtering, qualifiers, proxy resolution).
+
+### Improvements
+
+- Injection logs and stats now include **injected method count**.
+- Improved serialization handling for nested method injection targets.
+
+### Tests
+
+- Added unit tests for **`ToTarget` qualification** with nested serialized classes.
+- Added unit tests for **method injection**, covering single, array, and list parameter injection paths.
+
 ## Version 0.16.1
 
 ### Security patch

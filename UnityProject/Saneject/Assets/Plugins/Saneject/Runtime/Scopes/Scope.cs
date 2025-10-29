@@ -97,8 +97,8 @@ namespace Plugins.Saneject.Runtime.Scopes
             Type concreteType,
             string injectId,
             bool isCollection,
-            Object injectionTarget,
-            string targetMemberName)
+            string targetMemberName,
+            Type injectionTargetType)
         {
             if (Application.isPlaying)
                 throw new Exception("Saneject: Injection is editor-only. Exit Play Mode to inject.");
@@ -111,10 +111,10 @@ namespace Plugins.Saneject.Runtime.Scopes
                 binding.IsCollection == isCollection);
 
             // If we have an injection target, try to find a binding that passes target filters
-            if (injectionTarget != null)
+            if (injectionTargetType != null)
             {
                 foreach (Binding binding in matchingBindings
-                             .Where(binding => binding.PassesInjectionTargetQualifiers(injectionTarget))
+                             .Where(binding => binding.PassesInjectionTargetTypeQualifiers(injectionTargetType))
                              .Where(binding => binding.PassesMemberNameQualifiers(targetMemberName))
                              .Where(binding => binding.PassesIdQualifiers(injectId)))
                     return binding;
@@ -134,8 +134,8 @@ namespace Plugins.Saneject.Runtime.Scopes
                     concreteType,
                     injectId,
                     isCollection,
-                    injectionTarget,
-                    targetMemberName)
+                    targetMemberName,
+                    injectionTargetType)
                 : null;
         }
 

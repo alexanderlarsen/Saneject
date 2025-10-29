@@ -42,7 +42,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // Application.isBatchMode is true when run from CI tests.
+            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
             if (!Application.isBatchMode)
             {
                 if (UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
@@ -124,7 +124,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // Application.isBatchMode is true when run from CI tests.
+            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
             if (!Application.isBatchMode)
             {
                 if (UserSettings.AskBeforeHierarchyInjection && !EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Are you sure you want to inject all dependencies in the hierarchy?", "Yes", "Cancel"))
@@ -194,7 +194,7 @@ namespace Plugins.Saneject.Editor.Core
 
         /// <summary>
         /// Performs dependency injection for all <see cref="Scope" />s under a prefab root.
-        /// Only used for prefab assets; does not register or inject global dependencies.
+        /// Only used for prefab assets - does not register or inject global dependencies.
         /// This operation is editor-only and cannot be performed in Play Mode.
         /// </summary>
         /// <param name="startScope">The root scope in the prefab to start injection from.</param>
@@ -212,7 +212,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            // Application.isBatchMode is true when run from CI tests.
+            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
             if (!Application.isBatchMode)
             {
                 if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
@@ -453,48 +453,39 @@ namespace Plugins.Saneject.Editor.Core
                 if (!serializedProperty.IsInjectable(out Type interfaceType, out Type concreteType, out string injectId))
                     continue;
 
-                serializedProperty.NullifyOrClearArray();
+                serializedProperty.Clear();
 
                 bool isCollection = serializedProperty.isArray;
-                Object injectionTarget = serializedObject.targetObject;
-                Binding binding = scope.GetBindingRecursiveUpwards(interfaceType, concreteType, injectId, isCollection, injectionTarget, serializedProperty.GetDisplayName());
+                Object unityContext = serializedObject.targetObject;
+                Type injectionTargetType = serializedProperty.GetDeclaringType(serializedObject.targetObject);
+
+                // Build a context-aware signature for field logging
                 string injectedFieldSignature = FieldSignatureHelper.GetInjectedFieldSignature(serializedObject, serializedProperty, injectId);
 
-                if (binding == null)
-                {
-                    Debug.LogError($"Saneject: Missing binding {BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, scope)} {injectedFieldSignature}", scope);
-                    stats.numMissingBindings++;
+                // Resolve via shared path
+                if (!TryResolveDependency(
+                        scope,
+                        serializedObject,
+                        interfaceType,
+                        concreteType,
+                        isCollection,
+                        injectId,
+                        memberName: serializedProperty.GetDisplayName(),
+                        injectionTargetType: injectionTargetType,
+                        injectionTarget: unityContext,
+                        siteSignature: injectedFieldSignature,
+                        stats: stats,
+                        out Object proxyAsset,
+                        out Object[] dependencies))
                     continue;
-                }
 
-                binding.MarkUsed();
-
-                if (binding.IsProxyBinding)
+                // Apply resolution to the field
+                if (proxyAsset != null)
                 {
-                    Type proxyType = ProxyUtils.GetProxyTypeFromConcreteType(binding.ConcreteType);
-
-                    if (proxyType != null)
-                    {
-                        serializedProperty.objectReferenceValue = ProxyUtils.GetFirstOrCreateProxyAsset(proxyType, out bool _);
-                        stats.numInjectedFields++;
-                    }
-                    else
-                    {
-                        Debug.LogError($"Saneject: Missing ProxyObject<{binding.ConcreteType.Name}> for binding {binding.GetBindingSignature()} {injectedFieldSignature}", scope);
-                        stats.numMissingDependencies++;
-                    }
-
-                    continue;
+                    serializedProperty.objectReferenceValue = proxyAsset;
+                    stats.numInjectedFields++;
                 }
-
-                Object[] dependencies = binding.LocateDependencies(injectionTarget).ToArray();
-
-                HashSet<Type> rejectedTypes = null;
-
-                if (UserSettings.FilterBySameContext)
-                    dependencies = dependencies.FilterBySameContext(serializedObject, out rejectedTypes);
-
-                if (dependencies.Length > 0)
+                else if (dependencies is { Length: > 0 })
                 {
                     if (isCollection)
                         serializedProperty.SetCollection(dependencies);
@@ -502,30 +493,155 @@ namespace Plugins.Saneject.Editor.Core
                         serializedProperty.objectReferenceValue = dependencies.FirstOrDefault();
 
                     stats.numInjectedFields++;
-                    continue;
                 }
-
-                StringBuilder errorMessageBuilder = new();
-
-                errorMessageBuilder.AppendLine(
-                    $"Saneject: Binding failed to locate a dependency {binding.GetBindingSignature()} {injectedFieldSignature}.");
-
-                if (rejectedTypes is { Count: > 0 })
-                {
-                    string typeList = string.Join(", ", rejectedTypes.Select(t => t.Name));
-
-                    errorMessageBuilder.AppendLine(
-                        $"Candidates rejected due to scene/prefab or prefab/prefab context mismatch: {typeList}.");
-
-                    errorMessageBuilder.AppendLine(
-                        "Use ProxyObjects for proper cross-context references, or disable filtering in User Settings (not recommended).");
-                }
-
-                stats.numMissingDependencies++;
-                Debug.LogError(errorMessageBuilder.ToString(), scope);
             }
 
+            // Apply field injections first
             serializedObject.ApplyModifiedPropertiesWithoutUndo();
+
+            // Now perform method injection AFTER all fields are serialized
+            InjectMethods(serializedObject, scope, stats);
+        }
+
+        /// <summary>
+        /// Handles method injection for [Inject] attributed methods.
+        /// </summary>
+        private static void InjectMethods(
+            SerializedObject serializedObject,
+            Scope scope,
+            InjectionStats stats)
+        {
+            Object rootTarget = serializedObject.targetObject;
+            Type rootType = rootTarget.GetType();
+
+            // Inject methods on the root object
+            InjectMethodsOnType(rootTarget, rootType, serializedObject, scope, stats);
+
+            // Inject methods on nested serializable classes
+            InjectMethodsInNestedSerializables(serializedObject, scope, stats);
+        }
+
+        /// <summary>
+        /// Injects methods on nested [Serializable] classes within the serialized object.
+        /// </summary>
+        private static void InjectMethodsInNestedSerializables(
+            SerializedObject serializedObject,
+            Scope scope,
+            InjectionStats stats)
+        {
+            SerializedProperty property = serializedObject.GetIterator();
+
+            while (property.NextVisible(enterChildren: true))
+                if (property.propertyType == SerializedPropertyType.Generic)
+                {
+                    object nestedObject = property.GetValue();
+
+                    if (nestedObject != null && nestedObject.GetType().IsDefined(typeof(SerializableAttribute), false))
+                    {
+                        Type nestedType = nestedObject.GetType();
+                        InjectMethodsOnType(nestedObject, nestedType, serializedObject, scope, stats);
+                    }
+                }
+        }
+
+        /// <summary>
+        /// Injects methods on a specific object type.
+        /// </summary>
+        private static void InjectMethodsOnType(
+            object injectionTarget,
+            Type injectionTargetType,
+            SerializedObject serializedObject,
+            Scope scope,
+            InjectionStats stats)
+        {
+            MethodInfo[] methods = injectionTargetType.GetMethods(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
+
+            foreach (MethodInfo method in methods)
+            {
+                InjectAttribute injectAttribute = method.GetCustomAttribute<InjectAttribute>();
+
+                if (injectAttribute == null)
+                    continue;
+
+                ParameterInfo[] parameters = method.GetParameters();
+                object[] invokeParameters = new object[parameters.Length];
+                bool allParametersResolved = true;
+
+                for (int i = 0; i < parameters.Length; i++)
+                {
+                    ParameterInfo p = parameters[i];
+
+                    bool isArray = p.ParameterType.IsArray;
+
+                    bool isList = p.ParameterType.IsGenericType &&
+                                  p.ParameterType.GetGenericTypeDefinition() == typeof(List<>);
+
+                    bool isCollection = isArray || isList;
+
+                    // Normalize to element type for binding lookup
+                    Type elementType = isArray
+                        ? p.ParameterType.GetElementType()
+                        : isList
+                            ? p.ParameterType.GetGenericArguments()[0]
+                            : p.ParameterType;
+
+                    if (elementType == null)
+                        break;
+                    
+                    Type interfaceType = elementType.IsInterface ? elementType : null;
+                    Type concreteType = elementType.IsInterface ? null : elementType;
+
+                    // Build a context-aware signature for method logging
+                    string siteSignature = MethodSignatureHelper.GetInjectedMethodSignature(method, injectionTarget, injectAttribute.ID);
+
+                    // Resolve via shared path
+                    if (!TryResolveDependency(
+                            scope,
+                            serializedObject,
+                            interfaceType,
+                            concreteType,
+                            isCollection,
+                            injectAttribute.ID,
+                            memberName: p.Name,
+                            injectionTargetType: injectionTargetType,
+                            injectionTarget: serializedObject.targetObject,
+                            siteSignature: siteSignature,
+                            stats: stats,
+                            out Object proxyAsset,
+                            out Object[] dependencies))
+                    {
+                        allParametersResolved = false;
+                        break;
+                    }
+
+                    if (proxyAsset != null)
+                    {
+                        // Assume the parameter type matches the proxy asset type when proxy binding is used
+                        invokeParameters[i] = proxyAsset;
+                        continue;
+                    }
+
+                    // Build a typed collection that matches the parameter signature
+                    if (isCollection)
+                        invokeParameters[i] = BuildTypedCollectionForMethodParameter(p.ParameterType, elementType, dependencies);
+                    else
+                        invokeParameters[i] = dependencies.FirstOrDefault();
+                }
+
+                if (!allParametersResolved)
+                    continue;
+
+                // Update serialized object to get latest state
+                serializedObject.Update();
+
+                // Invoke the method
+                method.Invoke(injectionTarget, invokeParameters);
+
+                // Serialize the changes made by the method
+                serializedObject.ApplyModifiedPropertiesWithoutUndo();
+                EditorUtility.SetDirty(serializedObject.targetObject);
+                stats.numInjectedMethods++;
+            }
         }
 
         /// <summary>
@@ -655,6 +771,131 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             return false;
+        }
+
+        // -----------------------------
+        // Shared resolution helpers
+        // -----------------------------
+
+        private static bool TryResolveDependency(
+            Scope scope,
+            SerializedObject serializedObject,
+            Type interfaceType,
+            Type concreteType,
+            bool isCollection,
+            string injectId,
+            string memberName,
+            Type injectionTargetType,
+            Object injectionTarget,
+            string siteSignature,
+            InjectionStats stats,
+            out Object proxyAsset,
+            out Object[] dependencies)
+        {
+            proxyAsset = null;
+            dependencies = null;
+
+            Binding binding = scope.GetBindingRecursiveUpwards(
+                interfaceType,
+                concreteType,
+                injectId,
+                isCollection,
+                memberName,
+                injectionTargetType);
+
+            if (binding == null)
+            {
+                // Context-aware, keep existing partial binding formatting
+                string partialBindingSignature = BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, scope);
+                Debug.LogError($"Saneject: Missing binding {partialBindingSignature} {siteSignature}", scope);
+
+                stats.numMissingBindings++;
+                return false;
+            }
+
+            binding.MarkUsed();
+
+            // Proxy resolution path
+            if (binding.IsProxyBinding)
+            {
+                Type proxyType = ProxyUtils.GetProxyTypeFromConcreteType(binding.ConcreteType);
+
+                if (proxyType != null)
+                {
+                    proxyAsset = ProxyUtils.GetFirstOrCreateProxyAsset(proxyType, out _);
+                    return true;
+                }
+
+                Debug.LogError($"Saneject: Missing ProxyObject<{binding.ConcreteType.Name}> for binding {binding.GetBindingSignature()} {siteSignature}", scope);
+                stats.numMissingDependencies++;
+                return false;
+            }
+
+            // Locate candidates
+            Object[] found = binding.LocateDependencies(injectionTarget).ToArray();
+
+            HashSet<Type> rejectedTypes = null;
+
+            if (UserSettings.FilterBySameContext)
+                found = found.FilterBySameContext(serializedObject, out rejectedTypes);
+
+            if (found.Length > 0)
+            {
+                dependencies = found;
+                return true;
+            }
+
+            // Context-aware failure with detailed rejections, mirroring field path format
+            StringBuilder msg = new();
+
+            msg.AppendLine($"Saneject: Binding failed to locate a dependency {binding.GetBindingSignature()} {siteSignature}.");
+
+            if (rejectedTypes is { Count: > 0 })
+            {
+                string typeList = string.Join(", ", rejectedTypes.Select(t => t.Name));
+                msg.AppendLine($"Candidates rejected due to scene/prefab or prefab/prefab context mismatch: {typeList}.");
+                msg.AppendLine("Use ProxyObjects for proper cross-context references, or disable filtering in User Settings (not recommended).");
+            }
+
+            Debug.LogError(msg.ToString(), scope);
+            stats.numMissingDependencies++;
+            return false;
+        }
+
+        private static object BuildTypedCollectionForMethodParameter(
+            Type parameterType,
+            Type elementType,
+            Object[] dependencies)
+        {
+            if (parameterType.IsArray)
+            {
+                Array typedArray = Array.CreateInstance(elementType, dependencies.Length);
+
+                for (int i = 0; i < dependencies.Length; i++)
+                    typedArray.SetValue(dependencies[i], i);
+
+                return typedArray;
+            }
+
+            if (parameterType.IsGenericType && parameterType.GetGenericTypeDefinition() == typeof(List<>))
+            {
+                Type listType = typeof(List<>).MakeGenericType(elementType);
+                object list = Activator.CreateInstance(listType);
+                MethodInfo addMethod = listType.GetMethod("Add");
+
+                foreach (Object t in dependencies)
+                    addMethod?.Invoke(list, new object[] { t });
+
+                return list;
+            }
+
+            // Fallback - should not happen for supported collection types, return array
+            Array fallback = Array.CreateInstance(elementType, dependencies.Length);
+
+            for (int i2 = 0; i2 < dependencies.Length; i2++)
+                fallback.SetValue(dependencies[i2], i2);
+
+            return fallback;
         }
     }
 }

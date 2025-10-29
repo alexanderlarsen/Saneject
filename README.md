@@ -23,9 +23,9 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
 > ⚠️ **Beta notice**  
 > Saneject is currently in beta. The core is mostly stable, but I still iterate and occasionally uncover quirks or bugs. The API may also change a bit during this phase, so expect some breaking changes until 1.0.0.
 >
-> The framework was originally developed to power [Tails ↗](https://www.youtube.com/playlist?list=PLeSb1exZWazIzm3UXsKb7iJG6MgkaIvSQ), a VR Snake game I’m building with a friend, and is now being actively integrated there, which lets me uncover edge cases, refine the UX, and prove the system in a real production setting.
+> The framework was originally developed to power [Tails ↗](https://www.youtube.com/playlist?list=PLeSb1exZWazIzm3UXsKb7iJG6MgkaIvSQ), a VR Snake game I'm building with a friend, and is now being actively integrated there, which lets me uncover edge cases, refine the UX, and prove the system in a real production setting.
 >
-> Saneject will remain in beta until I’m satisfied with its stability, usability, and ergonomics in production.
+> Saneject will remain in beta until I'm satisfied with its stability, usability, and ergonomics in production.
 
 > 👋 **Tried it? Let me know**
 >
@@ -83,6 +83,9 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [SerializeInterface](#serializeinterface)
         - [Why Unity can't "serialize an interface"](#why-unity-cant-serialize-an-interface)
         - [What the Saneject Roslyn generator adds](#what-the-saneject-roslyn-generator-adds)
+    - [Method injection](#method-injection)
+        - [Rules](#rules)
+        - [Example](#example)
     - [ProxyObject](#proxyobject)
         - [Auto-generation](#auto-generation)
         - [Manual generation](#manual-generation)
@@ -475,7 +478,7 @@ Bind cross-scene singletons from scene instances. Methods return a `GlobalBindin
 
 The `GlobalBindingBuilder<TComponent>` is a locator API identical to [Component locators](#component-locators), but with two important differences:
 
-- **No qualifiers** (`ToId`, `ToTarget`, `ToMember`): Global bindings are not injected into specific targets. Instead, they are stored in a `SceneGlobalContainer` (a scene object) and then promoted to the global scope at runtime. Because there is no injection target, qualifiers don’t apply.
+- **No qualifiers** (`ToId`, `ToTarget`, `ToMember`): Global bindings are not injected into specific targets. Instead, they are stored in a `SceneGlobalContainer` (a scene object) and then promoted to the global scope at runtime. Because there is no injection target, qualifiers don't apply.
 - **No proxy binding (`.FromProxy()`)**: Proxies are already global by nature. They can be injected from any context and resolve their target from the global scope. Registering a proxy itself as a global would be redundant and potentially misleading, so this method is excluded.
 
 Just like `ComponentBindingBuilder<TComponent>`, locator methods on `GlobalBindingBuilder<TComponent>` still return a `ComponentFilterBuilder<TComponent>`, so you can filter candidate components with the usual filter methods (`WhereTagIs`, `WhereNameIs`, etc.).
@@ -765,6 +768,66 @@ With `[Inject, SerializeInterface]`, fields are grayed out and auto-managed by S
 Without `[Inject]`, they behave as regular `Object` fields you can assign manually. If you assign an object that doesn't implement the required interface, the field is cleared to `null`.
 
 ![Interface field visible in the Inspector](Docs/serialize-interface-inspector-example.webp)
+
+### Method injection
+
+Saneject supports `[Inject]` on methods as an alternative or complement to field injection.
+
+This is useful when you want to:
+
+- Configure components based on injected data (e.g. calculations using a config `ScriptableObject`).
+- Inject into third-party classes where you can't modify the source but they expose public serialized fields or properties.
+- Configure external systems (e.g. editor tools, asset processors, analytics) using resolved dependencies.
+- Apply complex initialization logic where simple field/property injection isn't enough.
+- Configure or cache dependencies internally according to custom logic before storing them in fields.
+- …and generally, any editor-time behavior that should happen after dependency resolution.
+
+Method injection runs after all `[Inject]` fields are assigned.
+
+#### Rules
+
+- The method must be an instance method (not static).
+- Access level can be `public`, `protected`, or `private`.
+- All parameters must be resolvable by Saneject bindings:
+    - Each parameter type follows the same resolution rules as fields.
+    - Arrays and `List<T>` parameters are supported.
+    - Interface parameters resolve from interface bindings.
+    - Proxy bindings work the same as for fields.
+- If any parameter cannot be resolved, the method is not invoked.
+- `[Inject]` methods inside nested `[Serializable]` classes are also supported.
+- Methods are invoked in declaration order (reflection order in C#).
+
+#### Example
+
+```csharp
+public partial class RootClass : MonoBehaviour
+{
+    [SerializeField]
+    private NestedClass nestedClass;
+    
+    [Inject]
+    private void Inject(Dependency dependency, IDependency iface)
+    {
+        // Called automatically after field injection
+    }
+
+    [Inject]
+    private void InjectCollection(Dependency[] dependencies)
+    {
+        // Arrays and lists are supported
+    }
+}
+
+[Serializable]
+public class NestedClass
+{
+    [Inject]
+    public void Inject(MyDependency[] dependencies)
+    {
+        // Nested serializable classes are supported too
+    }
+}
+```
 
 ### ProxyObject
 

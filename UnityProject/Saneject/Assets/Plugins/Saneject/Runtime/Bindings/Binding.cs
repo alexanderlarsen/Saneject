@@ -6,7 +6,6 @@ using UnityEngine;
 using Object = UnityEngine.Object;
 
 // ReSharper disable LoopCanBeConvertedToQuery
-
 // ReSharper disable NonReadonlyMemberInGetHashCode
 
 namespace Plugins.Saneject.Runtime.Bindings
@@ -18,7 +17,7 @@ namespace Plugins.Saneject.Runtime.Bindings
     public class Binding : IEquatable<Binding>
     {
         private readonly List<Func<Object, bool>> filters = new();
-        private readonly List<(Func<Object, bool> qualifier, Type targetType)> injectionTargetQualifiers = new();
+        private readonly List<(Func<Type, bool> qualifier, Type targetType)> injectionTargetTypeQualifiers = new();
         private readonly List<(Func<string, bool> qualifier, string memberName)> injectionTargetMemberQualifiers = new();
         private readonly List<(Func<string, bool> qualifier, string id)> idQualifiers = new();
 
@@ -48,20 +47,53 @@ namespace Plugins.Saneject.Runtime.Bindings
         public bool IsAssetBinding { get; private set; }
         public bool IsProxyBinding { get; private set; }
 
+        /// <summary>
+        /// Custom equality comparison to determine if the binding is unique or a duplicate based on system rules.
+        /// </summary>
+        // Equals (replace your current implementation)
+        public bool Equals(Binding other)
+        {
+            if (other is null) return false;
+            if (ReferenceEquals(this, other)) return true;
+
+            // Core signature
+            bool typeMatch = InterfaceType != null
+                ? InterfaceType == other.InterfaceType
+                : ConcreteType == other.ConcreteType;
+
+            if (!(Equals(Scope, other.Scope)
+                  && typeMatch
+                  && IsGlobal == other.IsGlobal
+                  && IsCollection == other.IsCollection))
+                return false;
+
+            // Overlap-based equality for qualifiers
+            IEnumerable<Type> myTargetTypes = injectionTargetTypeQualifiers.Select(tf => tf.targetType);
+            IEnumerable<Type> otherTargetTypes = other.injectionTargetTypeQualifiers.Select(tf => tf.targetType);
+
+            IEnumerable<string> myMemberNames = injectionTargetMemberQualifiers.Select(f => f.memberName);
+            IEnumerable<string> otherMemberNames = other.injectionTargetMemberQualifiers.Select(f => f.memberName);
+
+            IEnumerable<string> myIds = idQualifiers.Select(f => f.id);
+            IEnumerable<string> otherIds = other.idQualifiers.Select(f => f.id);
+
+            return TargetsOverlapForEquality(myTargetTypes, otherTargetTypes)
+                   && MemberNamesOverlapForEquality(myMemberNames, otherMemberNames)
+                   && IdsOverlapForEquality(myIds, otherIds);
+        }
+
         public string[] GetTargetNames()
         {
-            return injectionTargetQualifiers.Select(f => f.targetType.Name).ToArray();
+            return injectionTargetTypeQualifiers
+                .Select(f => f.targetType.Name)                
+                .ToArray();
         }
-        
+
         public string[] GetMemberNames()
         {
             return injectionTargetMemberQualifiers.Select(f => f.memberName).ToArray();
         }
-        
-        /// <summary>
-        /// Constructs a readable binding name used by the <c>DependencyInjector</c> for logging purposes,
-        /// including interface and concrete type names and an optional ID.
-        /// </summary>
+
         /// <summary>
         /// Marks this binding as eligible for collection injection, allowing it to be resolved into array or list fields.
         /// </summary>
@@ -76,6 +108,9 @@ namespace Plugins.Saneject.Runtime.Bindings
             IsCollection = true;
         }
 
+        /// <summary>
+        /// Marks this binding as eligible for component injection, allowing it to resolve components.
+        /// </summary>
         public void MarkComponentBinding()
         {
             if (IsComponentBinding)
@@ -86,7 +121,10 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             IsComponentBinding = true;
         }
-
+        
+        /// <summary>
+        /// Marks this binding as eligible for asset injection, allowing it to resolve assets.
+        /// </summary>
         public void MarkAssetBinding()
         {
             if (IsAssetBinding)
@@ -174,15 +212,15 @@ namespace Plugins.Saneject.Runtime.Bindings
         }
 
         /// <summary>
-        /// Adds a target-type qualifier for this binding.
+        /// Adds a target-type qualifier for this binding (also works on nested serialized classes).
         /// </summary>
-        /// <param name="qualifier">Predicate to evaluate the injection target object.</param>
+        /// <param name="qualifier">Predicate to evaluate the declaring type.</param>
         /// <param name="targetType">Target type used for equality checks.</param>
-        public void AddInjectionTargetQualifier(
-            Func<Object, bool> qualifier,
+        public void AddInjectionTargetTypeQualifier(
+            Func<Type, bool> qualifier,
             Type targetType)
         {
-            injectionTargetQualifiers.Add((qualifier, targetType));
+            injectionTargetTypeQualifiers.Add((qualifier, targetType));
         }
 
         /// <summary>
@@ -231,16 +269,16 @@ namespace Plugins.Saneject.Runtime.Bindings
         }
 
         /// <summary>
-        /// Checks if this binding's target filters pass for the given injection target.
+        /// Checks if this binding's target-type qualifiers pass for the given type.
         /// </summary>
-        /// <param name="target">The injection target to evaluate against target filters.</param>
-        /// <returns>True if all target filters pass or no target filters exist, false otherwise.</returns>
-        public bool PassesInjectionTargetQualifiers(Object target)
+        /// <param name="injectionTargetType">The type that declares the injection site member.</param>
+        /// <returns>True if any qualifier matches or none exist, false otherwise.</returns>
+        public bool PassesInjectionTargetTypeQualifiers(Type injectionTargetType)
         {
-            if (injectionTargetQualifiers.Count == 0)
+            if (injectionTargetTypeQualifiers.Count == 0)
                 return true;
 
-            return target != null && injectionTargetQualifiers.Any(f => f.qualifier(target));
+            return injectionTargetType != null && injectionTargetTypeQualifiers.Any(f => f.qualifier(injectionTargetType));
         }
 
         /// <summary>
@@ -269,41 +307,6 @@ namespace Plugins.Saneject.Runtime.Bindings
             return !string.IsNullOrWhiteSpace(id) && idQualifiers.Any(f => f.qualifier(id));
         }
 
-        /// <summary>
-        /// Custom equality comparison to determine if the binding is unique or a duplicate based on system rules.
-        /// </summary>
-        // Equals (replace your current implementation)
-        public bool Equals(Binding other)
-        {
-            if (other is null) return false;
-            if (ReferenceEquals(this, other)) return true;
-
-            // Core signature
-            bool typeMatch = InterfaceType != null
-                ? InterfaceType == other.InterfaceType
-                : ConcreteType == other.ConcreteType;
-
-            if (!(Equals(Scope, other.Scope)
-                  && typeMatch
-                  && IsGlobal == other.IsGlobal
-                  && IsCollection == other.IsCollection))
-                return false;
-
-            // Overlap-based equality for qualifiers
-            IEnumerable<Type> myTargetTypes = injectionTargetQualifiers.Select(tf => tf.targetType);
-            IEnumerable<Type> otherTargetTypes = other.injectionTargetQualifiers.Select(tf => tf.targetType);
-
-            IEnumerable<string> myMemberNames = injectionTargetMemberQualifiers.Select(f => f.memberName);
-            IEnumerable<string> otherMemberNames = other.injectionTargetMemberQualifiers.Select(f => f.memberName);
-
-            IEnumerable<string> myIds = idQualifiers.Select(f => f.id);
-            IEnumerable<string> otherIds = other.idQualifiers.Select(f => f.id);
-
-            return TargetsOverlapForEquality(myTargetTypes, otherTargetTypes)
-                   && MemberNamesOverlapForEquality(myMemberNames, otherMemberNames)
-                   && IdsOverlapForEquality(myIds, otherIds);
-        }
-
         public override int GetHashCode()
         {
             // if this is an interface binding, hash only on InterfaceType,
@@ -313,12 +316,12 @@ namespace Plugins.Saneject.Runtime.Bindings
 
             // To satisfy (Equals => same hash), don't hash the exact contents of qualifiers,
             // only whether they are empty or not. Collisions are fine.
-            bool hasTargetQualifiers = injectionTargetQualifiers.Any();
+            bool hasTargetTypeQualifiers = injectionTargetTypeQualifiers.Any();
             bool hasMemberQualifiers = injectionTargetMemberQualifiers.Any();
             bool hasIdQualifiers = idQualifiers.Any();
 
             hash = HashCode.Combine(hash,
-                hasTargetQualifiers ? 1 : 0,
+                hasTargetTypeQualifiers ? 1 : 0,
                 hasMemberQualifiers ? 1 : 0,
                 hasIdQualifiers ? 1 : 0);
 
