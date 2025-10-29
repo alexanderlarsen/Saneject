@@ -485,7 +485,7 @@ namespace Plugins.Saneject.Editor.Core
                     serializedProperty.objectReferenceValue = proxyAsset;
                     stats.numInjectedFields++;
                 }
-                else if (dependencies != null && dependencies.Length > 0)
+                else if (dependencies is { Length: > 0 })
                 {
                     if (isCollection)
                         serializedProperty.SetCollection(dependencies);
@@ -623,7 +623,7 @@ namespace Plugins.Saneject.Editor.Core
 
                     // Build a typed collection that matches the parameter signature
                     if (isCollection)
-                        invokeParameters[i] = BuildTypedCollectionForMethodParam(p.ParameterType, elementType, dependencies);
+                        invokeParameters[i] = BuildTypedCollectionForMethodParameter(p.ParameterType, elementType, dependencies);
                     else
                         invokeParameters[i] = dependencies.FirstOrDefault();
                 }
@@ -862,7 +862,7 @@ namespace Plugins.Saneject.Editor.Core
             return false;
         }
 
-        private static object BuildTypedCollectionForMethodParam(
+        private static object BuildTypedCollectionForMethodParameter(
             Type parameterType,
             Type elementType,
             Object[] dependencies)
@@ -881,10 +881,10 @@ namespace Plugins.Saneject.Editor.Core
             {
                 Type listType = typeof(List<>).MakeGenericType(elementType);
                 object list = Activator.CreateInstance(listType);
-                MethodInfo add = listType.GetMethod("Add");
+                MethodInfo addMethod = listType.GetMethod("Add");
 
-                for (int i = 0; i < dependencies.Length; i++)
-                    add.Invoke(list, new object[] { dependencies[i] });
+                foreach (Object t in dependencies)
+                    addMethod?.Invoke(list, new object[] { t });
 
                 return list;
             }
