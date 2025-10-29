@@ -1,4 +1,6 @@
-﻿## Version 0.17.0
+﻿# Saneject Changelog
+
+## Version 0.17.0
 
 ### Features
 
