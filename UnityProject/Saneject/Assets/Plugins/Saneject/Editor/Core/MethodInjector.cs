@@ -116,6 +116,7 @@ namespace Plugins.Saneject.Editor.Core
                             injectionTargetType: injectionTargetType,
                             injectionTarget: serializedObject.targetObject,
                             siteSignature: siteSignature,
+                            suppressMissingErrors: injectAttribute.SuppressMissingErrors,
                             stats: stats,
                             out Object proxyAsset,
                             out Object[] dependencies))

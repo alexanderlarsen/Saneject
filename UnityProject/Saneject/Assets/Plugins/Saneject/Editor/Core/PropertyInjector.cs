@@ -22,7 +22,7 @@ namespace Plugins.Saneject.Editor.Core
 
             while (serializedProperty.NextVisible(enterChildren: true))
             {
-                if (!serializedProperty.IsPropertyInjectable(out Type interfaceType, out Type concreteType, out string injectId))
+                if (!serializedProperty.IsPropertyInjectable(out Type interfaceType, out Type concreteType, out string injectId, out bool suppressMissingErrors))
                     continue;
 
                 serializedProperty.Clear();
@@ -46,6 +46,7 @@ namespace Plugins.Saneject.Editor.Core
                         injectionTargetType: injectionTargetType,
                         injectionTarget: unityContext,
                         siteSignature: injectedFieldSignature,
+                        suppressMissingErrors: suppressMissingErrors,
                         stats: stats,
                         out Object proxyAsset,
                         out Object[] dependencies))
@@ -76,11 +77,13 @@ namespace Plugins.Saneject.Editor.Core
             this SerializedProperty serializedProperty,
             out Type interfaceType,
             out Type concreteType,
-            out string injectId)
+            out string injectId,
+            out bool suppressMissingErrors)
         {
             interfaceType = null;
             concreteType = null;
             injectId = null;
+            suppressMissingErrors = false;
 
             FieldInfo field = serializedProperty.GetFieldInfo();
 
@@ -103,9 +106,10 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             InjectAttribute injectAttribute = field.GetCustomAttribute<InjectAttribute>(true);
-
+            
             if (injectAttribute != null && typeof(object).IsAssignableFrom(field.FieldType))
             {
+                suppressMissingErrors = injectAttribute.SuppressMissingErrors;
                 injectId = injectAttribute.ID;
                 return true;
             }

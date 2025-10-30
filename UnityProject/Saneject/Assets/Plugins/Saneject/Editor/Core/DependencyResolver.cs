@@ -25,6 +25,7 @@ namespace Plugins.Saneject.Editor.Core
             Type injectionTargetType,
             Object injectionTarget,
             string siteSignature,
+            bool suppressMissingErrors,
             InjectionStats stats,
             out Object proxyAsset,
             out Object[] dependencies)
@@ -42,11 +43,18 @@ namespace Plugins.Saneject.Editor.Core
 
             if (binding == null)
             {
-                // Context-aware, keep existing partial binding formatting
-                string partialBindingSignature = BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, scope);
-                Debug.LogError($"Saneject: Missing binding {partialBindingSignature} {siteSignature}", scope);
+                if (suppressMissingErrors)
+                {
+                    stats.numSuppressedMissing++;
+                }
+                else
+                {
+                    // Context-aware, keep existing partial binding formatting
+                    string partialBindingSignature = BindingSignatureHelper.GetPartialBindingSignature(isCollection, interfaceType, concreteType, scope);
+                    Debug.LogError($"Saneject: Missing binding {partialBindingSignature} {siteSignature}", scope);
+                    stats.numMissingBindings++;
+                }
 
-                stats.numMissingBindings++;
                 return false;
             }
 
@@ -80,6 +88,13 @@ namespace Plugins.Saneject.Editor.Core
             {
                 dependencies = found;
                 return true;
+            }
+
+            // Suppress error messages for optional dependencies
+            if (suppressMissingErrors)
+            {
+                stats.numSuppressedMissing++;
+                return false;
             }
 
             // Context-aware failure with detailed rejections, mirroring field path format

@@ -15,6 +15,7 @@ namespace Plugins.Saneject.Editor.Core
         public int numUnusedBindings;
         public int numInvalidBindings;
         public int numMissingDependencies;
+        public int numSuppressedMissing;
 
         private enum LogSeverity
         {
@@ -52,6 +53,19 @@ namespace Plugins.Saneject.Editor.Core
             sb.Append("Completed in ");
             sb.Append(elapsedMilliseconds);
             sb.Append(" ms");
+
+            if (numSuppressedMissing > 0)
+            {
+                sb.Append("\n⚠️ ");
+                sb.Append(numSuppressedMissing);
+
+                sb.Append(numSuppressedMissing == 1
+                    ? " missing binding/dependency error was suppressed"
+                    : " missing binding/dependency errors were suppressed");
+
+                sb.Append(" due to [Inject(suppressMissingErrors: true)]. ");
+                sb.Append("Remove the flag to view detailed logs.");
+            }
 
             string log = sb.ToString();
 
