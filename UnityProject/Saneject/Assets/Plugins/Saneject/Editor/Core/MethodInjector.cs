@@ -112,7 +112,7 @@ namespace Plugins.Saneject.Editor.Core
                             concreteType,
                             isCollection,
                             injectAttribute.ID,
-                            memberName: p.Name,
+                            memberName: method.Name,
                             injectionTargetType: injectionTargetType,
                             injectionTarget: serializedObject.targetObject,
                             siteSignature: siteSignature,
