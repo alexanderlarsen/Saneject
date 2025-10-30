@@ -1,8 +1,10 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Reflection;
 using System.Text.RegularExpressions;
+using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
@@ -227,6 +229,12 @@ namespace {ns}
             string code,
             Type concreteType)
         {
+            if (concreteType.FullName == null)
+            {
+                Debug.LogError($"Cannot check source code for proxy of {concreteType.Name}: Full name is null.");
+                return false;
+            }
+
             string fq = Regex.Escape(concreteType.FullName);
             string nameOnly = Regex.Escape(concreteType.Name);
             fq = fq.Replace(@"\+", @"(\+|\.)");
@@ -235,6 +243,31 @@ namespace {ns}
             string patternNameOnly = @"\:\s*ProxyObject\s*<\s*(global::\s*)?" + nameOnly + @"\s*>";
 
             return Regex.IsMatch(code, patternFq) || Regex.IsMatch(code, patternNameOnly);
+        }
+
+        public static void CreateMissingProxyStubs(
+            this IEnumerable<Binding> proxyBindings,
+            out bool isProxyCreationPending)
+        {
+            isProxyCreationPending = false;
+
+            List<Type> typesToCreate = proxyBindings
+                .Select(binding => binding.ConcreteType)
+                .Where(type => !DoesProxyScriptExist(type)).ToList();
+
+            if (typesToCreate.Count == 0)
+                return;
+
+            isProxyCreationPending = true;
+
+            string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
+
+            EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{typesToCreate.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
+
+            typesToCreate.ForEach(GenerateProxyScript);
+            SessionState.SetInt("Saneject.ProxyStubCount", typesToCreate.Count);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
         }
     }
 }

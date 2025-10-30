@@ -1,5 +1,24 @@
 ﻿# Saneject Changelog
 
+## Version 0.18.0
+
+### Features
+
+- Added support for **optional error suppression**
+    - You can now mark `[Inject(suppressMissingErrors: true)]` to silence expected missing bindings or dependencies.
+    - Suppressed issues are still counted and clearly noted below the injection summary log for full transparency.
+    - Mostly useful for advanced edge cases, e.g., shared components used in multiple contexts where some references are intentionally null.
+
+### Fixes
+
+- Fix incorrect `memberName` parameter for method injection
+    - Updated `MethodInjector` to pass `method.Name` instead of parameter name (`p.Name`) as the `memberName` value during method injection.
+    - Ensures `.ToMember("...")` correctly targets method names when using method injection.
+
+### Refactor
+
+- The large `DependencyInjector` class has been refactored into smaller, modular classes with clear, isolated responsibilities, reusable methods, which makes the system easier to maintain.
+
 ## Version 0.17.0
 
 ### Features
