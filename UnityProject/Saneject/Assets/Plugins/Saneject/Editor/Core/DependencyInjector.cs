@@ -2,17 +2,13 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
-using System.Reflection;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Util;
 using Plugins.Saneject.Runtime.Bindings;
-using Plugins.Saneject.Runtime.Extensions;
-using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 using Saneject.Plugins.Saneject.Editor.Utility;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
@@ -33,160 +29,53 @@ namespace Plugins.Saneject.Editor.Core
         /// </summary>
         public static void InjectSceneDependencies()
         {
-            if (Application.isPlaying)
-            {
-                EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
-                return;
-            }
-
-            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
-            if (!Application.isBatchMode)
-            {
-                if (UserSettings.AskBeforeSceneInjection && !EditorUtility.DisplayDialog("Saneject: Inject Scene Dependencies", "Are you sure you want to inject all dependencies in the scene?", "Yes", "Cancel"))
-                    return;
-
-                if (UserSettings.ClearLogsOnInjection)
-                    ConsoleUtils.ClearLog();
-            }
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
-            Scope[] allScopes = Object
-                .FindObjectsByType<Scope>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-                .Where(scope => !scope.gameObject.IsPrefab())
-                .ToArray();
-
-            if (allScopes.Length <= 0)
-            {
-                Debug.LogWarning("Saneject: No scopes found in scene. Nothing to inject.");
-                stopwatch.Stop();
-                return;
-            }
-
-            try
-            {
-                EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in scene", 0);
-
-                ScopeExtensions.Initialize(allScopes);
-
-                Scope[] rootScopes = allScopes
-                    .Where(scope => !scope.ParentScope)
-                    .ToArray();
-
-                IEnumerable<Binding> proxyBindings = allScopes
-                    .SelectMany(scope => scope.GetProxyBindings());
-
-                proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
-
-                if (isProxyCreationPending)
-                {
-                    stopwatch.Stop();
-                    allScopes.Dispose();
-                    EditorUtility.ClearProgressBar();
-                    Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
-                    return;
-                }
-
-                InjectionStats stats = new();
-
-                allScopes.ConfigureGlobalBindings(stats);
-
-                foreach (Scope root in rootScopes)
-                    root.InjectFromRoot(stats, isPrefabInjection: false);
-
-                allScopes.LogUnusedBindings(stats);
-                stopwatch.Stop();
-
-                if (UserSettings.LogInjectionStats)
-                {
-                    stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
-                    stats.LogStats("Full scene", allScopes.Length, stopwatch.ElapsedMilliseconds);
-                }
-            }
-            catch (Exception e)
-            {
-                stopwatch.Stop();
-                Debug.LogException(e);
-            }
-
-            allScopes.Dispose();
-            EditorUtility.ClearProgressBar();
+            RunInjectionPass(
+                dialogTitle: "Saneject: Inject Scene Dependencies",
+                confirmationMessage: "Are you sure you want to inject all dependencies in the scene?",
+                askBeforeInject: UserSettings.AskBeforeSceneInjection,
+                collectScopes: () => Object
+                    .FindObjectsByType<Scope>(FindObjectsInactive.Include, FindObjectsSortMode.None)
+                    .Where(scope => !scope.gameObject.IsPrefab())
+                    .ToArray(),
+                noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
+                progressBarTitle: "Saneject: Injection in progress",
+                progressBarMessage: "Injecting all objects in scene",
+                configureGlobalBindings: true,
+                isPrefabInjection: false,
+                buildStatsLabel: _ => "Full scene"
+            );
         }
 
+        /// <summary>
+        /// Performs dependency injection for all <see cref="Scope" />s under a hierarchy root in the scene.
+        /// Scans for configured bindings starting from the given scope, resolves them recursively up the hierarchy,
+        /// and assigns references to all eligible fields/properties.
+        /// This operation is editor-only and cannot be performed in Play Mode.
+        /// </summary>
+        /// <param name="startScope">The root scope to start injection from. All child scopes will be processed.</param>
         public static void InjectSingleHierarchyDependencies(Scope startScope)
         {
-            if (Application.isPlaying)
-            {
-                EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
-                return;
-            }
-
-            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
-            if (!Application.isBatchMode)
-            {
-                if (UserSettings.AskBeforeHierarchyInjection && !EditorUtility.DisplayDialog("Saneject: Inject Hierarchy Dependencies", "Are you sure you want to inject all dependencies in the hierarchy?", "Yes", "Cancel"))
-                    return;
-
-                if (UserSettings.ClearLogsOnInjection)
-                    ConsoleUtils.ClearLog();
-            }
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            Scope rootScope = startScope.FindRootScope();
-
-            Scope[] allScopes = rootScope
-                .GetComponentsInChildren<Scope>()
-                .Where(scope => !scope.gameObject.IsPrefab())
-                .ToArray();
-
-            if (allScopes.Length <= 0)
-            {
-                Debug.LogWarning("Saneject: No scopes found in hierarchy. Nothing to inject.");
-                stopwatch.Stop();
-                return;
-            }
-
-            ScopeExtensions.Initialize(allScopes);
-
-            try
-            {
-                EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting all objects in hierarchy", 0);
-
-                IEnumerable<Binding> proxyBindings = allScopes
-                    .SelectMany(scope => scope.GetProxyBindings());
-
-                proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
-
-                if (isProxyCreationPending)
+            RunInjectionPass(
+                dialogTitle: "Saneject: Inject Hierarchy Dependencies",
+                confirmationMessage: "Are you sure you want to inject all dependencies in the hierarchy?",
+                askBeforeInject: UserSettings.AskBeforeHierarchyInjection,
+                collectScopes: () => startScope
+                    .FindRootScope()
+                    .GetComponentsInChildren<Scope>()
+                    .Where(scope => !scope.gameObject.IsPrefab())
+                    .ToArray(),
+                noScopesWarning: "Saneject: No scopes found in hierarchy. Nothing to inject.",
+                progressBarTitle: "Saneject: Injection in progress",
+                progressBarMessage: "Injecting all objects in hierarchy",
+                configureGlobalBindings: true,
+                isPrefabInjection: false,
+                buildStatsLabel: scopes =>
                 {
-                    stopwatch.Stop();
-                    allScopes.Dispose();
-                    EditorUtility.ClearProgressBar();
-                    Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
-                    return;
+                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
+                    string rootName = root ? root.gameObject.name : "Unknown";
+                    return $"Single scene hierarchy [{rootName}]";
                 }
-
-                InjectionStats stats = new();
-
-                allScopes.ConfigureGlobalBindings(stats);
-                rootScope.InjectFromRoot(stats, isPrefabInjection: false);
-                allScopes.LogUnusedBindings(stats);
-                stopwatch.Stop();
-
-                if (UserSettings.LogInjectionStats)
-                {
-                    stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
-                    stats.LogStats($"Single scene hierarchy [{rootScope.gameObject.name}]", allScopes.Length, stopwatch.ElapsedMilliseconds);
-                }
-            }
-            catch (Exception e)
-            {
-                stopwatch.Stop();
-                Debug.LogException(e);
-            }
-
-            allScopes.Dispose();
-            EditorUtility.ClearProgressBar();
+            );
         }
 
         /// <summary>
@@ -203,16 +92,54 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            RunInjectionPass(
+                dialogTitle: "Saneject: Inject Prefab Dependencies",
+                confirmationMessage: "Are you sure you want to inject all dependencies in the prefab?",
+                askBeforeInject: UserSettings.AskBeforePrefabInjection,
+                collectScopes: () => startScope
+                    .FindRootScope()
+                    .GetComponentsInChildren<Scope>(),
+                noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
+                progressBarTitle: "Saneject: Injection in progress",
+                progressBarMessage: "Injecting prefab dependencies",
+                configureGlobalBindings: false,
+                isPrefabInjection: true,
+                buildStatsLabel: scopes =>
+                {
+                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
+                    string rootName = root ? root.gameObject.name : "Unknown";
+                    return $"Prefab [{rootName}]";
+                }
+            );
+        }
+
+        /// <summary>
+        /// Executes a single pass of the dependency injection operation based on the provided parameters.
+        /// Handles dialog confirmation, scope collection, progress display, and injection processing.
+        /// This is an editor-only operation and cannot be performed in Play Mode.
+        /// </summary>
+        private static void RunInjectionPass(
+            string dialogTitle,
+            string confirmationMessage,
+            bool askBeforeInject,
+            Func<Scope[]> collectScopes,
+            string noScopesWarning,
+            string progressBarTitle,
+            string progressBarMessage,
+            bool configureGlobalBindings,
+            bool isPrefabInjection,
+            Func<Scope[], string> buildStatsLabel)
+        {
             if (Application.isPlaying)
             {
-                EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                EditorUtility.DisplayDialog(dialogTitle, "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
 
             // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
             if (!Application.isBatchMode)
             {
-                if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog("Saneject: Inject Prefab Dependencies", "Are you sure you want to inject all dependencies in the prefab?", "Yes", "Cancel"))
+                if (askBeforeInject && !EditorUtility.DisplayDialog(dialogTitle, confirmationMessage, "Yes", "Cancel"))
                     return;
 
                 if (UserSettings.ClearLogsOnInjection)
@@ -220,180 +147,79 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            Scope rootScope = startScope.FindRootScope();
-            Scope[] allScopes = rootScope.GetComponentsInChildren<Scope>();
+            Scope[] allScopes = collectScopes?.Invoke() ?? Array.Empty<Scope>();
 
             if (allScopes.Length <= 0)
             {
-                Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
-                return;
-            }
-
-            ScopeExtensions.Initialize(allScopes);
-
-            IEnumerable<Binding> proxyBindings = allScopes.SelectMany(scope => scope.GetProxyBindings());
-            proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
-
-            if (isProxyCreationPending)
-            {
+                Debug.LogWarning(noScopesWarning);
                 stopwatch.Stop();
-                allScopes.Dispose();
-                EditorUtility.ClearProgressBar();
-                Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
                 return;
             }
-
-            InjectionStats stats = new();
-            EditorUtility.DisplayProgressBar("Saneject: Injection in progress", "Injecting prefab dependencies", 0);
 
             try
             {
-                rootScope.InjectFromRoot(stats, isPrefabInjection: true);
-                allScopes.LogUnusedBindings(stats);
+                EditorUtility.DisplayProgressBar(progressBarTitle, progressBarMessage, 0);
+                ScopeExtensions.Initialize(allScopes);
+
+                IEnumerable<Binding> proxyBindings = allScopes
+                    .SelectMany(scope => scope.GetProxyBindings());
+
+                proxyBindings.CreateMissingProxyStubs(out bool isProxyCreationPending);
+
+                if (isProxyCreationPending)
+                {
+                    stopwatch.Stop();
+                    allScopes.Dispose();
+                    EditorUtility.ClearProgressBar();
+                    Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
+                    return;
+                }
+
+                InjectionStats stats = new();
+
+                if (configureGlobalBindings)
+                    allScopes.BuildSceneGlobalContainer(stats);
+
+                if (isPrefabInjection)
+                {
+                    // Prefab pass: inject only the single root scope
+                    Scope rootScope = allScopes.FirstOrDefault(s => !s.ParentScope);
+
+                    if (rootScope)
+                        InjectFromRootScope(rootScope, stats, isPrefabInjection: true);
+                }
+                else
+                {
+                    // Scene / hierarchy pass: inject all root scopes
+                    foreach (Scope rootScope in allScopes.Where(s => !s.ParentScope))
+                        InjectFromRootScope(rootScope, stats, isPrefabInjection: false);
+                }
+
+                Logger.LogUnusedBindings(allScopes, stats);
                 stopwatch.Stop();
 
                 if (UserSettings.LogInjectionStats)
                 {
                     stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
-                    stats.LogStats($"Prefab [{rootScope.gameObject.name}]", allScopes.Length, stopwatch.ElapsedMilliseconds);
+                    string label = buildStatsLabel?.Invoke(allScopes) ?? "Injection";
+                    stats.LogStats(label, allScopes.Length, stopwatch.ElapsedMilliseconds);
                 }
             }
             catch (Exception e)
             {
                 stopwatch.Stop();
-                Debug.LogError($"Saneject Exception: {e}");
+                Debug.LogException(e);
             }
 
             allScopes.Dispose();
             EditorUtility.ClearProgressBar();
         }
 
-        private static void CreateMissingProxyStubs(
-            this IEnumerable<Binding> proxyBindings,
-            out bool isProxyCreationPending)
-        {
-            isProxyCreationPending = false;
-
-            List<Type> typesToCreate = proxyBindings
-                .Select(binding => binding.ConcreteType)
-                .Where(type => !ProxyUtils.DoesProxyScriptExist(type)).ToList();
-
-            if (typesToCreate.Count == 0)
-                return;
-
-            isProxyCreationPending = true;
-
-            string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
-
-            EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{typesToCreate.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
-
-            typesToCreate.ForEach(ProxyUtils.GenerateProxyScript);
-            SessionState.SetInt("Saneject.ProxyStubCount", typesToCreate.Count);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
-        }
-
-        /// <summary>
-        /// Logs warnings about any bindings that were configured but not actually used during injection.
-        /// </summary>
-        private static void LogUnusedBindings(
-            this IEnumerable<Scope> allScopes,
-            InjectionStats stats)
-        {
-            foreach (Scope scope in allScopes)
-            {
-                List<Binding> unusedBindings = scope.GetUnusedBindings();
-
-                if (UserSettings.LogUnusedBindings && unusedBindings.Count > 0)
-                    foreach (Binding binding in unusedBindings)
-                        Debug.LogWarning($"Saneject: Unused binding {binding.GetBindingSignature()}. If you don't plan to use this binding, you can safely remove it.", scope);
-
-                stats.numUnusedBindings += unusedBindings.Count;
-            }
-        }
-
-        /// <summary>
-        /// Registers all scene-global bindings by creating a SceneGlobalContainer and populating it.
-        /// </summary>
-        private static void ConfigureGlobalBindings(
-            this Scope[] scopes,
-            InjectionStats stats)
-        {
-            SceneGlobalContainer[] existingContainers = Object.FindObjectsByType<SceneGlobalContainer>(FindObjectsInactive.Include, FindObjectsSortMode.None);
-
-            foreach (SceneGlobalContainer container in existingContainers)
-                container.DestroySelfOrGameObjectIfSolo();
-
-            SceneGlobalContainer sceneGlobalContainer = null;
-
-            foreach (Scope scope in scopes)
-            {
-                List<Binding> globalBindings = scope.GetGlobalBindings();
-
-                if (globalBindings == null || globalBindings.Count == 0)
-                    continue;
-
-                if (scope.gameObject.IsPrefab())
-                {
-                    Debug.LogWarning($"Saneject: Global bindings found on prefab scope '{scope.GetType().Name}'. These are ignored because the system can only inject global bindings from scenes.", scope);
-                    continue;
-                }
-
-                foreach (Binding globalBinding in globalBindings)
-                {
-                    Object resolved = globalBinding
-                        .LocateDependencies()
-                        .FirstOrDefault();
-
-                    globalBinding.MarkUsed();
-
-                    if (UserSettings.FilterBySameContext && resolved is Component component && component.gameObject.IsPrefab())
-                    {
-                        Debug.LogError($"Saneject: Global binding failed to locate a dependency {globalBinding.GetBindingSignature()}. Candidate rejected due to scene/prefab context mismatch: '{resolved.name}.{resolved.GetType().Name}'. Inject a non-prefab component, or disable filtering in User Settings (not recommended).");
-                        stats.numMissingDependencies++;
-                        continue;
-                    }
-
-                    if (!resolved)
-                    {
-                        Debug.LogError($"Saneject: Global binding failed to locate a dependency {globalBinding.GetBindingSignature()}.", scope);
-                        stats.numMissingDependencies++;
-                        continue;
-                    }
-
-                    if (!sceneGlobalContainer)
-                    {
-                        GameObject go = new(nameof(SceneGlobalContainer));
-                        sceneGlobalContainer = go.AddComponent<SceneGlobalContainer>();
-
-                        FieldInfo field = typeof(SceneGlobalContainer).GetField("createdByDependencyInjector", BindingFlags.Instance | BindingFlags.NonPublic);
-
-                        if (field != null)
-                            field.SetValue(sceneGlobalContainer, true);
-                        else
-                            Debug.LogError("Saneject: Could not find 'createdByDependencyInjector' field.", sceneGlobalContainer);
-
-                        EditorSceneManager.MarkSceneDirty(go.scene);
-                    }
-
-                    if (sceneGlobalContainer.Add(resolved))
-                    {
-                        stats.numInjectedGlobal++;
-                    }
-                    else
-                    {
-                        Debug.LogError($"Saneject: Global binding dependency type '{globalBinding.ConcreteType}'' already added to SceneGlobalContainer {globalBinding.GetBindingSignature()}.", scope);
-                        stats.numInvalidBindings++;
-                    }
-                }
-            }
-        }
-
         /// <summary>
         /// Performs recursive injection for all child objects in a hierarchy rooted at a given Scope.
         /// </summary>
-        private static void InjectFromRoot(
-            this Scope rootScope,
+        private static void InjectFromRootScope(
+            Scope rootScope,
             InjectionStats stats,
             bool isPrefabInjection)
         {
@@ -426,8 +252,12 @@ namespace Plugins.Saneject.Editor.Core
                 foreach (MonoBehaviour monoBehaviour in currentTransform.GetComponents<MonoBehaviour>())
                 {
                     SerializedObject serializedObject = new(monoBehaviour);
+
+                    // Fields/properties first, persist changes
                     PropertyInjector.InjectSerializedProperties(serializedObject, currentScope, stats);
                     serializedObject.Save();
+
+                    // Then method injection, persist any changes it made
                     MethodInjector.InjectMethods(serializedObject, currentScope, stats);
                     serializedObject.Save();
                 }
