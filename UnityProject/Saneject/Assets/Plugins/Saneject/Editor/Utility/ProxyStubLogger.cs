@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.Core
+namespace Plugins.Saneject.Editor.Utility
 {
     [InitializeOnLoad]
     internal static class ProxyStubLogger

@@ -10,7 +10,7 @@ using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.Util
+namespace Plugins.Saneject.Editor.Utility
 {
     /// <summary>
     /// Utilities for generating and resolving proxy scripts and assets for Saneject.

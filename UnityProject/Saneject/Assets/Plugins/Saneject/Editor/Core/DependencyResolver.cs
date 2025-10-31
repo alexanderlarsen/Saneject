@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Plugins.Saneject.Editor.Util;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;

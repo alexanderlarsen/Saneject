@@ -8,7 +8,7 @@ namespace Plugins.Saneject.Editor.Menus
     /// <summary>
     /// Adds editor menu items for injecting dependencies into scenes and prefabs.
     /// </summary>
-    public class DependencyInjectionMenus
+    public class InjectionMenus
     {
         /// <summary>
         /// Validates if scene injection can be run (only outside of prefab editing).
