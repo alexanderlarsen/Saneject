@@ -208,8 +208,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             EditorGUILayout.EndScrollView();
             GUILayout.FlexibleSpace();
             DrawFooter();
-            HandleGlobalClickToClearSelection();
-            HandleGlobalEscapeToClearSelection();
+            HandleClearSelection();
             GUILayout.EndArea();
         }
 
@@ -393,37 +392,37 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             return index >= 0 && index < list.count;
         }
 
-        // Handle global click outside any list item
-        private void HandleGlobalClickToClearSelection()
+        private void HandleClearSelection()
         {
             Event e = Event.current;
 
-            if (e.rawType != EventType.MouseDown || e.button != 0)
-                return;
-
-            if (!clickedListItemThisFrame)
+            // Left mouse click outside list item
+            if (e.rawType == EventType.MouseDown && e.button == 0)
             {
-                (selectedTab == 0 ? sceneList : prefabList).ClearSelection();
-                Repaint();
+                if (clickedListItemThisFrame)
+                {
+                    clickedListItemThisFrame = false;
+                    return;
+                }
+
+                ClearCurrentListSelection();
+                clickedListItemThisFrame = false;
+            }
+            // Escape key
+            else if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
+            {
+                ClearCurrentListSelection();
+                e.Use();
             }
 
-            clickedListItemThisFrame = false;
-        }
+            return;
 
-        private void HandleGlobalEscapeToClearSelection()
-        {
-            Event e = Event.current;
-
-            if (e.type != EventType.KeyDown)
-                return;
-
-            if (e.keyCode != KeyCode.Escape)
-                return;
-
-            ReorderableList list = selectedTab == 0 ? sceneList : prefabList;
-            list.ClearSelection();
-            Repaint();
-            e.Use(); // consume the event so it doesn’t propagate further
+            void ClearCurrentListSelection()
+            {
+                ReorderableList list = selectedTab == 0 ? sceneList : prefabList;
+                list.ClearSelection();
+                Repaint();
+            }
         }
 
         private void HandleWindowDragAndDrop(Rect dropArea)
@@ -533,7 +532,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
 
                 int min = indices.Min();
                 int max = indices.Max();
-                
+
                 list.ClearSelection();
                 list.SelectRange(min, max);
 
