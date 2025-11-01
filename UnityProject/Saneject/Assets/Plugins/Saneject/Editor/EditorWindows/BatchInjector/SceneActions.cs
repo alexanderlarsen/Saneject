@@ -18,11 +18,11 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                if (data.scenes.All(s => s.Path != scene.path))
+                if (data.scenes.All(s => s.path != scene.path))
                     data.scenes.Add(new AssetEntry(scene.path, true));
             }
 
-            ListSorter.SortList(data.scenes, sortMode, e => e.Path);
+            AssetListSorter.SortList(data.scenes, sortMode);
             Storage.SaveData(data);
         }
 
@@ -37,7 +37,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 .ToList();
 
             List<string> newScenes = paths
-                .Where(p => data.scenes.All(s => s.Path != p))
+                .Where(p => data.scenes.All(s => s.path != p))
                 .Where(p => AssetDatabase.LoadAssetAtPath<SceneAsset>(p))
                 .ToList();
 
@@ -56,7 +56,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 foreach (string path in newScenes)
                     data.scenes.Add(new AssetEntry(path, true));
 
-                ListSorter.SortList(data.scenes, sortMode, e => e.Path);
+                AssetListSorter.SortList(data.scenes, sortMode);
                 Storage.SaveData(data);
             }
         }

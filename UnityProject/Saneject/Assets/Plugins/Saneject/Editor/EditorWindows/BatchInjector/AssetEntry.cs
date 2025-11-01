@@ -1,21 +1,22 @@
 ﻿using System;
+using System.IO;
 
 namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
 {
     [Serializable]
     public class AssetEntry
     {
+        public string path;
+        public string name;
+        public bool enabled;
+
         public AssetEntry(
             string path,
             bool enabled)
         {
-            Path = path;
-            Enabled = enabled;
-            Name = System.IO.Path.GetFileNameWithoutExtension(path);
+            this.path = path;
+            this.enabled = enabled;
+            name = Path.GetFileNameWithoutExtension(path);
         }
-
-        public string Path;
-        public string Name;
-        public bool Enabled;
     }
 }

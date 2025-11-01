@@ -73,7 +73,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             {
                 if (index < 0 || index >= source.Count) return;
                 AssetEntry entry = source[index];
-                Object asset = loader(entry.Path);
+                Object asset = loader(entry.path);
                 bool missing = asset == null;
 
                 const float toggleWidth = 20f;
@@ -85,7 +85,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 rect.y += 2;
                 rect.height = EditorGUIUtility.singleLineHeight;
 
-                entry.Enabled = EditorGUI.Toggle(new Rect(rect.x + 4, rect.y, toggleWidth, rect.height), entry.Enabled);
+                entry.enabled = EditorGUI.Toggle(new Rect(rect.x + 4, rect.y, toggleWidth, rect.height), entry.enabled);
 
                 using (new EditorGUI.DisabledScope(true))
                 {
@@ -93,7 +93,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                         asset, typeof(Object), false);
                 }
 
-                string labelText = missing ? "(Deleted)" : entry.Path;
+                string labelText = missing ? "(Deleted)" : entry.path;
 
                 EditorGUI.LabelField(new Rect(rect.x + toggleWidth + objWidth + 7, rect.y,
                     rect.width - objWidth - 40, rect.height), labelText, EditorStyles.miniLabel);
@@ -190,11 +190,10 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             });
         }
 
-        private void DrawSortMenuButton<T>(
+        private void DrawSortMenuButton(
             Func<SortMode> getSortMode,
             Action<SortMode> setSortMode,
-            List<T> list,
-            Func<T, string> pathSelector,
+            List<AssetEntry> list,
             Action onSorted)
         {
             SortMode currentMode = getSortMode();
@@ -221,7 +220,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 menu.AddItem(new GUIContent(label), currentMode == mode, () =>
                 {
                     setSortMode(mode);
-                    ListSorter.SortList(list, mode, pathSelector, isNameSort);
+                    AssetListSorter.SortList(list, mode);
                     onSorted?.Invoke();
                 });
             }
@@ -257,7 +256,6 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                     getSortMode: () => sceneSortMode,
                     setSortMode: v => sceneSortMode = v,
                     list: data.scenes,
-                    pathSelector: entry => entry.Path,
                     onSorted: () =>
                     {
                         Storage.SaveData(data);
@@ -302,7 +300,6 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                     getSortMode: () => prefabSortMode,
                     setSortMode: v => prefabSortMode = v,
                     list: data.prefabs,
-                    pathSelector: entry => entry.Path,
                     onSorted: () =>
                     {
                         Storage.SaveData(data);
@@ -405,31 +402,31 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                     {
                         containsScene = true;
 
-                        if (data.scenes.All(s => s.Path != path))
+                        if (data.scenes.All(s => s.path != path))
                             data.scenes.Add(new AssetEntry(path, true));
                     }
                     else if (obj is GameObject && path.EndsWith(".prefab"))
                     {
                         containsPrefab = true;
 
-                        if (data.prefabs.All(p => p.Path != path))
+                        if (data.prefabs.All(p => p.path != path))
                             data.prefabs.Add(new AssetEntry(path, true));
                     }
                 }
 
                 if (containsScene)
-                    ListSorter.SortList(data.scenes, sceneSortMode, e => e.Path);
+                    AssetListSorter.SortList(data.scenes, sceneSortMode);
                 else if (containsPrefab)
-                    ListSorter.SortList(data.prefabs, prefabSortMode, e => e.Path);
+                    AssetListSorter.SortList(data.prefabs, prefabSortMode);
 
                 foreach (Object obj in DragAndDrop.objectReferences)
                 {
                     string path = AssetDatabase.GetAssetPath(obj);
 
                     if (obj is SceneAsset && path.EndsWith(".unity"))
-                        addedSceneIndices.Add(data.scenes.FindIndex(s => s.Path == path));
+                        addedSceneIndices.Add(data.scenes.FindIndex(s => s.path == path));
                     else if (obj is GameObject && path.EndsWith(".prefab"))
-                        addedPrefabIndices.Add(data.prefabs.FindIndex(p => p.Path == path));
+                        addedPrefabIndices.Add(data.prefabs.FindIndex(p => p.path == path));
                 }
 
                 // Switch tab regardless of duplicates

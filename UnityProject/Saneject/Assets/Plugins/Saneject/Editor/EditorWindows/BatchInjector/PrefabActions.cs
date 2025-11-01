@@ -24,10 +24,10 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             }
 
             foreach (string path in prefabsInScene)
-                if (data.prefabs.All(p => p.Path != path))
+                if (data.prefabs.All(p => p.path != path))
                     data.prefabs.Add(new AssetEntry(path, true));
 
-            ListSorter.SortList(data.prefabs, sortMode, e => e.Path);
+            AssetListSorter.SortList(data.prefabs, sortMode);
             Storage.SaveData(data);
         }
 
@@ -40,7 +40,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 .ToList();
 
             List<string> newPrefabs = paths
-                .Where(p => data.prefabs.All(s => s.Path != p))
+                .Where(p => data.prefabs.All(s => s.path != p))
                 .Where(p => AssetDatabase.LoadAssetAtPath<GameObject>(p) != null)
                 .ToList();
 
@@ -57,7 +57,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 foreach (string path in newPrefabs)
                     data.prefabs.Add(new AssetEntry(path, true));
 
-                ListSorter.SortList(data.prefabs, sortMode, e => e.Path);
+                AssetListSorter.SortList(data.prefabs, sortMode);
                 Storage.SaveData(data);
             }
         }
