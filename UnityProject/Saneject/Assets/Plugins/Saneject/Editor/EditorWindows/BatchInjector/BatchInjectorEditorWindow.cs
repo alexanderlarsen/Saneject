@@ -19,7 +19,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
         private ReorderableList sceneList;
         private ReorderableList prefabList;
         private Vector2 listScroll;
-        private int selectedTab;
+        private SelectedTab selectedTab;
 
         private Rect sceneListRect;
         private Rect prefabListRect;
@@ -27,10 +27,14 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
 
         private SortMode sceneSortMode = SortMode.Custom;
         private SortMode prefabSortMode = SortMode.Custom;
-        
-        enum SelectedTab { Scenes, Prefabs }
 
         private string searchQuery = "";
+
+        private enum SelectedTab
+        {
+            Scenes,
+            Prefabs
+        }
 
         [MenuItem("Saneject/Batch Injector")]
         public static void ShowWindow()
@@ -112,10 +116,16 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
 
             list.onReorderCallback = _ =>
             {
-                if (selectedTab == 0)
-                    sceneSortMode = SortMode.Custom;
-                else if (selectedTab == 1)
-                    prefabSortMode = SortMode.Custom;
+                switch (selectedTab)
+                {
+                    case SelectedTab.Scenes:
+                        sceneSortMode = SortMode.Custom;
+                        break;
+
+                    case SelectedTab.Prefabs:
+                        prefabSortMode = SortMode.Custom;
+                        break;
+                }
 
                 Storage.SaveData(data);
             };
@@ -137,14 +147,14 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
 
             switch (selectedTab)
             {
-                case 0:
+                case SelectedTab.Scenes:
                     DrawSceneHeader();
                     GUILayout.Space(5);
                     listScroll = EditorGUILayout.BeginScrollView(listScroll);
                     DrawSceneList();
                     break;
 
-                case 1:
+                case SelectedTab.Prefabs:
                     DrawPrefabSection();
                     GUILayout.Space(5);
                     listScroll = EditorGUILayout.BeginScrollView(listScroll);
@@ -173,7 +183,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             EditorGUILayout.LabelField("Drag and drop scenes and prefabs anywhere in the window to add them to each list.");
             GUILayout.Space(8);
 
-            selectedTab = GUILayout.Toolbar(selectedTab, new[]
+            selectedTab = (SelectedTab)GUILayout.Toolbar((int)selectedTab, new[]
             {
                 $"Scenes ({data.scenes.Count})",
                 $"Prefabs ({data.prefabs.Count})"
@@ -425,12 +435,12 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                 // Switch tab regardless of duplicates
                 if (containsScene)
                 {
-                    selectedTab = 0;
+                    selectedTab = SelectedTab.Scenes;
                     SelectIndices(sceneList, addedSceneIndices);
                 }
                 else if (containsPrefab)
                 {
-                    selectedTab = 1;
+                    selectedTab = SelectedTab.Prefabs;
                     SelectIndices(prefabList, addedPrefabIndices);
                 }
 
