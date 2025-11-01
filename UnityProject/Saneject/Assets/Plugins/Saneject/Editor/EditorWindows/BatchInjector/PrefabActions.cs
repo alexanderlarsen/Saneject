@@ -16,16 +16,21 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             foreach (GameObject go in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID))
             {
                 GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(go);
-                if (!prefab) continue;
+                
+                if (!prefab) 
+                    continue;
 
                 string path = AssetDatabase.GetAssetPath(prefab);
-                if (string.IsNullOrEmpty(path)) continue;
+                
+                if (string.IsNullOrEmpty(path)) 
+                    continue;
+                
                 prefabsInScene.Add(path);
             }
 
             foreach (string path in prefabsInScene)
                 if (data.prefabs.All(p => p.path != path))
-                    data.prefabs.Add(new AssetEntry(path, true));
+                    data.prefabs.Add(new AssetEntry(path));
 
             AssetListSorter.SortList(data.prefabs, sortMode);
             Storage.SaveData(data);
@@ -41,7 +46,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
 
             List<string> newPrefabs = paths
                 .Where(p => data.prefabs.All(s => s.path != p))
-                .Where(p => AssetDatabase.LoadAssetAtPath<GameObject>(p) != null)
+                .Where(p => AssetDatabase.LoadAssetAtPath<GameObject>(p))
                 .ToList();
 
             if (newPrefabs.Count == 0)
@@ -55,7 +60,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                     "Yes", "No"))
             {
                 foreach (string path in newPrefabs)
-                    data.prefabs.Add(new AssetEntry(path, true));
+                    data.prefabs.Add(new AssetEntry(path));
 
                 AssetListSorter.SortList(data.prefabs, sortMode);
                 Storage.SaveData(data);

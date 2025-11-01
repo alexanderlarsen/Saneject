@@ -8,14 +8,11 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
     {
         public string path;
         public string name;
-        public bool enabled;
-
-        public AssetEntry(
-            string path,
-            bool enabled)
+        public bool enabled = true;
+        
+        public AssetEntry(string path)
         {
             this.path = path;
-            this.enabled = enabled;
             name = Path.GetFileNameWithoutExtension(path);
         }
     }

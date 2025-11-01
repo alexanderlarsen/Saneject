@@ -19,7 +19,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                     continue;
 
                 if (data.scenes.All(s => s.path != scene.path))
-                    data.scenes.Add(new AssetEntry(scene.path, true));
+                    data.scenes.Add(new AssetEntry(scene.path));
             }
 
             AssetListSorter.SortList(data.scenes, sortMode);
@@ -54,7 +54,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
                     "Yes", "No"))
             {
                 foreach (string path in newScenes)
-                    data.scenes.Add(new AssetEntry(path, true));
+                    data.scenes.Add(new AssetEntry(path));
 
                 AssetListSorter.SortList(data.scenes, sortMode);
                 Storage.SaveData(data);
