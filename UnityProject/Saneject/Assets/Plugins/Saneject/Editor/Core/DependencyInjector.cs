@@ -55,16 +55,15 @@ namespace Plugins.Saneject.Editor.Core
 
         /// <summary>
         /// Performs dependency injection across multiple scenes in sequence.
-        /// Each scene is opened, processed for <see cref="Scope" />s, injected, saved,
-        /// and then the next scene is loaded. Logs progress per scene and aggregates
-        /// statistics for all processed scopes.
+        /// Each scene is opened, injected, and saved before continuing to the next.
+        /// Logs progress per scene and aggregates statistics for all processed scopes.
         /// Restores the originally active scene after completion.
         /// This operation is editor-only and cannot be performed in Play Mode.
         /// </summary>
-        /// <param name="sceneAssetPaths">An array of scene asset paths to inject, in order of processing.</param>
-        /// <param name="canClearLogs"></param>
-        /// <param name="stats"></param>
-        /// <param name="logStats"></param>
+        /// <param name="sceneAssetPaths">Array of scene asset paths to inject, in order of processing.</param>
+        /// <param name="canClearLogs">Whether to clear the console before injection starts.</param>
+        /// <param name="logStats">Whether to log the summary statistics after completion.</param>
+        /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
         public static void BatchInjectScenes(
             string[] sceneAssetPaths,
             bool canClearLogs,
@@ -131,6 +130,16 @@ namespace Plugins.Saneject.Editor.Core
             stats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssetPaths.Length} scenes");
         }
 
+        /// <summary>
+        /// Performs dependency injection across multiple prefabs in sequence.
+        /// Each prefab asset is loaded, processed for <see cref="Scope" />s, injected, and saved back to disk.
+        /// Logs progress per prefab and aggregates statistics for all processed scopes.
+        /// This operation is editor-only and cannot be performed in Play Mode.
+        /// </summary>
+        /// <param name="prefabAssetPaths">Array of prefab asset paths to inject, in order of processing.</param>
+        /// <param name="canClearLogs">Whether to clear the console before injection starts.</param>
+        /// <param name="logStats">Whether to log the summary statistics after completion.</param>
+        /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
         public static void BatchInjectPrefabs(
             string[] prefabAssetPaths,
             bool canClearLogs,
@@ -210,6 +219,13 @@ namespace Plugins.Saneject.Editor.Core
             stats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssetPaths.Length} prefabs");
         }
 
+        /// <summary>
+        /// Performs dependency injection across both scenes and prefabs in a single combined pass.
+        /// Executes scene injection first, followed by prefab injection, then prints a unified summary log at the end.
+        /// This operation is editor-only and cannot be performed in Play Mode.
+        /// </summary>
+        /// <param name="sceneAssetPaths">Array of scene asset paths to process, injected in order.</param>
+        /// <param name="prefabAssetPaths">Array of prefab asset paths to process, injected in order.</param>
         public static void BatchInjectAllScenesAndPrefabs(
             string[] sceneAssetPaths,
             string[] prefabAssetPaths)
