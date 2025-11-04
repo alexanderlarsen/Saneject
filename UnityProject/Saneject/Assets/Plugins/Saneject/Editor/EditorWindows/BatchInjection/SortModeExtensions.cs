@@ -1,4 +1,4 @@
-﻿namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
+﻿namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     public static class SortModeExtensions
     {

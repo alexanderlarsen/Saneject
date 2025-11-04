@@ -25,7 +25,7 @@ namespace Plugins.Saneject.Editor.Menus
         [MenuItem("Saneject/Inject Scene Dependencies", false, 49), MenuItem("GameObject/Inject Scene Dependencies", false, 49)]
         private static void InjectSceneDependencies()
         {
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
         }
 
         /// <summary>
@@ -44,7 +44,7 @@ namespace Plugins.Saneject.Editor.Menus
         private static void InjectPrefabDependencies()
         {
             Scope scope = PrefabStageUtility.GetCurrentPrefabStage().FindComponentOfType<Scope>();
-            DependencyInjector.InjectPrefabDependencies(scope);
+            DependencyInjector.InjectPrefab(scope);
         }
     }
 }

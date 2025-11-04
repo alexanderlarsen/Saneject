@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
+namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     public static class Storage
     {

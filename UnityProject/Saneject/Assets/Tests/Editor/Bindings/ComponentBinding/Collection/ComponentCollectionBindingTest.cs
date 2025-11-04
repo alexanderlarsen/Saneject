@@ -37,7 +37,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Collection
                 .Where(service => service.gameObject == grandChild3 || service.gameObject == grandChild4);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.servicesConcreteArray);
@@ -70,7 +70,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Collection
                 .Where(service => service.gameObject == grandChild3 || service.gameObject == grandChild4);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             HashSet<GameObject> concreteSet = requester.servicesConcreteArray.Select(c => c.gameObject).ToHashSet();
@@ -105,7 +105,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Collection
                 .Where(service => service.gameObject == grandChild3 || service.gameObject == grandChild4);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.serviceConcreteSingle);

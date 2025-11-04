@@ -31,7 +31,7 @@ namespace Tests.Editor.General
             BindComponent<InjectableComponent>(childScope).FromSelf();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.concreteComponent);
@@ -55,7 +55,7 @@ namespace Tests.Editor.General
             BindComponent<InjectableComponent>(rootScope).FromSelf();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.concreteComponent);
@@ -78,7 +78,7 @@ namespace Tests.Editor.General
             BindComponent<InjectableComponent>(scope).FromSelf();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(prefabRequester.concreteComponent);
@@ -101,7 +101,7 @@ namespace Tests.Editor.General
             BindComponent<InjectableComponent>(scope).FromSelf();
 
             // Inject
-            DependencyInjector.InjectPrefabDependencies(scope);
+            DependencyInjector.InjectPrefab(scope);
 
             // Assert
             Assert.AreEqual(component, requester.concreteComponent);

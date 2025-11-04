@@ -28,7 +28,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
             BindAsset<InjectableScriptableObject>(scope).ToID("componentB").FromInstance(assetB);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.concreteComponentA);
@@ -55,7 +55,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
             BindAsset<IInjectable, InjectableScriptableObject>(scope).ToID("componentB").FromInstance(assetB);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.interfaceComponentA);
@@ -80,7 +80,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Qualifiers
             BindAsset<InjectableScriptableObject>(scope).FromInstance(asset);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert – ID fields should remain null because no matching ID binding exists
             Assert.IsNull(requester.concreteComponentA);

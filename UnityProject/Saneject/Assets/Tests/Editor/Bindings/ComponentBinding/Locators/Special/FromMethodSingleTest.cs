@@ -26,7 +26,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
             BindComponent<InjectableComponent>(scope).FromMethod(() => serviceInstance);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.concreteComponent);
@@ -47,7 +47,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
             BindComponent<IInjectable, InjectableComponent>(scope).FromMethod(() => serviceInstance);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.interfaceComponent);

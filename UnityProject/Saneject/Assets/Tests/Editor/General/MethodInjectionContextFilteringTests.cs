@@ -55,7 +55,7 @@ namespace Tests.Editor.General
                 .FromInstance(dep);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(GetPrivateField<MyDependency>(target, "myDependency2"),
@@ -92,7 +92,7 @@ namespace Tests.Editor.General
                 .FromInstance(dep);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(dep, GetPrivateField<MyDependency>(target, "myDependency2"),
@@ -127,7 +127,7 @@ namespace Tests.Editor.General
                 .FromInstance(depOnAsset);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(GetPrivateField<MyDependency>(target, "myDependency2"),

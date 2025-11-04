@@ -1,12 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Editor.Core;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
+namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     public class BatchInjectorEditorWindow : EditorWindow
     {
@@ -225,7 +226,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             };
 
             EditorGUILayout.LabelField("Batch Injector", titleStyle);
-            EditorGUILayout.LabelField("Drag and drop scenes and prefabs anywhere in the window to add them to each list.");
+
+            EditorGUILayout.LabelField("Drag and drop scenes and prefabs anywhere in the window to add them to each list. Then click one of the Inject-buttons to inject all selected scenes and/or prefabs in one go.", EditorStyles.wordWrappedLabel);
             GUILayout.Space(8);
 
             selectedTab = (SelectedTab)GUILayout.Toolbar
@@ -547,37 +549,71 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             GUILayout.Space(6);
             EditorGUILayout.BeginHorizontal();
 
-            int sceneCount = data.scenes.Count;
-            int prefabCount = data.prefabs.Count;
+            AssetEntry[] scenes = data.scenes.Where(scene => scene.enabled).ToArray();
+            AssetEntry[] prefabs = data.prefabs.Where(prefab => prefab.enabled).ToArray();
 
-            int selectedScenes = sceneList.selectedIndices?.Count ?? 0;
-            int selectedPrefabs = prefabList.selectedIndices?.Count ?? 0;
+            int sceneCount = scenes.Length;
+            int prefabCount = prefabs.Length;
 
             // Inject All
-            if (GUILayout.Button("Inject All"))
-                Debug.Log("Injecting all scenes and prefabs...");
+            using (new EditorGUI.DisabledScope(sceneCount == 0 && prefabCount == 0))
+            {
+                if (GUILayout.Button("Inject All"))
+                {
+                    string[] sceneAssetPaths = scenes
+                        .Select(scene => scene.path)
+                        .ToArray();
+
+                    string[] prefabAssetPaths = prefabs
+                        .Select(prefab => prefab.path)
+                        .ToArray();
+
+                    DependencyInjector.BatchInjectAllScenesAndPrefabs(
+                        sceneAssetPaths,
+                        prefabAssetPaths
+                    );
+                }
+            }
 
             // Inject All Scenes
-            if (GUILayout.Button($"Inject All Scenes ({sceneCount})"))
-                Debug.Log($"Injecting {sceneCount} scenes...");
+            using (new EditorGUI.DisabledScope(sceneCount == 0))
+            {
+                if (GUILayout.Button($"Inject Scenes ({sceneCount})"))
+                    DependencyInjector.BatchInjectScenes(
+                        sceneAssetPaths: scenes
+                            .Select(scene => scene.path)
+                            .ToArray(),
+                        canClearLogs: true,
+                        logStats: true
+                    );
+            }
 
             // Inject All Prefabs
-            if (GUILayout.Button($"Inject All Prefabs ({prefabCount})"))
-                Debug.Log($"Injecting {prefabCount} prefabs...");
-
-            // Inject Selected Scene(s)
-            using (new EditorGUI.DisabledScope(selectedScenes == 0))
+            using (new EditorGUI.DisabledScope(prefabCount == 0))
             {
-                if (GUILayout.Button($"Inject Selected Scene{(selectedScenes != 1 ? "s" : "")} ({selectedScenes})"))
-                    Debug.Log($"Injecting {selectedScenes} selected scene{(selectedScenes != 1 ? "s" : "")}...");
+                if (GUILayout.Button($"Inject Prefabs ({prefabCount})"))
+                    DependencyInjector.BatchInjectPrefabs(
+                        prefabs
+                            .Select(prefab => prefab.path)
+                            .ToArray(),
+                        canClearLogs: true,
+                        logStats: true
+                    );
             }
 
-            // Inject Selected Prefab(s)
-            using (new EditorGUI.DisabledScope(selectedPrefabs == 0))
-            {
-                if (GUILayout.Button($"Inject Selected Prefab{(selectedPrefabs != 1 ? "s" : "")} ({selectedPrefabs})"))
-                    Debug.Log($"Injecting {selectedPrefabs} selected prefab{(selectedPrefabs != 1 ? "s" : "")}...");
-            }
+            // // Inject Selected Scene(s)
+            // using (new EditorGUI.DisabledScope(selectedScenes == 0))
+            // {
+            //     if (GUILayout.Button($"Inject Selected Scene{(selectedScenes != 1 ? "s" : "")} ({selectedScenes})"))
+            //         Debug.Log($"Injecting {selectedScenes} selected scene{(selectedScenes != 1 ? "s" : "")}...");
+            // }
+            //
+            // // Inject Selected Prefab(s)
+            // using (new EditorGUI.DisabledScope(selectedPrefabs == 0))
+            // {
+            //     if (GUILayout.Button($"Inject Selected Prefab{(selectedPrefabs != 1 ? "s" : "")} ({selectedPrefabs})"))
+            //         Debug.Log($"Injecting {selectedPrefabs} selected prefab{(selectedPrefabs != 1 ? "s" : "")}...");
+            // }
 
             EditorGUILayout.EndHorizontal();
         }

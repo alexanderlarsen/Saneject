@@ -27,7 +27,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.ProjectLoad
                 .Where(a => a.name == "InjectableScriptableObject 2");
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             InjectableScriptableObject expected = Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 2");
@@ -50,7 +50,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.ProjectLoad
                 .Where(a => a.name == "InjectableScriptableObject 3");
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             InjectableScriptableObject expected = Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 3");

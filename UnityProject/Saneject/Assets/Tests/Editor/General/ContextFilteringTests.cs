@@ -46,7 +46,7 @@ namespace Tests.Editor.General
             // Bind the actual prefab instance explicitly
             BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable);
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.IsNull(requester.interfaceComponent,
                 "Scene requester should not resolve from prefab instance when filtering is enabled.");
@@ -69,7 +69,7 @@ namespace Tests.Editor.General
             // Bind the actual prefab instance explicitly
             BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable);
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(injectable, requester.interfaceComponent,
                 "Scene requester should resolve from prefab instance when filtering is disabled.");
@@ -97,7 +97,7 @@ namespace Tests.Editor.General
             // Bind to a specific instance (different root than requester)
             BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable2);
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.IsNull(requester.interfaceComponent,
                 "Requester should not resolve from a different prefab instance when filtering is enabled.");
@@ -118,7 +118,7 @@ namespace Tests.Editor.General
             // Bind directly to the asset component (editor-only scenario)
             BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectableOnAsset);
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.IsNull(requester.interfaceComponent,
                 "Requester should not resolve from a prefab asset when filtering is enabled.");

@@ -28,7 +28,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .Where(c => c != null && c.gameObject.name == "ChildB");
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
@@ -50,7 +50,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .Where(x => ReferenceEquals(x, targetIface)); // filter purely via the interface
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.interfaceComponent);
         }
@@ -71,7 +71,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereComponent(c => c.gameObject.name == "ChildB");
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
@@ -92,7 +92,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereComponent(c => c.gameObject.name == "ChildB"); // access Component API even though T is interface
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.interfaceComponent);
         }
@@ -113,7 +113,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereGameObject(go => go.name == "ChildA");
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
@@ -134,7 +134,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereGameObject(go => go.name == "ChildA");
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.interfaceComponent);
         }
@@ -157,7 +157,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromDescendants()
                 .WhereTransform(t => t.parent != null && t.parent.name == "ChildA");
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
@@ -179,7 +179,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromDescendants()
                 .WhereTransform(t => t.parent != null && t.parent.name == "ChildA");
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.interfaceComponent);
         }

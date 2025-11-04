@@ -28,7 +28,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
                 .FromInstance(target);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(target, requester.concreteComponent);
@@ -51,7 +51,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
                 .FromInstance(target);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(target, requester.interfaceComponent);
@@ -74,7 +74,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
                 .FromInstance(target);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);

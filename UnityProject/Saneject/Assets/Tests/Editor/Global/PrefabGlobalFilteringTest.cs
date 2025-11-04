@@ -51,7 +51,7 @@ namespace Tests.Editor.Global
             BindGlobal<InjectableComponent>(scope).FromInstance(injectable);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             SceneGlobalContainer container = Object.FindFirstObjectByType<SceneGlobalContainer>();
@@ -103,7 +103,7 @@ namespace Tests.Editor.Global
             BindGlobal<InjectableComponent>(scope).FromInstance(injectable);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             SceneGlobalContainer container = Object.FindFirstObjectByType<SceneGlobalContainer>();

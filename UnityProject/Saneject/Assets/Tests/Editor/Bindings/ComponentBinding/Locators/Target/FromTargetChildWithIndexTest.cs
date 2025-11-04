@@ -26,7 +26,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<InjectableComponent>(scope).FromTargetChildWithIndex(2);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(requester.concreteComponent);
@@ -47,7 +47,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<IInjectable, InjectableComponent>(scope).FromTargetChildWithIndex(2);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(requester.interfaceComponent);
@@ -68,7 +68,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<IInjectable, InjectableComponent>(scope).FromTargetChildWithIndex(99);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);

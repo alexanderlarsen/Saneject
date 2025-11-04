@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
+namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     [Serializable]
     public class AssetEntry

@@ -31,7 +31,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereIsActiveAndEnabled(); // sample sugar
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(enabledComp, requester.concreteComponent);
         }
@@ -58,7 +58,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereParentNameIs("ChildA"); // sample sugar
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
@@ -82,7 +82,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromScopeSelf()
                 .WhereAnyChildNameIs("ChildA"); // sample sugar
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
@@ -116,7 +116,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereAnyAncestorTagIs("Untagged"); // sample sugar
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
@@ -144,7 +144,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Filters
                 .FromRootDescendants()
                 .WhereAnySiblingLayerIs(uiLayer); // sample sugar
 
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             Assert.AreEqual(target, requester.concreteComponent);
         }
