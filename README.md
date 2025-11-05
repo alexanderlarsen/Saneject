@@ -100,9 +100,6 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [Roslyn tools](#roslyn-tools)
     - [User settings](#user-settings)
 - [Tested Unity versions](#tested-unity-versions)
-- [Limitations](#limitations)
-- [Possible additions](#possible-additions)
-- [Future explorations](#future-explorations)
 - [Credits](#credits)
 - [Contribution](#contribution)
 - [License](#license)
@@ -127,34 +124,44 @@ Saneject isn't meant to replace full runtime frameworks like Zenject or VContain
 
 ## Features
 
+## Features
+
 ### Injection & binding
 
 - **Editor-time, deterministic injection:** Bindings are resolved in the editor, stored directly in serialized fields, including nested serialized classes.
 - **Fluent, scope-aware binding API:** Search hierarchy or project, filter by tag/layer/name, bind by type or ID.
+- **Bind Components and Assets:** Use familiar APIs with context-aware methods. Component methods traverse GameObject hierarchies; asset bindings can load from Resources, folders, and more.
 - **Collection binding support:** Inject arrays or lists with full support for filters, scoping, and binding IDs.
-- **Flexible filtering:** Query scene or asset bindings with filters for name, tag, layer, hierarchy, and custom predicates for advanced resolution logic.
-- **Non-blocking validation:** Reports all missing, conflicting, or invalid bindings in a single pass without halting injection flow, enabling faster iteration and debugging.
+- **Method injection:** Inject dependencies as method parameters. Supports single values, arrays, and lists, and works alongside field injection, including inside nested serialized classes.
+- **Context filtering:** Prefabs and scenes are injected in isolation. A prefab inside a scene will not be used to resolve scene dependencies and vice versa.
+- **Flexible filtering:** Predicate-based filtering system for both components and assets. Compact, composable, and extensible with user-defined helper methods.
+- **Target qualification:** Inject by ID, target type, or member name. Target bindings can specify which classes and members to apply to, working on fields, properties, and methods.
 - **Unified Scope component:** One `Scope` type handles both scenes and prefabs, with automatic context detection.
+- **Batch injection (coming soon):** Editor window to inject all or selected scenes and prefabs in the project with one click, with detailed logs per item and cumulative summary stats at the end.
 
 ### Serialization & interfaces
 
-- **Interface serialization with Roslyn:** `[SerializeInterface] IMyInterface` fields show up in the Inspector.
-- **Serialized collections of interfaces:** Interface arrays and lists, e.g., `[SerializeInterface] IMyInterface[]`, are fully supported, injectable and visible in the Inspector too.
-- **No more interface class wrappers:** Write plain `[SerializeInterface] IMyInterface foo` instead of wrapping in `Interface<TInterface> foo` and unwrapping with `foo.Value`.
-- **Cross-scene / prefab references:** `ProxyObject` `ScriptableObjects` allow serialized references to objects Unity normally can't link.
-- **Global Scope:** Scene dependencies can be promoted to global singletons at editor-time and resolved statically by proxies at runtime.
+- **Interface serialization with Roslyn:** `[SerializeInterface]` fields show up in the Inspector.
+- **Serialized collections of interfaces:** Arrays and lists of interfaces are fully supported, injectable, and visible in the Inspector.
+- **No more interface class wrappers:** Write plain `[SerializeInterface] IMyInterface foo` instead of wrapping or unwrapping values.
+- **Cross-scene and prefab references:** Proxies allow serialized references between scenes and prefabs while preserving Unity’s isolation rules.
+- **Global Scope:** Scene dependencies can be promoted to global singletons at editor time and resolved statically at runtime.
 
 ### Performance & runtime
 
-- **No runtime reflection:** Everything is injected and serialized in the editor. At runtime, it's just data Unity already serialized.
-- **Proxy resolution:** Proxies resolve their targets once, then cache them. Minimal overhead (dictionary lookup or simple search).
+- **No runtime reflection:** Everything is injected and serialized in the editor. At runtime, it’s just Unity’s own data.
+- **Proxy resolution:** Proxies resolve their targets once, then cache them for minimal overhead.
+- **Zero startup cost:** No container initialization, no additional lifecycles, no reflection or allocations during play.
 
 ### Editor UX & tooling
 
-- **Native UI/UX:** Designed to feel like it belongs in Unity with polished inspectors, minimal ceremony, and contextual behavior that matches Unity workflows.
-- **User-friendly tooling:** One-click scene or prefab resolve, automatic proxy generation, correct inspector interface ordering, automatic Scope context handling.
-- **Inspector polish:** `[Inject]` fields grayed out (or hidden), interface proxies show implemented types, help boxes on components.
-- **User Settings panel:** Toggle injected field visibility, logging, and more.
+- **Comprehensive logging & validation:** Every point of failure is logged non-blocking in one pass, including missing, conflicting, or invalid bindings and missing dependencies. Logs both individual messages and total summary stats after each injection.
+- **Native UI/UX:** Designed to feel at home in Unity with polished inspectors, contextual menus, and intuitive behavior.
+- **User-friendly tooling:** One-click injection for scenes or prefabs, automatic proxy generation, and scope-aware inspector actions.
+- **Inspector polish:** Injected fields are clearly marked or grayed out, interfaces display implemented types, and nested serialized classes are drawn in order.
+- **User Settings panel:** Toggle injected field visibility, logging behavior, context filtering, and more, directly from the editor.
+- **Show Scope path:** Displays the parent scope chain in the Scope inspector for quick navigation and debugging.
+- **Create Scope menu:** Menu item that generates Scope boilerplate code.
 
 ## Quick start
 
@@ -317,11 +324,11 @@ Methods in `ComponentBindingBuilder<TComponent> where TComponent : UnityEngine.C
 Qualifiers restrict when a binding applies based on the injection target or its ID.  
 If you add more than one, the binding will match whenever **any** of them apply.
 
-| Method                                              | Description                                                                                                                         |
-|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `ToTarget<TTarget>()`<br/>`ToTarget(params Type[])` | Applies binding only if the injection target (class requesting injection) is of the given type(s).                                  |
-| `ToId(params string[])`                             | Applies binding only if the injection target member (field or property) has one of the specified IDs (from `[Inject(Id = "...")]`). |
-| `ToMember(params string[])`                         | Applies binding only if the injection target member (field or property) has one of the specified names.                             |
+| Method                                              | Description                                                                                                                                         |
+|-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ToTarget<TTarget>()`<br/>`ToTarget(params Type[])` | Applies binding only if the injection target (class requesting injection) is of the given type(s). Also works with nested `[Serializable]` classes. |
+| `ToId(params string[])`                             | Applies binding only if the injection target member (field, property or method) has one of the specified IDs (from `[Inject(Id = "...")]`).         |
+| `ToMember(params string[])`                         | Applies binding only if the injection target member (field, property or method) has one of the specified names.                                     |
 
 #### Component locators
 
@@ -436,11 +443,11 @@ Methods in `AssetBindingBuilder<TAsset> where TAsset : UnityEngine.Object`.
 Qualifiers restrict when a binding applies based on the injection target or its ID.  
 If you add more than one, the binding will match whenever **any** of them apply.
 
-| Method                                              | Description                                                                                                                         |
-|-----------------------------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `ToTarget<TTarget>()`<br/>`ToTarget(params Type[])` | Applies binding only if the injection target (class requesting injection) is of the given type(s).                                  |
-| `ToId(params string[])`                             | Applies binding only if the injection target member (field or property) has one of the specified IDs (from `[Inject(Id = "...")]`). |
-| `ToMember(params string[])`                         | Applies binding only if the injection target member (field or property) has one of the specified names.                             |
+| Method                                              | Description                                                                                                                                         |
+|-----------------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------|
+| `ToTarget<TTarget>()`<br/>`ToTarget(params Type[])` | Applies binding only if the injection target (class requesting injection) is of the given type(s). Also works with nested `[Serializable]` classes. |
+| `ToId(params string[])`                             | Applies binding only if the injection target member (field, property or method) has one of the specified IDs (from `[Inject(Id = "...")]`).         |
+| `ToMember(params string[])`                         | Applies binding only if the injection target member (field, property or method) has one of the specified names.                                     |
 
 #### Asset locators
 
@@ -663,7 +670,7 @@ When context isolation is enabled (recommended):
 
 For each `[Inject]` field, Saneject determines the *context key* of both sides:
 
-- **Injection target (field owner):** the object declaring the `[Inject]` field.
+- **Injection target (field owner):** the object declaring the `[Inject]` field, property or method.
 - **Candidate dependency:** each object that could satisfy the binding.
 
 Both are compared:
@@ -771,7 +778,7 @@ Without `[Inject]`, they behave as regular `Object` fields you can assign manual
 
 ### Method injection
 
-Saneject supports `[Inject]` on methods as an alternative or complement to field injection.
+Saneject supports `[Inject]` on methods as an alternative or complement to field injection. Method injection also supports qualifiers `ToTarget<T>()`, `ToMember(string)`, `ToId(string)`, with member name being the method name.
 
 This is useful when you want to:
 
@@ -1111,28 +1118,6 @@ Saneject is automatically tested in [CI](https://github.com/alexanderlarsen/Sane
 
 In-between versions will likely work, but only the above are verified in automated tests.  
 Unity 2023 releases are skipped since they are tech stream builds (not long-term supported), and Unity does not recommend them for production.
-
-## Limitations
-
-- Injecting plain C# objects (POCOs) directly into other objects is not supported due to Unity's serialization limits. Injection *into* serializable POCOs nested inside `MonoBehaviour` is supported.
-- Verified on Windows (Mono + IL2CPP) and Android (IL2CPP). Other platforms remain untested.
-
-For trade-offs compared to runtime DI frameworks, see [Runtime DI vs Saneject](#runtime-di-vs-saneject).
-
-## Possible additions
-
-These are features that could be added if there's interest.
-
-- Asset binding by interface only, `BindAsset<IMyInterface>()`. Useful for injecting collections of different `ScriptableObject` that implement the same interface.
-
-## Future explorations
-
-These are research ideas and experiments that may or may not make it into Saneject.
-
-- Editor-time POCO injection via `[SerializeReference]`.
-- Project-wide "one click" injection: process all scenes and prefabs in one go. Difficult to get right but could be a power feature.
-- Circular dependency detection: Currently not possible because injection runs one scene or prefab at a time. A project-wide injection pass would enable it, and it could be configurable (ignore, warn, block).
-- Interface-aware object picker. Unity's built-in picker can't filter by interface, so this would require a fully custom object picker. A bit niche now that `[Inject]` fields are grayed out and not pickable, but it would make `[SerializeInterface]` feel more native if people want to use it without `[Inject]`.
 
 ## Credits
 
