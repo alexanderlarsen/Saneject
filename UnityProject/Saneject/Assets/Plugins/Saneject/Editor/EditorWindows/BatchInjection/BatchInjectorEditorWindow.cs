@@ -19,17 +19,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         private Rect sceneListRect;
         private Rect prefabListRect;
         private Vector2 listScroll;
-        private SelectedTab selectedTab;
         private bool clickedListItemThisFrame;
-        private SortMode sceneSortMode = SortMode.Custom;
-        private SortMode prefabSortMode = SortMode.Custom;
-        private GUIStyle titleStyle;
 
-        private enum SelectedTab
-        {
-            Scenes,
-            Prefabs
-        }
+        private GUIStyle titleStyle;
 
         [MenuItem("Saneject/Batch Injector")]
         public static void ShowWindow()
@@ -67,7 +59,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             DrawHeader();
             GUILayout.Space(8);
 
-            switch (selectedTab)
+            switch (data.selectedTab)
             {
                 case SelectedTab.Scenes:
                     DrawSceneHeader();
@@ -188,14 +180,14 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
             list.onReorderCallback = _ =>
             {
-                switch (selectedTab)
+                switch (data.selectedTab)
                 {
                     case SelectedTab.Scenes:
-                        sceneSortMode = SortMode.Custom;
+                        data.sceneSortMode = SortMode.Custom;
                         break;
 
                     case SelectedTab.Prefabs:
-                        prefabSortMode = SortMode.Custom;
+                        data.prefabSortMode = SortMode.Custom;
                         break;
                 }
 
@@ -222,9 +214,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             EditorGUILayout.LabelField("Drag and drop scenes and prefabs anywhere in the window to add them to each list. Then click one of the Inject-buttons to inject all selected scenes and/or prefabs in one go.", EditorStyles.wordWrappedLabel);
             GUILayout.Space(8);
 
-            selectedTab = (SelectedTab)GUILayout.Toolbar
+            data.selectedTab = (SelectedTab)GUILayout.Toolbar
             (
-                selected: (int)selectedTab,
+                selected: (int)data.selectedTab,
                 texts: new[]
                 {
                     $"Scenes ({data.scenes.Count})",
@@ -243,11 +235,12 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
             GenericMenu menu = new();
 
-            AddItem(SortMode.PathAtoZ);
-            AddItem(SortMode.PathZtoA);
-            menu.AddSeparator("");
             AddItem(SortMode.NameAtoZ);
             AddItem(SortMode.NameZtoA);
+            menu.AddSeparator("");
+            AddItem(SortMode.PathAtoZ);
+            AddItem(SortMode.PathZtoA);
+
             menu.ShowAsContext();
 
             return;
@@ -279,13 +272,13 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
                 if (GUILayout.Button("Add Open Scenes"))
                 {
-                    SceneListManager.AddOpenScenes(data, sceneSortMode);
+                    SceneListManager.AddOpenScenes(data, data.sceneSortMode);
                     Repaint();
                 }
 
                 if (GUILayout.Button("Add All Project Scenes"))
                 {
-                    SceneListManager.AddAllProjectScenes(data, sceneSortMode);
+                    SceneListManager.AddAllProjectScenes(data, data.sceneSortMode);
                     Repaint();
                 }
 
@@ -297,8 +290,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
                 DrawSortMenuButton
                 (
-                    sortMode: sceneSortMode,
-                    setSortMode: value => sceneSortMode = value,
+                    sortMode: data.sceneSortMode,
+                    setSortMode: value => data.sceneSortMode = value,
                     list: data.scenes
                 );
             }
@@ -320,13 +313,13 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
                 if (GUILayout.Button("Add All Prefabs In Current Scene"))
                 {
-                    PrefabListManager.AddAllPrefabsInScene(data, prefabSortMode);
+                    PrefabListManager.AddAllPrefabsInScene(data, data.prefabSortMode);
                     Repaint();
                 }
 
                 if (GUILayout.Button("Add All Project Prefabs"))
                 {
-                    PrefabListManager.AddAllProjectPrefabs(data, prefabSortMode);
+                    PrefabListManager.AddAllProjectPrefabs(data, data.prefabSortMode);
                     Repaint();
                 }
 
@@ -338,8 +331,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
                 DrawSortMenuButton
                 (
-                    sortMode: prefabSortMode,
-                    setSortMode: v => prefabSortMode = v,
+                    sortMode: data.prefabSortMode,
+                    setSortMode: value => data.prefabSortMode = value,
                     list: data.prefabs
                 );
             }
@@ -400,7 +393,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
             void ClearCurrentListSelection()
             {
-                ReorderableList list = selectedTab == 0 ? sceneList : prefabList;
+                ReorderableList list = data.selectedTab == 0 ? sceneList : prefabList;
                 list.ClearSelection();
                 Repaint();
             }
@@ -433,7 +426,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 AddObjectsToList(ref isScene, ref isPrefab);
                 SortObjects(isScene, isPrefab);
                 FindObjectIndices(sceneObjectIndices, prefabObjectIndices);
-                selectedTab = isScene ? SelectedTab.Scenes : SelectedTab.Prefabs;
+                data.selectedTab = isScene ? SelectedTab.Scenes : SelectedTab.Prefabs;
 
                 SelectListItems
                 (
@@ -470,7 +463,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                     else if (obj is GameObject && path.EndsWith(".prefab"))
                     {
                         isPrefab = true;
-                        data.prefabs.TryAdd(path);   
+                        data.prefabs.TryAdd(path);
                     }
                 }
             }
@@ -480,9 +473,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 bool isPrefab)
             {
                 if (isScene)
-                    data.scenes.Sort(sceneSortMode);
+                    data.scenes.Sort(data.sceneSortMode);
                 else if (isPrefab)
-                    data.prefabs.Sort(prefabSortMode);
+                    data.prefabs.Sort(data.prefabSortMode);
             }
 
             void FindObjectIndices(

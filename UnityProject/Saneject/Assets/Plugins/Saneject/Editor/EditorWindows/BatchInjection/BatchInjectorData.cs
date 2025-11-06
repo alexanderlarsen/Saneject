@@ -8,5 +8,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
     {
         public List<AssetData> scenes = new();
         public List<AssetData> prefabs = new();
+
+        public SortMode sceneSortMode = SortMode.NameAtoZ;
+        public SortMode prefabSortMode = SortMode.NameAtoZ;
+        public SelectedTab selectedTab = SelectedTab.Scenes;
     }
 }

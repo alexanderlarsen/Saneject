@@ -2,10 +2,10 @@
 {
     public enum SortMode
     {
-        Custom,
+        NameAtoZ,
+        NameZtoA,
         PathAtoZ,
         PathZtoA,
-        NameAtoZ,
-        NameZtoA
+        Custom
     }
 }
