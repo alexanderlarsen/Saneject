@@ -6,7 +6,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
     public static class AssetListSorter
     {
         public static void SortList(
-            List<AssetData> list,
+            List<AssetItem> list,
             SortMode mode)
         {
             if (mode == SortMode.Custom || list is not { Count: > 1 })
@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                     return;
             }
 
-            Comparison<AssetData> comparison = mode switch
+            Comparison<AssetItem> comparison = mode switch
             {
                 SortMode.PathAtoZ => (
                     a,
@@ -71,7 +71,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
             return;
 
-            string GetSortString(AssetData item)
+            string GetSortString(AssetItem item)
             {
                 return mode switch
                 {

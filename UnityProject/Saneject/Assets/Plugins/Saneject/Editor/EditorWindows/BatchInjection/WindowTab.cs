@@ -1,6 +1,6 @@
 ﻿namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
-    public enum SelectedTab
+    public enum WindowTab
     {
         Scenes,
         Prefabs

@@ -27,9 +27,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             }
 
             foreach (string path in paths)
-                data.prefabs.TryAdd(path);
+                data.prefabList.TryAdd(path);
 
-            data.prefabs.Sort();
+            data.prefabList.Sort();
             Storage.SaveData(data);
         }
 
@@ -41,7 +41,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".prefab"))
                 .ToList();
 
-            List<string> newPrefabs = data.prefabs.GetAssetPathsNotInList(paths);
+            List<string> newPrefabs = data.prefabList.GetAssetPathsNotInList(paths);
 
             if (newPrefabs.Count == 0)
             {
@@ -62,9 +62,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 ))
             {
                 foreach (string path in newPrefabs)
-                    data.prefabs.TryAdd(path);
+                    data.prefabList.TryAdd(path);
 
-                data.prefabs.Sort();
+                data.prefabList.Sort();
                 Storage.SaveData(data);
             }
         }
@@ -79,7 +79,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 ))
                 return;
 
-            data.prefabs.Clear();
+            data.prefabList.Clear();
             Storage.SaveData(data);
         }
     }

@@ -16,10 +16,10 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                data.scenes.TryAdd(scene.path);
+                data.sceneList.TryAdd(scene.path);
             }
 
-            data.scenes.Sort();
+            data.sceneList.Sort();
             Storage.SaveData(data);
         }
 
@@ -31,7 +31,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".unity"))
                 .ToList();
 
-            List<string> newScenes = data.scenes.GetAssetPathsNotInList(paths);
+            List<string> newScenes = data.sceneList.GetAssetPathsNotInList(paths);
 
             if (newScenes.Count == 0)
             {
@@ -46,9 +46,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                     "Yes", "No"))
             {
                 foreach (string path in newScenes)
-                    data.scenes.TryAdd(path);
+                    data.sceneList.TryAdd(path);
 
-                data.scenes.Sort();
+                data.sceneList.Sort();
                 Storage.SaveData(data);
             }
         }
@@ -58,7 +58,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             if (!EditorUtility.DisplayDialog("Batch Injector", "Remove all scenes from list?", "Yes", "Cancel"))
                 return;
 
-            data.scenes.Clear();
+            data.sceneList.Clear();
             Storage.SaveData(data);
         }
     }

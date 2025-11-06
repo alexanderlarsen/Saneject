@@ -6,7 +6,7 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     [Serializable]
-    public class AssetData
+    public class AssetItem
     {
         [SerializeField]
         private string path;
@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         [NonSerialized]
         private Object cachedAsset;
 
-        public AssetData(string path)
+        public AssetItem(string path)
         {
             this.path = path;
             name = System.IO.Path.GetFileNameWithoutExtension(path);

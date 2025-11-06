@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
-using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
@@ -9,18 +9,40 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
     [Serializable]
     public class AssetList
     {
-        public List<AssetData> list = new();
-        public SortMode sortMode = SortMode.NameAtoZ;
+        [SerializeField]
+        private SortMode sortMode = SortMode.NameAtoZ;
+
+        [SerializeField]
+        private List<AssetItem> list = new();
 
         public int EnabledCount { get; private set; }
-        
+        public int TotalCount => list.Count;
+        public IList Elements => list;
+        public SortMode SortMode => sortMode;
+
         public bool TryAdd(string assetPath)
         {
             if (list.Any(item => item.Path == assetPath))
                 return false;
 
-            list.Add(new AssetData(assetPath));
+            list.Add(new AssetItem(assetPath));
             return true;
+        }
+
+        public AssetItem GetElementAt(int index)
+        {
+            if (index < 0 || index >= list.Count)
+                throw new IndexOutOfRangeException();
+            
+            return list[index];
+        }
+
+        public void RemoveAt(int index)
+        {
+            if (index < 0 || index >= list.Count)
+                return;
+
+            list.RemoveAt(index);
         }
 
         public void Sort()
@@ -32,8 +54,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         {
             EnabledCount = list.Count(item => item.Enabled);
         }
-        
-        public AssetData[] GetEnabled()
+
+        public AssetItem[] GetEnabled()
         {
             return list
                 .Where(item => item.Enabled)
@@ -49,13 +71,25 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
         public void TrySortByEnabledOrDisabled()
         {
-            if (sortMode is SortMode.EnabledToDisabled or SortMode.DisabledToEnabled)
-                Sort();
+            if (sortMode is not (SortMode.EnabledToDisabled or SortMode.DisabledToEnabled))
+                return;
+
+            Sort();
         }
-        
+
         public void Clear()
         {
             list.Clear();
+        }
+
+        public int FindIndexByPath(string path)
+        {
+            return list.FindIndex(asset => asset.Path == path);
+        }
+
+        public void SetSortMode(SortMode sortMode)
+        {
+            this.sortMode = sortMode;
         }
     }
 }
