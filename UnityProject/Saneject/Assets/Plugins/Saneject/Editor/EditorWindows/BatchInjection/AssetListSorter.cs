@@ -6,18 +6,18 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
     public static class AssetListSorter
     {
         public static void SortList(
-            List<AssetEntry> list,
+            List<AssetData> list,
             SortMode mode)
         {
             if (mode == SortMode.Custom || list is not { Count: > 1 })
                 return;
 
-            Comparison<AssetEntry> comparison = mode switch
+            Comparison<AssetData> comparison = mode switch
             {
-                SortMode.PathAtoZ => (a, b) => Compare(GetString(a), GetString(b)),
-                SortMode.PathZtoA => (a, b) => Compare(GetString(b), GetString(a)),
-                SortMode.NameAtoZ => (a, b) => Compare(GetString(a), GetString(b)),
-                SortMode.NameZtoA => (a, b) => Compare(GetString(b), GetString(a)),
+                SortMode.PathAtoZ => (a, b) => Compare(GetSortString(a), GetSortString(b)),
+                SortMode.PathZtoA => (a, b) => Compare(GetSortString(b), GetSortString(a)),
+                SortMode.NameAtoZ => (a, b) => Compare(GetSortString(a), GetSortString(b)),
+                SortMode.NameZtoA => (a, b) => Compare(GetSortString(b), GetSortString(a)),
                 _ => null
             };
 
@@ -26,12 +26,12 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
             return;
 
-            string GetString(AssetEntry item)
+            string GetSortString(AssetData item)
             {
                 return mode switch
                 {
-                    SortMode.PathAtoZ or SortMode.PathZtoA => item.path,
-                    SortMode.NameAtoZ or SortMode.NameZtoA => item.name,
+                    SortMode.PathAtoZ or SortMode.PathZtoA => item.Path,
+                    SortMode.NameAtoZ or SortMode.NameZtoA => item.Name,
                     _ => null
                 };
             }

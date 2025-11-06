@@ -4,9 +4,9 @@ using System.Collections.Generic;
 namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     [Serializable]
-    public class BatchInjectData
+    public class BatchInjectorData
     {
-        public List<AssetEntry> scenes = new();
-        public List<AssetEntry> prefabs = new();
+        public List<AssetData> scenes = new();
+        public List<AssetData> prefabs = new();
     }
 }

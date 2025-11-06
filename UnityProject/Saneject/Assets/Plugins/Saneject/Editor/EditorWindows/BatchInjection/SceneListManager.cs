@@ -5,10 +5,10 @@ using UnityEngine.SceneManagement;
 
 namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
-    public static class SceneActions
+    public static class SceneListManager
     {
         public static void AddOpenScenes(
-            BatchInjectData data,
+            BatchInjectorData data,
             SortMode sortMode)
         {
             for (int i = 0; i < SceneManager.sceneCount; i++)
@@ -18,8 +18,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                if (data.scenes.All(s => s.path != scene.path))
-                    data.scenes.Add(new AssetEntry(scene.path));
+                if (data.scenes.All(s => s.Path != scene.path))
+                    data.scenes.TryAdd(scene.path);
             }
 
             AssetListSorter.SortList(data.scenes, sortMode);
@@ -27,7 +27,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         }
 
         public static void AddAllProjectScenes(
-            BatchInjectData data,
+            BatchInjectorData data,
             SortMode sortMode)
         {
             string[] guids = AssetDatabase.FindAssets("t:Scene", new[] { "Assets" });
@@ -36,10 +36,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".unity"))
                 .ToList();
 
-            List<string> newScenes = paths
-                .Where(p => data.scenes.All(s => s.path != p))
-                .Where(p => AssetDatabase.LoadAssetAtPath<SceneAsset>(p))
-                .ToList();
+            List<string> newScenes = paths.GetAssetPathsNotInList(data.scenes);
 
             if (newScenes.Count == 0)
             {
@@ -54,14 +51,14 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                     "Yes", "No"))
             {
                 foreach (string path in newScenes)
-                    data.scenes.Add(new AssetEntry(path));
+                    data.scenes.Add(new AssetData(path));
 
                 AssetListSorter.SortList(data.scenes, sortMode);
                 Storage.SaveData(data);
             }
         }
 
-        public static void ClearScenes(BatchInjectData data)
+        public static void ClearScenes(BatchInjectorData data)
         {
             if (!EditorUtility.DisplayDialog("Batch Injector", "Remove all scenes from list?", "Yes", "Cancel"))
                 return;

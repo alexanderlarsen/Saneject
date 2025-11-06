@@ -5,10 +5,10 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
-    public static class PrefabActions
+    public static class PrefabListManager
     {
         public static void AddAllPrefabsInScene(
-            BatchInjectData data,
+            BatchInjectorData data,
             SortMode sortMode)
         {
             HashSet<string> prefabsInScene = new();
@@ -16,27 +16,29 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             foreach (GameObject go in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID))
             {
                 GameObject prefab = PrefabUtility.GetCorrespondingObjectFromSource(go);
-                
-                if (!prefab) 
+
+                if (!prefab)
                     continue;
 
                 string path = AssetDatabase.GetAssetPath(prefab);
-                
-                if (string.IsNullOrEmpty(path)) 
+
+                if (string.IsNullOrEmpty(path))
                     continue;
-                
+
                 prefabsInScene.Add(path);
             }
 
             foreach (string path in prefabsInScene)
-                if (data.prefabs.All(p => p.path != path))
-                    data.prefabs.Add(new AssetEntry(path));
+                if (data.prefabs.All(p => p.Path != path))
+                    data.prefabs.TryAdd(path);
 
             AssetListSorter.SortList(data.prefabs, sortMode);
             Storage.SaveData(data);
         }
 
-        public static void AddAllProjectPrefabs(BatchInjectData data, SortMode sortMode)
+        public static void AddAllProjectPrefabs(
+            BatchInjectorData data,
+            SortMode sortMode)
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" });
 
@@ -44,32 +46,42 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".prefab"))
                 .ToList();
 
-            List<string> newPrefabs = paths
-                .Where(p => data.prefabs.All(s => s.path != p))
-                .Where(p => AssetDatabase.LoadAssetAtPath<GameObject>(p))
-                .ToList();
+            List<string> newPrefabs = paths.GetAssetPathsNotInList(data.prefabs);
 
             if (newPrefabs.Count == 0)
             {
-                EditorUtility.DisplayDialog("Batch Injector", "All prefabs are already added.", "OK");
+                EditorUtility.DisplayDialog(
+                    title: "Batch Injector",
+                    message: "All prefabs are already added.",
+                    ok: "OK"
+                );
+
                 return;
             }
 
-            if (EditorUtility.DisplayDialog("Batch Injector",
-                    $"Do you want to add {newPrefabs.Count} prefab{(newPrefabs.Count == 1 ? "" : "s")} to the Batch Injector?",
-                    "Yes", "No"))
+            if (EditorUtility.DisplayDialog(
+                    title: "Batch Injector",
+                    message: $"Do you want to add {newPrefabs.Count} prefab{(newPrefabs.Count == 1 ? "" : "s")} to the Batch Injector?",
+                    ok: "Yes",
+                    cancel: "No"
+                ))
             {
                 foreach (string path in newPrefabs)
-                    data.prefabs.Add(new AssetEntry(path));
+                    data.prefabs.TryAdd(path);
 
-                AssetListSorter.SortList(data.prefabs, sortMode);
+                data.prefabs.Sort(sortMode);
                 Storage.SaveData(data);
             }
         }
 
-        public static void ClearPrefabs(BatchInjectData data)
+        public static void ClearPrefabs(BatchInjectorData data)
         {
-            if (!EditorUtility.DisplayDialog("Batch Injector", "Remove all prefabs from list?", "Yes", "Cancel"))
+            if (!EditorUtility.DisplayDialog(
+                    title: "Batch Injector",
+                    message: "Remove all prefabs from list?",
+                    ok: "Yes",
+                    cancel: "Cancel"
+                ))
                 return;
 
             data.prefabs.Clear();

@@ -11,25 +11,19 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     public class BatchInjectorEditorWindow : EditorWindow
     {
-        private const float WindowPaddingX = 5f;
-        private const float WindowPaddingY = 10f;
+        private const float WindowPadding = 5f;
 
-        private GUIStyle titleStyle;
-
-        private BatchInjectData data = new();
+        private BatchInjectorData data = new();
         private ReorderableList sceneList;
         private ReorderableList prefabList;
-        private Vector2 listScroll;
-        private SelectedTab selectedTab;
-
         private Rect sceneListRect;
         private Rect prefabListRect;
+        private Vector2 listScroll;
+        private SelectedTab selectedTab;
         private bool clickedListItemThisFrame;
-
         private SortMode sceneSortMode = SortMode.Custom;
         private SortMode prefabSortMode = SortMode.Custom;
-
-        private string searchQuery = "";
+        private GUIStyle titleStyle;
 
         private enum SelectedTab
         {
@@ -48,8 +42,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         private void OnEnable()
         {
             data = Storage.LoadData();
-            sceneList = CreateList(data.scenes, AssetDatabase.LoadAssetAtPath<SceneAsset>);
-            prefabList = CreateList(data.prefabs, AssetDatabase.LoadAssetAtPath<GameObject>);
+            sceneList = CreateList(data.scenes);
+            prefabList = CreateList(data.prefabs);
         }
 
         private void OnDisable()
@@ -57,13 +51,51 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             Storage.SaveData(data);
         }
 
-        private ReorderableList CreateList(
-            List<AssetEntry> source,
-            Func<string, Object> loader)
+        private void OnGUI()
+        {
+            HandleWindowDragAndDrop(position);
+
+            Rect paddedRect = new
+            (
+                WindowPadding,
+                WindowPadding,
+                position.width - WindowPadding * 2,
+                position.height - WindowPadding * 2
+            );
+
+            GUILayout.BeginArea(paddedRect);
+            DrawHeader();
+            GUILayout.Space(8);
+
+            switch (selectedTab)
+            {
+                case SelectedTab.Scenes:
+                    DrawSceneHeader();
+                    GUILayout.Space(5);
+                    listScroll = EditorGUILayout.BeginScrollView(listScroll);
+                    DrawSceneList();
+                    break;
+
+                case SelectedTab.Prefabs:
+                    DrawPrefabHeader();
+                    GUILayout.Space(5);
+                    listScroll = EditorGUILayout.BeginScrollView(listScroll);
+                    DrawPrefabList();
+                    break;
+            }
+
+            EditorGUILayout.EndScrollView();
+            GUILayout.FlexibleSpace();
+            DrawInjectButtons();
+            HandleClearSelection();
+            GUILayout.EndArea();
+        }
+
+        private ReorderableList CreateList(List<AssetData> source)
         {
             ReorderableList list = new(
                 elements: source,
-                elementType: typeof(AssetEntry),
+                elementType: typeof(AssetData),
                 draggable: true,
                 displayHeader: false,
                 displayAddButton: false,
@@ -81,8 +113,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 if (index < 0 || index >= source.Count)
                     return;
 
-                AssetEntry entry = source[index];
-                Object asset = loader(entry.path);
+                AssetData data = source[index];
+                Object asset = data.Asset;
 
                 const float toggleWidth = 20f;
                 const float objWidth = 220f;
@@ -90,7 +122,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 rect.y += 2;
                 rect.height = EditorGUIUtility.singleLineHeight;
 
-                entry.enabled = EditorGUI.Toggle
+                data.Enabled = EditorGUI.Toggle
                 (
                     new Rect
                     (
@@ -99,7 +131,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                         toggleWidth,
                         rect.height
                     ),
-                    entry.enabled
+                    data.Enabled
                 );
 
                 using (new EditorGUI.DisabledScope(true))
@@ -121,7 +153,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
                 string labelText = asset == null
                     ? "(Deleted)"
-                    : entry.path;
+                    : data.Path;
 
                 EditorGUI.LabelField
                 (
@@ -137,19 +169,19 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 );
             };
 
-            list.onRemoveCallback = l =>
+            list.onRemoveCallback = _ =>
             {
-                List<int> indices = l.selectedIndices?
+                List<int> indices = list.selectedIndices?
                     .Distinct()
                     .Where(i => i >= 0 && i < source.Count)
                     .OrderByDescending(i => i)
-                    .ToList() ?? new List<int> { l.index };
+                    .ToList() ?? new List<int> { list.index };
 
                 foreach (int i in indices)
                     source.RemoveAt(i);
 
-                l.ClearSelection();
-                l.index = Mathf.Clamp(l.index, 0, source.Count - 1);
+                list.ClearSelection();
+                list.index = Mathf.Clamp(list.index, 0, source.Count - 1);
                 Storage.SaveData(data);
                 GUI.changed = true;
             };
@@ -171,46 +203,6 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             };
 
             return list;
-        }
-
-        private void OnGUI()
-        {
-            HandleWindowDragAndDrop(position);
-
-            Rect paddedRect = new
-            (
-                WindowPaddingX,
-                WindowPaddingY,
-                position.width - WindowPaddingX * 2,
-                position.height - WindowPaddingY * 2
-            );
-
-            GUILayout.BeginArea(paddedRect);
-            DrawHeader();
-            GUILayout.Space(8);
-
-            switch (selectedTab)
-            {
-                case SelectedTab.Scenes:
-                    DrawSceneHeader();
-                    GUILayout.Space(5);
-                    listScroll = EditorGUILayout.BeginScrollView(listScroll);
-                    DrawSceneList();
-                    break;
-
-                case SelectedTab.Prefabs:
-                    DrawPrefabSection();
-                    GUILayout.Space(5);
-                    listScroll = EditorGUILayout.BeginScrollView(listScroll);
-                    DrawPrefabList();
-                    break;
-            }
-
-            EditorGUILayout.EndScrollView();
-            GUILayout.FlexibleSpace();
-            DrawFooter();
-            HandleClearSelection();
-            GUILayout.EndArea();
         }
 
         private void DrawHeader()
@@ -242,14 +234,11 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         }
 
         private void DrawSortMenuButton(
-            Func<SortMode> getSortMode,
+            SortMode sortMode,
             Action<SortMode> setSortMode,
-            List<AssetEntry> list,
-            Action onSorted)
+            List<AssetData> list)
         {
-            SortMode currentMode = getSortMode();
-
-            if (!GUILayout.Button($"Sort: {currentMode.GetDisplayString()}"))
+            if (!GUILayout.Button($"Sort: {sortMode.GetDisplayString()}"))
                 return;
 
             GenericMenu menu = new();
@@ -268,12 +257,13 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 menu.AddItem
                 (
                     content: new GUIContent(mode.GetDisplayString()),
-                    on: currentMode == mode,
+                    on: sortMode == mode,
                     func: () =>
                     {
                         setSortMode(mode);
                         AssetListSorter.SortList(list, mode);
-                        onSorted?.Invoke();
+                        Storage.SaveData(data);
+                        Repaint();
                     }
                 );
             }
@@ -289,32 +279,27 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
                 if (GUILayout.Button("Add Open Scenes"))
                 {
-                    SceneActions.AddOpenScenes(data, sceneSortMode);
+                    SceneListManager.AddOpenScenes(data, sceneSortMode);
                     Repaint();
                 }
 
                 if (GUILayout.Button("Add All Project Scenes"))
                 {
-                    SceneActions.AddAllProjectScenes(data, sceneSortMode);
+                    SceneListManager.AddAllProjectScenes(data, sceneSortMode);
                     Repaint();
                 }
 
                 if (GUILayout.Button("Clear All"))
                 {
-                    SceneActions.ClearScenes(data);
+                    SceneListManager.ClearScenes(data);
                     Repaint();
                 }
 
                 DrawSortMenuButton
                 (
-                    getSortMode: () => sceneSortMode,
-                    setSortMode: v => sceneSortMode = v,
-                    list: data.scenes,
-                    onSorted: () =>
-                    {
-                        Storage.SaveData(data);
-                        Repaint();
-                    }
+                    sortMode: sceneSortMode,
+                    setSortMode: value => sceneSortMode = value,
+                    list: data.scenes
                 );
             }
         }
@@ -326,7 +311,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             clickedListItemThisFrame |= ClickedOnListItem(sceneList, sceneListRect);
         }
 
-        private void DrawPrefabSection()
+        private void DrawPrefabHeader()
         {
             using (new EditorGUILayout.HorizontalScope())
             {
@@ -335,32 +320,27 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 
                 if (GUILayout.Button("Add All Prefabs In Current Scene"))
                 {
-                    PrefabActions.AddAllPrefabsInScene(data, prefabSortMode);
+                    PrefabListManager.AddAllPrefabsInScene(data, prefabSortMode);
                     Repaint();
                 }
 
                 if (GUILayout.Button("Add All Project Prefabs"))
                 {
-                    PrefabActions.AddAllProjectPrefabs(data, prefabSortMode);
+                    PrefabListManager.AddAllProjectPrefabs(data, prefabSortMode);
                     Repaint();
                 }
 
                 if (GUILayout.Button("Clear All"))
                 {
-                    PrefabActions.ClearPrefabs(data);
+                    PrefabListManager.ClearPrefabs(data);
                     Repaint();
                 }
 
                 DrawSortMenuButton
                 (
-                    getSortMode: () => prefabSortMode,
+                    sortMode: prefabSortMode,
                     setSortMode: v => prefabSortMode = v,
-                    list: data.prefabs,
-                    onSorted: () =>
-                    {
-                        Storage.SaveData(data);
-                        Repaint();
-                    }
+                    list: data.prefabs
                 );
             }
         }
@@ -372,7 +352,6 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             clickedListItemThisFrame |= ClickedOnListItem(prefabList, prefabListRect);
         }
 
-        // Detect click on list item
         private static bool ClickedOnListItem(
             ReorderableList list,
             Rect rect)
@@ -486,16 +465,12 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                     if (obj is SceneAsset && path.EndsWith(".unity"))
                     {
                         isScene = true;
-
-                        if (data.scenes.All(s => s.path != path))
-                            data.scenes.Add(new AssetEntry(path));
+                        data.scenes.TryAdd(path);
                     }
                     else if (obj is GameObject && path.EndsWith(".prefab"))
                     {
                         isPrefab = true;
-
-                        if (data.prefabs.All(p => p.path != path))
-                            data.prefabs.Add(new AssetEntry(path));
+                        data.prefabs.TryAdd(path);   
                     }
                 }
             }
@@ -505,9 +480,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 bool isPrefab)
             {
                 if (isScene)
-                    AssetListSorter.SortList(data.scenes, sceneSortMode);
+                    data.scenes.Sort(sceneSortMode);
                 else if (isPrefab)
-                    AssetListSorter.SortList(data.prefabs, prefabSortMode);
+                    data.prefabs.Sort(prefabSortMode);
             }
 
             void FindObjectIndices(
@@ -519,9 +494,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                     string path = AssetDatabase.GetAssetPath(obj);
 
                     if (obj is SceneAsset && path.EndsWith(".unity"))
-                        ints.Add(data.scenes.FindIndex(s => s.path == path));
+                        ints.Add(data.scenes.FindIndex(s => s.Path == path));
                     else if (obj is GameObject && path.EndsWith(".prefab"))
-                        addedPrefabIndices1.Add(data.prefabs.FindIndex(p => p.path == path));
+                        addedPrefabIndices1.Add(data.prefabs.FindIndex(p => p.Path == path));
                 }
             }
 
@@ -544,93 +519,75 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             }
         }
 
-        private void DrawFooter()
+        private void DrawInjectButtons()
         {
+            AssetData[] enabledScenes = data.scenes.GetEnabled();
+            AssetData[] enabledPrefabs = data.prefabs.GetEnabled();
+
+            int sceneCount = enabledScenes.Length;
+            int prefabCount = enabledPrefabs.Length;
+
             GUILayout.Space(6);
-            EditorGUILayout.BeginHorizontal();
 
-            AssetEntry[] scenes = data.scenes.Where(scene => scene.enabled).ToArray();
-            AssetEntry[] prefabs = data.prefabs.Where(prefab => prefab.enabled).ToArray();
-
-            int sceneCount = scenes.Length;
-            int prefabCount = prefabs.Length;
-
-            // Inject All
-            using (new EditorGUI.DisabledScope(sceneCount == 0 && prefabCount == 0))
+            using (new EditorGUILayout.HorizontalScope())
             {
-                if (GUILayout.Button("Inject All"))
+                // Inject All
+                using (new EditorGUI.DisabledScope(sceneCount == 0 && prefabCount == 0))
                 {
-                    string[] sceneAssetPaths = scenes
-                        .Select(scene => scene.path)
-                        .ToArray();
+                    if (GUILayout.Button("Inject All"))
+                        DependencyInjector.BatchInjectAllScenesAndPrefabs(
+                            sceneAssetPaths: enabledScenes
+                                .Select(scene => scene.Path)
+                                .ToArray(),
+                            prefabAssetPaths: enabledPrefabs
+                                .Select(prefab => prefab.Path)
+                                .ToArray()
+                        );
+                }
 
-                    string[] prefabAssetPaths = prefabs
-                        .Select(prefab => prefab.path)
-                        .ToArray();
+                // Inject Scenes
+                using (new EditorGUI.DisabledScope(sceneCount == 0))
+                {
+                    if (GUILayout.Button($"Inject Scenes ({sceneCount})"))
+                        DependencyInjector.BatchInjectScenes(
+                            sceneAssetPaths: enabledScenes
+                                .Select(scene => scene.Path)
+                                .ToArray(),
+                            canClearLogs: true,
+                            logStats: true
+                        );
+                }
 
-                    DependencyInjector.BatchInjectAllScenesAndPrefabs(
-                        sceneAssetPaths,
-                        prefabAssetPaths
-                    );
+                // Inject Prefabs
+                using (new EditorGUI.DisabledScope(prefabCount == 0))
+                {
+                    if (GUILayout.Button($"Inject Prefabs ({prefabCount})"))
+                        DependencyInjector.BatchInjectPrefabs(
+                            enabledPrefabs
+                                .Select(prefab => prefab.Path)
+                                .ToArray(),
+                            canClearLogs: true,
+                            logStats: true
+                        );
                 }
             }
-
-            // Inject All Scenes
-            using (new EditorGUI.DisabledScope(sceneCount == 0))
-            {
-                if (GUILayout.Button($"Inject Scenes ({sceneCount})"))
-                    DependencyInjector.BatchInjectScenes(
-                        sceneAssetPaths: scenes
-                            .Select(scene => scene.path)
-                            .ToArray(),
-                        canClearLogs: true,
-                        logStats: true
-                    );
-            }
-
-            // Inject All Prefabs
-            using (new EditorGUI.DisabledScope(prefabCount == 0))
-            {
-                if (GUILayout.Button($"Inject Prefabs ({prefabCount})"))
-                    DependencyInjector.BatchInjectPrefabs(
-                        prefabs
-                            .Select(prefab => prefab.path)
-                            .ToArray(),
-                        canClearLogs: true,
-                        logStats: true
-                    );
-            }
-
-            // // Inject Selected Scene(s)
-            // using (new EditorGUI.DisabledScope(selectedScenes == 0))
-            // {
-            //     if (GUILayout.Button($"Inject Selected Scene{(selectedScenes != 1 ? "s" : "")} ({selectedScenes})"))
-            //         Debug.Log($"Injecting {selectedScenes} selected scene{(selectedScenes != 1 ? "s" : "")}...");
-            // }
-            //
-            // // Inject Selected Prefab(s)
-            // using (new EditorGUI.DisabledScope(selectedPrefabs == 0))
-            // {
-            //     if (GUILayout.Button($"Inject Selected Prefab{(selectedPrefabs != 1 ? "s" : "")} ({selectedPrefabs})"))
-            //         Debug.Log($"Injecting {selectedPrefabs} selected prefab{(selectedPrefabs != 1 ? "s" : "")}...");
-            // }
-
-            EditorGUILayout.EndHorizontal();
         }
 
-        private void DrawSearchBar()
-        {
-            EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-            GUI.SetNextControlName("SearchField");
-            searchQuery = GUILayout.TextField(searchQuery, GUI.skin.FindStyle("ToolbarSeachTextField"));
-
-            if (GUILayout.Button("", GUI.skin.FindStyle("ToolbarSeachCancelButton")))
-            {
-                searchQuery = "";
-                GUI.FocusControl(null);
-            }
-
-            EditorGUILayout.EndHorizontal();
-        }
+        // private string searchQuery = "";
+        //
+        // private void DrawSearchBar()
+        // {
+        //     EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+        //     GUI.SetNextControlName("SearchField");
+        //     searchQuery = GUILayout.TextField(searchQuery, GUI.skin.FindStyle("ToolbarSeachTextField"));
+        //
+        //     if (GUILayout.Button("", GUI.skin.FindStyle("ToolbarSeachCancelButton")))
+        //     {
+        //         searchQuery = "";
+        //         GUI.FocusControl(null);
+        //     }
+        //
+        //     EditorGUILayout.EndHorizontal();
+        // }
     }
 }

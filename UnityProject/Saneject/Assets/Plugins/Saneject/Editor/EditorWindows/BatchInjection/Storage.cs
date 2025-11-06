@@ -7,19 +7,22 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
     {
         private const string PrefsKey = "Saneject_BatchInject_Data";
 
-        public static void SaveData(BatchInjectData data)
+        public static void SaveData(BatchInjectorData data)
         {
             string json = JsonUtility.ToJson(data);
             EditorPrefs.SetString(PrefsKey, json);
         }
 
-        public static BatchInjectData LoadData()
+        public static BatchInjectorData LoadData()
         {
             if (!EditorPrefs.HasKey(PrefsKey))
-                return new BatchInjectData();
+                return new BatchInjectorData();
 
             string json = EditorPrefs.GetString(PrefsKey);
-            return JsonUtility.FromJson<BatchInjectData>(json) ?? new BatchInjectData();
+
+            BatchInjectorData data = JsonUtility.FromJson<BatchInjectorData>(json) ?? new BatchInjectorData();
+
+            return data;
         }
     }
 }
