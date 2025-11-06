@@ -9,32 +9,28 @@ namespace Plugins.Saneject.Editor.BatchInjection
     public class AssetItem
     {
         [SerializeField]
-        private string path;
-
-        [SerializeField]
-        private string name;
+        private string guid;
 
         [SerializeField]
         private bool enabled = true;
 
         [NonSerialized]
-        private Object cachedAsset;
+        private Object asset;
 
-        public AssetItem(string path)
+        public AssetItem(string guid)
         {
-            this.path = path;
-            name = System.IO.Path.GetFileNameWithoutExtension(path);
+            this.guid = guid;
         }
 
-        public string Path => path;
-        public string Name => name;
+        public string Guid => guid;
+        public Object Asset => asset ??= AssetDatabase.LoadAssetByGUID<Object>(new GUID(guid));
+        public string Path => AssetDatabase.GUIDToAssetPath(guid);
+        public string Name => Asset ? Asset.name : string.Empty;
 
         public bool Enabled
         {
             get => enabled;
             set => enabled = value;
         }
-
-        public Object Asset => cachedAsset ??= AssetDatabase.LoadAssetAtPath<Object>(Path);
     }
 }

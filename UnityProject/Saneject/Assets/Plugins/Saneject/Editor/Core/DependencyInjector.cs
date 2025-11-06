@@ -161,7 +161,7 @@ namespace Plugins.Saneject.Editor.Core
             {
                 string path = prefabAssetPaths[i];
                 string prefabName = Path.GetFileNameWithoutExtension(path);
-                string logSectionColor = Colors.BatchLogColors[i % Colors.BatchLogColors.Length];
+                string logSectionColor = EditorColors.BatchLogColors[i % EditorColors.BatchLogColors.Length];
 
                 Debug.Log($"<color={logSectionColor}><b>↓</b> Saneject: Start prefab injection [{prefabName}] <b>↓</b></color>");
 
@@ -249,7 +249,7 @@ namespace Plugins.Saneject.Editor.Core
             for (int i = 0; i < sceneAssetPaths.Length; i++)
             {
                 Scene scene = EditorSceneManager.OpenScene(sceneAssetPaths[i], OpenSceneMode.Single);
-                string logSectionColor = Colors.BatchLogColors[i % Colors.BatchLogColors.Length];
+                string logSectionColor = EditorColors.BatchLogColors[i % EditorColors.BatchLogColors.Length];
 
                 Debug.Log($"<color={logSectionColor}><b>↓</b> Saneject: Start scene injection [{scene.name}] <b>↓</b></color>");
 

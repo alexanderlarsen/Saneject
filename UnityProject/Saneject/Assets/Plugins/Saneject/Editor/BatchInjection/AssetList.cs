@@ -2,6 +2,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.BatchInjection
@@ -29,12 +30,18 @@ namespace Plugins.Saneject.Editor.BatchInjection
             set => scroll = value;
         }
 
-        public bool TryAdd(string assetPath)
+        public bool TryAddByPath(string path)
         {
-            if (list.Any(item => item.Path == assetPath))
+            string guid = AssetDatabase.AssetPathToGUID(path);
+            return TryAddByGuid(guid);
+        }
+
+        public bool TryAddByGuid(string guid)
+        {
+            if (list.Any(item => item.Guid == guid))
                 return false;
 
-            list.Add(new AssetItem(assetPath));
+            list.Add(new AssetItem(guid));
             return true;
         }
 
@@ -71,11 +78,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 .ToArray();
         }
 
-        public List<string> GetAssetPathsNotInList(List<string> paths)
+        public IEnumerable<string> FindGuidsNotInList(IEnumerable<string> guids)
         {
-            return paths
-                .Where(path => list.All(s => s.Path != path))
-                .ToList();
+            return guids.Where(guid => list.All(item => item.Guid != guid));
         }
 
         public void TrySortByEnabledOrDisabled()

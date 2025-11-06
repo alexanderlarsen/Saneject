@@ -10,6 +10,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
 {
     public static class AssetListDrawer
     {
+        private static GUIStyle missingPathLabel;
+
         public static ReorderableList CreateReorderableList(
             AssetList list,
             Action onModified)
@@ -64,12 +66,26 @@ namespace Plugins.Saneject.Editor.BatchInjection
                         false);
                 }
 
-                string labelText = element.Asset == null ? "(Deleted)" : element.Path;
+                bool hasAsset = element.Asset != null;
+
+                GUIStyle pathLabelStyle = hasAsset
+                    ? EditorStyles.miniLabel
+                    : missingPathLabel ??= new GUIStyle(EditorStyles.miniLabel)
+                    {
+                        normal =
+                        {
+                            textColor = new Color(0.9f, 0.45f, 0.4f, 1f)
+                        }
+                    };
+
+                string labelText = hasAsset
+                    ? element.Path
+                    : "Deleted";
 
                 EditorGUI.LabelField(
                     new Rect(rect.x + toggleWidth + objWidth + 7, rect.y, rect.width - objWidth - 40, rect.height),
                     labelText,
-                    EditorStyles.miniLabel);
+                    pathLabelStyle);
             };
 
             reorderable.onRemoveCallback = _ =>

@@ -18,8 +18,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
         private ReorderableList prefabList;
         private Rect sceneListRect;
         private Rect prefabListRect;
-        private GUIStyle titleStyle;
         private bool clickedAnyListItem;
+        private GUIStyle titleStyle;
 
         [MenuItem("Saneject/Batch Injector")]
         public static void ShowWindow()

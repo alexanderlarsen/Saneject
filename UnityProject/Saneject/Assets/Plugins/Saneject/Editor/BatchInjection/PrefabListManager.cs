@@ -27,7 +27,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
             }
 
             foreach (string path in paths)
-                data.prefabList.TryAdd(path);
+                data.prefabList.TryAddByPath(path);
 
             data.prefabList.Sort();
             Storage.SaveData(data);
@@ -36,14 +36,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
         public static void AddAllProjectPrefabs(BatchInjectorData data)
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" });
+            string[] newGuids = data.prefabList.FindGuidsNotInList(guids).ToArray();
 
-            List<string> paths = guids.Select(AssetDatabase.GUIDToAssetPath)
-                .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".prefab"))
-                .ToList();
-
-            List<string> newPrefabs = data.prefabList.GetAssetPathsNotInList(paths);
-
-            if (newPrefabs.Count == 0)
+            if (newGuids.Length == 0)
             {
                 EditorUtility.DisplayDialog(
                     title: "Batch Injector",
@@ -56,13 +51,13 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
             if (EditorUtility.DisplayDialog(
                     title: "Batch Injector",
-                    message: $"Do you want to add {newPrefabs.Count} prefab{(newPrefabs.Count == 1 ? "" : "s")} to the Batch Injector?",
+                    message: $"Do you want to add {newGuids.Length} prefab{(newGuids.Length == 1 ? "" : "s")} to the Batch Injector?",
                     ok: "Yes",
                     cancel: "No"
                 ))
             {
-                foreach (string path in newPrefabs)
-                    data.prefabList.TryAdd(path);
+                foreach (string guid in newGuids)
+                    data.prefabList.TryAddByGuid(guid);
 
                 data.prefabList.Sort();
                 Storage.SaveData(data);

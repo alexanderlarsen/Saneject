@@ -27,8 +27,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
             if (!windowRect.Contains(evt.mousePosition))
                 return;
 
-            bool hasSceneOrPrefab = UnityEditor.DragAndDrop.objectReferences.Any(o => o is SceneAsset or GameObject);
-            UnityEditor.DragAndDrop.visualMode = hasSceneOrPrefab ? DragAndDropVisualMode.Copy : DragAndDropVisualMode.Rejected;
+            bool hasSceneOrPrefab = DragAndDrop.objectReferences.Any(o => o is SceneAsset or GameObject);
+            DragAndDrop.visualMode = hasSceneOrPrefab ? DragAndDropVisualMode.Copy : DragAndDropVisualMode.Rejected;
 
             List<int> prefabObjectIndices = new();
             List<int> sceneObjectIndices = new();
@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 bool isScene = false;
                 bool isPrefab = false;
 
-                UnityEditor.DragAndDrop.AcceptDrag();
+                DragAndDrop.AcceptDrag();
                 AddObjectsToList(ref isScene, ref isPrefab);
                 SortObjects(isScene, isPrefab);
                 FindObjectIndices(sceneObjectIndices, prefabObjectIndices);
@@ -67,19 +67,19 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 ref bool isScene,
                 ref bool isPrefab)
             {
-                foreach (Object obj in UnityEditor.DragAndDrop.objectReferences)
+                foreach (Object obj in DragAndDrop.objectReferences)
                 {
                     string path = AssetDatabase.GetAssetPath(obj);
 
                     if (obj is SceneAsset && path.EndsWith(".unity"))
                     {
                         isScene = true;
-                        data.sceneList.TryAdd(path);
+                        data.sceneList.TryAddByPath(path);
                     }
                     else if (obj is GameObject && path.EndsWith(".prefab"))
                     {
                         isPrefab = true;
-                        data.prefabList.TryAdd(path);
+                        data.prefabList.TryAddByPath(path);
                     }
                 }
             }
@@ -98,7 +98,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 List<int> ints,
                 List<int> addedPrefabIndices)
             {
-                foreach (Object obj in UnityEditor.DragAndDrop.objectReferences)
+                foreach (Object obj in DragAndDrop.objectReferences)
                 {
                     string path = AssetDatabase.GetAssetPath(obj);
 

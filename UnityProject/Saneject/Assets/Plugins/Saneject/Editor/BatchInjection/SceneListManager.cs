@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
@@ -16,7 +15,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                data.sceneList.TryAdd(scene.path);
+                data.sceneList.TryAddByPath(scene.path);
             }
 
             data.sceneList.Sort();
@@ -26,14 +25,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
         public static void AddAllProjectScenes(BatchInjectorData data)
         {
             string[] guids = AssetDatabase.FindAssets("t:Scene", new[] { "Assets" });
+            string[] newGuids = data.sceneList.FindGuidsNotInList(guids).ToArray();
 
-            List<string> paths = guids.Select(AssetDatabase.GUIDToAssetPath)
-                .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".unity"))
-                .ToList();
-
-            List<string> newScenes = data.sceneList.GetAssetPathsNotInList(paths);
-
-            if (newScenes.Count == 0)
+            if (newGuids.Length == 0)
             {
                 EditorUtility.DisplayDialog("Batch Injector",
                     "All scenes are already added.", "OK");
@@ -42,11 +36,11 @@ namespace Plugins.Saneject.Editor.BatchInjection
             }
 
             if (EditorUtility.DisplayDialog("Batch Injector",
-                    $"Do you want to add {newScenes.Count} scene{(newScenes.Count == 1 ? "" : "s")} to the Batch Injector?",
+                    $"Do you want to add {newGuids.Length} scene{(newGuids.Length == 1 ? "" : "s")} to the Batch Injector?",
                     "Yes", "No"))
             {
-                foreach (string path in newScenes)
-                    data.sceneList.TryAdd(path);
+                foreach (string guid in newGuids)
+                    data.sceneList.TryAddByGuid(guid);
 
                 data.sceneList.Sort();
                 Storage.SaveData(data);

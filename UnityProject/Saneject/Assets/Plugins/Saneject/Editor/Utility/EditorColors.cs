@@ -1,6 +1,6 @@
 ﻿namespace Plugins.Saneject.Editor.Utility
 {
-    public static class Colors
+    public static class EditorColors
     {
         public static readonly string[] BatchLogColors =
         {
