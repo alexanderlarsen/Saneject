@@ -15,10 +15,19 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         [SerializeField]
         private List<AssetItem> list = new();
 
+        [SerializeField]
+        private Vector2 scroll;
+
         public int EnabledCount { get; private set; }
         public int TotalCount => list.Count;
         public IList Elements => list;
         public SortMode SortMode => sortMode;
+
+        public Vector2 Scroll
+        {
+            get => scroll;
+            set => scroll = value;
+        }
 
         public bool TryAdd(string assetPath)
         {
@@ -33,7 +42,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         {
             if (index < 0 || index >= list.Count)
                 throw new IndexOutOfRangeException();
-            
+
             return list[index];
         }
 

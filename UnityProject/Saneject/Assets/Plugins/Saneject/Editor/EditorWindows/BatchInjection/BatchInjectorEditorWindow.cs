@@ -17,7 +17,6 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
         private ReorderableList prefabList;
         private Rect sceneListRect;
         private Rect prefabListRect;
-        private Vector2 listScroll;
         private GUIStyle titleStyle;
         private bool clickedListItemThisFrame;
 
@@ -54,17 +53,17 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 case WindowTab.Scenes:
                     DrawSceneHeader();
                     GUILayout.Space(5);
-                    listScroll = EditorGUILayout.BeginScrollView(listScroll);
+                    data.sceneList.Scroll = EditorGUILayout.BeginScrollView(data.sceneList.Scroll);
                     DrawSceneList();
                     break;
 
                 case WindowTab.Prefabs:
                     DrawPrefabHeader();
                     GUILayout.Space(5);
-                    listScroll = EditorGUILayout.BeginScrollView(listScroll);
+                    data.prefabList.Scroll = EditorGUILayout.BeginScrollView(data.prefabList.Scroll);
                     DrawPrefabList();
                     break;
-            }
+            } 
 
             EditorGUILayout.EndScrollView();
             GUILayout.FlexibleSpace();
