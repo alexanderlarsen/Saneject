@@ -8,11 +8,5 @@ namespace Plugins.Saneject.Editor.BatchInjection
         public AssetList sceneList = new();
         public AssetList prefabList = new();
         public WindowTab windowTab = WindowTab.Scenes;
-
-        public void Initialize()
-        {
-            sceneList.UpdateEnabledCount();
-            prefabList.UpdateEnabledCount();
-        }
     }
 }

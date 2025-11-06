@@ -121,6 +121,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
                 list.ClearSelection();
                 list.SelectRange(min, max);
+                list.GrabKeyboardFocus();
 
                 for (int i = min; i <= max; i++)
                     if (!indices.Contains(i))

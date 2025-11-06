@@ -130,13 +130,9 @@ namespace Plugins.Saneject.Editor.Inspectors
             {
                 if (GUILayout.Button("Inject Prefab Dependencies"))
                 {
-                    if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog(
-                            title: "Saneject: Inject Prefab Dependencies",
-                            message: "Are you sure you want to inject all dependencies in the prefab?",
-                            ok: "Yes",
-                            cancel: "Cancel"))
+                    if (!Dialogs.Injection.ConfirmInjectPrefab())
                         return;
-
+                    
                     if (UserSettings.ClearLogsOnInjection)
                         ConsoleUtils.ClearLog();
                     
@@ -149,11 +145,7 @@ namespace Plugins.Saneject.Editor.Inspectors
             {
                 if (GUILayout.Button("Inject Hierarchy Dependencies"))
                 {
-                    if (UserSettings.AskBeforeHierarchyInjection && !EditorUtility.DisplayDialog(
-                            title: "Saneject: Inject Hierarchy Dependencies",
-                            message: "Are you sure you want to inject all dependencies in the hierarchy?",
-                            ok: "Yes",
-                            cancel: "Cancel"))
+                    if (!Dialogs.Injection.ConfirmInjectHierarchy())
                         return;
 
                     if (UserSettings.ClearLogsOnInjection)

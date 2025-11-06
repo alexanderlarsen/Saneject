@@ -34,12 +34,14 @@ namespace Plugins.Saneject.Editor.BatchInjection
             data = Storage.LoadData();
 
             sceneList = AssetListDrawer.CreateReorderableList(
-                list: data.sceneList,
+                data: data,
+                assetList: data.sceneList,
                 onModified: () => Storage.SaveData(data)
             );
 
             prefabList = AssetListDrawer.CreateReorderableList(
-                list: data.prefabList,
+                data: data,
+                assetList: data.prefabList,
                 onModified: () => Storage.SaveData(data)
             );
         }
@@ -71,7 +73,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
             GUILayout.FlexibleSpace();
             DrawInjectButtons();
 
-            AssetListDrawer.HandleClearSelection(
+            AssetListDrawer.HandleInput(
                 clickedAnyListItem: ref clickedAnyListItem,
                 tab: data.windowTab,
                 sceneList: sceneList,
@@ -173,11 +175,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 {
                     if (GUILayout.Button("Inject All"))
                     {
-                        if (UserSettings.AskBeforeBatchInjectAll && !EditorUtility.DisplayDialog(
-                                title: "Saneject: Batch Inject All Dependencies",
-                                message: $"Are you sure you want to batch inject {sceneCount} scenes and {prefabCount} prefabs?",
-                                ok: "Yes",
-                                cancel: "Cancel"))
+                        if (!Dialogs.BatchInjection.ConfirmInjectAll(sceneCount, prefabCount))
                             return;
 
                         if (UserSettings.ClearLogsOnInjection)
@@ -201,11 +199,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 {
                     if (GUILayout.Button($"Inject Scenes ({sceneCount})"))
                     {
-                        if (UserSettings.AskBeforeBatchInjectScenes && !EditorUtility.DisplayDialog(
-                                title: "Saneject: Batch Inject Scene Dependencies",
-                                message: $"Are you sure you want to batch inject {sceneCount} scenes?",
-                                ok: "Yes",
-                                cancel: "Cancel"))
+                        if (!Dialogs.BatchInjection.ConfirmInjectScene(sceneCount))
                             return;
 
                         if (UserSettings.ClearLogsOnInjection)
@@ -226,11 +220,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 {
                     if (GUILayout.Button($"Inject Prefabs ({prefabCount})"))
                     {
-                        if (UserSettings.AskBeforeBatchInjectPrefabs && !EditorUtility.DisplayDialog(
-                                title: "Saneject: Batch Inject Prefab Dependencies",
-                                message: $"Are you sure you want to batch inject {prefabCount} prefabs?",
-                                ok: "Yes",
-                                cancel: "Cancel"))
+                        if (!Dialogs.BatchInjection.ConfirmInjectPrefab(prefabCount))
                             return;
 
                         if (UserSettings.ClearLogsOnInjection)

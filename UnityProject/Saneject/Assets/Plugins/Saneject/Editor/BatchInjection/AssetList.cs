@@ -19,7 +19,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
         [SerializeField]
         private Vector2 scroll;
 
-        public int EnabledCount { get; private set; }
+        public int EnabledCount => list.Count(item => item.Enabled);
         public int TotalCount => list.Count;
         public IList Elements => list;
         public SortMode SortMode => sortMode;
@@ -64,11 +64,6 @@ namespace Plugins.Saneject.Editor.BatchInjection
         public void Sort()
         {
             AssetListSorter.SortList(list, sortMode);
-        }
-
-        public void UpdateEnabledCount()
-        {
-            EnabledCount = list.Count(item => item.Enabled);
         }
 
         public AssetItem[] GetEnabled()

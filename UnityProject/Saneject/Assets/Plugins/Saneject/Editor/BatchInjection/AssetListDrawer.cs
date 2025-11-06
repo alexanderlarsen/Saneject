@@ -1,6 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Editor.Core;
+using Plugins.Saneject.Editor.Utility;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -13,11 +16,12 @@ namespace Plugins.Saneject.Editor.BatchInjection
         private static GUIStyle missingPathLabel;
 
         public static ReorderableList CreateReorderableList(
-            AssetList list,
+            BatchInjectorData data,
+            AssetList assetList,
             Action onModified)
         {
             ReorderableList reorderable = new(
-                list.Elements,
+                assetList.Elements,
                 typeof(AssetItem),
                 draggable: true,
                 displayHeader: false,
@@ -33,7 +37,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 _,
                 _) =>
             {
-                if (index < 0 || index >= list.TotalCount)
+                if (index < 0 || index >= assetList.TotalCount)
                     return;
 
                 const float toggleWidth = 20f;
@@ -42,7 +46,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 rect.y += 2;
                 rect.height = EditorGUIUtility.singleLineHeight;
 
-                AssetItem element = list.GetElementAt(index);
+                AssetItem element = assetList.GetElementAt(index);
 
                 bool toggle = EditorGUI.Toggle(
                     new Rect(rect.x + 4, rect.y, toggleWidth, rect.height),
@@ -51,8 +55,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 if (toggle != element.Enabled)
                 {
                     element.Enabled = toggle;
-                    list.TrySortByEnabledOrDisabled();
-                    list.UpdateEnabledCount();
+                    assetList.TrySortByEnabledOrDisabled();
                     onModified?.Invoke();
                     GUI.changed = true;
                 }
@@ -86,13 +89,18 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     new Rect(rect.x + toggleWidth + objWidth + 7, rect.y, rect.width - objWidth - 40, rect.height),
                     labelText,
                     pathLabelStyle);
+
+                DrawContextMenu(reorderable, assetList, data.windowTab, rect, index, onModified);
             };
 
             reorderable.onRemoveCallback = _ =>
             {
+                if (reorderable.selectedIndices.Count == 0)
+                    return;
+
                 List<int> indices = reorderable.selectedIndices?
                     .Distinct()
-                    .Where(i => i >= 0 && i < list.TotalCount)
+                    .Where(i => i >= 0 && i < assetList.TotalCount)
                     .OrderByDescending(i => i)
                     .ToList() ?? new List<int> { reorderable.index };
 
@@ -102,10 +110,10 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     return;
 
                 foreach (int i in indices)
-                    list.RemoveAt(i);
+                    assetList.RemoveAt(i);
 
                 reorderable.ClearSelection();
-                reorderable.index = Mathf.Clamp(reorderable.index, 0, list.TotalCount - 1);
+                reorderable.index = Mathf.Clamp(reorderable.index, 0, assetList.TotalCount - 1);
                 onModified?.Invoke();
                 GUI.changed = true;
             };
@@ -148,7 +156,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
             clickedListAnyItem |= CheckListItemClicked(list, rect);
         }
 
-        public static void HandleClearSelection(
+        public static void HandleInput(
             ref bool clickedAnyListItem,
             WindowTab tab,
             ReorderableList sceneList,
@@ -166,23 +174,194 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     return;
                 }
 
-                ClearCurrentListSelection();
+                ClearSelection();
                 clickedAnyListItem = false;
+                return;
             }
+
             // Escape key
-            else if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
+            if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Escape)
             {
-                ClearCurrentListSelection();
+                ClearSelection();
+                e.Use();
+                return;
+            }
+
+            // Ctrl + A
+            if (e.type == EventType.KeyDown && (e.control || e.command) && e.keyCode == KeyCode.A)
+            {
+                SelectAll();
                 e.Use();
             }
 
             return;
 
-            void ClearCurrentListSelection()
+            void SelectAll()
+            {
+                ReorderableList list = tab == 0 ? sceneList : prefabList;
+                list.GrabKeyboardFocus();
+                list.SelectRange(0, list.count - 1);
+                repaint.Invoke();
+            }
+
+            void ClearSelection()
             {
                 ReorderableList list = tab == 0 ? sceneList : prefabList;
                 list.ClearSelection();
                 repaint.Invoke();
+            }
+        }
+
+        private static void DrawContextMenu(
+            ReorderableList list,
+            AssetList assetList,
+            WindowTab tab,
+            Rect rect,
+            int index,
+            Action onModified)
+        {
+            Event e = Event.current;
+
+            if (e.type != EventType.ContextClick || !rect.Contains(e.mousePosition))
+                return;
+
+            GenericMenu menu = new();
+            List<int> selected = list.selectedIndices?.ToList() ?? new List<int> { index };
+
+            bool hasSelection = selected.Count > 0;
+
+            AddItem(
+                label: "Select All",
+                isEnabled: selected.Count != list.count,
+                onClick: () =>
+                {
+                    list.GrabKeyboardFocus();
+                    list.SelectRange(0, list.count - 1);
+                    assetList.TrySortByEnabledOrDisabled();
+                    onModified.Invoke();
+                }
+            );
+
+            menu.AddSeparator("");
+
+            AddItem(
+                label: $"Inject {selected.Count} Selected {(tab == WindowTab.Scenes ? "Scene" : "Prefab")}{(selected.Count == 1 ? "" : "s")}",
+                isEnabled: hasSelection,
+                onClick: () =>
+                {
+                    string[] paths = selected.Select(i => assetList.GetElementAt(i).Path).ToArray();
+
+                    switch (tab)
+                    {
+                        case WindowTab.Scenes:
+                            if (!Dialogs.BatchInjection.ConfirmInjectScene(paths.Length))
+                                break;
+
+                            if (UserSettings.ClearLogsOnInjection)
+                                ConsoleUtils.ClearLog();
+
+                            DependencyInjector.BatchInjectScenes(paths, true);
+                            break;
+
+                        case WindowTab.Prefabs:
+                            if (!Dialogs.BatchInjection.ConfirmInjectPrefab(paths.Length))
+                                break;
+
+                            if (UserSettings.ClearLogsOnInjection)
+                                ConsoleUtils.ClearLog();
+
+                            DependencyInjector.BatchInjectPrefabs(paths, true);
+                            break;
+                    }
+                });
+
+            menu.AddSeparator("");
+
+            AddItem(
+                label: "Find in Project",
+                isEnabled: selected.Count == 1,
+                onClick: () =>
+                {
+                    foreach (int i in selected)
+                    {
+                        AssetItem item = assetList.GetElementAt(i);
+                        Object asset = item.Asset;
+
+                        if (asset)
+                            EditorGUIUtility.PingObject(asset);
+                    }
+                }
+            );
+
+            menu.AddSeparator("");
+
+            AddItem(
+                label: "Enable",
+                isEnabled: hasSelection,
+                onClick: () =>
+                {
+                    foreach (int i in selected)
+                        assetList.GetElementAt(i)
+                            .Enabled = true;
+
+                    assetList.TrySortByEnabledOrDisabled();
+                    onModified?.Invoke();
+                }
+            );
+
+            AddItem(
+                label: "Disable",
+                isEnabled: hasSelection,
+                onClick: () =>
+                {
+                    foreach (int i in selected)
+                        assetList.GetElementAt(i)
+                            .Enabled = false;
+
+                    assetList.TrySortByEnabledOrDisabled();
+                    onModified?.Invoke();
+                }
+            );
+
+            menu.AddSeparator("");
+
+            AddItem(
+                label: "Remove Selected",
+                isEnabled: hasSelection,
+                onClick: () =>
+                {
+                    if (!EditorUtility.DisplayDialog("Batch Injector",
+                            $"Remove {selected.Count} selected item{(selected.Count == 1 ? "" : "s")}?",
+                            "Yes",
+                            "No"))
+                        return;
+
+                    foreach (int i in selected.OrderByDescending(i => i))
+                        assetList.RemoveAt(i);
+
+                    list.ClearSelection();
+                    onModified?.Invoke();
+                    GUI.changed = true;
+                }
+            );
+
+            menu.ShowAsContext();
+            e.Use();
+
+            return;
+
+            void AddItem(
+                string label,
+                bool isEnabled,
+                GenericMenu.MenuFunction onClick)
+            {
+                if (!isEnabled)
+                {
+                    menu.AddDisabledItem(new GUIContent(label));
+                    return;
+                }
+
+                menu.AddItem(new GUIContent(label), false, onClick);
             }
         }
 
