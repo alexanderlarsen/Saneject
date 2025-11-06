@@ -129,16 +129,40 @@ namespace Plugins.Saneject.Editor.Inspectors
             else if (hasPrefab)
             {
                 if (GUILayout.Button("Inject Prefab Dependencies"))
+                {
+                    if (UserSettings.AskBeforePrefabInjection && !EditorUtility.DisplayDialog(
+                            title: "Saneject: Inject Prefab Dependencies",
+                            message: "Are you sure you want to inject all dependencies in the prefab?",
+                            ok: "Yes",
+                            cancel: "Cancel"))
+                        return;
+
+                    if (UserSettings.ClearLogsOnInjection)
+                        ConsoleUtils.ClearLog();
+                    
                     foreach (Object t in targets)
                         if (t is Scope scope)
                             DependencyInjector.InjectPrefab(scope);
+                }
             }
             else if (hasScene)
             {
                 if (GUILayout.Button("Inject Hierarchy Dependencies"))
+                {
+                    if (UserSettings.AskBeforeHierarchyInjection && !EditorUtility.DisplayDialog(
+                            title: "Saneject: Inject Hierarchy Dependencies",
+                            message: "Are you sure you want to inject all dependencies in the hierarchy?",
+                            ok: "Yes",
+                            cancel: "Cancel"))
+                        return;
+
+                    if (UserSettings.ClearLogsOnInjection)
+                        ConsoleUtils.ClearLog();
+                    
                     foreach (Object t in targets)
                         if (t is Scope scope)
                             DependencyInjector.InjectSingleHierarchy(scope);
+                }
             }
 
             EditorGUI.EndDisabledGroup();

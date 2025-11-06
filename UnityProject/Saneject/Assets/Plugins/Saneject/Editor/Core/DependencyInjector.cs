@@ -32,11 +32,14 @@ namespace Plugins.Saneject.Editor.Core
         /// <param name="startScope">The root scope to start injection from. All child scopes will be processed.</param>
         public static void InjectSingleHierarchy(Scope startScope)
         {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
             RunInjectionPass
             (
-                dialogTitle: "Saneject: Inject Hierarchy Dependencies",
-                confirmationMessage: "Are you sure you want to inject all dependencies in the hierarchy?",
-                askBeforeInject: UserSettings.AskBeforeHierarchyInjection,
                 collectScopes: () => startScope
                     .FindRootScope()
                     .GetComponentsInChildren<Scope>(includeInactive: true)
@@ -47,7 +50,6 @@ namespace Plugins.Saneject.Editor.Core
                 progressBarMessage: "Injecting all objects in hierarchy",
                 configureGlobalBindings: true,
                 isPrefabInjection: false,
-                clearLogs: UserSettings.ClearLogsOnInjection,
                 buildStatsLabel: scopes =>
                 {
                     Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
@@ -65,6 +67,12 @@ namespace Plugins.Saneject.Editor.Core
         /// <param name="startScope">The root scope in the prefab to start injection from.</param>
         public static void InjectPrefab(Scope startScope)
         {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
             if (!startScope)
             {
                 Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
@@ -73,9 +81,6 @@ namespace Plugins.Saneject.Editor.Core
 
             RunInjectionPass
             (
-                dialogTitle: "Saneject: Inject Prefab Dependencies",
-                confirmationMessage: "Are you sure you want to inject all dependencies in the prefab?",
-                askBeforeInject: UserSettings.AskBeforePrefabInjection,
                 collectScopes: () => startScope
                     .FindRootScope()
                     .GetComponentsInChildren<Scope>(includeInactive: true),
@@ -84,7 +89,6 @@ namespace Plugins.Saneject.Editor.Core
                 progressBarMessage: "Injecting prefab dependencies",
                 configureGlobalBindings: false,
                 isPrefabInjection: true,
-                clearLogs: UserSettings.ClearLogsOnInjection,
                 buildStatsLabel: scopes =>
                 {
                     Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
@@ -102,13 +106,16 @@ namespace Plugins.Saneject.Editor.Core
         /// </summary>
         public static void InjectCurrentScene()
         {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
             Scene scene = SceneManager.GetActiveScene();
 
             RunInjectionPass
             (
-                dialogTitle: "Saneject: Inject Scene Dependencies",
-                confirmationMessage: "Are you sure you want to inject all dependencies in the scene?",
-                askBeforeInject: false,
                 collectScopes: () => scene
                     .GetRootGameObjects()
                     .Where(root => !root.IsPrefab())
@@ -119,7 +126,6 @@ namespace Plugins.Saneject.Editor.Core
                 progressBarMessage: "Injecting all objects in scene",
                 configureGlobalBindings: true,
                 isPrefabInjection: false,
-                clearLogs: false,
                 buildStatsLabel: _ => $"Scene injection completed [{scene.name}]"
             );
         }
@@ -131,19 +137,20 @@ namespace Plugins.Saneject.Editor.Core
         /// This operation is editor-only and cannot be performed in Play Mode.
         /// </summary>
         /// <param name="prefabAssetPaths">Array of prefab asset paths to inject, in order of processing.</param>
-        /// <param name="canClearLogs">Whether to clear the console before injection starts.</param>
         /// <param name="logStats">Whether to log the summary statistics after completion.</param>
         /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
         public static void BatchInjectPrefabs(
             string[] prefabAssetPaths,
-            bool canClearLogs,
             bool logStats,
             InjectionStats stats = null)
         {
-            stats ??= new InjectionStats();
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
 
-            if (UserSettings.ClearLogsOnInjection && canClearLogs)
-                ConsoleUtils.ClearLog();
+            stats ??= new InjectionStats();
 
             Debug.Log($"<b>──────────  Saneject: Starting prefab batch injection of {prefabAssetPaths.Length} prefab{(prefabAssetPaths.Length != 1 ? "s" : "")}  ──────────</b>");
 
@@ -179,16 +186,12 @@ namespace Plugins.Saneject.Editor.Core
                 }
 
                 RunInjectionPass(
-                    dialogTitle: "Saneject: Inject Prefab Dependencies",
-                    confirmationMessage: "Are you sure you want to inject all dependencies in the prefab?",
-                    askBeforeInject: false,
                     collectScopes: () => scopes,
                     noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
                     progressBarTitle: "Saneject: Injection in progress",
                     progressBarMessage: $"Injecting prefab dependencies ({prefabName})",
                     configureGlobalBindings: false,
                     isPrefabInjection: true,
-                    clearLogs: false,
                     buildStatsLabel: _ => $"Prefab injection completed [{prefabName}]",
                     addResultToStats: stats
                 );
@@ -221,21 +224,22 @@ namespace Plugins.Saneject.Editor.Core
         /// This operation is editor-only and cannot be performed in Play Mode.
         /// </summary>
         /// <param name="sceneAssetPaths">Array of scene asset paths to inject, in order of processing.</param>
-        /// <param name="canClearLogs">Whether to clear the console before injection starts.</param>
         /// <param name="logStats">Whether to log the summary statistics after completion.</param>
         /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
         public static void BatchInjectScenes(
             string[] sceneAssetPaths,
-            bool canClearLogs,
             bool logStats,
             InjectionStats stats = null)
         {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
             stats ??= new InjectionStats();
 
             string previousScenePath = SceneManager.GetActiveScene().path;
-
-            if (UserSettings.ClearLogsOnInjection && canClearLogs)
-                ConsoleUtils.ClearLog();
 
             Debug.Log($"<b>──────────  Saneject: Start scene batch injection of {sceneAssetPaths.Length} scene{(sceneAssetPaths.Length != 1 ? "s" : "")}  ──────────</b>");
 
@@ -257,16 +261,12 @@ namespace Plugins.Saneject.Editor.Core
 
                 RunInjectionPass
                 (
-                    dialogTitle: "Saneject: Inject Scene Dependencies",
-                    confirmationMessage: "Are you sure you want to inject all dependencies in the scene?",
-                    askBeforeInject: false,
                     collectScopes: () => scopes,
                     noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
                     progressBarTitle: "Saneject: Injection in progress",
                     progressBarMessage: "Injecting all objects in scene",
                     configureGlobalBindings: true,
                     isPrefabInjection: false,
-                    clearLogs: false,
                     buildStatsLabel: _ => $"Scene injection completed [{scene.name}]",
                     addResultToStats: stats
                 );
@@ -301,19 +301,23 @@ namespace Plugins.Saneject.Editor.Core
             string[] sceneAssetPaths,
             string[] prefabAssetPaths)
         {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
             InjectionStats sceneStats = new();
             InjectionStats prefabStats = new();
 
             BatchInjectScenes(
                 sceneAssetPaths: sceneAssetPaths,
-                canClearLogs: true,
                 logStats: false,
                 stats: sceneStats
             );
 
             BatchInjectPrefabs(
                 prefabAssetPaths: prefabAssetPaths,
-                canClearLogs: false,
                 logStats: false,
                 stats: prefabStats
             );
@@ -332,33 +336,19 @@ namespace Plugins.Saneject.Editor.Core
         /// This is an editor-only operation and cannot be performed in Play Mode.
         /// </summary>
         private static void RunInjectionPass(
-            string dialogTitle,
-            string confirmationMessage,
-            bool askBeforeInject,
             Func<Scope[]> collectScopes,
             string noScopesWarning,
             string progressBarTitle,
             string progressBarMessage,
             bool configureGlobalBindings,
             bool isPrefabInjection,
-            bool clearLogs,
             Func<Scope[], string> buildStatsLabel,
             InjectionStats addResultToStats = null)
         {
             if (Application.isPlaying)
             {
-                EditorUtility.DisplayDialog(dialogTitle, "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
-            }
-
-            // Application.isBatchMode is true when run from CI tests and CI test runner can't confirm the dialog so we need to skip it in that case.
-            if (!Application.isBatchMode)
-            {
-                if (askBeforeInject && !EditorUtility.DisplayDialog(dialogTitle, confirmationMessage, "Yes", "Cancel"))
-                    return;
-
-                if (clearLogs)
-                    ConsoleUtils.ClearLog();
             }
 
             Stopwatch stopwatch = Stopwatch.StartNew();

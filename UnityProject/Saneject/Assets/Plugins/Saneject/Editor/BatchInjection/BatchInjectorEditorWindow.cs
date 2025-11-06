@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Linq;
 using Plugins.Saneject.Editor.Core;
+using Plugins.Saneject.Editor.Utility;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -170,6 +172,17 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 using (new EditorGUI.DisabledScope(sceneCount == 0 && prefabCount == 0))
                 {
                     if (GUILayout.Button("Inject All"))
+                    {
+                        if (UserSettings.AskBeforeBatchInjectAll && !EditorUtility.DisplayDialog(
+                                title: "Saneject: Batch Inject All Dependencies",
+                                message: $"Are you sure you want to batch inject {sceneCount} scenes and {prefabCount} prefabs?",
+                                ok: "Yes",
+                                cancel: "Cancel"))
+                            return;
+
+                        if (UserSettings.ClearLogsOnInjection)
+                            ConsoleUtils.ClearLog();
+
                         DependencyInjector.BatchInjectAllScenesAndPrefabs(
                             sceneAssetPaths: data.sceneList
                                 .GetEnabled()
@@ -180,34 +193,57 @@ namespace Plugins.Saneject.Editor.BatchInjection
                                 .Select(prefab => prefab.Path)
                                 .ToArray()
                         );
+                    }
                 }
 
                 // Inject Scenes
                 using (new EditorGUI.DisabledScope(sceneCount == 0))
                 {
                     if (GUILayout.Button($"Inject Scenes ({sceneCount})"))
+                    {
+                        if (UserSettings.AskBeforeBatchInjectScenes && !EditorUtility.DisplayDialog(
+                                title: "Saneject: Batch Inject Scene Dependencies",
+                                message: $"Are you sure you want to batch inject {sceneCount} scenes?",
+                                ok: "Yes",
+                                cancel: "Cancel"))
+                            return;
+
+                        if (UserSettings.ClearLogsOnInjection)
+                            ConsoleUtils.ClearLog();
+
                         DependencyInjector.BatchInjectScenes(
                             sceneAssetPaths: data.sceneList
                                 .GetEnabled()
                                 .Select(scene => scene.Path)
                                 .ToArray(),
-                            canClearLogs: true,
                             logStats: true
                         );
+                    }
                 }
 
                 // Inject Prefabs
                 using (new EditorGUI.DisabledScope(prefabCount == 0))
                 {
                     if (GUILayout.Button($"Inject Prefabs ({prefabCount})"))
+                    {
+                        if (UserSettings.AskBeforeBatchInjectPrefabs && !EditorUtility.DisplayDialog(
+                                title: "Saneject: Batch Inject Prefab Dependencies",
+                                message: $"Are you sure you want to batch inject {prefabCount} prefabs?",
+                                ok: "Yes",
+                                cancel: "Cancel"))
+                            return;
+
+                        if (UserSettings.ClearLogsOnInjection)
+                            ConsoleUtils.ClearLog();
+
                         DependencyInjector.BatchInjectPrefabs(
                             prefabAssetPaths: data.prefabList
                                 .GetEnabled()
                                 .Select(prefab => prefab.Path)
                                 .ToArray(),
-                            canClearLogs: true,
                             logStats: true
                         );
+                    }
                 }
             }
         }

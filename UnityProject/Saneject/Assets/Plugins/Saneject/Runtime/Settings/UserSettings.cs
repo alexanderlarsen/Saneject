@@ -106,6 +106,26 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
+        // Batch Injection
+        public static bool AskBeforeBatchInjectAll
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
+        public static bool AskBeforeBatchInjectScenes
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
+        public static bool AskBeforeBatchInjectPrefabs
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
+        // Shared helpers
         private static string GetString(
             string defaultValue,
             [CallerMemberName] string propertyName = null)

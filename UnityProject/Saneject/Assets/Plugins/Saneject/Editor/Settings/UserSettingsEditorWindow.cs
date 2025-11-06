@@ -128,6 +128,30 @@ namespace Plugins.Saneject.Editor.Settings
             );
 
             EditorGUILayout.Space(10);
+            EditorGUILayout.LabelField("Batch Injection", EditorStyles.boldLabel);
+
+            DrawToggle(
+                label: "Ask Before Batch Inject All",
+                tooltip: "Show a confirmation dialog before batch injecting all selected scenes and prefabs in the Batch Injector window.",
+                currentValue: UserSettings.AskBeforeBatchInjectAll,
+                onChanged: newValue => UserSettings.AskBeforeBatchInjectAll = newValue
+            );
+
+            DrawToggle(
+                label: "Ask Before Batch Inject Scenes",
+                tooltip: "Show a confirmation dialog before batch injecting all selected scenes in the Batch Injector window.",
+                currentValue: UserSettings.AskBeforeBatchInjectScenes,
+                onChanged: newValue => UserSettings.AskBeforeBatchInjectScenes = newValue
+            );
+
+            DrawToggle(
+                label: "Ask Before Batch Inject Prefabs",
+                tooltip: "Show a confirmation dialog before batch injecting all selected prefabs in the Batch Injector window.",
+                currentValue: UserSettings.AskBeforeBatchInjectPrefabs,
+                onChanged: newValue => UserSettings.AskBeforeBatchInjectPrefabs = newValue
+            );
+
+            EditorGUILayout.Space(10);
             EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
 
             DrawToggle(
@@ -145,7 +169,7 @@ namespace Plugins.Saneject.Editor.Settings
                 onChanged: newValue => UserSettings.ShowHelpBoxes = newValue,
                 repaintInspectors: true
             );
-            
+
             DrawToggle(
                 label: "Show Scope Path",
                 tooltip: "Display scope path, from ancestor scopes down to the selected scope, in the scope inspector.",
