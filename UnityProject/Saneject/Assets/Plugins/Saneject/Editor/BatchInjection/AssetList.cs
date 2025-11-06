@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection
 {
     [Serializable]
     public class AssetList

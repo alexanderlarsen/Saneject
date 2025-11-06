@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection
 {
     public static class AssetListSorter
     {

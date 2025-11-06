@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection
 {
     [Serializable]
     public class BatchInjectorData

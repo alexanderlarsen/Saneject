@@ -1,4 +1,4 @@
-﻿namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
+﻿namespace Plugins.Saneject.Editor.BatchInjection
 {
     public enum SortMode
     {

@@ -3,7 +3,7 @@ using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.EditorWindows
+namespace Plugins.Saneject.Editor.Settings
 {
     /// <summary>
     /// Editor window for configuring Saneject <see cref="UserSettings" /> in the Unity Editor.

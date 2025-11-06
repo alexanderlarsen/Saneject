@@ -6,7 +6,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection
 {
     public class BatchInjectorEditorWindow : EditorWindow
     {

@@ -3,7 +3,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection
 {
     [Serializable]
     public class AssetItem
