@@ -297,7 +297,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
             AddItem(
                 label: "Enable",
-                isEnabled: hasSelection,
+                isEnabled: selected.Count(i => assetList.GetElementAt(i).Enabled) != selected.Count,
                 onClick: () =>
                 {
                     foreach (int i in selected)
@@ -311,7 +311,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
             AddItem(
                 label: "Disable",
-                isEnabled: hasSelection,
+                isEnabled: selected.Count(i => assetList.GetElementAt(i).Enabled) != 0,
                 onClick: () =>
                 {
                     foreach (int i in selected)
