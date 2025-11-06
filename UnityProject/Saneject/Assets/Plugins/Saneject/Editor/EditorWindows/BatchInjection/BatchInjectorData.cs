@@ -6,11 +6,15 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
     [Serializable]
     public class BatchInjectorData
     {
-        public List<AssetData> scenes = new();
-        public List<AssetData> prefabs = new();
+        public AssetList scenes = new();
+        public AssetList prefabs = new();
 
-        public SortMode sceneSortMode = SortMode.NameAtoZ;
-        public SortMode prefabSortMode = SortMode.NameAtoZ;
         public SelectedTab selectedTab = SelectedTab.Scenes;
+
+        public void Initialize()
+        {
+            scenes.UpdateEnabledCount();
+            prefabs.UpdateEnabledCount();
+        }
     }
 }

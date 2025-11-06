@@ -7,9 +7,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     public static class SceneListManager
     {
-        public static void AddOpenScenes(
-            BatchInjectorData data,
-            SortMode sortMode)
+        public static void AddOpenScenes(BatchInjectorData data)
         {
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
@@ -18,17 +16,14 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                if (data.scenes.All(s => s.Path != scene.path))
-                    data.scenes.TryAdd(scene.path);
+                data.scenes.TryAdd(scene.path);
             }
 
-            AssetListSorter.SortList(data.scenes, sortMode);
+            data.scenes.Sort();
             Storage.SaveData(data);
         }
 
-        public static void AddAllProjectScenes(
-            BatchInjectorData data,
-            SortMode sortMode)
+        public static void AddAllProjectScenes(BatchInjectorData data)
         {
             string[] guids = AssetDatabase.FindAssets("t:Scene", new[] { "Assets" });
 
@@ -36,12 +31,12 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".unity"))
                 .ToList();
 
-            List<string> newScenes = paths.GetAssetPathsNotInList(data.scenes);
+            List<string> newScenes = data.scenes.GetAssetPathsNotInList(paths);
 
             if (newScenes.Count == 0)
             {
                 EditorUtility.DisplayDialog("Batch Injector",
-                    "All scenes are already.", "OK");
+                    "All scenes are already added.", "OK");
 
                 return;
             }
@@ -51,9 +46,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                     "Yes", "No"))
             {
                 foreach (string path in newScenes)
-                    data.scenes.Add(new AssetData(path));
+                    data.scenes.TryAdd(path);
 
-                AssetListSorter.SortList(data.scenes, sortMode);
+                data.scenes.Sort();
                 Storage.SaveData(data);
             }
         }

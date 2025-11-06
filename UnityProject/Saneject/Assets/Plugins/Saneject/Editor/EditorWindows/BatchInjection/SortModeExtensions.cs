@@ -10,6 +10,8 @@
                 SortMode.PathZtoA => "Path Z-A",
                 SortMode.NameAtoZ => "Name A-Z",
                 SortMode.NameZtoA => "Name Z-A",
+                SortMode.EnabledToDisabled => "Enabled-Disabled",
+                SortMode.DisabledToEnabled => "Disabled-Enabled",
                 _ => "Custom"
             };
         }

@@ -12,12 +12,57 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
             if (mode == SortMode.Custom || list is not { Count: > 1 })
                 return;
 
+            switch (mode)
+            {
+                case SortMode.DisabledToEnabled:
+                    list.Sort((
+                        a,
+                        b) =>
+                    {
+                        int flagCompare = a.Enabled.CompareTo(b.Enabled);
+
+                        if (flagCompare != 0)
+                            return flagCompare;
+
+                        // Secondary alphabetical sort (by Name, then Path)
+                        int nameCompare = Compare(a.Name, b.Name);
+                        return nameCompare != 0 ? nameCompare : Compare(a.Path, b.Path);
+                    });
+
+                    return;
+
+                case SortMode.EnabledToDisabled:
+                    list.Sort((
+                        a,
+                        b) =>
+                    {
+                        int flagCompare = b.Enabled.CompareTo(a.Enabled);
+
+                        if (flagCompare != 0)
+                            return flagCompare;
+
+                        // Secondary alphabetical sort (by Name, then Path)
+                        int nameCompare = Compare(a.Name, b.Name);
+                        return nameCompare != 0 ? nameCompare : Compare(a.Path, b.Path);
+                    });
+
+                    return;
+            }
+
             Comparison<AssetData> comparison = mode switch
             {
-                SortMode.PathAtoZ => (a, b) => Compare(GetSortString(a), GetSortString(b)),
-                SortMode.PathZtoA => (a, b) => Compare(GetSortString(b), GetSortString(a)),
-                SortMode.NameAtoZ => (a, b) => Compare(GetSortString(a), GetSortString(b)),
-                SortMode.NameZtoA => (a, b) => Compare(GetSortString(b), GetSortString(a)),
+                SortMode.PathAtoZ => (
+                    a,
+                    b) => Compare(GetSortString(a), GetSortString(b)),
+                SortMode.PathZtoA => (
+                    a,
+                    b) => Compare(GetSortString(b), GetSortString(a)),
+                SortMode.NameAtoZ => (
+                    a,
+                    b) => Compare(GetSortString(a), GetSortString(b)),
+                SortMode.NameZtoA => (
+                    a,
+                    b) => Compare(GetSortString(b), GetSortString(a)),
                 _ => null
             };
 

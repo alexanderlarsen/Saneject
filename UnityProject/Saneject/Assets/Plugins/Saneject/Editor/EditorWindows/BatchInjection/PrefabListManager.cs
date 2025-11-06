@@ -7,11 +7,9 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
 {
     public static class PrefabListManager
     {
-        public static void AddAllPrefabsInScene(
-            BatchInjectorData data,
-            SortMode sortMode)
+        public static void AddAllPrefabsInScene(BatchInjectorData data)
         {
-            HashSet<string> prefabsInScene = new();
+            HashSet<string> paths = new();
 
             foreach (GameObject go in Object.FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.InstanceID))
             {
@@ -25,20 +23,17 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 if (string.IsNullOrEmpty(path))
                     continue;
 
-                prefabsInScene.Add(path);
+                paths.Add(path);
             }
 
-            foreach (string path in prefabsInScene)
-                if (data.prefabs.All(p => p.Path != path))
-                    data.prefabs.TryAdd(path);
+            foreach (string path in paths)
+                data.prefabs.TryAdd(path);
 
-            AssetListSorter.SortList(data.prefabs, sortMode);
+            data.prefabs.Sort();
             Storage.SaveData(data);
         }
 
-        public static void AddAllProjectPrefabs(
-            BatchInjectorData data,
-            SortMode sortMode)
+        public static void AddAllProjectPrefabs(BatchInjectorData data)
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" });
 
@@ -46,7 +41,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 .Where(p => !string.IsNullOrEmpty(p) && p.EndsWith(".prefab"))
                 .ToList();
 
-            List<string> newPrefabs = paths.GetAssetPathsNotInList(data.prefabs);
+            List<string> newPrefabs = data.prefabs.GetAssetPathsNotInList(paths);
 
             if (newPrefabs.Count == 0)
             {
@@ -69,7 +64,7 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 foreach (string path in newPrefabs)
                     data.prefabs.TryAdd(path);
 
-                data.prefabs.Sort(sortMode);
+                data.prefabs.Sort();
                 Storage.SaveData(data);
             }
         }

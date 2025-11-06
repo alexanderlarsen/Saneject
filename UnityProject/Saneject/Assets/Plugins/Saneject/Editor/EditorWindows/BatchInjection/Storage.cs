@@ -19,9 +19,8 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjection
                 return new BatchInjectorData();
 
             string json = EditorPrefs.GetString(PrefsKey);
-
             BatchInjectorData data = JsonUtility.FromJson<BatchInjectorData>(json) ?? new BatchInjectorData();
-
+            data.Initialize();
             return data;
         }
     }

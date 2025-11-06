@@ -6,6 +6,8 @@
         NameZtoA,
         PathAtoZ,
         PathZtoA,
+        EnabledToDisabled,
+        DisabledToEnabled,
         Custom
     }
 }
