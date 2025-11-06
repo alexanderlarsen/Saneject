@@ -24,6 +24,77 @@ namespace Plugins.Saneject.Editor.Core
     public static class DependencyInjector
     {
         /// <summary>
+        /// Performs dependency injection for all <see cref="Scope" />s under a hierarchy root in the scene.
+        /// Scans for configured bindings starting from the given scope, resolves them recursively up the hierarchy,
+        /// and assigns references to all eligible fields/properties.
+        /// This operation is editor-only and cannot be performed in Play Mode.
+        /// </summary>
+        /// <param name="startScope">The root scope to start injection from. All child scopes will be processed.</param>
+        public static void InjectSingleHierarchy(Scope startScope)
+        {
+            RunInjectionPass
+            (
+                dialogTitle: "Saneject: Inject Hierarchy Dependencies",
+                confirmationMessage: "Are you sure you want to inject all dependencies in the hierarchy?",
+                askBeforeInject: UserSettings.AskBeforeHierarchyInjection,
+                collectScopes: () => startScope
+                    .FindRootScope()
+                    .GetComponentsInChildren<Scope>(includeInactive: true)
+                    .Where(scope => !scope.gameObject.IsPrefab())
+                    .ToArray(),
+                noScopesWarning: "Saneject: No scopes found in hierarchy. Nothing to inject.",
+                progressBarTitle: "Saneject: Injection in progress",
+                progressBarMessage: "Injecting all objects in hierarchy",
+                configureGlobalBindings: true,
+                isPrefabInjection: false,
+                clearLogs: UserSettings.ClearLogsOnInjection,
+                buildStatsLabel: scopes =>
+                {
+                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
+                    string rootName = root ? root.gameObject.name : "Unknown";
+                    return $"Single scene hierarchy injection completed [{rootName}]";
+                }
+            );
+        }
+
+        /// <summary>
+        /// Performs dependency injection for all <see cref="Scope" />s under a prefab root.
+        /// Only used for prefab assets - does not register or inject global dependencies.
+        /// This operation is editor-only and cannot be performed in Play Mode.
+        /// </summary>
+        /// <param name="startScope">The root scope in the prefab to start injection from.</param>
+        public static void InjectPrefab(Scope startScope)
+        {
+            if (!startScope)
+            {
+                Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
+                return;
+            }
+
+            RunInjectionPass
+            (
+                dialogTitle: "Saneject: Inject Prefab Dependencies",
+                confirmationMessage: "Are you sure you want to inject all dependencies in the prefab?",
+                askBeforeInject: UserSettings.AskBeforePrefabInjection,
+                collectScopes: () => startScope
+                    .FindRootScope()
+                    .GetComponentsInChildren<Scope>(includeInactive: true),
+                noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
+                progressBarTitle: "Saneject: Injection in progress",
+                progressBarMessage: "Injecting prefab dependencies",
+                configureGlobalBindings: false,
+                isPrefabInjection: true,
+                clearLogs: UserSettings.ClearLogsOnInjection,
+                buildStatsLabel: scopes =>
+                {
+                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
+                    string rootName = root ? root.gameObject.name : "Unknown";
+                    return $"Prefab injection completed [{rootName}]";
+                }
+            );
+        }
+
+        /// <summary>
         /// Performs dependency injection for all <see cref="Scope" />s in the currently active scene.
         /// Scans all non-prefab root objects and their descendants for scopes, processes bindings,
         /// and injects dependencies where applicable.
@@ -51,83 +122,6 @@ namespace Plugins.Saneject.Editor.Core
                 clearLogs: false,
                 buildStatsLabel: _ => $"Scene injection completed [{scene.name}]"
             );
-        }
-
-        /// <summary>
-        /// Performs dependency injection across multiple scenes in sequence.
-        /// Each scene is opened, injected, and saved before continuing to the next.
-        /// Logs progress per scene and aggregates statistics for all processed scopes.
-        /// Restores the originally active scene after completion.
-        /// This operation is editor-only and cannot be performed in Play Mode.
-        /// </summary>
-        /// <param name="sceneAssetPaths">Array of scene asset paths to inject, in order of processing.</param>
-        /// <param name="canClearLogs">Whether to clear the console before injection starts.</param>
-        /// <param name="logStats">Whether to log the summary statistics after completion.</param>
-        /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
-        public static void BatchInjectScenes(
-            string[] sceneAssetPaths,
-            bool canClearLogs,
-            bool logStats,
-            InjectionStats stats = null)
-        {
-            stats ??= new InjectionStats();
-
-            string previousScenePath = SceneManager.GetActiveScene().path;
-
-            if (UserSettings.ClearLogsOnInjection && canClearLogs)
-                ConsoleUtils.ClearLog();
-
-            Debug.Log($"<b>──────────  Saneject: Start scene batch injection of {sceneAssetPaths.Length} scene{(sceneAssetPaths.Length != 1 ? "s" : "")}  ──────────</b>");
-
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            int numScopesProcessed = 0;
-
-            for (int i = 0; i < sceneAssetPaths.Length; i++)
-            {
-                Scene scene = EditorSceneManager.OpenScene(sceneAssetPaths[i], OpenSceneMode.Single);
-                string logSectionColor = Colors.BatchLogColors[i % Colors.BatchLogColors.Length];
-
-                Debug.Log($"<color={logSectionColor}><b>↓</b> Saneject: Start scene injection [{scene.name}] <b>↓</b></color>");
-
-                Scope[] scopes = scene
-                    .GetRootGameObjects()
-                    .Where(root => !root.IsPrefab())
-                    .SelectMany(root => root.GetComponentsInChildren<Scope>(includeInactive: true))
-                    .ToArray();
-
-                RunInjectionPass
-                (
-                    dialogTitle: "Saneject: Inject Scene Dependencies",
-                    confirmationMessage: "Are you sure you want to inject all dependencies in the scene?",
-                    askBeforeInject: false,
-                    collectScopes: () => scopes,
-                    noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
-                    progressBarTitle: "Saneject: Injection in progress",
-                    progressBarMessage: "Injecting all objects in scene",
-                    configureGlobalBindings: true,
-                    isPrefabInjection: false,
-                    clearLogs: false,
-                    buildStatsLabel: _ => $"Scene injection completed [{scene.name}]",
-                    addResultToStats: stats
-                );
-
-                EditorSceneManager.SaveScene(scene);
-                numScopesProcessed += scopes.Length;
-
-                Debug.Log($"<color={logSectionColor}><b>↑</b> Saneject: End scene injection [{scene.name}] <b>↑</b></color>");
-            }
-
-            EditorSceneManager.OpenScene(previousScenePath);
-
-            stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            stats.numScopesProcessed = numScopesProcessed;
-            stopwatch.Stop();
-
-            if (!logStats)
-                return;
-
-            Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
-            stats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssetPaths.Length} scenes");
         }
 
         /// <summary>
@@ -220,6 +214,83 @@ namespace Plugins.Saneject.Editor.Core
         }
 
         /// <summary>
+        /// Performs dependency injection across multiple scenes in sequence.
+        /// Each scene is opened, injected, and saved before continuing to the next.
+        /// Logs progress per scene and aggregates statistics for all processed scopes.
+        /// Restores the originally active scene after completion.
+        /// This operation is editor-only and cannot be performed in Play Mode.
+        /// </summary>
+        /// <param name="sceneAssetPaths">Array of scene asset paths to inject, in order of processing.</param>
+        /// <param name="canClearLogs">Whether to clear the console before injection starts.</param>
+        /// <param name="logStats">Whether to log the summary statistics after completion.</param>
+        /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
+        public static void BatchInjectScenes(
+            string[] sceneAssetPaths,
+            bool canClearLogs,
+            bool logStats,
+            InjectionStats stats = null)
+        {
+            stats ??= new InjectionStats();
+
+            string previousScenePath = SceneManager.GetActiveScene().path;
+
+            if (UserSettings.ClearLogsOnInjection && canClearLogs)
+                ConsoleUtils.ClearLog();
+
+            Debug.Log($"<b>──────────  Saneject: Start scene batch injection of {sceneAssetPaths.Length} scene{(sceneAssetPaths.Length != 1 ? "s" : "")}  ──────────</b>");
+
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            int numScopesProcessed = 0;
+
+            for (int i = 0; i < sceneAssetPaths.Length; i++)
+            {
+                Scene scene = EditorSceneManager.OpenScene(sceneAssetPaths[i], OpenSceneMode.Single);
+                string logSectionColor = Colors.BatchLogColors[i % Colors.BatchLogColors.Length];
+
+                Debug.Log($"<color={logSectionColor}><b>↓</b> Saneject: Start scene injection [{scene.name}] <b>↓</b></color>");
+
+                Scope[] scopes = scene
+                    .GetRootGameObjects()
+                    .Where(root => !root.IsPrefab())
+                    .SelectMany(root => root.GetComponentsInChildren<Scope>(includeInactive: true))
+                    .ToArray();
+
+                RunInjectionPass
+                (
+                    dialogTitle: "Saneject: Inject Scene Dependencies",
+                    confirmationMessage: "Are you sure you want to inject all dependencies in the scene?",
+                    askBeforeInject: false,
+                    collectScopes: () => scopes,
+                    noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
+                    progressBarTitle: "Saneject: Injection in progress",
+                    progressBarMessage: "Injecting all objects in scene",
+                    configureGlobalBindings: true,
+                    isPrefabInjection: false,
+                    clearLogs: false,
+                    buildStatsLabel: _ => $"Scene injection completed [{scene.name}]",
+                    addResultToStats: stats
+                );
+
+                EditorSceneManager.SaveScene(scene);
+                numScopesProcessed += scopes.Length;
+
+                Debug.Log($"<color={logSectionColor}><b>↑</b> Saneject: End scene injection [{scene.name}] <b>↑</b></color>");
+            }
+
+            EditorSceneManager.OpenScene(previousScenePath);
+
+            stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+            stats.numScopesProcessed = numScopesProcessed;
+            stopwatch.Stop();
+
+            if (!logStats)
+                return;
+
+            Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
+            stats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssetPaths.Length} scenes");
+        }
+
+        /// <summary>
         /// Performs dependency injection across both scenes and prefabs in a single combined pass.
         /// Executes scene injection first, followed by prefab injection, then prints a unified summary log at the end.
         /// This operation is editor-only and cannot be performed in Play Mode.
@@ -253,77 +324,6 @@ namespace Plugins.Saneject.Editor.Core
                 firstSentence: $"Scene batch injection complete | Processed {sceneAssetPaths.Length} scenes");
 
             prefabStats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssetPaths.Length} prefabs");
-        }
-
-        /// <summary>
-        /// Performs dependency injection for all <see cref="Scope" />s under a hierarchy root in the scene.
-        /// Scans for configured bindings starting from the given scope, resolves them recursively up the hierarchy,
-        /// and assigns references to all eligible fields/properties.
-        /// This operation is editor-only and cannot be performed in Play Mode.
-        /// </summary>
-        /// <param name="startScope">The root scope to start injection from. All child scopes will be processed.</param>
-        public static void InjectSingleHierarchy(Scope startScope)
-        {
-            RunInjectionPass
-            (
-                dialogTitle: "Saneject: Inject Hierarchy Dependencies",
-                confirmationMessage: "Are you sure you want to inject all dependencies in the hierarchy?",
-                askBeforeInject: UserSettings.AskBeforeHierarchyInjection,
-                collectScopes: () => startScope
-                    .FindRootScope()
-                    .GetComponentsInChildren<Scope>(includeInactive: true)
-                    .Where(scope => !scope.gameObject.IsPrefab())
-                    .ToArray(),
-                noScopesWarning: "Saneject: No scopes found in hierarchy. Nothing to inject.",
-                progressBarTitle: "Saneject: Injection in progress",
-                progressBarMessage: "Injecting all objects in hierarchy",
-                configureGlobalBindings: true,
-                isPrefabInjection: false,
-                clearLogs: UserSettings.ClearLogsOnInjection,
-                buildStatsLabel: scopes =>
-                {
-                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
-                    string rootName = root ? root.gameObject.name : "Unknown";
-                    return $"Single scene hierarchy injection completed [{rootName}]";
-                }
-            );
-        }
-
-        /// <summary>
-        /// Performs dependency injection for all <see cref="Scope" />s under a prefab root.
-        /// Only used for prefab assets - does not register or inject global dependencies.
-        /// This operation is editor-only and cannot be performed in Play Mode.
-        /// </summary>
-        /// <param name="startScope">The root scope in the prefab to start injection from.</param>
-        public static void InjectPrefab(Scope startScope)
-        {
-            if (!startScope)
-            {
-                Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
-                return;
-            }
-
-            RunInjectionPass
-            (
-                dialogTitle: "Saneject: Inject Prefab Dependencies",
-                confirmationMessage: "Are you sure you want to inject all dependencies in the prefab?",
-                askBeforeInject: UserSettings.AskBeforePrefabInjection,
-                collectScopes: () => startScope
-                    .FindRootScope()
-                    .GetComponentsInChildren<Scope>(includeInactive: true),
-                noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
-                progressBarTitle: "Saneject: Injection in progress",
-                progressBarMessage: "Injecting prefab dependencies",
-                configureGlobalBindings: false,
-                isPrefabInjection: true,
-                clearLogs: UserSettings.ClearLogsOnInjection,
-                buildStatsLabel: scopes =>
-                {
-                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
-                    string rootName = root ? root.gameObject.name : "Unknown";
-                    return $"Prefab injection completed [{rootName}]";
-                }
-            );
         }
 
         /// <summary>
