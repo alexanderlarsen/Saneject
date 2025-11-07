@@ -23,6 +23,8 @@ namespace Plugins.Saneject.Editor.Core
     /// </summary>
     public static class DependencyInjector
     {
+        #region Single injection
+
         /// <summary>
         /// Performs dependency injection for all <see cref="Scope" />s under a hierarchy root in the scene.
         /// Scans for configured bindings starting from the given scope, resolves them recursively up the hierarchy,
@@ -129,6 +131,10 @@ namespace Plugins.Saneject.Editor.Core
                 buildStatsLabel: _ => $"Scene injection completed [{scene.name}]"
             );
         }
+
+        #endregion
+
+        #region Batch injection
 
         /// <summary>
         /// Performs dependency injection across multiple prefabs in sequence.
@@ -364,6 +370,10 @@ namespace Plugins.Saneject.Editor.Core
             prefabStats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
         }
 
+        #endregion
+
+        #region Shared injection methods
+
         /// <summary>
         /// Executes a single pass of the dependency injection operation based on the provided parameters.
         /// Handles dialog confirmation, scope collection, progress display, and injection processing.
@@ -510,5 +520,7 @@ namespace Plugins.Saneject.Editor.Core
                     InjectRecursive(child, currentScope);
             }
         }
+
+        #endregion
     }
 }
