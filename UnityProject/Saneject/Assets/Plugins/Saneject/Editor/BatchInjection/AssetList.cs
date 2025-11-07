@@ -22,7 +22,12 @@ namespace Plugins.Saneject.Editor.BatchInjection
         public int EnabledCount => list.Count(item => item.Enabled);
         public int TotalCount => list.Count;
         public IList Elements => list;
-        public SortMode SortMode => sortMode;
+
+        public SortMode SortMode
+        {
+            get => sortMode;
+            set => sortMode = value;
+        }
 
         public Vector2 Scroll
         {
@@ -94,11 +99,6 @@ namespace Plugins.Saneject.Editor.BatchInjection
         public int FindIndexByPath(string path)
         {
             return list.FindIndex(asset => asset.Path == path);
-        }
-
-        public void SetSortMode(SortMode sortMode)
-        {
-            this.sortMode = sortMode;
         }
     }
 }

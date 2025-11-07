@@ -126,7 +126,11 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 GUI.changed = true;
             };
 
-            reorderable.onReorderCallback = _ => onModified?.Invoke();
+            reorderable.onReorderCallback = _ =>
+            {
+                assetList.SortMode = SortMode.Custom;
+                onModified?.Invoke();
+            };
 
             return reorderable;
         }
@@ -422,7 +426,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     on: list.SortMode == mode,
                     func: () =>
                     {
-                        list.SetSortMode(mode);
+                        list.SortMode = mode;
                         list.Sort();
                         Storage.SaveData(data);
                         repaint?.Invoke();
