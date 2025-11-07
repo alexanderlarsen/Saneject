@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Editor.Utility
 
             string scriptsWord = count == 1 ? "script" : "scripts";
 
-            Debug.LogWarning($"Saneject: {count} proxy {scriptsWord} generated. Unity has recompiled and stopped the injection pass. Click 'Inject' again to complete.");
+            Debug.LogWarning($"Saneject: {count} proxy {scriptsWord} generated. Unity has recompiled and stopped the injection pass. Inject again to complete.");
             SessionState.EraseInt("Saneject.ProxyStubCount");
         }
     }

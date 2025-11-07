@@ -6,9 +6,12 @@ using System.Reflection;
 using System.Text.RegularExpressions;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Proxy;
+using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Plugins.Saneject.Editor.Utility
 {
@@ -201,6 +204,102 @@ namespace {ns}
             return null;
         }
 
+        /// <summary>
+        /// Attempts to generate proxy scripts for the specified set of types if they do not already exist.
+        /// </summary>
+        /// <param name="types">
+        /// A set of types for which proxy scripts should be created.
+        /// </param>
+        /// <returns>
+        /// True if proxy scripts were successfully created for any of the provided types; otherwise, false.
+        /// </returns>
+        public static bool TryCreateProxyScripts(HashSet<Type> types)
+        {
+            if (types.Count == 0)
+                return false;
+
+            types.RemoveWhere(DoesProxyScriptExist);
+
+            if (types.Count == 0)
+                return false;
+
+            string scriptsWord = types.Count == 1 ? "script" : "scripts";
+
+            EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{types.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
+
+            foreach (Type type in types)
+                GenerateProxyScript(type);
+
+            SessionState.SetInt("Saneject.ProxyStubCount", types.Count);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            return true;
+        }
+
+        /// <summary>
+        /// Attempts to create proxy scripts for the specified scopes if they do not already exist.
+        /// </summary>
+        /// <param name="scopes">A collection of scopes that may contain proxy bindings.</param>
+        /// <returns>
+        /// True if at least one proxy script was successfully created; otherwise, false.
+        /// </returns>
+        public static bool TryCreateProxyScripts(IEnumerable<Scope> scopes)
+        {
+            HashSet<Type> proxyTypes = scopes
+                .SelectMany(scope => scope.GetProxyBindings())
+                .Select(binding => binding.ConcreteType)
+                .ToHashSet();
+
+            return TryCreateProxyScripts(proxyTypes);
+        }
+
+        /// <summary>
+        /// Attempts to create proxy scripts for all declared proxies in the specified scenes based on their file paths.
+        /// </summary>
+        /// <param name="scenePaths">A collection of scene file paths for which proxy scripts are to be created.</param>
+        /// <returns>
+        /// A boolean value indicating whether the operation completed successfully.
+        /// Returns true if proxy scripts were successfully created or already existed for all scenes; otherwise, false.
+        /// </returns>
+        public static bool TryCreateProxyScriptsForScenes(IEnumerable<string> scenePaths)
+        {
+            HashSet<Type> types = GetSceneProxyTypes(scenePaths);
+            return TryCreateProxyScripts(types);
+        }
+
+        /// <summary>
+        /// Attempts to create proxy scripts for all declared proxies in the given set of prefab file paths.
+        /// </summary>
+        /// <param name="prefabsPaths">The collection of file paths to prefab assets.</param>
+        /// <returns>
+        /// Returns true if proxy scripts were successfully created for one or more prefabs,
+        /// or false if none were created.
+        /// </returns>
+        public static bool TryCreateProxyScriptsForPrefabs(IEnumerable<string> prefabsPaths)
+        {
+            HashSet<Type> types = GetPrefabProxyTypes(prefabsPaths);
+            return TryCreateProxyScripts(types);
+        }
+
+        /// <summary>
+        /// Attempts to generate proxy scripts for all declared proxies associated with the specified scenes and prefabs.
+        /// </summary>
+        /// <param name="scenePaths">A collection of file paths for the scenes to process when generating proxy scripts.</param>
+        /// <param name="prefabsPaths">A collection of file paths for the prefabs to process when generating proxy scripts.</param>
+        /// <returns>
+        /// True if one or more proxy scripts were successfully created; otherwise, false.
+        /// </returns>
+        public static bool TryCreateProxyScriptsForScenesAndPrefabs(
+            IEnumerable<string> scenePaths,
+            IEnumerable<string> prefabsPaths)
+        {
+            HashSet<Type> sceneTypes = GetSceneProxyTypes(scenePaths);
+            HashSet<Type> prefabTypes = GetPrefabProxyTypes(prefabsPaths);
+            HashSet<Type> allTypes = new(sceneTypes);
+            allTypes.UnionWith(prefabTypes);
+            return TryCreateProxyScripts(allTypes);
+        }
+
         private static bool HasCompiledProxyTypeFor(Type concreteType)
         {
             return GetProxyTypeFromConcreteType(concreteType) != null;
@@ -245,29 +344,54 @@ namespace {ns}
             return Regex.IsMatch(code, patternFq) || Regex.IsMatch(code, patternNameOnly);
         }
 
-        public static void CreateMissingProxyStubs(
-            this IEnumerable<Binding> proxyBindings,
-            out bool isProxyCreationPending)
+        private static HashSet<Type> GetSceneProxyTypes(IEnumerable<string> scenePaths)
         {
-            isProxyCreationPending = false;
+            HashSet<Type> types = new();
 
-            List<Type> typesToCreate = proxyBindings
-                .Select(binding => binding.ConcreteType)
-                .Where(type => !DoesProxyScriptExist(type)).ToList();
+            foreach (string path in scenePaths)
+            {
+                Scene scene = EditorSceneManager.OpenScene(path);
+                GameObject[] rootGameObjects = scene.GetRootGameObjects();
 
-            if (typesToCreate.Count == 0)
-                return;
+                foreach (GameObject root in rootGameObjects)
+                {
+                    foreach (Scope scope in root.GetComponentsInChildren<Scope>(true))
+                    {
+                        scope.ConfigureBindings();
+                        scope.ValidateBindings();
 
-            isProxyCreationPending = true;
+                        foreach (Binding proxyBinding in scope.GetProxyBindings())
+                            types.Add(proxyBinding.ConcreteType);
 
-            string scriptsWord = typesToCreate.Count == 1 ? "script" : "scripts";
+                        scope.Dispose();
+                    }
+                }
+            }
 
-            EditorUtility.DisplayDialog($"Saneject: Proxy {scriptsWord} required", $"{typesToCreate.Count} proxy {scriptsWord} will be created. Afterwards Unity will recompile and stop the current injection pass. Click 'Inject' again after recompilation to complete the injection.", "Got it");
+            return types;
+        }
 
-            typesToCreate.ForEach(GenerateProxyScript);
-            SessionState.SetInt("Saneject.ProxyStubCount", typesToCreate.Count);
-            AssetDatabase.SaveAssets();
-            AssetDatabase.Refresh();
+        private static HashSet<Type> GetPrefabProxyTypes(IEnumerable<string> prefabsPaths)
+        {
+            HashSet<Type> types = new();
+
+            foreach (string path in prefabsPaths)
+            {
+                GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
+
+                foreach (Scope scope in prefabAsset.GetComponentsInChildren<Scope>(true))
+                {
+                    scope.ConfigureBindings();
+                    scope.ValidateBindings();
+
+                    foreach (Binding proxyBinding in scope.GetProxyBindings())
+                        types.Add(proxyBinding.ConcreteType);
+
+                    scope.Dispose();
+                }
+            }
+
+            return types;
         }
     }
 }
