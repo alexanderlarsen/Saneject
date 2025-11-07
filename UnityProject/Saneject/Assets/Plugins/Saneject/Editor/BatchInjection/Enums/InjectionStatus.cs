@@ -1,4 +1,4 @@
-﻿namespace Plugins.Saneject.Editor.BatchInjection
+﻿namespace Plugins.Saneject.Editor.BatchInjection.Enums
 {
     public enum InjectionStatus
     {

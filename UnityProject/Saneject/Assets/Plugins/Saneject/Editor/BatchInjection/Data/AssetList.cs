@@ -2,10 +2,12 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Editor.BatchInjection.Enums;
+using Plugins.Saneject.Editor.BatchInjection.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection.Data
 {
     [Serializable]
     public class AssetList
@@ -14,7 +16,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
         private SortMode sortMode = SortMode.NameAtoZ;
 
         [SerializeField]
-        private List<AssetItem> list = new();
+        private List<AssetData> list = new();
 
         [SerializeField]
         private Vector2 scroll;
@@ -46,11 +48,11 @@ namespace Plugins.Saneject.Editor.BatchInjection
             if (list.Any(item => item.Guid == guid))
                 return false;
 
-            list.Add(new AssetItem(guid));
+            list.Add(new AssetData(guid));
             return true;
         }
 
-        public AssetItem GetElementAt(int index)
+        public AssetData GetElementAt(int index)
         {
             if (index < 0 || index >= list.Count)
                 throw new IndexOutOfRangeException();
@@ -68,10 +70,10 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
         public void Sort()
         {
-            AssetListSorter.SortList(list, sortMode);
+            SortingUtils.SortList(list, sortMode);
         }
 
-        public AssetItem[] GetEnabled()
+        public AssetData[] GetEnabled()
         {
             return list
                 .Where(item => item.Enabled)

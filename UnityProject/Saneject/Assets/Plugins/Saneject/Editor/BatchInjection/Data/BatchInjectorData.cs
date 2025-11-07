@@ -1,6 +1,7 @@
 ﻿using System;
+using Plugins.Saneject.Editor.BatchInjection.Enums;
 
-namespace Plugins.Saneject.Editor.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection.Data
 {
     [Serializable]
     public class BatchInjectorData

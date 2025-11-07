@@ -2,6 +2,7 @@
 using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Utility;
+using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;

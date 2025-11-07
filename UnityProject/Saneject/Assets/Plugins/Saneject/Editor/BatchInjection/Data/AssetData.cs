@@ -1,12 +1,13 @@
 ﻿using System;
+using Plugins.Saneject.Editor.BatchInjection.Enums;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection.Data
 {
     [Serializable]
-    public class AssetItem
+    public class AssetData
     {
         [SerializeField]
         private string guid;
@@ -20,7 +21,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
         [NonSerialized]
         private Object asset;
 
-        public AssetItem(string guid)
+        public AssetData(string guid)
         {
             this.guid = guid;
         }

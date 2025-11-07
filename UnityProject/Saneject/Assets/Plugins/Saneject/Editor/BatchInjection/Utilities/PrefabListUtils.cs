@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Editor.BatchInjection.Data;
+using Plugins.Saneject.Editor.BatchInjection.Persistence;
 using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection.Utilities
 {
-    public static class PrefabListManager
+    public static class PrefabListUtils
     {
-        public static void AddAllPrefabsInScene(BatchInjectorData data)
+        public static void AddAllPrefabsInScene(BatchInjectorData injectorData)
         {
             HashSet<string> paths = new();
 
@@ -27,20 +29,21 @@ namespace Plugins.Saneject.Editor.BatchInjection
             }
 
             foreach (string path in paths)
-                data.prefabList.TryAddByPath(path);
+                injectorData.prefabList.TryAddByPath(path);
 
-            data.prefabList.Sort();
-            Storage.SaveData(data);
+            injectorData.prefabList.Sort();
+            Storage.SaveData(injectorData);
         }
 
-        public static void AddAllProjectPrefabs(BatchInjectorData data)
+        public static void AddAllProjectPrefabs(BatchInjectorData injectorData)
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new[] { "Assets" });
-            string[] newGuids = data.prefabList.FindGuidsNotInList(guids).ToArray();
+            string[] newGuids = injectorData.prefabList.FindGuidsNotInList(guids).ToArray();
 
             if (newGuids.Length == 0)
             {
-                EditorUtility.DisplayDialog(
+                EditorUtility.DisplayDialog
+                (
                     title: "Batch Injector",
                     message: "All prefabs are already added.",
                     ok: "OK"
@@ -49,7 +52,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 return;
             }
 
-            if (EditorUtility.DisplayDialog(
+            if (EditorUtility.DisplayDialog
+                (
                     title: "Batch Injector",
                     message: $"Do you want to add {newGuids.Length} prefab{(newGuids.Length == 1 ? "" : "s")} to the Batch Injector?",
                     ok: "Yes",
@@ -57,16 +61,17 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 ))
             {
                 foreach (string guid in newGuids)
-                    data.prefabList.TryAddByGuid(guid);
+                    injectorData.prefabList.TryAddByGuid(guid);
 
-                data.prefabList.Sort();
-                Storage.SaveData(data);
+                injectorData.prefabList.Sort();
+                Storage.SaveData(injectorData);
             }
         }
 
-        public static void ClearPrefabs(BatchInjectorData data)
+        public static void ClearPrefabs(BatchInjectorData injectorData)
         {
-            if (!EditorUtility.DisplayDialog(
+            if (!EditorUtility.DisplayDialog
+                (
                     title: "Batch Injector",
                     message: "Remove all prefabs from list?",
                     ok: "Yes",
@@ -74,8 +79,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 ))
                 return;
 
-            data.prefabList.Clear();
-            Storage.SaveData(data);
+            injectorData.prefabList.Clear();
+            Storage.SaveData(injectorData);
         }
     }
 }

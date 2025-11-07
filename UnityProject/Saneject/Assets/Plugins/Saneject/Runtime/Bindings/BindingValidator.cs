@@ -1,4 +1,4 @@
-﻿using Plugins.Saneject.Editor.Extensions;
+﻿using Plugins.Saneject.Runtime.Extensions;
 using UnityEngine;
 
 namespace Plugins.Saneject.Runtime.Bindings

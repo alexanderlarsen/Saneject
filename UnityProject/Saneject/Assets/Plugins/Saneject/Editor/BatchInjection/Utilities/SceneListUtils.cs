@@ -1,12 +1,14 @@
 ﻿using System.Linq;
+using Plugins.Saneject.Editor.BatchInjection.Data;
+using Plugins.Saneject.Editor.BatchInjection.Persistence;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
-namespace Plugins.Saneject.Editor.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection.Utilities
 {
-    public static class SceneListManager
+    public static class SceneListUtils
     {
-        public static void AddOpenScenes(BatchInjectorData data)
+        public static void AddOpenScenes(BatchInjectorData injectorData)
         {
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
@@ -15,17 +17,17 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                data.sceneList.TryAddByPath(scene.path);
+                injectorData.sceneList.TryAddByPath(scene.path);
             }
 
-            data.sceneList.Sort();
-            Storage.SaveData(data);
+            injectorData.sceneList.Sort();
+            Storage.SaveData(injectorData);
         }
 
-        public static void AddAllProjectScenes(BatchInjectorData data)
+        public static void AddAllProjectScenes(BatchInjectorData injectorData)
         {
             string[] guids = AssetDatabase.FindAssets("t:Scene", new[] { "Assets" });
-            string[] newGuids = data.sceneList.FindGuidsNotInList(guids).ToArray();
+            string[] newGuids = injectorData.sceneList.FindGuidsNotInList(guids).ToArray();
 
             if (newGuids.Length == 0)
             {
@@ -40,20 +42,20 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     "Yes", "No"))
             {
                 foreach (string guid in newGuids)
-                    data.sceneList.TryAddByGuid(guid);
+                    injectorData.sceneList.TryAddByGuid(guid);
 
-                data.sceneList.Sort();
-                Storage.SaveData(data);
+                injectorData.sceneList.Sort();
+                Storage.SaveData(injectorData);
             }
         }
 
-        public static void ClearScenes(BatchInjectorData data)
+        public static void ClearScenes(BatchInjectorData injectorData)
         {
             if (!EditorUtility.DisplayDialog("Batch Injector", "Remove all scenes from list?", "Yes", "Cancel"))
                 return;
 
-            data.sceneList.Clear();
-            Storage.SaveData(data);
+            injectorData.sceneList.Clear();
+            Storage.SaveData(injectorData);
         }
     }
 }

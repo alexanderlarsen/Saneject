@@ -1,10 +1,11 @@
-﻿using Plugins.Saneject.Editor.Core;
+﻿using Plugins.Saneject.Editor.BatchInjection.Enums;
+using Plugins.Saneject.Editor.Core;
 
-namespace Plugins.Saneject.Editor.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection.Utilities
 {
-    public static class Extensions
+    public static class InjectionStatusUtils
     {
-        public static InjectionStatus GetInjectionStatus(this InjectionStats stats)
+        public static InjectionStatus GetInjectionStatusFromStats(InjectionStats stats)
         {
             int totalErrors = stats.numMissingBindings + stats.numInvalidBindings + stats.numMissingDependencies;
 

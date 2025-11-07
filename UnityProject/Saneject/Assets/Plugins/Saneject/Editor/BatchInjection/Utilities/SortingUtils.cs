@@ -1,12 +1,14 @@
 ﻿using System;
 using System.Collections.Generic;
+using Plugins.Saneject.Editor.BatchInjection.Data;
+using Plugins.Saneject.Editor.BatchInjection.Enums;
 
-namespace Plugins.Saneject.Editor.BatchInjection
+namespace Plugins.Saneject.Editor.BatchInjection.Utilities
 {
-    public static class AssetListSorter
+    public static class SortingUtils
     {
         public static void SortList(
-            List<AssetItem> list,
+            List<AssetData> list,
             SortMode mode)
         {
             if (mode == SortMode.Custom || list is not { Count: > 1 })
@@ -49,7 +51,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     return;
             }
 
-            Comparison<AssetItem> comparison = mode switch
+            Comparison<AssetData> comparison = mode switch
             {
                 SortMode.PathAtoZ => (
                     a,
@@ -71,12 +73,12 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
             return;
 
-            string GetSortString(AssetItem item)
+            string GetSortString(AssetData data)
             {
                 return mode switch
                 {
-                    SortMode.PathAtoZ or SortMode.PathZtoA => item.Path,
-                    SortMode.NameAtoZ or SortMode.NameZtoA => item.Name,
+                    SortMode.PathAtoZ or SortMode.PathZtoA => data.Path,
+                    SortMode.NameAtoZ or SortMode.NameZtoA => data.Name,
                     _ => null
                 };
             }

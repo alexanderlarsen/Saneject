@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Runtime.Scopes;
+﻿using Plugins.Saneject.Runtime.Extensions;
+using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Extensions
@@ -9,10 +10,10 @@ namespace Plugins.Saneject.Editor.Extensions
     public static class ScopeExtensions
     {
         /// <summary>
-        /// Sets parent scopes and calls <see cref="Scope.ConfigureBindings" /> on each scope in the array.
+        /// Sets parent scopes, configures bindings, and validates them for each scope in the array.
         /// </summary>
         /// <param name="scopes">The array of scopes to configure.</param>
-        public static void Initialize(this Scope[] scopes)
+        public static void InitializeScopes(this Scope[] scopes)
         {
             foreach (Scope scope in scopes)
             {
