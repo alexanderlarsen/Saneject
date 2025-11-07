@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Linq;
 using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Settings;
@@ -98,6 +97,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
             EditorGUILayout.LabelField("Batch Injector", titleStyle);
             EditorGUILayout.LabelField("Drag and drop scenes and prefabs anywhere in the window to add them to each list. Then click one of the Inject-buttons to inject all selected scenes and/or prefabs in one go.", EditorStyles.wordWrappedLabel);
+            EditorGUILayout.LabelField("The status icons show the result of the last injection run from this window.", EditorStyles.wordWrappedLabel);
             GUILayout.Space(8);
         }
 
@@ -182,14 +182,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
                             ConsoleUtils.ClearLog();
 
                         DependencyInjector.BatchInjectAllScenesAndPrefabs(
-                            sceneAssetPaths: data.sceneList
-                                .GetEnabled()
-                                .Select(scene => scene.Path)
-                                .ToArray(),
-                            prefabAssetPaths: data.prefabList
-                                .GetEnabled()
-                                .Select(prefab => prefab.Path)
-                                .ToArray()
+                            sceneAssets: data.sceneList.GetArray(),
+                            prefabAssets: data.prefabList.GetArray()
                         );
                     }
                 }
@@ -206,10 +200,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                             ConsoleUtils.ClearLog();
 
                         DependencyInjector.BatchInjectScenes(
-                            sceneAssetPaths: data.sceneList
-                                .GetEnabled()
-                                .Select(scene => scene.Path)
-                                .ToArray(),
+                            sceneAssets: data.sceneList.GetArray(),
                             logStats: true
                         );
                     }
@@ -227,10 +218,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                             ConsoleUtils.ClearLog();
 
                         DependencyInjector.BatchInjectPrefabs(
-                            prefabAssetPaths: data.prefabList
-                                .GetEnabled()
-                                .Select(prefab => prefab.Path)
-                                .ToArray(),
+                            prefabAssets: data.prefabList.GetArray(),
                             logStats: true
                         );
                     }

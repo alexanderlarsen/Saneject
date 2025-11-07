@@ -17,7 +17,7 @@ namespace Plugins.Saneject.Editor.Core
         public int numMissingDependencies;
         public int numSuppressedMissing;
         public int numScopesProcessed;
-        public long elapsedMilliseconds;       
+        public long elapsedMilliseconds;
 
         private enum LogSeverity
         {
@@ -36,11 +36,10 @@ namespace Plugins.Saneject.Editor.Core
             numInvalidBindings += stats.numInvalidBindings;
             numMissingDependencies += stats.numMissingDependencies;
             numSuppressedMissing += stats.numSuppressedMissing;
-            numScopesProcessed += stats.numScopesProcessed;       
+            numScopesProcessed += stats.numScopesProcessed;
         }
 
-        public void LogStats(
-            string firstSentence)
+        public void LogStats(string firstSentence)
         {
             StringBuilder sb = new();
 

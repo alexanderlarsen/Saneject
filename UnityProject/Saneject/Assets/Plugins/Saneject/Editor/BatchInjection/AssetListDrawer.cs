@@ -90,6 +90,12 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     labelText,
                     pathLabelStyle);
 
+                InjectionStatus status = assetList.GetElementAt(index).Status;
+
+                EditorGUI.LabelField(
+                    new Rect(rect.width, rect.y, 20, 20),
+                    new GUIContent(status.GetDisplayString(), status.GetTooltip()));
+
                 DrawContextMenu(reorderable, assetList, data.windowTab, rect, index, onModified);
             };
 
@@ -249,28 +255,28 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 isEnabled: hasSelection,
                 onClick: () =>
                 {
-                    string[] paths = selected.Select(i => assetList.GetElementAt(i).Path).ToArray();
+                    AssetItem[] assets = selected.Select(assetList.GetElementAt).ToArray();
 
                     switch (tab)
                     {
                         case WindowTab.Scenes:
-                            if (!Dialogs.BatchInjection.ConfirmInjectScene(paths.Length))
+                            if (!Dialogs.BatchInjection.ConfirmInjectScene(assets.Length))
                                 break;
 
                             if (UserSettings.ClearLogsOnInjection)
                                 ConsoleUtils.ClearLog();
 
-                            DependencyInjector.BatchInjectScenes(paths, true);
+                            DependencyInjector.BatchInjectScenes(assets, true);
                             break;
 
                         case WindowTab.Prefabs:
-                            if (!Dialogs.BatchInjection.ConfirmInjectPrefab(paths.Length))
+                            if (!Dialogs.BatchInjection.ConfirmInjectPrefab(assets.Length))
                                 break;
 
                             if (UserSettings.ClearLogsOnInjection)
                                 ConsoleUtils.ClearLog();
 
-                            DependencyInjector.BatchInjectPrefabs(paths, true);
+                            DependencyInjector.BatchInjectPrefabs(assets, true);
                             break;
                     }
                 });
@@ -325,6 +331,21 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
             menu.AddSeparator("");
 
+            AddItem(
+                label: "Clear Injection Status",
+                isEnabled: hasSelection,
+                onClick: () =>
+                {
+                    foreach (int i in selected.OrderByDescending(i => i))
+                        assetList.GetElementAt(i).Status = InjectionStatus.Unknown;
+
+                    onModified?.Invoke();
+                    GUI.changed = true;
+                }
+            );
+            
+            menu.AddSeparator("");
+            
             AddItem(
                 label: "Remove Selected",
                 isEnabled: hasSelection,
@@ -435,6 +456,30 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 SortMode.EnabledToDisabled => "Enabled-Disabled",
                 SortMode.DisabledToEnabled => "Disabled-Enabled",
                 _ => "Custom"
+            };
+        }
+
+        private static string GetDisplayString(this InjectionStatus status)
+        {
+            return status switch
+            {
+                InjectionStatus.Unknown => "❔",
+                InjectionStatus.Success => "✅",
+                InjectionStatus.Warning => "⚠️",
+                InjectionStatus.Error => "❌",
+                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
+            };
+        }
+
+        private static string GetTooltip(this InjectionStatus status)
+        {
+            return status switch
+            {
+                InjectionStatus.Unknown => "Run injection to get a status",
+                InjectionStatus.Success => "Successfully injected",
+                InjectionStatus.Warning => "Injected with warnings. See console for details",
+                InjectionStatus.Error => "Injection failed with errors. See console for details",
+                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
             };
         }
     }

@@ -100,5 +100,10 @@ namespace Plugins.Saneject.Editor.BatchInjection
         {
             this.sortMode = sortMode;
         }
+
+        public AssetItem[] GetArray()
+        {
+            return list.ToArray();       
+        }
     }
 }

@@ -14,6 +14,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
         [SerializeField]
         private bool enabled = true;
 
+        [SerializeField]
+        private InjectionStatus status;
+
         [NonSerialized]
         private Object asset;
 
@@ -31,6 +34,12 @@ namespace Plugins.Saneject.Editor.BatchInjection
         {
             get => enabled;
             set => enabled = value;
+        }
+
+        public InjectionStatus Status
+        {
+            get => status;
+            set => status = value;
         }
     }
 }

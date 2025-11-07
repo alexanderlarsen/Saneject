@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.IO;
 using System.Linq;
+using Plugins.Saneject.Editor.BatchInjection;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
@@ -136,11 +137,11 @@ namespace Plugins.Saneject.Editor.Core
         /// Logs progress per prefab and aggregates statistics for all processed scopes.
         /// This operation is editor-only and cannot be performed in Play Mode.
         /// </summary>
-        /// <param name="prefabAssetPaths">Array of prefab asset paths to inject, in order of processing.</param>
+        /// <param name="prefabAssets">Array of prefab asset items to inject, in order of processing.</param>
         /// <param name="logStats">Whether to log the summary statistics after completion.</param>
         /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
         public static void BatchInjectPrefabs(
-            string[] prefabAssetPaths,
+            AssetItem[] prefabAssets,
             bool logStats,
             InjectionStats stats = null)
         {
@@ -152,16 +153,19 @@ namespace Plugins.Saneject.Editor.Core
 
             stats ??= new InjectionStats();
 
-            Debug.Log($"<b>──────────  Saneject: Starting prefab batch injection of {prefabAssetPaths.Length} prefab{(prefabAssetPaths.Length != 1 ? "s" : "")}  ──────────</b>");
+            Debug.Log($"<b>──────────  Saneject: Starting prefab batch injection of {prefabAssets.Length} prefab{(prefabAssets.Length != 1 ? "s" : "")}  ──────────</b>");
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             int numScopesProcessed = 0;
 
-            for (int i = 0; i < prefabAssetPaths.Length; i++)
+            for (int i = 0; i < prefabAssets.Length; i++)
             {
-                string path = prefabAssetPaths[i];
+                AssetItem prefabItem = prefabAssets[i];
+                string path = prefabItem.Path;
                 string prefabName = Path.GetFileNameWithoutExtension(path);
                 string logSectionColor = EditorColors.BatchLogColors[i % EditorColors.BatchLogColors.Length];
+
+                prefabItem.Status = InjectionStatus.Unknown;
 
                 Debug.Log($"<color={logSectionColor}><b>↓</b> Saneject: Start prefab injection [{prefabName}] <b>↓</b></color>");
 
@@ -193,13 +197,12 @@ namespace Plugins.Saneject.Editor.Core
                     configureGlobalBindings: false,
                     isPrefabInjection: true,
                     buildStatsLabel: _ => $"Prefab injection completed [{prefabName}]",
-                    addResultToStats: stats
+                    addResultToStats: stats,
+                    assetItem: prefabItem
                 );
 
-                // Save serialized changes to the prefab asset
                 EditorUtility.SetDirty(prefabAsset);
                 AssetDatabase.SaveAssets();
-
                 numScopesProcessed += scopes.Length;
 
                 Debug.Log($"<color={logSectionColor}><b>↑</b> Saneject: End prefab injection [{prefabName}] <b>↑</b></color>");
@@ -213,7 +216,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
 
             Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
-            stats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssetPaths.Length} prefabs");
+            stats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
         }
 
         /// <summary>
@@ -223,11 +226,11 @@ namespace Plugins.Saneject.Editor.Core
         /// Restores the originally active scene after completion.
         /// This operation is editor-only and cannot be performed in Play Mode.
         /// </summary>
-        /// <param name="sceneAssetPaths">Array of scene asset paths to inject, in order of processing.</param>
+        /// <param name="sceneAssets">Array of scene asset items to inject, in order of processing.</param>
         /// <param name="logStats">Whether to log the summary statistics after completion.</param>
         /// <param name="stats">Optional <see cref="InjectionStats" /> object to accumulate results into. A new one is created if omitted.</param>
         public static void BatchInjectScenes(
-            string[] sceneAssetPaths,
+            AssetItem[] sceneAssets,
             bool logStats,
             InjectionStats stats = null)
         {
@@ -241,15 +244,17 @@ namespace Plugins.Saneject.Editor.Core
 
             string previousScenePath = SceneManager.GetActiveScene().path;
 
-            Debug.Log($"<b>──────────  Saneject: Start scene batch injection of {sceneAssetPaths.Length} scene{(sceneAssetPaths.Length != 1 ? "s" : "")}  ──────────</b>");
+            Debug.Log($"<b>──────────  Saneject: Start scene batch injection of {sceneAssets.Length} scene{(sceneAssets.Length != 1 ? "s" : "")}  ──────────</b>");
 
             Stopwatch stopwatch = Stopwatch.StartNew();
             int numScopesProcessed = 0;
 
-            for (int i = 0; i < sceneAssetPaths.Length; i++)
+            for (int i = 0; i < sceneAssets.Length; i++)
             {
-                Scene scene = EditorSceneManager.OpenScene(sceneAssetPaths[i], OpenSceneMode.Single);
+                AssetItem sceneItem = sceneAssets[i];
+                Scene scene = EditorSceneManager.OpenScene(sceneItem.Path, OpenSceneMode.Single);
                 string logSectionColor = EditorColors.BatchLogColors[i % EditorColors.BatchLogColors.Length];
+                sceneItem.Status = InjectionStatus.Unknown;
 
                 Debug.Log($"<color={logSectionColor}><b>↓</b> Saneject: Start scene injection [{scene.name}] <b>↓</b></color>");
 
@@ -268,7 +273,8 @@ namespace Plugins.Saneject.Editor.Core
                     configureGlobalBindings: true,
                     isPrefabInjection: false,
                     buildStatsLabel: _ => $"Scene injection completed [{scene.name}]",
-                    addResultToStats: stats
+                    addResultToStats: stats,
+                    assetItem: sceneItem
                 );
 
                 EditorSceneManager.SaveScene(scene);
@@ -287,7 +293,7 @@ namespace Plugins.Saneject.Editor.Core
                 return;
 
             Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
-            stats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssetPaths.Length} scenes");
+            stats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
         }
 
         /// <summary>
@@ -295,11 +301,11 @@ namespace Plugins.Saneject.Editor.Core
         /// Executes scene injection first, followed by prefab injection, then prints a unified summary log at the end.
         /// This operation is editor-only and cannot be performed in Play Mode.
         /// </summary>
-        /// <param name="sceneAssetPaths">Array of scene asset paths to process, injected in order.</param>
-        /// <param name="prefabAssetPaths">Array of prefab asset paths to process, injected in order.</param>
+        /// <param name="sceneAssets">Array of scene asset items to process, injected in order.</param>
+        /// <param name="prefabAssets">Array of prefab asset items to process, injected in order.</param>
         public static void BatchInjectAllScenesAndPrefabs(
-            string[] sceneAssetPaths,
-            string[] prefabAssetPaths)
+            AssetItem[] prefabAssets,
+            AssetItem[] sceneAssets)
         {
             if (Application.isPlaying)
             {
@@ -311,13 +317,13 @@ namespace Plugins.Saneject.Editor.Core
             InjectionStats prefabStats = new();
 
             BatchInjectScenes(
-                sceneAssetPaths: sceneAssetPaths,
+                sceneAssets: sceneAssets,
                 logStats: false,
                 stats: sceneStats
             );
 
             BatchInjectPrefabs(
-                prefabAssetPaths: prefabAssetPaths,
+                prefabAssets: prefabAssets,
                 logStats: false,
                 stats: prefabStats
             );
@@ -325,9 +331,9 @@ namespace Plugins.Saneject.Editor.Core
             Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
 
             sceneStats.LogStats(
-                firstSentence: $"Scene batch injection complete | Processed {sceneAssetPaths.Length} scenes");
+                firstSentence: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
 
-            prefabStats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssetPaths.Length} prefabs");
+            prefabStats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
         }
 
         /// <summary>
@@ -343,7 +349,8 @@ namespace Plugins.Saneject.Editor.Core
             bool configureGlobalBindings,
             bool isPrefabInjection,
             Func<Scope[], string> buildStatsLabel,
-            InjectionStats addResultToStats = null)
+            InjectionStats addResultToStats = null,
+            AssetItem assetItem = null)
         {
             if (Application.isPlaying)
             {
@@ -412,6 +419,9 @@ namespace Plugins.Saneject.Editor.Core
                     string label = buildStatsLabel?.Invoke(allScopes) ?? "Injection";
                     stats.LogStats(label);
                 }
+
+                if (assetItem != null)
+                    assetItem.Status = stats.GetInjectionStatus();
 
                 addResultToStats?.AddStats(stats);
             }
