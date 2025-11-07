@@ -45,6 +45,11 @@ namespace Plugins.Saneject.Editor.BatchInjection
             return true;
         }
 
+        public AssetItem[] GetArray()
+        {
+            return list.ToArray();
+        }
+
         public AssetItem GetElementAt(int index)
         {
             if (index < 0 || index >= list.Count)
@@ -99,11 +104,6 @@ namespace Plugins.Saneject.Editor.BatchInjection
         public void SetSortMode(SortMode sortMode)
         {
             this.sortMode = sortMode;
-        }
-
-        public AssetItem[] GetArray()
-        {
-            return list.ToArray();       
         }
     }
 }

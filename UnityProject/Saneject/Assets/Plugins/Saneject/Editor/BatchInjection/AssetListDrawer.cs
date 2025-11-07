@@ -94,7 +94,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
 
                 EditorGUI.LabelField(
                     new Rect(rect.width, rect.y, 20, 20),
-                    new GUIContent(status.GetDisplayString(), status.GetTooltip()));
+                    status.GetGuiContent()
+                );
 
                 DrawContextMenu(reorderable, assetList, data.windowTab, rect, index, onModified);
             };
@@ -343,9 +344,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     GUI.changed = true;
                 }
             );
-            
+
             menu.AddSeparator("");
-            
+
             AddItem(
                 label: "Remove Selected",
                 isEnabled: hasSelection,
@@ -459,26 +460,14 @@ namespace Plugins.Saneject.Editor.BatchInjection
             };
         }
 
-        private static string GetDisplayString(this InjectionStatus status)
+        private static GUIContent GetGuiContent(this InjectionStatus status)
         {
             return status switch
             {
-                InjectionStatus.Unknown => "❔",
-                InjectionStatus.Success => "✅",
-                InjectionStatus.Warning => "⚠️",
-                InjectionStatus.Error => "❌",
-                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
-            };
-        }
-
-        private static string GetTooltip(this InjectionStatus status)
-        {
-            return status switch
-            {
-                InjectionStatus.Unknown => "Run injection to get a status",
-                InjectionStatus.Success => "Successfully injected",
-                InjectionStatus.Warning => "Injected with warnings. See console for details",
-                InjectionStatus.Error => "Injection failed with errors. See console for details",
+                InjectionStatus.Unknown => new GUIContent("❔", "Run injection to get a status"),
+                InjectionStatus.Success => new GUIContent("✅", "Succesfully injected"),
+                InjectionStatus.Warning => new GUIContent("⚠️", "Injected with warnings. See console for details"),
+                InjectionStatus.Error => new GUIContent("❌", "Injection failed with errors. See console for details"),
                 _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
             };
         }
