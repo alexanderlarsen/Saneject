@@ -150,6 +150,9 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            foreach (AssetItem asset in prefabAssets)
+                asset.Status = InjectionStatus.Unknown;
+
             if (ProxyUtils.TryCreateProxyScriptsForPrefabs(prefabAssets.Select(prefab => prefab.Path)))
             {
                 EditorUtility.ClearProgressBar();
@@ -242,6 +245,9 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
+            
+            foreach (AssetItem asset in sceneAssets)
+                asset.Status = InjectionStatus.Unknown;
 
             string previousScenePath = SceneManager.GetActiveScene().path;
 
@@ -322,6 +328,9 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
+            
+            foreach (AssetItem asset in sceneAssets.Union(prefabAssets))
+                asset.Status = InjectionStatus.Unknown;
 
             string previousScenePath = SceneManager.GetActiveScene().path;
             IEnumerable<string> scenePaths = sceneAssets.Select(scene => scene.Path);
