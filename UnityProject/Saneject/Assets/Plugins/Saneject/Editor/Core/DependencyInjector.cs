@@ -150,11 +150,8 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            string previousScenePath = SceneManager.GetActiveScene().path;
-
             if (ProxyUtils.TryCreateProxyScriptsForPrefabs(prefabAssets.Select(prefab => prefab.Path)))
             {
-                EditorSceneManager.OpenScene(previousScenePath);
                 EditorUtility.ClearProgressBar();
                 Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
                 return;
