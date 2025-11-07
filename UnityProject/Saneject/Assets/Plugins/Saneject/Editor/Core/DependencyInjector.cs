@@ -176,14 +176,14 @@ namespace Plugins.Saneject.Editor.Core
 
                 prefabItem.Status = InjectionStatus.Unknown;
 
-                Debug.Log($"<color={logSectionColor}><b>↓↓↓</b> Saneject: Start prefab injection [{prefabName}] <b>↓↓↓</b></color>");
+                Debug.Log($"<color={logSectionColor}><b>↓↓↓</b> Saneject: Start prefab injection [{prefabName}] <b>↓↓↓</b></color>", prefabItem.Asset);
 
                 GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 
                 if (!prefabAsset)
                 {
                     Debug.LogWarning($"Saneject: Failed to load prefab asset at '{path}'. Skipping.");
-                    Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>");
+                    Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>", prefabItem.Asset);
                     continue;
                 }
 
@@ -191,8 +191,8 @@ namespace Plugins.Saneject.Editor.Core
 
                 if (scopes.Length == 0)
                 {
-                    Debug.LogWarning($"Saneject: No scopes found in prefab '{prefabName}'. Nothing to inject.");
-                    Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>");
+                    Debug.LogWarning($"Saneject: No scopes found in prefab '{prefabName}'. Nothing to inject.", prefabItem.Asset);
+                    Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>", prefabItem.Asset);
                     continue;
                 }
 
@@ -211,7 +211,7 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.SetDirty(prefabAsset);
                 AssetDatabase.SaveAssets();
                 numScopesProcessed += scopes.Length;
-                Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>");
+                Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>", prefabItem.Asset);
             }
 
             stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
@@ -245,7 +245,7 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
-            
+
             foreach (AssetItem asset in sceneAssets)
                 asset.Status = InjectionStatus.Unknown;
 
@@ -273,7 +273,7 @@ namespace Plugins.Saneject.Editor.Core
                 string logSectionColor = EditorColors.BatchLogColors[i % EditorColors.BatchLogColors.Length];
                 sceneItem.Status = InjectionStatus.Unknown;
 
-                Debug.Log($"<color={logSectionColor}><b>↓↓↓</b> Saneject: Start scene injection [{scene.name}] <b>↓↓↓</b></color>");
+                Debug.Log($"<color={logSectionColor}><b>↓↓↓</b> Saneject: Start scene injection [{scene.name}] <b>↓↓↓</b></color>", sceneItem.Asset);
 
                 Scope[] scopes = scene
                     .GetRootGameObjects()
@@ -296,7 +296,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 EditorSceneManager.SaveScene(scene);
                 numScopesProcessed += scopes.Length;
-                Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End scene injection [{scene.name}] <b>↑↑↑</b></color>");
+                Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End scene injection [{scene.name}] <b>↑↑↑</b></color>", sceneItem.Asset);
             }
 
             EditorSceneManager.OpenScene(previousScenePath);
@@ -328,7 +328,7 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
-            
+
             foreach (AssetItem asset in sceneAssets.Union(prefabAssets))
                 asset.Status = InjectionStatus.Unknown;
 
@@ -360,10 +360,7 @@ namespace Plugins.Saneject.Editor.Core
             );
 
             Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
-
-            sceneStats.LogStats(
-                firstSentence: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
-
+            sceneStats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
             prefabStats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
         }
 
