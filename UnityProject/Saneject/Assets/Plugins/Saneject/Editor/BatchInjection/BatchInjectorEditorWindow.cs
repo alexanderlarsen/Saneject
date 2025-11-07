@@ -3,6 +3,7 @@ using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
 
@@ -178,8 +179,13 @@ namespace Plugins.Saneject.Editor.BatchInjection
                         if (!Dialogs.BatchInjection.ConfirmInjectAll(sceneCount, prefabCount))
                             return;
 
+                        if(!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                            return;
+                        
                         if (UserSettings.ClearLogsOnInjection)
                             ConsoleUtils.ClearLog();
+                        
+                        
 
                         DependencyInjector.BatchInjectAllScenesAndPrefabs(
                             sceneAssets: data.sceneList.GetArray(),
@@ -196,6 +202,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
                         if (!Dialogs.BatchInjection.ConfirmInjectScene(sceneCount))
                             return;
 
+                        if(!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+                            return;
+                        
                         if (UserSettings.ClearLogsOnInjection)
                             ConsoleUtils.ClearLog();
 

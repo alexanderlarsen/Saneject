@@ -5,6 +5,7 @@ using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -262,6 +263,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
                     {
                         case WindowTab.Scenes:
                             if (!Dialogs.BatchInjection.ConfirmInjectScene(assets.Length))
+                                break;
+
+                            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
                                 break;
 
                             if (UserSettings.ClearLogsOnInjection)
