@@ -257,7 +257,9 @@ namespace Plugins.Saneject.Editor.BatchInjection
                 isEnabled: hasSelection,
                 onClick: () =>
                 {
-                    AssetItem[] assets = selected.Select(assetList.GetElementAt).ToArray();
+                    AssetItem[] assets = selected
+                        .Select(assetList.GetElementAt)
+                        .ToArray();
 
                     switch (tab)
                     {

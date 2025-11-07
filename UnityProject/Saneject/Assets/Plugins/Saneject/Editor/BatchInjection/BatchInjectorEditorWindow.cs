@@ -188,8 +188,8 @@ namespace Plugins.Saneject.Editor.BatchInjection
                         
 
                         DependencyInjector.BatchInjectAllScenesAndPrefabs(
-                            sceneAssets: data.sceneList.GetArray(),
-                            prefabAssets: data.prefabList.GetArray()
+                            sceneAssets: data.sceneList.GetEnabled(),
+                            prefabAssets: data.prefabList.GetEnabled()
                         );
                     }
                 }
@@ -209,7 +209,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                             ConsoleUtils.ClearLog();
 
                         DependencyInjector.BatchInjectScenes(
-                            sceneAssets: data.sceneList.GetArray(),
+                            sceneAssets: data.sceneList.GetEnabled(),
                             logStats: true
                         );
                     }
@@ -227,7 +227,7 @@ namespace Plugins.Saneject.Editor.BatchInjection
                             ConsoleUtils.ClearLog();
 
                         DependencyInjector.BatchInjectPrefabs(
-                            prefabAssets: data.prefabList.GetArray(),
+                            prefabAssets: data.prefabList.GetEnabled(),
                             logStats: true
                         );
                     }
