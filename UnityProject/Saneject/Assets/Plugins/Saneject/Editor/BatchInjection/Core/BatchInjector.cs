@@ -95,10 +95,10 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 InjectionExecutor.RunInjectionPass
                 (
                     collectScopes: () => scopes,
-                    buildStatsLabel: _ => $"Prefab injection completed [{prefabName}]",
                     isPrefabInjection: true,
                     createProxyScripts: false,
                     noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
+                    statsLabelFirstSentence: $"Prefab injection completed [{prefabName}]",
                     addResultToStats: stats,
                     assetData: prefabData
                 );
@@ -184,10 +184,10 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 InjectionExecutor.RunInjectionPass
                 (
                     collectScopes: () => scopes,
-                    buildStatsLabel: _ => $"Scene injection completed [{scene.name}]",
                     isPrefabInjection: false,
                     createProxyScripts: false,
                     noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
+                    statsLabelFirstSentence: $"Scene injection completed [{scene.name}]",
                     addResultToStats: stats,
                     assetData: sceneData
                 );

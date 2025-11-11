@@ -33,10 +33,10 @@ namespace Plugins.Saneject.Editor.Core
         /// </summary>
         public static void RunInjectionPass(
             Func<Scope[]> collectScopes,
-            Func<Scope[], string> buildStatsLabel,
             bool isPrefabInjection,
             bool createProxyScripts,
             string noScopesWarning,
+            string statsLabelFirstSentence,
             string progressBarTitle = null,
             string progressBarMessage = null,
             AssetData assetData = null,
@@ -100,9 +100,7 @@ namespace Plugins.Saneject.Editor.Core
                     stats.numScopesProcessed = allScopes.Length;
                     stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
                     stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-
-                    string label = buildStatsLabel?.Invoke(allScopes) ?? "Injection";
-                    stats.LogStats(label);
+                    stats.LogStats(statsLabelFirstSentence);
                 }
 
                 if (assetData != null)

@@ -31,22 +31,18 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            Scope rootScope = startScope.FindRootScope();
+
             InjectionExecutor.RunInjectionPass
             (
-                collectScopes: () => startScope
-                    .FindRootScope()
+                collectScopes: () => rootScope
                     .GetComponentsInChildren<Scope>(includeInactive: true)
                     .Where(scope => !scope.gameObject.IsPrefab())
                     .ToArray(),
-                buildStatsLabel: scopes =>
-                {
-                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
-                    string rootName = root ? root.gameObject.name : "Unknown";
-                    return $"Single scene hierarchy injection completed [{rootName}]";
-                },
                 isPrefabInjection: false,
                 createProxyScripts: true,
                 noScopesWarning: "Saneject: No scopes found in hierarchy. Nothing to inject.",
+                statsLabelFirstSentence: $"Single scene hierarchy injection completed [{rootScope.gameObject.name}]",
                 progressBarTitle: "Saneject: Injection in progress",
                 progressBarMessage: "Injecting all objects in hierarchy"
             );
@@ -72,20 +68,15 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            Scope rootScope = startScope.FindRootScope();
+
             InjectionExecutor.RunInjectionPass
             (
-                collectScopes: () => startScope
-                    .FindRootScope()
-                    .GetComponentsInChildren<Scope>(includeInactive: true),
-                buildStatsLabel: scopes =>
-                {
-                    Scope root = scopes.FirstOrDefault(s => !s.ParentScope);
-                    string rootName = root ? root.gameObject.name : "Unknown";
-                    return $"Prefab injection completed [{rootName}]";
-                },
+                collectScopes: () => rootScope.GetComponentsInChildren<Scope>(includeInactive: true),
                 isPrefabInjection: true,
                 createProxyScripts: true,
                 noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
+                statsLabelFirstSentence: $"Prefab injection completed [{rootScope.gameObject.name}]",
                 progressBarTitle: "Saneject: Injection in progress",
                 progressBarMessage: "Injecting prefab dependencies"
             );
@@ -114,10 +105,10 @@ namespace Plugins.Saneject.Editor.Core
                     .Where(root => !root.IsPrefab())
                     .SelectMany(root => root.GetComponentsInChildren<Scope>(includeInactive: true))
                     .ToArray(),
-                buildStatsLabel: _ => $"Scene injection completed [{scene.name}]",
                 isPrefabInjection: false,
                 createProxyScripts: true,
                 noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
+                statsLabelFirstSentence: $"Scene injection completed [{scene.name}]",
                 progressBarTitle: "Saneject: Injection in progress",
                 progressBarMessage: "Injecting all objects in scene"
             );
