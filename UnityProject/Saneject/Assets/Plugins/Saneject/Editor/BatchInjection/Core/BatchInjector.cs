@@ -43,6 +43,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
             }
 
             EditorUtility.DisplayProgressBar("Saneject: Batch injection in progress", "Starting batch prefab injection", 0);
+            prefabAssets = prefabAssets.Where(s => s.Asset != null).ToArray();
 
             foreach (AssetData asset in prefabAssets)
                 asset.Status = InjectionStatus.Unknown;
@@ -142,6 +143,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
             }
 
             EditorUtility.DisplayProgressBar("Saneject: Batch injection in progress", "Starting batch scene injection", 0);
+            sceneAssets = sceneAssets.Where(s => s.Asset != null).ToArray();
 
             foreach (AssetData asset in sceneAssets)
                 asset.Status = InjectionStatus.Unknown;
@@ -165,7 +167,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
 
             for (int i = 0; i < sceneAssets.Length; i++)
             {
-                EditorUtility.DisplayProgressBar("Saneject: Batch injection in progress", $"Injecting all objects in prefab '{sceneAssets[i].Name}'", i / (float)sceneAssets.Length);
+                EditorUtility.DisplayProgressBar("Saneject: Batch injection in progress", $"Injecting all objects in scene '{sceneAssets[i].Name}'", i / (float)sceneAssets.Length);
                 AssetData sceneData = sceneAssets[i];
                 Scene scene = EditorSceneManager.OpenScene(sceneData.Path, OpenSceneMode.Single);
                 string logSectionColor = EditorColors.BatchLogColors[i % EditorColors.BatchLogColors.Length];
