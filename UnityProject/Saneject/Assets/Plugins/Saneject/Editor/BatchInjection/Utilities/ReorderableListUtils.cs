@@ -50,7 +50,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Utilities
                     reorderable.index
                 };
 
-                if (!EditorUtility.DisplayDialog("Batch Injector", $"Do you want to delete {indices.Count} item{(indices.Count == 1 ? "" : "s")}?", "Yes", "No"))
+                if (!EditorUtility.DisplayDialog("Batch Injector", $"Remove {indices.Count} selected item{(indices.Count == 1 ? "" : "s")}?", "Yes", "No"))
                     return;
 
                 foreach (int i in indices)
