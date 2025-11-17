@@ -152,7 +152,9 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
 
             if (ProxyUtils.TryCreateProxyScriptsForScenes(sceneAssets.Select(scene => scene.Path)))
             {
-                EditorSceneManager.OpenScene(previousScenePath);
+                if (!string.IsNullOrEmpty(previousScenePath) && previousScenePath != ".")
+                    EditorSceneManager.OpenScene(previousScenePath);
+                
                 EditorUtility.ClearProgressBar();
                 Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
                 return;
@@ -197,7 +199,8 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End scene injection [{scene.name}] <b>↑↑↑</b></color>", sceneData.Asset);
             }
 
-            EditorSceneManager.OpenScene(previousScenePath);
+            if (!string.IsNullOrEmpty(previousScenePath) && previousScenePath != ".")
+                EditorSceneManager.OpenScene(previousScenePath);
 
             stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
             stats.numScopesProcessed = numScopesProcessed;
@@ -239,7 +242,9 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
 
             if (ProxyUtils.TryCreateProxyScriptsForScenesAndPrefabs(scenePaths, prefabPaths))
             {
-                EditorSceneManager.OpenScene(previousScenePath);
+                if (!string.IsNullOrEmpty(previousScenePath) && previousScenePath != ".")
+                    EditorSceneManager.OpenScene(previousScenePath);
+                
                 EditorUtility.ClearProgressBar();
                 Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
                 return;
