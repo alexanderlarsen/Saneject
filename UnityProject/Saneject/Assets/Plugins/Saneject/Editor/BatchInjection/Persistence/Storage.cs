@@ -1,26 +1,42 @@
-﻿using Plugins.Saneject.Editor.BatchInjection.Data;
-using UnityEditor;
+﻿using System;
+using System.IO;
+using Plugins.Saneject.Editor.BatchInjection.Data;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.BatchInjection.Persistence
 {
     public static class Storage
     {
-        private const string PrefsKey = "Saneject_BatchInject_Data";
+        private static readonly string Folder = Path.GetFullPath(Path.Combine(Application.dataPath, "../ProjectSettings/Saneject"));
+        private static readonly string FullPath = Path.Combine(Folder, "BatchInjectorData.json");
 
         public static void SaveData(BatchInjectorData injectorData)
         {
-            string json = JsonUtility.ToJson(injectorData);
-            EditorPrefs.SetString(PrefsKey, json);
+            Directory.CreateDirectory(Folder);
+            string json = JsonUtility.ToJson(injectorData, prettyPrint: true);
+            File.WriteAllText(FullPath, json);
         }
 
         public static BatchInjectorData LoadOrCreateData()
         {
-            if (!EditorPrefs.HasKey(PrefsKey))
+            if (!File.Exists(FullPath))
                 return new BatchInjectorData();
 
-            string json = EditorPrefs.GetString(PrefsKey);
-            return JsonUtility.FromJson<BatchInjectorData>(json) ?? new BatchInjectorData();
+            BatchInjectorData data;
+
+            try
+            {
+                string json = File.ReadAllText(FullPath);
+                data = JsonUtility.FromJson<BatchInjectorData>(json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Batch Injector: Failed to load configuration data. {e.Message} Creating new file.");
+                data = new BatchInjectorData();
+                SaveData(data);
+            }
+
+            return data;
         }
     }
 }
