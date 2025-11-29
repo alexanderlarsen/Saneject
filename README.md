@@ -92,6 +92,7 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
         - [Example](#example)
         - [Resolve strategies](#resolve-strategies)
         - [Performance note](#performance-note)
+    - [Batch Injector editor window](#batch-injector-editor-window)
     - [MonoBehaviour fallback inspector](#monobehaviour-fallback-inspector)
     - [Saneject inspector API](#saneject-inspector-api)
     - [GlobalScope](#globalscope)
@@ -124,8 +125,6 @@ Saneject isn't meant to replace full runtime frameworks like Zenject or VContain
 
 ## Features
 
-## Features
-
 ### Injection & binding
 
 - **Editor-time, deterministic injection:** Bindings are resolved in the editor, stored directly in serialized fields, including nested serialized classes.
@@ -137,7 +136,7 @@ Saneject isn't meant to replace full runtime frameworks like Zenject or VContain
 - **Flexible filtering:** Predicate-based filtering system for both components and assets. Compact, composable, and extensible with user-defined helper methods.
 - **Target qualification:** Inject by ID, target type, or member name. Target bindings can specify which classes and members to apply to, working on fields, properties, and methods.
 - **Unified Scope component:** One `Scope` type handles both scenes and prefabs, with automatic context detection.
-- **Batch injection (coming soon):** Editor window to inject all or selected scenes and prefabs in the project with one click, with detailed logs per item and cumulative summary stats at the end.
+- **Batch injection:** Editor window to inject all or selected scenes and prefabs in the project with one click, with detailed logs per item and cumulative summary stats at the end.
 
 ### Serialization & interfaces
 
@@ -962,6 +961,28 @@ The proxy resolves its target the first time it's accessed and then caches it. I
 Forwarded calls include a null-check, which makes them about 8x slower than a direct call. In practice that means nanoseconds of overhead, which is negligible outside of extremely tight loops.
 
 In a stress test, one million proxy calls in a single frame to a trivial method took ~5 ms on an Intel i7-9700K CPU. If you ever need to squeeze out that last bit of performance in a hot path, grab the concrete instance once with `proxy.GetInstanceAs<TConcrete>()` and call it directly.
+
+### Batch Injector editor window
+
+The Batch Injector lets you inject multiple scenes and prefabs across your entire project in one click, which can be quite the time-saver as your project grows.
+
+Open it via `Saneject/Batch Injector`
+
+- **Add scenes and prefabs** by dragging them into the window or using buttons, making it easy to build and manage large injection lists.
+- **Toggle items on or off** to decide exactly which assets will be included when you run a batch injection.
+- **Inject scenes, inject prefabs, or inject everything** with dedicated buttons so you can target only what you need.
+- **Status indicators** show whether each asset succeeded, warned, or failed during the last injection, helping you spot issues at a glance.
+- **Sorting and search** let you quickly find or organize assets when working with large projects.
+- **Context menu actions** let you bulk-select, enable, disable, remove entries, clear injection status, or inject only the selected assets for fast list management.
+- **GUID based tracking** keeps entries stable even if assets move or get renamed in the project.
+- **Confirmation dialogs** let you avoid accidental large batch operations, with per-operation control in User Settings.
+- **Save prompts** ensure you don’t lose unsaved scene changes before injection starts.
+- **Log pinging** lets you click a log entry to highlight the scene or prefab it refers to, speeding up debugging.
+- **Scope-level injection logs** show which scopes ran and what was injected for each asset, making results transparent.
+- **Batch injection summaries** give a final report of everything processed, including counts for scenes, prefabs, scopes, fields, methods, globals, and suppressed errors.
+
+![Batch Injector editor window](Docs/batch-injector-window.webp)
+![Batch Injector logs](Docs/batch-injector-logs.webp)
 
 ### MonoBehaviour fallback inspector
 
