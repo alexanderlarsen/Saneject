@@ -27,7 +27,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Data
         }
 
         public string Guid => guid;
-        public Object Asset => asset ??= AssetDatabase.LoadAssetByGUID<Object>(new GUID(guid));
+        public Object Asset => asset ??= AssetDatabase.LoadAssetAtPath<Object>(AssetDatabase.GUIDToAssetPath(guid));
         public string Path => AssetDatabase.GUIDToAssetPath(guid);
         public string Name => Asset ? Asset.name : string.Empty;
 
