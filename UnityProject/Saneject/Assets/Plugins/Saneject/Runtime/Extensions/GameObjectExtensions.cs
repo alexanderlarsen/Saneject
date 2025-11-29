@@ -4,7 +4,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 #endif
 
-namespace Plugins.Saneject.Editor.Extensions
+namespace Plugins.Saneject.Runtime.Extensions
 {
     /// <summary>
     /// Editor utility extensions for <see cref="GameObject" />s.

@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.Core
+namespace Plugins.Saneject.Editor.Utility
 {
     [InitializeOnLoad]
     internal static class ProxyStubLogger
@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Editor.Core
 
             string scriptsWord = count == 1 ? "script" : "scripts";
 
-            Debug.LogWarning($"Saneject: {count} proxy {scriptsWord} generated. Unity has recompiled and stopped the injection pass. Click 'Inject' again to complete.");
+            Debug.LogWarning($"Saneject: {count} proxy {scriptsWord} generated. Unity has recompiled and stopped the injection pass. Inject again to complete.");
             SessionState.EraseInt("Saneject.ProxyStubCount");
         }
     }

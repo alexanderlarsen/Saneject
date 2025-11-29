@@ -26,7 +26,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Scope
             BindComponent<InjectableComponent>(scope).FromScopeAncestors();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(requester.concreteComponent);
@@ -47,7 +47,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Scope
             BindComponent<IInjectable, InjectableComponent>(scope).FromScopeAncestors();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(requester.interfaceComponent);
@@ -68,7 +68,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Scope
             BindComponent<InjectableComponent>(scope).FromScopeAncestors(includeSelf: true);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(injectable, requester.concreteComponent);
@@ -89,7 +89,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Scope
             BindComponent<InjectableComponent>(scope).FromScopeAncestors(includeSelf: false);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);
@@ -110,7 +110,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Scope
             BindComponent<InjectableComponent>(scope).FromScopeAncestors(includeSelf: false);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);

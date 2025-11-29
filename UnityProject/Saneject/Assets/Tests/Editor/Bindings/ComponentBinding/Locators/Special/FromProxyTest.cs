@@ -43,7 +43,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
             Assert.IsFalse(assetExists);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(requester.proxyTarget);

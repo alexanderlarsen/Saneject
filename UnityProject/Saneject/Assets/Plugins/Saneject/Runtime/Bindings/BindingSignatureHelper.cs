@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Text;
-using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
 
 namespace Plugins.Saneject.Runtime.Bindings

@@ -26,7 +26,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<InjectableComponent>(scope).FromTargetDescendants();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(requester.concreteComponent);
@@ -47,7 +47,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<IInjectable, InjectableComponent>(scope).FromTargetDescendants();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(requester.interfaceComponent);
@@ -68,7 +68,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<IInjectable, InjectableComponent>(scope).FromTargetDescendants();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);
@@ -90,7 +90,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<InjectableComponent>(scope).FromTargetDescendants(includeSelf: true);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(injectable, requester.concreteComponent);
@@ -111,7 +111,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<InjectableComponent>(scope).FromTargetDescendants(includeSelf: false);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);
@@ -132,7 +132,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Target
             BindComponent<InjectableComponent>(scope).FromTargetDescendants(includeSelf: false);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);

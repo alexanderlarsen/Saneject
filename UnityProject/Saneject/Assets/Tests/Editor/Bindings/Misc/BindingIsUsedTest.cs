@@ -34,7 +34,7 @@ namespace Tests.Editor.Bindings.Misc
             Binding binding = GetBinding(scope);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsTrue(binding.IsUsed, "Component binding should be marked as used after injection.");
@@ -58,7 +58,7 @@ namespace Tests.Editor.Bindings.Misc
             Binding binding = GetBinding(scope);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsTrue(binding.IsUsed, "Asset binding should be marked as used after injection.");
@@ -81,7 +81,7 @@ namespace Tests.Editor.Bindings.Misc
             Binding binding = GetBinding(scope);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert only binding usage (global bindings don’t inject into requesters directly)
             Assert.IsTrue(binding.IsUsed, "Global binding should be marked as used after injection.");

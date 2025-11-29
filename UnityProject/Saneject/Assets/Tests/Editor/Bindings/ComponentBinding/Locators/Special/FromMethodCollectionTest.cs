@@ -34,7 +34,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
                 .WhereGameObject(g => g.name == "B");
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(componentB, requester.concreteComponent);
@@ -62,7 +62,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.Special
                 .WhereGameObject(g => g.name == "B");
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(componentB, requester.interfaceComponent);

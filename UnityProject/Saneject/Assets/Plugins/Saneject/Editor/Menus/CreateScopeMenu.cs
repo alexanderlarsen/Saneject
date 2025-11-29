@@ -6,10 +6,10 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Menus
 {
-    public static class ScopeCreator
+    public static class CreateScopeMenu
     {
         [MenuItem("Saneject/Create New Scope", false, -10), MenuItem("Assets/Create/Saneject/Create New Scope", false, -10)]
-        public static void CreateScope()
+        private static void CreateScope()
         {
             string folderPath = GetSelectedFolder();
 

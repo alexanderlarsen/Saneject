@@ -27,7 +27,7 @@ namespace Tests.Editor.General
             BindComponent<IInjectable, InjectableComponent>(scope).FromSelf();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.nested);

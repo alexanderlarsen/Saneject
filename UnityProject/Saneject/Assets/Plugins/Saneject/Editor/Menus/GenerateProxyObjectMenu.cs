@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Plugins.Saneject.Editor.Util;
+using Plugins.Saneject.Editor.Utility;
 using UnityEditor;
 using UnityEngine;
 

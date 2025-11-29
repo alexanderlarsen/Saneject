@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
 
-namespace Saneject.Plugins.Saneject.Editor.Utility
+namespace Plugins.Saneject.Editor.Utility
 {
     public static class ConsoleUtils
     {

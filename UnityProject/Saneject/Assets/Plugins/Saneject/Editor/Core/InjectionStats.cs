@@ -16,6 +16,8 @@ namespace Plugins.Saneject.Editor.Core
         public int numInvalidBindings;
         public int numMissingDependencies;
         public int numSuppressedMissing;
+        public int numScopesProcessed;
+        public long elapsedMilliseconds;
 
         private enum LogSeverity
         {
@@ -24,16 +26,26 @@ namespace Plugins.Saneject.Editor.Core
             Error
         }
 
-        public void LogStats(
-            string injectionType,
-            int numScopesProcessed,
-            long elapsedMilliseconds)
+        public void AddStats(InjectionStats stats)
+        {
+            numInjectedGlobal += stats.numInjectedGlobal;
+            numInjectedFields += stats.numInjectedFields;
+            numInjectedMethods += stats.numInjectedMethods;
+            numMissingBindings += stats.numMissingBindings;
+            numUnusedBindings += stats.numUnusedBindings;
+            numInvalidBindings += stats.numInvalidBindings;
+            numMissingDependencies += stats.numMissingDependencies;
+            numSuppressedMissing += stats.numSuppressedMissing;
+            numScopesProcessed += stats.numScopesProcessed;
+        }
+
+        public void LogStats(string firstSentence)
         {
             StringBuilder sb = new();
 
             sb.Append("Saneject: ");
-            sb.Append(injectionType);
-            sb.Append(" injection complete | ");
+            sb.Append(firstSentence);
+            sb.Append(" | ");
             sb.Append(numScopesProcessed);
             sb.Append(numScopesProcessed == 1 ? " scope processed | " : " scopes processed | ");
             sb.Append(numInjectedGlobal);

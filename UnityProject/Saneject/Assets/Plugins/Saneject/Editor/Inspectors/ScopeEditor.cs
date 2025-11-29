@@ -2,6 +2,7 @@
 using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Utility;
+using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
@@ -129,16 +130,32 @@ namespace Plugins.Saneject.Editor.Inspectors
             else if (hasPrefab)
             {
                 if (GUILayout.Button("Inject Prefab Dependencies"))
+                {
+                    if (!Dialogs.Injection.ConfirmInjectPrefab())
+                        return;
+                    
+                    if (UserSettings.ClearLogsOnInjection)
+                        ConsoleUtils.ClearLog();
+                    
                     foreach (Object t in targets)
                         if (t is Scope scope)
-                            DependencyInjector.InjectPrefabDependencies(scope);
+                            DependencyInjector.InjectPrefab(scope);
+                }
             }
             else if (hasScene)
             {
                 if (GUILayout.Button("Inject Hierarchy Dependencies"))
+                {
+                    if (!Dialogs.Injection.ConfirmInjectHierarchy())
+                        return;
+
+                    if (UserSettings.ClearLogsOnInjection)
+                        ConsoleUtils.ClearLog();
+                    
                     foreach (Object t in targets)
                         if (t is Scope scope)
-                            DependencyInjector.InjectSingleHierarchyDependencies(scope);
+                            DependencyInjector.InjectSingleHierarchy(scope);
+                }
             }
 
             EditorGUI.EndDisabledGroup();

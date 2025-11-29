@@ -27,7 +27,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
                 .Where(asset => asset.name.StartsWith("Injectable") && asset.name.EndsWith("2"));
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             InjectableScriptableObject expected = Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 2");
@@ -51,7 +51,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Filters
                 .Where(asset => asset.name.StartsWith("Injectable") && asset.name.EndsWith("2"));
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             InjectableScriptableObject expected = Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 2");

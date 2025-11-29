@@ -1,5 +1,7 @@
 ﻿using Plugins.Saneject.Editor.Core;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 
@@ -8,7 +10,7 @@ namespace Plugins.Saneject.Editor.Menus
     /// <summary>
     /// Adds editor menu items for injecting dependencies into scenes and prefabs.
     /// </summary>
-    public class DependencyInjectionMenus
+    public class InjectionMenus
     {
         /// <summary>
         /// Validates if scene injection can be run (only outside of prefab editing).
@@ -25,7 +27,13 @@ namespace Plugins.Saneject.Editor.Menus
         [MenuItem("Saneject/Inject Scene Dependencies", false, 49), MenuItem("GameObject/Inject Scene Dependencies", false, 49)]
         private static void InjectSceneDependencies()
         {
-            DependencyInjector.InjectSceneDependencies();
+            if (!Dialogs.Injection.ConfirmInjectScene())
+                return;
+
+            if (UserSettings.ClearLogsOnInjection)
+                ConsoleUtils.ClearLog();
+
+            DependencyInjector.InjectCurrentScene();
         }
 
         /// <summary>
@@ -43,8 +51,14 @@ namespace Plugins.Saneject.Editor.Menus
         [MenuItem("Saneject/Inject Prefab Dependencies", false, 50), MenuItem("GameObject/Inject Prefab Dependencies", false, 50)]
         private static void InjectPrefabDependencies()
         {
+            if (!Dialogs.Injection.ConfirmInjectPrefab())
+                return;
+
+            if (UserSettings.ClearLogsOnInjection)
+                ConsoleUtils.ClearLog();
+
             Scope scope = PrefabStageUtility.GetCurrentPrefabStage().FindComponentOfType<Scope>();
-            DependencyInjector.InjectPrefabDependencies(scope);
+            DependencyInjector.InjectPrefab(scope);
         }
     }
 }

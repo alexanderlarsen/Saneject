@@ -1,6 +1,5 @@
 ﻿using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Scopes;
-using Saneject.Plugins.Saneject.Editor.Utility;
 using UnityEditor;
 using UnityEngine;
 

@@ -26,7 +26,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.Special
             BindAsset<InjectableScriptableObject>(scope).FromMethod(() => instance);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(instance, requester.concreteAsset);
@@ -47,7 +47,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.Special
             BindAsset<IInjectable, InjectableScriptableObject>(scope).FromMethod(() => instance);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(instance, requester.interfaceAsset);

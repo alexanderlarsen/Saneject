@@ -27,7 +27,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.CustomTarget
             BindComponent<InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.concreteComponent);
@@ -48,7 +48,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.CustomTarget
             BindComponent<IInjectable, InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.interfaceComponent);
@@ -69,7 +69,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.CustomTarget
             BindComponent<InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform, includeSelf: true);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(injectable, requester.concreteComponent);
@@ -90,7 +90,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.CustomTarget
             BindComponent<InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform, includeSelf: false);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);
@@ -110,7 +110,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Locators.CustomTarget
             BindComponent<InjectableComponent>(scope).FromAncestorsOf(grandchildA.transform, includeSelf: false);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);

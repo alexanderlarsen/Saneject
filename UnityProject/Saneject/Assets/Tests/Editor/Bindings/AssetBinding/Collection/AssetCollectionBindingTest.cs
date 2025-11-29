@@ -36,7 +36,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Collection
                 .FromMethod(() => new List<InjectableScriptableObject> { assetC, assetD });
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.NotNull(requester.assetsConcreteArray);
@@ -75,7 +75,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Collection
                 .FromMethod(() => new List<InjectableScriptableObject> { assetC, assetD });
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             HashSet<string> concreteSet = requester.assetsConcreteArray.Select(x => x.name).ToHashSet();
@@ -109,7 +109,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Collection
                 .FromMethod(() => new List<InjectableScriptableObject> { assetC, assetD });
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.assetConcreteSingle);

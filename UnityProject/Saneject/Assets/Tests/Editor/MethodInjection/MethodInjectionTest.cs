@@ -32,7 +32,7 @@ namespace Tests.Editor.MethodInjection
                 .FromInstance(dependency);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(GetPrivateField<MyDependency>(rootClass, "myDependency2"));
@@ -62,7 +62,7 @@ namespace Tests.Editor.MethodInjection
                 .FromRootDescendants();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             object nested = GetPrivateField<object>(rootClass, "nestedClass");
@@ -96,7 +96,7 @@ namespace Tests.Editor.MethodInjection
                 .FromInstance(dependency);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(GetPrivateField<MyDependency>(rootClass, "myDependency2"));
@@ -129,7 +129,7 @@ namespace Tests.Editor.MethodInjection
                 .FromInstance(depA);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert root injection
             Assert.IsNotNull(GetPrivateField<MyDependency>(rootClass, "myDependency2"));
@@ -158,7 +158,7 @@ namespace Tests.Editor.MethodInjection
             BindComponent<IDependency, MyDependency>(scope).FromInstance(dep);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsTrue(instance.inject1Called);
@@ -182,7 +182,7 @@ namespace Tests.Editor.MethodInjection
             BindMultipleComponents<MyDependency>(scope).FromRootDescendants();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(2, instance.arrayDeps.Length);
@@ -205,7 +205,7 @@ namespace Tests.Editor.MethodInjection
             BindComponent<MyDependency>(scope).FromInstance(dep);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsTrue(instance.privateInjected);
@@ -227,7 +227,7 @@ namespace Tests.Editor.MethodInjection
             // Missing IDependency binding intentionally
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsFalse(instance.methodCalled);
@@ -257,7 +257,7 @@ namespace Tests.Editor.MethodInjection
                 .FromRootDescendants();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             object nested = GetPrivateField<object>(rootClass, "nestedClass");
@@ -290,7 +290,7 @@ namespace Tests.Editor.MethodInjection
                 .FromInstance(dep);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert both field and method-based values exist
             Assert.IsNotNull(GetPrivateField<MyDependency>(rootClass, "myDependency"));
@@ -336,7 +336,7 @@ namespace Tests.Editor.MethodInjection
                 .FromInstance(depChild);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert both injected properly in their respective scopes
             Assert.IsNotNull(GetPrivateField<MyDependency>(parent, "myDependency2"),
@@ -366,7 +366,7 @@ namespace Tests.Editor.MethodInjection
             // intentionally empty to simulate missing dependencies
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(GetPrivateField<MyDependency>(rootClass, "myDependency2"));

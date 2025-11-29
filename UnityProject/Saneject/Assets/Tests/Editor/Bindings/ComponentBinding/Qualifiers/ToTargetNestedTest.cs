@@ -30,7 +30,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
                 .FromInstance(injectable);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNotNull(GetPrivateField<InjectableComponent>(rootClass, "injectableComponent"));
@@ -60,7 +60,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
                 .FromInstance(injectable);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(GetPrivateField<InjectableComponent>(rootClass, "injectableComponent"));
@@ -90,7 +90,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Qualifiers
                 .FromInstance(injectable);
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(GetPrivateField<InjectableComponent>(rootClass, "injectableComponent"));

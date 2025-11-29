@@ -30,7 +30,7 @@ namespace Tests.Editor.Global
                 .FromAnywhereInScene();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             SceneGlobalContainer container = Object.FindFirstObjectByType<SceneGlobalContainer>();

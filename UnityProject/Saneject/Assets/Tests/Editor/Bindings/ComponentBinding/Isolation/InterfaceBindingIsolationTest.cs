@@ -27,7 +27,7 @@ namespace Tests.Editor.Bindings.ComponentBinding.Isolation
                 .FromDescendants();
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.IsNull(requester.concreteComponent);

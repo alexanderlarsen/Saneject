@@ -34,7 +34,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.Special
                 .Where(a => a.name == "B");
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(assetB, requester.concreteAsset);
@@ -62,7 +62,7 @@ namespace Tests.Editor.Bindings.AssetBinding.Locators.Special
                 .Where(a => a.name == "B");
 
             // Inject
-            DependencyInjector.InjectSceneDependencies();
+            DependencyInjector.InjectCurrentScene();
 
             // Assert
             Assert.AreEqual(assetB, requester.interfaceAsset);
