@@ -13,7 +13,7 @@ namespace Plugins.Saneject.Editor.Inspectors
     /// Displays configuration and runtime info for interface proxy ScriptableObjects.
     /// </summary>
     [CustomEditor(typeof(ProxyObjectBase), true)]
-    public class ProxyObjectEditor : UnityEditor.Editor
+    public class ProxyObjectInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
