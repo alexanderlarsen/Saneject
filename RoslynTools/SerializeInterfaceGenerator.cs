@@ -1,9 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
+using RoslynTools.Extensions;
+using RoslynTools.Utils;
 
 namespace Saneject.Roslyn.Generators;
 
@@ -20,11 +23,10 @@ public class SerializeInterfaceGenerator : ISourceGenerator
         if (context.SyntaxReceiver is not InterfaceMemberReceiver receiver)
             return;
 
-        Dictionary<INamedTypeSymbol, List<IFieldSymbol>> groupedFields = new(SymbolEqualityComparer.Default);
-        Dictionary<INamedTypeSymbol, List<(IPropertySymbol propertySymbol, bool hasInject, string idValue)>> groupedProps = new(SymbolEqualityComparer.Default);
-        bool hasInterfaceCollection = false;
+        Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass = new(SymbolEqualityComparer.Default);
+        Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass = new(SymbolEqualityComparer.Default);
 
-        //–– fields ––
+        // Collect fields
         foreach (FieldDeclarationSyntax candidate in receiver.FieldCandidates)
         {
             SemanticModel model = context.Compilation.GetSemanticModel(candidate.SyntaxTree);
@@ -37,260 +39,228 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 if (!fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.Name == "SerializeInterfaceAttribute"))
                     continue;
 
-                ITypeSymbol t = fieldSymbol.Type;
-                bool isSingle = t.TypeKind == TypeKind.Interface;
-                bool isCollection = IsInterfaceCollection(t);
-                hasInterfaceCollection |= isCollection;
-
-                if (!isSingle && !isCollection)
+                if (!fieldSymbol.Type.IsInterface() && !fieldSymbol.Type.IsInterfaceCollection())
                     continue;
 
                 INamedTypeSymbol owner = fieldSymbol.ContainingType;
 
-                if (!groupedFields.TryGetValue(owner, out List<IFieldSymbol> list))
-                    groupedFields[owner] = list = new List<IFieldSymbol>();
+                if (!fieldsByClass.ContainsKey(owner))
+                    fieldsByClass[owner] = [];
 
-                list.Add(fieldSymbol);
+                fieldsByClass[owner].Add(fieldSymbol);
             }
         }
 
-        //–– props ––
+        // Collect properties
         foreach (PropertyDeclarationSyntax candidate in receiver.PropertyCandidates)
         {
-            if (!candidate.AttributeLists.Any(al => al.Target?.Identifier.Text == "field"
-                                                    && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
+            if (!candidate.AttributeLists.Any(al => al.Target?.Identifier.Text == "field" && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
                 continue;
 
             SemanticModel model = context.Compilation.GetSemanticModel(candidate.SyntaxTree);
 
-            if (model.GetDeclaredSymbol(candidate) is not IPropertySymbol prop)
+            if (model.GetDeclaredSymbol(candidate) is not IPropertySymbol propertySymbol)
                 continue;
 
-            ITypeSymbol t = prop.Type;
-            bool isSingle = t.TypeKind == TypeKind.Interface;
-            bool isCollection = IsInterfaceCollection(t);
-            hasInterfaceCollection |= isCollection;
-
-            if (!isSingle && !isCollection)
+            if (!propertySymbol.Type.IsInterface() && !propertySymbol.Type.IsInterfaceCollection())
                 continue;
 
-            AttributeSyntax injectSyntax = candidate.AttributeLists
-                .Where(al => al.Target?.Identifier.Text == "field")
-                .SelectMany(al => al.Attributes)
-                .FirstOrDefault(a => a.Name.ToString().Contains("Inject"));
+            INamedTypeSymbol owner = propertySymbol.ContainingType;
 
-            bool hasInject = injectSyntax != null;
-            string idValue = "null";
+            if (!propertiesByClass.ContainsKey(owner))
+                propertiesByClass[owner] = [];
 
-            if (hasInject && injectSyntax.ArgumentList?.Arguments.Count > 0
-                          && injectSyntax.ArgumentList.Arguments[0].Expression is LiteralExpressionSyntax lit
-                          && lit.Token.Value is string s)
-                idValue = $"\"{s}\"";
-
-            INamedTypeSymbol owner = prop.ContainingType;
-
-            if (!groupedProps.TryGetValue(owner, out List<(IPropertySymbol propertySymbol, bool hasInject, string idValue)> list))
-                groupedProps[owner] = list = new List<(IPropertySymbol, bool, string)>();
-
-            list.Add((prop, hasInject, idValue));
+            propertiesByClass[owner].Add(propertySymbol);
         }
 
-        //–– generate ––
-        foreach (INamedTypeSymbol classSymbol in groupedFields.Keys.Union(groupedProps.Keys))
+        IEnumerable<INamedTypeSymbol> allClasses = fieldsByClass.Keys
+            .Union(propertiesByClass.Keys, SymbolEqualityComparer.Default)
+            .OfType<INamedTypeSymbol>();
+
+        // Generate code
+        foreach (INamedTypeSymbol classSymbol in allClasses)
         {
-            if (!IsUnitySerializable(classSymbol) || classSymbol.IsSealed)
+            if (!classSymbol.IsUnitySerializable() || classSymbol.IsSealed)
                 continue;
 
-            INamespaceSymbol nsSymbol = classSymbol.ContainingNamespace;
-            string ns = nsSymbol.ToDisplayString();
-            bool hasNs = !string.IsNullOrEmpty(ns) && !nsSymbol.IsGlobalNamespace;
+            INamespaceSymbol namespaceSymbol = classSymbol.ContainingNamespace;
+            string namespaceName = namespaceSymbol.ToDisplayString();
+            bool hasNamespace = !string.IsNullOrEmpty(namespaceName) && !namespaceSymbol.IsGlobalNamespace;
             StringBuilder sb = new();
 
-            sb.AppendLine("using System;");
-            sb.AppendLine("using System.Collections.Generic;");
             sb.AppendLine("using System.Linq;");
-            sb.AppendLine("using UnityEngine;");
-            sb.AppendLine("using Plugins.Saneject.Runtime.Attributes;");
             sb.AppendLine();
 
-            if (hasNs)
+            if (hasNamespace)
             {
-                sb.AppendLine($"namespace {ns}");
+                sb.AppendLine($"namespace {namespaceName}");
                 sb.AppendLine("{");
             }
 
-            sb.AppendLine($"    public partial class {classSymbol.Name} : ISerializationCallbackReceiver");
+            sb.AppendLine($"    public partial class {classSymbol.Name} : UnityEngine.ISerializationCallbackReceiver");
             sb.AppendLine("    {");
 
-            // backing fields for fields
-            if (groupedFields.TryGetValue(classSymbol, out List<IFieldSymbol> fields))
-                foreach (IFieldSymbol fs in fields)
+            // Backing fields for fields
+            if (fieldsByClass.TryGetValue(classSymbol, out List<IFieldSymbol> fieldSymbols))
+                for (int i = 0; i < fieldSymbols.Count; i++)
                 {
-                    string backing = "__" + fs.Name;
-                    ITypeSymbol t = fs.Type;
-                    string typeStr = t.ToDisplayString();
-                    AttributeData injAttr = fs.GetAttributes().FirstOrDefault(a => a.AttributeClass?.Name == "InjectAttribute");
-                    string hasInj = injAttr != null ? "true" : "false";
-                    string id = "null";
+                    IFieldSymbol fieldSymbol = fieldSymbols[i];
+                    string name = fieldSymbol.Name;
 
-                    if (injAttr?.ConstructorArguments.Length > 0 && injAttr.ConstructorArguments[0].Value is string idv)
-                        id = $"\"{idv}\"";
+                    sb.AppendLine("        /// <summary>");
+                    sb.AppendLine($"        /// Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{name}\" />. You should not interact with this backing field directly.");
+                    sb.AppendLine("        /// </summary>");
 
-                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                    if (fieldSymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
                     {
-                        string elementType = arr.ElementType.ToDisplayString();
-                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{fs.Name}\" />. You should not interact with the backing field directly.</summary>");
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object[] {backing};");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol, array.ElementType)}]");
+                        sb.AppendLine($"        private UnityEngine.Object[] __{name};");
                     }
-                    else if (t is INamedTypeSymbol named && named.IsGenericType
-                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
-                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    else if (fieldSymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
-                        string elementType = named.TypeArguments[0].ToDisplayString();
-                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{fs.Name}\" />. You should not interact with the backing field directly.</summary>");
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private List<UnityEngine.Object> {backing};");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol, list.TypeArguments[0])}]");
+                        sb.AppendLine($"        private System.Collections.Generic.List<UnityEngine.Object> __{name};");
                     }
                     else
                     {
-                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{fs.Name}\" />. You should not interact with the backing field directly.</summary>");
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {id}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object {backing};");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol, fieldSymbol.Type)}]");
+                        sb.AppendLine($"        private UnityEngine.Object __{name};");
                     }
+
+                    if (i != fieldSymbols.Count - 1)
+                        sb.AppendLine();
                 }
 
-            // backing fields for props
-            if (groupedProps.TryGetValue(classSymbol, out List<(IPropertySymbol propertySymbol, bool hasInject, string idValue)> props))
-                foreach ((IPropertySymbol ps, bool hasInjAttr, string idv) in props)
-                {
-                    string backing = "__" + ps.Name;
-                    ITypeSymbol t = ps.Type;
-                    string typeStr = t.ToDisplayString();
-                    string hasInj = hasInjAttr ? "true" : "false";
+            // Backing fields for properties
+            if (propertiesByClass.TryGetValue(classSymbol, out List<IPropertySymbol> propertySymbols))
+            {
+                if (fieldSymbols.Count > 0)
+                    sb.AppendLine();
 
-                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                for (int i = 0; i < propertySymbols.Count; i++)
+                {
+                    IPropertySymbol propertySymbol = propertySymbols[i];
+                    string name = propertySymbol.Name;
+
+                    sb.AppendLine("        /// <summary>");
+                    sb.AppendLine($"        /// Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{name}\" />. You should not interact with this backing field directly.");
+                    sb.AppendLine("        /// </summary>");
+
+                    if (propertySymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
                     {
-                        string elementType = arr.ElementType.ToDisplayString();
-                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{ps.Name}\" />. You should not interact with the backing field directly.</summary>");
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object[] {backing};");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(propertySymbol, array.ElementType)}]");
+                        sb.AppendLine($"        private UnityEngine.Object[] __{name};");
                     }
-                    else if (t is INamedTypeSymbol named && named.IsGenericType
-                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
-                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    else if (propertySymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
-                        string elementType = named.TypeArguments[0].ToDisplayString();
-                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{ps.Name}\" />. You should not interact with the backing field directly.</summary>");
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({elementType}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private List<UnityEngine.Object> {backing};");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(propertySymbol, list.TypeArguments[0])}]");
+                        sb.AppendLine($"        private System.Collections.Generic.List<UnityEngine.Object> __{name};");
                     }
                     else
                     {
-                        sb.AppendLine($"        /// <summary> Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{ps.Name}\" />. You should not interact with the backing field directly.</summary>");
-                        sb.AppendLine($"        [SerializeField, InterfaceBackingField(typeof({typeStr}), {hasInj}, {idv}), System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)] private UnityEngine.Object {backing};");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(propertySymbol, propertySymbol.Type)}]");
+                        sb.AppendLine($"        private UnityEngine.Object __{name};");
                     }
+
+                    if (i != propertySymbols.Count - 1)
+                        sb.AppendLine();
                 }
+            }
 
             sb.AppendLine();
-            sb.AppendLine("        /// <summary>Auto-generated method used by Saneject to sync interface -> backing field. You should not interact with the method directly.</summary>");
-            sb.AppendLine("        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Auto-generated method used by Saneject to sync interface -> backing field. You should not interact with the method directly.");
+            sb.AppendLine("        /// </summary>");
+            sb.AppendLine($"        [{AttributeUtils.GetEditorBrowsableAttribute(EditorBrowsableState.Never)}]");
             sb.AppendLine("        public void OnBeforeSerialize()");
             sb.AppendLine("        {");
-            sb.AppendLine("        #if UNITY_EDITOR");
+            sb.AppendLine("#if UNITY_EDITOR");
 
-            if (groupedFields.TryGetValue(classSymbol, out fields))
-                foreach (IFieldSymbol fs in fields)
+            if (fieldsByClass.TryGetValue(classSymbol, out fieldSymbols))
+                foreach (IFieldSymbol fieldSymbol in fieldSymbols)
                 {
-                    string name = fs.Name;
-                    string backing = "__" + name;
-                    ITypeSymbol t = fs.Type;
+                    string name = fieldSymbol.Name;
 
-                    if (t.TypeKind == TypeKind.Interface)
-                        sb.AppendLine($"            {backing} = {name} as UnityEngine.Object;");
-                    else if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
-                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToArray();");
-                    else if (t is INamedTypeSymbol named && named.IsGenericType &&
-                             named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>" &&
-                             named.TypeArguments[0].TypeKind == TypeKind.Interface)
-                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToList();");
+                    if (fieldSymbol.Type.IsInterfaceArray(out _))
+                        sb.AppendLine($"            __{name} = {name}?.Cast<UnityEngine.Object>().ToArray();");
+                    else if (fieldSymbol.Type.IsInterfaceList(out _))
+                        sb.AppendLine($"            __{name} = {name}?.Cast<UnityEngine.Object>().ToList();");
+                    else
+                        sb.AppendLine($"            __{name} = {name} as UnityEngine.Object;");
                 }
 
-            if (groupedProps.TryGetValue(classSymbol, out props))
-                foreach ((IPropertySymbol ps, _, _) in props)
+            if (propertiesByClass.TryGetValue(classSymbol, out propertySymbols))
+                foreach (IPropertySymbol propertySymbol in propertySymbols)
                 {
-                    string name = ps.Name;
-                    string backing = "__" + name;
-                    ITypeSymbol t = ps.Type;
+                    string name = propertySymbol.Name;
 
-                    if (t.TypeKind == TypeKind.Interface)
-                        sb.AppendLine($"            {backing} = {name} as UnityEngine.Object;");
-                    else if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
-                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToArray();");
-                    else if (t is INamedTypeSymbol named && named.IsGenericType &&
-                             named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>" &&
-                             named.TypeArguments[0].TypeKind == TypeKind.Interface)
-                        sb.AppendLine($"            {backing} = {name}?.Cast<UnityEngine.Object>().ToList();");
+                    if (propertySymbol.Type.IsInterfaceArray(out _))
+                        sb.AppendLine($"            __{name} = {name}?.Cast<UnityEngine.Object>().ToArray();");
+                    else if (propertySymbol.Type.IsInterfaceList(out _))
+                        sb.AppendLine($"            __{name} = {name}?.Cast<UnityEngine.Object>().ToList();");
+                    else
+                        sb.AppendLine($"            __{name} = {name} as UnityEngine.Object;");
                 }
 
-            sb.AppendLine("        #endif");
+            sb.AppendLine("#endif");
             sb.AppendLine("        }");
             sb.AppendLine();
-            sb.AppendLine("        /// <summary>Auto-generated method used by Saneject to sync backing field -> interface. You should not interact with the method directly.</summary>");
-            sb.AppendLine("        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]");
+            sb.AppendLine("        /// <summary>");
+            sb.AppendLine("        /// Auto-generated method used by Saneject to sync backing field -> interface. You should not interact with the method directly.");
+            sb.AppendLine("        /// </summary>");
+            sb.AppendLine($"        [{AttributeUtils.GetEditorBrowsableAttribute(EditorBrowsableState.Never)}]");
             sb.AppendLine("        public void OnAfterDeserialize()");
             sb.AppendLine("        {");
 
-            // deserialize fields
-            if (groupedFields.TryGetValue(classSymbol, out fields))
-                foreach (IFieldSymbol fs in fields)
+            // Deserialize fields
+            if (fieldsByClass.TryGetValue(classSymbol, out fieldSymbols))
+                foreach (IFieldSymbol fieldSymbol in fieldSymbols)
                 {
-                    string name = fs.Name;
-                    ITypeSymbol t = fs.Type;
-                    string backing = "__" + name;
+                    string name = fieldSymbol.Name;
 
-                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                    if (fieldSymbol.Type.IsInterfaceArray(out IArrayTypeSymbol arr))
                     {
-                        string elem = arr.ElementType.ToDisplayString();
-                        sb.AppendLine($"            {name} = ({backing} ?? Array.Empty<UnityEngine.Object>()).Select(x => x as {elem}).ToArray();");
+                        string type = arr.ElementType.ToDisplayString();
+                        sb.AppendLine($"            {name} = (__{name} ?? System.Array.Empty<UnityEngine.Object>()).Select(x => x as {type}).ToArray();");
                     }
-                    else if (t is INamedTypeSymbol named && named.IsGenericType
-                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
-                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    else if (fieldSymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
-                        string elem = named.TypeArguments[0].ToDisplayString();
-                        sb.AppendLine($"            {name} = ({backing} ?? new List<UnityEngine.Object>()).Select(x => x as {elem}).ToList();");
+                        string type = list.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"            {name} = (__{name} ?? new System.Collections.Generic.List<UnityEngine.Object>()).Select(x => x as {type}).ToList();");
                     }
                     else
                     {
-                        sb.AppendLine($"            {name} = {backing} as {t.ToDisplayString()};");
+                        string type = fieldSymbol.Type.ToDisplayString();
+                        sb.AppendLine($"            {name} = __{name} as {type};");
                     }
                 }
 
-            // deserialize props
-            if (groupedProps.TryGetValue(classSymbol, out props))
-                foreach ((IPropertySymbol ps, bool _, string _) in props)
+            // Deserialize properties
+            if (propertiesByClass.TryGetValue(classSymbol, out propertySymbols))
+                foreach (IPropertySymbol propertySymbol in propertySymbols)
                 {
-                    string name = ps.Name;
-                    ITypeSymbol t = ps.Type;
-                    string backing = "__" + name;
+                    string name = propertySymbol.Name;
 
-                    if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface)
+                    if (propertySymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
                     {
-                        string elem = arr.ElementType.ToDisplayString();
-                        sb.AppendLine($"            {name} = ({backing} ?? Array.Empty<UnityEngine.Object>()).Select(x => x as {elem}).ToArray();");
+                        string type = array.ElementType.ToDisplayString();
+                        sb.AppendLine($"            {name} = (__{name} ?? Array.Empty<UnityEngine.Object>()).Select(x => x as {type}).ToArray();");
                     }
-                    else if (t is INamedTypeSymbol named && named.IsGenericType
-                                                         && named.ConstructUnboundGenericType().ToDisplayString() == "System.Collections.Generic.List<>"
-                                                         && named.TypeArguments[0].TypeKind == TypeKind.Interface)
+                    else if (propertySymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
-                        string elem = named.TypeArguments[0].ToDisplayString();
-                        sb.AppendLine($"            {name} = ({backing} ?? new List<UnityEngine.Object>()).Select(x => x as {elem}).ToList();");
+                        string type = list.TypeArguments[0].ToDisplayString();
+                        sb.AppendLine($"            {name} = (__{name} ?? new List<UnityEngine.Object>()).Select(x => x as {type}).ToList();");
                     }
                     else
                     {
-                        sb.AppendLine($"            {name} = {backing} as {t.ToDisplayString()};");
+                        string type = propertySymbol.Type.ToDisplayString();
+                        sb.AppendLine($"            {name} = __{name} as {type};");
                     }
                 }
 
             sb.AppendLine("        }");
             sb.AppendLine("    }");
-            if (hasNs) sb.AppendLine("}");
+            if (hasNamespace) sb.AppendLine("}");
 
             string hint = classSymbol
                 .ToDisplayString(SymbolDisplayFormat.FullyQualifiedFormat)
@@ -302,49 +272,29 @@ public class SerializeInterfaceGenerator : ISourceGenerator
         }
     }
 
-    private static bool IsInterfaceCollection(ITypeSymbol t)
-    {
-        if (t is IArrayTypeSymbol arr && arr.ElementType.TypeKind == TypeKind.Interface) return true;
-
-        if (t is INamedTypeSymbol named && named.IsGenericType
-                                        && named.TypeArguments.Length == 1
-                                        && named.TypeArguments[0].TypeKind == TypeKind.Interface) return true;
-
-        return false;
-    }
-
-    private static bool InheritsFromUnityObject(INamedTypeSymbol? t)
-    {
-        while (t != null)
-        {
-            if (t.ToDisplayString() == "UnityEngine.Object") return true;
-            t = t.BaseType;
-        }
-
-        return false;
-    }
-
-    private static bool IsUnitySerializable(INamedTypeSymbol t)
-    {
-        return InheritsFromUnityObject(t)
-               || t.GetAttributes().Any(a => a.AttributeClass?.ToDisplayString() == "System.SerializableAttribute");
-    }
-
     private class InterfaceMemberReceiver : ISyntaxReceiver
     {
-        public List<FieldDeclarationSyntax> FieldCandidates { get; } = new();
-        public List<PropertyDeclarationSyntax> PropertyCandidates { get; } = new();
+        public List<FieldDeclarationSyntax> FieldCandidates { get; } = [];
+        public List<PropertyDeclarationSyntax> PropertyCandidates { get; } = [];
 
         public void OnVisitSyntaxNode(SyntaxNode node)
         {
-            if (node is FieldDeclarationSyntax f && f.AttributeLists
-                    .Any(al => al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
-                FieldCandidates.Add(f);
+            if (node is FieldDeclarationSyntax fieldDeclaration
+                && fieldDeclaration.AttributeLists.Any(lists =>
+                    lists.Attributes.Any(attribute =>
+                        attribute.Name
+                            .ToString()
+                            .Contains("SerializeInterface"))))
+                FieldCandidates.Add(fieldDeclaration);
 
-            if (node is PropertyDeclarationSyntax p && p.AttributeLists
-                    .Any(al => al.Target?.Identifier.Text == "field"
-                               && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
-                PropertyCandidates.Add(p);
+            if (node is PropertyDeclarationSyntax propertyDeclaration
+                && propertyDeclaration.AttributeLists.Any(lists =>
+                    lists.Target?.Identifier.Text == "field"
+                    && lists.Attributes.Any(attribute =>
+                        attribute.Name
+                            .ToString()
+                            .Contains("SerializeInterface"))))
+                PropertyCandidates.Add(propertyDeclaration);
         }
     }
 }

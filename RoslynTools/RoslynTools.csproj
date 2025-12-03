@@ -23,6 +23,8 @@
 
     <ItemGroup Condition="'$(Module)' == 'SerializeInterface'">
         <Compile Include="SerializeInterfaceGenerator.cs"/>
+        <Compile Include="Extensions/SymbolExtensions.cs"/>
+        <Compile Include="Utils/AttributeUtils.cs"/>        
     </ItemGroup>
 
     <ItemGroup Condition="'$(Module)' == 'InterfaceProxy'">

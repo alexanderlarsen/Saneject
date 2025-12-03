@@ -12,18 +12,11 @@ namespace Plugins.Saneject.Runtime.Attributes
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Property), EditorBrowsable(EditorBrowsableState.Never)]
     public sealed class InterfaceBackingFieldAttribute : PropertyAttribute
     {
-        public InterfaceBackingFieldAttribute(
-            Type interfaceType,
-            bool isInjected,
-            string injectId)
+        public InterfaceBackingFieldAttribute(Type interfaceType)
         {
             InterfaceType = interfaceType;
-            IsInjected = isInjected;
-            InjectId = injectId;
         }
 
         public Type InterfaceType { get; }
-        public bool IsInjected { get; }
-        public string InjectId { get; }
     }
 }
