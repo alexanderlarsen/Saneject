@@ -1,7 +1,7 @@
 ﻿using System.Linq;
 using Microsoft.CodeAnalysis;
 
-namespace RoslynTools.Extensions;
+namespace RoslynTools.SerializeInterface.Extensions;
 
 public static class SymbolExtensions
 {
@@ -9,7 +9,7 @@ public static class SymbolExtensions
     {
         return typeSymbol.IsInterfaceArray(out _) || typeSymbol.IsInterfaceList(out _);
     }
-    
+
     public static bool IsInterfaceArray(
         this ITypeSymbol typeSymbol,
         out IArrayTypeSymbol array)

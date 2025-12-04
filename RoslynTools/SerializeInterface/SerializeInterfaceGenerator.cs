@@ -5,10 +5,10 @@ using System.Text;
 using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
-using RoslynTools.Extensions;
-using RoslynTools.Utils;
+using RoslynTools.SerializeInterface.Extensions;
+using RoslynTools.SerializeInterface.Utils;
 
-namespace Saneject.Roslyn.Generators;
+namespace RoslynTools.SerializeInterface;
 
 [Generator]
 public class SerializeInterfaceGenerator : ISourceGenerator
@@ -26,7 +26,16 @@ public class SerializeInterfaceGenerator : ISourceGenerator
         Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass = new(SymbolEqualityComparer.Default);
         Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass = new(SymbolEqualityComparer.Default);
 
-        // Collect fields
+        CollectFields(context, receiver, fieldsByClass);
+        CollectProperties(context, receiver, propertiesByClass);
+        GenerateCode(context, fieldsByClass, propertiesByClass);
+    }
+
+    private static void CollectFields(
+        GeneratorExecutionContext context,
+        InterfaceMemberReceiver receiver,
+        Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass)
+    {
         foreach (FieldDeclarationSyntax candidate in receiver.FieldCandidates)
         {
             SemanticModel model = context.Compilation.GetSemanticModel(candidate.SyntaxTree);
@@ -50,8 +59,13 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 fieldsByClass[owner].Add(fieldSymbol);
             }
         }
+    }
 
-        // Collect properties
+    private static void CollectProperties(
+        GeneratorExecutionContext context,
+        InterfaceMemberReceiver receiver,
+        Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass)
+    {
         foreach (PropertyDeclarationSyntax candidate in receiver.PropertyCandidates)
         {
             if (!candidate.AttributeLists.Any(al => al.Target?.Identifier.Text == "field" && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
@@ -72,7 +86,13 @@ public class SerializeInterfaceGenerator : ISourceGenerator
 
             propertiesByClass[owner].Add(propertySymbol);
         }
+    }
 
+    private static void GenerateCode(
+        GeneratorExecutionContext context,
+        Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass,
+        Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass)
+    {
         IEnumerable<INamedTypeSymbol> allClasses = fieldsByClass.Keys
             .Union(propertiesByClass.Keys, SymbolEqualityComparer.Default)
             .OfType<INamedTypeSymbol>();
@@ -100,7 +120,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
             sb.AppendLine($"    public partial class {classSymbol.Name} : UnityEngine.ISerializationCallbackReceiver");
             sb.AppendLine("    {");
 
-            // Backing fields for fields
+            // Generate backing fields for fields
             if (fieldsByClass.TryGetValue(classSymbol, out List<IFieldSymbol> fieldSymbols))
                 for (int i = 0; i < fieldSymbols.Count; i++)
                 {
@@ -131,10 +151,10 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                         sb.AppendLine();
                 }
 
-            // Backing fields for properties
+            // Generate bcking fields for properties
             if (propertiesByClass.TryGetValue(classSymbol, out List<IPropertySymbol> propertySymbols))
             {
-                if (fieldSymbols.Count > 0)
+                if (fieldSymbols is { Count: > 0 })
                     sb.AppendLine();
 
                 for (int i = 0; i < propertySymbols.Count; i++)
@@ -167,6 +187,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 }
             }
 
+            // Serialize interface objects
             sb.AppendLine();
             sb.AppendLine("        /// <summary>");
             sb.AppendLine("        /// Auto-generated method used by Saneject to sync interface -> backing field. You should not interact with the method directly.");
