@@ -1,4 +1,35 @@
-﻿## Version 0.19.0
+﻿# Changelog
+
+## Version 0.20.0
+
+### New Inspector (Faster, Cleaner, More Reliable)
+
+- Replaced the old inspector API with a new data-driven system that behaves much closer to Unity's native inspectors.
+- All serialized fields are now discovered in a single structured pass, which removes a lot of brittle special-case logic.
+- Interface fields and properties now show Unity's default PropertyField UI, so attributes like Header, Tooltip and others finally work as expected.
+- Collections (arrays/lists) use Unity's built-in rendering inside a disabled scope instead of a custom drawer.
+- Nested serializable classes are drawn more consistently thanks to the unified PropertyData pipeline.
+- Result: a cleaner inspector that is easier to extend, easier to debug and more predictable.
+
+### Improved SerializeInterface Code Generation
+
+- Major refactor of the SerializeInterfaceGenerator to make the generated code cleaner and more robust.
+- User attributes on interface fields and auto-properties are now copied correctly to the generated backing fields, enabling full Unity inspector support.
+- Generator now uses fully qualified names everywhere to avoid namespace conflicts.
+- InterfaceBackingFieldAttribute has been simplified to store only the interface type, since InjectAttribute is now copied directly onto the generated field.
+- PropertyInjector now reads real Inject attributes instead of custom metadata, reducing duplication and improving accuracy.
+
+### Full Support for Auto-Property Interface Fields
+
+- Added proper support for attributes on auto-properties using [field: SerializeInterface].
+- The generator now targets the property's compiler-generated backing field (<Name>k__BackingField), ensuring attributes behave the same as on normal fields.
+- Auto-properties now support Header, Tooltip, Inject and other attributes with no extra work from the user.
+
+### Summary
+
+This release is mostly invisible to end users but significantly improves Saneject's stability and internal consistency. Interface serialization, inspector rendering and attribute handling are now far more reliable, which also makes future features easier to build.
+
+## Version 0.19.0
 
 ### New batch injection system
 
