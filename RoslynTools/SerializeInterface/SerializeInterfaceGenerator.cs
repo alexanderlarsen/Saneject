@@ -162,23 +162,30 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     IPropertySymbol propertySymbol = propertySymbols[i];
                     string name = propertySymbol.Name;
 
+                    IFieldSymbol backingField = propertySymbol.ContainingType
+                        .GetMembers()
+                        .OfType<IFieldSymbol>()
+                        .FirstOrDefault(f => SymbolEqualityComparer.Default.Equals(f.AssociatedSymbol, propertySymbol));
+
+                    ISymbol attributeSymbol = backingField != null ? backingField : propertySymbol;
+
                     sb.AppendLine("        /// <summary>");
                     sb.AppendLine($"        /// Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{name}\" />. You should not interact with this backing field directly.");
                     sb.AppendLine("        /// </summary>");
 
                     if (propertySymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(propertySymbol, array.ElementType)}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol, array.ElementType)}]");
                         sb.AppendLine($"        private UnityEngine.Object[] __{name};");
                     }
                     else if (propertySymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(propertySymbol, list.TypeArguments[0])}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol, list.TypeArguments[0])}]");
                         sb.AppendLine($"        private System.Collections.Generic.List<UnityEngine.Object> __{name};");
                     }
                     else
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(propertySymbol, propertySymbol.Type)}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol, propertySymbol.Type)}]");
                         sb.AppendLine($"        private UnityEngine.Object __{name};");
                     }
 
@@ -265,12 +272,12 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     if (propertySymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
                     {
                         string type = array.ElementType.ToDisplayString();
-                        sb.AppendLine($"            {name} = (__{name} ?? Array.Empty<UnityEngine.Object>()).Select(x => x as {type}).ToArray();");
+                        sb.AppendLine($"            {name} = (__{name} ?? System.Array.Empty<UnityEngine.Object>()).Select(x => x as {type}).ToArray();");
                     }
                     else if (propertySymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
                         string type = list.TypeArguments[0].ToDisplayString();
-                        sb.AppendLine($"            {name} = (__{name} ?? new List<UnityEngine.Object>()).Select(x => x as {type}).ToList();");
+                        sb.AppendLine($"            {name} = (__{name} ?? new System.Collections.Generic.List<UnityEngine.Object>()).Select(x => x as {type}).ToList();");
                     }
                     else
                     {

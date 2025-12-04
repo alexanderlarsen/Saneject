@@ -9,7 +9,7 @@ namespace RoslynTools.SerializeInterface.Utils;
 public static class AttributeUtils
 {
     public static string GetAttributes(
-        ISymbol fieldSymbol,
+        ISymbol symbol,
         ITypeSymbol typeSymbol)
     {
         List<string> attributes =
@@ -19,7 +19,7 @@ public static class AttributeUtils
             "System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)"
         ];
 
-        foreach (AttributeData attributeData in fieldSymbol.GetAttributes())
+        foreach (AttributeData attributeData in symbol.GetAttributes())
         {
             string attribute = attributeData.ToString();
 
