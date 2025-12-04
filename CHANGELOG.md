@@ -2,7 +2,7 @@
 
 ## Version 0.20.0
 
-### New Inspector (Faster, Cleaner, More Reliable)
+### New Inspector (faster, cleaner, more reliable)
 
 - Replaced the old inspector API with a new data-driven system that behaves much closer to Unity's native inspectors.
 - All serialized fields are now discovered in a single structured pass, which removes a lot of brittle special-case logic.
@@ -11,7 +11,7 @@
 - Nested serializable classes are drawn more consistently thanks to the unified PropertyData pipeline.
 - Result: a cleaner inspector that is easier to extend, easier to debug and more predictable.
 
-### Improved SerializeInterface Code Generation
+### Improved SerializeInterface code generation
 
 - Major refactor of the SerializeInterfaceGenerator to make the generated code cleaner and more robust.
 - User attributes on interface fields and auto-properties are now copied correctly to the generated backing fields, enabling full Unity inspector support.
@@ -19,11 +19,15 @@
 - InterfaceBackingFieldAttribute has been simplified to store only the interface type, since InjectAttribute is now copied directly onto the generated field.
 - PropertyInjector now reads real Inject attributes instead of custom metadata, reducing duplication and improving accuracy.
 
-### Full Support for Auto-Property Interface Fields
+### Full support for auto-property interface fields
 
 - Added proper support for attributes on auto-properties using [field: SerializeInterface].
 - The generator now targets the property's compiler-generated backing field (<Name>k__BackingField), ensuring attributes behave the same as on normal fields.
 - Auto-properties now support Header, Tooltip, Inject and other attributes with no extra work from the user.
+
+### Bug fixes
+- "Show Injected Fields/Properties" user setting no longer toggles non-injected serialized interfaces.
+- Suppress missing errors via Inject-attribute now works on serialized interfaces.
 
 ### Summary
 
