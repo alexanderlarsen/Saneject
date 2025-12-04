@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 using Plugins.Saneject.Editor.Core;
-using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Editor.Inspectors.API;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
@@ -33,8 +33,8 @@ namespace Plugins.Saneject.Editor.Inspectors
 
         public override void OnInspectorGUI()
         {
-            SanejectInspector.DrawMonoBehaviourScriptField(targets, target);
-            
+            SanejectInspector.DrawMonoBehaviourScriptField(target);
+
             if (UserSettings.ShowHelpBoxes)
                 EditorGUILayout.HelpBox(
                     "• Two scope types: Prefab and Scene (both managed by this Scope component).\n" +
@@ -114,7 +114,9 @@ namespace Plugins.Saneject.Editor.Inspectors
                     EditorGUILayout.EndHorizontal();
                 }
 
-            SanejectInspector.DrawAllSerializedFields(serializedObject, target);
+            SanejectInspector.CollectPropertyData(serializedObject, target, out IReadOnlyCollection<PropertyData> properties);
+
+            SanejectInspector.DrawAndValidateProperties(properties);
 
             if (Application.isPlaying)
                 GUILayout.Label("Injection is editor-only. Exit Play Mode to inject.", EditorStyles.boldLabel);
@@ -133,10 +135,10 @@ namespace Plugins.Saneject.Editor.Inspectors
                 {
                     if (!Dialogs.Injection.ConfirmInjectPrefab())
                         return;
-                    
+
                     if (UserSettings.ClearLogsOnInjection)
                         ConsoleUtils.ClearLog();
-                    
+
                     foreach (Object t in targets)
                         if (t is Scope scope)
                             DependencyInjector.InjectPrefab(scope);
@@ -151,7 +153,7 @@ namespace Plugins.Saneject.Editor.Inspectors
 
                     if (UserSettings.ClearLogsOnInjection)
                         ConsoleUtils.ClearLog();
-                    
+
                     foreach (Object t in targets)
                         if (t is Scope scope)
                             DependencyInjector.InjectSingleHierarchy(scope);

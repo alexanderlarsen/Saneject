@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Reflection;
+using Plugins.Saneject.Editor.Inspectors.API;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Global;
 using Plugins.Saneject.Runtime.Scopes;
@@ -16,11 +17,11 @@ namespace Plugins.Saneject.Editor.Inspectors
     /// Global containers are created and managed automatically; manual editing is discouraged.
     /// </summary>
     [CustomEditor(typeof(SceneGlobalContainer))]
-    public class SceneGlobalContainerEditor : UnityEditor.Editor
+    public class SceneGlobalContainerInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
-            SanejectInspector.DrawMonoBehaviourScriptField(targets, target);
+            SanejectInspector.DrawMonoBehaviourScriptField(target);
 
             if (UserSettings.ShowHelpBoxes)
                 EditorGUILayout.HelpBox(

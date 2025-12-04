@@ -1,15 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.Utility
-{
-    public static class SanejectInspector
+namespace Plugins.Saneject.Editor.Inspectors.API
+{ 
+    public static class LegacySanejectInspector
     {
         /// <summary>
         /// Draws the complete default Saneject MonoBehaviour inspector, including the script field, all serializable fields in declaration order, injection-aware read-only handling, custom UI and validation for [SerializeInterface] fields, and recursive drawing of nested serializable types.

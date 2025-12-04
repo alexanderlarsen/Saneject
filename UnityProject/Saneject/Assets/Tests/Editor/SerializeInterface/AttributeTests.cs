@@ -11,15 +11,15 @@ namespace Tests.Editor.SerializeInterface
 {
     public class AttributeTests
     {
+        // TODO: Update these tests to reflect new InterfaceBackingFieldAttribute
+        
         [Test]
         public void BackingField_HasNullInjectId()
         {
             AssertBackingField(
                 typeof(ComponentRequester),
                 "__interfaceComponent",
-                expectedType: typeof(IInjectable),
-                expectedInjectId: null,
-                expectedIsInjected: true);
+                expectedType: typeof(IInjectable));
         }
 
         [Test]
@@ -28,9 +28,7 @@ namespace Tests.Editor.SerializeInterface
             AssertBackingField(
                 typeof(ComponentRequesterWithID),
                 "__interfaceComponentA",
-                expectedType: typeof(IInjectable),
-                expectedInjectId: "componentA",
-                expectedIsInjected: true);
+                expectedType: typeof(IInjectable));
         }
 
         [Test]
@@ -39,17 +37,13 @@ namespace Tests.Editor.SerializeInterface
             AssertBackingField(
                 typeof(ComponentRequesterWithID),
                 "__interfaceComponentB",
-                expectedType: typeof(IInjectable),
-                expectedInjectId: "componentB",
-                expectedIsInjected: true);
+                expectedType: typeof(IInjectable));
         }
 
         private void AssertBackingField(
             Type targetType,
             string backingFieldName,
-            Type expectedType,
-            string expectedInjectId,
-            bool expectedIsInjected)
+            Type expectedType)
         {
             FieldInfo field = targetType.GetField(
                 backingFieldName,
@@ -62,8 +56,6 @@ namespace Tests.Editor.SerializeInterface
 
             Assert.NotNull(attr, $"Expected InterfaceBackingFieldAttribute on field '{backingFieldName}'.");
             Assert.AreEqual(expectedType, attr.InterfaceType, "Interface type mismatch.");
-            Assert.AreEqual(expectedIsInjected, attr.IsInjected, "IsInjected mismatch.");
-            Assert.AreEqual(expectedInjectId, attr.InjectId, "InjectId mismatch.");
         }
     }
 }
