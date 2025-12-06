@@ -1,5 +1,10 @@
 ﻿# Changelog
 
+## Version 0.20.1
+
+### Fixes
+- Fixed missing serialization sync when multiple classes in an inheritance hierarchy use `SerializeInterface`, by generating `virtual` methods for base classes and `new` methods for derived classes so that `OnBeforeSerialize` and `OnAfterDeserialize` chain correctly across the hierarchy.
+
 ## Version 0.20.0
 
 ### New Inspector (faster, cleaner, more reliable)

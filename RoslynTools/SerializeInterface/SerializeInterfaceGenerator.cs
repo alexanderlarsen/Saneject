@@ -25,16 +25,18 @@ public class SerializeInterfaceGenerator : ISourceGenerator
 
         Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass = new(SymbolEqualityComparer.Default);
         Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass = new(SymbolEqualityComparer.Default);
+        HashSet<INamedTypeSymbol> classesWithInterfaces = new(SymbolEqualityComparer.Default);
 
-        CollectFields(context, receiver, fieldsByClass);
-        CollectProperties(context, receiver, propertiesByClass);
-        GenerateCode(context, fieldsByClass, propertiesByClass);
+        CollectFields(context, receiver, fieldsByClass, classesWithInterfaces);
+        CollectProperties(context, receiver, propertiesByClass, classesWithInterfaces);
+        GenerateCode(context, fieldsByClass, propertiesByClass, classesWithInterfaces);
     }
 
     private static void CollectFields(
         GeneratorExecutionContext context,
         InterfaceMemberReceiver receiver,
-        Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass)
+        Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass,
+        HashSet<INamedTypeSymbol> classesWithInterfaces)
     {
         foreach (FieldDeclarationSyntax candidate in receiver.FieldCandidates)
         {
@@ -57,6 +59,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     fieldsByClass[owner] = [];
 
                 fieldsByClass[owner].Add(fieldSymbol);
+                classesWithInterfaces.Add(owner);
             }
         }
     }
@@ -64,7 +67,8 @@ public class SerializeInterfaceGenerator : ISourceGenerator
     private static void CollectProperties(
         GeneratorExecutionContext context,
         InterfaceMemberReceiver receiver,
-        Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass)
+        Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass,
+        HashSet<INamedTypeSymbol> classesWithInterfaces)
     {
         foreach (PropertyDeclarationSyntax candidate in receiver.PropertyCandidates)
         {
@@ -85,13 +89,15 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 propertiesByClass[owner] = [];
 
             propertiesByClass[owner].Add(propertySymbol);
+            classesWithInterfaces.Add(owner);
         }
     }
 
     private static void GenerateCode(
         GeneratorExecutionContext context,
         Dictionary<INamedTypeSymbol, List<IFieldSymbol>> fieldsByClass,
-        Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass)
+        Dictionary<INamedTypeSymbol, List<IPropertySymbol>> propertiesByClass,
+        HashSet<INamedTypeSymbol> classesWithInterfaces)
     {
         IEnumerable<INamedTypeSymbol> allClasses = fieldsByClass.Keys
             .Union(propertiesByClass.Keys, SymbolEqualityComparer.Default)
@@ -194,15 +200,26 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 }
             }
 
+            bool baseClassesHaveInterfaces = classesWithInterfaces.ContainsAnyBaseClassOf(classSymbol);
+
             // Serialize interface objects
             sb.AppendLine();
             sb.AppendLine("        /// <summary>");
             sb.AppendLine("        /// Auto-generated method used by Saneject to sync interface -> backing field. You should not interact with the method directly.");
             sb.AppendLine("        /// </summary>");
             sb.AppendLine($"        [{AttributeUtils.GetEditorBrowsableAttribute(EditorBrowsableState.Never)}]");
-            sb.AppendLine("        public void OnBeforeSerialize()");
+
+            sb.AppendLine(
+                baseClassesHaveInterfaces
+                    ? "        public new void OnBeforeSerialize()"
+                    : "        public virtual void OnBeforeSerialize()"
+            );
+
             sb.AppendLine("        {");
             sb.AppendLine("#if UNITY_EDITOR");
+
+            if (baseClassesHaveInterfaces)
+                sb.AppendLine("            base.OnBeforeSerialize();");
 
             if (fieldsByClass.TryGetValue(classSymbol, out fieldSymbols))
                 foreach (IFieldSymbol fieldSymbol in fieldSymbols)
@@ -237,8 +254,17 @@ public class SerializeInterfaceGenerator : ISourceGenerator
             sb.AppendLine("        /// Auto-generated method used by Saneject to sync backing field -> interface. You should not interact with the method directly.");
             sb.AppendLine("        /// </summary>");
             sb.AppendLine($"        [{AttributeUtils.GetEditorBrowsableAttribute(EditorBrowsableState.Never)}]");
-            sb.AppendLine("        public void OnAfterDeserialize()");
+
+            sb.AppendLine(
+                baseClassesHaveInterfaces
+                    ? "        public new void OnAfterDeserialize()"
+                    : "        public virtual void OnAfterDeserialize()"
+            );
+
             sb.AppendLine("        {");
+
+            if (baseClassesHaveInterfaces)
+                sb.AppendLine("            base.OnAfterDeserialize();");
 
             // Deserialize fields
             if (fieldsByClass.TryGetValue(classSymbol, out fieldSymbols))
