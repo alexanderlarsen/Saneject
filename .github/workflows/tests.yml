@@ -15,7 +15,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        unity: [2022.3.12f1, 2022.3.62f3, 6000.0.58f2, 6000.0.63f1, 6000.1.17f1, 6000.2.6f2, 6000.2.15f1, 6000.3.0f1]
+        unity: [2022.3.12f1, 2022.3.62f1, 6000.0.23f1, 6000.0.55f1, 6000.1.16f1, 6000.2.0f1]
     steps:
       - uses: actions/checkout@v4
 
