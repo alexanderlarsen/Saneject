@@ -95,17 +95,14 @@ namespace Plugins.Saneject.Editor.Core
 
             concreteType = serializedProperty.isArray ? field.FieldType.GetElementType() : field.FieldType;
 
-            InjectAttribute injectAttribute = field.GetCustomAttribute<InjectAttribute>(true);
-
-            if (injectAttribute == null)
+            if (!field.TryGetAttribute(out InjectAttribute injectAttribute))
                 return false;
 
             suppressMissingErrors = injectAttribute.SuppressMissingErrors;
             injectId = injectAttribute.ID;
 
-            InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
 
-            if (interfaceBackingFieldAttribute != null)
+            if (field.TryGetAttribute(out InterfaceBackingFieldAttribute interfaceBackingFieldAttribute))
             {
                 interfaceType = interfaceBackingFieldAttribute.InterfaceType;
                 concreteType = null;

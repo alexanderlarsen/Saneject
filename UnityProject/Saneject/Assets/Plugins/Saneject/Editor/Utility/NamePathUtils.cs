@@ -22,9 +22,8 @@ namespace Plugins.Saneject.Editor.Utility
             string goPath = component.transform.GetHierarchyPath();
             string propertyPath = serializedProperty.propertyPath;
 
-            // If this SP maps to a real field, we might need special handling.
-            FieldInfo field = serializedProperty?.GetFieldInfo();
-            InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field?.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
+            FieldInfo field = serializedProperty.GetFieldInfo();
+            bool isInterfaceBackingField = field.HasAttribute<InterfaceBackingFieldAttribute>();
 
             // Demangle compiler auto-property backing fields for ALL segments (handles nested objects).
             // Also trim Saneject's leading underscores on the LAST segment only when drawing interface-backing fields.
@@ -36,7 +35,7 @@ namespace Plugins.Saneject.Editor.Utility
                     parts[i] = DemangleCompilerBackingName(parts[i]);
 
                     // Only trim leading '_' on the final segment when this is an interface-backing field
-                    if (i == parts.Length - 1 && interfaceBackingFieldAttribute != null)
+                    if (i == parts.Length - 1 && isInterfaceBackingField)
                         parts[i] = parts[i].TrimStart('_');
                 }
 
@@ -61,9 +60,9 @@ namespace Plugins.Saneject.Editor.Utility
         public static string GetDisplayName(this SerializedProperty serializedProperty)
         {
             string name = serializedProperty.name;
-            FieldInfo field = serializedProperty?.GetFieldInfo();
-            InterfaceBackingFieldAttribute interfaceBackingFieldAttribute = field?.GetCustomAttribute<InterfaceBackingFieldAttribute>(true);
-            return interfaceBackingFieldAttribute != null ? name.TrimStart('_') : name;
+            FieldInfo field = serializedProperty.GetFieldInfo();
+            bool isInterfaceBackingField = field.HasAttribute<InterfaceBackingFieldAttribute>();
+            return isInterfaceBackingField ? name.TrimStart('_') : name;
         }
 
         /// <summary>
