@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 namespace RoslynTools.SerializeInterface.Extensions;
@@ -57,6 +58,21 @@ public static class SymbolExtensions
         {
             if (t.ToDisplayString() == "UnityEngine.Object") return true;
             t = t.BaseType;
+        }
+
+        return false;
+    }
+
+    public static bool ContainsAnyBaseClassOf(this HashSet<INamedTypeSymbol> lookup, INamedTypeSymbol symbol)
+    {
+        INamedTypeSymbol current = symbol.BaseType;
+
+        while (current != null)
+        {
+            if (lookup.Contains(current))
+                return true;
+
+            current = current.BaseType;
         }
 
         return false;
