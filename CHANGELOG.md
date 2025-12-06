@@ -404,7 +404,7 @@ Saneject is now confirmed to work from 2022.3.12f LTS.
 ### Validation & Error Handling
 
 - Improved validation and error handling across the binding system.
-- Binding configuration issues (missing, conflicting, unused bindings) are now reported in a single pass without halting injection flow.
+- Binding configuration issues (missing, conflicting, unused bindings) are now reported in a single pass without halting the injection flow.
 - Added extended validation for binding declarations to detect invalid or contradictory configurations.
 
 ### Inspector & UI
