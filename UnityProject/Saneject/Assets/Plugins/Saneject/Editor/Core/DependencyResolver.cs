@@ -82,7 +82,8 @@ namespace Plugins.Saneject.Editor.Core
             HashSet<Type> rejectedTypes = null;
 
             if (UserSettings.FilterBySameContext)
-                found = ContextFilter.FilterBySameContext(found, serializedObject, out rejectedTypes);
+                // found = LegacyContextFilter.FilterBySameContext(found, serializedObject, out rejectedTypes);
+                found = ContextFilter.FilterBySameContext(serializedObject.targetObject, found, out rejectedTypes).ToArray();
 
             if (found.Length > 0)
             {

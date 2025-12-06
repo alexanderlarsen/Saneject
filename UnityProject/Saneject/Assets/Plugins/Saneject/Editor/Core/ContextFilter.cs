@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,89 +9,86 @@ namespace Plugins.Saneject.Editor.Core
 {
     public static class ContextFilter
     {
-        /// <summary>
-        /// Ensures that only dependencies from the same context as the injection target are kept.
-        /// Scene objects only match within the same scene, prefab instances only within their root,
-        /// and prefab assets only within their asset root. ScriptableObjects and other assets are unaffected.
-        /// </summary>
-        public static Object[] FilterBySameContext(
-            Object[] objects,
-            SerializedObject serializedObject,
-            out HashSet<Type> rejectedTypes)
+        public static IEnumerable<Object> FilterBySameContext(
+            Object referenceObject,
+            IEnumerable<Object> objects)
         {
-            rejectedTypes = null;
-
-            if (objects.Length == 0)
-                return objects;
-
-            object targetContext = GetContextKey(serializedObject.targetObject);
-            List<Object> filtered = new();
-
-            foreach (Object obj in objects)
-            {
-                if (obj is Component comp)
-                {
-                    object candidateContext = GetContextKey(comp);
-
-                    // Reject if they don't share the same context
-                    if (!Equals(targetContext, candidateContext))
-                    {
-                        rejectedTypes ??= new HashSet<Type>();
-                        rejectedTypes.Add(comp.GetType());
-                        continue;
-                    }
-                }
-
-                // Non-Component objects (ScriptableObjects, etc.) are always valid
-                filtered.Add(obj);
-            }
-
-            return filtered.ToArray();
+            return objects.Where(obj => AreSameContext(referenceObject, obj));
         }
 
-        /// <summary>
-        /// Returns a context "key" that uniquely identifies whether an object belongs
-        /// to a scene, a prefab instance, or a prefab asset. Prefab assets and their
-        /// instances normalize to the same prefab asset root so they are treated as
-        /// one context.
-        /// </summary>
-        private static object GetContextKey(Object obj)
+        public static IEnumerable<Object> FilterBySameContext(
+            Object referenceObject,
+            IEnumerable<Object> objects,
+            out HashSet<Type> rejectedTypes)
         {
-            if (obj is not Component component)
-                return null; // unrestricted (ScriptableObjects, etc.)
+            List<Object> filtered = new();
+            rejectedTypes = new HashSet<Type>();
 
-            GameObject go = component.gameObject;
+            foreach (Object obj in objects)
+                if (AreSameContext(referenceObject, obj))
+                    filtered.Add(obj);
+                else
+                    rejectedTypes.Add(obj.GetType());
 
-            // 1) Prefab INSTANCE
-            if (PrefabUtility.IsPartOfPrefabInstance(go))
+            return filtered;
+        }
+
+        public static bool AreSameContext(
+            Object a,
+            Object b)
+        {
+            GameObject aGameObject = GetGameObject(a);
+            GameObject bGameObject = GetGameObject(b);
+
+            // Non-GameObjects (ScriptableObjects, etc.) allowed in any context
+            if (!aGameObject || !bGameObject)
+                return true;
+
+            if (aGameObject == bGameObject)
+                return true;
+
+            // Prefab asset check
+            bool aIsAsset = PrefabUtility.IsPartOfPrefabAsset(aGameObject);
+            bool bIsAsset = PrefabUtility.IsPartOfPrefabAsset(bGameObject);
+
+            if (aIsAsset || bIsAsset)
             {
-                GameObject instanceRoot = PrefabUtility.GetOutermostPrefabInstanceRoot(go);
+                if (!(aIsAsset && bIsAsset))
+                    return false;
 
-                if (instanceRoot)
-                {
-                    GameObject prefabAsset = PrefabUtility.GetCorrespondingObjectFromSource(instanceRoot);
-                    return prefabAsset ? (Object)prefabAsset : instanceRoot;
-                }
+                GameObject aAssetRoot = aGameObject.transform.root.gameObject;
+                GameObject bAssetRoot = bGameObject.transform.root.gameObject;
 
-                return go.scene; // fallback
+                return aAssetRoot == bAssetRoot;
             }
 
-            // 2) Prefab ASSET in Project window
-            if (PrefabUtility.IsPartOfPrefabAsset(go))
-                // The root of the prefab asset is just its transform.root
-                return go.transform.root.gameObject;
+            // Scene check
+            if (aGameObject.scene != bGameObject.scene)
+                return false;
 
-            // 3) Open Prefab Stage
-            PrefabStage stage = PrefabStageUtility.GetPrefabStage(go);
+            // Prefab instance root check
+            GameObject aInstance = PrefabUtility.GetNearestPrefabInstanceRoot(aGameObject);
+            GameObject bInstance = PrefabUtility.GetNearestPrefabInstanceRoot(bGameObject);
 
-            if (stage && stage.prefabContentsRoot)
+            bool aIsInstance = aInstance;
+            bool bIsInstance = bInstance;
+
+            // One is prefab instance, other is plain scene object
+            if (aIsInstance != bIsInstance)
+                return false;
+
+            // Both scene objects or both inside same instance root
+            return !aIsInstance || aInstance == bInstance;
+        }
+
+        private static GameObject GetGameObject(Object obj)
+        {
+            return obj switch
             {
-                GameObject asset = PrefabUtility.GetCorrespondingObjectFromSource(stage.prefabContentsRoot);
-                return asset ? (Object)asset : stage.prefabContentsRoot;
-            }
-
-            // 4) Scene object
-            return go.scene;
+                GameObject gameObject => gameObject,
+                Component component => component.gameObject,
+                _ => null
+            };
         }
     }
 }
