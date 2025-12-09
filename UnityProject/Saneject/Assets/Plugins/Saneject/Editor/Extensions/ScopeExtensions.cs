@@ -68,7 +68,7 @@ namespace Plugins.Saneject.Editor.Extensions
         /// <summary>
         /// Set ParentScope by traversing up the transform hierarchy.
         /// </summary>
-        private static void SetParentScope(this Scope scope)
+        public static void SetParentScope(this Scope scope)
         {
             Transform current = scope.transform.parent;
 

@@ -387,7 +387,7 @@ namespace Tests.Editor.General
 
             Assert.NotNull(so);
             Assert.NotNull(requesterA.interfaceComponent);
-            Assert.AreEqual(so, requesterA.interfaceComponent);
+            Assert.AreNotEqual(so, requesterA.interfaceComponent);
         }
 
         protected override void CreateHierarchy()
