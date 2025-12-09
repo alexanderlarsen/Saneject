@@ -29,6 +29,8 @@ namespace Plugins.Saneject.Editor.Extensions
         /// </summary>
         public static Scope FindRootScope(this Scope startScope)
         {
+            // TODO: Find root scope based on parent/child tree,
+            
             Scope current = startScope;
             bool clampToPrefab = current.gameObject.IsPrefab();
 
@@ -70,6 +72,8 @@ namespace Plugins.Saneject.Editor.Extensions
         /// </summary>
         public static void SetParentScope(this Scope scope)
         {
+            // TODO: Add context filtering here. Parent is nearest ancestor scope with same context.
+            
             Transform current = scope.transform.parent;
 
             while (current)

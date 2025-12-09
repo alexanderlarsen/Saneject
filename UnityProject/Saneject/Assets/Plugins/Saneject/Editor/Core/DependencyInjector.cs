@@ -16,6 +16,13 @@ namespace Plugins.Saneject.Editor.Core
     /// </summary>
     public static class DependencyInjector
     {
+        // TODO: Change injection algorithm order:
+        /* 1. Collect scopes
+         * 2. Filter scopes by starting scope context
+         * 3. Build parent/child tree
+         * 4. Find root scope based
+         * 5. Perform DI normally and skip nested scopes with different context than starting scope */
+        
         /// <summary>
         /// Performs dependency injection for all <see cref="Scope" />s under a hierarchy root in the scene.
         /// Scans for configured bindings starting from the given scope, resolves them recursively up the hierarchy,
@@ -30,7 +37,7 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
-
+            
             Scope rootScope = startScope.FindRootScope();
 
             InjectionExecutor.RunInjectionPass

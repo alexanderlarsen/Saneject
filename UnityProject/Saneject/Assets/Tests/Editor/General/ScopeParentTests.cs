@@ -74,7 +74,9 @@ namespace Tests.Editor.General
             secondChildSceneScope.SetParentScope();
 
             Assert.IsNull(sceneRootScope.ParentScope);
+            Assert.NotNull(firstChildSceneScope.ParentScope);
             Assert.AreSame(sceneRootScope, firstChildSceneScope.ParentScope);
+            Assert.NotNull(secondChildSceneScope.ParentScope);
             Assert.AreSame(sceneRootScope, secondChildSceneScope.ParentScope);
         }
 
@@ -164,6 +166,7 @@ namespace Tests.Editor.General
             sceneChildScope.SetParentScope();
 
             Assert.IsNull(prefabScope.ParentScope);
+            Assert.IsNotNull(sceneChildScope.ParentScope);
             Assert.AreSame(sceneRootScope, sceneChildScope.ParentScope);
         }
 
@@ -197,6 +200,10 @@ namespace Tests.Editor.General
             sceneChildScopeA.SetParentScope();
             sceneChildScopeB.SetParentScope();
 
+            Assert.IsNull(sceneRootScope.ParentScope);
+            Assert.IsNull(prefabScope.ParentScope);
+            Assert.IsNotNull(sceneChildScopeA.ParentScope);
+            Assert.IsNotNull(sceneChildScopeB.ParentScope);
             Assert.AreSame(sceneRootScope, sceneChildScopeA.ParentScope);
             Assert.AreSame(sceneChildScopeA, sceneChildScopeB.ParentScope);
         }
@@ -226,6 +233,8 @@ namespace Tests.Editor.General
             midSceneScope.SetParentScope();
             prefabScope.SetParentScope();
 
+            Assert.IsNull(sceneRootScope.ParentScope);
+            Assert.IsNotNull(midSceneScope.ParentScope);
             Assert.AreSame(sceneRootScope, midSceneScope.ParentScope);
             Assert.IsNull(prefabScope.ParentScope);
         }
@@ -397,8 +406,10 @@ namespace Tests.Editor.General
             sceneScopeB.SetParentScope();
 
             Assert.IsNull(prefabRootScopeA.ParentScope);
+            Assert.IsNotNull(sceneScopeA.ParentScope);
             Assert.AreSame(sceneRootScope, sceneScopeA.ParentScope);
             Assert.IsNull(prefabRootScopeB.ParentScope);
+            Assert.IsNotNull(sceneScopeB.ParentScope);
             Assert.AreSame(sceneScopeA, sceneScopeB.ParentScope);
         }
 
@@ -432,8 +443,11 @@ namespace Tests.Editor.General
             prefabRootScopeA.SetParentScope();
             sceneScopeA.SetParentScope();
 
+            Assert.IsNull(sceneRootScope.ParentScope);
+            Assert.IsNotNull(midSceneScope.ParentScope);
             Assert.AreSame(sceneRootScope, midSceneScope.ParentScope);
             Assert.IsNull(prefabRootScopeA.ParentScope);
+            Assert.IsNotNull(sceneScopeA.ParentScope);
             Assert.AreSame(midSceneScope, sceneScopeA.ParentScope);
         }
 
@@ -470,8 +484,10 @@ namespace Tests.Editor.General
             prefabRootScopeB.SetParentScope();
             nestedSceneScope.SetParentScope();
 
+            Assert.IsNull(sceneRootScope.ParentScope);
             Assert.IsNull(prefabRootScopeA.ParentScope);
             Assert.IsNull(prefabRootScopeB.ParentScope);
+            Assert.IsNotNull(nestedSceneScope.ParentScope);
             Assert.AreSame(sceneRootScope, nestedSceneScope.ParentScope);
         }
 
