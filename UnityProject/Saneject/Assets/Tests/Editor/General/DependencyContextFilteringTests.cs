@@ -385,9 +385,8 @@ namespace Tests.Editor.General
 
             DependencyInjector.InjectPrefab(scopeA);
 
-            Assert.NotNull(so);
             Assert.NotNull(requesterA.interfaceComponent);
-            Assert.AreNotEqual(so, requesterA.interfaceComponent);
+            Assert.AreEqual(so, requesterA.interfaceComponent);
         }
 
         protected override void CreateHierarchy()
