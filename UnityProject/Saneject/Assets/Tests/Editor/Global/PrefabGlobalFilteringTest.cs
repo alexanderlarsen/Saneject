@@ -21,21 +21,21 @@ namespace Tests.Editor.Global
         public override void SetUp()
         {
             base.SetUp();
-            prevFilterBySameContext = UserSettings.FilterBySameContext;
+            prevFilterBySameContext = UserSettings.UseContextIsolation;
         }
 
         [TearDown]
         public override void TearDown()
         {
             base.TearDown();
-            UserSettings.FilterBySameContext = prevFilterBySameContext;
+            UserSettings.UseContextIsolation = prevFilterBySameContext;
         }
 
         [Test]
         public void PrefabComponent_NotRegisteredAsGlobal_WhenFilteringEnabled()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             // Add components
             TestScope scope = root.AddComponent<TestScope>();
@@ -88,7 +88,7 @@ namespace Tests.Editor.Global
         public void PrefabComponent_RegisteredAsGlobal_WhenFilteringDisabled()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = false;
+            UserSettings.UseContextIsolation = false;
 
             // Add components
             TestScope scope = root.AddComponent<TestScope>();

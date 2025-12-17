@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Editor.Core
     /// dependency resolution, serialized field and method injection, progress display, and statistics collection.
     /// <para>
     /// This class is editor-only and designed for use by higher-level tools such as
-    /// <see cref="DependencyInjector"/> and <see cref="Plugins.Saneject.Editor.BatchInjection.Core.BatchInjector"/>.
+    /// <see cref="DependencyInjector" /> and <see cref="Plugins.Saneject.Editor.BatchInjection.Core.BatchInjector" />.
     /// </para>
     /// </summary>
     public static class InjectionExecutor
@@ -32,15 +32,13 @@ namespace Plugins.Saneject.Editor.Core
         /// This is an editor-only operation and cannot be performed in Play Mode.
         /// </summary>
         public static void RunInjectionPass(
-            Func<Scope[]> collectScopes,
-            bool isPrefabInjection,
+            Scope startScope,
             bool createProxyScripts,
-            string noScopesWarning,
-            string statsLabelFirstSentence,
+            string statsLogPrefix,
             string progressBarTitle = null,
             string progressBarMessage = null,
             AssetData assetData = null,
-            InjectionStats addResultToStats = null)
+            InjectionStats globalStats = null)
         {
             if (Application.isPlaying)
             {
@@ -49,64 +47,60 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            Scope[] allScopes = collectScopes?.Invoke() ?? Array.Empty<Scope>();
+            Scope rootScope = startScope.FindRootScope();
 
-            if (allScopes.Length <= 0)
-            {
-                Debug.LogWarning(noScopesWarning);
-                stopwatch.Stop();
-                return;
-            }
+            Scope[] allScopes = rootScope
+                .GetComponentsInChildren<Scope>(includeInactive: true)
+                .Where(scope => ContextFilter.AreSameContext(scope, rootScope))
+                .ToArray();
 
             try
             {
                 if (progressBarTitle != null && progressBarMessage != null)
                     EditorUtility.DisplayProgressBar(progressBarTitle, progressBarMessage, 0);
 
-                allScopes.InitializeScopes();
+                foreach (Scope scope in allScopes)
+                {
+                    scope.SetParentScope();
+                    scope.ConfigureBindings();
+                    scope.ValidateBindings();
+                }
 
                 if (createProxyScripts && ProxyUtils.TryCreateProxyScripts(allScopes))
                 {
                     stopwatch.Stop();
-                    allScopes.Dispose();
+                    allScopes.DisposeAll();
                     EditorUtility.ClearProgressBar();
                     Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
                     return;
                 }
 
-                InjectionStats stats = new();
+                InjectionStats localStats = new();
 
-                if (!isPrefabInjection)
-                    allScopes.BuildSceneGlobalContainer(stats);
+                if (!rootScope.gameObject.IsPrefab())
+                    allScopes.BuildSceneGlobalContainer(localStats);
 
-                foreach (Scope rootScope in allScopes.Where(scope => !scope.ParentScope))
-                {
-                    if (!isPrefabInjection && rootScope.gameObject.IsPrefab())
-                    {
-                        if (UserSettings.LogPrefabSkippedDuringSceneInjection)
-                            Debug.LogWarning($"Saneject: Skipping scene injection on prefab scope '{rootScope.GetType().Name}' on '{rootScope.gameObject.name}'. The prefab must solve its dependencies using its own scope.", rootScope.gameObject);
+                InjectRecursive
+                (
+                    rootScope: rootScope,
+                    currentTransform: rootScope.transform,
+                    currentScope: rootScope,
+                    stats: localStats
+                );
 
-                        continue;
-                    }
-
-                    InjectRecursive(rootScope.transform, rootScope, stats, isPrefabInjection);
-                }
-
-                Logger.LogUnusedBindings(allScopes, stats);
+                Logger.LogUnusedBindings(allScopes, localStats);
                 stopwatch.Stop();
 
-                if (UserSettings.LogInjectionStats)
-                {
-                    stats.numScopesProcessed = allScopes.Length;
-                    stats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
-                    stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-                    stats.LogStats(statsLabelFirstSentence);
-                }
-
                 if (assetData != null)
-                    assetData.Status = InjectionStatusUtils.GetInjectionStatusFromStats(stats);
+                    assetData.Status = InjectionStatusUtils.GetInjectionStatusFromStats(localStats);
 
-                addResultToStats?.AddStats(stats);
+                localStats.numScopesProcessed = allScopes.Length;
+                localStats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
+                localStats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
+                globalStats?.AddStats(localStats);
+                
+                if (UserSettings.LogInjectionStats)
+                    localStats.LogStats(prefix: statsLogPrefix);
             }
             catch (Exception e)
             {
@@ -114,44 +108,66 @@ namespace Plugins.Saneject.Editor.Core
                 Debug.LogException(e);
             }
 
-            allScopes.Dispose();
+            allScopes.DisposeAll();
 
             if (progressBarTitle != null && progressBarMessage != null)
                 EditorUtility.ClearProgressBar();
         }
 
         private static void InjectRecursive(
+            Scope rootScope,
             Transform currentTransform,
             Scope currentScope,
-            InjectionStats stats,
-            bool isPrefabInjection)
+            InjectionStats stats)
         {
-            if (!isPrefabInjection && currentTransform.gameObject.IsPrefab())
+            if (currentTransform.TryGetComponent(out Scope localScope) && localScope != currentScope)
+                currentScope = localScope;
+
+            if (!ContextFilter.AreSameContext(rootScope, currentTransform))
             {
-                if (UserSettings.LogPrefabSkippedDuringSceneInjection)
-                    Debug.LogWarning($"Saneject: Skipping scene injection on prefab '{currentTransform.gameObject.name}'. The prefab must solve its dependencies using its own scope", currentTransform.gameObject);
+                if (UserSettings.LogDifferentContextSkipping)
+                    Debug.LogWarning($"Saneject: Skipping injection on '{currentTransform.gameObject.name}' due to different context.",
+                        currentTransform.gameObject);
+
+                foreach (Transform child in currentTransform)
+                    InjectRecursive
+                    (
+                        rootScope: rootScope,
+                        currentTransform: child,
+                        currentScope: currentScope,
+                        stats: stats
+                    );
 
                 return;
             }
-
-            if (currentTransform.TryGetComponent(out Scope localScope) && localScope != currentScope)
-                currentScope = localScope;
 
             foreach (MonoBehaviour monoBehaviour in currentTransform.GetComponents<MonoBehaviour>())
             {
                 SerializedObject serializedObject = new(monoBehaviour);
 
                 // Fields/properties first, persist changes
-                PropertyInjector.InjectSerializedProperties(serializedObject, currentScope, stats);
+                PropertyInjector.InjectSerializedProperties(serializedObject,
+                    currentScope,
+                    stats);
+
                 serializedObject.Save();
 
                 // Then method injection, persist any changes it made
-                MethodInjector.InjectMethods(serializedObject, currentScope, stats);
+                MethodInjector.InjectMethods(serializedObject,
+                    currentScope,
+                    stats);
+
                 serializedObject.Save();
             }
 
             foreach (Transform child in currentTransform)
-                InjectRecursive(child, currentScope, stats, isPrefabInjection);
+                InjectRecursive
+                (
+                    rootScope: rootScope,
+                    currentTransform: child,
+                    currentScope: currentScope,
+                    stats: stats
+                );
         }
     }
 }

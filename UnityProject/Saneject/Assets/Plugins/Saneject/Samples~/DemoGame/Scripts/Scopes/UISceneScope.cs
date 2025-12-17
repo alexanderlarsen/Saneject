@@ -26,7 +26,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
                 .WhereGameObject(go => go.name == "ScoreText");
 
             BindComponent<Button>()
-                .ToTarget<GameOverController>()
+                .ToTarget<GameOverView>()
                 .ToMember("restartButton")
                 .FromTargetDescendants()
                 .WhereGameObject(go => go.name == "RestartButton");

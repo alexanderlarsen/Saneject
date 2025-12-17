@@ -1,8 +1,56 @@
 ﻿# Changelog
 
+## Version 0.21.0
+
+### Context isolation overhaul
+
+- Replaced the previous context filtering implementation with a clearer, stricter and fully deterministic model.
+- Context isolation now applies consistently to **dependency resolution, hierarchy traversal, scope parent resolution and object injection**.
+- Scenes, prefab instances and prefab assets are treated as **hard-isolated contexts** when filtering is enabled.
+- Each prefab instance in a scene is its own context, even when multiple instances come from the same prefab asset.
+- Nested prefabs are isolated from their parents and siblings, regardless of prefab source.
+- Scene injection fully ignores prefab instances, prefab components and prefab scopes.
+- Prefab injection fully ignores scene objects, scene components and scene scopes.
+- Scene objects nested under prefabs are now injected correctly during scene injection.
+- Prefab instances no longer partially see scene scopes or bindings.
+- Fixed multiple edge cases where injection traversal stopped incorrectly or leaked across boundaries.
+
+### Dependency resolution improvements
+
+- Dependency candidates are now filtered strictly by context before assignment.
+- Rejected candidates are collected and reported together in a single, contextual error message.
+- ScriptableObjects and other non-GameObject assets remain context-agnostic and can resolve from any context.
+- Method injection fully respects the same context filtering rules as field injection.
+
+### Scope resolution changes
+
+- Scope parent resolution now respects context isolation.
+- Parent scopes are only assigned if they exist within the same context.
+- Scene scopes nested under prefabs correctly resolve to the nearest valid scene scope ancestor.
+- Prefab scopes no longer inherit parent scopes across prefab or scene boundaries.
+
+### Scope inspector improvements
+
+- Scope inspector now displays the full scope hierarchy path with a clear visual indication of context boundaries.
+- Out-of-context scopes are dimmed and include tooltips explaining why they are ignored during injection.
+- Improved multi-selection handling, including mixed scene- and prefab selection states.
+- Shows how many hierarchies or prefabs will be affected by the current injection operation. 
+
+### Tests
+
+- Refactored and expanded dependency context filtering tests to cover scenes, prefab instances, prefab assets, scriptable objects and method injection.
+- Added various scope context isolation tests covering scene injection, prefab injection, nested prefabs, sibling prefabs and mixed hierarchies.
+- Added scope parent resolution tests validating correct behavior across complex alternating scene- and prefab hierarchies.
+- Adjusted and fixed existing tests to reflect the new, stricter isolation rules.
+
+### Summary
+
+This release hardens Saneject's context isolation model. Injection behavior is now consistent, predictable and aligned with Unity's serialization constraints, eliminating multiple edge cases and making scene and prefab reuse safer.
+
 ## Version 0.20.1
 
 ### Fixes
+
 - Fixed missing serialization sync when multiple classes in an inheritance hierarchy use `SerializeInterface`, by generating `virtual` methods for base classes and `new` methods for derived classes so that `OnBeforeSerialize` and `OnAfterDeserialize` chain correctly across the hierarchy.
 
 ## Version 0.20.0
@@ -31,6 +79,7 @@
 - Auto-properties now support Header, Tooltip, Inject and other attributes with no extra work from the user.
 
 ### Bug fixes
+
 - "Show Injected Fields/Properties" user setting no longer toggles non-injected serialized interfaces.
 - Suppress missing errors via Inject-attribute now works on serialized interfaces.
 
@@ -42,18 +91,18 @@ This release is mostly invisible to end users but significantly improves Sanejec
 
 ### New batch injection system
 
-- Introducing the **Batch Injector**, a new editor window for injecting multiple scenes and prefabs across your entire project in one click, which can be quite the time-saver as your project grows. Drag scenes and prefabs into the window, toggle them on or off, and choose between injecting scenes, prefabs, or everything in a single pass.
+- Introducing the **Batch Injector**, a new editor window for injecting multiple scenes and prefabs across your entire project in one click, which can be quite the time-saver as your project grows. Drag scenes and prefabs into the window, toggle them on or off and choose between injecting scenes, prefabs or everything in a single pass.
 - **Toggle items on or off** to decide exactly which assets will be included when you run a batch injection.
-- **Inject scenes, inject prefabs, or inject everything** with dedicated buttons so you can target only what you need.
-- **Status indicators** show whether each asset succeeded, warned, or failed during the last injection, helping you spot issues at a glance.
+- **Inject scenes, inject prefabs or inject everything** with dedicated buttons so you can target only what you need.
+- **Status indicators** show whether each asset succeeded, warned or failed during the last injection, helping you spot issues at a glance.
 - **Sorting and search** let you quickly find or organize assets when working with large projects.
-- **Context menu actions** let you bulk-select, enable, disable, remove entries, clear injection status, or inject only the selected assets for fast list management.
+- **Context menu actions** let you bulk-select, enable, disable, remove entries, clear injection status or inject only the selected assets for fast list management.
 - **GUID based tracking** keeps entries stable even if assets move or get renamed in the project.
 - **Confirmation dialogs** let you avoid accidental large batch operations, with per-operation control in User Settings.
-- **Save prompts** ensure you don’t lose unsaved scene changes before injection starts.
+- **Save prompts** ensure you don't lose unsaved scene changes before injection starts.
 - **Log pinging** lets you click a log entry to highlight the scene or prefab it refers to, speeding up debugging.
 - **Scope-level injection logs** show which scopes ran and what was injected for each asset, making results transparent.
-- **Batch injection summaries** give a final report of everything processed, including counts for scenes, prefabs, scopes, fields, methods, globals, and suppressed errors.
+- **Batch injection summaries** give a final report of everything processed, including counts for scenes, prefabs, scopes, fields, methods, globals and suppressed errors.
 
 ### Tests
 
@@ -84,7 +133,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
 
 - `ToTarget<T>` now correctly supports nested serializable classes. Previously it only evaluated against the root `MonoBehaviour`, but it now recognizes and targets nested class instances as well.
 - Added **method injection** support (`[Inject]` on methods). Useful for configuration or injection into third party components.
-    - Supports single, array, and `List<T>` parameters.
+    - Supports single, array and `List<T>` parameters.
     - Works alongside field injection - methods are invoked after fields are injected.
     - Fully supported in nested `[Serializable]` classes.
     - Parameters participate in full binding resolution (context filtering, qualifiers, proxy resolution).
@@ -97,7 +146,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
 ### Tests
 
 - Added unit tests for **`ToTarget` qualification** with nested serialized classes.
-- Added unit tests for **method injection**, covering single, array, and list parameter injection paths.
+- Added unit tests for **method injection**, covering single, array and list parameter injection paths.
 
 ## Version 0.16.1
 
@@ -106,7 +155,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
 - Upgraded the project to Unity 6000.0.59f2 to address the Unity security vulnerability [CVE-2025-59489](https://unity.com/security/sept-2025-01).
 - This update ensures the project uses a patched Unity runtime that resolves the untrusted search path issue.
 - This change only affects users who clone and open the Unity project directly using the previous Unity version listed in ProjectSettings. Opening the project with the updated Unity 6000.0.59f2 or later is safe.
-- Users who install Saneject via UPM or a .unitypackage file are not affected and don’t need to take any action.
+- Users who install Saneject via UPM or a .unitypackage file are not affected and don't need to take any action.
 
 ## Version 0.16.0
 
@@ -123,7 +172,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
     - Skip prefab components by default when registering in SceneGlobalContainer (can be turned off in user settings - but not recommended).
     - Injection logic now tracks invalid bindings for clearer debugging.
 - Added MonoBehaviour script field to inspectors
-    - Both `ScopeEditor` and `SceneGlobalContainerEditor` now show the standard “Script” field with improved spacing and headers.
+    - Both `ScopeEditor` and `SceneGlobalContainerEditor` now show the standard "Script" field with improved spacing and headers.
 
 ### Fixes
 
@@ -139,7 +188,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
 
 ### Changes
 
-- Allow injecting abstract `UnityEngine.Object` types, aligning with Unity’s own `GetComponent` APIs.
+- Allow injecting abstract `UnityEngine.Object` types, aligning with Unity's own `GetComponent` APIs.
 - Simplified the filter surface API for component and asset bindings:
     - Removed built-in syntactic sugar methods (`WhereNameIs`, `WhereSiblingIndexIs`, etc.).
     - Added more hierarchy predicate-based base methods (`Where`, `WhereComponent`, `WhereTransform`, `WhereGameObject`, etc.).
@@ -148,7 +197,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
     - To mitigate boilerplate:
         - The filter system is now extensible with **user-defined syntactic sugar** methods.
         - Developers can implement only the helpers they need, keeping the API lean while retaining ergonomics.
-        - Example sugar helpers are provided as an importable **UPM sample** (“Component Filter Extensions”) demonstrating how to extend the filter API (works the same way for both component and asset filters).
+        - Example sugar helpers are provided as an importable **UPM sample** ("Component Filter Extensions") demonstrating how to extend the filter API (works the same way for both component and asset filters).
 
 ### Tests
 
@@ -162,9 +211,9 @@ This release is mostly invisible to end users but significantly improves Sanejec
 ### Features
 
 - Added contextual right-click menu item in the Inspector: **Filter Logs By This Component**.  
-  Copies the component’s full transform path into the Console search bar.
+  Copies the component's full transform path into the Console search bar.
     - For regular components, filters logs by their hierarchy path.
-    - For `Scope` components, automatically filters by the scope’s type name.  
+    - For `Scope` components, automatically filters by the scope's type name.  
       This makes it easy to isolate errors and warnings for a single component or scope in large projects.
 
 ## Version 0.13.1
@@ -221,7 +270,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
 ### Changes
 
 - Binding target filters (`WhereTargetIs<T>`) now evaluate with **`Any`** instead of **`All`**.  
-  This allows chaining multiple filters to mean “inject into `T1` **or** `T2`” instead of requiring all filters simultaneously.
+  This allows chaining multiple filters to mean "inject into `T1` **or** `T2`" instead of requiring all filters simultaneously.
 - Binding uniqueness & equality updated:
     - `Binding.Equals` now treats **target-type** and **member-name** filters as **overlap-based** (subset/superset considered equal if they can apply to the same injection site).
     - `GetHashCode` was adjusted accordingly (hash depends on presence of these filters rather than their full contents).
@@ -377,7 +426,7 @@ Saneject is now confirmed to work from 2022.3.12f LTS.
 ### Editor
 
 - Renamed `MonoBehaviourInspector` to `MonoBehaviourFallbackInspector` and made it a true fallback so it only applies when no more specific custom inspector exists.
-- Added `SanejectInspector` public API for integrating Saneject’s injection-aware inspector features into custom editors.
+- Added `SanejectInspector` public API for integrating Saneject's injection-aware inspector features into custom editors.
 - Introduced unified `SanejectInspector.DrawDefault` method to restore the full Saneject inspector UI/UX in a single call from any custom inspector.
 
 ### CI/Testing
@@ -431,7 +480,7 @@ Saneject is now confirmed to work from 2022.3.12f LTS.
 - Added a new Roslyn analyzer (`AttributesAnalyzer.dll`) that validates:
     - `[Inject]` fields must also have `[SerializeField]` or `[SerializeInterface]`.
     - `[SerializeInterface]` can only be applied to fields of interface type.
-- Added code fixes that offer context-aware actions to add, remove, or correct attribute usage.
+- Added code fixes that offer context-aware actions to add, remove or correct attribute usage.
 - Updated Roslyn tools documentation and reorganized project structure for clarity.
 
 See [Roslyn Tools in Saneject](https://github.com/alexanderlarsen/Saneject?tab=readme-ov-file#roslyn-tools-in-saneject) for more details.

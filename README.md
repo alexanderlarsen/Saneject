@@ -77,8 +77,12 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
     - [Scopes & resolution order](#scopes--resolution-order)
     - [Binding uniqueness](#binding-uniqueness)
     - [Context isolation](#context-isolation)
-        - [How it works](#how-it-works)
+        - [What counts as a context](#what-counts-as-a-context)
+        - [Rules when context isolation is enabled](#rules-when-context-isolation-is-enabled)
+            - [Dependency resolution](#dependency-resolution)
+            - [Hierarchy traversal during injection](#hierarchy-traversal-during-injection)
         - [Turning it off](#turning-it-off)
+        - [Cross-context references](#cross-context-references)
         - [Global bindings and context filtering](#global-bindings-and-context-filtering)
     - [SerializeInterface](#serializeinterface)
         - [Why Unity can't "serialize an interface"](#why-unity-cant-serialize-an-interface)
@@ -132,7 +136,7 @@ Saneject isn't meant to replace full runtime frameworks like Zenject or VContain
 - **Bind Components and Assets:** Use familiar APIs with context-aware methods. Component methods traverse GameObject hierarchies; asset bindings can load from Resources, folders, and more.
 - **Collection binding support:** Inject arrays or lists with full support for filters, scoping, and binding IDs.
 - **Method injection:** Inject dependencies as method parameters. Supports single values, arrays, and lists, and works alongside field injection, including inside nested serialized classes.
-- **Context filtering:** Prefabs and scenes are injected in isolation. A prefab inside a scene will not be used to resolve scene dependencies and vice versa.
+- **Context isolation:** Prefabs and scenes are injected in isolation. A prefab inside a scene will not be used to resolve scene dependencies and vice versa.
 - **Flexible filtering:** Predicate-based filtering system for both components and assets. Compact, composable, and extensible with user-defined helper methods.
 - **Target qualification:** Inject by ID, target type, or member name. Target bindings can specify which classes and members to apply to, working on fields, properties, and methods.
 - **Unified Scope component:** One `Scope` type handles both scenes and prefabs, with automatic context detection.
@@ -143,12 +147,12 @@ Saneject isn't meant to replace full runtime frameworks like Zenject or VContain
 - **Interface serialization with Roslyn:** `[SerializeInterface]` fields show up in the Inspector.
 - **Serialized collections of interfaces:** Arrays and lists of interfaces are fully supported, injectable, and visible in the Inspector.
 - **No more interface class wrappers:** Write plain `[SerializeInterface] IMyInterface foo` instead of wrapping or unwrapping values.
-- **Cross-scene and prefab references:** Proxies allow serialized references between scenes and prefabs while preserving Unity’s isolation rules.
+- **Cross-scene and prefab references:** Proxies allow serialized references between scenes and prefabs while preserving Unity's isolation rules.
 - **Global Scope:** Scene dependencies can be promoted to global singletons at editor time and resolved statically at runtime.
 
 ### Performance & runtime
 
-- **No runtime reflection:** Everything is injected and serialized in the editor. At runtime, it’s just Unity’s own data.
+- **No runtime reflection:** Everything is injected and serialized in the editor. At runtime, it's just Unity's own data.
 - **Proxy resolution:** Proxies resolve their targets once, then cache them for minimal overhead.
 - **Zero startup cost:** No container initialization, no additional lifecycles, no reflection or allocations during play.
 
@@ -656,39 +660,76 @@ This uniqueness model ensures deterministic resolution and early conflict detect
 
 ### Context isolation
 
-By default, Saneject enforces *context isolation* when resolving dependencies, meaning preventing references across contexts Unity can't serialize, such as scene ↔ prefab or prefab ↔ prefab, which will break when the prefab isn't present in the scene.
+Saneject enforces *context isolation* by default during injection to prevent references that Unity cannot serialize safely and to keep prefabs reusable and deterministic.
 
-When context isolation is enabled (recommended):
+Context isolation affects both dependency resolution and hierarchy traversal.
 
-- Scene objects only resolve to other objects in the same scene.
-- Prefab instances only resolve to other components within the same prefab instance.
-- Prefab assets only resolve within their own asset root.
-- Cross-context candidates (scene ↔ prefab, prefab ↔ prefab, prefab asset ↔ prefab instance, etc.) are filtered out with a clear log message.
+When enabled, scenes, prefab instances, and prefab assets are treated as separate, hard-isolated contexts.
 
-#### How it works
+#### What counts as a context
 
-For each `[Inject]` field, Saneject determines the *context key* of both sides:
+A context is one of the following:
 
-- **Injection target (field owner):** the object declaring the `[Inject]` field, property or method.
-- **Candidate dependency:** each object that could satisfy the binding.
+- A **scene**
+- A **single prefab instance** in a scene. Each prefab instance is its own context, even if multiple instances come from the same prefab asset
+- A **prefab asset** opened or injected directly from the Project window
 
-Both are compared:
+ScriptableObjects and other project assets are not context-restricted.
 
-- If the target is a scene object, only candidates from the same scene are allowed.
-- If the target is a prefab instance, only candidates from that exact prefab instance root are allowed.
-- If the target is a prefab asset, only candidates from that prefab asset root are allowed.
-- ScriptableObjects and other project assets are not restricted.
+#### Rules when context isolation is enabled
 
-Any mismatches are discarded before assignment, and the rejection is logged with the binding signature for transparency.
+##### Dependency resolution
+
+An injected dependency is only allowed if the injection target and the candidate belong to the same context.
+
+- Scene objects only resolve dependencies from the same scene
+- A prefab instance only resolves dependencies from within that same prefab instance
+- A prefab asset only resolves dependencies from within its own asset root
+- Prefab instances cannot resolve from other prefab instances, even if they share the same prefab source
+- Scene objects cannot resolve from prefab instances or prefab assets
+- ScriptableObjects and other assets can be resolved from any context
+
+Rejected candidates are filtered before assignment and reported in a single, contextual error message.
+
+##### Hierarchy traversal during injection
+
+Injection traversal is also context-aware.
+
+- **Scene injection pass**
+    - Traverses only scene objects
+    - Prefab instances, prefab scopes, and prefab components are completely ignored
+- **Prefab injection pass**
+    - Traverses only the targeted prefab instance or prefab asset hierarchy
+    - Scene objects and scene scopes are ignored
+- Nested prefabs are treated as separate contexts
+- Injecting one prefab instance never injects on its parents, siblings or children, even if they are the same prefab
+
+This applies equally to:
+
+- Field injection
+- Method injection
+- Scope parent resolution
+- Scope hierarchy traversal
 
 #### Turning it off
 
-This behavior can be controlled in **User Settings** with the toggle **Filter By Same Context**:
+Context isolation is controlled in **User Settings** via **Use Context Isolation**.
 
-- **On (default)**: Cross-context links are blocked. Use `ProxyObjects` if you need to connect a scene to a prefab or bridge between prefabs.
-- **Off**: Cross-context links are allowed. This is generally unsafe, but can be useful in rare advanced workflows.
+When disabled:
 
-For most cases, leave this enabled and rely on `ProxyObjects` for legitimate cross-context references.
+- Scenes and prefab instances form a single unified hierarchy
+- Injection traversal crosses scene and prefab boundaries
+- Dependencies can resolve freely across contexts
+
+This mode exists as an escape hatch but is unsafe for most workflows. Unity does not reliably serialize these links, and removing a prefab instance or scene will break dependencies.
+
+Keeping context isolation enabled and structuring your dependencies around that is strongly recommended.
+
+#### Cross-context references
+
+If a prefab needs to reference a scene object, or multiple scenes need to reference shared instances, use **ProxyObjects**.
+
+Proxies are serializable assets that resolve their real target at runtime and are the supported way to bridge contexts without breaking isolation.
 
 #### Global bindings and context filtering
 
@@ -696,8 +737,8 @@ The same context rules also apply to global bindings.
 
 When **Filter By Same Context** is enabled:
 
-- Prefab components are automatically filtered out when resolving global bindings, so only scene objects in the same context can be promoted to the global scope.
-- This prevents accidentally registering prefab components that might be missing at runtime.
+- Prefab components are automatically filtered out when resolving global bindings, so only scene objects in the same context can be promoted to the global scope
+- This prevents accidentally registering prefab components that might be missing at runtime
 
 Disabling the setting removes that safeguard and allows prefab components to be registered globally, which can break if the prefab is not present when the game runs.
 
@@ -976,7 +1017,7 @@ Open it via `Saneject/Batch Injector`
 - **Context menu actions** let you bulk-select, enable, disable, remove entries, clear injection status, or inject only the selected assets for fast list management.
 - **GUID based tracking** keeps entries stable even if assets move or get renamed in the project.
 - **Confirmation dialogs** let you avoid accidental large batch operations, with per-operation control in User Settings.
-- **Save prompts** ensure you don’t lose unsaved scene changes before injection starts.
+- **Save prompts** ensure you don't lose unsaved scene changes before injection starts.
 - **Log pinging** lets you click a log entry to highlight the scene or prefab it refers to, speeding up debugging.
 - **Scope-level injection logs** show which scopes ran and what was injected for each asset, making results transparent.
 - **Batch injection summaries** give a final report of everything processed, including counts for scenes, prefabs, scopes, fields, methods, globals, and suppressed errors.
@@ -1106,23 +1147,23 @@ Roslyn source code is in the [RoslynTools](RoslynTools) folder.
 
 Found under `Saneject/User Settings`, these let you customize editor and logging behavior in the Unity Editor.
 
-| Setting                                     | Description                                                                                                                                                                                                                                   |
-|---------------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting all dependencies into the full scene (excluding prefabs present in the scene).                                                                                                                    |
-| `Ask Before Hierarchy Injection`            | Show a confirmation dialog before injecting dependencies into a single scene hierarchy (excluding prefabs present in the hierarchy).                                                                                                          |
-| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting dependencies into a prefab.                                                                                                                                                                       |
-| `Filter By Same Context`                    | Enforce context isolation during injection. Scene objects only resolve with other scene objects, and prefab objects only resolve within their own prefab. Cross-context references are filtered out unless this is disabled in User Settings. |
-| `Show Injected Fields/Properties`           | Show `[Inject]` fields and `[field: Inject]` auto-properties in the Inspector.                                                                                                                                                                |
-| `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                                                                                                                                                      |
-| `Show Scope Path`                           | Display scope path, from ancestor scopes down to the selected scope, in the scope inspector.                                                                                                                                                  |
-| `Log On Proxy Instance Resolve`             | Log when a proxy resolves its target during Play Mode.                                                                                                                                                                                        |
-| `Log Global Scope Register/Unregister`      | Log when objects are registered or unregistered in the global scope during Play Mode.                                                                                                                                                         |
-| `Log Injection Stats`                       | Log a summary after injection: scopes processed, fields injected, globals added, unused/missing bindings.                                                                                                                                     |
-| `Log Prefab Skipped During Scene Injection` | Log when a prefab is skipped during a scene injection pass.                                                                                                                                                                                   |
-| `Log Unused Bindings`                       | Log when bindings are declared but never used in the current scene or prefab.                                                                                                                                                                 |
-| `Clear Logs On Injection`                   | Clear console logs before injection starts. Useful for seeing missing/invalid bindings etc. for the current injection pass only.                                                                                                              |
-| `Generated Proxy Asset Folder`              | Folder to save proxy assets auto-generated by the system.                                                                                                                                                                                     |
-| `Generate Scope Namespace From Folder`      | If enabled, new Scopes created via the editor menu get a namespace matching their folder path (relative to `Assets/`). When disabled, Scopes are generated without a namespace.                                                               |
+| Setting                                     | Description                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+|---------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Ask Before Scene Injection`                | Show a confirmation dialog before injecting all dependencies into the full scene (excluding prefabs present in the scene).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| `Ask Before Hierarchy Injection`            | Show a confirmation dialog before injecting dependencies into a single scene hierarchy (excluding prefabs present in the hierarchy).                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| `Ask Before Prefab Injection`               | Show a confirmation dialog before injecting dependencies into a prefab.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                    |
+| `Use Context Isolation`                     | Controls both dependency resolution and hierarchy traversal during injection. When enabled, scenes and prefab instances are treated as separate contexts with a hard boundary. Scene injection ignores prefab instances entirely, and prefab injection ignores scene objects. Dependencies can only resolve within the same context. When disabled, scenes and prefab instances form a single unified hierarchy. Mixed scene and prefab instance hierarchies are processed together, and dependencies may freely resolve across scene and prefab instance boundaries. NOTE: Keeping this enabled is recommended for most use cases to preserve isolation and reuse safety. |
+| `Show Injected Fields/Properties`           | Show `[Inject]` fields and `[field: Inject]` auto-properties in the Inspector.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| `Show Help Boxes`                           | Show help boxes in the Inspector on Saneject components.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                   |
+| `Show Scope Path`                           | Display scope path, from ancestor scopes down to the selected scope, in the scope inspector.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               |
+| `Log On Proxy Instance Resolve`             | Log when a proxy resolves its target during Play Mode.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| `Log Global Scope Register/Unregister`      | Log when objects are registered or unregistered in the global scope during Play Mode.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                      |
+| `Log Injection Stats`                       | Log a summary after injection: scopes processed, fields injected, globals added, unused/missing bindings.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `Log Prefab Skipped During Scene Injection` | Log when a prefab is skipped during a scene injection pass.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                |
+| `Log Unused Bindings`                       | Log when bindings are declared but never used in the current scene or prefab.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                              |
+| `Clear Logs On Injection`                   | Clear console logs before injection starts. Useful for seeing missing/invalid bindings etc. for the current injection pass only.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           |
+| `Generated Proxy Asset Folder`              | Folder to save proxy assets auto-generated by the system.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                  |
+| `Generate Scope Namespace From Folder`      | If enabled, new Scopes created via the editor menu get a namespace matching their folder path (relative to `Assets/`). When disabled, Scopes are generated without a namespace.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            |
 
 ## Tested Unity versions
 
