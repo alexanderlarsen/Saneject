@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Linq;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -10,27 +9,20 @@ namespace Plugins.Saneject.Editor.Core
 {
     public static class ContextFilter
     {
-        public static IEnumerable<Object> FilterBySameContext(
-            Object referenceObject,
-            IEnumerable<Object> objects)
-        {
-            return objects.Where(obj => AreSameContext(referenceObject, obj));
-        }
-
-        public static IEnumerable<Object> FilterBySameContext(
-            Object referenceObject,
-            IEnumerable<Object> objects,
+        public static IEnumerable<Object> FilterInjectionCandidatesBySameContext(
+            Object injectionTarget,
+            IEnumerable<Object> candidates,
             out HashSet<Type> rejectedTypes)
         {
             rejectedTypes = new HashSet<Type>();
-            
+
             if (!UserSettings.UseContextIsolation)
-                return objects;
-            
+                return candidates;
+
             List<Object> filtered = new();
 
-            foreach (Object obj in objects)
-                if (AreSameContext(referenceObject, obj))
+            foreach (Object obj in candidates)
+                if (IsDependencyCandidateAllowed(injectionTarget, obj))
                     filtered.Add(obj);
                 else
                     rejectedTypes.Add(obj.GetType());
@@ -44,7 +36,7 @@ namespace Plugins.Saneject.Editor.Core
         {
             if (!UserSettings.UseContextIsolation)
                 return true;
-            
+
             GameObject aGameObject = GetGameObject(a);
             GameObject bGameObject = GetGameObject(b);
 
@@ -87,6 +79,21 @@ namespace Plugins.Saneject.Editor.Core
 
             // Both scene objects or both inside same instance root
             return !aIsInstance || aInstance == bInstance;
+        }
+ 
+        private static bool IsDependencyCandidateAllowed(
+            Object target,
+            Object candidate)
+        {
+            GameObject candidateGameObject = GetGameObject(candidate);
+ 
+            bool candidateIsPrefabAsset = 
+                candidate == candidateGameObject && 
+                PrefabUtility.IsPartOfPrefabAsset(candidateGameObject) && 
+                candidateGameObject.transform.root == candidateGameObject.transform;
+
+            // Always allow prefabs themselves to be injected, like any other asset.
+            return candidateIsPrefabAsset || AreSameContext(target, candidate);
         }
 
         private static GameObject GetGameObject(Object obj)

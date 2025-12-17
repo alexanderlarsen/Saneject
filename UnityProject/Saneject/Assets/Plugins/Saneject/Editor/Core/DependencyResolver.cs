@@ -76,10 +76,10 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             // Locate candidates
-            Object[] found = ContextFilter.FilterBySameContext
+            Object[] found = ContextFilter.FilterInjectionCandidatesBySameContext
             (
-                referenceObject: serializedObject.targetObject,
-                objects: binding.LocateDependencies(injectionTarget).ToArray(),
+                injectionTarget: serializedObject.targetObject,
+                candidates: binding.LocateDependencies(injectionTarget).ToArray(),
                 rejectedTypes: out HashSet<Type> rejectedTypes
             ).ToArray();
 
