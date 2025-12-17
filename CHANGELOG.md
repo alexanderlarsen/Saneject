@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## Version x.xx.x
+
+### Tests
+
+- Expand tests to validate injection behavior with `Use Context Isolation` disabled
+
 ## Version 0.21.0
 
 ### Context isolation overhaul

@@ -58,6 +58,33 @@ namespace Tests.Editor.General
             Assert.IsNull(prefabRequester.interfaceComponent);
         }
 
+        [Test]
+        public void SceneInjection_InjectsNestedPrefabScope_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope sceneScope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester sceneRequester = sceneRoot.AddComponent<ComponentRequester>();
+            InjectableComponent sceneInjectable = sceneRoot.AddComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(sceneScope).FromSelf();
+
+            GameObject prefabInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefabInstance.transform.SetParent(sceneRoot.transform);
+
+            TestScope prefabScope = prefabInstance.GetComponent<TestScope>();
+            ComponentRequester prefabRequester = prefabInstance.GetComponent<ComponentRequester>();
+            InjectableComponent prefabInjectable = prefabInstance.GetComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(prefabScope).FromSelf();
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.AreEqual(sceneInjectable, sceneRequester.interfaceComponent);
+            Assert.AreEqual(prefabInjectable, prefabRequester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // S2: SceneScope injects, multiple nested PrefabScopes skipped
         //---------------------------------------------------------------------
@@ -98,6 +125,36 @@ namespace Tests.Editor.General
             Assert.IsNull(requesterB.interfaceComponent);
         }
 
+        [Test]
+        public void SceneInjection_InjectsMultipleNestedPrefabScopes_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope sceneScope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester sceneRequester = sceneRoot.AddComponent<ComponentRequester>();
+            InjectableComponent sceneInjectable = sceneRoot.AddComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(sceneScope).FromSelf();
+
+            GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject prefabB = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2"));
+
+            prefabA.transform.SetParent(sceneRoot.transform);
+            prefabB.transform.SetParent(sceneRoot.transform);
+
+            ComponentRequester requesterA = prefabA.GetComponent<ComponentRequester>();
+            ComponentRequester requesterB = prefabB.GetComponent<ComponentRequester>();
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.AreEqual(sceneInjectable, sceneRequester.interfaceComponent);
+            Assert.AreEqual(sceneInjectable, requesterA.interfaceComponent);
+            Assert.AreEqual(sceneInjectable, requesterB.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // S3: SceneScope nested under prefab is injected during scene injection
         //---------------------------------------------------------------------
@@ -132,6 +189,35 @@ namespace Tests.Editor.General
             Assert.AreEqual(childSceneInjectable, childSceneRequester.interfaceComponent);
 
             Assert.IsNull(prefabRequester.interfaceComponent);
+        }
+
+        [Test]
+        public void SceneInjection_InjectsPrefabAndSceneScope_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope prefabScope = prefabInstance.GetComponent<TestScope>();
+            ComponentRequester prefabRequester = prefabInstance.GetComponent<ComponentRequester>();
+            InjectableComponent prefabInjectable = prefabInstance.GetComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(prefabScope).FromSelf();
+
+            GameObject sceneChild = new("SceneChild");
+            sceneChild.transform.SetParent(prefabInstance.transform);
+            TestScope sceneChildScope = sceneChild.AddComponent<TestScope>();
+            ComponentRequester sceneChildRequester = sceneChild.AddComponent<ComponentRequester>();
+            InjectableComponent sceneChildInjectable = sceneChild.AddComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(sceneChildScope).FromSelf();
+
+            sceneRoot.AddComponent<TestScope>();
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.AreEqual(prefabInjectable, prefabRequester.interfaceComponent);
+            Assert.AreEqual(sceneChildInjectable, sceneChildRequester.interfaceComponent);
         }
 
         //---------------------------------------------------------------------
@@ -179,6 +265,41 @@ namespace Tests.Editor.General
             Assert.AreEqual(grandChildInjectable, grandChildRequester.interfaceComponent);
         }
 
+        [Test]
+        public void SceneInjection_InjectsAllSceneScopesInHierarchy_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject child = new("SceneChild");
+            GameObject grandChild = new("SceneGrandChild");
+
+            child.transform.SetParent(sceneRoot.transform);
+            grandChild.transform.SetParent(child.transform);
+
+            TestScope rootScope = sceneRoot.AddComponent<TestScope>();
+            TestScope childScope = child.AddComponent<TestScope>();
+            TestScope grandChildScope = grandChild.AddComponent<TestScope>();
+
+            ComponentRequester rootRequester = sceneRoot.AddComponent<ComponentRequester>();
+            ComponentRequester childRequester = child.AddComponent<ComponentRequester>();
+            ComponentRequester grandChildRequester = grandChild.AddComponent<ComponentRequester>();
+
+            InjectableComponent rootInjectable = sceneRoot.AddComponent<InjectableComponent>();
+            InjectableComponent childInjectable = child.AddComponent<InjectableComponent>();
+            InjectableComponent grandChildInjectable = grandChild.AddComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(rootScope).FromSelf();
+            BindComponent<IInjectable, InjectableComponent>(childScope).FromSelf();
+            BindComponent<IInjectable, InjectableComponent>(grandChildScope).FromSelf();
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.AreEqual(rootInjectable, rootRequester.interfaceComponent);
+            Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
+            Assert.AreEqual(grandChildInjectable, grandChildRequester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // P1: PrefabScope injects its own hierarchy (same instance)
         //---------------------------------------------------------------------
@@ -213,6 +334,33 @@ namespace Tests.Editor.General
             Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
         }
 
+        [Test]
+        public void PrefabInjection_InjectsOwnPrefabHierarchy_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope rootScope = prefabInstance.GetComponent<TestScope>();
+            ComponentRequester rootRequester = prefabInstance.GetComponent<ComponentRequester>();
+            InjectableComponent rootInjectable = prefabInstance.GetComponent<InjectableComponent>();
+
+            GameObject child = prefabInstance.transform.GetChild(0).gameObject;
+            TestScope childScope = child.GetComponent<TestScope>();
+            ComponentRequester childRequester = child.GetComponent<ComponentRequester>();
+            InjectableComponent childInjectable = child.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(rootScope).FromSelf();
+            BindComponent<IInjectable, InjectableComponent>(childScope).FromSelf();
+
+            DependencyInjector.InjectPrefab(rootScope);
+
+            Assert.AreEqual(rootInjectable, rootRequester.interfaceComponent);
+            Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // P2: Prefab under scene injects normally, scene scope skipped
         //---------------------------------------------------------------------
@@ -244,6 +392,33 @@ namespace Tests.Editor.General
             Assert.AreEqual(prefabInjectable, prefabRequester.interfaceComponent);
 
             Assert.IsNull(sceneRequester.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabInjection_InjectsSceneAndPrefab_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope sceneScope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester sceneRequester = sceneRoot.AddComponent<ComponentRequester>();
+            InjectableComponent sceneInjectable = sceneRoot.AddComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(sceneScope).FromSelf();
+
+            GameObject prefabInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefabInstance.transform.SetParent(sceneRoot.transform);
+
+            TestScope prefabScope = prefabInstance.GetComponent<TestScope>();
+            ComponentRequester prefabRequester = prefabInstance.GetComponent<ComponentRequester>();
+            InjectableComponent prefabInjectable = prefabInstance.GetComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(prefabScope).FromSelf();
+
+            DependencyInjector.InjectPrefab(prefabScope);
+
+            Assert.AreEqual(prefabInjectable, prefabRequester.interfaceComponent);
+            Assert.AreEqual(sceneInjectable, sceneRequester.interfaceComponent);
         }
 
         //---------------------------------------------------------------------
@@ -282,6 +457,30 @@ namespace Tests.Editor.General
             Assert.IsNull(sceneChildRequester.interfaceComponent);
         }
 
+        [Test]
+        public void PrefabInjection_InjectsSceneScopeNestedUnderPrefab_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope prefabScope = prefabInstance.GetComponent<TestScope>();
+
+            GameObject sceneChild = new("SceneChildScope");
+            sceneChild.transform.SetParent(prefabInstance.transform);
+
+            TestScope sceneChildScope = sceneChild.AddComponent<TestScope>();
+            ComponentRequester sceneChildRequester = sceneChild.AddComponent<ComponentRequester>();
+            InjectableComponent sceneChildInjectable = sceneChild.AddComponent<InjectableComponent>();
+            BindComponent<IInjectable, InjectableComponent>(sceneChildScope).FromSelf();
+
+            DependencyInjector.InjectPrefab(prefabScope);
+
+            Assert.AreEqual(sceneChildInjectable, sceneChildRequester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // P4: Prefab injection skips nested different prefab instance
         //---------------------------------------------------------------------
@@ -316,6 +515,38 @@ namespace Tests.Editor.General
             Assert.IsNull(childRequester.interfaceComponent);
         }
 
+        [Test]
+        public void PrefabInjection_InjectsNestedDifferentPrefabInstance_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject parentPrefab = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject childPrefab = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2"));
+
+            childPrefab.transform.SetParent(parentPrefab.transform);
+
+            TestScope parentScope = parentPrefab.GetComponent<TestScope>();
+            TestScope childScope = childPrefab.GetComponent<TestScope>();
+
+            ComponentRequester parentRequester = parentPrefab.GetComponent<ComponentRequester>();
+            ComponentRequester childRequester = childPrefab.GetComponent<ComponentRequester>();
+
+            InjectableComponent parentInjectable = parentPrefab.GetComponent<InjectableComponent>();
+            InjectableComponent childInjectable = childPrefab.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(parentScope).FromSelf();
+            BindComponent<IInjectable, InjectableComponent>(childScope).FromSelf();
+
+            DependencyInjector.InjectPrefab(parentScope);
+
+            Assert.AreEqual(parentInjectable, parentRequester.interfaceComponent);
+            Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // P5: Injecting nested prefab instance only injects that instance
         //---------------------------------------------------------------------
@@ -348,6 +579,38 @@ namespace Tests.Editor.General
             Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
 
             Assert.IsNull(parentRequester.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabInjection_InjectsParentAndChildPrefab_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject parentPrefab = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject childPrefab = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2"));
+
+            childPrefab.transform.SetParent(parentPrefab.transform);
+
+            TestScope parentScope = parentPrefab.GetComponent<TestScope>();
+            TestScope childScope = childPrefab.GetComponent<TestScope>();
+
+            ComponentRequester parentRequester = parentPrefab.GetComponent<ComponentRequester>();
+            ComponentRequester childRequester = childPrefab.GetComponent<ComponentRequester>();
+
+            InjectableComponent parentInjectable = parentPrefab.GetComponent<InjectableComponent>();
+            InjectableComponent childInjectable = childPrefab.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(parentScope).FromSelf();
+            BindComponent<IInjectable, InjectableComponent>(childScope).FromSelf();
+
+            DependencyInjector.InjectPrefab(childScope);
+
+            Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
+            Assert.AreEqual(parentInjectable, parentRequester.interfaceComponent);
         }
 
         //---------------------------------------------------------------------
@@ -468,6 +731,38 @@ namespace Tests.Editor.General
             Assert.IsNull(childRequester.interfaceComponent);
         }
 
+        [Test]
+        public void PrefabInstanceIsolation_NestedSamePrefab_ParentInject_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject parent = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject child = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            child.transform.SetParent(parent.transform);
+
+            TestScope parentScope = parent.GetComponent<TestScope>();
+            TestScope childScope = child.GetComponent<TestScope>();
+
+            ComponentRequester parentRequester = parent.GetComponent<ComponentRequester>();
+            ComponentRequester childRequester = child.GetComponent<ComponentRequester>();
+
+            InjectableComponent parentInjectable = parent.GetComponent<InjectableComponent>();
+            InjectableComponent childInjectable = child.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(parentScope).FromSelf();
+            BindComponent<IInjectable, InjectableComponent>(childScope).FromSelf();
+
+            DependencyInjector.InjectPrefab(parentScope);
+
+            Assert.AreEqual(parentInjectable, parentRequester.interfaceComponent);
+            Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // M3b: Same-prefab nested instance, injecting child skips parent
         //---------------------------------------------------------------------
@@ -500,6 +795,38 @@ namespace Tests.Editor.General
             Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
 
             Assert.IsNull(parentRequester.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabInstanceIsolation_NestedSamePrefab_ChildInject_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject parent = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject child = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            child.transform.SetParent(parent.transform);
+
+            TestScope parentScope = parent.GetComponent<TestScope>();
+            TestScope childScope = child.GetComponent<TestScope>();
+
+            ComponentRequester parentRequester = parent.GetComponent<ComponentRequester>();
+            ComponentRequester childRequester = child.GetComponent<ComponentRequester>();
+
+            InjectableComponent parentInjectable = parent.GetComponent<InjectableComponent>();
+            InjectableComponent childInjectable = child.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(parentScope).FromSelf();
+            BindComponent<IInjectable, InjectableComponent>(childScope).FromSelf();
+
+            DependencyInjector.InjectPrefab(childScope);
+
+            Assert.AreEqual(childInjectable, childRequester.interfaceComponent);
+            Assert.AreEqual(parentInjectable, parentRequester.interfaceComponent);
         }
 
         protected override void CreateHierarchy()
