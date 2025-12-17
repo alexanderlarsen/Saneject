@@ -29,12 +29,12 @@
 - Scene scopes nested under prefabs correctly resolve to the nearest valid scene scope ancestor.
 - Prefab scopes no longer inherit parent scopes across prefab or scene boundaries.
 
-### Global bindings
+### Scope inspector improvements
 
-- Global bindings now fully respect context isolation.
-- When **Filter By Same Context** is enabled, prefab components are filtered out during global registration.
-- This prevents accidentally promoting prefab-bound components to the global scope when they may not exist at runtime.
-- Disabling the setting removes this safeguard and allows prefab components to be registered globally.
+- Scope inspector now displays the full scope hierarchy path with a clear visual indication of context boundaries.
+- Out-of-context scopes are dimmed and include tooltips explaining why they are ignored during injection.
+- Improved multi-selection handling, including mixed scene- and prefab selection states.
+- Shows how many hierarchies or prefabs will be affected by the current injection operation. 
 
 ### Tests
 

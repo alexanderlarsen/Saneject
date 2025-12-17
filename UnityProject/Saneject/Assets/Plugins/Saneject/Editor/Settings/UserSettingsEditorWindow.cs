@@ -130,7 +130,8 @@ namespace Plugins.Saneject.Editor.Settings
                 "and dependencies may freely resolve across scene and prefab instance boundaries.\n\n" +
                 "NOTE: Keeping this enabled is recommended for most use cases to preserve isolation and reuse safety.",
                 currentValue: UserSettings.UseContextIsolation,
-                onChanged: newValue => UserSettings.UseContextIsolation = newValue
+                onChanged: newValue => UserSettings.UseContextIsolation = newValue,
+                repaintInspectors: true
             );
 
             EditorGUILayout.Space(10);
