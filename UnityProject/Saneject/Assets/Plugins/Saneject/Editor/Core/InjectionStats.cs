@@ -39,12 +39,12 @@ namespace Plugins.Saneject.Editor.Core
             numScopesProcessed += stats.numScopesProcessed;
         }
 
-        public void LogStats(string firstSentence)
+        public void LogStats(string prefix)
         {
             StringBuilder sb = new();
 
             sb.Append("Saneject: ");
-            sb.Append(firstSentence);
+            sb.Append(prefix);
             sb.Append(" | ");
             sb.Append(numScopesProcessed);
             sb.Append(numScopesProcessed == 1 ? " scope processed | " : " scopes processed | ");

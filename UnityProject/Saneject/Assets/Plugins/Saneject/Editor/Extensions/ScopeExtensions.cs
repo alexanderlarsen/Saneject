@@ -1,4 +1,4 @@
-﻿using Plugins.Saneject.Runtime.Extensions;
+﻿using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
@@ -10,58 +10,30 @@ namespace Plugins.Saneject.Editor.Extensions
     public static class ScopeExtensions
     {
         /// <summary>
-        /// Sets parent scopes, configures bindings, and validates them for each scope in the array.
-        /// </summary>
-        /// <param name="scopes">The array of scopes to configure.</param>
-        public static void InitializeScopes(this Scope[] scopes)
-        {
-            foreach (Scope scope in scopes)
-            {
-                scope.SetParentScope();
-                scope.ConfigureBindings();
-                scope.ValidateBindings();
-            }
-        }
-
-        /// <summary>
         /// Walks up to the root-most <see cref="Scope" />. If the start scope lives on a prefab instance,
         /// the walk stops at that prefab instance root (does not cross into the scene root).
         /// </summary>
-        public static Scope FindRootScope(this Scope startScope)
+        public static Scope FindRootScope(this Scope startingScope)
         {
-            // TODO: Find root scope based on parent/child tree,
-            
-            Scope current = startScope;
-            bool clampToPrefab = current.gameObject.IsPrefab();
+            Transform currentTransform = startingScope.transform.parent;
+            Scope rootScope = startingScope;
 
-            while (true)
+            while (currentTransform)
             {
-                Transform parent = current.transform.parent;
+                if (currentTransform.TryGetComponent(out Scope foundScope) && ContextFilter.AreSameContext(startingScope, foundScope))
+                    rootScope = foundScope;
 
-                if (!parent)
-                    break;
-
-                // If we started inside a prefab, don't cross out of it.
-                if (clampToPrefab && !parent.gameObject.IsPrefab())
-                    break;
-
-                // Start lookup from the parent, not from 'current' (GetComponentInParent includes self). 
-                Scope next = parent.GetComponentInParent<Scope>(true);
-
-                if (!next || next == current)
-                    break;
-
-                current = next;
+                currentTransform = currentTransform.parent;
             }
 
-            return current;
+            return rootScope;
         }
 
         /// <summary>
         /// Calls <see cref="Scope.Dispose" /> on each scope in the array.
         /// </summary>
         /// <param name="scopes">The array of scopes to dispose.</param>
-        public static void Dispose(this Scope[] scopes)
+        public static void DisposeAll(this Scope[] scopes)
         {
             foreach (Scope scope in scopes)
                 scope.Dispose();
@@ -70,17 +42,15 @@ namespace Plugins.Saneject.Editor.Extensions
         /// <summary>
         /// Set ParentScope by traversing up the transform hierarchy.
         /// </summary>
-        public static void SetParentScope(this Scope scope)
+        public static void SetParentScope(this Scope startingScope)
         {
-            // TODO: Add context filtering here. Parent is nearest ancestor scope with same context.
-            
-            Transform current = scope.transform.parent;
+            Transform current = startingScope.transform.parent;
 
             while (current)
             {
-                if (current.TryGetComponent(out Scope parentScope))
+                if (current.TryGetComponent(out Scope foundScope) && ContextFilter.AreSameContext(startingScope, foundScope))
                 {
-                    scope.ParentScope = parentScope;
+                    startingScope.ParentScope = foundScope;
                     break;
                 }
 

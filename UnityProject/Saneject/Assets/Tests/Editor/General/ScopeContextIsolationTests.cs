@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Plugins.Saneject.Editor.Core;
+using Plugins.Saneject.Runtime.Settings;
 using Tests.Runtime;
 using Tests.Runtime.Component;
 using UnityEditor;
@@ -15,6 +16,7 @@ namespace Tests.Editor.General
         public override void SetUp()
         {
             base.SetUp();
+            UserSettings.UseContextIsolation = true;
         }
 
         [TearDown]
@@ -192,12 +194,10 @@ namespace Tests.Editor.General
             ComponentRequester rootRequester = prefabInstance.GetComponent<ComponentRequester>();
             InjectableComponent rootInjectable = prefabInstance.GetComponent<InjectableComponent>();
 
-            GameObject child = new("ChildScope");
-            child.transform.SetParent(prefabInstance.transform);
-
-            TestScope childScope = child.AddComponent<TestScope>();
-            ComponentRequester childRequester = child.AddComponent<ComponentRequester>();
-            InjectableComponent childInjectable = child.AddComponent<InjectableComponent>();
+            GameObject child = prefabInstance.transform.GetChild(0).gameObject;
+            TestScope childScope = child.GetComponent<TestScope>();
+            ComponentRequester childRequester = child.GetComponent<ComponentRequester>();
+            InjectableComponent childInjectable = child.GetComponent<InjectableComponent>();
 
             BindComponent<IInjectable, InjectableComponent>(rootScope).FromSelf();
             BindComponent<IInjectable, InjectableComponent>(childScope).FromSelf();
@@ -269,6 +269,9 @@ namespace Tests.Editor.General
             ComponentRequester sceneChildRequester = sceneChild.AddComponent<ComponentRequester>();
             InjectableComponent sceneChildInjectable = sceneChild.AddComponent<InjectableComponent>();
             BindComponent<IInjectable, InjectableComponent>(sceneChildScope).FromSelf();
+
+            prefabRequester.interfaceComponent = null;
+            sceneChildRequester.interfaceComponent = null;
 
             DependencyInjector.InjectPrefab(prefabScope);
 

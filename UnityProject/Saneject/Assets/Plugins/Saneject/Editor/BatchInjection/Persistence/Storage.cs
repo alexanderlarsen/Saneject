@@ -31,7 +31,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Persistence
             }
             catch (Exception e)
             {
-                Debug.LogError($"Batch Injector: Failed to load configuration data. {e.Message} Creating new file.");
+                Debug.LogError($"Saneject: Batch Injector failed to load configuration data. {e.Message} Creating new file.");
                 data = new BatchInjectorData();
                 SaveData(data);
             }

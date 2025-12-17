@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Editor.Core
 
                     globalBinding.MarkUsed();
 
-                    if (UserSettings.FilterBySameContext && resolved is Component component && component.gameObject.IsPrefab())
+                    if (UserSettings.UseContextIsolation && resolved is Component component && component.gameObject.IsPrefab())
                     {
                         Debug.LogError($"Saneject: Global binding failed to locate a dependency {globalBinding.GetBindingSignature()}. Candidate rejected due to scene/prefab context mismatch: '{resolved.name}.{resolved.GetType().Name}'. Inject a non-prefab component, or disable filtering in User Settings (not recommended).");
                         stats.numMissingDependencies++;

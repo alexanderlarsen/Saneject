@@ -171,7 +171,7 @@ namespace {ns}
             AssetDatabase.CreateAsset(instance, proxyAssetPath);
             AssetDatabase.SaveAssets();
 
-            Debug.Log($"Created proxy asset at path '{proxyAssetPath}'.", instance);
+            Debug.Log($"Saneject: Created proxy asset at path '{proxyAssetPath}'.", instance);
             createdNew = true;
             return instance;
         }
@@ -330,7 +330,7 @@ namespace {ns}
         {
             if (concreteType.FullName == null)
             {
-                Debug.LogError($"Cannot check source code for proxy of {concreteType.Name}: Full name is null.");
+                Debug.LogError($"Saneject: Cannot check source code for proxy of {concreteType.Name}: Full name is null.");
                 return false;
             }
 

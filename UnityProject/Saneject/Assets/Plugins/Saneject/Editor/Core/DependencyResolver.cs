@@ -5,7 +5,6 @@ using System.Text;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Scopes;
-using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -77,13 +76,12 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             // Locate candidates
-            Object[] found = binding.LocateDependencies(injectionTarget).ToArray();
-
-            HashSet<Type> rejectedTypes = null;
-
-            if (UserSettings.FilterBySameContext)
-                // found = LegacyContextFilter.FilterBySameContext(found, serializedObject, out rejectedTypes);
-                found = ContextFilter.FilterBySameContext(serializedObject.targetObject, found, out rejectedTypes).ToArray();
+            Object[] found = ContextFilter.FilterBySameContext
+            (
+                referenceObject: serializedObject.targetObject,
+                objects: binding.LocateDependencies(injectionTarget).ToArray(),
+                rejectedTypes: out HashSet<Type> rejectedTypes
+            ).ToArray();
 
             if (found.Length > 0)
             {

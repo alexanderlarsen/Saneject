@@ -1,5 +1,6 @@
 ﻿using NUnit.Framework;
 using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Runtime.Settings;
 using Tests.Runtime;
 using UnityEditor;
 using UnityEngine;
@@ -14,6 +15,7 @@ namespace Tests.Editor.General
         public override void SetUp()
         {
             base.SetUp();
+            UserSettings.UseContextIsolation = true;
         }
 
         [TearDown]

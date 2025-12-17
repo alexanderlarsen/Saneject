@@ -18,14 +18,14 @@ namespace Tests.Editor.General
         public override void SetUp()
         {
             base.SetUp();
-            prevFilterBySameContext = UserSettings.FilterBySameContext;
+            prevFilterBySameContext = UserSettings.UseContextIsolation;
         }
 
         [TearDown]
         public override void TearDown()
         {
             base.TearDown();
-            UserSettings.FilterBySameContext = prevFilterBySameContext;
+            UserSettings.UseContextIsolation = prevFilterBySameContext;
         }
 
         [Test]
@@ -33,7 +33,7 @@ namespace Tests.Editor.General
         {
             // Suppress expected errors from filtered dependencies
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             // Add components
             TestScope scope = sceneRoot.AddComponent<TestScope>();
@@ -70,7 +70,7 @@ namespace Tests.Editor.General
         {
             // Suppress expected errors from unfiltered contexts
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = false;
+            UserSettings.UseContextIsolation = false;
 
             // Add components
             TestScope scope = sceneRoot.AddComponent<TestScope>();
@@ -107,7 +107,7 @@ namespace Tests.Editor.General
         {
             // Suppress expected errors
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             // Add components
             TestScope scope = sceneRoot.AddComponent<TestScope>();

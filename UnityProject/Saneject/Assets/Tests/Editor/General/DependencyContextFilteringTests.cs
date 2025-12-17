@@ -18,14 +18,14 @@ namespace Tests.Editor.General
         public override void SetUp()
         {
             base.SetUp();
-            prevFilter = UserSettings.FilterBySameContext;
+            prevFilter = UserSettings.UseContextIsolation;
         }
 
         [TearDown]
         public override void TearDown()
         {
             base.TearDown();
-            UserSettings.FilterBySameContext = prevFilter;
+            UserSettings.UseContextIsolation = prevFilter;
         }
 
         //---------------------------------------------------------------------
@@ -35,7 +35,7 @@ namespace Tests.Editor.General
         public void SceneAllowsSceneDependency()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             TestScope scope = sceneRoot.AddComponent<TestScope>();
             ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
@@ -86,7 +86,7 @@ namespace Tests.Editor.General
         public void SceneRejectsPrefabInstance()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             TestScope scope = sceneRoot.AddComponent<TestScope>();
             ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
@@ -111,7 +111,7 @@ namespace Tests.Editor.General
         public void SceneRejectsPrefabAsset()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             TestScope scope = sceneRoot.AddComponent<TestScope>();
             ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
@@ -134,7 +134,7 @@ namespace Tests.Editor.General
         public void PrefabInstanceAllowsSameInstanceDependency()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
                 Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
@@ -161,7 +161,7 @@ namespace Tests.Editor.General
         public void PrefabInstanceRejectsOtherPrefabInstance()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
                 Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
@@ -189,7 +189,7 @@ namespace Tests.Editor.General
         public void PrefabInstanceRejectsSceneObject()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
                 Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
@@ -214,7 +214,7 @@ namespace Tests.Editor.General
         public void PrefabInstanceRejectsPrefabAsset()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
                 Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
@@ -240,7 +240,7 @@ namespace Tests.Editor.General
         public void PrefabAssetAllowsSameAssetDependency()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabAsset = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
             TestScope scopeAsset = prefabAsset.GetComponent<TestScope>();
@@ -265,7 +265,7 @@ namespace Tests.Editor.General
         public void PrefabAssetRejectsOtherPrefabAsset()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabAssetA = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
             GameObject prefabAssetB = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2");
@@ -290,7 +290,7 @@ namespace Tests.Editor.General
         public void PrefabAssetRejectsPrefabInstance()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabAsset = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
             TestScope assetScope = prefabAsset.GetComponent<TestScope>();
@@ -316,7 +316,7 @@ namespace Tests.Editor.General
         public void PrefabAssetRejectsSceneObject()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             GameObject prefabAsset = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
             TestScope assetScope = prefabAsset.GetComponent<TestScope>();
@@ -339,7 +339,7 @@ namespace Tests.Editor.General
         public void SceneAllowsScriptableObjectDependency()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             TestScope scope = sceneRoot.AddComponent<TestScope>();
             ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
@@ -366,7 +366,7 @@ namespace Tests.Editor.General
         public void PrefabInstanceAllowsScriptableObjectDependency()
         {
             IgnoreErrorMessages();
-            UserSettings.FilterBySameContext = true;
+            UserSettings.UseContextIsolation = true;
 
             // Instantiate prefab instance A
             GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(

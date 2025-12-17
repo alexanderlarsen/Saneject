@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -21,8 +22,12 @@ namespace Plugins.Saneject.Editor.Core
             IEnumerable<Object> objects,
             out HashSet<Type> rejectedTypes)
         {
-            List<Object> filtered = new();
             rejectedTypes = new HashSet<Type>();
+            
+            if (!UserSettings.UseContextIsolation)
+                return objects;
+            
+            List<Object> filtered = new();
 
             foreach (Object obj in objects)
                 if (AreSameContext(referenceObject, obj))
@@ -37,6 +42,9 @@ namespace Plugins.Saneject.Editor.Core
             Object a,
             Object b)
         {
+            if (!UserSettings.UseContextIsolation)
+                return true;
+            
             GameObject aGameObject = GetGameObject(a);
             GameObject bGameObject = GetGameObject(b);
 

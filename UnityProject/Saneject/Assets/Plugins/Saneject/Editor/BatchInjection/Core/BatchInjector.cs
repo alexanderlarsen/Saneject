@@ -5,9 +5,11 @@ using System.Linq;
 using Plugins.Saneject.Editor.BatchInjection.Data;
 using Plugins.Saneject.Editor.BatchInjection.Enums;
 using Plugins.Saneject.Editor.Core;
+using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -60,7 +62,6 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
             Debug.Log($"<b>──────────  Saneject: Starting prefab batch injection of {prefabAssets.Length} prefab{(prefabAssets.Length != 1 ? "s" : "")}  ──────────</b>");
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            int numScopesProcessed = 0;
 
             for (int i = 0; i < prefabAssets.Length; i++)
             {
@@ -77,40 +78,32 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(path);
 
                 if (!prefabAsset)
-                {
                     Debug.LogWarning($"Saneject: Failed to load prefab asset at '{path}'. Skipping.");
-                    Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>", prefabData.Asset);
-                    continue;
-                }
 
-                Scope[] scopes = prefabAsset.GetComponentsInChildren<Scope>(true);
+                Scope rootScope = prefabAsset ? prefabAsset.GetComponentInChildren<Scope>() : null;
 
-                if (scopes.Length == 0)
+                if (rootScope)
                 {
-                    Debug.LogWarning($"Saneject: No scopes found in prefab '{prefabName}'. Nothing to inject.", prefabData.Asset);
-                    Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>", prefabData.Asset);
-                    continue;
+                    InjectionExecutor.RunInjectionPass
+                    (
+                        startScope: rootScope,
+                        createProxyScripts: false,
+                        statsLogPrefix: $"Prefab injection completed [{rootScope.gameObject.name}]",
+                        globalStats: stats
+                    );
+
+                    EditorUtility.SetDirty(prefabAsset);
+                    AssetDatabase.SaveAssets();
+                }
+                else
+                {
+                    Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
                 }
 
-                InjectionExecutor.RunInjectionPass
-                (
-                    collectScopes: () => scopes,
-                    isPrefabInjection: true,
-                    createProxyScripts: false,
-                    noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
-                    statsLabelFirstSentence: $"Prefab injection completed [{prefabName}]",
-                    addResultToStats: stats,
-                    assetData: prefabData
-                );
-
-                EditorUtility.SetDirty(prefabAsset);
-                AssetDatabase.SaveAssets();
-                numScopesProcessed += scopes.Length;
                 Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>", prefabData.Asset);
             }
 
             stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            stats.numScopesProcessed = numScopesProcessed;
             stopwatch.Stop();
             EditorUtility.ClearProgressBar();
 
@@ -118,7 +111,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 return;
 
             Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
-            stats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
+            stats.LogStats(prefix: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
         }
 
         /// <summary>
@@ -154,7 +147,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
             {
                 if (!string.IsNullOrEmpty(previousScenePath) && previousScenePath != ".")
                     EditorSceneManager.OpenScene(previousScenePath);
-                
+
                 EditorUtility.ClearProgressBar();
                 Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
                 return;
@@ -165,7 +158,6 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
             Debug.Log($"<b>──────────  Saneject: Start scene batch injection of {sceneAssets.Length} scene{(sceneAssets.Length != 1 ? "s" : "")}  ──────────</b>");
 
             Stopwatch stopwatch = Stopwatch.StartNew();
-            int numScopesProcessed = 0;
 
             for (int i = 0; i < sceneAssets.Length; i++)
             {
@@ -177,25 +169,31 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
 
                 Debug.Log($"<color={logSectionColor}><b>↓↓↓</b> Saneject: Start scene injection [{scene.name}] <b>↓↓↓</b></color>", sceneData.Asset);
 
-                Scope[] scopes = scene
+                HashSet<Scope> rootScopes = scene
                     .GetRootGameObjects()
-                    .Where(root => !root.IsPrefab())
-                    .SelectMany(root => root.GetComponentsInChildren<Scope>(includeInactive: true))
-                    .ToArray();
+                    .SelectMany(scope => scope.GetComponentsInChildren<Scope>(includeInactive: true))
+                    .Where(scope => !UserSettings.UseContextIsolation || !scope.gameObject.IsPrefab())
+                    .Select(scope => scope.FindRootScope())
+                    .ToHashSet();
 
-                InjectionExecutor.RunInjectionPass
-                (
-                    collectScopes: () => scopes,
-                    isPrefabInjection: false,
-                    createProxyScripts: false,
-                    noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
-                    statsLabelFirstSentence: $"Scene injection completed [{scene.name}]",
-                    addResultToStats: stats,
-                    assetData: sceneData
-                );
+                if (rootScopes is { Count: > 0 })
+                {
+                    foreach (Scope rootScope in rootScopes)
+                        InjectionExecutor.RunInjectionPass
+                        (
+                            startScope: rootScope,
+                            statsLogPrefix: $"Scene injection completed [{scene.name}]",
+                            createProxyScripts: false,
+                            globalStats: stats
+                        );
 
-                EditorSceneManager.SaveScene(scene);
-                numScopesProcessed += scopes.Length;
+                    EditorSceneManager.SaveScene(scene);
+                }
+                else
+                {
+                    Debug.LogWarning($"Saneject: No scopes found in scene '{scene.name}'. Nothing to inject.");
+                }
+
                 Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End scene injection [{scene.name}] <b>↑↑↑</b></color>", sceneData.Asset);
             }
 
@@ -203,7 +201,6 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 EditorSceneManager.OpenScene(previousScenePath);
 
             stats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
-            stats.numScopesProcessed = numScopesProcessed;
             stopwatch.Stop();
             EditorUtility.ClearProgressBar();
 
@@ -211,7 +208,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 return;
 
             Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
-            stats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
+            stats.LogStats(prefix: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
         }
 
         /// <summary>
@@ -244,7 +241,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
             {
                 if (!string.IsNullOrEmpty(previousScenePath) && previousScenePath != ".")
                     EditorSceneManager.OpenScene(previousScenePath);
-                
+
                 EditorUtility.ClearProgressBar();
                 Debug.LogWarning("Saneject: Injection aborted due to proxy script creation.");
                 return;
@@ -266,8 +263,8 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
             );
 
             Debug.Log("<b>──────────  Saneject: Batch injection summary  ──────────</b>");
-            sceneStats.LogStats(firstSentence: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
-            prefabStats.LogStats(firstSentence: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
+            sceneStats.LogStats(prefix: $"Scene batch injection complete | Processed {sceneAssets.Length} scenes");
+            prefabStats.LogStats(prefix: $"Prefab batch injection complete | Processed {prefabAssets.Length} prefabs");
             EditorUtility.ClearProgressBar();
         }
     }

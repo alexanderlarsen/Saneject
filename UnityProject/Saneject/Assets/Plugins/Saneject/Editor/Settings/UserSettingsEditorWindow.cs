@@ -77,7 +77,7 @@ namespace Plugins.Saneject.Editor.Settings
                     }
                     else
                     {
-                        Debug.LogWarning("Selected folder is not inside this project's Assets folder.");
+                        Debug.LogWarning("Saneject: Selected folder is not inside this project's Assets folder.");
                     }
                 }
             }
@@ -120,11 +120,17 @@ namespace Plugins.Saneject.Editor.Settings
             );
 
             DrawToggle(
-                label: "Filter By Same Context",
+                label: "Use Context Isolation",
                 tooltip:
-                "Filters out prefab components when injecting into scene objects, and filters out scene components when injecting into prefabs. This enforces context isolation. Disabling is not recommended: These links depend on a prefab being present in the scene and will break if the prefab is removed or reused somewhere else. Use ProxyObjects (BindComponent<IInterface, Concrete>().FromProxy()) for proper cross-context references. Only disable if you explicitly want scene ↔ prefab links that exist only in the current scene.",
-                currentValue: UserSettings.FilterBySameContext,
-                onChanged: newValue => UserSettings.FilterBySameContext = newValue
+                "Controls both dependency resolution and hierarchy traversal during injection.\n\n" +
+                "When enabled, scenes and prefab instances are treated as separate contexts with a hard boundary. " +
+                "Scene injection ignores prefab instances entirely, and prefab injection ignores scene objects. " +
+                "Dependencies can only resolve within the same context.\n\n" +
+                "When disabled, scenes and prefab instances form a single unified hierarchy. Mixed scene and prefab instance hierarchies are processed together, " +
+                "and dependencies may freely resolve across scene and prefab instance boundaries.\n\n" +
+                "NOTE: Keeping this enabled is recommended for most use cases to preserve isolation and reuse safety.",
+                currentValue: UserSettings.UseContextIsolation,
+                onChanged: newValue => UserSettings.UseContextIsolation = newValue
             );
 
             EditorGUILayout.Space(10);
@@ -206,10 +212,10 @@ namespace Plugins.Saneject.Editor.Settings
             );
 
             DrawToggle(
-                label: "Log Prefab Skipped During Scene Injection",
-                tooltip: "Log when a prefab is skipped during scene injection.",
-                currentValue: UserSettings.LogPrefabSkippedDuringSceneInjection,
-                onChanged: newValue => UserSettings.LogPrefabSkippedDuringSceneInjection = newValue
+                label: "Log Different Context Skipping",
+                tooltip: "Log a message when a scope is skipped due to a different context, i.e., when a prefab is skipped during scene injection pass or scene object is skipped during prefab instance injection pass.",
+                currentValue: UserSettings.LogDifferentContextSkipping,
+                onChanged: newValue => UserSettings.LogDifferentContextSkipping = newValue
             );
 
             DrawToggle(

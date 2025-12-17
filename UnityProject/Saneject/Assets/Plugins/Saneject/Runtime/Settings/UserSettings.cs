@@ -29,7 +29,7 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
-        public static bool FilterBySameContext
+        public static bool UseContextIsolation
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
@@ -68,7 +68,7 @@ namespace Plugins.Saneject.Runtime.Settings
         }
 
         // Editor Logging
-        public static bool LogPrefabSkippedDuringSceneInjection
+        public static bool LogDifferentContextSkipping
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);

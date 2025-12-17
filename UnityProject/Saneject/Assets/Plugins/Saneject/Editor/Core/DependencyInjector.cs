@@ -1,11 +1,12 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Runtime.Extensions;
 using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.SceneManagement;
-using Debug = UnityEngine.Debug;
 
 namespace Plugins.Saneject.Editor.Core
 {
@@ -20,9 +21,9 @@ namespace Plugins.Saneject.Editor.Core
         /* 1. Collect scopes
          * 2. Filter scopes by starting scope context
          * 3. Build parent/child tree
-         * 4. Find root scope based
+         * 4. Find root scope based on parent-child scope hierarchy
          * 5. Perform DI normally and skip nested scopes with different context than starting scope */
-        
+
         /// <summary>
         /// Performs dependency injection for all <see cref="Scope" />s under a hierarchy root in the scene.
         /// Scans for configured bindings starting from the given scope, resolves them recursively up the hierarchy,
@@ -37,21 +38,25 @@ namespace Plugins.Saneject.Editor.Core
                 EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
                 return;
             }
-            
+
             Scope rootScope = startScope.FindRootScope();
+
+            if (!rootScope)
+            {
+                Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
+                return;
+            }
+
+            InjectionStats stats = new();
 
             InjectionExecutor.RunInjectionPass
             (
-                collectScopes: () => rootScope
-                    .GetComponentsInChildren<Scope>(includeInactive: true)
-                    .Where(scope => !scope.gameObject.IsPrefab())
-                    .ToArray(),
-                isPrefabInjection: false,
+                startScope: startScope,
                 createProxyScripts: true,
-                noScopesWarning: "Saneject: No scopes found in hierarchy. Nothing to inject.",
-                statsLabelFirstSentence: $"Single scene hierarchy injection completed [{rootScope.gameObject.name}]",
+                $"Single scene hierarchy injection completed [{rootScope.gameObject.name}]",
                 progressBarTitle: "Saneject: Injection in progress",
-                progressBarMessage: "Injecting all objects in hierarchy"
+                progressBarMessage: "Injecting all objects in hierarchy",
+                globalStats: stats
             );
         }
 
@@ -65,27 +70,28 @@ namespace Plugins.Saneject.Editor.Core
         {
             if (Application.isPlaying)
             {
-                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                EditorUtility.DisplayDialog(title: "Saneject", message: "Injection is editor-only. Exit Play Mode to inject.", ok: "Got it");
                 return;
             }
 
-            if (!startScope)
+            Scope rootScope = startScope ? startScope.FindRootScope() : null;
+
+            if (!rootScope)
             {
                 Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
                 return;
             }
 
-            Scope rootScope = startScope.FindRootScope();
+            InjectionStats stats = new();
 
             InjectionExecutor.RunInjectionPass
             (
-                collectScopes: () => rootScope.GetComponentsInChildren<Scope>(includeInactive: true),
-                isPrefabInjection: true,
+                startScope: startScope,
                 createProxyScripts: true,
-                noScopesWarning: "Saneject: No scopes found in prefab. Nothing to inject.",
-                statsLabelFirstSentence: $"Prefab injection completed [{rootScope.gameObject.name}]",
+                statsLogPrefix: $"Prefab injection completed [{rootScope.gameObject.name}]",
                 progressBarTitle: "Saneject: Injection in progress",
-                progressBarMessage: "Injecting prefab dependencies"
+                progressBarMessage: "Injecting prefab dependencies",
+                globalStats: stats
             );
         }
 
@@ -105,20 +111,31 @@ namespace Plugins.Saneject.Editor.Core
 
             Scene scene = SceneManager.GetActiveScene();
 
-            InjectionExecutor.RunInjectionPass
-            (
-                collectScopes: () => scene
-                    .GetRootGameObjects()
-                    .Where(root => !root.IsPrefab())
-                    .SelectMany(root => root.GetComponentsInChildren<Scope>(includeInactive: true))
-                    .ToArray(),
-                isPrefabInjection: false,
-                createProxyScripts: true,
-                noScopesWarning: "Saneject: No scopes found in scene. Nothing to inject.",
-                statsLabelFirstSentence: $"Scene injection completed [{scene.name}]",
-                progressBarTitle: "Saneject: Injection in progress",
-                progressBarMessage: "Injecting all objects in scene"
-            );
+            HashSet<Scope> rootScopes = scene
+                .GetRootGameObjects()
+                .SelectMany(scope => scope.GetComponentsInChildren<Scope>(includeInactive: true))
+                .Where(scope => !UserSettings.UseContextIsolation || !scope.gameObject.IsPrefab())
+                .Select(scope => scope.FindRootScope())
+                .ToHashSet();
+
+            if (rootScopes is not { Count: > 0 })
+            {
+                Debug.LogWarning($"Saneject: No scopes found in scene '{scene.name}'. Nothing to inject.");
+                return;
+            }
+
+            InjectionStats stats = new();
+
+            foreach (Scope rootScope in rootScopes)
+                InjectionExecutor.RunInjectionPass
+                (
+                    startScope: rootScope,
+                    createProxyScripts: true,
+                    statsLogPrefix: $"Scene injection completed [{scene.name}]",
+                    progressBarTitle: "Saneject: Injection in progress",
+                    progressBarMessage: "Injecting all objects in scene",
+                    globalStats: stats
+                );
         }
     }
 }
