@@ -53,6 +53,31 @@ namespace Tests.Editor.General
             Assert.AreSame(childSceneScope, grandChildSceneScope.ParentScope);
         }
 
+        [Test]
+        public void SceneParentResolution_SimpleChain_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope sceneRootScope = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject childObject = new("SceneChild");
+            childObject.transform.SetParent(sceneRootObject.transform);
+            TestScope childSceneScope = childObject.AddComponent<TestScope>();
+
+            GameObject grandChildObject = new("SceneGrandChild");
+            grandChildObject.transform.SetParent(childObject.transform);
+            TestScope grandChildSceneScope = grandChildObject.AddComponent<TestScope>();
+
+            sceneRootScope.SetParentScope();
+            childSceneScope.SetParentScope();
+            grandChildSceneScope.SetParentScope();
+
+            Assert.IsNull(sceneRootScope.ParentScope);
+            Assert.AreSame(sceneRootScope, childSceneScope.ParentScope);
+            Assert.AreSame(childSceneScope, grandChildSceneScope.ParentScope);
+        }
+
         //---------------------------------------------------------------------
         // 2. Scene siblings share same parent
         //---------------------------------------------------------------------
@@ -80,6 +105,30 @@ namespace Tests.Editor.General
             Assert.AreSame(sceneRootScope, firstChildSceneScope.ParentScope);
             Assert.NotNull(secondChildSceneScope.ParentScope);
             Assert.AreSame(sceneRootScope, secondChildSceneScope.ParentScope);
+        }
+
+        [Test]
+        public void SceneParentResolution_SiblingsShareSameParent_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope sceneRootScope = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject a = new("SceneChildA");
+            a.transform.SetParent(sceneRootObject.transform);
+            TestScope scopeA = a.AddComponent<TestScope>();
+
+            GameObject b = new("SceneChildB");
+            b.transform.SetParent(sceneRootObject.transform);
+            TestScope scopeB = b.AddComponent<TestScope>();
+
+            sceneRootScope.SetParentScope();
+            scopeA.SetParentScope();
+            scopeB.SetParentScope();
+
+            Assert.AreSame(sceneRootScope, scopeA.ParentScope);
+            Assert.AreSame(sceneRootScope, scopeB.ParentScope);
         }
 
         //---------------------------------------------------------------------
@@ -118,6 +167,29 @@ namespace Tests.Editor.General
             Assert.AreSame(levelScopes[2], levelScopes[3].ParentScope);
         }
 
+        [Test]
+        public void SceneParentResolution_DeepChainFiveLevels_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope root = sceneRootObject.AddComponent<TestScope>();
+            TestScope current = root;
+
+            for (int i = 0; i < 4; i++)
+            {
+                GameObject go = new("Level" + i);
+                go.transform.SetParent(current.transform);
+                TestScope next = go.AddComponent<TestScope>();
+                current.SetParentScope();
+                current = next;
+            }
+
+            current.SetParentScope();
+
+            Assert.IsNull(root.ParentScope);
+        }
+
         //---------------------------------------------------------------------
         // 4. Prefab root under scene root is isolated
         //---------------------------------------------------------------------
@@ -140,6 +212,28 @@ namespace Tests.Editor.General
 
             Assert.IsNull(sceneRootScope.ParentScope);
             Assert.IsNull(prefabScope.ParentScope);
+        }
+
+        [Test]
+        public void ParentResolution_PrefabUnderSceneRoot_NotIsolated_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope sceneRootScope = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject prefab =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefab.transform.SetParent(sceneRootObject.transform);
+
+            TestScope prefabScope = prefab.GetComponent<TestScope>();
+
+            sceneRootScope.SetParentScope();
+            prefabScope.SetParentScope();
+
+            Assert.AreSame(sceneRootScope, prefabScope.ParentScope);
         }
 
         //---------------------------------------------------------------------
@@ -170,6 +264,32 @@ namespace Tests.Editor.General
             Assert.IsNull(prefabScope.ParentScope);
             Assert.IsNotNull(sceneChildScope.ParentScope);
             Assert.AreSame(sceneRootScope, sceneChildScope.ParentScope);
+        }
+
+        [Test]
+        public void ParentResolution_SceneScopeUnderPrefab_DoesNotJump_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope sceneRootScope = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject prefab =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefab.transform.SetParent(sceneRootObject.transform);
+            TestScope prefabScope = prefab.GetComponent<TestScope>();
+
+            GameObject sceneChild = new("SceneChild");
+            sceneChild.transform.SetParent(prefab.transform);
+            TestScope sceneChildScope = sceneChild.AddComponent<TestScope>();
+
+            sceneRootScope.SetParentScope();
+            prefabScope.SetParentScope();
+            sceneChildScope.SetParentScope();
+
+            Assert.AreSame(prefabScope, sceneChildScope.ParentScope);
         }
 
         //---------------------------------------------------------------------
@@ -210,6 +330,38 @@ namespace Tests.Editor.General
             Assert.AreSame(sceneChildScopeA, sceneChildScopeB.ParentScope);
         }
 
+        [Test]
+        public void ParentResolution_SceneChainUnderPrefab_NoJump_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope root = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject prefab =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefab.transform.SetParent(sceneRootObject.transform);
+            TestScope prefabScope = prefab.GetComponent<TestScope>();
+
+            GameObject a = new("A");
+            a.transform.SetParent(prefab.transform);
+            TestScope scopeA = a.AddComponent<TestScope>();
+
+            GameObject b = new("B");
+            b.transform.SetParent(a.transform);
+            TestScope scopeB = b.AddComponent<TestScope>();
+
+            root.SetParentScope();
+            prefabScope.SetParentScope();
+            scopeA.SetParentScope();
+            scopeB.SetParentScope();
+
+            Assert.AreSame(prefabScope, scopeA.ParentScope);
+            Assert.AreSame(scopeA, scopeB.ParentScope);
+        }
+
         //---------------------------------------------------------------------
         // 7. Prefab under scene chain remains isolated
         //---------------------------------------------------------------------
@@ -241,6 +393,32 @@ namespace Tests.Editor.General
             Assert.IsNull(prefabScope.ParentScope);
         }
 
+        [Test]
+        public void ParentResolution_PrefabUnderSceneChain_NotIsolated_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope root = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject mid = new("Mid");
+            mid.transform.SetParent(sceneRootObject.transform);
+            TestScope midScope = mid.AddComponent<TestScope>();
+
+            GameObject prefab =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2"));
+
+            prefab.transform.SetParent(mid.transform);
+            TestScope prefabScope = prefab.GetComponent<TestScope>();
+
+            root.SetParentScope();
+            midScope.SetParentScope();
+            prefabScope.SetParentScope();
+
+            Assert.AreSame(midScope, prefabScope.ParentScope);
+        }
+
         //---------------------------------------------------------------------
         // 8. Single prefab root is isolated
         //---------------------------------------------------------------------
@@ -257,6 +435,22 @@ namespace Tests.Editor.General
             prefabScope.SetParentScope();
 
             Assert.IsNull(prefabScope.ParentScope);
+        }
+
+        [Test]
+        public void PrefabParentResolution_SinglePrefabRoot_NotIsolated_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefab =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope scope = prefab.GetComponent<TestScope>();
+            scope.SetParentScope();
+
+            Assert.IsNull(scope.ParentScope);
         }
 
         //---------------------------------------------------------------------
@@ -287,6 +481,31 @@ namespace Tests.Editor.General
             Assert.IsNull(childPrefabScope.ParentScope);
         }
 
+        [Test]
+        public void PrefabParentResolution_NestedSamePrefab_InheritsParent_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject parent =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject child =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            child.transform.SetParent(parent.transform);
+
+            TestScope parentScope = parent.GetComponent<TestScope>();
+            TestScope childScope = child.GetComponent<TestScope>();
+
+            parentScope.SetParentScope();
+            childScope.SetParentScope();
+
+            Assert.AreSame(parentScope, childScope.ParentScope);
+        }
+
         //---------------------------------------------------------------------
         // 10. Nested different-prefab instance is isolated
         //---------------------------------------------------------------------
@@ -313,6 +532,31 @@ namespace Tests.Editor.General
 
             Assert.IsNull(prefabScopeA.ParentScope);
             Assert.IsNull(prefabScopeB.ParentScope);
+        }
+
+        [Test]
+        public void PrefabParentResolution_NestedDifferentPrefab_InheritsParent_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject parent =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject child =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2"));
+
+            child.transform.SetParent(parent.transform);
+
+            TestScope parentScope = parent.GetComponent<TestScope>();
+            TestScope childScope = child.GetComponent<TestScope>();
+
+            parentScope.SetParentScope();
+            childScope.SetParentScope();
+
+            Assert.AreSame(parentScope, childScope.ParentScope);
         }
 
         //---------------------------------------------------------------------
@@ -342,6 +586,30 @@ namespace Tests.Editor.General
             Assert.IsNull(secondPrefabScope.ParentScope);
         }
 
+        [Test]
+        public void PrefabParentResolution_SiblingSamePrefab_NotIsolated_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject a =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject b =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope scopeA = a.GetComponent<TestScope>();
+            TestScope scopeB = b.GetComponent<TestScope>();
+
+            scopeA.SetParentScope();
+            scopeB.SetParentScope();
+
+            Assert.IsNull(scopeA.ParentScope);
+            Assert.IsNull(scopeB.ParentScope);
+        }
+
         //---------------------------------------------------------------------
         // 12. Sibling prefab instances of different prefabs are isolated
         //---------------------------------------------------------------------
@@ -367,6 +635,30 @@ namespace Tests.Editor.General
 
             Assert.IsNull(prefabScopeA.ParentScope);
             Assert.IsNull(prefabScopeB.ParentScope);
+        }
+
+        [Test]
+        public void PrefabParentResolution_SiblingDifferentPrefabs_NotIsolated_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject a =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject b =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2"));
+
+            TestScope scopeA = a.GetComponent<TestScope>();
+            TestScope scopeB = b.GetComponent<TestScope>();
+
+            scopeA.SetParentScope();
+            scopeB.SetParentScope();
+
+            Assert.IsNull(scopeA.ParentScope);
+            Assert.IsNull(scopeB.ParentScope);
         }
 
         //---------------------------------------------------------------------
@@ -415,6 +707,45 @@ namespace Tests.Editor.General
             Assert.AreSame(sceneScopeA, sceneScopeB.ParentScope);
         }
 
+        [Test]
+        public void ParentResolution_AlternatingScenePrefabChain_NoIsolation()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope root = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject prefabA =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefabA.transform.SetParent(sceneRootObject.transform);
+            TestScope scopePrefabA = prefabA.GetComponent<TestScope>();
+
+            GameObject sceneA = new("SceneA");
+            sceneA.transform.SetParent(prefabA.transform);
+            TestScope scopeSceneA = sceneA.AddComponent<TestScope>();
+
+            GameObject prefabB =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2"));
+
+            prefabB.transform.SetParent(sceneA.transform);
+            TestScope scopePrefabB = prefabB.GetComponent<TestScope>();
+
+            GameObject sceneB = new("SceneB");
+            sceneB.transform.SetParent(prefabB.transform);
+            TestScope scopeSceneB = sceneB.AddComponent<TestScope>();
+
+            root.SetParentScope();
+            scopePrefabA.SetParentScope();
+            scopeSceneA.SetParentScope();
+            scopePrefabB.SetParentScope();
+            scopeSceneB.SetParentScope();
+
+            Assert.AreSame(scopePrefabB, scopeSceneB.ParentScope);
+        }
+
         //---------------------------------------------------------------------
         // 14. Alternating contexts under additional scene scope
         //---------------------------------------------------------------------
@@ -451,6 +782,37 @@ namespace Tests.Editor.General
             Assert.IsNull(prefabRootScopeA.ParentScope);
             Assert.IsNotNull(sceneScopeA.ParentScope);
             Assert.AreSame(midSceneScope, sceneScopeA.ParentScope);
+        }
+
+        [Test]
+        public void ParentResolution_AlternatingContextsUnderSceneChain_NoIsolation()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope root = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject mid = new("Mid");
+            mid.transform.SetParent(sceneRootObject.transform);
+            TestScope midScope = mid.AddComponent<TestScope>();
+
+            GameObject prefab =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefab.transform.SetParent(mid.transform);
+            TestScope prefabScope = prefab.GetComponent<TestScope>();
+
+            GameObject scene = new("Scene");
+            scene.transform.SetParent(prefab.transform);
+            TestScope sceneScope = scene.AddComponent<TestScope>();
+
+            root.SetParentScope();
+            midScope.SetParentScope();
+            prefabScope.SetParentScope();
+            sceneScope.SetParentScope();
+
+            Assert.AreSame(prefabScope, sceneScope.ParentScope);
         }
 
         //---------------------------------------------------------------------
@@ -491,6 +853,42 @@ namespace Tests.Editor.General
             Assert.IsNull(prefabRootScopeB.ParentScope);
             Assert.IsNotNull(nestedSceneScope.ParentScope);
             Assert.AreSame(sceneRootScope, nestedSceneScope.ParentScope);
+        }
+
+        [Test]
+        public void ParentResolution_SceneUnderNestedSamePrefab_DoesNotJump_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope root = sceneRootObject.AddComponent<TestScope>();
+
+            GameObject prefabA =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefabA.transform.SetParent(sceneRootObject.transform);
+            TestScope scopeA = prefabA.GetComponent<TestScope>();
+
+            GameObject prefabB =
+                (GameObject)PrefabUtility.InstantiatePrefab(
+                    Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            prefabB.transform.SetParent(prefabA.transform);
+            TestScope scopeB = prefabB.GetComponent<TestScope>();
+
+            GameObject scene =
+                new("Scene");
+
+            scene.transform.SetParent(prefabB.transform);
+            TestScope sceneScope = scene.AddComponent<TestScope>();
+
+            root.SetParentScope();
+            scopeA.SetParentScope();
+            scopeB.SetParentScope();
+            sceneScope.SetParentScope();
+
+            Assert.AreSame(scopeB, sceneScope.ParentScope);
         }
 
         protected override void CreateHierarchy()

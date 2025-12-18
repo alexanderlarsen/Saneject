@@ -54,7 +54,13 @@ namespace Plugins.Saneject.Editor.Inspectors
                 GUILayout.Label("Injection is editor-only. Exit Play Mode to inject.", EditorStyles.boldLabel);
 
             GUILayout.Space(3);
+            DrawButton(selectionType);
+            EditorGUI.EndDisabledGroup();
+            serializedObject.ApplyModifiedProperties();
+        }
 
+        private void DrawButton(SelectionType selectionType)
+        {
             switch (selectionType)
             {
                 case SelectionType.Scene:
@@ -85,10 +91,6 @@ namespace Plugins.Saneject.Editor.Inspectors
                     break;
                 }
             }
-
-            EditorGUI.EndDisabledGroup();
-
-            serializedObject.ApplyModifiedProperties();
         }
 
         private SelectionType GetSelectionType()
@@ -153,7 +155,7 @@ namespace Plugins.Saneject.Editor.Inspectors
                     node.LabelText,
                     sameContext
                         ? string.Empty
-                        : $"'{node.LabelText}' is in a different context and will not be considered when injecting from this scope."
+                        : $"'{node.LabelText}' is in a different context than the selected Scope and will not participate in injection from this Scope.\n\nContext isolation can be toggled in Saneject → User Settings → Use Context Isolation, but it's recommended to keep it on."
                 );
 
                 EditorGUILayout.BeginHorizontal();
@@ -200,21 +202,6 @@ namespace Plugins.Saneject.Editor.Inspectors
 
         private void InjectHierarchy()
         {
-            if (!Dialogs.Injection.ConfirmInjectPrefab())
-                return;
-
-            if (UserSettings.ClearLogsOnInjection)
-                ConsoleUtils.ClearLog();
-
-            foreach (Scope rootScope in rootScopes)
-            {
-                Debug.Log(rootScope.gameObject.name);
-                DependencyInjector.InjectPrefab(rootScope);
-            }
-        }
-
-        private void InjectPrefab()
-        {
             if (!Dialogs.Injection.ConfirmInjectHierarchy())
                 return;
 
@@ -222,10 +209,19 @@ namespace Plugins.Saneject.Editor.Inspectors
                 ConsoleUtils.ClearLog();
 
             foreach (Scope rootScope in rootScopes)
-            {
-                Debug.Log(rootScope.gameObject.name);
                 DependencyInjector.InjectSingleHierarchy(rootScope);
-            }
+        }
+
+        private void InjectPrefab()
+        {
+            if (!Dialogs.Injection.ConfirmInjectPrefab())
+                return;
+
+            if (UserSettings.ClearLogsOnInjection)
+                ConsoleUtils.ClearLog();
+
+            foreach (Scope rootScope in rootScopes)
+                DependencyInjector.InjectPrefab(rootScope);
         }
 
         private void BuildScopeHierarchy()

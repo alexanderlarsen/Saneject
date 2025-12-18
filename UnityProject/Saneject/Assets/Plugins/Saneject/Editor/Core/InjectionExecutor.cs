@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
 using Plugins.Saneject.Editor.BatchInjection.Data;
@@ -31,11 +32,11 @@ namespace Plugins.Saneject.Editor.Core
         /// Handles dialog confirmation, scope collection, progress display, and injection processing.
         /// This is an editor-only operation and cannot be performed in Play Mode.
         /// </summary>
-        public static void RunInjectionPass(
+        public static void RunInjectionPassSingle(
             Scope startScope,
             bool createProxyScripts,
             string statsLogPrefix,
-            string progressBarTitle = null,
+            bool logStats,
             string progressBarMessage = null,
             AssetData assetData = null,
             InjectionStats globalStats = null)
@@ -46,8 +47,15 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
+            Scope rootScope = startScope ? startScope.FindRootScope() : null;
+
+            if (!rootScope)
+            {
+                Debug.LogWarning("Saneject: No scopes found in this context. Nothing to inject.");
+                return;
+            }
+
             Stopwatch stopwatch = Stopwatch.StartNew();
-            Scope rootScope = startScope.FindRootScope();
 
             Scope[] allScopes = rootScope
                 .GetComponentsInChildren<Scope>(includeInactive: true)
@@ -56,8 +64,8 @@ namespace Plugins.Saneject.Editor.Core
 
             try
             {
-                if (progressBarTitle != null && progressBarMessage != null)
-                    EditorUtility.DisplayProgressBar(progressBarTitle, progressBarMessage, 0);
+                if (progressBarMessage != null)
+                    EditorUtility.DisplayProgressBar("Saneject: Injection in progress", progressBarMessage, 0);
 
                 foreach (Scope scope in allScopes)
                 {
@@ -98,9 +106,9 @@ namespace Plugins.Saneject.Editor.Core
                 localStats.numInvalidBindings = allScopes.Sum(scope => scope.InvalidBindingsCount);
                 localStats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 globalStats?.AddStats(localStats);
-                
-                if (UserSettings.LogInjectionStats)
-                    localStats.LogStats(prefix: statsLogPrefix);
+
+                if (logStats && UserSettings.LogInjectionStats)
+                    localStats.LogStats(prefix: $"{statsLogPrefix} [{rootScope.gameObject.name}]");
             }
             catch (Exception e)
             {
@@ -110,8 +118,48 @@ namespace Plugins.Saneject.Editor.Core
 
             allScopes.DisposeAll();
 
-            if (progressBarTitle != null && progressBarMessage != null)
+            if (progressBarMessage != null)
                 EditorUtility.ClearProgressBar();
+        }
+
+        public static void RunInjectionPassMultiple(
+            IEnumerable<Scope> startScopes,
+            bool createProxyScripts,
+            string statsLogPrefix,
+            bool logStats,
+            string progressBarMessage = null,
+            AssetData assetData = null,
+            InjectionStats globalStats = null)
+        {
+            if (Application.isPlaying)
+            {
+                EditorUtility.DisplayDialog("Saneject", "Injection is editor-only. Exit Play Mode to inject.", "Got it");
+                return;
+            }
+
+            Scope[] scopesArray = startScopes.ToArray();
+
+            if (scopesArray is not { Length: > 0 })
+            {
+                Debug.LogWarning("Saneject: No scopes found in this context. Nothing to inject.");
+                return;
+            }
+
+            globalStats ??= new InjectionStats();
+
+            foreach (Scope startScope in scopesArray)
+                RunInjectionPassSingle
+                (
+                    startScope,
+                    createProxyScripts,
+                    statsLogPrefix,
+                    logStats: false,
+                    progressBarMessage,
+                    assetData,
+                    globalStats);
+
+            if (logStats && UserSettings.LogInjectionStats)
+                globalStats.LogStats(prefix: $"{statsLogPrefix}");
         }
 
         private static void InjectRecursive(

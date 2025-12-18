@@ -84,10 +84,11 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
 
                 if (rootScope)
                 {
-                    InjectionExecutor.RunInjectionPass
+                    InjectionExecutor.RunInjectionPassSingle
                     (
                         startScope: rootScope,
                         createProxyScripts: false,
+                        logStats: true,
                         statsLogPrefix: $"Prefab injection completed [{rootScope.gameObject.name}]",
                         globalStats: stats
                     );
@@ -97,7 +98,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 }
                 else
                 {
-                    Debug.LogWarning("Saneject: No scopes found in prefab. Nothing to inject.");
+                    Debug.LogWarning("Saneject: No scopes found in this context. Nothing to inject.");
                 }
 
                 Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End prefab injection [{prefabName}] <b>↑↑↑</b></color>", prefabData.Asset);
@@ -179,11 +180,12 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 if (rootScopes is { Count: > 0 })
                 {
                     foreach (Scope rootScope in rootScopes)
-                        InjectionExecutor.RunInjectionPass
+                        InjectionExecutor.RunInjectionPassSingle
                         (
                             startScope: rootScope,
                             statsLogPrefix: $"Scene injection completed [{scene.name}]",
                             createProxyScripts: false,
+                            logStats: true,
                             globalStats: stats
                         );
 
@@ -191,7 +193,7 @@ namespace Plugins.Saneject.Editor.BatchInjection.Core
                 }
                 else
                 {
-                    Debug.LogWarning($"Saneject: No scopes found in scene '{scene.name}'. Nothing to inject.");
+                    Debug.LogWarning("Saneject: No scopes found in this context. Nothing to inject.");
                 }
 
                 Debug.Log($"<color={logSectionColor}><b>↑↑↑</b> Saneject: End scene injection [{scene.name}] <b>↑↑↑</b></color>", sceneData.Asset);

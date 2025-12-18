@@ -51,6 +51,26 @@ namespace Tests.Editor.General
             Assert.AreEqual(injectable, requester.interfaceComponent);
         }
 
+        [Test]
+        public void SceneAllowsSceneDependency_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope scope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
+            requester.interfaceComponent = null;
+            InjectableComponent injectable = sceneRoot.AddComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scope).FromSelf();
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.NotNull(injectable);
+            Assert.NotNull(requester.interfaceComponent);
+            Assert.AreEqual(injectable, requester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // 2. SCENE → DIFFERENT SCENE (simulated rejection)
         //---------------------------------------------------------------------
@@ -104,6 +124,28 @@ namespace Tests.Editor.General
             Assert.IsNull(requester.interfaceComponent);
         }
 
+        [Test]
+        public void SceneAllowsPrefabInstance_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope scope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
+            requester.interfaceComponent = null;
+
+            GameObject prefabInstance = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            InjectableComponent injectable = prefabInstance.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable);
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.AreEqual(injectable, requester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // 4. SCENE → PREFAB ASSET (rejected)
         //---------------------------------------------------------------------
@@ -125,6 +167,26 @@ namespace Tests.Editor.General
             DependencyInjector.InjectCurrentScene();
 
             Assert.IsNull(requester.interfaceComponent);
+        }
+
+        [Test]
+        public void SceneAllowsPrefabAsset_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope scope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
+            requester.interfaceComponent = null;
+
+            GameObject prefabAsset = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
+            InjectableComponent injectable = prefabAsset.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scope).FromInstance(injectable);
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.AreEqual(injectable, requester.interfaceComponent);
         }
 
         //---------------------------------------------------------------------
@@ -151,6 +213,28 @@ namespace Tests.Editor.General
 
             Assert.NotNull(injectableA);
             Assert.NotNull(requesterA.interfaceComponent);
+            Assert.AreEqual(injectableA, requesterA.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabInstanceAllowsSameInstanceDependency_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope scopeA = prefabA.GetComponent<TestScope>();
+            ComponentRequester requesterA = prefabA.GetComponent<ComponentRequester>();
+            requesterA.interfaceComponent = null;
+
+            InjectableComponent injectableA = prefabA.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scopeA).FromSelf();
+
+            DependencyInjector.InjectPrefab(scopeA);
+
             Assert.AreEqual(injectableA, requesterA.interfaceComponent);
         }
 
@@ -182,6 +266,31 @@ namespace Tests.Editor.General
             Assert.IsNull(requesterA.interfaceComponent);
         }
 
+        [Test]
+        public void PrefabInstanceAllowsOtherPrefabInstance_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            GameObject prefabB = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope scopeA = prefabA.GetComponent<TestScope>();
+            ComponentRequester requesterA = prefabA.GetComponent<ComponentRequester>();
+            requesterA.interfaceComponent = null;
+
+            InjectableComponent injectableB = prefabB.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scopeA).FromInstance(injectableB);
+
+            DependencyInjector.InjectPrefab(scopeA);
+
+            Assert.AreEqual(injectableB, requesterA.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // 7. PREFAB A → SCENE (rejected)
         //---------------------------------------------------------------------
@@ -205,6 +314,28 @@ namespace Tests.Editor.General
             DependencyInjector.InjectPrefab(scopeA);
 
             Assert.IsNull(requesterA.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabInstanceAllowsSceneObject_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope scopeA = prefabA.GetComponent<TestScope>();
+            ComponentRequester requesterA = prefabA.GetComponent<ComponentRequester>();
+            requesterA.interfaceComponent = null;
+
+            InjectableComponent sceneInjectable = sceneRoot.AddComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scopeA).FromInstance(sceneInjectable);
+
+            DependencyInjector.InjectPrefab(scopeA);
+
+            Assert.AreEqual(sceneInjectable, requesterA.interfaceComponent);
         }
 
         //---------------------------------------------------------------------
@@ -233,6 +364,29 @@ namespace Tests.Editor.General
             Assert.IsNull(requesterA.interfaceComponent);
         }
 
+        [Test]
+        public void PrefabInstanceAllowsPrefabAsset_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope scopeA = prefabA.GetComponent<TestScope>();
+            ComponentRequester requesterA = prefabA.GetComponent<ComponentRequester>();
+            requesterA.interfaceComponent = null;
+
+            GameObject prefabAsset = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
+            InjectableComponent injectableAsset = prefabAsset.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scopeA).FromInstance(injectableAsset);
+
+            DependencyInjector.InjectPrefab(scopeA);
+
+            Assert.AreEqual(injectableAsset, requesterA.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         // 9. PREFAB ASSET → SAME PREFAB ASSET (allowed)
         //---------------------------------------------------------------------
@@ -255,6 +409,26 @@ namespace Tests.Editor.General
 
             Assert.NotNull(injectable);
             Assert.NotNull(requesterAsset.interfaceComponent);
+            Assert.AreEqual(injectable, requesterAsset.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabAssetAllowsSameAssetDependency_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabAsset = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
+            TestScope scopeAsset = prefabAsset.GetComponent<TestScope>();
+            ComponentRequester requesterAsset = prefabAsset.GetComponent<ComponentRequester>();
+            requesterAsset.interfaceComponent = null;
+
+            InjectableComponent injectable = prefabAsset.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scopeAsset).FromSelf();
+
+            DependencyInjector.InjectPrefab(scopeAsset);
+
             Assert.AreEqual(injectable, requesterAsset.interfaceComponent);
         }
 
@@ -281,6 +455,28 @@ namespace Tests.Editor.General
             DependencyInjector.InjectPrefab(scopeA);
 
             Assert.IsNull(requesterA.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabAssetAllowsOtherPrefabAsset_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabAssetA = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1");
+            GameObject prefabAssetB = Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 2");
+
+            TestScope scopeA = prefabAssetA.GetComponent<TestScope>();
+            ComponentRequester requesterA = prefabAssetA.GetComponent<ComponentRequester>();
+            requesterA.interfaceComponent = null;
+
+            InjectableComponent bInjectable = prefabAssetB.GetComponent<InjectableComponent>();
+
+            BindComponent<IInjectable, InjectableComponent>(scopeA).FromInstance(bInjectable);
+
+            DependencyInjector.InjectPrefab(scopeA);
+
+            Assert.AreEqual(bInjectable, requesterA.interfaceComponent);
         }
 
         //---------------------------------------------------------------------
@@ -359,6 +555,26 @@ namespace Tests.Editor.General
             Assert.AreEqual(so, requester.interfaceComponent);
         }
 
+        [Test]
+        public void SceneAllowsScriptableObjectDependency_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            TestScope scope = sceneRoot.AddComponent<TestScope>();
+            ComponentRequester requester = sceneRoot.AddComponent<ComponentRequester>();
+            requester.interfaceComponent = null;
+
+            InjectableScriptableObject so =
+                Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 1");
+
+            BindAsset<IInjectable, InjectableScriptableObject>(scope).FromInstance(so);
+
+            DependencyInjector.InjectCurrentScene();
+
+            Assert.AreEqual(so, requester.interfaceComponent);
+        }
+
         //---------------------------------------------------------------------
         //14. PREFAB INSTANCE → SCRIPTABLE OBJECT (allowed)
         //---------------------------------------------------------------------
@@ -386,6 +602,29 @@ namespace Tests.Editor.General
             DependencyInjector.InjectPrefab(scopeA);
 
             Assert.NotNull(requesterA.interfaceComponent);
+            Assert.AreEqual(so, requesterA.interfaceComponent);
+        }
+
+        [Test]
+        public void PrefabInstanceAllowsScriptableObjectDependency_WhenIsolationDisabled()
+        {
+            IgnoreErrorMessages();
+            UserSettings.UseContextIsolation = false;
+
+            GameObject prefabA = (GameObject)PrefabUtility.InstantiatePrefab(
+                Resources.Load<GameObject>("Test/PrefabWithScopeRequesterAndInjectable 1"));
+
+            TestScope scopeA = prefabA.GetComponent<TestScope>();
+            ComponentRequester requesterA = prefabA.GetComponent<ComponentRequester>();
+            requesterA.interfaceComponent = null;
+
+            InjectableScriptableObject so =
+                Resources.Load<InjectableScriptableObject>("Test/InjectableScriptableObject 1");
+
+            BindAsset<IInjectable, InjectableScriptableObject>(scopeA).FromInstance(so);
+
+            DependencyInjector.InjectPrefab(scopeA);
+
             Assert.AreEqual(so, requesterA.interfaceComponent);
         }
 

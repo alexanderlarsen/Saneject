@@ -1,5 +1,16 @@
 ﻿# Changelog
 
+## Version 0.21.1
+
+### Fixes
+
+- Fixed minor logging issues during injection where scene and prefab logs were swapped.
+- Fixed missing logs in the batch injector.
+
+### Tests
+
+- Expanded test coverage to validate injection behavior with `Use Context Isolation` disabled.
+
 ## Version 0.21.0
 
 ### Context isolation overhaul
@@ -34,7 +45,7 @@
 - Scope inspector now displays the full scope hierarchy path with a clear visual indication of context boundaries.
 - Out-of-context scopes are dimmed and include tooltips explaining why they are ignored during injection.
 - Improved multi-selection handling, including mixed scene- and prefab selection states.
-- Shows how many hierarchies or prefabs will be affected by the current injection operation. 
+- Shows how many hierarchies or prefabs will be affected by the current injection operation.
 
 ### Tests
 
