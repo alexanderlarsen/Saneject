@@ -54,7 +54,13 @@ namespace Plugins.Saneject.Editor.Inspectors
                 GUILayout.Label("Injection is editor-only. Exit Play Mode to inject.", EditorStyles.boldLabel);
 
             GUILayout.Space(3);
+            DrawButton(selectionType);
+            EditorGUI.EndDisabledGroup();
+            serializedObject.ApplyModifiedProperties();
+        }
 
+        private void DrawButton(SelectionType selectionType)
+        {
             switch (selectionType)
             {
                 case SelectionType.Scene:
@@ -85,10 +91,6 @@ namespace Plugins.Saneject.Editor.Inspectors
                     break;
                 }
             }
-
-            EditorGUI.EndDisabledGroup();
-
-            serializedObject.ApplyModifiedProperties();
         }
 
         private SelectionType GetSelectionType()
