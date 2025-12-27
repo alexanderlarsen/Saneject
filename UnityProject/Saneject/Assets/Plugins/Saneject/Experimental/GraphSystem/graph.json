@@ -1,0 +1,590 @@
+{
+  "RootNodes": [
+    {
+      "DebugParentId": 0,
+      "Name": "Scenario (1)",
+      "Id": 32134,
+      "ContextData": {
+        "Name": "Scene Object",
+        "Id": -1244
+      },
+      "Scope": null,
+      "Components": [],
+      "Children": [
+        {
+          "DebugParentId": 32134,
+          "Name": "SceneScope1",
+          "Id": 32318,
+          "ContextData": {
+            "Name": "Scene Object",
+            "Id": -1244
+          },
+          "Scope": {
+            "DebugParentScopeId": 0,
+            "Name": "MyScope",
+            "Id": 32324,
+            "Bindings": null
+          },
+          "Components": [
+            {
+              "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+              "Id": 32322,
+              "Properties": [
+                {
+                  "Name": "dependency",
+                  "InjectId": "lol",
+                  "SuppressMissingErrors": true
+                },
+                {
+                  "Name": "<DependencyProperty>k__BackingField",
+                  "InjectId": null,
+                  "SuppressMissingErrors": false
+                }
+              ],
+              "Methods": null
+            }
+          ],
+          "Children": [
+            {
+              "DebugParentId": 32318,
+              "Name": "PrefabScope (1)",
+              "Id": 32240,
+              "ContextData": {
+                "Name": "Prefab Instance",
+                "Id": -1282
+              },
+              "Scope": {
+                "DebugParentScopeId": 0,
+                "Name": "MyScope",
+                "Id": -1284,
+                "Bindings": null
+              },
+              "Components": [
+                {
+                  "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                  "Id": -1286,
+                  "Properties": [
+                    {
+                      "Name": "dependency",
+                      "InjectId": "lol",
+                      "SuppressMissingErrors": true
+                    },
+                    {
+                      "Name": "<DependencyProperty>k__BackingField",
+                      "InjectId": null,
+                      "SuppressMissingErrors": false
+                    }
+                  ],
+                  "Methods": null
+                }
+              ],
+              "Children": [
+                {
+                  "DebugParentId": 32240,
+                  "Name": "Child",
+                  "Id": -1290,
+                  "ContextData": {
+                    "Name": "Prefab Instance",
+                    "Id": -1282
+                  },
+                  "Scope": {
+                    "DebugParentScopeId": 0,
+                    "Name": "MyScope",
+                    "Id": -1292,
+                    "Bindings": null
+                  },
+                  "Components": [
+                    {
+                      "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                      "Id": -1294,
+                      "Properties": [
+                        {
+                          "Name": "dependency",
+                          "InjectId": "lol",
+                          "SuppressMissingErrors": true
+                        },
+                        {
+                          "Name": "<DependencyProperty>k__BackingField",
+                          "InjectId": null,
+                          "SuppressMissingErrors": false
+                        }
+                      ],
+                      "Methods": null
+                    }
+                  ],
+                  "Children": [
+                    {
+                      "DebugParentId": -1290,
+                      "Name": "Child",
+                      "Id": -1298,
+                      "ContextData": {
+                        "Name": "Prefab Instance",
+                        "Id": -1282
+                      },
+                      "Scope": {
+                        "DebugParentScopeId": 0,
+                        "Name": "MyScope",
+                        "Id": -1300,
+                        "Bindings": null
+                      },
+                      "Components": [
+                        {
+                          "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                          "Id": -1302,
+                          "Properties": [
+                            {
+                              "Name": "dependency",
+                              "InjectId": "lol",
+                              "SuppressMissingErrors": true
+                            },
+                            {
+                              "Name": "<DependencyProperty>k__BackingField",
+                              "InjectId": null,
+                              "SuppressMissingErrors": false
+                            }
+                          ],
+                          "Methods": null
+                        }
+                      ],
+                      "Children": [
+                        {
+                          "DebugParentId": -1298,
+                          "Name": "Child",
+                          "Id": -1306,
+                          "ContextData": {
+                            "Name": "Prefab Instance",
+                            "Id": -1282
+                          },
+                          "Scope": {
+                            "DebugParentScopeId": 0,
+                            "Name": "MyScope",
+                            "Id": -1308,
+                            "Bindings": null
+                          },
+                          "Components": [
+                            {
+                              "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                              "Id": -1310,
+                              "Properties": [
+                                {
+                                  "Name": "dependency",
+                                  "InjectId": "lol",
+                                  "SuppressMissingErrors": true
+                                },
+                                {
+                                  "Name": "<DependencyProperty>k__BackingField",
+                                  "InjectId": null,
+                                  "SuppressMissingErrors": false
+                                }
+                              ],
+                              "Methods": null
+                            }
+                          ],
+                          "Children": []
+                        }
+                      ]
+                    }
+                  ]
+                },
+                {
+                  "DebugParentId": 32240,
+                  "Name": "SceneScope2",
+                  "Id": 32284,
+                  "ContextData": {
+                    "Name": "Scene Object",
+                    "Id": -1244
+                  },
+                  "Scope": {
+                    "DebugParentScopeId": 0,
+                    "Name": "MyScope",
+                    "Id": 32290,
+                    "Bindings": null
+                  },
+                  "Components": [
+                    {
+                      "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                      "Id": 32288,
+                      "Properties": [
+                        {
+                          "Name": "dependency",
+                          "InjectId": "lol",
+                          "SuppressMissingErrors": true
+                        },
+                        {
+                          "Name": "<DependencyProperty>k__BackingField",
+                          "InjectId": null,
+                          "SuppressMissingErrors": false
+                        }
+                      ],
+                      "Methods": null
+                    }
+                  ],
+                  "Children": [
+                    {
+                      "DebugParentId": 32284,
+                      "Name": "Prefab 1",
+                      "Id": 32194,
+                      "ContextData": {
+                        "Name": "Prefab Instance",
+                        "Id": -1372
+                      },
+                      "Scope": {
+                        "DebugParentScopeId": 0,
+                        "Name": "MyScope",
+                        "Id": -1374,
+                        "Bindings": null
+                      },
+                      "Components": [
+                        {
+                          "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                          "Id": -1376,
+                          "Properties": [
+                            {
+                              "Name": "dependency",
+                              "InjectId": "lol",
+                              "SuppressMissingErrors": true
+                            },
+                            {
+                              "Name": "<DependencyProperty>k__BackingField",
+                              "InjectId": null,
+                              "SuppressMissingErrors": false
+                            }
+                          ],
+                          "Methods": null
+                        }
+                      ],
+                      "Children": [
+                        {
+                          "DebugParentId": 32194,
+                          "Name": "PrefabScope (2)",
+                          "Id": 32294,
+                          "ContextData": {
+                            "Name": "Prefab Instance",
+                            "Id": -1468
+                          },
+                          "Scope": {
+                            "DebugParentScopeId": 0,
+                            "Name": "MyScope",
+                            "Id": -1470,
+                            "Bindings": null
+                          },
+                          "Components": [
+                            {
+                              "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                              "Id": -1472,
+                              "Properties": [
+                                {
+                                  "Name": "dependency",
+                                  "InjectId": "lol",
+                                  "SuppressMissingErrors": true
+                                },
+                                {
+                                  "Name": "<DependencyProperty>k__BackingField",
+                                  "InjectId": null,
+                                  "SuppressMissingErrors": false
+                                }
+                              ],
+                              "Methods": null
+                            }
+                          ],
+                          "Children": [
+                            {
+                              "DebugParentId": 32294,
+                              "Name": "Child",
+                              "Id": -1476,
+                              "ContextData": {
+                                "Name": "Prefab Instance",
+                                "Id": -1468
+                              },
+                              "Scope": {
+                                "DebugParentScopeId": 0,
+                                "Name": "MyScope",
+                                "Id": -1478,
+                                "Bindings": null
+                              },
+                              "Components": [
+                                {
+                                  "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                  "Id": -1480,
+                                  "Properties": [
+                                    {
+                                      "Name": "dependency",
+                                      "InjectId": "lol",
+                                      "SuppressMissingErrors": true
+                                    },
+                                    {
+                                      "Name": "<DependencyProperty>k__BackingField",
+                                      "InjectId": null,
+                                      "SuppressMissingErrors": false
+                                    }
+                                  ],
+                                  "Methods": null
+                                }
+                              ],
+                              "Children": [
+                                {
+                                  "DebugParentId": -1476,
+                                  "Name": "Child",
+                                  "Id": -1484,
+                                  "ContextData": {
+                                    "Name": "Prefab Instance",
+                                    "Id": -1468
+                                  },
+                                  "Scope": {
+                                    "DebugParentScopeId": 0,
+                                    "Name": "MyScope",
+                                    "Id": -1486,
+                                    "Bindings": null
+                                  },
+                                  "Components": [
+                                    {
+                                      "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                      "Id": -1488,
+                                      "Properties": [
+                                        {
+                                          "Name": "dependency",
+                                          "InjectId": "lol",
+                                          "SuppressMissingErrors": true
+                                        },
+                                        {
+                                          "Name": "<DependencyProperty>k__BackingField",
+                                          "InjectId": null,
+                                          "SuppressMissingErrors": false
+                                        }
+                                      ],
+                                      "Methods": null
+                                    }
+                                  ],
+                                  "Children": [
+                                    {
+                                      "DebugParentId": -1484,
+                                      "Name": "Child",
+                                      "Id": -1492,
+                                      "ContextData": {
+                                        "Name": "Prefab Instance",
+                                        "Id": -1468
+                                      },
+                                      "Scope": {
+                                        "DebugParentScopeId": 0,
+                                        "Name": "MyScope",
+                                        "Id": -1494,
+                                        "Bindings": null
+                                      },
+                                      "Components": [
+                                        {
+                                          "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                          "Id": -1496,
+                                          "Properties": [
+                                            {
+                                              "Name": "dependency",
+                                              "InjectId": "lol",
+                                              "SuppressMissingErrors": true
+                                            },
+                                            {
+                                              "Name": "<DependencyProperty>k__BackingField",
+                                              "InjectId": null,
+                                              "SuppressMissingErrors": false
+                                            }
+                                          ],
+                                          "Methods": null
+                                        }
+                                      ],
+                                      "Children": []
+                                    }
+                                  ]
+                                }
+                              ]
+                            },
+                            {
+                              "DebugParentId": 32294,
+                              "Name": "SceneScope2",
+                              "Id": 32138,
+                              "ContextData": {
+                                "Name": "Scene Object",
+                                "Id": -1244
+                              },
+                              "Scope": {
+                                "DebugParentScopeId": 0,
+                                "Name": "MyScope",
+                                "Id": 32144,
+                                "Bindings": null
+                              },
+                              "Components": [
+                                {
+                                  "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                  "Id": 32142,
+                                  "Properties": [
+                                    {
+                                      "Name": "dependency",
+                                      "InjectId": "lol",
+                                      "SuppressMissingErrors": true
+                                    },
+                                    {
+                                      "Name": "<DependencyProperty>k__BackingField",
+                                      "InjectId": null,
+                                      "SuppressMissingErrors": false
+                                    }
+                                  ],
+                                  "Methods": null
+                                }
+                              ],
+                              "Children": [
+                                {
+                                  "DebugParentId": 32138,
+                                  "Name": "Prefab",
+                                  "Id": 32328,
+                                  "ContextData": {
+                                    "Name": "Prefab Instance",
+                                    "Id": -1378
+                                  },
+                                  "Scope": {
+                                    "DebugParentScopeId": 0,
+                                    "Name": "MyScope",
+                                    "Id": -1380,
+                                    "Bindings": null
+                                  },
+                                  "Components": [
+                                    {
+                                      "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                      "Id": -1382,
+                                      "Properties": [
+                                        {
+                                          "Name": "dependency",
+                                          "InjectId": "lol",
+                                          "SuppressMissingErrors": true
+                                        },
+                                        {
+                                          "Name": "<DependencyProperty>k__BackingField",
+                                          "InjectId": null,
+                                          "SuppressMissingErrors": false
+                                        }
+                                      ],
+                                      "Methods": null
+                                    }
+                                  ],
+                                  "Children": [
+                                    {
+                                      "DebugParentId": 32328,
+                                      "Name": "Child",
+                                      "Id": -1386,
+                                      "ContextData": {
+                                        "Name": "Prefab Instance",
+                                        "Id": -1378
+                                      },
+                                      "Scope": {
+                                        "DebugParentScopeId": 0,
+                                        "Name": "MyScope",
+                                        "Id": -1388,
+                                        "Bindings": null
+                                      },
+                                      "Components": [
+                                        {
+                                          "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                          "Id": -1390,
+                                          "Properties": [
+                                            {
+                                              "Name": "dependency",
+                                              "InjectId": "lol",
+                                              "SuppressMissingErrors": true
+                                            },
+                                            {
+                                              "Name": "<DependencyProperty>k__BackingField",
+                                              "InjectId": null,
+                                              "SuppressMissingErrors": false
+                                            }
+                                          ],
+                                          "Methods": null
+                                        }
+                                      ],
+                                      "Children": [
+                                        {
+                                          "DebugParentId": -1386,
+                                          "Name": "Child",
+                                          "Id": -1394,
+                                          "ContextData": {
+                                            "Name": "Prefab Instance",
+                                            "Id": -1378
+                                          },
+                                          "Scope": {
+                                            "DebugParentScopeId": 0,
+                                            "Name": "MyScope",
+                                            "Id": -1396,
+                                            "Bindings": null
+                                          },
+                                          "Components": [
+                                            {
+                                              "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                              "Id": -1398,
+                                              "Properties": [
+                                                {
+                                                  "Name": "dependency",
+                                                  "InjectId": "lol",
+                                                  "SuppressMissingErrors": true
+                                                },
+                                                {
+                                                  "Name": "<DependencyProperty>k__BackingField",
+                                                  "InjectId": null,
+                                                  "SuppressMissingErrors": false
+                                                }
+                                              ],
+                                              "Methods": null
+                                            }
+                                          ],
+                                          "Children": [
+                                            {
+                                              "DebugParentId": -1394,
+                                              "Name": "Child",
+                                              "Id": -1402,
+                                              "ContextData": {
+                                                "Name": "Prefab Instance",
+                                                "Id": -1378
+                                              },
+                                              "Scope": {
+                                                "DebugParentScopeId": 0,
+                                                "Name": "MyScope",
+                                                "Id": -1404,
+                                                "Bindings": null
+                                              },
+                                              "Components": [
+                                                {
+                                                  "Name": "Dev.PrefabNestedUnderSceneScopeRepro.Requester",
+                                                  "Id": -1406,
+                                                  "Properties": [
+                                                    {
+                                                      "Name": "dependency",
+                                                      "InjectId": "lol",
+                                                      "SuppressMissingErrors": true
+                                                    },
+                                                    {
+                                                      "Name": "<DependencyProperty>k__BackingField",
+                                                      "InjectId": null,
+                                                      "SuppressMissingErrors": false
+                                                    }
+                                                  ],
+                                                  "Methods": null
+                                                }
+                                              ],
+                                              "Children": []
+                                            }
+                                          ]
+                                        }
+                                      ]
+                                    }
+                                  ]
+                                }
+                              ]
+                            }
+                          ]
+                        }
+                      ]
+                    }
+                  ]
+                }
+              ]
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}
