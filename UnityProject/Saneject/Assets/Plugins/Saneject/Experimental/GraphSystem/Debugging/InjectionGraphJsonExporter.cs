@@ -1,4 +1,5 @@
-﻿using System.IO;
+﻿using System;
+using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Plugins.Saneject.Experimental.GraphSystem.Data;
@@ -37,7 +38,28 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Debugging
                     ? new JObject
                     {
                         ["type"] = node.Scope?.Type.Name,
-                        ["parentScope"] = node.Scope?.ParentScope?.Type.Name
+                        ["parentScope"] = node.Scope?.ParentScope?.Type.Name,
+                        ["bindings"] = new JArray(node.Scope?.Bindings?.Select(binding => new JObject
+                        {
+                            ["interfaceType"] = binding.InterfaceType?.Name,
+                            ["concreteType"] = binding.ConcreteType?.Name,
+                            ["bindingType"] = binding.BindingType.ToString(),
+                            ["searchOrigin"] = binding.SearchOrigin.ToString(),
+                            ["searchDirection"] = binding.SearchDirection.ToString(),
+                            ["customTargetTransform"] = binding.CustomTargetTransform?.name,
+                            ["directInstancesToResolveFrom"] = new JArray(binding.DirectInstancesToResolveFrom.Select(instance => instance.GetType().Name)),
+                            ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
+                            ["childIndexForSearch"] = binding.ChildIndexForSearch,
+                            ["resolveFromProxy"] = binding.ResolveFromProxy,
+                            ["idQualifiers"] = new JArray(binding.IdQualifiers),
+                            ["injectionTargetTypeQualifiers"] = new JArray(binding.InjectionTargetTypeQualifiers.Select(q => q.Name)),
+                            ["injectionTargetMemberNameQualifiers"] = new JArray(binding.InjectionTargetMemberNameQualifiers),
+                            ["sceneSearchFindObjectsSettings"] = binding.SceneSearchFindObjectsSettings != null ? new JObject
+                            {
+                                ["includeInactive"] = binding.SceneSearchFindObjectsSettings?.IncludeInactive.ToString(),
+                                ["sortMode"] = binding.SceneSearchFindObjectsSettings?.SortMode.ToString()
+                            } : null
+                        }) ?? Array.Empty<JObject>())
                     }
                     : null,
                 ["components"] = new JArray(node.Components.Select(componentNode => new JObject

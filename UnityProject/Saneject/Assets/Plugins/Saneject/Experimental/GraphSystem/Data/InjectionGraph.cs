@@ -9,16 +9,25 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Data
     [Serializable]
     public class InjectionGraph
     {
-        public InjectionGraph(params Transform[] startTransforms)
+        private InjectionGraph(params Transform[] startTransforms)
         {
-            HashSet<Transform> processedRoots = new();
-            
             RootNodes = startTransforms
-                .Where(startTransform => processedRoots.Add(startTransform.root))
-                .Select(transform => new TransformNode(transform.root))
+                .Select(transform => transform.root)
+                .Distinct()
+                .Select(root => new TransformNode(root))
                 .ToList();
         }
-        
-        public IReadOnlyList<TransformNode> RootNodes { get; } 
+
+        public IReadOnlyList<TransformNode> RootNodes { get; }
+
+        public static InjectionGraph Build(params Transform[] startTransforms)
+        {
+            return new InjectionGraph(startTransforms);
+        }
+
+        public static InjectionGraph Build(params GameObject[] startGameObjects)
+        {
+            return new InjectionGraph(startGameObjects.Select(go => go.transform).ToArray());
+        }
     }
 }

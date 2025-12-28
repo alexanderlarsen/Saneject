@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Plugins.Saneject.Experimental.GraphSystem.Bindings;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 
@@ -8,34 +9,35 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
     public class ScopeNode
     {
         public ScopeNode(
-            Scope scope,
+            NewScope scope,
             TransformNode transformNode)
         {
             TransformNode = transformNode;
             ParentScope = FindParentScopeNode(transformNode);
             Type = scope.GetType();
-            Bindings = new List<BindingNode>();
+            scope.ConfigureBindings();
+            Bindings = scope.Bindings;
         }
 
         public TransformNode TransformNode { get; }
         public ScopeNode ParentScope { get; }
         public Type Type { get; }
-        public IReadOnlyList<BindingNode> Bindings { get; }
+        public IReadOnlyList<NewBinding> Bindings { get; }
 
         private static ScopeNode FindParentScopeNode(TransformNode transformNode)
         {
-            TransformNode current = transformNode.Parent;
+            TransformNode currentTransformNode = transformNode.Parent;
             ScopeNode parentScope = null;
 
-            while (current != null)
+            while (currentTransformNode != null)
             {
-                if (current.Scope == null || (UserSettings.UseContextIsolation && current.Context != transformNode.Context))
+                if (currentTransformNode.Scope == null || (UserSettings.UseContextIsolation && currentTransformNode.Context != transformNode.Context))
                 {
-                    current = current.Parent;
+                    currentTransformNode = currentTransformNode.Parent;
                     continue;
                 }
 
-                parentScope = current.Scope;
+                parentScope = currentTransformNode.Scope;
                 break;
             }
 

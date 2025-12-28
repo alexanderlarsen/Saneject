@@ -6,7 +6,41 @@
       "context": "SceneObject (-22096)",
       "scope": {
         "type": "GameScope",
-        "parentScope": null
+        "parentScope": null,
+        "bindings": [
+          {
+            "interfaceType": null,
+            "concreteType": "Enemy",
+            "bindingType": "Component",
+            "searchOrigin": "Scope",
+            "searchDirection": "Self",
+            "customTargetTransform": null,
+            "directInstancesToResolveFrom": [],
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false,
+            "idQualifiers": [],
+            "injectionTargetTypeQualifiers": [],
+            "injectionTargetMemberNameQualifiers": [],
+            "sceneSearchFindObjectsSettings": null
+          },
+          {
+            "interfaceType": null,
+            "concreteType": "Player",
+            "bindingType": "Component",
+            "searchOrigin": "Scope",
+            "searchDirection": "Self",
+            "customTargetTransform": null,
+            "directInstancesToResolveFrom": [],
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false,
+            "idQualifiers": [],
+            "injectionTargetTypeQualifiers": [],
+            "injectionTargetMemberNameQualifiers": [],
+            "sceneSearchFindObjectsSettings": null
+          }
+        ]
       },
       "components": [
         {
@@ -37,7 +71,41 @@
           "context": "PrefabInstance (-22234)",
           "scope": {
             "type": "PlayerScope",
-            "parentScope": null
+            "parentScope": null,
+            "bindings": [
+              {
+                "interfaceType": "IMoveController",
+                "concreteType": null,
+                "bindingType": "Component",
+                "searchOrigin": "Scope",
+                "searchDirection": "Descendants",
+                "customTargetTransform": null,
+                "directInstancesToResolveFrom": [],
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false,
+                "idQualifiers": [],
+                "injectionTargetTypeQualifiers": [],
+                "injectionTargetMemberNameQualifiers": [],
+                "sceneSearchFindObjectsSettings": null
+              },
+              {
+                "interfaceType": "IWeapon",
+                "concreteType": null,
+                "bindingType": "Component",
+                "searchOrigin": "Scope",
+                "searchDirection": "Descendants",
+                "customTargetTransform": null,
+                "directInstancesToResolveFrom": [],
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false,
+                "idQualifiers": [],
+                "injectionTargetTypeQualifiers": [],
+                "injectionTargetMemberNameQualifiers": [],
+                "sceneSearchFindObjectsSettings": null
+              }
+            ]
           },
           "components": [
             {
@@ -99,12 +167,29 @@
               "children": []
             },
             {
+              "name": "Colliders (-41202)",
+              "parent": "Player (-22236)",
+              "context": "PrefabInstance (-22234)",
+              "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
+              "name": "AudioSources (-41660)",
+              "parent": "Player (-22236)",
+              "context": "PrefabInstance (-22234)",
+              "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
               "name": "Crossbow (-23238)",
               "parent": "Player (-22236)",
               "context": "PrefabInstance (-23236)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": null
+                "parentScope": null,
+                "bindings": []
               },
               "components": [
                 {
@@ -132,7 +217,42 @@
           "parent": "Game (-25246)",
           "context": "PrefabInstance (-22852)",
           "scope": null,
-          "components": [],
+          "components": [
+            {
+              "name": "Enemy (-42354)",
+              "fields": [
+                {
+                  "name": "moveController",
+                  "type": "IMoveController",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "weapon",
+                  "type": "IWeapon",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "__moveController",
+                  "type": "Object",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "__weapon",
+                  "type": "Object",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                }
+              ],
+              "methods": []
+            }
+          ],
           "children": [
             {
               "name": "MoveController (-22884)",
@@ -148,34 +268,13 @@
               "context": "PrefabInstance (-23264)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": null
+                "parentScope": null,
+                "bindings": []
               },
               "components": [],
               "children": []
             }
           ]
-        },
-        {
-          "name": "AudioManager (-26476)",
-          "parent": "Game (-25246)",
-          "context": "SceneObject (-22096)",
-          "scope": null,
-          "components": [
-            {
-              "name": "AudioManager (-26560)",
-              "fields": [
-                {
-                  "name": "gameOverAudioSource",
-                  "type": "AudioSource",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "isCollection": false
-                }
-              ],
-              "methods": []
-            }
-          ],
-          "children": []
         }
       ]
     }

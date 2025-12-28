@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
@@ -15,7 +14,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
             Transform = transform;
             Context = new ContextNode(transform);
 
-            Scope = transform.TryGetComponent(out Scope scope)
+            Scope = transform.TryGetComponent(out NewScope scope)
                 ? new ScopeNode(scope, this)
                 : null;
 

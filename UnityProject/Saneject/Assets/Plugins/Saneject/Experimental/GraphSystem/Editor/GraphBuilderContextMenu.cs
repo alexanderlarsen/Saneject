@@ -11,14 +11,14 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Editor
         {
             const string path = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Experimental\GraphSystem\graph.json";
 
-            InjectionGraph graph = new(Selection.activeGameObject.transform);
+            InjectionGraph graph = InjectionGraph.Build(Selection.gameObjects);
             InjectionGraphJsonExporter.SaveGraphToJson(graph, path);
         }
 
         [MenuItem("GameObject/Build Injection Graph And Save JSON", true, 49)]
         private static bool BuildGraphValidate()
         {
-            return Selection.activeGameObject != null && Selection.activeGameObject.transform != null;
+            return Selection.gameObjects != null && Selection.gameObjects.Length > 0;
         }
     }
 }
