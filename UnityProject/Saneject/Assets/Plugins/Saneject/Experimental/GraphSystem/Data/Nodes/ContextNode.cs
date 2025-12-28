@@ -1,13 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using UnityEditor;
+using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
 {
-    [Serializable]
     public class ContextNode : IEqualityComparer<ContextNode>
     {
-        public string Name { get; set; }
-        public int Id { get; set; }
+        public ContextNode(Object obj)
+        {
+            GetContextTypeAndKey(obj, out (ContextType type, int key) result);
+            Type = result.type;
+            Key = result.key;
+        }
+
+        public ContextType Type { get; }
+        public int Key { get; }
 
         public bool Equals(
             ContextNode x,
@@ -25,12 +34,53 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
             if (x.GetType() != y.GetType())
                 return false;
 
-            return x.Id == y.Id;
+            return x.Key == y.Key;
         }
 
         public int GetHashCode(ContextNode obj)
         {
-            return HashCode.Combine(obj.Id);
+            return HashCode.Combine(obj.Key);
+        }
+
+        private static void GetContextTypeAndKey(
+            Object obj,
+            out (ContextType type, int key) result)
+        {
+            GameObject gameObject = obj switch
+            {
+                GameObject go => go,
+                Component c => c.gameObject,
+                _ => null
+            };
+
+            // Non-GameObjects (ScriptableObjects, etc.)
+            if (!gameObject)
+            {
+                result.type = ContextType.Global;
+                result.key = 0;
+                return;
+            }
+
+            // Prefab asset
+            if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
+            {
+                result.type = ContextType.PrefabAsset;
+                result.key = gameObject.transform.root.gameObject.GetInstanceID();
+                return;
+            }
+
+            // Prefab instance
+            GameObject instanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
+
+            if (instanceRoot)
+            {
+                result.type = ContextType.PrefabInstance;
+                result.key = instanceRoot.GetInstanceID();
+                return;
+            }
+
+            result.type = ContextType.SceneObject;
+            result.key = gameObject.scene.handle;
         }
     }
 }

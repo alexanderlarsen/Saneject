@@ -1,20 +1,27 @@
-﻿using System;
-using System.Reflection;
-using Newtonsoft.Json;
+﻿using System.Reflection;
+using Plugins.Saneject.Experimental.GraphSystem.Extensions;
+using Plugins.Saneject.Runtime.Attributes;
 
 namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
 {
-    [Serializable]
     public class FieldNode
     {
-        [JsonIgnore]
-        public FieldInfo FieldInfo { get; set; }
+        public FieldNode(
+            object owner,
+            FieldInfo fieldInfo)
+        {
+            Owner = owner;
+            FieldInfo = fieldInfo;
+            InjectAttribute injectAttribute = fieldInfo.GetCustomAttribute<InjectAttribute>();
+            InjectId = injectAttribute.ID;
+            SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
+            IsCollection = fieldInfo.IsCollection();
+        }
 
-        [JsonProperty]
-        private string Name => FieldInfo.Name;
-
-        public string InjectId { get; set; }
-        public bool SuppressMissingErrors { get; set; }
-        public bool IsCollection { get; set; }
+        public object Owner { get; }
+        public FieldInfo FieldInfo { get; }
+        public string InjectId { get; }
+        public bool SuppressMissingErrors { get; }
+        public bool IsCollection { get; }
     }
 }

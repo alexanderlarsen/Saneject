@@ -1,21 +1,45 @@
 ﻿using System;
 using System.Collections.Generic;
-using Newtonsoft.Json;
+using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
 {
-    [Serializable]
     public class ScopeNode
     {
-        [JsonIgnore]
-        public ScopeNode ParentScope { get; set; }
+        public ScopeNode(
+            Scope scope,
+            TransformNode transformNode)
+        {
+            TransformNode = transformNode;
+            ParentScope = FindParentScopeNode(transformNode);
+            Type = scope.GetType();
+            Bindings = new List<BindingNode>();
+        }
 
-        [JsonProperty]
-        private int DebugParentScopeId => ParentScope?.Id ?? 0;
+        public TransformNode TransformNode { get; }
+        public ScopeNode ParentScope { get; }
+        public Type Type { get; }
+        public IReadOnlyList<BindingNode> Bindings { get; }
 
-        public string Name { get; set; }
-        public int Id { get; set; }
+        private static ScopeNode FindParentScopeNode(TransformNode transformNode)
+        {
+            TransformNode current = transformNode.Parent;
+            ScopeNode parentScope = null;
 
-        public List<BindingNode> Bindings { get; set; }
+            while (current != null)
+            {
+                if (current.Scope == null || (UserSettings.UseContextIsolation && current.Context != transformNode.Context))
+                {
+                    current = current.Parent;
+                    continue;
+                }
+
+                parentScope = current.Scope;
+                break;
+            }
+
+            return parentScope;
+        }
     }
 }
