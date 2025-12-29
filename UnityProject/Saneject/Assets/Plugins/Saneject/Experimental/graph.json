@@ -1,0 +1,327 @@
+{
+  "rootNodes": [
+    {
+      "name": "Game (Instance ID: 32280)",
+      "parent": null,
+      "context": "SceneObject (Key: -1244)",
+      "scope": {
+        "type": "GameScope",
+        "parentScope": null,
+        "componentBindings": [
+          {
+            "interfaceType": null,
+            "concreteType": "Enemy",
+            "directInstancesToResolveFrom": [],
+            "idQualifiers": [],
+            "injectionTargetTypeQualifiers": [],
+            "injectionTargetMemberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "Self",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false
+          },
+          {
+            "interfaceType": null,
+            "concreteType": "Player",
+            "directInstancesToResolveFrom": [],
+            "idQualifiers": [],
+            "injectionTargetTypeQualifiers": [],
+            "injectionTargetMemberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "Self",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false
+          }
+        ],
+        "assetBindings": [],
+        "globalBindings": []
+      },
+      "components": [
+        {
+          "name": "GameManager (Instance ID: 32276)",
+          "fields": [
+            {
+              "name": "enemy",
+              "type": "Enemy",
+              "injectId": null,
+              "suppressMissingErrors": false,
+              "isCollection": false
+            },
+            {
+              "name": "player",
+              "type": "Player",
+              "injectId": null,
+              "suppressMissingErrors": false,
+              "isCollection": false
+            }
+          ],
+          "methods": []
+        }
+      ],
+      "children": [
+        {
+          "name": "Player (Instance ID: 32306)",
+          "parent": "Game (Instance ID: 32280)",
+          "context": "PrefabInstance (Key: -1256)",
+          "scope": {
+            "type": "PlayerScope",
+            "parentScope": null,
+            "componentBindings": [
+              {
+                "interfaceType": "IMoveController",
+                "concreteType": null,
+                "directInstancesToResolveFrom": [],
+                "idQualifiers": [],
+                "injectionTargetTypeQualifiers": [],
+                "injectionTargetMemberNameQualifiers": [],
+                "searchOrigin": "Scope",
+                "searchDirection": "Descendants",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false
+              },
+              {
+                "interfaceType": "IWeapon",
+                "concreteType": null,
+                "directInstancesToResolveFrom": [],
+                "idQualifiers": [
+                  "PlayerWeapon"
+                ],
+                "injectionTargetTypeQualifiers": [
+                  "Player"
+                ],
+                "injectionTargetMemberNameQualifiers": [
+                  "CurrentWeapon"
+                ],
+                "searchOrigin": "Scope",
+                "searchDirection": "Descendants",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false
+              }
+            ],
+            "assetBindings": [
+              {
+                "interfaceType": null,
+                "concreteType": "Texture2D",
+                "directInstancesToResolveFrom": [],
+                "idQualifiers": [
+                  "PlayerTexture"
+                ],
+                "injectionTargetTypeQualifiers": [],
+                "injectionTargetMemberNameQualifiers": [
+                  "Texture"
+                ],
+                "assetPath": "Assets/Dev/GraphTesting/Textures/PlayerTexture.png",
+                "assetLoadType": "AssetLoad"
+              },
+              {
+                "interfaceType": null,
+                "concreteType": "Player",
+                "directInstancesToResolveFrom": [
+                  "Player"
+                ],
+                "idQualifiers": [
+                  "PlayerTexture"
+                ],
+                "injectionTargetTypeQualifiers": [],
+                "injectionTargetMemberNameQualifiers": [
+                  "Texture"
+                ],
+                "assetPath": null,
+                "assetLoadType": "Instance"
+              }
+            ],
+            "globalBindings": []
+          },
+          "components": [
+            {
+              "name": "Player (Instance ID: -1260)",
+              "fields": [
+                {
+                  "name": "audioSourcesList",
+                  "type": "List`1",
+                  "injectId": "audioSources",
+                  "suppressMissingErrors": false,
+                  "isCollection": true
+                },
+                {
+                  "name": "collidersArray",
+                  "type": "Collider[]",
+                  "injectId": "playerColliders",
+                  "suppressMissingErrors": false,
+                  "isCollection": true
+                },
+                {
+                  "name": "moveController",
+                  "type": "IMoveController",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "weapon",
+                  "type": "IWeapon",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "__moveController",
+                  "type": "Object",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "__weapon",
+                  "type": "Object",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                }
+              ],
+              "methods": []
+            }
+          ],
+          "children": [
+            {
+              "name": "MoveController (Instance ID: -1264)",
+              "parent": "Player (Instance ID: 32306)",
+              "context": "PrefabInstance (Key: -1256)",
+              "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
+              "name": "Colliders (Instance ID: -1270)",
+              "parent": "Player (Instance ID: 32306)",
+              "context": "PrefabInstance (Key: -1256)",
+              "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
+              "name": "AudioSources (Instance ID: -1278)",
+              "parent": "Player (Instance ID: 32306)",
+              "context": "PrefabInstance (Key: -1256)",
+              "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
+              "name": "Crossbow (Instance ID: 32310)",
+              "parent": "Player (Instance ID: 32306)",
+              "context": "PrefabInstance (Key: -1246)",
+              "scope": {
+                "type": "WeaponScope",
+                "parentScope": null,
+                "componentBindings": [],
+                "assetBindings": [],
+                "globalBindings": []
+              },
+              "components": [
+                {
+                  "name": "Crossbow (Instance ID: -1250)",
+                  "fields": [],
+                  "methods": [
+                    {
+                      "name": "Initialize",
+                      "parameters": [
+                        "Collider",
+                        "Rigidbody"
+                      ],
+                      "injectId": null,
+                      "suppressMissingErrors": false
+                    }
+                  ]
+                }
+              ],
+              "children": []
+            }
+          ]
+        },
+        {
+          "name": "Enemy (Instance ID: 32298)",
+          "parent": "Game (Instance ID: 32280)",
+          "context": "PrefabInstance (Key: 32300)",
+          "scope": null,
+          "components": [
+            {
+              "name": "Enemy (Instance ID: 32302)",
+              "fields": [
+                {
+                  "name": "moveController",
+                  "type": "IMoveController",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "weapon",
+                  "type": "IWeapon",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "__moveController",
+                  "type": "Object",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                },
+                {
+                  "name": "__weapon",
+                  "type": "Object",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "isCollection": false
+                }
+              ],
+              "methods": []
+            }
+          ],
+          "children": [
+            {
+              "name": "MoveController (Instance ID: -1254)",
+              "parent": "Enemy (Instance ID: 32298)",
+              "context": "PrefabInstance (Key: 32300)",
+              "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
+              "name": "Rifle (Instance ID: 32314)",
+              "parent": "Enemy (Instance ID: 32298)",
+              "context": "PrefabInstance (Key: -1284)",
+              "scope": {
+                "type": "WeaponScope",
+                "parentScope": null,
+                "componentBindings": [],
+                "assetBindings": [],
+                "globalBindings": []
+              },
+              "components": [],
+              "children": []
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

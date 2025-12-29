@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Runtime.Bindings;
+﻿using System;
+using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Runtime
 {
@@ -42,8 +43,15 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <returns>A fluent builder for configuring the component binding.</returns>
         protected ComponentBindingBuilder<T> BindComponent<T>() where T : class
         {
-            ComponentBinding binding = new();
-            binding.SetTargetType(typeof(T));
+            Type targetType = typeof(T);
+            bool isInterface = targetType.IsInterface;
+
+            ComponentBinding binding = new()
+            {
+                InterfaceType = isInterface ? targetType : null,
+                ConcreteType = isInterface ? null : targetType
+            };
+
             componentBindings.Add(binding);
             return new ComponentBindingBuilder<T>(binding);
         }
@@ -68,9 +76,16 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
         protected ComponentBindingBuilder<T> BindMultipleComponents<T>() where T : class
         {
-            ComponentBinding binding = new();
-            binding.SetTargetType(typeof(T));
-            binding.MarkCollectionBinding();
+            Type targetType = typeof(T);
+            bool isInterface = targetType.IsInterface;
+
+            ComponentBinding binding = new()
+            {
+                InterfaceType = isInterface ? targetType : null,
+                ConcreteType = isInterface ? null : targetType,
+                IsCollectionBinding = true
+            };
+
             componentBindings.Add(binding);
             return new ComponentBindingBuilder<T>(binding);
         }
@@ -86,8 +101,12 @@ namespace Plugins.Saneject.Experimental.Runtime
             where TConcrete : Component, TInterface
             where TInterface : class
         {
-            ComponentBinding binding = new();
-            binding.SetTargetTypes(typeof(TInterface), typeof(TConcrete));
+            ComponentBinding binding = new()
+            {
+                InterfaceType = typeof(TInterface),
+                ConcreteType = typeof(TConcrete)
+            };
+
             componentBindings.Add(binding);
             return new ComponentBindingBuilder<TConcrete>(binding);
         }
@@ -118,9 +137,13 @@ namespace Plugins.Saneject.Experimental.Runtime
             where TConcrete : Component, TInterface
             where TInterface : class
         {
-            ComponentBinding binding = new();
-            binding.SetTargetTypes(typeof(TInterface), typeof(TConcrete));
-            binding.MarkCollectionBinding();
+            ComponentBinding binding = new()
+            {
+                InterfaceType = typeof(TInterface),
+                ConcreteType = typeof(TConcrete),
+                IsCollectionBinding = true
+            };
+
             componentBindings.Add(binding);
             return new ComponentBindingBuilder<TConcrete>(binding);
         }
@@ -137,8 +160,11 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <returns>A fluent builder for configuring the asset binding.</returns>
         protected AssetBindingBuilder<TConcrete> BindAsset<TConcrete>() where TConcrete : Object
         {
-            AssetBinding binding = new();
-            binding.SetTargetType(typeof(TConcrete));
+            AssetBinding binding = new()
+            {
+                ConcreteType = typeof(TConcrete)
+            };
+
             assetBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
@@ -163,9 +189,12 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <returns>A fluent builder for configuring the asset collection binding.</returns>
         protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TConcrete>() where TConcrete : Object
         {
-            AssetBinding binding = new();
-            binding.SetTargetType(typeof(TConcrete));
-            binding.MarkCollectionBinding();
+            AssetBinding binding = new()
+            {
+                ConcreteType = typeof(TConcrete),
+                IsCollectionBinding = true
+            };
+
             assetBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
@@ -181,9 +210,13 @@ namespace Plugins.Saneject.Experimental.Runtime
             where TConcrete : Object, TInterface
             where TInterface : class
         {
-            AssetBinding binding = new();
-            binding.SetTargetTypes(typeof(TInterface), typeof(TConcrete));
-            binding.MarkCollectionBinding();
+            AssetBinding binding = new()
+            {
+                InterfaceType = typeof(TInterface),
+                ConcreteType = typeof(TConcrete),
+                IsCollectionBinding = true
+            };
+
             assetBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
@@ -214,9 +247,13 @@ namespace Plugins.Saneject.Experimental.Runtime
             where TConcrete : Object, TInterface
             where TInterface : class
         {
-            AssetBinding binding = new();
-            binding.SetTargetTypes(typeof(TInterface), typeof(TConcrete));
-            binding.MarkCollectionBinding();
+            AssetBinding binding = new()
+            {
+                InterfaceType = typeof(TInterface),
+                ConcreteType = typeof(TConcrete),
+                IsCollectionBinding = true
+            };
+
             assetBindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
@@ -226,18 +263,21 @@ namespace Plugins.Saneject.Experimental.Runtime
         #region GLOBAL METHODS
 
         /// <summary>
-        /// Registers a global binding for the scene component <typeparamref name="T" />.
+        /// Registers a global binding for the scene component <typeparamref name="TConcrete" />.
         /// Promotes the component into the global scope via <c>SceneGlobalContainer</c>.
         /// Enables cross-scene access through global resolution (e.g., via <c>ProxyObject</c>).
         /// </summary>
-        /// <typeparam name="T">The <see cref="Component" /> type to bind globally.</typeparam>
+        /// <typeparam name="TConcrete">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>
-        protected GlobalComponentBindingBuilder<T> BindGlobal<T>() where T : Component
+        protected GlobalComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component
         {
-            GlobalComponentBinding binding = new();
-            binding.SetTargetType(typeof(T));
+            GlobalComponentBinding binding = new()
+            {
+                ConcreteType = typeof(TConcrete)
+            };
+
             globalBindings.Add(binding);
-            return new GlobalComponentBindingBuilder<T>(binding);
+            return new GlobalComponentBindingBuilder<TConcrete>(binding);
         }
 
         #endregion

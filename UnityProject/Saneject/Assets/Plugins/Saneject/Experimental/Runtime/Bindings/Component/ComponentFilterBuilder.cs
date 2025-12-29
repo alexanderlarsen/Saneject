@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> Where(Func<TComponent, bool> predicate)
         {
-            binding.AddFilter(o => o is TComponent t && predicate(t));
+            binding.Filters.Add(o => o is TComponent t && predicate(t));
             return this;
         }
 

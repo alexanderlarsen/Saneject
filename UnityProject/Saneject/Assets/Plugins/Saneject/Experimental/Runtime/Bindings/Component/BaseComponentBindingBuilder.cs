@@ -99,8 +99,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeSelf()
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Self);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.Self;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -109,8 +110,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeParent()
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Parent);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.Parent;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -120,9 +122,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeAncestors(bool includeSelf = false)
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Ancestors);
-            binding.SetIncludeSelfInSearch(includeSelf);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.Ancestors;
+            binding.IncludeSelfInSearch = includeSelf;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -131,8 +134,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeFirstChild()
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.FirstChild);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.FirstChild;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -141,8 +145,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeLastChild()
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.LastChild);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.LastChild;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -151,9 +156,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeChildWithIndex(int index)
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.ChildAtIndex);
-            binding.SetChildIndexForSearch(index);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.ChildAtIndex;
+            binding.ChildIndexForSearch = index;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -163,9 +169,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeDescendants(bool includeSelf = false)
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Descendants);
-            binding.SetIncludeSelfInSearch(includeSelf);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.Descendants;
+            binding.IncludeSelfInSearch = includeSelf;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -174,8 +181,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromScopeSiblings()
         {
-            binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Siblings);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scope;
+            binding.SearchDirection = SearchDirection.Siblings;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -188,8 +196,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromRootSelf()
         {
-            binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.Self);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Root;
+            binding.SearchDirection = SearchDirection.Self;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -198,8 +207,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromRootFirstChild()
         {
-            binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.FirstChild);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Root;
+            binding.SearchDirection = SearchDirection.FirstChild;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -208,8 +218,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromRootLastChild()
         {
-            binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.LastChild);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Root;
+            binding.SearchDirection = SearchDirection.LastChild;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -218,9 +229,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromRootChildWithIndex(int index)
         {
-            binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.ChildAtIndex);
-            binding.SetChildIndexForSearch(index);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Root;
+            binding.SearchDirection = SearchDirection.ChildAtIndex;
+            binding.ChildIndexForSearch = index;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -230,9 +242,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromRootDescendants(bool includeSelf = false)
         {
-            binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.Descendants);
-            binding.SetIncludeSelfInSearch(includeSelf);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Root;
+            binding.SearchDirection = SearchDirection.Descendants;
+            binding.IncludeSelfInSearch = includeSelf;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -246,8 +259,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetSelf()
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Self);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.Self;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -257,8 +271,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetParent()
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Parent);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.Parent;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -269,9 +284,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetAncestors(bool includeSelf = false)
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Ancestors);
-            binding.SetIncludeSelfInSearch(includeSelf);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.Ancestors;
+            binding.IncludeSelfInSearch = includeSelf;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -281,8 +297,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetFirstChild()
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.FirstChild);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.FirstChild;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -292,8 +309,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetLastChild()
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.LastChild);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.LastChild;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -303,9 +321,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetChildWithIndex(int index)
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.ChildAtIndex);
-            binding.SetChildIndexForSearch(index);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.ChildAtIndex;
+            binding.ChildIndexForSearch = index;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -316,9 +335,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetDescendants(bool includeSelf = false)
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Descendants);
-            binding.SetIncludeSelfInSearch(includeSelf);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.Descendants;
+            binding.IncludeSelfInSearch = includeSelf;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -328,8 +348,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetSiblings()
         {
-            binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Siblings);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.InjectionTarget;
+            binding.SearchDirection = SearchDirection.Siblings;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -342,9 +363,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> From(Transform target)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Self);
-            binding.SetCustomTargetTransform(target);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.Self;
+            binding.CustomTargetTransform = target;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -353,9 +375,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromParentOf(Transform target)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Parent);
-            binding.SetCustomTargetTransform(target);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.Parent;
+            binding.CustomTargetTransform = target;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -367,10 +390,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             Transform target,
             bool includeSelf = false)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Ancestors);
-            binding.SetCustomTargetTransform(target);
-            binding.SetIncludeSelfInSearch(includeSelf);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.Ancestors;
+            binding.CustomTargetTransform = target;
+            binding.IncludeSelfInSearch = includeSelf;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -379,9 +403,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromFirstChildOf(Transform target)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.FirstChild);
-            binding.SetCustomTargetTransform(target);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.FirstChild;
+            binding.CustomTargetTransform = target;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -390,9 +415,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromLastChildOf(Transform target)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.LastChild);
-            binding.SetCustomTargetTransform(target);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.LastChild;
+            binding.CustomTargetTransform = target;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -403,10 +429,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             Transform target,
             int index)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.ChildAtIndex);
-            binding.SetCustomTargetTransform(target);
-            binding.SetChildIndexForSearch(index);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.ChildAtIndex;
+            binding.CustomTargetTransform = target;
+            binding.ChildIndexForSearch = index;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -418,10 +445,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             Transform target,
             bool includeSelf = false)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Descendants);
-            binding.SetCustomTargetTransform(target);
-            binding.SetIncludeSelfInSearch(includeSelf);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.Descendants;
+            binding.CustomTargetTransform = target;
+            binding.IncludeSelfInSearch = includeSelf;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -430,9 +458,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromSiblingsOf(Transform target)
         {
-            binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Siblings);
-            binding.SetCustomTargetTransform(target);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
+            binding.SearchDirection = SearchDirection.Siblings;
+            binding.CustomTargetTransform = target;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -447,9 +476,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             FindObjectsInactive findObjectsInactive = FindObjectsInactive.Include,
             FindObjectsSortMode sortMode = FindObjectsSortMode.None)
         {
-            binding.SetSearchParameters(SearchOrigin.Scene, SearchDirection.Anywhere);
-            binding.SetSceneSearchFindObjectsSettings(findObjectsInactive, sortMode);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.Scene;
+            binding.SearchDirection = SearchDirection.Anywhere;
+            binding.FindObjectsInactive = findObjectsInactive;
+            binding.FindObjectsSortMode = sortMode;
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -458,9 +489,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromInstance(TComponent instance)
         {
-            binding.SetSearchParameters(SearchOrigin.SingleInstance, SearchDirection.None);
-            binding.ResolveFromInstances(instance);
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.SingleInstance;
+            binding.SearchDirection = SearchDirection.None;
+            binding.ResolveFromInstances.Add(instance);
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -469,9 +501,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromMethod(Func<TComponent> method)
         {
-            binding.SetSearchParameters(SearchOrigin.SingleInstance, SearchDirection.None);
-            binding.ResolveFromInstances(method?.Invoke());
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.SingleInstance;
+            binding.SearchDirection = SearchDirection.None;
+            binding.ResolveFromInstances.Add(method?.Invoke());
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -480,9 +513,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromMethod(Func<IEnumerable<TComponent>> method)
         {
-            binding.SetSearchParameters(SearchOrigin.MultipleInstances, SearchDirection.None);
-            binding.ResolveFromInstances(method?.Invoke().Cast<UnityEngine.Component>());
-            binding.MarkLocatorStrategySpecified();
+            binding.SearchOrigin = SearchOrigin.MultipleInstances;
+            binding.SearchDirection = SearchDirection.None;
+            binding.ResolveFromInstances.AddRange(method?.Invoke() ?? Enumerable.Empty<TComponent>());
+            binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
 

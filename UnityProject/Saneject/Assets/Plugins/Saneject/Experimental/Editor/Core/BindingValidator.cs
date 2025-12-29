@@ -2,9 +2,7 @@
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph;
-using Plugins.Saneject.Experimental.Runtime.Bindings;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
 using Plugins.Saneject.Runtime.Extensions;
 using UnityEngine;
 
@@ -32,16 +30,16 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             out List<BindingError> errors)
         {
             errors = new List<BindingError>();
-            BaseBinding binding = context.Binding;
+            BaseBindingNode binding = context.Binding;
 
             switch (binding)
             {
-                case GlobalComponentBinding globalBinding:
+                case GlobalComponentBindingNode globalBinding:
                 {
                     if (globalBinding.ResolveFromProxy)
                         errors.Add(new BindingError("A binding cannot be both Proxy and Global. Proxies consume globals; they are not globals themselves.", context));
 
-                    if (context.DeclaringTransform.gameObject.IsPrefab())
+                    if (context.Scope.TransformNode.Transform.gameObject.IsPrefab())
                         errors.Add(new BindingError("Global bindings cannot be used in prefabs, because the system can only inject global components from scenes.", context));
 
                     if (globalBinding.IsCollectionBinding)
@@ -53,7 +51,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     break;
                 }
 
-                case ComponentBinding componentBinding:
+                case ComponentBindingNode componentBinding:
                 {
                     if (componentBinding.ResolveFromProxy)
                     {
@@ -73,7 +71,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     break;
                 }
 
-                case AssetBinding assetBinding:
+                case AssetBindingNode assetBinding:
                 {
                     if (assetBinding.ConcreteType != null && typeof(Component).IsAssignableFrom(assetBinding.ConcreteType))
                         errors.Add(new BindingError($"Asset binding type '{assetBinding.ConcreteType.Name}' derives from Component. Assets must be ScriptableObjects, prefabs, or other UnityEngine.Object assets.", context));
@@ -93,8 +91,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (!binding.LocatorStrategySpecified)
                 errors.Add(new BindingError("Binding has no locator strategy (e.g. FromScopeSelf, FromAnywhereInScene).", context));
 
-            if (errors.Count > 0)
-                context.Binding.Invalidate();
+            context.Binding.IsValid = errors.Count == 0;
         }
     }
 }

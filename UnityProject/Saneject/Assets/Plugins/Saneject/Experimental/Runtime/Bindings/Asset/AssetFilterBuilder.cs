@@ -18,7 +18,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> Where(Func<TAsset, bool> predicate)
         {
-            binding.AddFilter(o => o is TAsset t && predicate(t));
+            binding.Filters.Add(o => o is TAsset t && predicate(t));
             return this;
         }
 

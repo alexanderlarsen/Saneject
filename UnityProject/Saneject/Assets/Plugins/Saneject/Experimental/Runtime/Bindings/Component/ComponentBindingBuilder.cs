@@ -20,8 +20,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public void FromProxy()
         {
-            binding.MarkResolveFromProxy();
-            binding.MarkLocatorStrategySpecified();
+            binding.ResolveFromProxy = true;
+            binding.LocatorStrategySpecified = true;
         }
 
         #region QUALIFIER METHODS
@@ -34,9 +34,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <param name="ids">The identifiers to match against injection targets.</param>
         public ComponentBindingBuilder<TComponent> ToID(params string[] ids)
         {
-            foreach (string id in ids)
-                binding.AddIdQualifier(id);
-
+            binding.IdQualifiers.AddRange(ids);
             return this;
         }
 
@@ -48,7 +46,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
         public ComponentBindingBuilder<TComponent> ToTarget<TTarget>()
         {
-            binding.AddInjectionTargetTypeQualifier(typeof(TTarget));
+            binding.TargetTypeQualifiers.Add(typeof(TTarget));
             return this;
         }
 
@@ -60,9 +58,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
         public ComponentBindingBuilder<TComponent> ToTarget(params Type[] targetTypes)
         {
-            foreach (Type type in targetTypes)
-                binding.AddInjectionTargetTypeQualifier(type);
-
+            binding.TargetTypeQualifiers.AddRange(targetTypes);
             return this;
         }
 
@@ -72,9 +68,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <param name="memberNames">The field or property names on the injection target that this binding should apply to.</param>
         public ComponentBindingBuilder<TComponent> ToMember(params string[] memberNames)
         {
-            foreach (string memberName in memberNames)
-                binding.AddInjectionTargetMemberNameQualifier(memberName);
-
+            binding.MemberNameQualifiers.AddRange(memberNames);
             return this;
         }
 

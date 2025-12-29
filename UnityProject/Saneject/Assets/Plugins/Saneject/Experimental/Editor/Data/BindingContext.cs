@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Experimental.Runtime.Bindings;
+﻿using Plugins.Saneject.Experimental.Editor.Graph;
+using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Data
@@ -6,14 +7,14 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     public class BindingContext
     {
         public BindingContext(
-            BaseBinding binding,
-            Transform declaringTransform)
+            BaseBindingNode binding,
+            ScopeNode scope)
         {
             Binding = binding;
-            DeclaringTransform = declaringTransform;
+            Scope = scope;
         }
 
-        public BaseBinding Binding { get; }
-        public Transform DeclaringTransform { get; }
+        public BaseBindingNode Binding { get; }
+        public ScopeNode Scope { get; } 
     }
 }

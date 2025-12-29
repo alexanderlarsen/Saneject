@@ -2,9 +2,7 @@
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
-using Plugins.Saneject.Experimental.Runtime.Bindings;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
@@ -37,15 +35,15 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             }
         }
 
-        public static IEnumerable<BaseBinding> GetAllBindings(this ScopeNode scopeNode)
+        public static IEnumerable<BaseBindingNode> GetAllBindings(this ScopeNode scopeNode)
         {
-            foreach (ComponentBinding componentBinding in scopeNode.ComponentBindings)
+            foreach (ComponentBindingNode componentBinding in scopeNode.ComponentBindings)
                 yield return componentBinding;
 
-            foreach (AssetBinding assetBinding in scopeNode.AssetBindings)
+            foreach (AssetBindingNode assetBinding in scopeNode.AssetBindings)
                 yield return assetBinding;
 
-            foreach (ComponentBinding globalBinding in scopeNode.GlobalBindings)
+            foreach (GlobalComponentBindingNode globalBinding in scopeNode.GlobalBindings)
                 yield return globalBinding;
         }
 
@@ -56,8 +54,8 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
                 if (transform.Scope == null)
                     continue;
 
-                foreach (BaseBinding binding in transform.Scope.GetAllBindings())
-                    yield return new BindingContext(binding, transform.Transform);
+                foreach (BaseBindingNode binding in transform.Scope.GetAllBindings())
+                    yield return new BindingContext(binding, transform.Scope);
             }
         }
     }

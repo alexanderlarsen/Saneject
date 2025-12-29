@@ -9,8 +9,8 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             string errorMessage,
             BindingContext context)
         {
-            PingObject = context.DeclaringTransform;
-            ErrorMessage = $"Invalid binding {BindingSignatureBuilder.GetBindingSignature(context.Binding)}: {errorMessage}";
+            PingObject = context.Scope.TransformNode.Transform;
+            ErrorMessage = $"Invalid binding {BindingSignatureBuilder.GetBindingSignature(context)}: {errorMessage}";
         }
 
         public string ErrorMessage { get; }

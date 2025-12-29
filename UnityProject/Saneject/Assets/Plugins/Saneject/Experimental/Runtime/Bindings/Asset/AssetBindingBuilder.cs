@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -29,9 +30,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <param name="ids">The identifiers to match against injection targets.</param>
         public AssetBindingBuilder<TAsset> ToID(params string[] ids)
         {
-            foreach (string id in ids)
-                binding.AddIdQualifier(id);
-
+            binding.IdQualifiers.AddRange(ids);
             return this;
         }
 
@@ -43,7 +42,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
         public AssetBindingBuilder<TAsset> ToTarget<TTarget>()
         {
-            binding.AddInjectionTargetTypeQualifier(typeof(TTarget));
+            binding.TargetTypeQualifiers.Add(typeof(TTarget));
             return this;
         }
 
@@ -55,9 +54,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
         public AssetBindingBuilder<TAsset> ToTarget(params Type[] targetTypes)
         {
-            foreach (Type type in targetTypes)
-                binding.AddInjectionTargetTypeQualifier(type);
-
+            binding.TargetTypeQualifiers.AddRange(targetTypes);
             return this;
         }
 
@@ -68,9 +65,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <param name="memberNames">The field or property names on the injection target that this binding should apply to.</param>
         public AssetBindingBuilder<TAsset> ToMember(params string[] memberNames)
         {
-            foreach (string memberName in memberNames)
-                binding.AddInjectionTargetMemberNameQualifier(memberName);
-
+            binding.MemberNameQualifiers.AddRange(memberNames);
             return this;
         }
 
@@ -83,9 +78,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromResources(string path)
         {
-            binding.SetAssetPath(path);
-            binding.SetAssetLoadType(AssetLoadType.Resources);
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetPath = path;
+            binding.AssetLoadType = AssetLoadType.Resources;
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
@@ -94,9 +89,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromResourcesAll(string path)
         {
-            binding.SetAssetPath(path);
-            binding.SetAssetLoadType(AssetLoadType.ResourcesAll);
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetPath = path;
+            binding.AssetLoadType = AssetLoadType.ResourcesAll;
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
@@ -105,9 +100,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromAssetLoad(string assetPath)
         {
-            binding.SetAssetPath(assetPath);
-            binding.SetAssetLoadType(AssetLoadType.AssetLoad);
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetPath = assetPath;
+            binding.AssetLoadType = AssetLoadType.AssetLoad;
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
@@ -117,9 +112,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromAssetLoadAll(string assetPath)
         {
-            binding.SetAssetPath(assetPath);
-            binding.SetAssetLoadType(AssetLoadType.AssetLoadAll);
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetPath = assetPath;
+            binding.AssetLoadType = AssetLoadType.AssetLoadAll;
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
@@ -129,9 +124,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromFolder(string folderPath)
         {
-            binding.SetAssetPath(folderPath);
-            binding.SetAssetLoadType(AssetLoadType.Folder);
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetPath = folderPath;
+            binding.AssetLoadType = AssetLoadType.Folder;
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
@@ -144,9 +139,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromInstance(TAsset instance)
         {
-            binding.SetAssetLoadType(AssetLoadType.Instance);
-            binding.ResolveFromInstances(instance);
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetLoadType = AssetLoadType.Instance;
+            binding.ResolveFromInstances.Add(instance);
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
@@ -155,9 +150,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromMethod(Func<TAsset> method)
         {
-            binding.SetAssetLoadType(AssetLoadType.Instance);
-            binding.ResolveFromInstances(method?.Invoke());
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetLoadType = AssetLoadType.Instance;
+            binding.ResolveFromInstances.Add(method?.Invoke());
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
@@ -166,9 +161,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> FromMethod(Func<IEnumerable<TAsset>> method)
         {
-            binding.SetAssetLoadType(AssetLoadType.Instance);
-            binding.ResolveFromInstances(method?.Invoke());
-            binding.MarkLocatorStrategySpecified();
+            binding.AssetLoadType = AssetLoadType.Instance;
+            binding.ResolveFromInstances.AddRange(method?.Invoke() ?? Enumerable.Empty<TAsset>());
+            binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
 

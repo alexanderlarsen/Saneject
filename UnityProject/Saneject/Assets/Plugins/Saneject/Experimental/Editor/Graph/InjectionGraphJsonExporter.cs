@@ -41,29 +41,24 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
-                            ["directInstancesToResolveFrom"] = new JArray(binding.DirectInstancesToResolveFrom.Select(instance => instance.GetType().Name)),
+                            ["directInstancesToResolveFrom"] = new JArray(binding.ResolveFromInstances.Select(instance => instance.GetType().Name)),
                             ["idQualifiers"] = new JArray(binding.IdQualifiers),
                             ["injectionTargetTypeQualifiers"] = new JArray(binding.TargetTypeQualifiers.Select(q => q.Name)),
                             ["injectionTargetMemberNameQualifiers"] = new JArray(binding.MemberNameQualifiers),
                             ["searchOrigin"] = binding.SearchOrigin.ToString(),
                             ["searchDirection"] = binding.SearchDirection.ToString(),
+                            ["findObjectsInactive"] = binding.FindObjectsInactive.ToString(),
+                            ["findObjectsSortMode"] = binding.FindObjectsSortMode.ToString(),
                             ["customTargetTransform"] = binding.CustomTargetTransform?.name,
                             ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
                             ["childIndexForSearch"] = binding.ChildIndexForSearch,
-                            ["resolveFromProxy"] = binding.ResolveFromProxy,
-                            ["sceneSearchFindObjectsSettings"] = binding.SceneSearchFindObjectsSettings != null
-                                ? new JObject
-                                {
-                                    ["includeInactive"] = binding.SceneSearchFindObjectsSettings?.IncludeInactive.ToString(),
-                                    ["sortMode"] = binding.SceneSearchFindObjectsSettings?.SortMode.ToString()
-                                }
-                                : null
+                            ["resolveFromProxy"] = binding.ResolveFromProxy
                         }) ?? Array.Empty<JObject>()),
                         ["assetBindings"] = new JArray(node.Scope?.AssetBindings?.Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
-                            ["directInstancesToResolveFrom"] = new JArray(binding.DirectInstancesToResolveFrom.Select(instance => instance.GetType().Name)),
+                            ["directInstancesToResolveFrom"] = new JArray(binding.ResolveFromInstances.Select(instance => instance.GetType().Name)),
                             ["idQualifiers"] = new JArray(binding.IdQualifiers),
                             ["injectionTargetTypeQualifiers"] = new JArray(binding.TargetTypeQualifiers.Select(q => q.Name)),
                             ["injectionTargetMemberNameQualifiers"] = new JArray(binding.MemberNameQualifiers),
@@ -74,23 +69,18 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
-                            ["directInstancesToResolveFrom"] = new JArray(binding.DirectInstancesToResolveFrom.Select(instance => instance.GetType().Name)),
+                            ["directInstancesToResolveFrom"] = new JArray(binding.ResolveFromInstances.Select(instance => instance.GetType().Name)),
                             ["idQualifiers"] = new JArray(binding.IdQualifiers),
                             ["injectionTargetTypeQualifiers"] = new JArray(binding.TargetTypeQualifiers.Select(q => q.Name)),
                             ["injectionTargetMemberNameQualifiers"] = new JArray(binding.MemberNameQualifiers),
                             ["searchOrigin"] = binding.SearchOrigin.ToString(),
                             ["searchDirection"] = binding.SearchDirection.ToString(),
+                            ["findObjectsInactive"] = binding.FindObjectsInactive.ToString(),
+                            ["findObjectsSortMode"] = binding.FindObjectsSortMode.ToString(),
                             ["customTargetTransform"] = binding.CustomTargetTransform?.name,
                             ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
                             ["childIndexForSearch"] = binding.ChildIndexForSearch,
-                            ["resolveFromProxy"] = binding.ResolveFromProxy,
-                            ["sceneSearchFindObjectsSettings"] = binding.SceneSearchFindObjectsSettings != null
-                                ? new JObject
-                                {
-                                    ["includeInactive"] = binding.SceneSearchFindObjectsSettings?.IncludeInactive.ToString(),
-                                    ["sortMode"] = binding.SceneSearchFindObjectsSettings?.SortMode.ToString()
-                                }
-                                : null
+                            ["resolveFromProxy"] = binding.ResolveFromProxy
                         }) ?? Array.Empty<JObject>())
                     }
                     : null,

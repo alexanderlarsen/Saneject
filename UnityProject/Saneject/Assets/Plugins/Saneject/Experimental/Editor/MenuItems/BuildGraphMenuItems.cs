@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Experimental.Editor.Graph;
+﻿using Plugins.Saneject.Experimental.Editor.Core;
+using Plugins.Saneject.Experimental.Editor.Graph;
 using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.MenuItems
@@ -10,7 +11,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         {
             const string path = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Experimental\GraphSystem\graph.json";
 
-            InjectionGraph graph = new(Selection.gameObjects);
+            InjectionGraph graph = GraphFactory.CreateInjectionGraph(Selection.gameObjects);
             InjectionGraphJsonExporter.SaveGraphToJson(graph, path);
         }
     }

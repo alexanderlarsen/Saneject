@@ -2,33 +2,97 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
-using Plugins.Saneject.Experimental.Runtime.Bindings;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
+using Plugins.Saneject.Runtime.Extensions;
 
 namespace Plugins.Saneject.Experimental.Editor.Utils
 {
+    // TODO: Refactor this class
+
     public static class BindingSignatureBuilder
     {
-         /// <summary>
+        /// <summary>
         /// Gets the identity string of a known/declared binding.
         /// </summary>
-        public static string GetBindingSignature(BaseBinding binding)
+        public static string GetBindingSignature(BindingContext context)
         {
-            return GetBindingSignature(
-                isGlobal: binding is GlobalComponentBinding,
-                isAsset: binding is AssetBinding,
-                isComponent: binding is ComponentBinding,
-                isProxy: binding is ComponentBinding { ResolveFromProxy: true },
-                isCollection: binding.IsCollectionBinding,
-                interfaceType: binding.InterfaceType,
-                concreteType: binding.ConcreteType,
-                ids: binding.IdQualifiers,
-                // scope: binding.Scope,
-                targetTypes: binding.TargetTypeQualifiers,
-                memberNames: binding.MemberNameQualifiers
-            );
+            BaseBindingNode binding = context.Binding;
+            Type interfaceType = binding.InterfaceType;
+            Type concreteType = binding.ConcreteType;
+            bool isCollection = binding.IsCollectionBinding;
+            IReadOnlyList<string> ids = binding.IdQualifiers;
+            IReadOnlyList<Type> targetTypes = binding.TargetTypeQualifiers;
+            IReadOnlyList<string> memberNames = binding.MemberNameQualifiers;
+            bool isPrefab = context.Scope.TransformNode.Transform.gameObject.IsPrefab();
+            string scopeName = context.Scope.GetType().Name;
+
+            StringBuilder sb = new();
+            sb.Append("[Binding: ");
+
+            if (interfaceType != null && concreteType != null)
+                sb.Append($"{interfaceType.Name}/{concreteType.Name}");
+            else if (interfaceType == null && concreteType != null)
+                sb.Append($"{concreteType.Name}");
+            else if (interfaceType != null)
+                sb.Append($"{interfaceType.Name}");
+            else
+                sb.Append("null/null");
+
+            sb.Append(" | ");
+            sb.Append(isCollection ? "Collection" : "Single");
+
+            switch (binding)
+            {
+                case GlobalComponentBindingNode:
+                {
+                    sb.Append(", Global");
+                    break;
+                }
+
+                case AssetBindingNode:
+                {
+                    sb.Append(", Asset");
+                    break;
+                }
+
+                case ComponentBindingNode componentBindingNode:
+                {
+                    sb.Append(", Component");
+
+                    if (componentBindingNode.ResolveFromProxy)
+                        sb.Append(", Proxy");
+
+                    break;
+                }
+            }
+
+            if (ids is { Count: > 0 })
+            {
+                sb.Append(" | ");
+                sb.Append(ids.Count == 1 ? "ID: " : "IDs: ");
+                sb.Append(string.Join(", ", ids));
+            }
+
+            if (targetTypes is { Count: > 0 })
+            {
+                sb.Append(" | ");
+                sb.Append(targetTypes.Count == 1 ? "To target: " : "To targets: ");
+                sb.Append(string.Join(", ", targetTypes.Select(t => t.Name)));
+            }
+
+            if (memberNames is { Count: > 0 })
+            {
+                sb.Append(" | ");
+                sb.Append(memberNames.Count == 1 ? "To member: " : "To members: ");
+                sb.Append(string.Join(", ", memberNames));
+            }
+
+            sb.Append($" | {(isPrefab ? "Prefab" : "Scene")} scope: {scopeName}");
+            sb.Append("]");
+
+            return sb.ToString();
         }
 
         /// <summary>
@@ -56,71 +120,6 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             sb.Append(isCollection ? "Collection" : "Single");
 
             sb.Append($" | Nearest scope: {scope.GetType().Name}");
-            sb.Append("]");
-
-            return sb.ToString();
-        }
-
-        private static string GetBindingSignature(
-            bool isGlobal,
-            bool isAsset,
-            bool isComponent,
-            bool isProxy,
-            bool isCollection,
-            Type interfaceType,
-            Type concreteType,
-            IReadOnlyList<string> ids,
-            // ScopeNode scope,
-            IReadOnlyList<Type> targetTypes,
-            IReadOnlyList<string> memberNames)
-        {
-            StringBuilder sb = new();
-            sb.Append("[Binding: ");
-
-            if (interfaceType != null && concreteType != null)
-                sb.Append($"{interfaceType.Name}/{concreteType.Name}");
-            else if (interfaceType == null && concreteType != null)
-                sb.Append($"{concreteType.Name}");
-            else if (interfaceType != null)
-                sb.Append($"{interfaceType.Name}");
-            else
-                sb.Append("null/null");
-
-            sb.Append(" | ");
-            sb.Append(isCollection ? "Collection" : "Single");
-
-            if (isGlobal)
-                sb.Append(", Global");
-            else if (isAsset)
-                sb.Append(", Asset");
-            else if (isComponent)
-                sb.Append(", Component");
-
-            if (isProxy)
-                sb.Append(", Proxy");
-
-            if (ids is { Count: > 0 })
-            {
-                sb.Append(" | ");
-                sb.Append(ids.Count == 1 ? "ID: " : "IDs: ");
-                sb.Append(string.Join(", ", ids));
-            }
-
-            if (targetTypes is { Count: > 0 })
-            {
-                sb.Append(" | ");
-                sb.Append(targetTypes.Count == 1 ? "To target: " : "To targets: ");
-                sb.Append(string.Join(", ", targetTypes.Select(t => t.Name)));
-            }
-
-            if (memberNames is { Count: > 0 })
-            {
-                sb.Append(" | ");
-                sb.Append(memberNames.Count == 1 ? "To member: " : "To members: ");
-                sb.Append(string.Join(", ", memberNames));
-            }
-
-            // sb.Append($" | {(scope.gameObject.IsPrefab() ? "Prefab" : "Scene")} scope: {scope.GetType().Name}");
             sb.Append("]");
 
             return sb.ToString();

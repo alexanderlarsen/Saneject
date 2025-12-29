@@ -11,5 +11,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             foreach (BindingError error in errors)
                 Debug.LogError(error.ErrorMessage, error.PingObject);
         }
+
+        public static void LogDependencyErrors(IReadOnlyList<DependencyError> dependencyErrors)
+        {
+        }
     }
 }

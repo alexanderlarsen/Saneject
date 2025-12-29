@@ -8,7 +8,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         [MenuItem("GameObject/Inject Hierarchy (new)", false, 49)]
         private static void InjectHierarchy()
         {
-            DependencyInjector.InjectSingleHierarchy(Selection.activeGameObject);
+            PipelineRunner.InjectSingleHierarchy(Selection.activeGameObject);
         }
     }
 }
