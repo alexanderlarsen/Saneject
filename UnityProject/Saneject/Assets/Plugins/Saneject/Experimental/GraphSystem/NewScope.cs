@@ -8,11 +8,11 @@ namespace Plugins.Saneject.Experimental.GraphSystem
     {
         private readonly HashSet<NewAssetBinding> assetBindings = new();
         private readonly HashSet<NewComponentBinding> componentBindings = new();
-        private readonly HashSet<NewComponentBinding> globalBindings = new();
+        private readonly HashSet<NewGlobalBinding> globalBindings = new();
 
         public IReadOnlyCollection<NewComponentBinding> ComponentBindings => componentBindings;
         public IReadOnlyCollection<NewAssetBinding> AssetBindings => assetBindings;
-        public IReadOnlyCollection<NewComponentBinding> GlobalBindings => globalBindings;
+        public IReadOnlyCollection<NewGlobalBinding> GlobalBindings => globalBindings;
 
         #region USER-FACING METHODS
 
@@ -232,7 +232,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem
         /// <returns>A fluent builder for configuring the global component binding.</returns>
         protected NewGlobalBindingBuilder<T> BindGlobal<T>() where T : Component
         {
-            NewComponentBinding binding = new();
+            NewGlobalBinding binding = new();
             binding.SetTargetType(typeof(T));
             globalBindings.Add(binding);
             return new NewGlobalBindingBuilder<T>(binding);

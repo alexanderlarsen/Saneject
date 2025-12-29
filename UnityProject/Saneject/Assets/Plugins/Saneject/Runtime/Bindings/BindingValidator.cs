@@ -88,7 +88,7 @@ namespace Plugins.Saneject.Runtime.Bindings
             {
                 Debug.LogError(
                     $"Saneject: Invalid binding {binding.GetBindingSignature()}." +
-                    $" Component binding type '{binding.ConcreteType.Name}' is not a Unity Component. Component bindings must resolve UnityEngine.Component types.",
+                        $" Component binding type '{binding.ConcreteType.Name}' is not a Unity Component. Component bindings must resolve UnityEngine.Component types.",
                     binding.Scope);
 
                 isValid = false;

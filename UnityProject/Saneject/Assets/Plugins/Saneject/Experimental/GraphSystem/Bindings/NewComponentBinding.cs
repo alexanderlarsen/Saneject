@@ -12,7 +12,8 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public int ChildIndexForSearch { get; private set; }
         public FindObjectsSettings SceneSearchFindObjectsSettings { get; private set; }
         public bool ResolveFromProxy { get; private set; }
-
+   
+        
         public void MarkResolveFromProxy()
         {
             ResolveFromProxy = true;

@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using Plugins.Saneject.Experimental.GraphSystem.Bindings;
-using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes

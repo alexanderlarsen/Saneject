@@ -39,7 +39,8 @@
             "sceneSearchFindObjectsSettings": null
           }
         ],
-        "assetBindings": []
+        "assetBindings": [],
+        "globalBindings": []
       },
       "components": [
         {
@@ -140,7 +141,8 @@
                 "assetPath": null,
                 "assetLoadType": "Instance"
               }
-            ]
+            ],
+            "globalBindings": []
           },
           "components": [
             {
@@ -225,7 +227,8 @@
                 "type": "WeaponScope",
                 "parentScope": null,
                 "componentBindings": [],
-                "assetBindings": []
+                "assetBindings": [],
+                "globalBindings": []
               },
               "components": [
                 {
@@ -306,7 +309,8 @@
                 "type": "WeaponScope",
                 "parentScope": null,
                 "componentBindings": [],
-                "assetBindings": []
+                "assetBindings": [],
+                "globalBindings": []
               },
               "components": [],
               "children": []

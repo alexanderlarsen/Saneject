@@ -11,7 +11,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Editor
         {
             const string path = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Experimental\GraphSystem\graph.json";
 
-            InjectionGraph graph = InjectionGraph.Build(Selection.gameObjects);
+            InjectionGraph graph = new(Selection.gameObjects);
             InjectionGraphJsonExporter.SaveGraphToJson(graph, path);
         }
 
@@ -19,6 +19,12 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Editor
         private static bool BuildGraphValidate()
         {
             return Selection.gameObjects != null && Selection.gameObjects.Length > 0;
+        }
+        
+        [MenuItem("GameObject/Inject Hierarchy (new)", false, 49)]
+        private static void InjectHierarchy()
+        {
+            NewDependencyInjector.InjectSingleHierarchy(Selection.activeGameObject);
         }
     }
 }

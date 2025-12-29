@@ -9,18 +9,30 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         private readonly List<object> directInstancesToResolveFrom = new();
         private readonly List<Func<Object, bool>> filters = new();
         private readonly List<string> idQualifiers = new();
-        private readonly List<string> injectionTargetMemberNameQualifiers = new();
-        private readonly List<Type> injectionTargetTypeQualifiers = new();
+        private readonly List<string> memberNameQualifiers = new();
+        private readonly List<Type> targetTypeQualifiers = new();
 
         public Type InterfaceType { get; private set; }
         public Type ConcreteType { get; private set; }
         public bool IsCollectionBinding { get; private set; }
+        public bool IsValid { get; private set; } = true;
+        public bool LocatorStrategySpecified { get; private set; }
 
         public IReadOnlyList<object> DirectInstancesToResolveFrom => directInstancesToResolveFrom;
         public IReadOnlyList<string> IdQualifiers => idQualifiers;
-        public IReadOnlyList<Type> InjectionTargetTypeQualifiers => injectionTargetTypeQualifiers;
-        public IReadOnlyList<string> InjectionTargetMemberNameQualifiers => injectionTargetMemberNameQualifiers;
+        public IReadOnlyList<Type> TargetTypeQualifiers => targetTypeQualifiers;
+        public IReadOnlyList<string> MemberNameQualifiers => memberNameQualifiers;
         public IReadOnlyList<Func<Object, bool>> Filters => filters;
+
+        public void MarkLocatorStrategySpecified()
+        {
+            LocatorStrategySpecified = true;
+        }
+
+        public void Invalidate()
+        {
+            IsValid = false;
+        }
 
         public void SetTargetType(Type targetType)
         {
@@ -50,12 +62,12 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
 
         public void AddInjectionTargetTypeQualifier(Type type)
         {
-            injectionTargetTypeQualifiers.Add(type);
+            targetTypeQualifiers.Add(type);
         }
 
         public void AddInjectionTargetMemberNameQualifier(string memberName)
         {
-            injectionTargetMemberNameQualifiers.Add(memberName);
+            memberNameQualifiers.Add(memberName);
         }
 
         /// <summary>

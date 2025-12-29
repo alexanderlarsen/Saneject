@@ -162,6 +162,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromScopeSelf()
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Self);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -171,6 +172,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromScopeParent()
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Parent);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -182,6 +184,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Ancestors);
             binding.SetIncludeSelfInSearch(includeSelf);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -191,6 +194,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromScopeFirstChild()
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.FirstChild);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -200,6 +204,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromScopeLastChild()
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.LastChild);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -210,6 +215,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.ChildAtIndex);
             binding.SetChildIndexForSearch(index);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -221,6 +227,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Descendants);
             binding.SetIncludeSelfInSearch(includeSelf);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -230,6 +237,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromScopeSiblings()
         {
             binding.SetSearchParameters(SearchOrigin.Scope, SearchDirection.Siblings);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -243,6 +251,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromRootSelf()
         {
             binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.Self);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -252,6 +261,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromRootFirstChild()
         {
             binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.FirstChild);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -261,6 +271,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromRootLastChild()
         {
             binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.LastChild);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -271,6 +282,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.ChildAtIndex);
             binding.SetChildIndexForSearch(index);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -282,6 +294,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.Root, SearchDirection.Descendants);
             binding.SetIncludeSelfInSearch(includeSelf);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -296,6 +309,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromTargetSelf()
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Self);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -306,6 +320,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromTargetParent()
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Parent);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -318,6 +333,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Ancestors);
             binding.SetIncludeSelfInSearch(includeSelf);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -328,6 +344,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromTargetFirstChild()
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.FirstChild);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -338,6 +355,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromTargetLastChild()
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.LastChild);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -349,6 +367,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.ChildAtIndex);
             binding.SetChildIndexForSearch(index);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -361,6 +380,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Descendants);
             binding.SetIncludeSelfInSearch(includeSelf);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -371,6 +391,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public NewComponentFilterBuilder<TComponent> FromTargetSiblings()
         {
             binding.SetSearchParameters(SearchOrigin.InjectionTarget, SearchDirection.Siblings);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -385,6 +406,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Self);
             binding.SetCustomTargetTransform(target);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -395,6 +417,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Parent);
             binding.SetCustomTargetTransform(target);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -409,6 +432,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Ancestors);
             binding.SetCustomTargetTransform(target);
             binding.SetIncludeSelfInSearch(includeSelf);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -419,6 +443,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.FirstChild);
             binding.SetCustomTargetTransform(target);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -429,6 +454,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.LastChild);
             binding.SetCustomTargetTransform(target);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -442,6 +468,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.ChildAtIndex);
             binding.SetCustomTargetTransform(target);
             binding.SetChildIndexForSearch(index);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -456,6 +483,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Descendants);
             binding.SetCustomTargetTransform(target);
             binding.SetIncludeSelfInSearch(includeSelf);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -466,6 +494,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.CustomTargetTransform, SearchDirection.Siblings);
             binding.SetCustomTargetTransform(target);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -482,6 +511,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.Scene, SearchDirection.Anywhere);
             binding.SetSceneSearchFindObjectsSettings(findObjectsInactive, sortMode);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -492,6 +522,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.SingleInstance, SearchDirection.None);
             binding.ResolveFromInstances(instance);
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -502,6 +533,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.SingleInstance, SearchDirection.None);
             binding.ResolveFromInstances(method?.Invoke());
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -512,6 +544,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetSearchParameters(SearchOrigin.MultipleInstances, SearchDirection.None);
             binding.ResolveFromInstances(method?.Invoke().Cast<Component>());
+            binding.MarkLocatorStrategySpecified();
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
 
@@ -521,6 +554,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         public void FromProxy()
         {
             binding.MarkResolveFromProxy();
+            binding.MarkLocatorStrategySpecified();
         }
 
         #endregion

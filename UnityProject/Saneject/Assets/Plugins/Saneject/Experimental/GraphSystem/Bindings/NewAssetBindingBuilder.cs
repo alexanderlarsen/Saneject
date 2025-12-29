@@ -85,6 +85,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetPath(path);
             binding.SetAssetLoadType(AssetLoadType.Resources);
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
@@ -95,6 +96,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetPath(path);
             binding.SetAssetLoadType(AssetLoadType.ResourcesAll);
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
@@ -105,6 +107,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetPath(assetPath);
             binding.SetAssetLoadType(AssetLoadType.AssetLoad);
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
@@ -116,6 +119,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetPath(assetPath);
             binding.SetAssetLoadType(AssetLoadType.AssetLoadAll);
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
@@ -127,6 +131,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetPath(folderPath);
             binding.SetAssetLoadType(AssetLoadType.Folder);
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
@@ -141,6 +146,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetLoadType(AssetLoadType.Instance);
             binding.ResolveFromInstances(instance);
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
@@ -151,6 +157,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetLoadType(AssetLoadType.Instance);
             binding.ResolveFromInstances(method?.Invoke());
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
@@ -161,6 +168,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
         {
             binding.SetAssetLoadType(AssetLoadType.Instance);
             binding.ResolveFromInstances(method?.Invoke());
+            binding.MarkLocatorStrategySpecified();
             return new NewAssetFilterBuilder<TAsset>(binding);
         }
 
