@@ -29,42 +29,76 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Debugging
         {
             JObject jNode = new()
             {
-                ["name"] = $"{node.Transform.name} ({node.Transform.GetInstanceID()})",
+                ["name"] = $"{node.Transform.name} (Instance ID: {node.Transform.GetInstanceID()})",
                 ["parent"] = node.Parent != null
-                    ? $"{node.Parent.Transform.name} ({node.Parent.Transform.GetInstanceID()})"
+                    ? $"{node.Parent.Transform.name} (Instance ID: {node.Parent.Transform.GetInstanceID()})"
                     : null,
-                ["context"] = $"{node.Context.Type} ({node.Context.Key})",
+                ["context"] = $"{node.Context.Type} (Key: {node.Context.Key})",
                 ["scope"] = node.Scope != null
                     ? new JObject
                     {
                         ["type"] = node.Scope?.Type.Name,
                         ["parentScope"] = node.Scope?.ParentScope?.Type.Name,
-                        ["bindings"] = new JArray(node.Scope?.Bindings?.Select(binding => new JObject
+                        ["componentBindings"] = new JArray(node.Scope?.ComponentBindings?.Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
-                            ["bindingType"] = binding.BindingType.ToString(),
-                            ["searchOrigin"] = binding.SearchOrigin.ToString(),
-                            ["searchDirection"] = binding.SearchDirection.ToString(),
-                            ["customTargetTransform"] = binding.CustomTargetTransform?.name,
                             ["directInstancesToResolveFrom"] = new JArray(binding.DirectInstancesToResolveFrom.Select(instance => instance.GetType().Name)),
-                            ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
-                            ["childIndexForSearch"] = binding.ChildIndexForSearch,
-                            ["resolveFromProxy"] = binding.ResolveFromProxy,
                             ["idQualifiers"] = new JArray(binding.IdQualifiers),
                             ["injectionTargetTypeQualifiers"] = new JArray(binding.InjectionTargetTypeQualifiers.Select(q => q.Name)),
                             ["injectionTargetMemberNameQualifiers"] = new JArray(binding.InjectionTargetMemberNameQualifiers),
-                            ["sceneSearchFindObjectsSettings"] = binding.SceneSearchFindObjectsSettings != null ? new JObject
-                            {
-                                ["includeInactive"] = binding.SceneSearchFindObjectsSettings?.IncludeInactive.ToString(),
-                                ["sortMode"] = binding.SceneSearchFindObjectsSettings?.SortMode.ToString()
-                            } : null
+                            ["searchOrigin"] = binding.SearchOrigin.ToString(),
+                            ["searchDirection"] = binding.SearchDirection.ToString(),
+                            ["customTargetTransform"] = binding.CustomTargetTransform?.name,
+                            ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
+                            ["childIndexForSearch"] = binding.ChildIndexForSearch,
+                            ["resolveFromProxy"] = binding.ResolveFromProxy,
+                            ["sceneSearchFindObjectsSettings"] = binding.SceneSearchFindObjectsSettings != null
+                                ? new JObject
+                                {
+                                    ["includeInactive"] = binding.SceneSearchFindObjectsSettings?.IncludeInactive.ToString(),
+                                    ["sortMode"] = binding.SceneSearchFindObjectsSettings?.SortMode.ToString()
+                                }
+                                : null
+                        }) ?? Array.Empty<JObject>()),
+                        ["assetBindings"] = new JArray(node.Scope?.AssetBindings?.Select(binding => new JObject
+                        {
+                            ["interfaceType"] = binding.InterfaceType?.Name,
+                            ["concreteType"] = binding.ConcreteType?.Name,
+                            ["directInstancesToResolveFrom"] = new JArray(binding.DirectInstancesToResolveFrom.Select(instance => instance.GetType().Name)),
+                            ["idQualifiers"] = new JArray(binding.IdQualifiers),
+                            ["injectionTargetTypeQualifiers"] = new JArray(binding.InjectionTargetTypeQualifiers.Select(q => q.Name)),
+                            ["injectionTargetMemberNameQualifiers"] = new JArray(binding.InjectionTargetMemberNameQualifiers),
+                            ["assetPath"] = binding.AssetPath,
+                            ["assetLoadType"] = binding.AssetLoadType.ToString()
+                        }) ?? Array.Empty<JObject>()),
+                        ["globalBindings"] = new JArray(node.Scope?.GlobalBindings?.Select(binding => new JObject
+                        {
+                            ["interfaceType"] = binding.InterfaceType?.Name,
+                            ["concreteType"] = binding.ConcreteType?.Name,
+                            ["directInstancesToResolveFrom"] = new JArray(binding.DirectInstancesToResolveFrom.Select(instance => instance.GetType().Name)),
+                            ["idQualifiers"] = new JArray(binding.IdQualifiers),
+                            ["injectionTargetTypeQualifiers"] = new JArray(binding.InjectionTargetTypeQualifiers.Select(q => q.Name)),
+                            ["injectionTargetMemberNameQualifiers"] = new JArray(binding.InjectionTargetMemberNameQualifiers),
+                            ["searchOrigin"] = binding.SearchOrigin.ToString(),
+                            ["searchDirection"] = binding.SearchDirection.ToString(),
+                            ["customTargetTransform"] = binding.CustomTargetTransform?.name,
+                            ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
+                            ["childIndexForSearch"] = binding.ChildIndexForSearch,
+                            ["resolveFromProxy"] = binding.ResolveFromProxy,
+                            ["sceneSearchFindObjectsSettings"] = binding.SceneSearchFindObjectsSettings != null
+                                ? new JObject
+                                {
+                                    ["includeInactive"] = binding.SceneSearchFindObjectsSettings?.IncludeInactive.ToString(),
+                                    ["sortMode"] = binding.SceneSearchFindObjectsSettings?.SortMode.ToString()
+                                }
+                                : null
                         }) ?? Array.Empty<JObject>())
                     }
                     : null,
                 ["components"] = new JArray(node.Components.Select(componentNode => new JObject
                     {
-                        ["name"] = $"{componentNode.Component.GetType().Name} ({componentNode.Component.GetInstanceID()})",
+                        ["name"] = $"{componentNode.Component.GetType().Name} (Instance ID: {componentNode.Component.GetInstanceID()})",
                         ["fields"] = new JArray(componentNode.Fields.Select
                         (fieldNode => new JObject
                         {

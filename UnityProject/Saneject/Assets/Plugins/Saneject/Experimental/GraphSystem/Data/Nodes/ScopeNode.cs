@@ -16,13 +16,17 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Data.Nodes
             ParentScope = FindParentScopeNode(transformNode);
             Type = scope.GetType();
             scope.ConfigureBindings();
-            Bindings = scope.Bindings;
+            ComponentBindings = scope.ComponentBindings;
+            AssetBindings = scope.AssetBindings;
+            GlobalBindings = scope.GlobalBindings;
         }
 
         public TransformNode TransformNode { get; }
         public ScopeNode ParentScope { get; }
         public Type Type { get; }
-        public IReadOnlyList<NewBinding> Bindings { get; }
+        public IReadOnlyCollection<NewComponentBinding> ComponentBindings { get; }
+        public IReadOnlyCollection<NewAssetBinding> AssetBindings { get; }
+        public IReadOnlyCollection<NewComponentBinding> GlobalBindings { get; }
 
         private static ScopeNode FindParentScopeNode(TransformNode transformNode)
         {

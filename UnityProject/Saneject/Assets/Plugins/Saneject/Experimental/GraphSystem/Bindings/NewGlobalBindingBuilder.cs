@@ -5,77 +5,15 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
 {
-    /// <summary>
-    /// Fluent builder for configuring component bindings within a <see cref="Scope" />.
-    /// Allows specifying how to locate a <see cref="Component" /> instance (or collection) from the scene hierarchy or injection context.
-    /// Supports locating from the scope, injection target, custom transforms, scene-wide queries, or explicit instances.
-    /// Typically returned from binding methods like <c>BindComponent&lt;TComponent&gt;()</c> or <c>BindMultipleComponents&lt;TComponent&gt;()</c>.
-    /// </summary>
-    public class NewComponentBindingBuilder<TComponent> where TComponent : class
+    public class NewGlobalBindingBuilder<TComponent> where TComponent : class
     {
         private readonly NewComponentBinding binding;
 
-        public NewComponentBindingBuilder(NewComponentBinding binding)
+        public NewGlobalBindingBuilder(NewComponentBinding binding)
         {
             this.binding = binding;
         }
-
-        #region QUALIFIER METHODS
-
-        /// <summary>
-        /// Qualifies this binding with an ID.
-        /// Only injection targets annotated with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />
-        /// that specify the same ID will resolve using this binding.
-        /// </summary>
-        /// <param name="ids">The identifiers to match against injection targets.</param>
-        public NewComponentBindingBuilder<TComponent> ToID(params string[] ids)
-        {
-            foreach (string id in ids)
-                binding.AddIdQualifier(id);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Qualifies this binding to apply only when the injection target is of the given type.
-        /// The injection target is the <see cref="UnityEngine.Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
-        /// </summary>
-        /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
-        public NewComponentBindingBuilder<TComponent> ToTarget<TTarget>()
-        {
-            binding.AddInjectionTargetTypeQualifier(typeof(TTarget));
-            return this;
-        }
-
-        /// <summary>
-        /// Qualifies this binding to apply only when the injection target is one of the specified types.
-        /// The injection target is the <see cref="UnityEngine.Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
-        /// </summary>
-        /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
-        public NewComponentBindingBuilder<TComponent> ToTarget(params Type[] targetTypes)
-        {
-            foreach (Type type in targetTypes)
-                binding.AddInjectionTargetTypeQualifier(type);
-
-            return this;
-        }
-
-        /// <summary>
-        /// Qualifies this binding to apply only when the injection target member (field or property) has one of the specified names.
-        /// </summary>
-        /// <param name="memberNames">The field or property names on the injection target that this binding should apply to.</param>
-        public NewComponentBindingBuilder<TComponent> ToMember(params string[] memberNames)
-        {
-            foreach (string memberName in memberNames)
-                binding.AddInjectionTargetMemberNameQualifier(memberName);
-
-            return this;
-        }
-
-        #endregion
-
+        
         #region DEFAULT (SCOPE) LOCATOR METHODS
 
         /// <summary>
@@ -514,15 +452,7 @@ namespace Plugins.Saneject.Experimental.GraphSystem.Bindings
             binding.ResolveFromInstances(method?.Invoke().Cast<Component>());
             return new NewComponentFilterBuilder<TComponent>(binding);
         }
-
-        /// <summary>
-        /// Creates or locates a <see cref="Plugins.Saneject.Runtime.Proxy.ProxyObject{TConcrete}" /> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component" /> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
-        /// </summary>
-        public void FromProxy()
-        {
-            binding.MarkResolveFromProxy();
-        }
-
+ 
         #endregion
     }
 }
