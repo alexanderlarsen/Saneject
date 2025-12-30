@@ -9,7 +9,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void InjectSingleHierarchy(GameObject startGameObject)
         {
-            InjectionGraph graph = GraphFactory.CreateInjectionGraph(startGameObject);
+            InjectionGraph graph = InjectionGraphFactory.CreateGraph(startGameObject);
 
             BindingValidator.ValidateBindings
             (
@@ -28,7 +28,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Logger.LogBindingErrors(bindingsErrors);
             Logger.LogDependencyErrors(dependencyErrors);
 
-            InjectionGraphJsonExporter.SaveGraphToJson(graph, @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Experimental\graph.json");
+            InjectionGraphJsonExporter.SaveGraphToJson(graph);
         }
     }
 }

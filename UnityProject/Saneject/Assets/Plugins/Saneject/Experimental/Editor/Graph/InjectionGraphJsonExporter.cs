@@ -2,18 +2,20 @@
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using Plugins.Saneject.Experimental.Editor.Utils;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph
 {
     public static class InjectionGraphJsonExporter
     {
-        public static void SaveGraphToJson(
-            InjectionGraph graph,
-            string path)
+        private const string Path = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Experimental\JsonOutput\Graph.json";
+
+        public static void SaveGraphToJson(InjectionGraph graph)
         {
-            File.WriteAllText(path, GetGraphJson(graph));
-            Debug.Log($"Saneject: Injection graph saved to '{path}'");
+            DirectoryUtils.EnsureDirectoryExists(Path);
+            File.WriteAllText(Path, GetGraphJson(graph));
+            Debug.Log($"Saneject: Injection graph saved to '{Path}'");
         }
 
         public static string GetGraphJson(InjectionGraph graph)

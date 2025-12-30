@@ -9,10 +9,10 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         [MenuItem("GameObject/Build Injection Graph And Save JSON", false, 49)]
         private static void BuildGraph()
         {
-            const string path = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Experimental\GraphSystem\graph.json";
-
-            InjectionGraph graph = GraphFactory.CreateInjectionGraph(Selection.gameObjects);
-            InjectionGraphJsonExporter.SaveGraphToJson(graph, path);
+            InjectionGraphJsonExporter.SaveGraphToJson
+            (
+                InjectionGraphFactory.CreateGraph(Selection.gameObjects)
+            );
         }
     }
 }

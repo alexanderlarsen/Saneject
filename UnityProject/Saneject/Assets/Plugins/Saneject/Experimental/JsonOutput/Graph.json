@@ -1,7 +1,7 @@
 {
   "rootNodes": [
     {
-      "name": "Game (Instance ID: 32280)",
+      "name": "Game (Instance ID: 32316)",
       "parent": null,
       "context": "SceneObject (Key: -1244)",
       "scope": {
@@ -46,7 +46,7 @@
       },
       "components": [
         {
-          "name": "GameManager (Instance ID: 32276)",
+          "name": "GameManager (Instance ID: 32312)",
           "fields": [
             {
               "name": "enemy",
@@ -68,8 +68,8 @@
       ],
       "children": [
         {
-          "name": "Player (Instance ID: 32306)",
-          "parent": "Game (Instance ID: 32280)",
+          "name": "Player (Instance ID: 32342)",
+          "parent": "Game (Instance ID: 32316)",
           "context": "PrefabInstance (Key: -1256)",
           "scope": {
             "type": "PlayerScope",
@@ -201,7 +201,7 @@
           "children": [
             {
               "name": "MoveController (Instance ID: -1264)",
-              "parent": "Player (Instance ID: 32306)",
+              "parent": "Player (Instance ID: 32342)",
               "context": "PrefabInstance (Key: -1256)",
               "scope": null,
               "components": [],
@@ -209,7 +209,7 @@
             },
             {
               "name": "Colliders (Instance ID: -1270)",
-              "parent": "Player (Instance ID: 32306)",
+              "parent": "Player (Instance ID: 32342)",
               "context": "PrefabInstance (Key: -1256)",
               "scope": null,
               "components": [],
@@ -217,15 +217,15 @@
             },
             {
               "name": "AudioSources (Instance ID: -1278)",
-              "parent": "Player (Instance ID: 32306)",
+              "parent": "Player (Instance ID: 32342)",
               "context": "PrefabInstance (Key: -1256)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Crossbow (Instance ID: 32310)",
-              "parent": "Player (Instance ID: 32306)",
+              "name": "Crossbow (Instance ID: 32346)",
+              "parent": "Player (Instance ID: 32342)",
               "context": "PrefabInstance (Key: -1246)",
               "scope": {
                 "type": "WeaponScope",
@@ -256,13 +256,13 @@
           ]
         },
         {
-          "name": "Enemy (Instance ID: 32298)",
-          "parent": "Game (Instance ID: 32280)",
-          "context": "PrefabInstance (Key: 32300)",
+          "name": "Enemy (Instance ID: 32334)",
+          "parent": "Game (Instance ID: 32316)",
+          "context": "PrefabInstance (Key: 32336)",
           "scope": null,
           "components": [
             {
-              "name": "Enemy (Instance ID: 32302)",
+              "name": "Enemy (Instance ID: 32338)",
               "fields": [
                 {
                   "name": "moveController",
@@ -299,15 +299,15 @@
           "children": [
             {
               "name": "MoveController (Instance ID: -1254)",
-              "parent": "Enemy (Instance ID: 32298)",
-              "context": "PrefabInstance (Key: 32300)",
+              "parent": "Enemy (Instance ID: 32334)",
+              "context": "PrefabInstance (Key: 32336)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Rifle (Instance ID: 32314)",
-              "parent": "Enemy (Instance ID: 32298)",
+              "name": "Rifle (Instance ID: 32350)",
+              "parent": "Enemy (Instance ID: 32334)",
               "context": "PrefabInstance (Key: -1284)",
               "scope": {
                 "type": "WeaponScope",

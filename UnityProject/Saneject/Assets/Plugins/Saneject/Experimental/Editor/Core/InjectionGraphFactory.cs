@@ -4,19 +4,19 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    public static class GraphFactory
+    public static class InjectionGraphFactory
     {
-        public static InjectionGraph CreateInjectionGraph(params GameObject[] startObjects)
+        public static InjectionGraph CreateGraph(params GameObject[] startObjects)
         {
             return new InjectionGraph(startObjects.Select(gameObject => gameObject.transform));
         }
 
-        public static InjectionGraph CreateInjectionGraph(params Transform[] startTransforms)
+        public static InjectionGraph CreateGraph(params Transform[] startTransforms)
         {
             return new InjectionGraph(startTransforms);
         }
 
-        public static InjectionGraph CreateInjectionGraph(params Component[] startComponents)
+        public static InjectionGraph CreateGraph(params Component[] startComponents)
         {
             return new InjectionGraph(startComponents.Select(component => component.transform));
         }

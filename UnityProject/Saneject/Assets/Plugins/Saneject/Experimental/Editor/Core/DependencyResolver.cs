@@ -5,9 +5,12 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class DependencyResolver
     {
-        public static void Resolve(InjectionGraph graph, out InjectionPlan sourceTargetMap, out IReadOnlyList<DependencyError> dependencyErrors)
+        public static void Resolve(
+            InjectionGraph graph,
+            out InjectionPlan injectionPlan,
+            out IReadOnlyList<DependencyError> dependencyErrors)
         {
-            sourceTargetMap = null;
+            injectionPlan = null;
             dependencyErrors = null;
         }
     }
