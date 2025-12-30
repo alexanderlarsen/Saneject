@@ -1,9 +1,9 @@
 ﻿using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
-    public class ComponentBindingNode : BaseBindingNode
+    public class ComponentBindingNode : BindingNode
     {
         public ComponentBindingNode(
             ComponentBinding binding,

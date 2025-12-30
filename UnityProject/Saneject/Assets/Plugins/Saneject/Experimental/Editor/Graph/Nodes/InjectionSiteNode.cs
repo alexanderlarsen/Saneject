@@ -2,7 +2,7 @@
 using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public abstract class InjectionSiteNode
     {

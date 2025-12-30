@@ -1,8 +1,8 @@
 ﻿using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
-    public class AssetBindingNode : BaseBindingNode
+    public class AssetBindingNode : BindingNode
     {
         public AssetBindingNode(
             AssetBinding binding,

@@ -1,6 +1,6 @@
 ﻿using System.Reflection;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public class MethodNode : InjectionSiteNode
     {

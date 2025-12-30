@@ -5,7 +5,7 @@ using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public class ComponentNode
     {

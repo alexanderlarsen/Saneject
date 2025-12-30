@@ -3,7 +3,7 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Runtime;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public class TransformNode
     {

@@ -1,6 +1,6 @@
 ﻿using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public class GlobalComponentBindingNode : ComponentBindingNode
     {

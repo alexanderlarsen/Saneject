@@ -2,10 +2,11 @@
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
+using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utils;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph
+namespace Plugins.Saneject.Experimental.Editor.Graph.Json
 {
     public static class InjectionGraphJsonExporter
     {

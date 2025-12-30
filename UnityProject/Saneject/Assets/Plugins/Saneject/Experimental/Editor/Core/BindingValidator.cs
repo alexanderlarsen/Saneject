@@ -2,7 +2,8 @@
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph;
-using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
+using Plugins.Saneject.Experimental.Editor.Graph.Extensions;
+using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -15,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         {
             List<BindingError> allErrors = new();
 
-            foreach (BaseBindingNode binding in graph.GetAllBindings())
+            foreach (BindingNode binding in graph.EnumerateAllBindingNodes())
             {
                 ValidateBinding(binding, out List<BindingError> errors);
                 allErrors.AddRange(errors);
@@ -25,7 +26,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         }
 
         private static void ValidateBinding(
-            BaseBindingNode binding,
+            BindingNode binding,
             out List<BindingError> errors)
         {
             errors = new List<BindingError>();

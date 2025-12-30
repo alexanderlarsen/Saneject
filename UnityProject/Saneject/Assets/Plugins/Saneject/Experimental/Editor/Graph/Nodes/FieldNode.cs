@@ -1,7 +1,7 @@
 ﻿using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public class FieldNode : InjectionSiteNode
     {

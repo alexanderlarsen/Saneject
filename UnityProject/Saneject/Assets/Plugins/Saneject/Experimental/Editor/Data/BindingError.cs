@@ -1,4 +1,4 @@
-﻿using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
+﻿using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utils;
 using UnityEngine;
 
@@ -7,7 +7,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     public class BindingError
     {
         public BindingError(
-            BaseBindingNode bindingNode,
+            BindingNode bindingNode,
             string errorMessage)
         {
             Transform = bindingNode.ScopeNode.TransformNode.Transform;

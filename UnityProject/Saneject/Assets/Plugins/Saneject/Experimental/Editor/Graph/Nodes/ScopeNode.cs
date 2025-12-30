@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
-using Plugins.Saneject.Experimental.Editor.Extensions;
-using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
 using Plugins.Saneject.Experimental.Runtime;
+using Plugins.Saneject.Runtime.Settings;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public class ScopeNode
     {
@@ -14,7 +13,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
             TransformNode transformNode)
         {
             TransformNode = transformNode;
-            ParentScopeNode = transformNode.FindParentScopeNode();
+            ParentScopeNode = FindParentScopeNode(transformNode);
             Type = scope.GetType();
             scope.ConfigureBindings();
 
@@ -37,5 +36,25 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
         public IReadOnlyCollection<ComponentBindingNode> ComponentBindingNodes { get; }
         public IReadOnlyCollection<AssetBindingNode> AssetBindingNodes { get; }
         public IReadOnlyCollection<GlobalComponentBindingNode> GlobalComponentBindingNodes { get; }
+
+        private static ScopeNode FindParentScopeNode(TransformNode transformNode)
+        {
+            TransformNode currentTransformNode = transformNode.ParentTransformNode;
+            ScopeNode parentScope = null;
+
+            while (currentTransformNode != null)
+            {
+                if (currentTransformNode.ScopeNode == null || (UserSettings.UseContextIsolation && currentTransformNode.ContextNode != transformNode.ContextNode))
+                {
+                    currentTransformNode = currentTransformNode.ParentTransformNode;
+                    continue;
+                }
+
+                parentScope = currentTransformNode.ScopeNode;
+                break;
+            }
+
+            return parentScope;
+        }
     }
 }

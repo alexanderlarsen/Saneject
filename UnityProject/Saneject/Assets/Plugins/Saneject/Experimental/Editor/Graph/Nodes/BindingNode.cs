@@ -4,11 +4,11 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
+namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
-    public abstract class BaseBindingNode
+    public abstract class BindingNode
     {
-        protected BaseBindingNode(
+        protected BindingNode(
             BaseBinding binding,
             ScopeNode scopeNode)
         {

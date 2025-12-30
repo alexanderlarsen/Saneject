@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
-using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
+using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Runtime.Extensions;
 
 namespace Plugins.Saneject.Experimental.Editor.Utils
@@ -16,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
         /// <summary>
         /// Gets the identity string of a known/declared binding.
         /// </summary>
-        public static string GetBindingSignature(BaseBindingNode binding)
+        public static string GetBindingSignature(BindingNode binding)
         { 
             Type interfaceType = binding.InterfaceType;
             Type concreteType = binding.ConcreteType;
