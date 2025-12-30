@@ -1,24 +1,16 @@
 ﻿using System.Reflection;
-using Plugins.Saneject.Runtime.Attributes;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph
 {
-    public class MethodNode
+    public class MethodNode : InjectionSiteNode
     {
         public MethodNode(
-            object owner,
-            MethodInfo methodInfo)
+            MethodInfo methodInfo,
+            ComponentNode componentNode) : base(methodInfo, componentNode)
         {
-            Owner = owner;
             MethodInfo = methodInfo;
-            InjectAttribute injectAttribute = methodInfo.GetCustomAttribute<InjectAttribute>();
-            InjectId = injectAttribute.ID;
-            SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
         }
 
-        public object Owner { get; }
         public MethodInfo MethodInfo { get; }
-        public string InjectId { get; }
-        public bool SuppressMissingErrors { get; }
     }
 }

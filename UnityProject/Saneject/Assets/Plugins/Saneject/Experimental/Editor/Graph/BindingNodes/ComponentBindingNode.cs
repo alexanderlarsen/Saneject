@@ -5,7 +5,9 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
 {
     public class ComponentBindingNode : BaseBindingNode
     {
-        public ComponentBindingNode(ComponentBinding binding) : base(binding)
+        public ComponentBindingNode(
+            ComponentBinding binding,
+            ScopeNode scopeNode) : base(binding, scopeNode)
         {
             SearchOrigin = binding.SearchOrigin;
             SearchDirection = binding.SearchDirection;

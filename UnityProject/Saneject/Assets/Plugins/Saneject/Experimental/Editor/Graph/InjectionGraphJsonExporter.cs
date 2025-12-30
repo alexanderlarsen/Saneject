@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
         public static string GetGraphJson(InjectionGraph graph)
         {
             JObject jGraph = new();
-            jGraph["rootNodes"] = new JArray(graph.RootNodes.Select(BuildNode));
+            jGraph["rootNodes"] = new JArray(graph.RootTransformNodes.Select(BuildNode));
             return jGraph.ToString();
         }
 
@@ -30,16 +30,16 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
             JObject jNode = new()
             {
                 ["name"] = $"{node.Transform.name} (Instance ID: {node.Transform.GetInstanceID()})",
-                ["parent"] = node.Parent != null
-                    ? $"{node.Parent.Transform.name} (Instance ID: {node.Parent.Transform.GetInstanceID()})"
+                ["parent"] = node.ParentTransformNode != null
+                    ? $"{node.ParentTransformNode.Transform.name} (Instance ID: {node.ParentTransformNode.Transform.GetInstanceID()})"
                     : null,
-                ["context"] = $"{node.Context.Type} (Key: {node.Context.Key})",
-                ["scope"] = node.Scope != null
+                ["context"] = $"{node.ContextNode.ContextType} (Key: {node.ContextNode.ContextKey})",
+                ["scope"] = node.ScopeNode != null
                     ? new JObject
                     {
-                        ["type"] = node.Scope?.Type.Name,
-                        ["parentScope"] = node.Scope?.ParentScope?.Type.Name,
-                        ["componentBindings"] = new JArray(node.Scope?.ComponentBindings?.Select(binding => new JObject
+                        ["type"] = node.ScopeNode?.Type.Name,
+                        ["parentScope"] = node.ScopeNode?.ParentScopeNode?.Type.Name,
+                        ["componentBindings"] = new JArray(node.ScopeNode?.ComponentBindingNodes?.Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
@@ -56,7 +56,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                             ["childIndexForSearch"] = binding.ChildIndexForSearch,
                             ["resolveFromProxy"] = binding.ResolveFromProxy
                         }) ?? Array.Empty<JObject>()),
-                        ["assetBindings"] = new JArray(node.Scope?.AssetBindings?.Select(binding => new JObject
+                        ["assetBindings"] = new JArray(node.ScopeNode?.AssetBindingNodes?.Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
@@ -67,7 +67,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                             ["assetPath"] = binding.AssetPath,
                             ["assetLoadType"] = binding.AssetLoadType.ToString()
                         }) ?? Array.Empty<JObject>()),
-                        ["globalBindings"] = new JArray(node.Scope?.GlobalBindings?.Select(binding => new JObject
+                        ["globalBindings"] = new JArray(node.ScopeNode?.GlobalComponentBindingNodes?.Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
@@ -86,10 +86,10 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                         }) ?? Array.Empty<JObject>())
                     }
                     : null,
-                ["components"] = new JArray(node.Components.Select(componentNode => new JObject
+                ["components"] = new JArray(node.ComponentNodes.Select(componentNode => new JObject
                     {
                         ["name"] = $"{componentNode.Component.GetType().Name} (Instance ID: {componentNode.Component.GetInstanceID()})",
-                        ["fields"] = new JArray(componentNode.Fields.Select
+                        ["fields"] = new JArray(componentNode.FieldNodes.Select
                         (fieldNode => new JObject
                         {
                             ["name"] = fieldNode.FieldInfo.Name,
@@ -98,7 +98,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                             ["suppressMissingErrors"] = fieldNode.SuppressMissingErrors,
                             ["isCollection"] = fieldNode.IsCollection
                         })),
-                        ["methods"] = new JArray(componentNode.Methods.Select(methodNode => new JObject
+                        ["methods"] = new JArray(componentNode.MethodNodes.Select(methodNode => new JObject
                         {
                             ["name"] = methodNode.MethodInfo.Name,
                             ["parameters"] = new JArray(methodNode.MethodInfo.GetParameters().Select(p => p.ParameterType.Name)),
@@ -107,7 +107,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                         }))
                     }
                 )),
-                ["children"] = new JArray(node.Children.Select(BuildNode))
+                ["children"] = new JArray(node.ChildTransformNodes.Select(BuildNode))
             };
 
             return jNode;

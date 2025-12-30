@@ -9,33 +9,34 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
     {
         public TransformNode(
             Transform transform,
-            TransformNode parent = null)
+            TransformNode parentTransformNode = null)
         {
-            Parent = parent;
+            ParentTransformNode = parentTransformNode;
             Transform = transform;
-            Context = new ContextNode(transform);
+            ContextNode = new ContextNode(transform);
 
-            Scope = transform.TryGetComponent(out Scope scope)
+            ScopeNode = transform.TryGetComponent(out Scope scope)
                 ? new ScopeNode(scope, this)
                 : null;
 
-            Components = transform
+            ComponentNodes = transform
                 .GetComponents<Component>()
-                .Select(component => new ComponentNode(component))
+                .Select(component => new ComponentNode(component, this))
                 .Where(node => node.HasMembers)
                 .ToList();
 
-            Children = transform
+            ChildTransformNodes = transform
                 .Cast<Transform>()
                 .Select(child => new TransformNode(child, this))
                 .ToList();
         }
 
-        public TransformNode Parent { get; }
+        public TransformNode ParentTransformNode { get; }
+        public ContextNode ContextNode { get; }
+        public ScopeNode ScopeNode { get; }
         public Transform Transform { get; }
-        public ContextNode Context { get; }
-        public ScopeNode Scope { get; }
-        public IReadOnlyList<ComponentNode> Components { get; }
-        public IReadOnlyList<TransformNode> Children { get; }
+
+        public IReadOnlyList<ComponentNode> ComponentNodes { get; }
+        public IReadOnlyList<TransformNode> ChildTransformNodes { get; }
     }
 }

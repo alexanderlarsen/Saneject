@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Experimental.Editor.Utils;
+﻿using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
+using Plugins.Saneject.Experimental.Editor.Utils;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Data
@@ -6,11 +7,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     public class BindingError
     {
         public BindingError(
-            BindingContext context,
+            BaseBindingNode bindingNode,
             string errorMessage)
         {
-            Transform = context.Transform;
-            ErrorMessage = $"Invalid binding {BindingSignatureBuilder.GetBindingSignature(context)}: {errorMessage}";
+            Transform = bindingNode.ScopeNode.TransformNode.Transform;
+            ErrorMessage = $"Invalid binding {BindingSignatureBuilder.GetBindingSignature(bindingNode)}: {errorMessage}";
         }
 
         public Transform Transform { get; }

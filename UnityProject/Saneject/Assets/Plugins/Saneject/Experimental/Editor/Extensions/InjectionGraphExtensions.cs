@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
 
@@ -10,58 +9,58 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
     {
         public static IEnumerable<TransformNode> GetAllTransformNodes(this InjectionGraph graph)
         {
-            return graph.RootNodes.SelectMany(GetTransformNodesRecursive);
+            return graph.RootTransformNodes.SelectMany(GetTransformNodesRecursive);
 
             IEnumerable<TransformNode> GetTransformNodesRecursive(TransformNode node)
             {
                 yield return node;
 
-                foreach (TransformNode child in node.Children.SelectMany(GetTransformNodesRecursive))
+                foreach (TransformNode child in node.ChildTransformNodes.SelectMany(GetTransformNodesRecursive))
                     yield return child;
             }
         }
 
         public static IEnumerable<ScopeNode> GetAllScopeNodes(this InjectionGraph graph)
         {
-            return graph.RootNodes.SelectMany(GetScopeNodesRecursive);
+            return graph.RootTransformNodes.SelectMany(GetScopeNodesRecursive);
 
             IEnumerable<ScopeNode> GetScopeNodesRecursive(TransformNode node)
             {
-                if (node.Scope != null)
-                    yield return node.Scope;
+                if (node.ScopeNode != null)
+                    yield return node.ScopeNode;
 
-                foreach (ScopeNode scope in node.Children.SelectMany(GetScopeNodesRecursive))
+                foreach (ScopeNode scope in node.ChildTransformNodes.SelectMany(GetScopeNodesRecursive))
                     yield return scope;
             }
         }
 
         public static IEnumerable<BaseBindingNode> GetAllBindings(this ScopeNode scopeNode)
         {
-            foreach (ComponentBindingNode componentBinding in scopeNode.ComponentBindings)
+            foreach (ComponentBindingNode componentBinding in scopeNode.ComponentBindingNodes)
                 yield return componentBinding;
 
-            foreach (AssetBindingNode assetBinding in scopeNode.AssetBindings)
+            foreach (AssetBindingNode assetBinding in scopeNode.AssetBindingNodes)
                 yield return assetBinding;
 
-            foreach (GlobalComponentBindingNode globalBinding in scopeNode.GlobalBindings)
+            foreach (GlobalComponentBindingNode globalBinding in scopeNode.GlobalComponentBindingNodes)
                 yield return globalBinding;
         }
 
-        public static IEnumerable<BindingContext> GetAllBindingContexts(this InjectionGraph graph)
+        public static IEnumerable<BaseBindingNode> GetAllBindings(this InjectionGraph graph)
         {
             foreach (TransformNode transform in graph.GetAllTransformNodes())
             {
-                if (transform.Scope == null)
+                if (transform.ScopeNode == null)
                     continue;
 
-                foreach (BaseBindingNode binding in transform.Scope.GetAllBindings())
-                    yield return new BindingContext(binding, transform.Scope);
+                foreach (BaseBindingNode binding in transform.ScopeNode.GetAllBindings())
+                    yield return binding;
             }
         }
 
-        public static IEnumerable<BindingContext> GetUnusedBindingContexts(this InjectionGraph graph)
+        public static IEnumerable<BaseBindingNode> GetUnusedBindings(this InjectionGraph graph)
         {
-            return graph.GetAllBindingContexts().Where(context => !context.Binding.IsUsed);
+            return graph.GetAllBindings().Where(binding => !binding.IsUsed);
         }
     }
 }

@@ -16,17 +16,16 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
         /// <summary>
         /// Gets the identity string of a known/declared binding.
         /// </summary>
-        public static string GetBindingSignature(BindingContext context)
-        {
-            BaseBindingNode binding = context.Binding;
+        public static string GetBindingSignature(BaseBindingNode binding)
+        { 
             Type interfaceType = binding.InterfaceType;
             Type concreteType = binding.ConcreteType;
             bool isCollection = binding.IsCollectionBinding;
             IReadOnlyList<string> ids = binding.IdQualifiers;
             IReadOnlyList<Type> targetTypes = binding.TargetTypeQualifiers;
             IReadOnlyList<string> memberNames = binding.MemberNameQualifiers;
-            bool isPrefab = context.Transform.gameObject.IsPrefab();
-            string scopeName = context.Scope.Type.Name;
+            bool isPrefab = binding.ScopeNode.TransformNode.ContextNode.IsPrefab;
+            string scopeName = binding.ScopeNode.Type.Name;
 
             StringBuilder sb = new();
             sb.Append("[Binding: ");

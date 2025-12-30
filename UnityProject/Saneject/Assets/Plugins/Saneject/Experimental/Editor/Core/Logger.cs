@@ -2,6 +2,7 @@
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph;
+using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
 using Plugins.Saneject.Experimental.Editor.Utils;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEngine;
@@ -25,8 +26,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (!UserSettings.LogUnusedBindings)
                 return;
 
-            foreach (BindingContext context in graph.GetUnusedBindingContexts())
-                Debug.LogWarning($"Saneject: Unused binding {BindingSignatureBuilder.GetBindingSignature(context)}. If you don't plan to use this binding, you can safely remove it.", context.Transform);
+            foreach (BaseBindingNode binding in graph.GetUnusedBindings())
+                Debug.LogWarning($"Saneject: Unused binding {BindingSignatureBuilder.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }
 
         public static void LogStats(int elapsedMilliseconds)

@@ -8,8 +8,12 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
 {
     public abstract class BaseBindingNode
     {
-        protected BaseBindingNode(BaseBinding binding)
+        protected BaseBindingNode(
+            BaseBinding binding,
+            ScopeNode scopeNode)
         {
+            ScopeNode = scopeNode;
+
             InterfaceType = binding.InterfaceType;
             ConcreteType = binding.ConcreteType;
             IsCollectionBinding = binding.IsCollectionBinding;
@@ -23,6 +27,8 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
 
             IsValid = binding.IsValid;
         }
+
+        public ScopeNode ScopeNode { get; }
 
         public Type InterfaceType { get; }
         public Type ConcreteType { get; }

@@ -9,9 +9,12 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
 {
     public class ComponentNode
     {
-        public ComponentNode(Component component)
+        public ComponentNode(
+            Component component,
+            TransformNode transformNode)
         {
             Component = component;
+            TransformNode = transformNode;
 
             const BindingFlags bindingFlags =
                 BindingFlags.Public |
@@ -19,24 +22,25 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
                 BindingFlags.Instance |
                 BindingFlags.FlattenHierarchy;
 
-            Fields = component
+            FieldNodes = component
                 .GetType()
                 .GetFields(bindingFlags)
                 .Where(fieldInfo => fieldInfo.HasAttribute<InjectAttribute>())
-                .Select(fieldInfo => new FieldNode(component, fieldInfo))
+                .Select(fieldInfo => new FieldNode(fieldInfo, this))
                 .ToList();
 
-            Methods = component
+            MethodNodes = component
                 .GetType()
                 .GetMethods(bindingFlags)
                 .Where(methodInfo => methodInfo.HasAttribute<InjectAttribute>())
-                .Select(methodInfo => new MethodNode(component, methodInfo))
+                .Select(methodInfo => new MethodNode(methodInfo, this))
                 .ToList();
         }
 
         public Component Component { get; }
-        public IReadOnlyList<FieldNode> Fields { get; }
-        public IReadOnlyList<MethodNode> Methods { get; }
-        public bool HasMembers => Fields.Count > 0 || Methods.Count > 0;
+        public TransformNode TransformNode { get; }
+        public IReadOnlyList<FieldNode> FieldNodes { get; }
+        public IReadOnlyList<MethodNode> MethodNodes { get; }
+        public bool HasMembers => FieldNodes.Count > 0 || MethodNodes.Count > 0;
     }
 }

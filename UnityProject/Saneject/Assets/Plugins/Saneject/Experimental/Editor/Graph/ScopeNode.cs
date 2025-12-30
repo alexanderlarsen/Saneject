@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.BindingNodes;
 using Plugins.Saneject.Experimental.Runtime;
-using Plugins.Saneject.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph
 {
@@ -14,48 +14,28 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
             TransformNode transformNode)
         {
             TransformNode = transformNode;
-            ParentScope = FindParentScopeNode(transformNode);
+            ParentScopeNode = transformNode.FindParentScopeNode();
             Type = scope.GetType();
             scope.ConfigureBindings();
 
-            ComponentBindings = scope.ComponentBindings
-                .Select(binding => new ComponentBindingNode(binding))
+            ComponentBindingNodes = scope.ComponentBindings
+                .Select(binding => new ComponentBindingNode(binding, this))
                 .ToList();
 
-            AssetBindings = scope.AssetBindings
-                .Select(binding => new AssetBindingNode(binding))
+            AssetBindingNodes = scope.AssetBindings
+                .Select(binding => new AssetBindingNode(binding, this))
                 .ToList();
 
-            GlobalBindings = scope.GlobalBindings
-                .Select(binding => new GlobalComponentBindingNode(binding))
+            GlobalComponentBindingNodes = scope.GlobalBindings
+                .Select(binding => new GlobalComponentBindingNode(binding, this))
                 .ToList();
         }
 
         public TransformNode TransformNode { get; }
-        public ScopeNode ParentScope { get; }
+        public ScopeNode ParentScopeNode { get; }
         public Type Type { get; }
-        public IReadOnlyCollection<ComponentBindingNode> ComponentBindings { get; }
-        public IReadOnlyCollection<AssetBindingNode> AssetBindings { get; }
-        public IReadOnlyCollection<GlobalComponentBindingNode> GlobalBindings { get; }
-
-        private static ScopeNode FindParentScopeNode(TransformNode transformNode)
-        {
-            TransformNode currentTransformNode = transformNode.Parent;
-            ScopeNode parentScope = null;
-
-            while (currentTransformNode != null)
-            {
-                if (currentTransformNode.Scope == null || (UserSettings.UseContextIsolation && currentTransformNode.Context != transformNode.Context))
-                {
-                    currentTransformNode = currentTransformNode.Parent;
-                    continue;
-                }
-
-                parentScope = currentTransformNode.Scope;
-                break;
-            }
-
-            return parentScope;
-        }
+        public IReadOnlyCollection<ComponentBindingNode> ComponentBindingNodes { get; }
+        public IReadOnlyCollection<AssetBindingNode> AssetBindingNodes { get; }
+        public IReadOnlyCollection<GlobalComponentBindingNode> GlobalComponentBindingNodes { get; }
     }
 }

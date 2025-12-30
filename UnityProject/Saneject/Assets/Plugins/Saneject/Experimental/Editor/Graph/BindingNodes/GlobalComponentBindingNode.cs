@@ -4,7 +4,9 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
 {
     public class GlobalComponentBindingNode : ComponentBindingNode
     {
-        public GlobalComponentBindingNode(GlobalComponentBinding binding) : base(binding)
+        public GlobalComponentBindingNode(
+            GlobalComponentBinding binding,
+            ScopeNode scopeNode) : base(binding, scopeNode)
         {
         }
     }

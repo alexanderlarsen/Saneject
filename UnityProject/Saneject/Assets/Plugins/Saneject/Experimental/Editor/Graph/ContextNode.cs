@@ -12,12 +12,14 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
         public ContextNode(Object obj)
         {
             GetContextTypeAndKey(obj, out (ContextType type, int key) result);
-            Type = result.type;
-            Key = result.key;
+            ContextType = result.type;
+            ContextKey = result.key;
+            IsPrefab = result.type is ContextType.PrefabAsset or ContextType.PrefabInstance;
         }
 
-        public ContextType Type { get; }
-        public int Key { get; }
+        public ContextType ContextType { get; }
+        public int ContextKey { get; }
+        public bool IsPrefab { get; }
 
         public bool Equals(
             ContextNode x,
@@ -35,12 +37,12 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
             if (x.GetType() != y.GetType())
                 return false;
 
-            return x.Key == y.Key;
+            return x.ContextKey == y.ContextKey;
         }
 
         public int GetHashCode(ContextNode obj)
         {
-            return HashCode.Combine(obj.Key);
+            return HashCode.Combine(obj.ContextKey);
         }
 
         private static void GetContextTypeAndKey(
