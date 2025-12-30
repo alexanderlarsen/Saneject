@@ -28,7 +28,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             ScopeNode scopeNode,
             FieldNode fieldNode)
         {
-            Debug.Log($"Scope: {scopeNode.Type.Name} | Field: {fieldNode.FieldInfo.Name}");
+            // var matchingBindings = scopeNode.
 
             return null;
         }

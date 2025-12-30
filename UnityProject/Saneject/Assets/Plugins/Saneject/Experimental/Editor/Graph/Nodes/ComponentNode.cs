@@ -25,7 +25,8 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             FieldNodes = component
                 .GetType()
                 .GetFields(bindingFlags)
-                .Where(fieldInfo => fieldInfo.HasAttribute<InjectAttribute>())
+                // TODO: Temporarily exclude interface backing fields until they are removed entirely
+                .Where(fieldInfo => fieldInfo.HasAttribute<InjectAttribute>() && !fieldInfo.HasAttribute<InterfaceBackingFieldAttribute>())
                 .Select(fieldInfo => new FieldNode(fieldInfo, this))
                 .ToList();
 

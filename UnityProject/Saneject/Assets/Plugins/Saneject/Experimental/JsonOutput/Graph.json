@@ -179,20 +179,6 @@
                   "injectId": null,
                   "suppressMissingErrors": false,
                   "isCollection": false
-                },
-                {
-                  "name": "__moveController",
-                  "type": "Object",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "isCollection": false
-                },
-                {
-                  "name": "__weapon",
-                  "type": "Object",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "isCollection": false
                 }
               ],
               "methods": []
@@ -313,20 +299,6 @@
                 {
                   "name": "weapon",
                   "type": "IWeapon",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "isCollection": false
-                },
-                {
-                  "name": "__moveController",
-                  "type": "Object",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "isCollection": false
-                },
-                {
-                  "name": "__weapon",
-                  "type": "Object",
                   "injectId": null,
                   "suppressMissingErrors": false,
                   "isCollection": false
