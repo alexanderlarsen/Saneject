@@ -1,6 +1,8 @@
 ﻿using System.Collections.Generic;
-using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+
+// ReSharper disable LoopCanBePartlyConvertedToQuery
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Extensions
 {
@@ -8,39 +10,46 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Extensions
     {
         public static IEnumerable<TransformNode> EnumerateAllTransformNodes(this InjectionGraph graph)
         {
-            return graph.RootTransformNodes.SelectMany(GetTransformNodesRecursive);
+            foreach (TransformNode root in graph.RootTransformNodes)
+                foreach (TransformNode node in EnumerateTransformNodesRecursive(root))
+                    yield return node;
 
-            IEnumerable<TransformNode> GetTransformNodesRecursive(TransformNode node)
+            yield break;
+
+            static IEnumerable<TransformNode> EnumerateTransformNodesRecursive(TransformNode node)
             {
                 yield return node;
 
-                foreach (TransformNode child in node.ChildTransformNodes.SelectMany(GetTransformNodesRecursive))
-                    yield return child;
+                foreach (TransformNode child in node.ChildTransformNodes)
+                    foreach (TransformNode descendant in EnumerateTransformNodesRecursive(child))
+                        yield return descendant;
             }
         }
 
         public static IEnumerable<BindingNode> EnumerateAllBindingNodes(this InjectionGraph graph)
         {
-            foreach (TransformNode transform in graph.EnumerateAllTransformNodes())
+            foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
             {
-                if (transform.ScopeNode == null)
+                if (transformNode.ScopeNode == null)
                     continue;
 
-                foreach (BindingNode binding in transform.ScopeNode.EnumerateAllBindingNodes())
-                    yield return binding;
+                foreach (ComponentBindingNode componentBinding in transformNode.ScopeNode.ComponentBindingNodes)
+                    yield return componentBinding;
+
+                foreach (AssetBindingNode assetBinding in transformNode.ScopeNode.AssetBindingNodes)
+                    yield return assetBinding;
+
+                foreach (GlobalComponentBindingNode globalBinding in transformNode.ScopeNode.GlobalComponentBindingNodes)
+                    yield return globalBinding;
             }
         }
 
-        public static IEnumerable<BindingNode> EnumerateAllBindingNodes(this ScopeNode scopeNode)
+        public static IEnumerable<FieldNode> EnumerateAllFieldNodes(this InjectionGraph graph)
         {
-            foreach (ComponentBindingNode componentBinding in scopeNode.ComponentBindingNodes)
-                yield return componentBinding;
-
-            foreach (AssetBindingNode assetBinding in scopeNode.AssetBindingNodes)
-                yield return assetBinding;
-
-            foreach (GlobalComponentBindingNode globalBinding in scopeNode.GlobalComponentBindingNodes)
-                yield return globalBinding;
+            foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
+                foreach (ComponentNode componentNode in transformNode.ComponentNodes)
+                    foreach (FieldNode fieldNode in componentNode.FieldNodes)
+                        yield return fieldNode;
         }
     }
 }
