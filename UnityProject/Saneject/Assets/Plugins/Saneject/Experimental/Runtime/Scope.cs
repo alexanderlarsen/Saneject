@@ -1,21 +1,55 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
+using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
+using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Runtime
 {
     public abstract class Scope : MonoBehaviour
     {
+        #region INTERNAL METHODS/FIELDS
+
+        /// <summary>
+        /// For internal use by Saneject. Not intended for user code.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private readonly HashSet<AssetBinding> assetBindings = new();
+
+        /// <summary>
+        /// For internal use by Saneject. Not intended for user code.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private readonly HashSet<ComponentBinding> componentBindings = new();
+
+        /// <summary>
+        /// For internal use by Saneject. Not intended for user code.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private readonly HashSet<GlobalComponentBinding> globalBindings = new();
 
-        public IReadOnlyCollection<ComponentBinding> ComponentBindings => componentBindings;
-        public IReadOnlyCollection<AssetBinding> AssetBindings => assetBindings;
-        public IReadOnlyCollection<GlobalComponentBinding> GlobalBindings => globalBindings;
+        /// <summary>
+        /// For internal use by Saneject. Not intended for user code.
+        /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public BindingCollection GetBindings()
+        {
+            DeclareBindings();
+
+            BindingCollection bindingCollection = new(componentBindings, assetBindings, globalBindings);
+
+            assetBindings.Clear();
+            componentBindings.Clear();
+            globalBindings.Clear();
+
+            return bindingCollection;
+        }
+
+        #endregion
 
         #region USER-FACING METHODS
 
@@ -31,13 +65,13 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <summary>
         /// Set up your bindings in this method.
         /// </summary>
-        public abstract void ConfigureBindings();
+        protected abstract void DeclareBindings();
 
         #region COMPONENT METHODS
 
         /// <summary>
         /// Registers a binding for a single <typeparamref name="T" /> component or interface type in this scope.
-        /// Use this for concrete <see cref="Component" /> or interface you wish to inject directly.
+        /// Use this for concrete <see cref="UnityEngine.Component" /> or interface you wish to inject directly.
         /// </summary>
         /// <typeparam name="T">The concrete component type to bind.</typeparam>
         /// <returns>A fluent builder for configuring the component binding.</returns>

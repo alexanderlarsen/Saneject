@@ -23,7 +23,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             }
 
             bindingErrors = allErrors;
-        }
+        } 
 
         private static void ValidateBinding(
             BindingNode binding,

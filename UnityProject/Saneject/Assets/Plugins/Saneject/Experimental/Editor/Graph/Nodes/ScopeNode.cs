@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Runtime;
+using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
@@ -15,17 +16,18 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             TransformNode = transformNode;
             ParentScopeNode = FindParentScopeNode(transformNode);
             Type = scope.GetType();
-            scope.ConfigureBindings();
 
-            ComponentBindingNodes = scope.ComponentBindings
+            BindingCollection collection = scope.GetBindings();
+
+            ComponentBindingNodes = collection.ComponentBindings
                 .Select(binding => new ComponentBindingNode(binding, this))
                 .ToList();
 
-            AssetBindingNodes = scope.AssetBindings
+            AssetBindingNodes = collection.AssetBindings
                 .Select(binding => new AssetBindingNode(binding, this))
                 .ToList();
 
-            GlobalComponentBindingNodes = scope.GlobalBindings
+            GlobalComponentBindingNodes = collection.GlobalBindings
                 .Select(binding => new GlobalComponentBindingNode(binding, this))
                 .ToList();
         }

@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Diagnostics;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Json;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -12,7 +14,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         public static void InjectSingleHierarchy(GameObject startGameObject)
         {
             Stopwatch stopwatch = Stopwatch.StartNew();
-            
+
+            if (UserSettings.ClearLogsOnInjection)
+                ConsoleUtils.ClearLog();
+
             InjectionGraph graph = InjectionGraphFactory.CreateGraph(startGameObject);
 
             BindingValidator.ValidateBindings
@@ -30,7 +35,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             DependencyInjector.InjectDependencies(injectionPlan);
 
             stopwatch.Stop();
-            
+
             Logger.LogBindingErrors(bindingsErrors);
             Logger.LogDependencyErrors(dependencyErrors);
             Logger.LogUnusedBindings(graph);
