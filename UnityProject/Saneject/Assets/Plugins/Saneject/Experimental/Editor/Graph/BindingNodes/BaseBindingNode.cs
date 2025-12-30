@@ -36,5 +36,6 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.BindingNodes
         public IReadOnlyList<Type> TargetTypeQualifiers { get; }
 
         public bool IsValid { get; set; }
+        public bool IsUsed { get; set; }
     }
 }

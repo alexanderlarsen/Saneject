@@ -10,8 +10,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             out InjectionPlan injectionPlan,
             out IReadOnlyList<DependencyError> dependencyErrors)
         {
-            injectionPlan = null;
+            injectionPlan = new();
             dependencyErrors = null;
+            
+            // graph
         }
     }
 }

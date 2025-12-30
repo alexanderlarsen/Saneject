@@ -58,5 +58,10 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
                     yield return new BindingContext(binding, transform.Scope);
             }
         }
+
+        public static IEnumerable<BindingContext> GetUnusedBindingContexts(this InjectionGraph graph)
+        {
+            return graph.GetAllBindingContexts().Where(context => !context.Binding.IsUsed);
+        }
     }
 }

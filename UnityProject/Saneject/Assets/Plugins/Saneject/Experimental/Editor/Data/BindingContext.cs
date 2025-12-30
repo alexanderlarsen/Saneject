@@ -12,9 +12,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             Binding = binding;
             Scope = scope;
+            Transform = scope.TransformNode.Transform;
         }
 
         public BaseBindingNode Binding { get; }
-        public ScopeNode Scope { get; } 
+        public ScopeNode Scope { get; }
+        public Transform Transform { get; }
     }
 }

@@ -6,14 +6,14 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     public class BindingError
     {
         public BindingError(
-            string errorMessage,
-            BindingContext context)
+            BindingContext context,
+            string errorMessage)
         {
-            PingObject = context.Scope.TransformNode.Transform;
+            Transform = context.Transform;
             ErrorMessage = $"Invalid binding {BindingSignatureBuilder.GetBindingSignature(context)}: {errorMessage}";
         }
 
+        public Transform Transform { get; }
         public string ErrorMessage { get; }
-        public Object PingObject { get; }
     }
 }

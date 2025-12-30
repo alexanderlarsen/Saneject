@@ -37,16 +37,16 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 case GlobalComponentBindingNode globalBinding:
                 {
                     if (globalBinding.ResolveFromProxy)
-                        errors.Add(new BindingError("A binding cannot be both Proxy and Global. Proxies consume globals; they are not globals themselves.", context));
+                        errors.Add(new BindingError(context, "A binding cannot be both Proxy and Global. Proxies consume globals; they are not globals themselves."));
 
-                    if (context.Scope.TransformNode.Transform.gameObject.IsPrefab())
-                        errors.Add(new BindingError("Global bindings cannot be used in prefabs, because the system can only inject global components from scenes.", context));
+                    if (context.Transform.gameObject.IsPrefab())
+                        errors.Add(new BindingError(context, "Global bindings cannot be used in prefabs, because the system can only inject global components from scenes."));
 
                     if (globalBinding.IsCollectionBinding)
-                        errors.Add(new BindingError("Global bindings must be singletons. Collections are not supported in the GlobalScope.", context));
+                        errors.Add(new BindingError(context, "Global bindings must be singletons. Collections are not supported in the GlobalScope."));
 
                     if (globalBinding.IdQualifiers.Count > 0)
-                        errors.Add(new BindingError("Global bindings cannot have IDs. The GlobalScope always resolves by type only.", context));
+                        errors.Add(new BindingError(context, "Global bindings cannot have IDs. The GlobalScope always resolves by type only."));
 
                     break;
                 }
@@ -56,17 +56,17 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     if (componentBinding.ResolveFromProxy)
                     {
                         if (componentBinding.InterfaceType == null)
-                            errors.Add(new BindingError("Proxy bindings require an interface type so the ProxyObject can forward calls. Use BindComponent<IInterface, Concrete>().FromProxy().", context));
+                            errors.Add(new BindingError(context, "Proxy bindings require an interface type so the ProxyObject can forward calls. Use BindComponent<IInterface, Concrete>().FromProxy()."));
 
                         if (componentBinding.ConcreteType == null)
-                            errors.Add(new BindingError("Proxy bindings require a concrete type to resolve into. Use BindComponent<IInterface, Concrete>().FromProxy().", context));
+                            errors.Add(new BindingError(context, "Proxy bindings require a concrete type to resolve into. Use BindComponent<IInterface, Concrete>().FromProxy()."));
 
                         if (componentBinding.IsCollectionBinding)
-                            errors.Add(new BindingError("Proxy bindings must be single-value only. Collections cannot be resolved via a ProxyObject.", context));
+                            errors.Add(new BindingError(context, "Proxy bindings must be single-value only. Collections cannot be resolved via a ProxyObject."));
                     }
 
                     if (componentBinding.ConcreteType != null && !typeof(Component).IsAssignableFrom(componentBinding.ConcreteType))
-                        errors.Add(new BindingError($"Component binding type '{componentBinding.ConcreteType.Name}' is not a Unity Component. Component bindings must resolve UnityEngine.Component types.", context));
+                        errors.Add(new BindingError(context, $"Component binding type '{componentBinding.ConcreteType.Name}' is not a Unity Component. Component bindings must resolve UnityEngine.Component types."));
 
                     break;
                 }
@@ -74,22 +74,22 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 case AssetBindingNode assetBinding:
                 {
                     if (assetBinding.ConcreteType != null && typeof(Component).IsAssignableFrom(assetBinding.ConcreteType))
-                        errors.Add(new BindingError($"Asset binding type '{assetBinding.ConcreteType.Name}' derives from Component. Assets must be ScriptableObjects, prefabs, or other UnityEngine.Object assets.", context));
+                        errors.Add(new BindingError(context, $"Asset binding type '{assetBinding.ConcreteType.Name}' derives from Component. Assets must be ScriptableObjects, prefabs, or other UnityEngine.Object assets."));
 
                     break;
                 }
             }
 
             if (binding.InterfaceType is { IsInterface: false })
-                errors.Add(new BindingError($"Binding interface type '{binding.InterfaceType.FullName}' is not an interface.", context));
+                errors.Add(new BindingError(context, $"Binding interface type '{binding.InterfaceType.FullName}' is not an interface."));
 
             if (binding.InterfaceType != null && binding.ConcreteType != null &&
                 binding.InterfaceType.IsInterface &&
                 !binding.InterfaceType.IsAssignableFrom(binding.ConcreteType))
-                errors.Add(new BindingError($"Concrete type '{binding.ConcreteType.Name}' does not implement interface '{binding.InterfaceType.Name}'.", context));
+                errors.Add(new BindingError(context, $"Concrete type '{binding.ConcreteType.Name}' does not implement interface '{binding.InterfaceType.Name}'."));
 
             if (!binding.LocatorStrategySpecified)
-                errors.Add(new BindingError("Binding has no locator strategy (e.g. FromScopeSelf, FromAnywhereInScene).", context));
+                errors.Add(new BindingError(context, "Binding has no locator strategy (e.g. FromScopeSelf, FromAnywhereInScene)."));
 
             context.Binding.IsValid = errors.Count == 0;
         }
