@@ -2,7 +2,8 @@
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Runtime;
-using Plugins.Saneject.Experimental.Runtime.Bindings;
+using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
+using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using Plugins.Saneject.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
@@ -17,27 +18,22 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             ParentScopeNode = FindParentScopeNode(transformNode);
             Type = scope.GetType();
 
-            BindingCollection collection = scope.GetBindings();
-
-            ComponentBindingNodes = collection.ComponentBindings
-                .Select(binding => new ComponentBindingNode(binding, this))
-                .ToList();
-
-            AssetBindingNodes = collection.AssetBindings
-                .Select(binding => new AssetBindingNode(binding, this))
-                .ToList();
-
-            GlobalComponentBindingNodes = collection.GlobalBindings
-                .Select(binding => new GlobalComponentBindingNode(binding, this))
+            BindingNodes = scope
+                .GetBindings()
+                .Select(binding => binding switch
+                {
+                    GlobalComponentBinding globalComponentBinding => new GlobalComponentBindingNode(globalComponentBinding, this),
+                    ComponentBinding componentBinding => new ComponentBindingNode(componentBinding, this),
+                    AssetBinding assetBinding => new AssetBindingNode(assetBinding, this) as BindingNode,
+                    _ => throw new ArgumentOutOfRangeException(nameof(binding), binding, null)
+                })
                 .ToList();
         }
 
         public TransformNode TransformNode { get; }
         public ScopeNode ParentScopeNode { get; }
         public Type Type { get; }
-        public IReadOnlyCollection<ComponentBindingNode> ComponentBindingNodes { get; }
-        public IReadOnlyCollection<AssetBindingNode> AssetBindingNodes { get; }
-        public IReadOnlyCollection<GlobalComponentBindingNode> GlobalComponentBindingNodes { get; }
+        public IReadOnlyCollection<BindingNode> BindingNodes { get; }
 
         private static ScopeNode FindParentScopeNode(TransformNode transformNode)
         {
@@ -46,13 +42,13 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
             while (currentTransformNode != null)
             {
-                if (currentTransformNode.ScopeNode == null || (UserSettings.UseContextIsolation && currentTransformNode.ContextNode != transformNode.ContextNode))
+                if (currentTransformNode.DeclaredScopeNode == null || (UserSettings.UseContextIsolation && currentTransformNode.ContextNode != transformNode.ContextNode))
                 {
                     currentTransformNode = currentTransformNode.ParentTransformNode;
                     continue;
                 }
 
-                parentScope = currentTransformNode.ScopeNode;
+                parentScope = currentTransformNode.DeclaredScopeNode;
                 break;
             }
 

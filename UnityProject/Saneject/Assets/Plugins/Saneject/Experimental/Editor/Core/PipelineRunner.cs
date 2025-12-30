@@ -20,23 +20,25 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             InjectionGraph graph = InjectionGraphFactory.CreateGraph(startGameObject);
 
-            BindingValidator.ValidateBindings
+            BindingConfigValidator.ValidateBindings
             (
                 graph,
-                out IReadOnlyList<BindingError> bindingsErrors
+                out List<BindingError> bindingErrors
             );
 
-            DependencyResolver.Resolve(
+            DependencyResolver.Resolve
+            (
                 graph,
+                bindingErrors,
                 out InjectionPlan injectionPlan,
-                out IReadOnlyList<DependencyError> dependencyErrors
+                out List<DependencyError> dependencyErrors
             );
 
             DependencyInjector.InjectDependencies(injectionPlan);
 
             stopwatch.Stop();
 
-            Logger.LogBindingErrors(bindingsErrors);
+            Logger.LogBindingErrors(bindingErrors);
             Logger.LogDependencyErrors(dependencyErrors);
             Logger.LogUnusedBindings(graph);
             Logger.LogStats(stopwatch.Elapsed.Milliseconds);

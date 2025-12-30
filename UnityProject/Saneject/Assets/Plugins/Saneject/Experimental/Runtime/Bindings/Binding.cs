@@ -4,7 +4,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings
 {
-    public abstract class BaseBinding
+    public abstract class Binding
     {
         public Type InterfaceType { get; set; }
         public Type ConcreteType { get; set; }

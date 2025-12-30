@@ -9,7 +9,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
     public abstract class BindingNode
     {
         protected BindingNode(
-            BaseBinding binding,
+            Binding binding,
             ScopeNode scopeNode)
         {
             ScopeNode = scopeNode;

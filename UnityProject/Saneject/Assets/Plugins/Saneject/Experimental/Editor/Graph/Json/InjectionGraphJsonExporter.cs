@@ -35,12 +35,12 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                     ? $"{node.ParentTransformNode.Transform.name} (Instance ID: {node.ParentTransformNode.Transform.GetInstanceID()})"
                     : null,
                 ["context"] = $"{node.ContextNode.ContextType} (Key: {node.ContextNode.ContextKey})",
-                ["scope"] = node.ScopeNode != null
+                ["scope"] = node.DeclaredScopeNode != null
                     ? new JObject
                     {
-                        ["type"] = node.ScopeNode?.Type.Name,
-                        ["parentScope"] = node.ScopeNode?.ParentScopeNode?.Type.Name,
-                        ["componentBindings"] = new JArray(node.ScopeNode?.ComponentBindingNodes?.Select(binding => new JObject
+                        ["type"] = node.DeclaredScopeNode?.Type.Name,
+                        ["parentScope"] = node.DeclaredScopeNode?.ParentScopeNode?.Type.Name,
+                        ["componentBindings"] = new JArray(node.DeclaredScopeNode?.BindingNodes?.OfType<ComponentBindingNode>().Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
@@ -57,7 +57,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                             ["childIndexForSearch"] = binding.ChildIndexForSearch,
                             ["resolveFromProxy"] = binding.ResolveFromProxy
                         }) ?? Array.Empty<JObject>()),
-                        ["assetBindings"] = new JArray(node.ScopeNode?.AssetBindingNodes?.Select(binding => new JObject
+                        ["assetBindings"] = new JArray(node.DeclaredScopeNode?.BindingNodes?.OfType<AssetBindingNode>().Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
@@ -68,7 +68,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                             ["assetPath"] = binding.AssetPath,
                             ["assetLoadType"] = binding.AssetLoadType.ToString()
                         }) ?? Array.Empty<JObject>()),
-                        ["globalBindings"] = new JArray(node.ScopeNode?.GlobalComponentBindingNodes?.Select(binding => new JObject
+                        ["globalBindings"] = new JArray(node.DeclaredScopeNode?.BindingNodes?.OfType<GlobalComponentBindingNode>().Select(binding => new JObject
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,

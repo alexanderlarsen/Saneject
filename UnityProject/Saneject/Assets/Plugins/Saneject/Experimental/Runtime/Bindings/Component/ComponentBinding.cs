@@ -2,7 +2,7 @@
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 {
-    public class ComponentBinding : BaseBinding
+    public class ComponentBinding : Binding
     {
         public SearchOrigin SearchOrigin { get; set; }
         public SearchDirection SearchDirection { get; set; }

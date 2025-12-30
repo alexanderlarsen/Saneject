@@ -6,9 +6,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 {
     public class ComponentFilterBuilder<TComponent> where TComponent : class
     {
-        private readonly BaseBinding binding;
+        private readonly Binding binding;
 
-        public ComponentFilterBuilder(BaseBinding binding)
+        public ComponentFilterBuilder(Binding binding)
         {
             this.binding = binding;
         }

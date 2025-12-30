@@ -30,17 +30,11 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Extensions
         {
             foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
             {
-                if (transformNode.ScopeNode == null)
+                if (transformNode.DeclaredScopeNode == null)
                     continue;
 
-                foreach (ComponentBindingNode componentBinding in transformNode.ScopeNode.ComponentBindingNodes)
-                    yield return componentBinding;
-
-                foreach (AssetBindingNode assetBinding in transformNode.ScopeNode.AssetBindingNodes)
-                    yield return assetBinding;
-
-                foreach (GlobalComponentBindingNode globalBinding in transformNode.ScopeNode.GlobalComponentBindingNodes)
-                    yield return globalBinding;
+                foreach (BindingNode binding in transformNode.DeclaredScopeNode.BindingNodes)
+                    yield return binding;
             }
         }
 

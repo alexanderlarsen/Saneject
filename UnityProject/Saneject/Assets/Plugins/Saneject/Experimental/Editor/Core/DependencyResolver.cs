@@ -1,9 +1,9 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Runtime.Settings;
-using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
@@ -11,41 +11,47 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void Resolve(
             InjectionGraph graph,
+            List<BindingError> bindingErrors,
             out InjectionPlan injectionPlan,
-            out IReadOnlyList<DependencyError> dependencyErrors)
+            out List<DependencyError> dependencyErrors)
         {
             injectionPlan = new InjectionPlan();
-            dependencyErrors = null;
+            dependencyErrors = new List<DependencyError>();
 
             foreach (FieldNode fieldNode in graph.EnumerateAllFieldNodes())
             {
-                ScopeNode scopeNode = FindNearestScope(fieldNode);
-                BindingNode matchingBindingNode = FindMatchingBindingNode(scopeNode, fieldNode);
+                BindingNode matchingBindingNode = FindMatchingBindingNode(fieldNode);
+
+                if (matchingBindingNode != null)
+                {
+                    // Debug.Log($"Found matching binding for field {fieldNode.MemberName} on type {fieldNode.DeclaringType.Name}");
+                }
+                else
+                {
+                    bindingErrors.Add(BindingError.CreateMissingBindingError(fieldNode));
+                }
             }
         }
 
-        private static BindingNode FindMatchingBindingNode(
-            ScopeNode scopeNode,
-            FieldNode fieldNode)
+        private static BindingNode FindMatchingBindingNode(FieldNode fieldNode)
         {
-            // var matchingBindings = scopeNode.
+            ScopeNode currentScope = fieldNode.ComponentNode.TransformNode.NearestScopeNode;
 
-            return null;
-        }
-
-        private static ScopeNode FindNearestScope(FieldNode fieldNode)
-        {
-            ContextNode fieldContext = fieldNode.ComponentNode.TransformNode.ContextNode;
-            TransformNode current = fieldNode.ComponentNode.TransformNode;
-
-            while (current != null)
+            while (currentScope != null)
             {
-                ScopeNode scope = current.ScopeNode;
+                List<BindingNode> matchingBindings = currentScope.BindingNodes
+                    .Where(binding => binding is not GlobalComponentBindingNode)
+                    .Where(binding => binding.InterfaceType == fieldNode.InterfaceType && (binding.ConcreteType == fieldNode.ConcreteType || fieldNode.ConcreteType == null))
+                    .Where(binding => binding.IsCollectionBinding == fieldNode.IsCollection)
+                    .Where(binding => binding.TargetTypeQualifiers.Count == 0 || binding.TargetTypeQualifiers.Any(type => type == fieldNode.DeclaringType))
+                    .Where(binding => binding.MemberNameQualifiers.Count == 0 || binding.MemberNameQualifiers.Any(name => name == fieldNode.MemberName))
+                    .Where(binding => binding.IdQualifiers.Count == 0 || binding.IdQualifiers.Any(id => id == fieldNode.InjectId))
+                    .ToList();
 
-                if (scope != null && (!UserSettings.UseContextIsolation || current.ContextNode == fieldContext))
-                    return scope;
+                if (matchingBindings.Count > 0)
+                    return matchingBindings.First();
 
-                current = current.ParentTransformNode;
+                currentScope = currentScope.ParentScopeNode;
             }
 
             return null;

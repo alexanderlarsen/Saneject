@@ -11,7 +11,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
 {
     // TODO: Refactor this class
 
-    public static class BindingSignatureBuilder
+    public static class SignatureBuilder
     {
         /// <summary>
         /// Gets the identity string of a known/declared binding.
@@ -101,7 +101,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             bool isCollection,
             Type interfaceType,
             Type concreteType,
-            ScopeNode scope)
+            ScopeNode scopeNode)
         {
             StringBuilder sb = new();
             sb.Append("[Binding: ");
@@ -118,10 +118,32 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             sb.Append(" | ");
             sb.Append(isCollection ? "Collection" : "Single");
 
-            sb.Append($" | Nearest scope: {scope.GetType().Name}");
+            sb.Append($" | Nearest scope: {scopeNode.Type.Name}");
             sb.Append("]");
 
             return sb.ToString();
+        }
+        
+        public static string GetFieldSignature(FieldNode fieldNode)
+        {
+            return "FIELD SIGNATURE NOT IMPLEMENTED YET";
+
+            // string fieldName = serializedProperty.GetFieldInfo().Name;
+            //
+            // StringBuilder sb = new();
+            // sb.Append("[Injected ");
+            // sb.Append(fieldName.Contains(">k__BackingField") ? "property" : "field");
+            // sb.Append(": ");
+            // sb.Append(NamePathUtils.GetInjectedFieldPath(serializedObject, serializedProperty));
+            //
+            // if (!string.IsNullOrWhiteSpace(injectId))
+            // {
+            //     sb.Append(" | ID: ");
+            //     sb.Append(injectId);
+            // }
+            //
+            // sb.Append("]");
+            // return sb.ToString();
         }
     }
 }

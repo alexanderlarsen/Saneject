@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Runtime;
+using Plugins.Saneject.Runtime.Settings;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
@@ -15,9 +16,11 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             Transform = transform;
             ContextNode = new ContextNode(transform);
 
-            ScopeNode = transform.TryGetComponent(out Scope scope)
+            DeclaredScopeNode = transform.TryGetComponent(out Scope scope)
                 ? new ScopeNode(scope, this)
                 : null;
+
+            NearestScopeNode = FindNearestScope();
 
             ComponentNodes = transform
                 .GetComponents<Component>()
@@ -33,10 +36,30 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
         public TransformNode ParentTransformNode { get; }
         public ContextNode ContextNode { get; }
-        public ScopeNode ScopeNode { get; }
+        public ScopeNode DeclaredScopeNode { get; }
+        public ScopeNode NearestScopeNode { get; }
         public Transform Transform { get; }
 
         public IReadOnlyList<ComponentNode> ComponentNodes { get; }
         public IReadOnlyList<TransformNode> ChildTransformNodes { get; }
+
+        private ScopeNode FindNearestScope()
+        {
+            TransformNode current = this;
+
+            while (current != null)
+            {
+                ScopeNode scope = current.DeclaredScopeNode;
+
+                if (scope != null &&
+                    (!UserSettings.UseContextIsolation ||
+                     current.ContextNode == ContextNode))
+                    return scope;
+
+                current = current.ParentTransformNode;
+            }
+
+            return null;
+        }
     }
 }

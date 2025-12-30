@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
@@ -18,35 +19,18 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private readonly HashSet<AssetBinding> assetBindings = new();
+        private readonly HashSet<Binding> bindings = new();
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        private readonly HashSet<ComponentBinding> componentBindings = new();
-
-        /// <summary>
-        /// For internal use by Saneject. Not intended for user code.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        private readonly HashSet<GlobalComponentBinding> globalBindings = new();
-
-        /// <summary>
-        /// For internal use by Saneject. Not intended for user code.
-        /// </summary>
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public BindingCollection GetBindings()
+        public IReadOnlyCollection<Binding> GetBindings()
         {
             DeclareBindings();
-
-            BindingCollection bindingCollection = new(componentBindings, assetBindings, globalBindings);
-
-            assetBindings.Clear();
-            componentBindings.Clear();
-            globalBindings.Clear();
-
-            return bindingCollection;
+            HashSet<Binding> bindingsCopy = bindings.ToHashSet();
+            bindings.Clear();
+            return bindingsCopy;
         }
 
         #endregion
@@ -86,7 +70,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 ConcreteType = isInterface ? null : targetType
             };
 
-            componentBindings.Add(binding);
+            bindings.Add(binding);
             return new ComponentBindingBuilder<T>(binding);
         }
 
@@ -120,7 +104,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 IsCollectionBinding = true
             };
 
-            componentBindings.Add(binding);
+            bindings.Add(binding);
             return new ComponentBindingBuilder<T>(binding);
         }
 
@@ -141,7 +125,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 ConcreteType = typeof(TConcrete)
             };
 
-            componentBindings.Add(binding);
+            bindings.Add(binding);
             return new ComponentBindingBuilder<TConcrete>(binding);
         }
 
@@ -178,7 +162,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 IsCollectionBinding = true
             };
 
-            componentBindings.Add(binding);
+            bindings.Add(binding);
             return new ComponentBindingBuilder<TConcrete>(binding);
         }
 
@@ -199,7 +183,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 ConcreteType = typeof(TConcrete)
             };
 
-            assetBindings.Add(binding);
+            bindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
 
@@ -229,7 +213,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 IsCollectionBinding = true
             };
 
-            assetBindings.Add(binding);
+            bindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
 
@@ -251,7 +235,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 IsCollectionBinding = true
             };
 
-            assetBindings.Add(binding);
+            bindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
 
@@ -288,7 +272,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 IsCollectionBinding = true
             };
 
-            assetBindings.Add(binding);
+            bindings.Add(binding);
             return new AssetBindingBuilder<TConcrete>(binding);
         }
 
@@ -310,7 +294,7 @@ namespace Plugins.Saneject.Experimental.Runtime
                 ConcreteType = typeof(TConcrete)
             };
 
-            globalBindings.Add(binding);
+            bindings.Add(binding);
             return new GlobalComponentBindingBuilder<TConcrete>(binding);
         }
 
