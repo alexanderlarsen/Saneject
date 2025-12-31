@@ -77,7 +77,7 @@ namespace Plugins.Saneject.Editor.Utility
             if (n.Length > 0 && n[0] == '<')
             {
                 int end = n.IndexOf(">k__BackingField", StringComparison.Ordinal);
-                if (end > 1) return n.Substring(1, end - 1); // "InterfaceB1"
+                if (end > 1) return n[1..end]; // "InterfaceB1"
             }
 
             return n;
@@ -102,7 +102,7 @@ namespace Plugins.Saneject.Editor.Utility
                 int end = segment.IndexOf(">k__BackingField", StringComparison.Ordinal);
 
                 if (end > 1)
-                    return segment.Substring(1, end - 1); // "PropertyName"
+                    return segment[1..end]; // "PropertyName"
             }
 
             return segment;

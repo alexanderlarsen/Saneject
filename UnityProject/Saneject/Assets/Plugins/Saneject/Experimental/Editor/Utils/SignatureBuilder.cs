@@ -2,10 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Runtime.Extensions;
 
 namespace Plugins.Saneject.Experimental.Editor.Utils
 {
@@ -17,7 +14,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
         /// Gets the identity string of a known/declared binding.
         /// </summary>
         public static string GetBindingSignature(BindingNode binding)
-        { 
+        {
             Type interfaceType = binding.InterfaceType;
             Type concreteType = binding.ConcreteType;
             bool isCollection = binding.IsCollectionBinding;
@@ -123,27 +120,23 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
 
             return sb.ToString();
         }
-        
+
         public static string GetFieldSignature(FieldNode fieldNode)
         {
-            return "FIELD SIGNATURE NOT IMPLEMENTED YET";
+            StringBuilder sb = new();
+            sb.Append("[Injected ");
+            sb.Append(fieldNode.IsPropertyBackingField ? "property" : "field");
+            sb.Append(": ");
+            sb.Append(fieldNode.DisplayPath);
 
-            // string fieldName = serializedProperty.GetFieldInfo().Name;
-            //
-            // StringBuilder sb = new();
-            // sb.Append("[Injected ");
-            // sb.Append(fieldName.Contains(">k__BackingField") ? "property" : "field");
-            // sb.Append(": ");
-            // sb.Append(NamePathUtils.GetInjectedFieldPath(serializedObject, serializedProperty));
-            //
-            // if (!string.IsNullOrWhiteSpace(injectId))
-            // {
-            //     sb.Append(" | ID: ");
-            //     sb.Append(injectId);
-            // }
-            //
-            // sb.Append("]");
-            // return sb.ToString();
+            if (!string.IsNullOrWhiteSpace(fieldNode.InjectId))
+            {
+                sb.Append(" | ID: ");
+                sb.Append(fieldNode.InjectId);
+            }
+
+            sb.Append("]");
+            return sb.ToString();
         }
     }
 }
