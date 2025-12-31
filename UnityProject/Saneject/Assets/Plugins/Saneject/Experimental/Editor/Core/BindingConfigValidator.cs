@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
-using Plugins.Saneject.Experimental.Editor.Graph.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEngine;
 
