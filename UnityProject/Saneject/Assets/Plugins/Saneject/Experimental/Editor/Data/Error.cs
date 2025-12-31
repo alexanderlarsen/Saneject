@@ -55,7 +55,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             StringBuilder msg = new();
 
-            msg.Append($"Binding failed to locate a dependency {SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetFieldSignature(fieldNode)}");
+            msg.Append($"Missing dependency {SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetFieldSignature(fieldNode)}");
 
             if (rejectedTypes is { Count: > 0 })
             {
