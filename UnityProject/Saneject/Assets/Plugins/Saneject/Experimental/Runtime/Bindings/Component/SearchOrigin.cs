@@ -7,8 +7,6 @@
         InjectionTarget,
         CustomTargetTransform,
         Scene,
-        SingleInstance, // Both direct instance and method
-        MultipleInstances, // Both direct instance and method
-        Proxy
+        Instance, // Both direct instance and method 
     }
 }

@@ -33,13 +33,14 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                         {
                             matchingBindingNode.IsUsed = true;
 
-                            List<Object> dependencies = DependencyLocator.LocateDependencies
+                            DependencyLocator.LocateDependencies
                             (
                                 matchingBindingNode,
+                                out IEnumerable<Object> locatedDependencies,
                                 out HashSet<Type> rejectedTypes
                             );
 
-                            if (dependencies.Count > 0)
+                            if (locatedDependencies.Any())
                             {
                             }
                             else

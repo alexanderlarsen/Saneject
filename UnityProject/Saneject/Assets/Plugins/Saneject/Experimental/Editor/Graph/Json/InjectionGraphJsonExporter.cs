@@ -65,7 +65,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                             ["idQualifiers"] = new JArray(binding.IdQualifiers),
                             ["injectionTargetTypeQualifiers"] = new JArray(binding.TargetTypeQualifiers.Select(q => q.Name)),
                             ["injectionTargetMemberNameQualifiers"] = new JArray(binding.MemberNameQualifiers),
-                            ["assetPath"] = binding.AssetPath,
+                            ["assetPath"] = binding.Path,
                             ["assetLoadType"] = binding.AssetLoadType.ToString()
                         }) ?? Array.Empty<JObject>()),
                         ["globalBindings"] = new JArray(node.DeclaredScopeNode?.BindingNodes?.OfType<GlobalComponentBindingNode>().Select(binding => new JObject

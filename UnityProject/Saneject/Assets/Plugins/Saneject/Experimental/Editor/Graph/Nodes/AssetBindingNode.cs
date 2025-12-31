@@ -8,11 +8,11 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             AssetBinding binding,
             ScopeNode scopeNode) : base(binding, scopeNode)
         {
-            AssetPath = binding.AssetPath;
+            Path = binding.AssetPath;
             AssetLoadType = binding.AssetLoadType;
         }
 
-        public string AssetPath { get; }
+        public string Path { get; }
         public AssetLoadType AssetLoadType { get; }
     }
 }

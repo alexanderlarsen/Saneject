@@ -2,6 +2,7 @@
 {
     public enum SearchDirection
     {
+        None,
         Self,
         Parent,
         Ancestors,
@@ -10,7 +11,6 @@
         ChildAtIndex,
         Descendants,
         Siblings,
-        None,
         Anywhere
     }
 }

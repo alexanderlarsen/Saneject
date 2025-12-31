@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 {
@@ -489,9 +490,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromInstance(TComponent instance)
         {
-            binding.SearchOrigin = SearchOrigin.SingleInstance;
-            binding.SearchDirection = SearchDirection.None;
-            binding.ResolveFromInstances.Add(instance);
+            binding.SearchOrigin = SearchOrigin.Instance;
+            binding.ResolveFromInstances.Add(instance as Object); // TODO: Silent fail if not UnityEngine.Object?
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
@@ -501,9 +501,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromMethod(Func<TComponent> method)
         {
-            binding.SearchOrigin = SearchOrigin.SingleInstance;
-            binding.SearchDirection = SearchDirection.None;
-            binding.ResolveFromInstances.Add(method?.Invoke());
+            
+            binding.SearchOrigin = SearchOrigin.Instance;
+            binding.ResolveFromInstances.Add(method?.Invoke() as Object); // TODO: Silent fail if not UnityEngine.Object?
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
@@ -513,9 +513,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromMethod(Func<IEnumerable<TComponent>> method)
         {
-            binding.SearchOrigin = SearchOrigin.MultipleInstances;
-            binding.SearchDirection = SearchDirection.None;
-            binding.ResolveFromInstances.AddRange(method?.Invoke() ?? Enumerable.Empty<TComponent>());
+            binding.SearchOrigin = SearchOrigin.Instance;
+            binding.ResolveFromInstances.AddRange(method?.Invoke().OfType<Object>() ?? Enumerable.Empty<Object>()); // TODO: Silent fail if not UnityEngine.Object?
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }

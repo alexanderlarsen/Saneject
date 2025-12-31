@@ -12,7 +12,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings
         public bool IsValid { get; set; }
         public bool LocatorStrategySpecified { get; set; }
 
-        public List<object> ResolveFromInstances { get; set; } = new();
+        public List<Object> ResolveFromInstances { get; set; } = new();
         public List<Func<Object, bool>> Filters { get; set; } = new();
         public List<string> IdQualifiers { get; set; } = new();
         public List<string> MemberNameQualifiers { get; set; } = new();

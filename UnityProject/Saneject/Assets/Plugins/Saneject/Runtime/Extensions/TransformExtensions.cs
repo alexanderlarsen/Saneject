@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Plugins.Saneject.Runtime.Extensions
@@ -39,5 +40,7 @@ namespace Plugins.Saneject.Runtime.Extensions
                 current = current.parent;
             }
         }
+
+     
     }
 }

@@ -8,6 +8,8 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
     public abstract class BindingNode
     {
+        // TODO: extract element type from arrays and lists
+        
         protected BindingNode(
             Binding binding,
             ScopeNode scopeNode)
@@ -16,6 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
             InterfaceType = binding.InterfaceType;
             ConcreteType = binding.ConcreteType;
+
             IsCollectionBinding = binding.IsCollectionBinding;
             LocatorStrategySpecified = binding.LocatorStrategySpecified;
 
@@ -35,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         public bool IsCollectionBinding { get; }
         public bool LocatorStrategySpecified { get; }
 
-        public IReadOnlyList<object> ResolveFromInstances { get; }
+        public IReadOnlyList<Object> ResolveFromInstances { get; }
         public IReadOnlyList<Func<Object, bool>> Filters { get; }
         public IReadOnlyList<string> IdQualifiers { get; }
         public IReadOnlyList<string> MemberNameQualifiers { get; }
@@ -43,5 +46,6 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
         public bool IsValid { get; set; }
         public bool IsUsed { get; set; }
+ 
     }
 }
