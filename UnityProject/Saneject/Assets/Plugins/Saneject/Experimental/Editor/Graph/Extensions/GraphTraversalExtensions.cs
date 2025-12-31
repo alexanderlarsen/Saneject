@@ -37,13 +37,5 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Extensions
                     yield return binding;
             }
         }
-
-        public static IEnumerable<FieldNode> EnumerateAllFieldNodes(this InjectionGraph graph)
-        {
-            foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
-                foreach (ComponentNode componentNode in transformNode.ComponentNodes)
-                    foreach (FieldNode fieldNode in componentNode.FieldNodes)
-                        yield return fieldNode;
-        }
     }
 }

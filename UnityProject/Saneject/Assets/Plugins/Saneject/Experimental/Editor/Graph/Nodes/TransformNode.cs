@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
                 ? new ScopeNode(scope, this)
                 : null;
 
-            NearestScopeNode = FindNearestScope();
+            NearestScopeNode = FindNearestSameContextScope();
 
             ComponentNodes = transform
                 .GetComponents<Component>()
@@ -43,7 +43,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         public IReadOnlyList<ComponentNode> ComponentNodes { get; }
         public IReadOnlyList<TransformNode> ChildTransformNodes { get; }
 
-        private ScopeNode FindNearestScope()
+        private ScopeNode FindNearestSameContextScope()
         {
             TransformNode current = this;
 

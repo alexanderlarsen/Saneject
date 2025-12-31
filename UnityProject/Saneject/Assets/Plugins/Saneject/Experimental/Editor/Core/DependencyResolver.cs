@@ -18,25 +18,34 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             injectionPlan = new InjectionPlan();
             dependencyErrors = new List<DependencyError>();
 
-            foreach (FieldNode fieldNode in graph.EnumerateAllFieldNodes())
+            foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
             {
-                BindingNode matchingBindingNode = FindMatchingBindingNode(fieldNode);
+                foreach (ComponentNode componentNode in transformNode.ComponentNodes)
+                {
+                    foreach (FieldNode fieldNode in componentNode.FieldNodes)
+                    {
+                        BindingNode match = FindMatchingBindingNode(fieldNode, transformNode.NearestScopeNode);
 
-                if (matchingBindingNode != null)
-                {
-                    // Debug.Log($"Found matching binding for field {fieldNode.MemberName} on type {fieldNode.DeclaringType.Name}");
-                }
-                else
-                {
-                    bindingErrors.Add(BindingError.CreateMissingBindingError(fieldNode));
+                        if (match != null)
+                        {
+                            match.IsUsed = true;
+                            // Debug.Log($"Found matching binding for field {fieldNode.MemberName} on type {fieldNode.DeclaringType.Name}");
+                        }
+                        else
+                        {
+                            bindingErrors.Add(BindingError.CreateMissingBindingError(fieldNode));
+                        }
+                    }
+                    
+                    // Resolve methods
                 }
             }
         }
 
-        private static BindingNode FindMatchingBindingNode(FieldNode fieldNode)
+        private static BindingNode FindMatchingBindingNode(
+            FieldNode fieldNode,
+            ScopeNode currentScope)
         {
-            ScopeNode currentScope = fieldNode.ComponentNode.TransformNode.NearestScopeNode;
-
             while (currentScope != null)
             {
                 List<BindingNode> matchingBindings = currentScope.BindingNodes
