@@ -12,14 +12,23 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class Logger
     {
-        public static void LogBindingErrors(IReadOnlyList<BindingError> errors)
+        public static void LogErrors(IReadOnlyList<Error> errors)
         {
-            foreach (BindingError error in errors)
-                Debug.LogError($"Saneject: {error.ErrorMessage}", error.Transform);
-        }
+            foreach (Error error in errors.OrderBy(e => ErrorPriority(e.ErrorType)))
+                Debug.LogError($"Saneject: {error.ErrorMessage}", error.LogContext);
 
-        public static void LogDependencyErrors(IReadOnlyList<DependencyError> dependencyErrors)
-        {
+            return;
+
+            static int ErrorPriority(ErrorType type)
+            {
+                return type switch
+                {
+                    ErrorType.InvalidBinding => 0,
+                    ErrorType.MissingBinding => 1,
+                    ErrorType.MissingDependency => 2,
+                    _ => int.MaxValue
+                };
+            }
         }
 
         public static void LogUnusedBindings(InjectionGraph graph)
@@ -34,6 +43,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         public static void LogStats(int elapsedMilliseconds)
         {
             Debug.Log($"Saneject: Injection took {elapsedMilliseconds}ms.");
+        }
+
+        public static void LogProxyCreationCompleted(int numProxiesCreated)
+        {
+            Debug.Log($"Saneject: Created {numProxiesCreated} proxies. Inject again to finish injection.");
         }
     }
 }

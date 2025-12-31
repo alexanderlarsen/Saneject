@@ -19,27 +19,33 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 ConsoleUtils.ClearLog();
 
             InjectionGraph graph = InjectionGraphFactory.CreateGraph(startGameObject);
+            List<Error> errors = new();
 
             BindingConfigValidator.ValidateBindings
             (
                 graph,
-                out List<BindingError> bindingErrors
+                errors
             );
+
+            if (ProxyCreator.ShouldCreateProxies(graph))
+            {
+                ProxyCreator.CreateAllProxies(graph, out int proxiesCreated);
+                Logger.LogProxyCreationCompleted(proxiesCreated);
+                return;
+            }
 
             DependencyResolver.Resolve
             (
                 graph,
-                bindingErrors,
-                out InjectionPlan injectionPlan,
-                out List<DependencyError> dependencyErrors
+                errors,
+                out InjectionPlan injectionPlan
             );
 
             DependencyInjector.InjectDependencies(injectionPlan);
 
             stopwatch.Stop();
 
-            Logger.LogBindingErrors(bindingErrors);
-            Logger.LogDependencyErrors(dependencyErrors);
+            Logger.LogErrors(errors);
             Logger.LogUnusedBindings(graph);
             Logger.LogStats(stopwatch.Elapsed.Milliseconds);
 

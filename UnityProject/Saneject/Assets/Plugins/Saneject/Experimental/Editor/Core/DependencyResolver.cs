@@ -1,9 +1,11 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
@@ -11,12 +13,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void Resolve(
             InjectionGraph graph,
-            List<BindingError> bindingErrors,
-            out InjectionPlan injectionPlan,
-            out List<DependencyError> dependencyErrors)
+            List<Error> errors,
+            out InjectionPlan injectionPlan)
         {
             injectionPlan = new InjectionPlan();
-            dependencyErrors = new List<DependencyError>();
 
             foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
             {
@@ -24,19 +24,41 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 {
                     foreach (FieldNode fieldNode in componentNode.FieldNodes)
                     {
-                        BindingNode match = FindMatchingBindingNode(fieldNode, transformNode.NearestScopeNode);
+                        BindingNode matchingBindingNode = FindMatchingBindingNode
+                        (
+                            fieldNode,
+                            transformNode.NearestScopeNode
+                        );
 
-                        if (match != null)
+                        if (matchingBindingNode != null)
                         {
-                            match.IsUsed = true;
-                            // Debug.Log($"Found matching binding for field {fieldNode.MemberName} on type {fieldNode.DeclaringType.Name}");
+                            matchingBindingNode.IsUsed = true;
+
+                            List<Object> dependencies = DependencyLocator.LocateDependencies
+                            (
+                                matchingBindingNode,
+                                out HashSet<Type> rejectedTypes
+                            );
+
+                            if (dependencies.Count > 0)
+                            {
+                            }
+                            else
+                            {
+                                errors.Add(Error.CreateMissingDependencyError
+                                (
+                                    matchingBindingNode,
+                                    fieldNode,
+                                    rejectedTypes
+                                ));
+                            }
                         }
                         else
                         {
-                            bindingErrors.Add(BindingError.CreateMissingBindingError(fieldNode));
+                            errors.Add(Error.CreateMissingBindingError(fieldNode));
                         }
                     }
-                    
+
                     // Resolve methods
                 }
             }
