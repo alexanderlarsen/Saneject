@@ -9,7 +9,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
     public abstract class BindingNode
     {
         // TODO: extract element type from arrays and lists
-        
+
         protected BindingNode(
             Binding binding,
             ScopeNode scopeNode)
@@ -27,8 +27,6 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             IdQualifiers = binding.IdQualifiers.ToList();
             MemberNameQualifiers = binding.MemberNameQualifiers.ToList();
             TargetTypeQualifiers = binding.TargetTypeQualifiers.ToList();
-
-            IsValid = binding.IsValid;
         }
 
         public ScopeNode ScopeNode { get; }
@@ -42,10 +40,6 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         public IReadOnlyList<Func<Object, bool>> Filters { get; }
         public IReadOnlyList<string> IdQualifiers { get; }
         public IReadOnlyList<string> MemberNameQualifiers { get; }
-        public IReadOnlyList<Type> TargetTypeQualifiers { get; }
-
-        public bool IsValid { get; set; }
-        public bool IsUsed { get; set; }
- 
+        public IReadOnlyList<Type> TargetTypeQualifiers { get; } 
     }
 }

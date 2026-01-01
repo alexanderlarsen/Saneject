@@ -19,7 +19,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             Type = scope.GetType();
 
             BindingNodes = scope
-                .GetBindings()
+                .CollectBindings()
                 .Select(binding => binding switch
                 {
                     GlobalComponentBinding globalComponentBinding => new GlobalComponentBindingNode(globalComponentBinding, this),

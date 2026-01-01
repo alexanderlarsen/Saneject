@@ -501,7 +501,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromMethod(Func<TComponent> method)
         {
-            
             binding.SearchOrigin = SearchOrigin.Instance;
             binding.ResolveFromInstances.Add(method?.Invoke() as Object); // TODO: Silent fail if not UnityEngine.Object?
             binding.LocatorStrategySpecified = true;

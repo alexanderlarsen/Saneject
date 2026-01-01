@@ -1,8 +1,5 @@
-﻿using System.Collections.Generic;
-using System.Diagnostics;
-using Plugins.Saneject.Editor.Utility;
+﻿using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Json;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEngine;
@@ -13,43 +10,31 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void InjectSingleHierarchy(GameObject startGameObject)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
-
             if (UserSettings.ClearLogsOnInjection)
                 ConsoleUtils.ClearLog();
 
-            InjectionGraph graph = InjectionGraphFactory.CreateGraph(startGameObject);
-            List<Error> errors = new();
+            InjectionSession session = InjectionSession.Create(startGameObject);
+            session.StartTimer();
 
-            BindingConfigValidator.ValidateBindings
-            (
-                graph,
-                errors
-            );
+            BindingConfigValidator.ValidateBindings(session);
 
-            if (ProxyCreator.ShouldCreateProxies(graph))
+            if (ProxyCreator.ShouldCreateProxies(session))
             {
-                ProxyCreator.CreateAllProxies(graph, out int proxiesCreated);
+                ProxyCreator.CreateAllProxies(session, out int proxiesCreated);
                 Logger.LogProxyCreationCompleted(proxiesCreated);
                 return;
             }
 
-            DependencyResolver.Resolve
-            (
-                graph,
-                errors,
-                out InjectionPlan injectionPlan
-            );
+            DependencyResolver.Resolve(session);
+            DependencyInjector.InjectDependencies(session);
 
-            DependencyInjector.InjectDependencies(injectionPlan);
+            session.StopTimer();
 
-            stopwatch.Stop();
+            Logger.LogErrors(session);
+            Logger.LogUnusedBindings(session);
+            Logger.LogStats(session);
 
-            Logger.LogErrors(errors);
-            Logger.LogUnusedBindings(graph);
-            Logger.LogStats(stopwatch.Elapsed.Milliseconds);
-
-            InjectionGraphJsonExporter.SaveGraphToJson(graph);
+            InjectionGraphJsonExporter.SaveGraphToJson(session.Graph);
         }
     }
 }

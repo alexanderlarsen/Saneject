@@ -9,7 +9,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings
         public Type InterfaceType { get; set; }
         public Type ConcreteType { get; set; }
         public bool IsCollectionBinding { get; set; }
-        public bool IsValid { get; set; }
         public bool LocatorStrategySpecified { get; set; }
 
         public List<Object> ResolveFromInstances { get; set; } = new();

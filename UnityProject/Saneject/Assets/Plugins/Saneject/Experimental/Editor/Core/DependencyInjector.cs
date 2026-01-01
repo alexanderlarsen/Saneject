@@ -1,8 +1,10 @@
-﻿namespace Plugins.Saneject.Experimental.Editor.Core
+﻿using Plugins.Saneject.Experimental.Editor.Data;
+
+namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class DependencyInjector
     {
-        public static void InjectDependencies(InjectionPlan injectionPlan)
+        public static void InjectDependencies(InjectionSession session)
         {
         }
     }

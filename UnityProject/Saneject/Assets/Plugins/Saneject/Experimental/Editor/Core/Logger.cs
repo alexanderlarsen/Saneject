@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utils;
 using Plugins.Saneject.Runtime.Settings;
@@ -11,9 +10,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class Logger
     {
-        public static void LogErrors(IReadOnlyList<Error> errors)
+        public static void LogErrors(InjectionSession session)
         {
-            foreach (Error error in errors.OrderBy(e => ErrorPriority(e.ErrorType)))
+            foreach (Error error in session.Errors.OrderBy(e => ErrorPriority(e.ErrorType)))
                 Debug.LogError($"Saneject: {error.ErrorMessage}", error.LogContext);
 
             return;
@@ -30,18 +29,23 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             }
         }
 
-        public static void LogUnusedBindings(InjectionGraph graph)
+        public static void LogUnusedBindings(InjectionSession session)
         {
             if (!UserSettings.LogUnusedBindings)
                 return;
 
-            foreach (BindingNode binding in graph.EnumerateAllBindingNodes().Where(binding => !binding.IsUsed))
+            IEnumerable<BindingNode> unusedBindings = session
+                .Graph
+                .EnumerateAllBindingNodes()
+                .Where(binding => !session.UsedBindings.Contains(binding));
+
+            foreach (BindingNode binding in unusedBindings)
                 Debug.LogWarning($"Saneject: Unused binding {SignatureBuilder.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }
 
-        public static void LogStats(int elapsedMilliseconds)
+        public static void LogStats(InjectionSession session)
         {
-            Debug.Log($"Saneject: Injection took {elapsedMilliseconds}ms.");
+            Debug.Log($"Saneject: Injection took {session.InjectionDurationMilliseconds}ms | ID: {session.Id}.");
         }
 
         public static void LogProxyCreationCompleted(int numProxiesCreated)

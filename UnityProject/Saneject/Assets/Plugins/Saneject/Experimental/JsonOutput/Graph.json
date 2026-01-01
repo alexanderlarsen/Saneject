@@ -16,7 +16,7 @@
             "injectionTargetTypeQualifiers": [],
             "injectionTargetMemberNameQualifiers": [],
             "searchOrigin": "Scope",
-            "searchDirection": "Self",
+            "searchDirection": "Descendants",
             "findObjectsInactive": "Exclude",
             "findObjectsSortMode": "None",
             "customTargetTransform": null,
@@ -32,7 +32,7 @@
             "injectionTargetTypeQualifiers": [],
             "injectionTargetMemberNameQualifiers": [],
             "searchOrigin": "Scope",
-            "searchDirection": "Self",
+            "searchDirection": "Descendants",
             "findObjectsInactive": "Exclude",
             "findObjectsSortMode": "None",
             "customTargetTransform": null,
@@ -73,7 +73,7 @@
           "context": "PrefabInstance (Key: -1268)",
           "scope": {
             "type": "PlayerScope",
-            "parentScope": null,
+            "parentScope": "GameScope",
             "componentBindings": [
               {
                 "interfaceType": "IMoveController",
@@ -215,7 +215,7 @@
               "context": "PrefabInstance (Key: -1256)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": null,
+                "parentScope": "PlayerScope",
                 "componentBindings": [],
                 "assetBindings": [],
                 "globalBindings": []
@@ -247,7 +247,7 @@
           "context": "PrefabInstance (Key: -1246)",
           "scope": {
             "type": "EnemyScope",
-            "parentScope": null,
+            "parentScope": "GameScope",
             "componentBindings": [
               {
                 "interfaceType": "IMoveController",
@@ -314,7 +314,7 @@
               "context": "PrefabInstance (Key: -1262)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": null,
+                "parentScope": "EnemyScope",
                 "componentBindings": [],
                 "assetBindings": [],
                 "globalBindings": []

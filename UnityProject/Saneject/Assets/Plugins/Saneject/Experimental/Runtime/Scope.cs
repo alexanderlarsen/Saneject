@@ -13,7 +13,7 @@ namespace Plugins.Saneject.Experimental.Runtime
 {
     public abstract class Scope : MonoBehaviour
     {
-        #region INTERNAL METHODS/FIELDS
+        #region INTERNAL
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
@@ -23,9 +23,10 @@ namespace Plugins.Saneject.Experimental.Runtime
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
+        /// Initializes bindings, copies them to new collection and disposes the original bindings.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public IReadOnlyCollection<Binding> GetBindings()
+        public IReadOnlyCollection<Binding> CollectBindings()
         {
             DeclareBindings();
             HashSet<Binding> bindingsCopy = bindings.ToHashSet();
@@ -35,12 +36,25 @@ namespace Plugins.Saneject.Experimental.Runtime
 
         #endregion
 
-        #region USER-FACING METHODS
+        #region USER-FACING
 
         /// <summary>
-        /// Sets <see cref="HideFlags" /> to <see cref="HideFlags.DontSaveInBuild" />. If you override this method, call <c>base.OnValidate()</c> to strip <see cref="Scope" /> from build.
+        /// Calls <see cref="MarkAsEditorOnly" />. If you override this method,
+        /// call <c>base.OnValidate()</c> or <see cref="MarkAsEditorOnly" /> to ensure
+        /// <see cref="Scope" /> is excluded from builds.
         /// </summary>
         protected virtual void OnValidate()
+        {
+            MarkAsEditorOnly();
+        }
+
+        /// <summary>
+        /// Marks this <see cref="Scope" /> as editor-only by setting
+        /// <see cref="HideFlags.DontSaveInBuild" />.
+        /// The <see cref="Scope" /> does not do anything at runtime and is only
+        /// used to declare injection configuration.
+        /// </summary>
+        protected void MarkAsEditorOnly()
         {
             if ((hideFlags & HideFlags.DontSaveInBuild) == 0)
                 hideFlags |= HideFlags.DontSaveInBuild;

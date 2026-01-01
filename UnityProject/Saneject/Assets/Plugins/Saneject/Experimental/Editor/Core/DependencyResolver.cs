@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Object = UnityEngine.Object;
 
@@ -10,14 +9,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class DependencyResolver
     {
-        public static void Resolve(
-            InjectionGraph graph,
-            List<Error> errors,
-            out InjectionPlan injectionPlan)
+        public static void Resolve(InjectionSession session)
         {
-            injectionPlan = new InjectionPlan();
-
-            foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
+            foreach (TransformNode transformNode in session.Graph.EnumerateAllTransformNodes())
             {
                 foreach (ComponentNode componentNode in transformNode.ComponentNodes)
                 {
@@ -26,12 +20,13 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                         BindingNode matchingBindingNode = FindMatchingBindingNode
                         (
                             fieldNode,
-                            transformNode.NearestScopeNode
+                            transformNode.NearestScopeNode,
+                            session
                         );
 
                         if (matchingBindingNode != null)
                         {
-                            matchingBindingNode.IsUsed = true;
+                            session.MarkBindingUsed(matchingBindingNode);
 
                             DependencyLocator.LocateDependencies
                             (
@@ -45,7 +40,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                             }
                             else
                             {
-                                errors.Add(Error.CreateMissingDependencyError
+                                session.AddError(Error.CreateMissingDependencyError
                                 (
                                     matchingBindingNode,
                                     fieldNode,
@@ -55,7 +50,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                         }
                         else
                         {
-                            errors.Add(Error.CreateMissingBindingError(fieldNode));
+                            session.AddError(Error.CreateMissingBindingError(fieldNode));
                         }
                     }
 
@@ -66,7 +61,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
         private static BindingNode FindMatchingBindingNode(
             FieldNode fieldNode,
-            ScopeNode currentScope)
+            ScopeNode currentScope,
+            InjectionSession session)
         {
             while (currentScope != null)
             {
@@ -79,8 +75,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     .Where(binding => binding.IdQualifiers.Count == 0 || binding.IdQualifiers.Any(id => id == fieldNode.InjectId))
                     .ToList();
 
-                if (matchingBindings.Count > 0)
-                    return matchingBindings.First();
+                BindingNode binding = matchingBindings.FirstOrDefault();
+
+                if (binding != null && session.ValidBindings.Contains(binding))
+                    return binding;
 
                 currentScope = currentScope.ParentScopeNode;
             }
