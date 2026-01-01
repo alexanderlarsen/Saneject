@@ -1,7 +1,5 @@
-﻿using Plugins.Saneject.Editor.Utility;
-using Plugins.Saneject.Experimental.Editor.Data;
+﻿using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Json;
-using Plugins.Saneject.Runtime.Settings;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -10,10 +8,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void InjectSingleHierarchy(GameObject startGameObject)
         {
-            if (UserSettings.ClearLogsOnInjection)
-                ConsoleUtils.ClearLog();
+            InjectionSession session = InjectionSession.StartSession(startGameObject);
 
-            InjectionSession session = InjectionSession.Create(startGameObject);
             BindingConfigValidator.ValidateBindings(session);
 
             if (ProxyCreator.ShouldCreateProxies(session))
@@ -26,8 +22,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             DependencyResolver.Resolve(session);
             DependencyInjector.InjectDependencies(session);
 
-            session.StopTimer();
+            session.StopSession();
 
+            Logger.TryClearLog();
             Logger.LogErrors(session);
             Logger.LogUnusedBindings(session);
             Logger.LogStats(session);

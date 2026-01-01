@@ -44,22 +44,21 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 (
                     bindingNode,
                     injectionTargetNode: fieldNode.ComponentNode.TransformNode,
-                    out IEnumerable<Object> locatedDependencies,
+                    out IEnumerable<Object> dependencies,
                     out HashSet<Type> rejectedTypes
                 );
 
-                if (locatedDependencies.Any())
-                {
-                }
-                else
-                {
+                Object[] array = dependencies.ToArray();
+
+                if (array is not { Length: > 0 })
                     session.AddError(Error.CreateMissingDependencyError
                     (
                         bindingNode,
                         fieldNode,
                         rejectedTypes
                     ));
-                }
+
+                session.RegisterFieldDependencies(fieldNode, array);
             }
             else
             {

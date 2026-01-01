@@ -85,7 +85,7 @@
           "context": "PrefabInstance (Key: -1268)",
           "scope": {
             "type": "PlayerScope",
-            "parentScope": "GameScope",
+            "parentScope": null,
             "componentBindings": [
               {
                 "interfaceType": "IMoveController",
@@ -252,7 +252,7 @@
               "context": "PrefabInstance (Key: -1256)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": "PlayerScope",
+                "parentScope": null,
                 "componentBindings": [],
                 "assetBindings": [],
                 "globalBindings": []
@@ -284,7 +284,7 @@
           "context": "PrefabInstance (Key: -1246)",
           "scope": {
             "type": "EnemyScope",
-            "parentScope": "GameScope",
+            "parentScope": null,
             "componentBindings": [
               {
                 "interfaceType": "IMoveController",
@@ -371,7 +371,7 @@
               "context": "PrefabInstance (Key: -1262)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": "EnemyScope",
+                "parentScope": null,
                 "componentBindings": [],
                 "assetBindings": [],
                 "globalBindings": []

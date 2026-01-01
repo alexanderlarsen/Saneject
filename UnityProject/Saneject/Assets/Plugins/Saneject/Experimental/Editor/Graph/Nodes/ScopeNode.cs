@@ -42,7 +42,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
             while (currentTransformNode != null)
             {
-                if (currentTransformNode.DeclaredScopeNode == null || (UserSettings.UseContextIsolation && currentTransformNode.ContextNode != transformNode.ContextNode))
+                if (currentTransformNode.DeclaredScopeNode == null || (UserSettings.UseContextIsolation && currentTransformNode.ContextIdentity != transformNode.ContextIdentity))
                 {
                     currentTransformNode = currentTransformNode.ParentTransformNode;
                     continue;

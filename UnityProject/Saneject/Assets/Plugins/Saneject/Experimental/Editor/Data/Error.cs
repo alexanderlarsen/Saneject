@@ -60,6 +60,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             if (rejectedTypes is { Count: > 0 })
             {
                 string typeList = string.Join(", ", rejectedTypes.Select(t => t.Name));
+                msg.AppendLine();
                 msg.AppendLine($"Candidates rejected due to scene/prefab or prefab/prefab context mismatch: {typeList}.");
                 msg.AppendLine("Use ProxyObjects for proper cross-context references, or disable filtering in User Settings (not recommended).");
             }

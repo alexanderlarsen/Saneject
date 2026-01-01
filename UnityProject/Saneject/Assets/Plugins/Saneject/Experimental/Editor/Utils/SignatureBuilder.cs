@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             IReadOnlyList<string> ids = binding.IdQualifiers;
             IReadOnlyList<Type> targetTypes = binding.TargetTypeQualifiers;
             IReadOnlyList<string> memberNames = binding.MemberNameQualifiers;
-            bool isPrefab = binding.ScopeNode.TransformNode.ContextNode.IsPrefab;
+            bool isPrefab = binding.ScopeNode.TransformNode.ContextIdentity.IsPrefab;
             string scopeName = binding.ScopeNode.Type.Name;
 
             StringBuilder sb = new();

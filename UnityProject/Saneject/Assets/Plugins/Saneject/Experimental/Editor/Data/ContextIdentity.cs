@@ -1,49 +1,23 @@
 ﻿using System;
-using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Editor.Data;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
+namespace Plugins.Saneject.Experimental.Editor.Data
 {
-    public class ContextNode : IEqualityComparer<ContextNode>
+    public class ContextIdentity : IEquatable<ContextIdentity>
     {
-        public ContextNode(Object obj)
+        public ContextIdentity(Object obj)
         {
             GetContextTypeAndKey(obj, out (ContextType type, int key) result);
-            ContextType = result.type;
-            ContextKey = result.key;
+            Type = result.type;
+            Key = result.key;
             IsPrefab = result.type is ContextType.PrefabAsset or ContextType.PrefabInstance;
         }
 
-        public ContextType ContextType { get; }
-        public int ContextKey { get; }
+        public ContextType Type { get; }
+        public int Key { get; }
         public bool IsPrefab { get; }
-
-        public bool Equals(
-            ContextNode x,
-            ContextNode y)
-        {
-            if (ReferenceEquals(x, y))
-                return true;
-
-            if (x is null)
-                return false;
-
-            if (y is null)
-                return false;
-
-            if (x.GetType() != y.GetType())
-                return false;
-
-            return x.ContextKey == y.ContextKey;
-        }
-
-        public int GetHashCode(ContextNode obj)
-        {
-            return HashCode.Combine(obj.ContextKey);
-        }
 
         private static void GetContextTypeAndKey(
             Object obj,
@@ -85,5 +59,31 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             result.type = ContextType.SceneObject;
             result.key = gameObject.scene.handle;
         }
+
+        #region Equality logic
+
+        public bool Equals(ContextIdentity other)
+        {
+            if (ReferenceEquals(this, other))
+                return true;
+
+            if (other is null)
+                return false;
+
+            return Type == other.Type &&
+                   Key == other.Key;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return obj is ContextIdentity other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(Type, Key);
+        }
+
+        #endregion
     }
 }

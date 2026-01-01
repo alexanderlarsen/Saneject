@@ -34,7 +34,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                 ["parent"] = node.ParentTransformNode != null
                     ? $"{node.ParentTransformNode.Transform.name} (Instance ID: {node.ParentTransformNode.Transform.GetInstanceID()})"
                     : null,
-                ["context"] = $"{node.ContextNode.ContextType} (Key: {node.ContextNode.ContextKey})",
+                ["context"] = $"{node.ContextIdentity.Type} (Key: {node.ContextIdentity.Key})",
                 ["scope"] = node.DeclaredScopeNode != null
                     ? new JObject
                     {

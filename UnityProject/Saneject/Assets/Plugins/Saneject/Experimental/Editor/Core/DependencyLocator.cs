@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
@@ -17,7 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         public static void LocateDependencies(
             BindingNode bindingNode,
             TransformNode injectionTargetNode,
-            out IEnumerable<Object> locatedDependencies,
+            out IEnumerable<Object> dependencies,
             out HashSet<Type> rejectedTypes)
         {
             rejectedTypes = new HashSet<Type>();
@@ -33,15 +34,15 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             foreach (Object dependency in allDependencies)
             {
-                ContextNode looseContextNode = new(dependency);
+                ContextIdentity dependencyContext = new(dependency);
 
-                if (looseContextNode.Equals(bindingNode.ScopeNode.TransformNode.ContextNode) || !UserSettings.UseContextIsolation)
+                if (!UserSettings.UseContextIsolation || dependencyContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
                     validDependencies.Add(dependency);
                 else
                     rejectedTypes.Add(dependency.GetType());
             }
 
-            locatedDependencies = validDependencies;
+            dependencies = validDependencies;
         }
 
         private static IEnumerable<Component> LocateComponentDependencies(
@@ -49,7 +50,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             TransformNode injectionTargetNode)
         {
             if (bindingNode.ResolveFromProxy) // TODO: Implement proxy resolution
-                return null;
+                throw new NotImplementedException();
 
             if (bindingNode.SearchOrigin == SearchOrigin.Instance)
                 return bindingNode.ResolveFromInstances.OfType<Component>();

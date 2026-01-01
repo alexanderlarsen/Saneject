@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utils;
@@ -10,6 +11,12 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class Logger
     {
+        public static void TryClearLog()
+        {
+            if (UserSettings.ClearLogsOnInjection)
+                ConsoleUtils.ClearLog();
+        }
+
         public static void LogErrors(InjectionSession session)
         {
             foreach (Error error in session.Errors.OrderBy(e => ErrorPriority(e.ErrorType)))
@@ -45,7 +52,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
         public static void LogStats(InjectionSession session)
         {
-            Debug.Log($"Saneject: Injection took {session.InjectionDurationMilliseconds}ms | ID: {session.Id}.");
+            Debug.Log($"Saneject: Injection took {session.DurationMilliseconds}ms | ID: {session.Id}.");
         }
 
         public static void LogProxyCreationCompleted(int numProxiesCreated)
