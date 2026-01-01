@@ -16,6 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void LocateDependencies(
             BindingNode bindingNode,
+            TransformNode injectionTargetNode,
             out IEnumerable<Object> locatedDependencies,
             out HashSet<Type> rejectedTypes)
         {
@@ -24,7 +25,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             IEnumerable<Object> allDependencies = bindingNode switch
             {
                 AssetBindingNode assetBindingNode => LocateAssetDependencies(assetBindingNode),
-                ComponentBindingNode componentBindingNode => LocateComponentDependencies(componentBindingNode),
+                ComponentBindingNode componentBindingNode => LocateComponentDependencies(componentBindingNode, injectionTargetNode),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -43,7 +44,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             locatedDependencies = validDependencies;
         }
 
-        private static IEnumerable<Component> LocateComponentDependencies(ComponentBindingNode bindingNode)
+        private static IEnumerable<Component> LocateComponentDependencies(
+            ComponentBindingNode bindingNode,
+            TransformNode injectionTargetNode)
         {
             if (bindingNode.ResolveFromProxy) // TODO: Implement proxy resolution
                 return null;
@@ -57,7 +60,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             {
                 SearchOrigin.Scope => bindingNode.ScopeNode.TransformNode.Transform,
                 SearchOrigin.Root => bindingNode.ScopeNode.TransformNode.Transform.root,
-                SearchOrigin.InjectionTarget => throw new NotImplementedException(), // TODO: Implement injection target resolution
+                SearchOrigin.InjectionTarget => injectionTargetNode.Transform,
                 SearchOrigin.CustomTargetTransform => bindingNode.CustomTargetTransform,
                 _ => null
             };

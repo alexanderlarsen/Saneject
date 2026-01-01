@@ -11,10 +11,12 @@
           {
             "interfaceType": null,
             "concreteType": "Enemy",
-            "directInstancesToResolveFrom": [],
+            "isCollectionBinding": false,
+            "locatorStrategySpecified": true,
+            "resolveFromInstances": [],
             "idQualifiers": [],
-            "injectionTargetTypeQualifiers": [],
-            "injectionTargetMemberNameQualifiers": [],
+            "targetTypeQualifiers": [],
+            "memberNameQualifiers": [],
             "searchOrigin": "Scope",
             "searchDirection": "Descendants",
             "findObjectsInactive": "Exclude",
@@ -27,10 +29,12 @@
           {
             "interfaceType": null,
             "concreteType": "Player",
-            "directInstancesToResolveFrom": [],
+            "isCollectionBinding": false,
+            "locatorStrategySpecified": true,
+            "resolveFromInstances": [],
             "idQualifiers": [],
-            "injectionTargetTypeQualifiers": [],
-            "injectionTargetMemberNameQualifiers": [],
+            "targetTypeQualifiers": [],
+            "memberNameQualifiers": [],
             "searchOrigin": "Scope",
             "searchDirection": "Descendants",
             "findObjectsInactive": "Exclude",
@@ -49,18 +53,26 @@
           "name": "GameManager (Instance ID: 32360)",
           "fields": [
             {
-              "name": "enemy",
-              "type": "Enemy",
+              "declaringType": "GameManager",
+              "memberName": "enemy",
               "injectId": null,
               "suppressMissingErrors": false,
-              "isCollection": false
+              "requestedType": "Enemy",
+              "isInterface": false,
+              "isCollection": false,
+              "displayPath": "Game/GameManager/enemy",
+              "isPropertyBackingField": false
             },
             {
-              "name": "player",
-              "type": "Player",
+              "declaringType": "GameManager",
+              "memberName": "player",
               "injectId": null,
               "suppressMissingErrors": false,
-              "isCollection": false
+              "requestedType": "Player",
+              "isInterface": false,
+              "isCollection": false,
+              "displayPath": "Game/GameManager/player",
+              "isPropertyBackingField": false
             }
           ],
           "methods": []
@@ -78,11 +90,13 @@
               {
                 "interfaceType": "IMoveController",
                 "concreteType": null,
-                "directInstancesToResolveFrom": [],
+                "isCollectionBinding": false,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
                 "idQualifiers": [],
-                "injectionTargetTypeQualifiers": [],
-                "injectionTargetMemberNameQualifiers": [],
-                "searchOrigin": "Scope",
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
+                "searchOrigin": "InjectionTarget",
                 "searchDirection": "Descendants",
                 "findObjectsInactive": "Exclude",
                 "findObjectsSortMode": "None",
@@ -94,16 +108,14 @@
               {
                 "interfaceType": "IWeapon",
                 "concreteType": null,
-                "directInstancesToResolveFrom": [],
-                "idQualifiers": [
-                  "PlayerWeapon"
-                ],
-                "injectionTargetTypeQualifiers": [
+                "isCollectionBinding": false,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
+                "idQualifiers": [],
+                "targetTypeQualifiers": [
                   "Player"
                 ],
-                "injectionTargetMemberNameQualifiers": [
-                  "CurrentWeapon"
-                ],
+                "memberNameQualifiers": [],
                 "searchOrigin": "Scope",
                 "searchDirection": "Descendants",
                 "findObjectsInactive": "Exclude",
@@ -114,38 +126,7 @@
                 "resolveFromProxy": false
               }
             ],
-            "assetBindings": [
-              {
-                "interfaceType": null,
-                "concreteType": "Texture2D",
-                "directInstancesToResolveFrom": [],
-                "idQualifiers": [
-                  "PlayerTexture"
-                ],
-                "injectionTargetTypeQualifiers": [],
-                "injectionTargetMemberNameQualifiers": [
-                  "Texture"
-                ],
-                "assetPath": "Assets/Dev/GraphTesting/Textures/PlayerTexture.png",
-                "assetLoadType": "AssetLoad"
-              },
-              {
-                "interfaceType": null,
-                "concreteType": "Player",
-                "directInstancesToResolveFrom": [
-                  "Player"
-                ],
-                "idQualifiers": [
-                  "PlayerTexture"
-                ],
-                "injectionTargetTypeQualifiers": [],
-                "injectionTargetMemberNameQualifiers": [
-                  "Texture"
-                ],
-                "assetPath": null,
-                "assetLoadType": "Instance"
-              }
-            ],
+            "assetBindings": [],
             "globalBindings": []
           },
           "components": [
@@ -153,32 +134,48 @@
               "name": "Player (Instance ID: -1272)",
               "fields": [
                 {
-                  "name": "audioSourcesList",
-                  "type": "List`1",
+                  "declaringType": "Player",
+                  "memberName": "moveController",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/moveController",
+                  "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "Player",
+                  "memberName": "weapon",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IWeapon",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/weapon",
+                  "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "Player",
+                  "memberName": "audioSourcesList",
                   "injectId": "audioSources",
                   "suppressMissingErrors": false,
-                  "isCollection": true
+                  "requestedType": "AudioSource",
+                  "isInterface": false,
+                  "isCollection": true,
+                  "displayPath": "Game/Player/Player/audioSourcesList",
+                  "isPropertyBackingField": false
                 },
                 {
-                  "name": "collidersArray",
-                  "type": "Collider[]",
+                  "declaringType": "Player",
+                  "memberName": "collidersArray",
                   "injectId": "playerColliders",
                   "suppressMissingErrors": false,
-                  "isCollection": true
-                },
-                {
-                  "name": "moveController",
-                  "type": "IMoveController",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "isCollection": false
-                },
-                {
-                  "name": "weapon",
-                  "type": "IWeapon",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "isCollection": false
+                  "requestedType": "Collider",
+                  "isInterface": false,
+                  "isCollection": true,
+                  "displayPath": "Game/Player/Player/collidersArray",
+                  "isPropertyBackingField": false
                 }
               ],
               "methods": []
@@ -252,10 +249,12 @@
               {
                 "interfaceType": "IMoveController",
                 "concreteType": null,
-                "directInstancesToResolveFrom": [],
+                "isCollectionBinding": false,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
                 "idQualifiers": [],
-                "injectionTargetTypeQualifiers": [],
-                "injectionTargetMemberNameQualifiers": [],
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
                 "searchOrigin": "Scope",
                 "searchDirection": "Descendants",
                 "findObjectsInactive": "Exclude",
@@ -268,10 +267,12 @@
               {
                 "interfaceType": "IWeapon",
                 "concreteType": null,
-                "directInstancesToResolveFrom": [],
+                "isCollectionBinding": false,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
                 "idQualifiers": [],
-                "injectionTargetTypeQualifiers": [],
-                "injectionTargetMemberNameQualifiers": [],
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
                 "searchOrigin": "Scope",
                 "searchDirection": "Descendants",
                 "findObjectsInactive": "Exclude",
@@ -290,18 +291,26 @@
               "name": "Enemy (Instance ID: -1250)",
               "fields": [
                 {
-                  "name": "moveController",
-                  "type": "IMoveController",
+                  "declaringType": "Enemy",
+                  "memberName": "moveController",
                   "injectId": null,
                   "suppressMissingErrors": false,
-                  "isCollection": false
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Enemy/Enemy/moveController",
+                  "isPropertyBackingField": false
                 },
                 {
-                  "name": "weapon",
-                  "type": "IWeapon",
+                  "declaringType": "Enemy",
+                  "memberName": "weapon",
                   "injectId": null,
                   "suppressMissingErrors": false,
-                  "isCollection": false
+                  "requestedType": "IWeapon",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Enemy/Enemy/weapon",
+                  "isPropertyBackingField": false
                 }
               ],
               "methods": []

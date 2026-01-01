@@ -44,10 +44,12 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                         {
                             ["interfaceType"] = binding.InterfaceType?.Name,
                             ["concreteType"] = binding.ConcreteType?.Name,
-                            ["directInstancesToResolveFrom"] = new JArray(binding.ResolveFromInstances.Select(instance => instance.GetType().Name)),
+                            ["isCollectionBinding"] = binding.IsCollectionBinding,
+                            ["locatorStrategySpecified"] = binding.LocatorStrategySpecified,
+                            ["resolveFromInstances"] = new JArray(binding.ResolveFromInstances.Select(instance => instance.GetType().Name)),
                             ["idQualifiers"] = new JArray(binding.IdQualifiers),
-                            ["injectionTargetTypeQualifiers"] = new JArray(binding.TargetTypeQualifiers.Select(q => q.Name)),
-                            ["injectionTargetMemberNameQualifiers"] = new JArray(binding.MemberNameQualifiers),
+                            ["targetTypeQualifiers"] = new JArray(binding.TargetTypeQualifiers.Select(q => q.Name)),
+                            ["memberNameQualifiers"] = new JArray(binding.MemberNameQualifiers),
                             ["searchOrigin"] = binding.SearchOrigin.ToString(),
                             ["searchDirection"] = binding.SearchDirection.ToString(),
                             ["findObjectsInactive"] = binding.FindObjectsInactive.ToString(),
@@ -93,11 +95,15 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                         ["fields"] = new JArray(componentNode.FieldNodes.Select
                         (fieldNode => new JObject
                         {
-                            ["name"] = fieldNode.FieldInfo.Name,
-                            ["type"] = fieldNode.FieldInfo.FieldType.Name,
+                            ["declaringType"] = fieldNode.DeclaringType?.Name,
+                            ["memberName"] = fieldNode.MemberName,
                             ["injectId"] = fieldNode.InjectId,
                             ["suppressMissingErrors"] = fieldNode.SuppressMissingErrors,
-                            ["isCollection"] = fieldNode.IsCollection
+                            ["requestedType"] = fieldNode.RequestedType.Name,
+                            ["isInterface"] = fieldNode.IsInterface,
+                            ["isCollection"] = fieldNode.IsCollection,
+                            ["displayPath"] = fieldNode.DisplayPath,
+                            ["isPropertyBackingField"] = fieldNode.IsPropertyBackingField
                         })),
                         ["methods"] = new JArray(componentNode.MethodNodes.Select(methodNode => new JObject
                         {

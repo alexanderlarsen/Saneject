@@ -11,52 +11,66 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void Resolve(InjectionSession session)
         {
-            foreach (TransformNode transformNode in session.Graph.EnumerateAllTransformNodes())
+            IEnumerable<ComponentNode> componentNodes = session.Graph
+                .EnumerateAllTransformNodes()
+                .SelectMany(transformNode => transformNode.ComponentNodes);
+
+            foreach (ComponentNode componentNode in componentNodes)
             {
-                foreach (ComponentNode componentNode in transformNode.ComponentNodes)
+                foreach (FieldNode fieldNode in componentNode.FieldNodes)
+                    ResolveField(fieldNode, session);
+
+                foreach (MethodNode methodNode in componentNode.MethodNodes)
+                    ResolveMethod(methodNode, session);
+            }
+        }
+
+        private static void ResolveField(
+            FieldNode fieldNode,
+            InjectionSession session)
+        {
+            BindingNode bindingNode = FindMatchingBindingNode
+            (
+                fieldNode,
+                fieldNode.ComponentNode.TransformNode.NearestScopeNode,
+                session
+            );
+
+            if (bindingNode != null)
+            {
+                session.MarkBindingUsed(bindingNode);
+
+                DependencyLocator.LocateDependencies
+                (
+                    bindingNode,
+                    injectionTargetNode: fieldNode.ComponentNode.TransformNode,
+                    out IEnumerable<Object> locatedDependencies,
+                    out HashSet<Type> rejectedTypes
+                );
+
+                if (locatedDependencies.Any())
                 {
-                    foreach (FieldNode fieldNode in componentNode.FieldNodes)
-                    {
-                        BindingNode matchingBindingNode = FindMatchingBindingNode
-                        (
-                            fieldNode,
-                            transformNode.NearestScopeNode,
-                            session
-                        );
-
-                        if (matchingBindingNode != null)
-                        {
-                            session.MarkBindingUsed(matchingBindingNode);
-
-                            DependencyLocator.LocateDependencies
-                            (
-                                matchingBindingNode,
-                                out IEnumerable<Object> locatedDependencies,
-                                out HashSet<Type> rejectedTypes
-                            );
-
-                            if (locatedDependencies.Any())
-                            {
-                            }
-                            else
-                            {
-                                session.AddError(Error.CreateMissingDependencyError
-                                (
-                                    matchingBindingNode,
-                                    fieldNode,
-                                    rejectedTypes
-                                ));
-                            }
-                        }
-                        else
-                        {
-                            session.AddError(Error.CreateMissingBindingError(fieldNode));
-                        }
-                    }
-
-                    // Resolve methods
+                }
+                else
+                {
+                    session.AddError(Error.CreateMissingDependencyError
+                    (
+                        bindingNode,
+                        fieldNode,
+                        rejectedTypes
+                    ));
                 }
             }
+            else
+            {
+                session.AddError(Error.CreateMissingBindingError(fieldNode));
+            }
+        }
+
+        private static void ResolveMethod(
+            MethodNode methodNode,
+            InjectionSession session)
+        {
         }
 
         private static BindingNode FindMatchingBindingNode(
@@ -66,24 +80,52 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         {
             while (currentScope != null)
             {
-                List<BindingNode> matchingBindings = currentScope.BindingNodes
-                    .Where(binding => binding is not GlobalComponentBindingNode)
-                    .Where(binding => binding.InterfaceType == fieldNode.InterfaceType && (binding.ConcreteType == fieldNode.ConcreteType || fieldNode.ConcreteType == null))
-                    .Where(binding => binding.IsCollectionBinding == fieldNode.IsCollection)
-                    .Where(binding => binding.TargetTypeQualifiers.Count == 0 || binding.TargetTypeQualifiers.Any(type => type == fieldNode.DeclaringType))
-                    .Where(binding => binding.MemberNameQualifiers.Count == 0 || binding.MemberNameQualifiers.Any(name => name == fieldNode.MemberName))
-                    .Where(binding => binding.IdQualifiers.Count == 0 || binding.IdQualifiers.Any(id => id == fieldNode.InjectId))
-                    .ToList();
+                BindingNode binding = currentScope.BindingNodes
+                    .Where(b => b is not GlobalComponentBindingNode)
+                    .Where(MatchesRequestedType)
+                    .Where(MatchesCollection)
+                    .Where(MatchesTargetType)
+                    .Where(MatchesMemberName)
+                    .Where(MatchesId)
+                    .FirstOrDefault(session.ValidBindings.Contains);
 
-                BindingNode binding = matchingBindings.FirstOrDefault();
-
-                if (binding != null && session.ValidBindings.Contains(binding))
+                if (binding != null)
                     return binding;
 
                 currentScope = currentScope.ParentScopeNode;
             }
 
             return null;
+
+            bool MatchesRequestedType(BindingNode bindingNode)
+            {
+                return fieldNode.IsInterface
+                    ? bindingNode.InterfaceType == fieldNode.RequestedType
+                    : bindingNode.ConcreteType == fieldNode.RequestedType;
+            }
+
+            bool MatchesCollection(BindingNode bindingNode)
+            {
+                return bindingNode.IsCollectionBinding == fieldNode.IsCollection;
+            }
+
+            bool MatchesTargetType(BindingNode bindingNode)
+            {
+                return bindingNode.TargetTypeQualifiers.Count == 0 ||
+                       bindingNode.TargetTypeQualifiers.Contains(fieldNode.DeclaringType);
+            }
+
+            bool MatchesMemberName(BindingNode bindingNode)
+            {
+                return bindingNode.MemberNameQualifiers.Count == 0 ||
+                       bindingNode.MemberNameQualifiers.Contains(fieldNode.MemberName);
+            }
+
+            bool MatchesId(BindingNode bindingNode)
+            {
+                return bindingNode.IdQualifiers.Count == 0 ||
+                       bindingNode.IdQualifiers.Contains(fieldNode.InjectId);
+            }
         }
     }
 }

@@ -36,10 +36,10 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         public bool IsCollectionBinding { get; }
         public bool LocatorStrategySpecified { get; }
 
-        public IReadOnlyList<Object> ResolveFromInstances { get; }
         public IReadOnlyList<Func<Object, bool>> Filters { get; }
+        public IReadOnlyList<Object> ResolveFromInstances { get; }
         public IReadOnlyList<string> IdQualifiers { get; }
         public IReadOnlyList<string> MemberNameQualifiers { get; }
-        public IReadOnlyList<Type> TargetTypeQualifiers { get; } 
+        public IReadOnlyList<Type> TargetTypeQualifiers { get; }
     }
 }

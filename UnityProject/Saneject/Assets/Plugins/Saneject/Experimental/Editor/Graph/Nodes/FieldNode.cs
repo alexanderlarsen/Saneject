@@ -11,20 +11,31 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             FieldInfo fieldInfo,
             ComponentNode componentNode) : base(fieldInfo, componentNode)
         {
-            FieldInfo = fieldInfo;
+            RequestedType = GetRequestedType(fieldInfo.FieldType);
+            IsInterface = fieldInfo.FieldType.IsInterface;
             IsCollection = fieldInfo.IsCollection();
-            InterfaceType = fieldInfo.FieldType.IsInterface ? fieldInfo.FieldType : null;
-            ConcreteType = fieldInfo.FieldType.IsInterface ? null : fieldInfo.FieldType;
             DisplayPath = FieldNodeUtils.GetPath(this);
             IsPropertyBackingField = fieldInfo.Name.Contains(">k__BackingField");
         }
 
-        public FieldInfo FieldInfo { get; }
+        /// <summary>
+        /// This is the type that the field is requesting for injection, which can either be a concrete type or an interface as the direct field type or element/generic type of an array or list.
+        /// </summary>
+        public Type RequestedType { get; }
 
-        public Type InterfaceType { get; }
-        public Type ConcreteType { get; }
+        public bool IsInterface { get; }
         public bool IsCollection { get; }
         public string DisplayPath { get; }
         public bool IsPropertyBackingField { get; }
+
+        private static Type GetRequestedType(Type type)
+        {
+            if (type.IsArray)
+                return type.GetElementType();
+
+            return type.IsGenericType
+                ? type.GetGenericArguments()[0]
+                : type;
+        }
     }
 }

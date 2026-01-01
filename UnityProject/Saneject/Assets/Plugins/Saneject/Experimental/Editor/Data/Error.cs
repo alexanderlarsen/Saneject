@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
         public static Error CreateMissingBindingError(FieldNode fieldNode)
         {
-            string expectedBindingSignature = SignatureBuilder.GetPartialBindingSignature(fieldNode.IsCollection, fieldNode.InterfaceType, fieldNode.ConcreteType, fieldNode.ComponentNode.TransformNode.NearestScopeNode);
+            string expectedBindingSignature = SignatureBuilder.GetPartialBindingSignature(fieldNode.RequestedType, fieldNode.IsCollection, fieldNode.ComponentNode.TransformNode.NearestScopeNode);
 
             return new Error
             (

@@ -14,8 +14,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 ConsoleUtils.ClearLog();
 
             InjectionSession session = InjectionSession.Create(startGameObject);
-            session.StartTimer();
-
             BindingConfigValidator.ValidateBindings(session);
 
             if (ProxyCreator.ShouldCreateProxies(session))

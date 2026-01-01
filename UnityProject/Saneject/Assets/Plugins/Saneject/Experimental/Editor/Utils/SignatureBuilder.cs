@@ -95,31 +95,22 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
         /// Gets the identity from an expected but unknown/missing binding. Constructed in the DependencyInjector based on field info at the current injection step.
         /// </summary>
         public static string GetPartialBindingSignature(
+            Type requestedType,
             bool isCollection,
-            Type interfaceType,
-            Type concreteType,
             ScopeNode scopeNode)
         {
             StringBuilder sb = new();
+            
             sb.Append("[Binding: ");
-
-            if (interfaceType != null && concreteType != null)
-                sb.Append($"{interfaceType.Name}/{concreteType.Name}");
-            else if (interfaceType == null && concreteType != null)
-                sb.Append($"{concreteType.Name}");
-            else if (interfaceType != null)
-                sb.Append($"{interfaceType.Name}");
-            else
-                sb.Append("null/null");
-
+            sb.Append(requestedType != null ? requestedType.Name : "null");
             sb.Append(" | ");
             sb.Append(isCollection ? "Collection" : "Single");
-
             sb.Append($" | Nearest scope: {scopeNode.Type.Name}");
             sb.Append("]");
 
             return sb.ToString();
         }
+
 
         public static string GetFieldSignature(FieldNode fieldNode)
         {
