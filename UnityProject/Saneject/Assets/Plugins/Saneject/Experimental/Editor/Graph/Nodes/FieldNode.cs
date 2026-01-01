@@ -11,7 +11,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             FieldInfo fieldInfo,
             ComponentNode componentNode) : base(fieldInfo, componentNode)
         {
-            RequestedType = GetRequestedType(fieldInfo.FieldType);
+            RequestedType = fieldInfo.ResolveType();
             IsInterface = fieldInfo.FieldType.IsInterface;
             IsCollection = fieldInfo.IsCollection();
             DisplayPath = FieldNodeUtils.GetPath(this);
@@ -27,15 +27,5 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         public bool IsCollection { get; }
         public string DisplayPath { get; }
         public bool IsPropertyBackingField { get; }
-
-        private static Type GetRequestedType(Type type)
-        {
-            if (type.IsArray)
-                return type.GetElementType();
-
-            return type.IsGenericType
-                ? type.GetGenericArguments()[0]
-                : type;
-        }
     }
 }

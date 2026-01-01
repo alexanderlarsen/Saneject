@@ -37,10 +37,10 @@ namespace Plugins.Saneject.Editor.Inspectors.API
         {
             foreach (FieldInfo field in type.GetAllFields())
             {
-                if (!ShouldDraw(field))
+                if (!field.ShouldDraw())
                     continue;
 
-                bool isSerializedInterface = IsSerializeInterface(field);
+                bool isSerializedInterface = field.IsSerializeInterface();
                 Type elementType = field.ResolveType();
                 string displayName = ObjectNames.NicifyVariableName(field.Name);
 
@@ -69,8 +69,7 @@ namespace Plugins.Saneject.Editor.Inspectors.API
                 PropertyData data = new
                 (
                     property,
-                    displayName,
-                    IsReadOnly(field),
+                    displayName, field.IsReadOnly(),
                     isSerializedInterface,
                     elementType,
                     children
@@ -212,7 +211,7 @@ namespace Plugins.Saneject.Editor.Inspectors.API
         /// </summary>
         public static bool IsReadOnly(this FieldInfo field)
         {
-            return HasInjectAttribute(field) || HasReadOnlyAttribute(field);
+            return field.HasInjectAttribute() || field.HasReadOnlyAttribute();
         }
 
         /// <summary>
@@ -242,12 +241,12 @@ namespace Plugins.Saneject.Editor.Inspectors.API
             if (field.IsDefined(typeof(InterfaceBackingFieldAttribute), false))
                 return false;
 
-            if (HasInjectAttribute(field) && !UserSettings.ShowInjectedFieldsProperties)
+            if (field.HasInjectAttribute() && !UserSettings.ShowInjectedFieldsProperties)
                 return false;
 
             return field.IsPublic
                    || field.IsDefined(typeof(SerializeField), false)
-                   || IsSerializeInterface(field);
+                   || field.IsSerializeInterface();
         }
 
         /// <summary>
@@ -266,6 +265,7 @@ namespace Plugins.Saneject.Editor.Inspectors.API
             return field.IsDefined(typeof(SerializeInterfaceAttribute), false);
         }
 
+        // TODO: Remove when merging experimental systems
         /// <summary>
         /// Returns the element type of a single or collection type (array/list).
         /// </summary>

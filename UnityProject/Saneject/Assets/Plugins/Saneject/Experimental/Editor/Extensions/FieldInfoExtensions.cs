@@ -15,5 +15,21 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
 
             return isArray || isList;
         }
+        
+        /// <summary>
+        /// Returns the element type of a single or collection type (array/list).
+        /// </summary>
+        public static Type ResolveType(this FieldInfo fieldInfo)
+        {
+            Type fieldType = fieldInfo.FieldType;
+
+            if (fieldType.IsArray)
+                return fieldType.GetElementType();
+
+            if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
+                return fieldType.GetGenericArguments()[0];
+
+            return fieldType;
+        }
     }
 }

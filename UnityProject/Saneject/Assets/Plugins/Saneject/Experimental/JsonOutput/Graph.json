@@ -124,6 +124,46 @@
                 "includeSelfInSearch": false,
                 "childIndexForSearch": 0,
                 "resolveFromProxy": false
+              },
+              {
+                "interfaceType": null,
+                "concreteType": "AudioSource",
+                "isCollectionBinding": true,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
+                "idQualifiers": [
+                  "audioSources"
+                ],
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
+                "searchOrigin": "InjectionTarget",
+                "searchDirection": "Descendants",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false
+              },
+              {
+                "interfaceType": null,
+                "concreteType": "Collider",
+                "isCollectionBinding": true,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
+                "idQualifiers": [
+                  "playerColliders"
+                ],
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
+                "searchOrigin": "InjectionTarget",
+                "searchDirection": "Descendants",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false
               }
             ],
             "assetBindings": [],
@@ -318,6 +358,14 @@
           ],
           "children": [
             {
+              "name": "MoveController (Instance ID: -1254)",
+              "parent": "Enemy (Instance ID: 32386)",
+              "context": "PrefabInstance (Key: -1246)",
+              "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
               "name": "Rifle (Instance ID: 32368)",
               "parent": "Enemy (Instance ID: 32386)",
               "context": "PrefabInstance (Key: -1262)",
@@ -328,14 +376,6 @@
                 "assetBindings": [],
                 "globalBindings": []
               },
-              "components": [],
-              "children": []
-            },
-            {
-              "name": "MoveController (Instance ID: -1254)",
-              "parent": "Enemy (Instance ID: 32386)",
-              "context": "PrefabInstance (Key: -1246)",
-              "scope": null,
               "components": [],
               "children": []
             }
