@@ -26,8 +26,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     if (globalBinding.ResolveFromProxy)
                         errors.Add(Error.CreateInvalidBindingError("A binding cannot be both Proxy and Global. Proxies consume globals; they are not globals themselves.", binding));
 
-                    if (binding.ScopeNode.TransformNode.ContextIdentity.IsPrefab)
-                        errors.Add(Error.CreateInvalidBindingError("Global bindings cannot be used in prefabs, because the system can only inject global components from scenes.", binding));
+                    if (globalBinding.ScopeNode.TransformNode.ContextIdentity.Type != ContextType.SceneObject)
+                        errors.Add(Error.CreateInvalidBindingError("Global bindings can only reference scene objects.", binding));
 
                     if (globalBinding.IsCollectionBinding)
                         errors.Add(Error.CreateInvalidBindingError("Global bindings must be singletons. Collections are not supported in the GlobalScope.", binding));

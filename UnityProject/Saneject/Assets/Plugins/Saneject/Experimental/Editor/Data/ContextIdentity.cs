@@ -47,12 +47,12 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             }
 
             // Prefab instance
-            GameObject instanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
+            GameObject prefabInstanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
 
-            if (instanceRoot)
+            if (prefabInstanceRoot)
             {
                 result.type = ContextType.PrefabInstance;
-                result.key = instanceRoot.GetInstanceID();
+                result.key = prefabInstanceRoot.GetInstanceID();
                 return;
             }
 
