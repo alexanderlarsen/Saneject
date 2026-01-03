@@ -8,25 +8,21 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void InjectSingleHierarchy(GameObject startGameObject)
         {
-            InjectionSession session = InjectionSession.StartSession(startGameObject);
-
-            BindingConfigValidator.ValidateBindings(session);
-
-            if (ProxyCreator.ShouldCreateProxies(session))
-            {
-                ProxyCreator.CreateAllProxies(session, out int proxiesCreated);
-                Logger.LogProxyCreationCompleted(proxiesCreated);
-                return;
-            }
-
-            DependencyResolver.Resolve(session);
-            DependencyInjector.InjectDependencies(session);
-
-            session.StopSession();
-
             Logger.TryClearLog();
+            InjectionSession session = InjectionSession.StartSession(startGameObject);
+            BindingValidator.ValidateBindings(session);
+
+            if (ProxyProcessor.CreateProxies(session) != ProxyCreationResult.Ready)
+                return;
+
+            Resolver.Resolve(session);
+            Injector.InjectDependencies(session);
+
+            session.EndSession();
+
             Logger.LogErrors(session);
             Logger.LogUnusedBindings(session);
+            Logger.LogCreatedProxyAssets(session);
             Logger.LogStats(session);
 
             InjectionGraphJsonExporter.SaveGraphToJson(session.Graph);

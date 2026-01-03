@@ -1,13 +1,31 @@
 {
   "rootNodes": [
     {
-      "name": "Game (Instance ID: 32364)",
+      "name": "Game (Instance ID: 32352)",
       "parent": null,
       "context": "SceneObject (Key: -1244)",
       "scope": {
         "type": "GameScope",
         "parentScope": null,
         "componentBindings": [
+          {
+            "interfaceType": null,
+            "concreteType": "GameManager",
+            "isCollectionBinding": false,
+            "locatorStrategySpecified": true,
+            "resolveFromInstances": [],
+            "idQualifiers": [],
+            "targetTypeQualifiers": [],
+            "memberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "Self",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false
+          },
           {
             "interfaceType": null,
             "concreteType": "Enemy",
@@ -46,11 +64,28 @@
           }
         ],
         "assetBindings": [],
-        "globalBindings": []
+        "globalBindings": [
+          {
+            "interfaceType": null,
+            "concreteType": "GameManager",
+            "directInstancesToResolveFrom": [],
+            "idQualifiers": [],
+            "injectionTargetTypeQualifiers": [],
+            "injectionTargetMemberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "Self",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false
+          }
+        ]
       },
       "components": [
         {
-          "name": "GameManager (Instance ID: 32360)",
+          "name": "GameManager (Instance ID: 32348)",
           "fields": [
             {
               "declaringType": "GameManager",
@@ -80,13 +115,49 @@
       ],
       "children": [
         {
-          "name": "Player (Instance ID: 32390)",
-          "parent": "Game (Instance ID: 32364)",
-          "context": "PrefabInstance (Key: -1268)",
+          "name": "Player (Instance ID: 32378)",
+          "parent": "Game (Instance ID: 32352)",
+          "context": "PrefabInstance (Key: -1252)",
           "scope": {
             "type": "PlayerScope",
-            "parentScope": null,
+            "parentScope": "GameScope",
             "componentBindings": [
+              {
+                "interfaceType": "IGameManager",
+                "concreteType": "GameManager",
+                "isCollectionBinding": false,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
+                "idQualifiers": [],
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
+                "searchOrigin": "Scope",
+                "searchDirection": "None",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": true
+              },
+              {
+                "interfaceType": "IMoveController",
+                "concreteType": "EnemyMoveController",
+                "isCollectionBinding": false,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
+                "idQualifiers": [],
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
+                "searchOrigin": "Scope",
+                "searchDirection": "None",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": true
+              },
               {
                 "interfaceType": "IMoveController",
                 "concreteType": null,
@@ -171,7 +242,7 @@
           },
           "components": [
             {
-              "name": "Player (Instance ID: -1272)",
+              "name": "Player (Instance ID: -1256)",
               "fields": [
                 {
                   "declaringType": "Player",
@@ -193,6 +264,17 @@
                   "isInterface": true,
                   "isCollection": false,
                   "displayPath": "Game/Player/Player/weapon",
+                  "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "Player",
+                  "memberName": "gameManager",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IGameManager",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/gameManager",
                   "isPropertyBackingField": false
                 },
                 {
@@ -223,43 +305,43 @@
           ],
           "children": [
             {
-              "name": "MoveController (Instance ID: -1276)",
-              "parent": "Player (Instance ID: 32390)",
-              "context": "PrefabInstance (Key: -1268)",
+              "name": "MoveController (Instance ID: -1260)",
+              "parent": "Player (Instance ID: 32378)",
+              "context": "PrefabInstance (Key: -1252)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Colliders (Instance ID: -1282)",
-              "parent": "Player (Instance ID: 32390)",
-              "context": "PrefabInstance (Key: -1268)",
+              "name": "Colliders (Instance ID: -1266)",
+              "parent": "Player (Instance ID: 32378)",
+              "context": "PrefabInstance (Key: -1252)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "AudioSources (Instance ID: -1290)",
-              "parent": "Player (Instance ID: 32390)",
-              "context": "PrefabInstance (Key: -1268)",
+              "name": "AudioSources (Instance ID: -1274)",
+              "parent": "Player (Instance ID: 32378)",
+              "context": "PrefabInstance (Key: -1252)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Crossbow (Instance ID: 32394)",
-              "parent": "Player (Instance ID: 32390)",
-              "context": "PrefabInstance (Key: -1256)",
+              "name": "Crossbow (Instance ID: 32382)",
+              "parent": "Player (Instance ID: 32378)",
+              "context": "PrefabInstance (Key: -1246)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": null,
+                "parentScope": "PlayerScope",
                 "componentBindings": [],
                 "assetBindings": [],
                 "globalBindings": []
               },
               "components": [
                 {
-                  "name": "Crossbow (Instance ID: -1260)",
+                  "name": "Crossbow (Instance ID: -1250)",
                   "fields": [],
                   "methods": [
                     {
@@ -279,12 +361,12 @@
           ]
         },
         {
-          "name": "Enemy (Instance ID: 32386)",
-          "parent": "Game (Instance ID: 32364)",
-          "context": "PrefabInstance (Key: -1246)",
+          "name": "Enemy (Instance ID: 32374)",
+          "parent": "Game (Instance ID: 32352)",
+          "context": "PrefabInstance (Key: -1280)",
           "scope": {
             "type": "EnemyScope",
-            "parentScope": null,
+            "parentScope": "GameScope",
             "componentBindings": [
               {
                 "interfaceType": "IMoveController",
@@ -328,7 +410,7 @@
           },
           "components": [
             {
-              "name": "Enemy (Instance ID: -1250)",
+              "name": "Enemy (Instance ID: -1284)",
               "fields": [
                 {
                   "declaringType": "Enemy",
@@ -358,20 +440,20 @@
           ],
           "children": [
             {
-              "name": "MoveController (Instance ID: -1254)",
-              "parent": "Enemy (Instance ID: 32386)",
-              "context": "PrefabInstance (Key: -1246)",
+              "name": "MoveController (Instance ID: -1288)",
+              "parent": "Enemy (Instance ID: 32374)",
+              "context": "PrefabInstance (Key: -1280)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Rifle (Instance ID: 32368)",
-              "parent": "Enemy (Instance ID: 32386)",
-              "context": "PrefabInstance (Key: -1262)",
+              "name": "Rifle (Instance ID: 32356)",
+              "parent": "Enemy (Instance ID: 32374)",
+              "context": "PrefabInstance (Key: -1292)",
               "scope": {
                 "type": "WeaponScope",
-                "parentScope": null,
+                "parentScope": "EnemyScope",
                 "componentBindings": [],
                 "assetBindings": [],
                 "globalBindings": []

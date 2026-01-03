@@ -14,7 +14,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
 
         public static void SaveGraphToJson(InjectionGraph graph)
         {
-            DirectoryUtils.EnsureDirectoryExists(Path);
+            DirectoryUtility.EnsureDirectoryExists(Path);
             File.WriteAllText(Path, GetGraphJson(graph));
             Debug.Log($"Saneject: Injection graph saved to '{Path}'");
         }

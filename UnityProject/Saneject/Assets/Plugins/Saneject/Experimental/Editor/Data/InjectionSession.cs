@@ -11,9 +11,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 {
     public class InjectionSession
     {
+        private readonly Dictionary<FieldNode, IEnumerable<Object>> fieldResolutionMap = new();
         private readonly HashSet<BindingNode> usedBindings = new();
         private readonly HashSet<BindingNode> validBindings = new();
-        private readonly Dictionary<FieldNode, IEnumerable<Object>> fieldResolutionMap = new();
+        private readonly List<(string path, Object instance)> createdProxyAssets = new();
         private readonly List<Error> errors = new();
         private readonly Stopwatch stopwatch = new();
 
@@ -32,35 +33,36 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public IReadOnlyCollection<BindingNode> ValidBindings => validBindings;
         public IReadOnlyCollection<Error> Errors => errors;
         public IReadOnlyDictionary<FieldNode, IEnumerable<Object>> FieldResolutionMap => fieldResolutionMap;
+        public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
 
         public long DurationMilliseconds => stopwatch.ElapsedMilliseconds;
         public bool IsSessionActive { get; private set; }
 
-        public void StopSession()
+        public void EndSession()
         {
             stopwatch.Stop();
             IsSessionActive = false;
         }
 
-        public void MarkBindingValid(BindingNode bindingNode)
+        public void RegisterValidBinding(BindingNode bindingNode)
         {
             EnsureActiveSession();
             validBindings.Add(bindingNode);
         }
 
-        public void MarkBindingUsed(BindingNode bindingNode)
+        public void RegisterUsedBinding(BindingNode bindingNode)
         {
             EnsureActiveSession();
             usedBindings.Add(bindingNode);
         }
 
-        public void AddError(Error error)
+        public void RegisterError(Error error)
         {
             EnsureActiveSession();
             errors.Add(error);
         }
 
-        public void AddErrors(IEnumerable<Error> errors)
+        public void RegisterErrors(IEnumerable<Error> errors)
         {
             EnsureActiveSession();
             this.errors.AddRange(errors);
@@ -72,6 +74,14 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             EnsureActiveSession();
             fieldResolutionMap[fieldNode] = dependencies;
+        }
+
+        public void RegisterCreatedProxyAsset(
+            Object instance,
+            string path)
+        {
+            EnsureActiveSession();
+            createdProxyAssets.Add((path, instance));
         }
 
         private void EnsureActiveSession()

@@ -15,13 +15,13 @@ EditorBuildSettings:
     path: Assets/Plugins/Saneject/~Samples/DemoGame/Scenes/UIScene.unity
     guid: 51d3d79ee5eba1341a73cecefb1ef13b
   - enabled: 1
-    path: Assets/Dev/InjectOptional/InjectOptional.unity
+    path: Assets/Dev/Scenarios/InjectOptional/InjectOptional.unity
     guid: baad942f7ae136a419ca61a23150afa5
   - enabled: 1
-    path: Assets/Dev/MethodInjection/MethodInjection.unity
+    path: Assets/Dev/Scenarios/MethodInjection/MethodInjection.unity
     guid: 0f031e4e17ead4d409c457ffcc69a646
   - enabled: 1
-    path: Assets/Dev/ProxyNullRefRepro/ProxyNullRefRepro.unity
+    path: Assets/Dev/Scenarios/ProxyNullRefRepro/ProxyNullRefRepro.unity
     guid: 4977f77e3d871694197b44a52e73b54d
   m_configObjects:
     com.unity.input.settings.actions: {fileID: -944628639613478452, guid: 052faaac586de48259a63d0c4782560b, type: 3}

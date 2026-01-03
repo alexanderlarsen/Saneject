@@ -3,7 +3,7 @@ using System.IO;
 
 namespace Plugins.Saneject.Experimental.Editor.Utils
 {
-    public static class DirectoryUtils
+    public static class DirectoryUtility
     {
         public static void EnsureDirectoryExists(string path)
         {
@@ -19,4 +19,4 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
                 Directory.CreateDirectory(directoryName);
         }
     }
-}
+} 

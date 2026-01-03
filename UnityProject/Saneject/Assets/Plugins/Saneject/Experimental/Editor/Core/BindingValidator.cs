@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    public static class BindingConfigValidator
+    public static class BindingValidator
     {
         public static void ValidateBindings(InjectionSession session)
         {
@@ -78,10 +78,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (!binding.LocatorStrategySpecified)
                 errors.Add(Error.CreateInvalidBindingError("Binding has no locator strategy (e.g. FromScopeSelf, FromAnywhereInScene).", binding));
 
-            session.AddErrors(errors);
+            session.RegisterErrors(errors);
 
             if (errors.Count == 0)
-                session.MarkBindingValid(binding);
+                session.RegisterValidBinding(binding);
         }
     }
 }

@@ -8,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    public static class DependencyInjector
+    public static class Injector
     {
         public static void InjectDependencies(InjectionSession session)
         {

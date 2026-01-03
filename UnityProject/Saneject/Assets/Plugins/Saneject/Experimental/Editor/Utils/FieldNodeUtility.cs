@@ -5,7 +5,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
 {
     namespace Plugins.Saneject.Experimental.Editor.Utils
     {
-        public static class FieldNodeUtils
+        public static class FieldNodeUtility
         {
             public static string GetPath(FieldNode fieldNode)
             {

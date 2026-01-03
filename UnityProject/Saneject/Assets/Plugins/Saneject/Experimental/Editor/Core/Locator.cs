@@ -13,7 +13,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    public static class DependencyLocator
+    public static class Locator
     {
         public static void LocateDependencies(
             BindingNode bindingNode,
@@ -45,12 +45,12 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             dependencies = validDependencies;
         }
 
-        private static IEnumerable<Component> LocateComponentDependencies(
+        private static IEnumerable<Object> LocateComponentDependencies(
             ComponentBindingNode bindingNode,
             TransformNode injectionTargetNode)
         {
-            if (bindingNode.ResolveFromProxy) // TODO: Implement proxy resolution
-                throw new NotImplementedException();
+            if (bindingNode.ResolveFromProxy)
+                return new[] { ResolveProxyAsset(bindingNode.ConcreteType) };
 
             if (bindingNode.SearchOrigin == SearchOrigin.Instance)
                 return bindingNode.ResolveFromInstances.OfType<Component>();
@@ -115,6 +115,17 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             };
 
             return dependencies ?? Enumerable.Empty<Component>();
+        }
+        
+        public static Object ResolveProxyAsset(Type targetType)
+        {
+            Type proxyType = ProxyProcessor.FindProxyStubType(targetType);
+
+            return AssetDatabase
+                .FindAssets($"t:{proxyType.Name}")
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(path => AssetDatabase.LoadAssetAtPath(path, proxyType))
+                .FirstOrDefault(asset => asset && asset.GetType() == proxyType);
         }
 
         private static IEnumerable<Object> LocateAssetDependencies(AssetBindingNode bindingNode)

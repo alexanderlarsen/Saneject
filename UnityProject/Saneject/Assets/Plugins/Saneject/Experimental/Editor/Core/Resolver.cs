@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    public static class DependencyResolver
+    public static class Resolver
     {
         public static void Resolve(InjectionSession session)
         {
@@ -38,9 +38,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             if (bindingNode != null)
             {
-                session.MarkBindingUsed(bindingNode);
+                session.RegisterUsedBinding(bindingNode);
 
-                DependencyLocator.LocateDependencies
+                Locator.LocateDependencies
                 (
                     bindingNode,
                     injectionTargetNode: fieldNode.ComponentNode.TransformNode,
@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 Object[] array = dependencies.ToArray();
 
                 if (array is not { Length: > 0 })
-                    session.AddError(Error.CreateMissingDependencyError
+                    session.RegisterError(Error.CreateMissingDependencyError
                     (
                         bindingNode,
                         fieldNode,
@@ -62,7 +62,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             }
             else
             {
-                session.AddError(Error.CreateMissingBindingError(fieldNode));
+                session.RegisterError(Error.CreateMissingBindingError(fieldNode));
             }
         }
 
