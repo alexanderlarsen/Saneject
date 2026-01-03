@@ -50,7 +50,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             TransformNode injectionTargetNode)
         {
             if (bindingNode.ResolveFromProxy)
-                return new[] { ResolveProxyAsset(bindingNode.ConcreteType) };
+                return new[] { ProxyProcessor.ResolveProxyAsset(bindingNode.ConcreteType) };
 
             if (bindingNode.SearchOrigin == SearchOrigin.Instance)
                 return bindingNode.ResolveFromInstances.OfType<Component>();
@@ -115,17 +115,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             };
 
             return dependencies ?? Enumerable.Empty<Component>();
-        }
-        
-        public static Object ResolveProxyAsset(Type targetType)
-        {
-            Type proxyType = ProxyProcessor.FindProxyStubType(targetType);
-
-            return AssetDatabase
-                .FindAssets($"t:{proxyType.Name}")
-                .Select(AssetDatabase.GUIDToAssetPath)
-                .Select(path => AssetDatabase.LoadAssetAtPath(path, proxyType))
-                .FirstOrDefault(asset => asset && asset.GetType() == proxyType);
         }
 
         private static IEnumerable<Object> LocateAssetDependencies(AssetBindingNode bindingNode)

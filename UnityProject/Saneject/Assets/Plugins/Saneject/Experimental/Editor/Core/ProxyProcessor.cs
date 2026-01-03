@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utils;
@@ -10,6 +9,7 @@ using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
@@ -32,55 +32,27 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             return ProxyCreationResult.Ready;
         }
 
-        public static Type FindProxyStubType(Type concreteType)
+        public static Object ResolveProxyAsset(Type concreteType)
         {
-            return concreteType != null
-                ? AppDomain.CurrentDomain
-                    .GetAssemblies()
-                    .SelectMany(GetNonNullTypes)
-                    .FirstOrDefault(t => typeof(ScriptableObject).IsAssignableFrom(t) && InheritsProxyOf(t, concreteType))
-                : throw new ArgumentNullException(nameof(concreteType));
+            Type proxyType = FindProxyStubType(concreteType);
 
-            static IEnumerable<Type> GetNonNullTypes(Assembly a)
-            {
-                try
-                {
-                    return a.GetTypes();
-                }
-                catch (ReflectionTypeLoadException e)
-                {
-                    return e.Types.Where(t => t != null);
-                }
-            }
+            return AssetDatabase
+                .FindAssets($"t:{proxyType.Name}")
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Select(path => AssetDatabase.LoadAssetAtPath(path, proxyType))
+                .FirstOrDefault(asset => asset && asset.GetType() == proxyType);
+        }
 
-            static bool InheritsProxyOf(
-                Type proxyCandidate,
-                Type genericType)
-            {
-                for (Type t = proxyCandidate; t != null && t != typeof(object); t = t.BaseType)
-                {
-                    if (!t.IsGenericType)
-                        continue;
-
-                    Type def = t.GetGenericTypeDefinition();
-
-                    if (def == typeof(ProxyObject<>))
-                    {
-                        Type arg = t.GetGenericArguments()[0];
-
-                        if (arg == genericType)
-                            return true;
-                    }
-                }
-
-                return false;
-            }
+        private static Type FindProxyStubType(Type concreteType)
+        {
+            Type stubBaseType = typeof(ProxyObject<>).MakeGenericType(concreteType);
+            return TypeCache.GetTypesDerivedFrom(stubBaseType).FirstOrDefault();
         }
 
         private static bool TryCreateProxyStubs(IReadOnlyCollection<Type> concreteTypes)
         {
             HashSet<Type> missing = concreteTypes
-                .Where(type => FindProxyStubType(type) == null)
+                .Where(TypeIsMissingProxyStub)
                 .ToHashSet();
 
             if (missing.Count == 0)
@@ -96,6 +68,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             AssetDatabase.Refresh();
 
             return true;
+        }
+
+        private static bool TypeIsMissingProxyStub(Type concreteType)
+        {
+            return FindProxyStubType(concreteType) == null;
         }
 
         private static void CreateMissingProxyAssets(
@@ -133,17 +110,13 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             string BuildProxyStubCode()
             {
                 return $@"
-using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.Proxy;
-
 namespace Plugins.Saneject.Generated.Proxies
 {{
-    [GenerateProxyObject]
-    public partial class {className} : ProxyObject<{concreteType.FullName}>
+    [Plugins.Saneject.Runtime.Attributes.GenerateProxyObject]
+    public partial class {className} : Plugins.Saneject.Runtime.Proxy.ProxyObject<{concreteType.FullName}>
     {{
     }}
-}}
-";
+}}";
             }
         }
     }
