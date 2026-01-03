@@ -28,12 +28,16 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
                     _ => throw new ArgumentOutOfRangeException(nameof(binding), binding, null)
                 })
                 .ToList();
+            
+            Scope = scope;
         }
 
         public TransformNode TransformNode { get; }
         public ScopeNode ParentScopeNode { get; }
         public Type Type { get; }
         public IReadOnlyCollection<BindingNode> BindingNodes { get; }
+        public Scope Scope { get; }
+        
 
         private static ScopeNode FindParentScopeNode(TransformNode transformNode)
         {

@@ -17,6 +17,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
         private readonly List<Error> errors = new();
         private readonly Stopwatch stopwatch = new();
+        private readonly Dictionary<ScopeNode, List<Object>> globalResolutionMap = new();
 
         private InjectionSession(IEnumerable<Transform> startTransforms)
         {
@@ -35,6 +36,12 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public IReadOnlyDictionary<FieldNode, IEnumerable<Object>> FieldResolutionMap => fieldResolutionMap;
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
 
+        public IReadOnlyDictionary<ScopeNode, IReadOnlyList<Object>> GlobalResolutionMap => globalResolutionMap.ToDictionary
+        (
+            kvp => kvp.Key,
+            kvp => (IReadOnlyList<Object>)kvp.Value
+        );
+
         public long DurationMilliseconds => stopwatch.ElapsedMilliseconds;
         public bool IsSessionActive { get; private set; }
 
@@ -42,6 +49,18 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             stopwatch.Stop();
             IsSessionActive = false;
+        }
+
+        public void RegisterGlobalDependency(
+            ScopeNode scopeNode,
+            Object globalObject)
+        {
+            EnsureActiveSession();
+
+            if (!globalResolutionMap.ContainsKey(scopeNode))
+                globalResolutionMap[scopeNode] = new List<Object>();
+
+            globalResolutionMap[scopeNode].Add(globalObject);
         }
 
         public void RegisterValidBinding(BindingNode bindingNode)

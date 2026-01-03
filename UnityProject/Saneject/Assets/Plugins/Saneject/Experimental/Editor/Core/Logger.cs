@@ -39,7 +39,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 {
                     ErrorType.InvalidBinding => 0,
                     ErrorType.MissingBinding => 1,
-                    ErrorType.MissingDependency => 2,
+                    ErrorType.MissingGlobalDependency => 2,
+                    ErrorType.MissingDependency => 3,
                     _ => int.MaxValue
                 };
             }

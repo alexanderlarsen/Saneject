@@ -5,15 +5,53 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Global;
 using UnityEngine;
 using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
+using ReadOnly = Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute;
 
 namespace Plugins.Saneject.Experimental.Runtime
 {
+    [DisallowMultipleComponent, DefaultExecutionOrder(-10000)]
     public abstract class Scope : MonoBehaviour
     {
         #region INTERNAL
+
+        [SerializeField, ReadOnly, Tooltip("These will be added to GlobalScope at runtime"), EditorBrowsable(EditorBrowsableState.Never)]
+        private List<Object> globalObjects = new();
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private void Awake()
+        {
+            foreach (Object obj in globalObjects)
+            {
+                if (obj == null)
+                    continue;
+
+                GlobalScope.Register(obj.GetType(), obj, this);
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        private void OnDestroy()
+        {
+            foreach (Object obj in globalObjects)
+            {
+                if (obj == null)
+                    continue;
+
+                GlobalScope.Unregister(obj.GetType());
+            }
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void UpdateGlobalObjects(IEnumerable<Object> globalObjects)
+        {
+            this.globalObjects.Clear();
+            this.globalObjects.AddRange(globalObjects.Where(obj => obj != null));
+        }
 
         /// <summary>
         /// For internal use by Saneject. Not intended for user code.
@@ -37,28 +75,6 @@ namespace Plugins.Saneject.Experimental.Runtime
         #endregion
 
         #region USER-FACING
-
-        /// <summary>
-        /// Calls <see cref="MarkAsEditorOnly" />. If you override this method,
-        /// call <c>base.OnValidate()</c> or <see cref="MarkAsEditorOnly" /> to ensure
-        /// <see cref="Scope" /> is excluded from builds.
-        /// </summary>
-        protected virtual void OnValidate()
-        {
-            MarkAsEditorOnly();
-        }
-
-        /// <summary>
-        /// Marks this <see cref="Scope" /> as editor-only by setting
-        /// <see cref="HideFlags.DontSaveInBuild" />.
-        /// The <see cref="Scope" /> does not do anything at runtime and is only
-        /// used to declare injection configuration.
-        /// </summary>
-        protected void MarkAsEditorOnly()
-        {
-            if ((hideFlags & HideFlags.DontSaveInBuild) == 0)
-                hideFlags |= HideFlags.DontSaveInBuild;
-        }
 
         /// <summary>
         /// Set up your bindings in this method.

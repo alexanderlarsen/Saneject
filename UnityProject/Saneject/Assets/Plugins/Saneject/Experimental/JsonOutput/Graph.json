@@ -28,6 +28,24 @@
           },
           {
             "interfaceType": null,
+            "concreteType": "Player",
+            "isCollectionBinding": false,
+            "locatorStrategySpecified": true,
+            "resolveFromInstances": [],
+            "idQualifiers": [],
+            "targetTypeQualifiers": [],
+            "memberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "Descendants",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false
+          },
+          {
+            "interfaceType": null,
             "concreteType": "Enemy",
             "isCollectionBinding": false,
             "locatorStrategySpecified": true,
@@ -80,12 +98,28 @@
             "includeSelfInSearch": false,
             "childIndexForSearch": 0,
             "resolveFromProxy": false
+          },
+          {
+            "interfaceType": null,
+            "concreteType": "Player",
+            "directInstancesToResolveFrom": [],
+            "idQualifiers": [],
+            "injectionTargetTypeQualifiers": [],
+            "injectionTargetMemberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "Descendants",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false
           }
         ]
       },
       "components": [
         {
-          "name": "GameManager (Instance ID: 32348)",
+          "name": "GameManager (Instance ID: -45944)",
           "fields": [
             {
               "declaringType": "GameManager",
@@ -122,6 +156,24 @@
             "type": "PlayerScope",
             "parentScope": "GameScope",
             "componentBindings": [
+              {
+                "interfaceType": null,
+                "concreteType": "Player",
+                "isCollectionBinding": false,
+                "locatorStrategySpecified": true,
+                "resolveFromInstances": [],
+                "idQualifiers": [],
+                "targetTypeQualifiers": [],
+                "memberNameQualifiers": [],
+                "searchOrigin": "Scope",
+                "searchDirection": "Self",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false
+              },
               {
                 "interfaceType": "IGameManager",
                 "concreteType": "GameManager",
@@ -238,7 +290,24 @@
               }
             ],
             "assetBindings": [],
-            "globalBindings": []
+            "globalBindings": [
+              {
+                "interfaceType": null,
+                "concreteType": "Player",
+                "directInstancesToResolveFrom": [],
+                "idQualifiers": [],
+                "injectionTargetTypeQualifiers": [],
+                "injectionTargetMemberNameQualifiers": [],
+                "searchOrigin": "Scope",
+                "searchDirection": "Self",
+                "findObjectsInactive": "Exclude",
+                "findObjectsSortMode": "None",
+                "customTargetTransform": null,
+                "includeSelfInSearch": false,
+                "childIndexForSearch": 0,
+                "resolveFromProxy": false
+              }
+            ]
           },
           "components": [
             {

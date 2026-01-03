@@ -11,6 +11,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void Resolve(InjectionSession session)
         {
+            ResolveGlobals(session);
+
             IEnumerable<ComponentNode> componentNodes = session.Graph
                 .EnumerateAllTransformNodes()
                 .SelectMany(transformNode => transformNode.ComponentNodes);
@@ -22,6 +24,38 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
                 foreach (MethodNode methodNode in componentNode.MethodNodes)
                     ResolveMethod(methodNode, session);
+            }
+        }
+
+        private static void ResolveGlobals(InjectionSession session)
+        {
+            IEnumerable<GlobalComponentBindingNode> globalBindings =
+                session.Graph
+                    .EnumerateAllBindingNodes()
+                    .OfType<GlobalComponentBindingNode>()
+                    .Where(session.ValidBindings.Contains);
+
+            foreach (GlobalComponentBindingNode binding in globalBindings)
+            {
+                Locator.LocateDependencies
+                (
+                    binding,
+                    injectionTargetNode: binding.ScopeNode.TransformNode,
+                    out IEnumerable<Object> dependencies,
+                    out HashSet<Type> rejectedTypes
+                );
+
+                List<Object> resolved = dependencies.ToList();
+
+                if (resolved is not { Count: > 0 })
+                    session.RegisterError(Error.CreateMissingGlobalDependencyError
+                    (
+                        binding,
+                        rejectedTypes
+                    ));
+
+                session.RegisterUsedBinding(binding);
+                session.RegisterGlobalDependency(binding.ScopeNode, resolved.FirstOrDefault());
             }
         }
 
@@ -38,8 +72,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             if (bindingNode != null)
             {
-                session.RegisterUsedBinding(bindingNode);
-
                 Locator.LocateDependencies
                 (
                     bindingNode,
@@ -58,6 +90,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                         rejectedTypes
                     ));
 
+                session.RegisterUsedBinding(bindingNode);
                 session.RegisterFieldDependencies(fieldNode, array);
             }
             else

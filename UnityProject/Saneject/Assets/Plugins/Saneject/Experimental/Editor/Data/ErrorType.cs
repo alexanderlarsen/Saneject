@@ -4,6 +4,7 @@
     {
         InvalidBinding,
         MissingBinding,
+        MissingGlobalDependency,
         MissingDependency
     }
 }

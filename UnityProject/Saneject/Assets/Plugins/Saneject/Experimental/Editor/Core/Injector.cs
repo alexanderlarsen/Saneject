@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using UnityEditor;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -13,11 +14,21 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         public static void InjectDependencies(InjectionSession session)
         {
             foreach ((FieldNode fieldNode, IEnumerable<Object> dependencies) in session.FieldResolutionMap)
+            {
                 fieldNode.FieldInfo.SetValue
                 (
                     fieldNode.ComponentNode.Component,
                     ConvertDependencies(fieldNode, dependencies)
                 );
+
+                EditorUtility.SetDirty(fieldNode.ComponentNode.Component);
+            }
+
+            foreach ((ScopeNode scopeNode, IEnumerable<Object> globalObjects) in session.GlobalResolutionMap)
+            {
+                scopeNode.Scope.UpdateGlobalObjects(globalObjects);
+                EditorUtility.SetDirty(scopeNode.Scope);
+            }
         }
 
         private static object ConvertDependencies(
