@@ -5,10 +5,10 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
     public static class InjectionMenuItems
     {
-        [MenuItem("GameObject/Inject Hierarchy (new)", false, 49), MenuItem("Assets/Inject Hierarchy (new)", false, 49)]
-        private static void InjectHierarchy()
+        [MenuItem("GameObject/Inject From Selection (NEW PIPELINE)", false, 49), MenuItem("Assets/Inject From Selection (NEW PIPELINE)", false, 49)]
+        private static void InjectFromSelection()
         {
-            PipelineRunner.InjectSingleHierarchy(Selection.activeGameObject);
+            InjectionPipeline.Inject(Selection.gameObjects);
         }
     }
 }

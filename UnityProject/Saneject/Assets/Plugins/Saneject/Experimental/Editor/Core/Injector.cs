@@ -13,21 +13,50 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void InjectDependencies(InjectionSession session)
         {
-            foreach ((FieldNode fieldNode, IEnumerable<Object> dependencies) in session.FieldResolutionMap)
-            {
-                fieldNode.FieldInfo.SetValue
-                (
-                    fieldNode.ComponentNode.Component,
-                    ConvertDependencies(fieldNode, dependencies)
-                );
+            InjectGlobals(session);
+            InjectFields(session);
+        }
 
-                EditorUtility.SetDirty(fieldNode.ComponentNode.Component);
-            }
+        private static void InjectGlobals(InjectionSession session)
+        {
+            IEnumerable<ScopeNode> allScopes = session.Graph
+                .EnumerateAllTransformNodes()
+                .Select(scopeNode => scopeNode.DeclaredScopeNode)
+                .Where(scopeNode => scopeNode != null);
 
-            foreach ((ScopeNode scopeNode, IEnumerable<Object> globalObjects) in session.GlobalResolutionMap)
+            foreach (ScopeNode scopeNode in allScopes)
             {
+                IEnumerable<Object> globalObjects = session.GlobalResolutionMap.TryGetValue(scopeNode, out IReadOnlyList<Object> objects)
+                    ? objects
+                    : Enumerable.Empty<Object>();
+
                 scopeNode.Scope.UpdateGlobalObjects(globalObjects);
                 EditorUtility.SetDirty(scopeNode.Scope);
+            }
+        }
+
+        private static void InjectFields(InjectionSession session)
+        {
+            IEnumerable<ComponentNode> allComponents = session.Graph
+                .EnumerateAllTransformNodes()
+                .SelectMany(node => node.ComponentNodes);
+
+            foreach (ComponentNode componentNode in allComponents)
+            {
+                foreach (FieldNode fieldNode in componentNode.FieldNodes)
+                {
+                    IEnumerable<Object> dependencies = session.FieldResolutionMap.TryGetValue(fieldNode, out IReadOnlyList<Object> objects)
+                        ? objects
+                        : Enumerable.Empty<Object>();
+
+                    fieldNode.FieldInfo.SetValue
+                    (
+                        componentNode.Component,
+                        ConvertDependencies(fieldNode, dependencies)
+                    );
+                }
+
+                EditorUtility.SetDirty(componentNode.Component);
             }
         }
 

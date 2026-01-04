@@ -1,16 +1,16 @@
 {
   "rootNodes": [
     {
-      "name": "Game (Instance ID: 32352)",
+      "name": "Player (Instance ID: 32400)",
       "parent": null,
-      "context": "SceneObject (Key: -1244)",
+      "context": "PrefabAsset (Key: 32398)",
       "scope": {
-        "type": "GameScope",
+        "type": "PlayerScope",
         "parentScope": null,
         "componentBindings": [
           {
             "interfaceType": null,
-            "concreteType": "GameManager",
+            "concreteType": "Player",
             "isCollectionBinding": false,
             "locatorStrategySpecified": true,
             "resolveFromInstances": [],
@@ -27,13 +27,69 @@
             "resolveFromProxy": false
           },
           {
-            "interfaceType": null,
-            "concreteType": "Player",
+            "interfaceType": "IGameManager",
+            "concreteType": "GameManager",
             "isCollectionBinding": false,
             "locatorStrategySpecified": true,
             "resolveFromInstances": [],
             "idQualifiers": [],
             "targetTypeQualifiers": [],
+            "memberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "None",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": true
+          },
+          {
+            "interfaceType": "IMoveController",
+            "concreteType": "EnemyMoveController",
+            "isCollectionBinding": false,
+            "locatorStrategySpecified": true,
+            "resolveFromInstances": [],
+            "idQualifiers": [],
+            "targetTypeQualifiers": [],
+            "memberNameQualifiers": [],
+            "searchOrigin": "Scope",
+            "searchDirection": "None",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": true
+          },
+          {
+            "interfaceType": "IMoveController",
+            "concreteType": null,
+            "isCollectionBinding": false,
+            "locatorStrategySpecified": true,
+            "resolveFromInstances": [],
+            "idQualifiers": [],
+            "targetTypeQualifiers": [],
+            "memberNameQualifiers": [],
+            "searchOrigin": "InjectionTarget",
+            "searchDirection": "Descendants",
+            "findObjectsInactive": "Exclude",
+            "findObjectsSortMode": "None",
+            "customTargetTransform": null,
+            "includeSelfInSearch": false,
+            "childIndexForSearch": 0,
+            "resolveFromProxy": false
+          },
+          {
+            "interfaceType": "IWeapon",
+            "concreteType": null,
+            "isCollectionBinding": false,
+            "locatorStrategySpecified": true,
+            "resolveFromInstances": [],
+            "idQualifiers": [],
+            "targetTypeQualifiers": [
+              "Player"
+            ],
             "memberNameQualifiers": [],
             "searchOrigin": "Scope",
             "searchDirection": "Descendants",
@@ -46,14 +102,16 @@
           },
           {
             "interfaceType": null,
-            "concreteType": "Enemy",
-            "isCollectionBinding": false,
+            "concreteType": "AudioSource",
+            "isCollectionBinding": true,
             "locatorStrategySpecified": true,
             "resolveFromInstances": [],
-            "idQualifiers": [],
+            "idQualifiers": [
+              "audioSources"
+            ],
             "targetTypeQualifiers": [],
             "memberNameQualifiers": [],
-            "searchOrigin": "Scope",
+            "searchOrigin": "InjectionTarget",
             "searchDirection": "Descendants",
             "findObjectsInactive": "Exclude",
             "findObjectsSortMode": "None",
@@ -64,14 +122,16 @@
           },
           {
             "interfaceType": null,
-            "concreteType": "Player",
-            "isCollectionBinding": false,
+            "concreteType": "Collider",
+            "isCollectionBinding": true,
             "locatorStrategySpecified": true,
             "resolveFromInstances": [],
-            "idQualifiers": [],
+            "idQualifiers": [
+              "playerColliders"
+            ],
             "targetTypeQualifiers": [],
             "memberNameQualifiers": [],
-            "searchOrigin": "Scope",
+            "searchOrigin": "InjectionTarget",
             "searchDirection": "Descendants",
             "findObjectsInactive": "Exclude",
             "findObjectsSortMode": "None",
@@ -85,7 +145,7 @@
         "globalBindings": [
           {
             "interfaceType": null,
-            "concreteType": "GameManager",
+            "concreteType": "Player",
             "directInstancesToResolveFrom": [],
             "idQualifiers": [],
             "injectionTargetTypeQualifiers": [],
@@ -98,49 +158,66 @@
             "includeSelfInSearch": false,
             "childIndexForSearch": 0,
             "resolveFromProxy": false
-          },
-          {
-            "interfaceType": null,
-            "concreteType": "Player",
-            "directInstancesToResolveFrom": [],
-            "idQualifiers": [],
-            "injectionTargetTypeQualifiers": [],
-            "injectionTargetMemberNameQualifiers": [],
-            "searchOrigin": "Scope",
-            "searchDirection": "Descendants",
-            "findObjectsInactive": "Exclude",
-            "findObjectsSortMode": "None",
-            "customTargetTransform": null,
-            "includeSelfInSearch": false,
-            "childIndexForSearch": 0,
-            "resolveFromProxy": false
           }
         ]
       },
       "components": [
         {
-          "name": "GameManager (Instance ID: -45944)",
+          "name": "Player (Instance ID: 32416)",
           "fields": [
             {
-              "declaringType": "GameManager",
-              "memberName": "enemy",
+              "declaringType": "Player",
+              "memberName": "moveController",
               "injectId": null,
               "suppressMissingErrors": false,
-              "requestedType": "Enemy",
-              "isInterface": false,
+              "requestedType": "IMoveController",
+              "isInterface": true,
               "isCollection": false,
-              "displayPath": "Game/GameManager/enemy",
+              "displayPath": "Player/Player/moveController",
               "isPropertyBackingField": false
             },
             {
-              "declaringType": "GameManager",
-              "memberName": "player",
+              "declaringType": "Player",
+              "memberName": "weapon",
               "injectId": null,
               "suppressMissingErrors": false,
-              "requestedType": "Player",
-              "isInterface": false,
+              "requestedType": "IWeapon",
+              "isInterface": true,
               "isCollection": false,
-              "displayPath": "Game/GameManager/player",
+              "displayPath": "Player/Player/weapon",
+              "isPropertyBackingField": false
+            },
+            {
+              "declaringType": "Player",
+              "memberName": "gameManager",
+              "injectId": null,
+              "suppressMissingErrors": false,
+              "requestedType": "IGameManager",
+              "isInterface": true,
+              "isCollection": false,
+              "displayPath": "Player/Player/gameManager",
+              "isPropertyBackingField": false
+            },
+            {
+              "declaringType": "Player",
+              "memberName": "audioSourcesList",
+              "injectId": "audioSources",
+              "suppressMissingErrors": false,
+              "requestedType": "AudioSource",
+              "isInterface": false,
+              "isCollection": true,
+              "displayPath": "Player/Player/audioSourcesList",
+              "isPropertyBackingField": false
+            },
+            {
+              "declaringType": "Player",
+              "memberName": "collidersArray",
+              "injectId": "playerColliders",
+              "suppressMissingErrors": false,
+              "requestedType": "Collider",
+              "isInterface": false,
+              "isCollection": true,
+              "displayPath": "Player/Player/collidersArray",
               "isPropertyBackingField": false
             }
           ],
@@ -149,388 +226,28 @@
       ],
       "children": [
         {
-          "name": "Player (Instance ID: 32378)",
-          "parent": "Game (Instance ID: 32352)",
-          "context": "PrefabInstance (Key: -1252)",
-          "scope": {
-            "type": "PlayerScope",
-            "parentScope": "GameScope",
-            "componentBindings": [
-              {
-                "interfaceType": null,
-                "concreteType": "Player",
-                "isCollectionBinding": false,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "Self",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              },
-              {
-                "interfaceType": "IGameManager",
-                "concreteType": "GameManager",
-                "isCollectionBinding": false,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "None",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": true
-              },
-              {
-                "interfaceType": "IMoveController",
-                "concreteType": "EnemyMoveController",
-                "isCollectionBinding": false,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "None",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": true
-              },
-              {
-                "interfaceType": "IMoveController",
-                "concreteType": null,
-                "isCollectionBinding": false,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "InjectionTarget",
-                "searchDirection": "Descendants",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              },
-              {
-                "interfaceType": "IWeapon",
-                "concreteType": null,
-                "isCollectionBinding": false,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [
-                  "Player"
-                ],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "Descendants",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              },
-              {
-                "interfaceType": null,
-                "concreteType": "AudioSource",
-                "isCollectionBinding": true,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [
-                  "audioSources"
-                ],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "InjectionTarget",
-                "searchDirection": "Descendants",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              },
-              {
-                "interfaceType": null,
-                "concreteType": "Collider",
-                "isCollectionBinding": true,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [
-                  "playerColliders"
-                ],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "InjectionTarget",
-                "searchDirection": "Descendants",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              }
-            ],
-            "assetBindings": [],
-            "globalBindings": [
-              {
-                "interfaceType": null,
-                "concreteType": "Player",
-                "directInstancesToResolveFrom": [],
-                "idQualifiers": [],
-                "injectionTargetTypeQualifiers": [],
-                "injectionTargetMemberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "Self",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              }
-            ]
-          },
-          "components": [
-            {
-              "name": "Player (Instance ID: -1256)",
-              "fields": [
-                {
-                  "declaringType": "Player",
-                  "memberName": "moveController",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IMoveController",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Player/Player/moveController",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "Player",
-                  "memberName": "weapon",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IWeapon",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Player/Player/weapon",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "Player",
-                  "memberName": "gameManager",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IGameManager",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Player/Player/gameManager",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "Player",
-                  "memberName": "audioSourcesList",
-                  "injectId": "audioSources",
-                  "suppressMissingErrors": false,
-                  "requestedType": "AudioSource",
-                  "isInterface": false,
-                  "isCollection": true,
-                  "displayPath": "Game/Player/Player/audioSourcesList",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "Player",
-                  "memberName": "collidersArray",
-                  "injectId": "playerColliders",
-                  "suppressMissingErrors": false,
-                  "requestedType": "Collider",
-                  "isInterface": false,
-                  "isCollection": true,
-                  "displayPath": "Game/Player/Player/collidersArray",
-                  "isPropertyBackingField": false
-                }
-              ],
-              "methods": []
-            }
-          ],
-          "children": [
-            {
-              "name": "MoveController (Instance ID: -1260)",
-              "parent": "Player (Instance ID: 32378)",
-              "context": "PrefabInstance (Key: -1252)",
-              "scope": null,
-              "components": [],
-              "children": []
-            },
-            {
-              "name": "Colliders (Instance ID: -1266)",
-              "parent": "Player (Instance ID: 32378)",
-              "context": "PrefabInstance (Key: -1252)",
-              "scope": null,
-              "components": [],
-              "children": []
-            },
-            {
-              "name": "AudioSources (Instance ID: -1274)",
-              "parent": "Player (Instance ID: 32378)",
-              "context": "PrefabInstance (Key: -1252)",
-              "scope": null,
-              "components": [],
-              "children": []
-            },
-            {
-              "name": "Crossbow (Instance ID: 32382)",
-              "parent": "Player (Instance ID: 32378)",
-              "context": "PrefabInstance (Key: -1246)",
-              "scope": {
-                "type": "WeaponScope",
-                "parentScope": "PlayerScope",
-                "componentBindings": [],
-                "assetBindings": [],
-                "globalBindings": []
-              },
-              "components": [
-                {
-                  "name": "Crossbow (Instance ID: -1250)",
-                  "fields": [],
-                  "methods": [
-                    {
-                      "name": "Initialize",
-                      "parameters": [
-                        "Collider",
-                        "Rigidbody"
-                      ],
-                      "injectId": null,
-                      "suppressMissingErrors": false
-                    }
-                  ]
-                }
-              ],
-              "children": []
-            }
-          ]
+          "name": "MoveController (Instance ID: 32418)",
+          "parent": "Player (Instance ID: 32400)",
+          "context": "PrefabAsset (Key: 32398)",
+          "scope": null,
+          "components": [],
+          "children": []
         },
         {
-          "name": "Enemy (Instance ID: 32374)",
-          "parent": "Game (Instance ID: 32352)",
-          "context": "PrefabInstance (Key: -1280)",
-          "scope": {
-            "type": "EnemyScope",
-            "parentScope": "GameScope",
-            "componentBindings": [
-              {
-                "interfaceType": "IMoveController",
-                "concreteType": null,
-                "isCollectionBinding": false,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "Descendants",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              },
-              {
-                "interfaceType": "IWeapon",
-                "concreteType": null,
-                "isCollectionBinding": false,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "Descendants",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              }
-            ],
-            "assetBindings": [],
-            "globalBindings": []
-          },
-          "components": [
-            {
-              "name": "Enemy (Instance ID: -1284)",
-              "fields": [
-                {
-                  "declaringType": "Enemy",
-                  "memberName": "moveController",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IMoveController",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Enemy/Enemy/moveController",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "Enemy",
-                  "memberName": "weapon",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IWeapon",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Enemy/Enemy/weapon",
-                  "isPropertyBackingField": false
-                }
-              ],
-              "methods": []
-            }
-          ],
-          "children": [
-            {
-              "name": "MoveController (Instance ID: -1288)",
-              "parent": "Enemy (Instance ID: 32374)",
-              "context": "PrefabInstance (Key: -1280)",
-              "scope": null,
-              "components": [],
-              "children": []
-            },
-            {
-              "name": "Rifle (Instance ID: 32356)",
-              "parent": "Enemy (Instance ID: 32374)",
-              "context": "PrefabInstance (Key: -1292)",
-              "scope": {
-                "type": "WeaponScope",
-                "parentScope": "EnemyScope",
-                "componentBindings": [],
-                "assetBindings": [],
-                "globalBindings": []
-              },
-              "components": [],
-              "children": []
-            }
-          ]
+          "name": "Colliders (Instance ID: 32420)",
+          "parent": "Player (Instance ID: 32400)",
+          "context": "PrefabAsset (Key: 32398)",
+          "scope": null,
+          "components": [],
+          "children": []
+        },
+        {
+          "name": "AudioSources (Instance ID: 32422)",
+          "parent": "Player (Instance ID: 32400)",
+          "context": "PrefabAsset (Key: 32398)",
+          "scope": null,
+          "components": [],
+          "children": []
         }
       ]
     }

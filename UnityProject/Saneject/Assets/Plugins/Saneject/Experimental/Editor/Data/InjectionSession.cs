@@ -12,12 +12,13 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     public class InjectionSession
     {
         private readonly Dictionary<FieldNode, IEnumerable<Object>> fieldResolutionMap = new();
+        private readonly Dictionary<ScopeNode, List<Object>> globalResolutionMap = new();
+
         private readonly HashSet<BindingNode> usedBindings = new();
         private readonly HashSet<BindingNode> validBindings = new();
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
         private readonly List<Error> errors = new();
         private readonly Stopwatch stopwatch = new();
-        private readonly Dictionary<ScopeNode, List<Object>> globalResolutionMap = new();
 
         private InjectionSession(IEnumerable<Transform> startTransforms)
         {
@@ -33,8 +34,12 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public IReadOnlyCollection<BindingNode> UsedBindings => usedBindings;
         public IReadOnlyCollection<BindingNode> ValidBindings => validBindings;
         public IReadOnlyCollection<Error> Errors => errors;
-        public IReadOnlyDictionary<FieldNode, IEnumerable<Object>> FieldResolutionMap => fieldResolutionMap;
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
+
+        public IReadOnlyDictionary<FieldNode, IReadOnlyList<Object>> FieldResolutionMap => fieldResolutionMap.ToDictionary(
+            kvp => kvp.Key,
+            kvp => (IReadOnlyList<Object>)kvp.Value
+        );
 
         public IReadOnlyDictionary<ScopeNode, IReadOnlyList<Object>> GlobalResolutionMap => globalResolutionMap.ToDictionary
         (

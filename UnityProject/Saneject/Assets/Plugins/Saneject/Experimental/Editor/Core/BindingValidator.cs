@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -9,13 +11,16 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void ValidateBindings(InjectionSession session)
         {
+            Dictionary<Type, GlobalComponentBindingNode> existingGlobalMap = new();
+
             foreach (BindingNode binding in session.Graph.EnumerateAllBindingNodes())
-                ValidateBinding(binding, session);
+                ValidateBinding(binding, session, existingGlobalMap);
         }
 
         private static void ValidateBinding(
             BindingNode binding,
-            InjectionSession session)
+            InjectionSession session,
+            Dictionary<Type, GlobalComponentBindingNode> existingGlobals)
         {
             List<Error> errors = new();
 
@@ -31,6 +36,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
                     if (globalBinding.IdQualifiers.Count > 0)
                         errors.Add(Error.CreateInvalidBindingError("Global bindings cannot have IDs. The GlobalScope always resolves by type only.", binding));
+
+                    if (existingGlobals.TryGetValue(globalBinding.ConcreteType, out GlobalComponentBindingNode existingGlobal))
+                        errors.Add(Error.CreateInvalidBindingError($"Duplicate global binding '{globalBinding.ConcreteType.Name}' declared by '{globalBinding.ScopeNode.Type.Name}'. Already owned by '{existingGlobal.ScopeNode.Type.Name}'. Only one global per type is allowed.", binding));
+                    else
+                        existingGlobals.Add(globalBinding.ConcreteType, globalBinding);
 
                     break;
                 }
@@ -63,7 +73,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     break;
                 }
             }
-
+            
             if (binding.InterfaceType is { IsInterface: false })
                 errors.Add(Error.CreateInvalidBindingError($"Binding interface type '{binding.InterfaceType.FullName}' is not an interface.", binding));
 

@@ -105,7 +105,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             sb.Append(requestedType != null ? requestedType.Name : "null");
             sb.Append(" | ");
             sb.Append(isCollection ? "Collection" : "Single");
-            sb.Append($" | Nearest scope: {scopeNode.Type.Name}");
+            sb.Append($" | Nearest scope: {scopeNode?.Type.Name ?? "None"}");
             sb.Append("]");
 
             return sb.ToString();

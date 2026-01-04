@@ -4,12 +4,12 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    public static class PipelineRunner
+    public static class InjectionPipeline
     {
-        public static void InjectSingleHierarchy(GameObject startGameObject)
+        public static void Inject(params GameObject[] startGameObjects)
         {
             Logger.TryClearLog();
-            InjectionSession session = InjectionSession.StartSession(startGameObject);
+            InjectionSession session = InjectionSession.StartSession(startGameObjects);
             BindingValidator.ValidateBindings(session);
 
             if (ProxyProcessor.CreateProxies(session) != ProxyCreationResult.Ready)
