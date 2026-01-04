@@ -471,9 +471,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         #region SPECIAL LOCATOR METHODS
 
         /// <summary>
-        /// Locate the <see cref="Component" /> anywhere in the scene using <see cref="UnityEngine.Object.FindObjectsByType(Type, FindObjectsSortMode)" />.
+        /// Locate the <see cref="Component" /> anywhere in the scene using <see cref="UnityEngine.Object.FindObjectsByType(System.Type,UnityEngine.FindObjectsSortMode)" />
+        /// - or within an isolated prefab asset using <see cref="UnityEngine.Component.GetComponentsInChildren(System.Type,bool)" /> from the prefab root.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromAnywhereInScene(
+        public ComponentFilterBuilder<TComponent> FromAnywhere(
             FindObjectsInactive findObjectsInactive = FindObjectsInactive.Include,
             FindObjectsSortMode sortMode = FindObjectsSortMode.None)
         {

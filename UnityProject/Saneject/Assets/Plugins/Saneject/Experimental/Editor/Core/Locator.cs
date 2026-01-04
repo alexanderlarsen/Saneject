@@ -105,9 +105,15 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                         .GetComponentsInSiblings(targetType),
 
                 SearchDirection.Anywhere =>
-                    Object.FindObjectsByType(targetType, bindingNode.FindObjectsInactive, bindingNode.FindObjectsSortMode)
-                        .Where(obj => obj.GetType() == targetType)
-                        .Cast<Component>(),
+                    injectionTargetNode.ContextIdentity.Type == ContextType.PrefabAsset
+                        ? injectionTargetNode
+                            .Transform
+                            .root
+                            .GetComponentsInChildren(targetType, bindingNode.FindObjectsInactive == FindObjectsInactive.Include)
+                        : Object
+                            .FindObjectsByType(targetType, bindingNode.FindObjectsInactive, bindingNode.FindObjectsSortMode)
+                            .Where(obj => obj.GetType() == targetType)
+                            .Cast<Component>(),
 
                 SearchDirection.None => throw new InvalidOperationException("Search direction must be specified."),
 
