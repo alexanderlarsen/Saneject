@@ -111,9 +111,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                             .root
                             .GetComponentsInChildren(targetType, bindingNode.FindObjectsInactive == FindObjectsInactive.Include)
                         : Object
-                            .FindObjectsByType(targetType, bindingNode.FindObjectsInactive, bindingNode.FindObjectsSortMode)
-                            .Where(obj => obj.GetType() == targetType)
-                            .Cast<Component>(),
+                            .FindObjectsByType<Component>(bindingNode.FindObjectsInactive, bindingNode.FindObjectsSortMode)
+                            .Where(component => targetType.IsAssignableFrom(component.GetType())),
 
                 SearchDirection.None => throw new InvalidOperationException("Search direction must be specified."),
 

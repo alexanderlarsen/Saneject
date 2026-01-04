@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         {
             FieldInfo = fieldInfo;
             RequestedType = fieldInfo.ResolveType();
-            IsInterface = fieldInfo.FieldType.IsInterface;
+            IsInterface = RequestedType.IsInterface;
             DisplayPath = FieldNodeUtility.GetPath(this);
             IsPropertyBackingField = fieldInfo.Name.Contains(">k__BackingField");
             FieldShape = GetFieldShape(fieldInfo);
