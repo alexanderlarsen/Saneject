@@ -17,7 +17,7 @@ namespace Plugins.Saneject.Experimental.Runtime
     {
         #region INTERNAL
 
-        [SerializeField, ReadOnly, Tooltip("These will be added to GlobalScope at runtime"), EditorBrowsable(EditorBrowsableState.Never)]
+        [SerializeField, ReadOnly, Tooltip("These are automatically added to GlobalScope at Scope Awake and removed at OnDestroy"), EditorBrowsable(EditorBrowsableState.Never)]
         private List<Object> globalObjects = new();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
