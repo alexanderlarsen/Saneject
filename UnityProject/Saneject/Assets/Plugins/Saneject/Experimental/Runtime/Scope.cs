@@ -5,12 +5,10 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
-using Plugins.Saneject.Runtime.Attributes;
-using Plugins.Saneject.Runtime.Global;
 using UnityEngine;
 using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
-using ReadOnly = Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute;
+using ReadOnlyAttribute = Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute;
 
 namespace Plugins.Saneject.Experimental.Runtime
 {
@@ -26,24 +24,14 @@ namespace Plugins.Saneject.Experimental.Runtime
         private void Awake()
         {
             foreach (Object obj in globalObjects)
-            {
-                if (obj == null)
-                    continue;
-
-                GlobalScope.Register(obj.GetType(), obj, this);
-            }
+                GlobalScope.Register(obj, this);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void OnDestroy()
         {
             foreach (Object obj in globalObjects)
-            {
-                if (obj == null)
-                    continue;
-
-                GlobalScope.Unregister(obj.GetType());
-            }
+                GlobalScope.Unregister(obj, this);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]

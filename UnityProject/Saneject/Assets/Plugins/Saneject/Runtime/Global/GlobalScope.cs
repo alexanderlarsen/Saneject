@@ -14,7 +14,6 @@ namespace Plugins.Saneject.Runtime.Global
     public static class GlobalScope
     {
         private static readonly Dictionary<Type, Object> Instances = new();
-        private static readonly Dictionary<Object, Type> OwnerTypeMap = new();
 
         private static bool allowUseInEditMode;
 
@@ -59,8 +58,7 @@ namespace Plugins.Saneject.Runtime.Global
         /// </summary>
         public static void Register(
             Type type,
-            Object instance,
-            Object caller = null)
+            Object instance)
         {
             if (!IsAllowed)
             {
@@ -69,19 +67,14 @@ namespace Plugins.Saneject.Runtime.Global
             }
 
             bool added = Instances.TryAdd(type, instance);
-            
-            if(added)
-                OwnerTypeMap.Add(instance, type);
 
             if (!UserSettings.LogGlobalScopeRegistration)
                 return;
 
-            string callerName = caller?.GetType().Name ?? "Unknown";
-
             if (added)
-                Debug.Log($"Saneject: New GlobalScope registration for '{type.Name}' by '{callerName}'.", caller);
+                Debug.Log($"Saneject: New GlobalScope registration for '{type.Name}'");
             else
-                Debug.LogError($"Saneject: Duplicate GlobalScope registration for '{type.Name}' by '{callerName}'.", caller);
+                Debug.LogError($"Saneject: Duplicate GlobalScope registration for '{type.Name}'");
         }
 
         /// <summary>
