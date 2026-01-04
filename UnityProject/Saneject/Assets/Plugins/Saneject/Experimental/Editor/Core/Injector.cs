@@ -5,6 +5,7 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEditor;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -26,11 +27,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             foreach (ScopeNode scopeNode in allScopes)
             {
-                IEnumerable<Object> globalObjects = session.GlobalResolutionMap.TryGetValue(scopeNode, out IReadOnlyList<Object> objects)
-                    ? objects
-                    : Enumerable.Empty<Object>();
+                IEnumerable<Component> globalObjects = session.GlobalResolutionMap.TryGetValue(scopeNode, out IReadOnlyList<Object> objects)
+                    ? objects.Cast<Component>()
+                    : Enumerable.Empty<Component>();
 
-                scopeNode.Scope.UpdateGlobalObjects(globalObjects);
+                scopeNode.Scope.UpdateGlobalComponents(globalObjects);
                 EditorUtility.SetDirty(scopeNode.Scope);
             }
         }

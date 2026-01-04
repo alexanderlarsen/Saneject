@@ -13,7 +13,7 @@ namespace Plugins.Saneject.Experimental.Runtime
     /// </summary>
     public static class GlobalScope
     {
-        private static readonly Dictionary<Type, Object> Instances = new();
+        private static readonly Dictionary<Type, Component> Instances = new();
         private static readonly Dictionary<Type, Object> OwnerTypeMap = new();
 
         /// <summary>
@@ -41,9 +41,9 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <summary>
         /// Get the registered global instance of type <typeparamref name="T" />. Returns <c>null</c> if not registered.
         /// </summary>
-        public static T Get<T>() where T : Object
+        public static T GetComponent<T>() where T : Component
         {
-            return Instances.TryGetValue(typeof(T), out Object instance)
+            return Instances.TryGetValue(typeof(T), out Component instance)
                 ? instance as T
                 : null;
         }
@@ -51,8 +51,8 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <summary>
         /// Register a global instance. Only valid in Play Mode. Only one instance per type.
         /// </summary>
-        public static void Register(
-            Object instance,
+        public static void RegisterComponent(
+            Component instance,
             Object caller)
         {
             if (!CheckModificationAllowed())
@@ -83,8 +83,8 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <summary>
         /// Unregister a global instance. Only valid in Play Mode.
         /// </summary>
-        public static void Unregister(
-            Object instance,
+        public static void UnregisterComponent(
+            Component instance,
             Object caller)
         {
             if (!CheckModificationAllowed())
@@ -120,7 +120,7 @@ namespace Plugins.Saneject.Experimental.Runtime
         /// <summary>
         /// Returns true if a global instance of type <typeparamref name="T" /> is registered.
         /// </summary>
-        public static bool IsRegistered<T>() where T : Object
+        public static bool IsRegistered<T>() where T : Component
         {
             return Instances.ContainsKey(typeof(T));
         }

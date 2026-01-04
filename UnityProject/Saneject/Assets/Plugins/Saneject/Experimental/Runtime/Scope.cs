@@ -18,27 +18,27 @@ namespace Plugins.Saneject.Experimental.Runtime
         #region INTERNAL
 
         [SerializeField, ReadOnly, Tooltip("These are automatically added to GlobalScope at Scope Awake and removed at OnDestroy"), EditorBrowsable(EditorBrowsableState.Never)]
-        private List<Object> globalObjects = new();
+        private List<Component> globalComponents = new();
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void Awake()
         {
-            foreach (Object obj in globalObjects)
-                GlobalScope.Register(obj, this);
+            foreach (Component obj in globalComponents)
+                GlobalScope.RegisterComponent(obj, this);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void OnDestroy()
         {
-            foreach (Object obj in globalObjects)
-                GlobalScope.Unregister(obj, this);
+            foreach (Component obj in globalComponents)
+                GlobalScope.UnregisterComponent(obj, this);
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
-        public void UpdateGlobalObjects(IEnumerable<Object> globalObjects)
+        public void UpdateGlobalComponents(IEnumerable<Component> globalObjects)
         {
-            this.globalObjects.Clear();
-            this.globalObjects.AddRange(globalObjects.Where(obj => obj != null));
+            this.globalComponents.Clear();
+            this.globalComponents.AddRange(globalObjects.Where(obj => obj != null));
         }
 
         /// <summary>
