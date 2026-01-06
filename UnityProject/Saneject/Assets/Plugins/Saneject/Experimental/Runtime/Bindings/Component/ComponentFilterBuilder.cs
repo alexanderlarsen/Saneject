@@ -6,9 +6,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 {
     public class ComponentFilterBuilder<TComponent> where TComponent : class
     {
-        private readonly Binding binding;
+        private readonly ComponentBinding binding;
 
-        public ComponentFilterBuilder(Binding binding)
+        public ComponentFilterBuilder(ComponentBinding binding)
         {
             this.binding = binding;
         }
@@ -20,7 +20,13 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> Where(Func<TComponent, bool> predicate)
         {
-            binding.Filters.Add(o => o is TComponent t && predicate(t));
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.Where,
+                    o => o is TComponent t && predicate(t)
+                ));
+
             return this;
         }
 
@@ -29,7 +35,13 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereComponent(Func<UnityEngine.Component, bool> predicate)
         {
-            Where(t => t is UnityEngine.Component c && c && predicate(c));
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereComponent,
+                    t => t is UnityEngine.Component c && c && predicate(c)
+                ));
+
             return this;
         }
 
@@ -38,7 +50,13 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereTransform(Func<Transform, bool> predicate)
         {
-            Where(t => t is UnityEngine.Component c && c && predicate(c.transform));
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereTransform,
+                    t => t is UnityEngine.Component c && c && predicate(c.transform)
+                ));
+
             return this;
         }
 
@@ -47,7 +65,13 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereGameObject(Func<GameObject, bool> predicate)
         {
-            Where(o => o is UnityEngine.Component c && c && predicate(c.gameObject));
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereGameObject,
+                    o => o is UnityEngine.Component c && c && predicate(c.gameObject)
+                ));
+
             return this;
         }
 
@@ -60,7 +84,13 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereParent(Func<Transform, bool> predicate)
         {
-            WhereTransform(t => t.parent && predicate(t.parent));
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereParent,
+                    t => t is UnityEngine.Component c && c && predicate(c.transform.parent)
+                ));
+
             return this;
         }
 
@@ -73,19 +103,29 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             bool includeSelf = false,
             int maxDepth = int.MaxValue)
         {
-            WhereTransform(t =>
-            {
-                Transform cur = includeSelf ? t : t.parent;
-                int depth = 0;
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereAnyAncestor,
+                    o =>
+                    {
+                        if (o is not UnityEngine.Component c || !c)
+                            return false;
 
-                while (cur && depth++ < maxDepth)
-                {
-                    if (predicate(cur)) return true;
-                    cur = cur.parent;
-                }
+                        Transform cur = includeSelf ? c.transform : c.transform.parent;
+                        int depth = 0;
 
-                return false;
-            });
+                        while (cur && depth++ < maxDepth)
+                        {
+                            if (predicate(cur))
+                                return true;
+
+                            cur = cur.parent;
+                        }
+
+                        return false;
+                    }
+                ));
 
             return this;
         }
@@ -95,7 +135,13 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereRoot(Func<Transform, bool> predicate)
         {
-            WhereTransform(t => t.root && predicate(t.root));
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereRoot,
+                    t => t is UnityEngine.Component c && c && c.transform.root && predicate(c.transform.root)
+                ));
+
             return this;
         }
 
@@ -108,14 +154,24 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereAnyChild(Func<Transform, bool> predicate)
         {
-            WhereTransform(t =>
-            {
-                for (int i = 0; i < t.childCount; i++)
-                    if (predicate(t.GetChild(i)))
-                        return true;
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereAnyChild,
+                    t =>
+                    {
+                        if (t is not UnityEngine.Component c || !c)
+                            return false;
 
-                return false;
-            });
+                        Transform tr = c.transform;
+
+                        for (int i = 0; i < tr.childCount; i++)
+                            if (predicate(tr.GetChild(i)))
+                                return true;
+
+                        return false;
+                    }
+                ));
 
             return this;
         }
@@ -127,12 +183,24 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             int index,
             Func<Transform, bool> predicate)
         {
-            WhereTransform(t =>
-            {
-                if (index < 0 || index >= t.childCount) return false;
-                Transform ch = t.GetChild(index);
-                return ch && predicate(ch);
-            });
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereChildAt,
+                    t =>
+                    {
+                        if (t is not UnityEngine.Component c || !c)
+                            return false;
+
+                        Transform tr = c.transform;
+
+                        if (index < 0 || index >= tr.childCount)
+                            return false;
+
+                        Transform ch = tr.GetChild(index);
+                        return ch && predicate(ch);
+                    }
+                ));
 
             return this;
         }
@@ -142,7 +210,17 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereFirstChild(Func<Transform, bool> predicate)
         {
-            WhereChildAt(0, predicate);
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereFirstChild,
+                    t =>
+                        t is UnityEngine.Component c &&
+                        c &&
+                        c.transform.childCount > 0 &&
+                        predicate(c.transform.GetChild(0))
+                ));
+
             return this;
         }
 
@@ -151,12 +229,24 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereLastChild(Func<Transform, bool> predicate)
         {
-            WhereTransform(t =>
-            {
-                if (t.childCount == 0) return false;
-                Transform ch = t.GetChild(t.childCount - 1);
-                return ch && predicate(ch);
-            });
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereLastChild,
+                    t =>
+                    {
+                        if (t is not UnityEngine.Component c || !c)
+                            return false;
+
+                        Transform tr = c.transform;
+
+                        if (tr.childCount == 0)
+                            return false;
+
+                        Transform ch = tr.GetChild(tr.childCount - 1);
+                        return ch && predicate(ch);
+                    }
+                ));
 
             return this;
         }
@@ -169,23 +259,38 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             Func<Transform, bool> predicate,
             bool includeSelf = false)
         {
-            WhereTransform(t =>
-            {
-                Stack<Transform> stack = new();
-                if (includeSelf) stack.Push(t);
-                for (int i = 0; i < t.childCount; i++) stack.Push(t.GetChild(i));
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereAnyDescendant,
+                    t =>
+                    {
+                        if (t is not UnityEngine.Component c || !c)
+                            return false;
 
-                while (stack.Count > 0)
-                {
-                    Transform cur = stack.Pop();
-                    if (cur && predicate(cur)) return true;
+                        Transform tr = c.transform;
+                        Stack<Transform> stack = new();
 
-                    for (int i = 0; i < cur.childCount; i++)
-                        stack.Push(cur.GetChild(i));
-                }
+                        if (includeSelf)
+                            stack.Push(tr);
 
-                return false;
-            });
+                        for (int i = 0; i < tr.childCount; i++)
+                            stack.Push(tr.GetChild(i));
+
+                        while (stack.Count > 0)
+                        {
+                            Transform cur = stack.Pop();
+
+                            if (cur && predicate(cur))
+                                return true;
+
+                            for (int i = 0; i < cur.childCount; i++)
+                                stack.Push(cur.GetChild(i));
+                        }
+
+                        return false;
+                    }
+                ));
 
             return this;
         }
@@ -195,20 +300,35 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// </summary>
         public ComponentFilterBuilder<TComponent> WhereAnySibling(Func<Transform, bool> predicate)
         {
-            WhereTransform(t =>
-            {
-                if (!t.parent) return false;
-                Transform p = t.parent;
+            binding.DependencyFilters.Add(
+                new ComponentDependencyFilter
+                (
+                    ComponentFilterType.WhereAnySibling,
+                    t =>
+                    {
+                        if (t is not UnityEngine.Component c || !c)
+                            return false;
 
-                for (int i = 0; i < p.childCount; i++)
-                {
-                    Transform s = p.GetChild(i);
-                    if (s == t) continue;
-                    if (predicate(s)) return true;
-                }
+                        Transform tr = c.transform;
+                        Transform parent = tr.parent;
 
-                return false;
-            });
+                        if (!parent)
+                            return false;
+
+                        for (int i = 0; i < parent.childCount; i++)
+                        {
+                            Transform sibling = parent.GetChild(i);
+
+                            if (sibling == tr)
+                                continue;
+
+                            if (predicate(sibling))
+                                return true;
+                        }
+
+                        return false;
+                    }
+                ));
 
             return this;
         }

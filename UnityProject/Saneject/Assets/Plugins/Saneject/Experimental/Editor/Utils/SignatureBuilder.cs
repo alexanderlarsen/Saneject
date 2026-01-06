@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
@@ -124,8 +125,25 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
                 }
             }
 
-            if (binding.Filters.Count > 0)
-                sb.Append(".Where(...)");
+            foreach (DependencyFilter filter in binding.DependencyFilters)
+                switch (filter)
+                {
+                    case ComponentDependencyFilter componentFilter:
+                    {
+                        if (componentFilter.FilterType != ComponentFilterType.None)
+                            sb.Append($".{componentFilter.FilterType}(...)");
+
+                        break;
+                    }
+
+                    case AssetDependencyFilter assetFilter:
+                    {
+                        if (assetFilter.FilterType != AssetFilterType.None)
+                            sb.Append($".{assetFilter.FilterType}(...)");
+
+                        break;
+                    }
+                }
 
             sb.Append("</b>");
             sb.Append($" [Scope: {binding.ScopeNode.Type.Name}]");

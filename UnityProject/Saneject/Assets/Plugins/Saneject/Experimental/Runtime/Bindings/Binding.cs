@@ -11,10 +11,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings
         public bool IsCollectionBinding { get; set; }
         public bool LocatorStrategySpecified { get; set; }
 
-        public List<Object> ResolveFromInstances { get; set; } = new();
-        public List<Func<Object, bool>> Filters { get; set; } = new();
-        public List<string> IdQualifiers { get; set; } = new();
-        public List<string> MemberNameQualifiers { get; set; } = new();
-        public List<Type> TargetTypeQualifiers { get; set; } = new();
+        public List<Object> ResolveFromInstances { get; } = new();
+        public List<string> IdQualifiers { get; } = new();
+        public List<string> MemberNameQualifiers { get; } = new();
+        public List<Type> TargetTypeQualifiers { get; } = new();
+        public List<DependencyFilter> DependencyFilters { get; } = new();
     }
 }

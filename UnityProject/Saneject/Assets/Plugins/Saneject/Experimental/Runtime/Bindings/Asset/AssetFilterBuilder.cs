@@ -1,8 +1,9 @@
 ﻿using System;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
 {
-    public class AssetFilterBuilder<TAsset> where TAsset : UnityEngine.Object
+    public class AssetFilterBuilder<TAsset> where TAsset : Object
     {
         private readonly AssetBinding binding;
 
@@ -10,7 +11,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         {
             this.binding = binding;
         }
-        
+
         #region BASE METHODS
 
         /// <summary>
@@ -18,7 +19,13 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// </summary>
         public AssetFilterBuilder<TAsset> Where(Func<TAsset, bool> predicate)
         {
-            binding.Filters.Add(o => o is TAsset t && predicate(t));
+            binding.DependencyFilters.Add(
+                new AssetDependencyFilter
+                (
+                    AssetFilterType.Where,
+                    o => o is TAsset t && predicate(t)
+                ));
+
             return this;
         }
 

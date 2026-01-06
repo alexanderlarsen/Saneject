@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.Collections.Generic;
+using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 {

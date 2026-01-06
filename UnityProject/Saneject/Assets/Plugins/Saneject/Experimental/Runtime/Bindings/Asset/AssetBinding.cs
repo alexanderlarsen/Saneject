@@ -1,4 +1,6 @@
-﻿namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
+﻿using System.Collections.Generic;
+
+namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
 {
     public class AssetBinding : Binding
     {
