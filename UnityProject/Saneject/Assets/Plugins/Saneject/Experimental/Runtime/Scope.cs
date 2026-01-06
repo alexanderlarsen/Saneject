@@ -37,8 +37,8 @@ namespace Plugins.Saneject.Experimental.Runtime
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void UpdateGlobalComponents(IEnumerable<Component> globalObjects)
         {
-            this.globalComponents.Clear();
-            this.globalComponents.AddRange(globalObjects.Where(obj => obj != null));
+            globalComponents.Clear();
+            globalComponents.AddRange(globalObjects.Where(obj => obj != null));
         }
 
         /// <summary>
@@ -250,7 +250,6 @@ namespace Plugins.Saneject.Experimental.Runtime
             {
                 InterfaceType = typeof(TInterface),
                 ConcreteType = typeof(TConcrete),
-                IsCollectionBinding = true
             };
 
             bindings.Add(binding);

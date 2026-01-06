@@ -10,8 +10,6 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Utils
 {
-    // TODO: Refactor this class
-
     public static class SignatureBuilder
     {
         public static string GetBindingSignature(BindingNode binding)

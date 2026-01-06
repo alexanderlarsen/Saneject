@@ -28,7 +28,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
                     _ => throw new ArgumentOutOfRangeException(nameof(binding), binding, null)
                 })
                 .ToList();
-            
+
             Scope = scope;
         }
 
@@ -37,7 +37,6 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         public Type Type { get; }
         public IReadOnlyCollection<BindingNode> BindingNodes { get; }
         public Scope Scope { get; }
-        
 
         private static ScopeNode FindParentScopeNode(TransformNode transformNode)
         {
@@ -46,7 +45,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
             while (currentTransformNode != null)
             {
-                if (currentTransformNode.DeclaredScopeNode == null || (UserSettings.UseContextIsolation && currentTransformNode.ContextIdentity != transformNode.ContextIdentity))
+                if (currentTransformNode.DeclaredScopeNode == null || (UserSettings.UseContextIsolation && !currentTransformNode.ContextIdentity.Equals(transformNode.ContextIdentity)))
                 {
                     currentTransformNode = currentTransformNode.ParentTransformNode;
                     continue;

@@ -3,7 +3,7 @@ using System.Collections;
 using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
-using Plugins.Saneject.Experimental.Editor.Utils.Plugins.Saneject.Experimental.Editor.Utils;
+using Plugins.Saneject.Experimental.Editor.Utils;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
