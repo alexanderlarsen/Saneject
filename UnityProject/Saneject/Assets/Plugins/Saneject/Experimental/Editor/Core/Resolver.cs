@@ -115,10 +115,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 BindingNode binding = currentScope.BindingNodes
                     .Where(b => b is not GlobalComponentBindingNode)
                     .Where(MatchesRequestedType)
-                    .Where(MatchesCollection)
-                    .Where(MatchesTargetType)
-                    .Where(MatchesMemberName)
-                    .Where(MatchesId)
+                    .Where(MatchesIsCollection)
+                    .Where(MatchesTargetTypeQualifiers)
+                    .Where(MatchesMemberNameQualifiers)
+                    .Where(MatchesIdQualifiers)
                     .FirstOrDefault(session.ValidBindings.Contains);
 
                 if (binding != null)
@@ -136,24 +136,24 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     : bindingNode.ConcreteType == fieldNode.RequestedType;
             }
 
-            bool MatchesCollection(BindingNode bindingNode)
+            bool MatchesIsCollection(BindingNode bindingNode)
             {
                 return bindingNode.IsCollectionBinding == fieldNode.IsCollection;
             }
 
-            bool MatchesTargetType(BindingNode bindingNode)
+            bool MatchesTargetTypeQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.TargetTypeQualifiers.Count == 0 ||
                        bindingNode.TargetTypeQualifiers.Contains(fieldNode.DeclaringType);
             }
 
-            bool MatchesMemberName(BindingNode bindingNode)
+            bool MatchesMemberNameQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.MemberNameQualifiers.Count == 0 ||
                        bindingNode.MemberNameQualifiers.Contains(fieldNode.MemberName);
             }
 
-            bool MatchesId(BindingNode bindingNode)
+            bool MatchesIdQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.IdQualifiers.Count == 0 ||
                        bindingNode.IdQualifiers.Contains(fieldNode.InjectId);

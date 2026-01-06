@@ -119,6 +119,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 _ => throw new ArgumentOutOfRangeException()
             };
 
+            if (dependencies != null && bindingNode.Filters.Count > 0)
+                dependencies = dependencies.Where(component => bindingNode.Filters.All(f => f(component)));
+
             return dependencies ?? Enumerable.Empty<Component>();
         }
 
