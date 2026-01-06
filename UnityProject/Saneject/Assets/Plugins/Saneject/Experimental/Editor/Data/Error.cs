@@ -43,7 +43,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             return new Error
             (
                 ErrorType.MissingBinding,
-                $"Missing binding {expectedBindingSignature} {SignatureBuilder.GetFieldSignature(fieldNode)}",
+                $"Missing binding, e.g., {expectedBindingSignature} {SignatureBuilder.GetFieldSignature(fieldNode)}",
                 fieldNode.ComponentNode.TransformNode.Transform
             );
         }

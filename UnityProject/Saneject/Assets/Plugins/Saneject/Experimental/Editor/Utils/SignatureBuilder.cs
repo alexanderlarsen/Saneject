@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
 
             sb.Append(binding switch
             {
-                GlobalComponentBindingNode => "BindGlobalComponent",
+                GlobalComponentBindingNode => "BindGlobal",
                 AssetBindingNode => "BindAsset",
                 ComponentBindingNode => "BindComponent",
                 _ => throw new ArgumentOutOfRangeException(nameof(binding), binding, null)
@@ -127,8 +127,8 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             if (binding.Filters.Count > 0)
                 sb.Append(".Where(...)");
 
-            sb.Append($" [Scope: {binding.ScopeNode.Type.Name}]");
             sb.Append("</b>");
+            sb.Append($" [Scope: {binding.ScopeNode.Type.Name}]");
 
             return sb.ToString();
         }
@@ -153,20 +153,12 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             if (isCollection)
                 sb.Append("s");
 
-            sb.Append($"<{requestedType.Name}>()");
+            sb.Append($"<{requestedType.Name}>()</b>");
 
-            if (isComponentType)
-            {
-                sb.Append("</b> or <b>BindGlobalComponent");
-
-                if (isCollection)
-                    sb.Append("s");
-
-                sb.Append($"<{requestedType.Name}>()");
-            }
+            if (isComponentType && !isCollection)
+                sb.Append($" or <b>BindGlobal<{requestedType.Name}>()</b>");
 
             sb.Append($" [Nearest scope: {scopeNode.Type.Name}]");
-            sb.Append("</b>");
 
             return sb.ToString();
         }
@@ -174,7 +166,6 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
         public static string GetFieldSignature(FieldNode fieldNode)
         {
             StringBuilder sb = new();
-            sb.Append("<b>");
             sb.Append("[Injected ");
             sb.Append(fieldNode.IsPropertyBackingField ? "property" : "field");
             sb.Append($": {fieldNode.DisplayPath}");
@@ -186,7 +177,6 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             }
 
             sb.Append("]");
-            sb.Append("</b>");
             return sb.ToString();
         }
     }
