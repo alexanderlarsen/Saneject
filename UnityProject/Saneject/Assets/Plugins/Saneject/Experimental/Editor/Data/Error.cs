@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
         public static Error CreateMissingBindingError(FieldNode fieldNode)
         {
-            string expectedBindingSignature = SignatureBuilder.GetPartialBindingSignature(fieldNode.RequestedType, fieldNode.IsCollection, fieldNode.ComponentNode.TransformNode.NearestScopeNode);
+            string expectedBindingSignature = SignatureBuilder.GetLossyBindingSignature(fieldNode.RequestedType, fieldNode.IsCollection, fieldNode.ComponentNode.TransformNode.NearestScopeNode);
 
             return new Error
             (
@@ -54,7 +54,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             StringBuilder msg = new();
 
-            msg.Append($"Missing dependency {SignatureBuilder.GetBindingSignature(bindingNode)}");
+            msg.Append($"Missing dependency for binding {SignatureBuilder.GetBindingSignature(bindingNode)}");
 
             if (rejectedTypes is { Count: > 0 })
             {
@@ -79,7 +79,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             StringBuilder msg = new();
 
-            msg.Append($"Missing dependency {SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetFieldSignature(fieldNode)}");
+            msg.Append($"Missing dependency for binding {SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetFieldSignature(fieldNode)}");
 
             if (rejectedTypes is { Count: > 0 })
             {

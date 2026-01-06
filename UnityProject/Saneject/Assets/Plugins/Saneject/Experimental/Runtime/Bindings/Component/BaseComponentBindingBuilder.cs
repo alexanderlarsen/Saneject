@@ -357,16 +357,16 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         #endregion
 
-        #region CUSTOM TARGET LOCATOR METHODS
+        #region CUSTOM TRANSFORM LOCATOR METHODS
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> From(Transform target)
+        public ComponentFilterBuilder<TComponent> From(Transform transform)
         {
             binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
             binding.SearchDirection = SearchDirection.Self;
-            binding.CustomTargetTransform = target;
+            binding.CustomTargetTransform = transform;
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
@@ -374,11 +374,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Locate the <see cref="Component" /> on the direct parent of the specified <see cref="Transform" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromParentOf(Transform target)
+        public ComponentFilterBuilder<TComponent> FromParentOf(Transform transform)
         {
             binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
             binding.SearchDirection = SearchDirection.Parent;
-            binding.CustomTargetTransform = target;
+            binding.CustomTargetTransform = transform;
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
@@ -402,11 +402,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />'s first direct child <see cref="Transform" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromFirstChildOf(Transform target)
+        public ComponentFilterBuilder<TComponent> FromFirstChildOf(Transform transform)
         {
             binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
             binding.SearchDirection = SearchDirection.FirstChild;
-            binding.CustomTargetTransform = target;
+            binding.CustomTargetTransform = transform;
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
@@ -414,11 +414,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />'s last direct child <see cref="Transform" />.
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromLastChildOf(Transform target)
+        public ComponentFilterBuilder<TComponent> FromLastChildOf(Transform transform)
         {
             binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
             binding.SearchDirection = SearchDirection.LastChild;
-            binding.CustomTargetTransform = target;
+            binding.CustomTargetTransform = transform;
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
@@ -427,12 +427,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />'s direct child <see cref="Transform" /> with index.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromChildWithIndexOf(
-            Transform target,
+            Transform transform,
             int index)
         {
             binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
             binding.SearchDirection = SearchDirection.ChildAtIndex;
-            binding.CustomTargetTransform = target;
+            binding.CustomTargetTransform = transform;
             binding.ChildIndexForSearch = index;
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
@@ -443,12 +443,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromDescendantsOf(
-            Transform target,
+            Transform transform,
             bool includeSelf = false)
         {
             binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
             binding.SearchDirection = SearchDirection.Descendants;
-            binding.CustomTargetTransform = target;
+            binding.CustomTargetTransform = transform;
             binding.IncludeSelfInSearch = includeSelf;
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
@@ -457,11 +457,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Locate the <see cref="Component" /> on any sibling <see cref="Transform" /> of the specified <see cref="Transform" /> (other children of the same parent).
         /// </summary>
-        public ComponentFilterBuilder<TComponent> FromSiblingsOf(Transform target)
+        public ComponentFilterBuilder<TComponent> FromSiblingsOf(Transform transform)
         {
             binding.SearchOrigin = SearchOrigin.CustomTargetTransform;
             binding.SearchDirection = SearchDirection.Siblings;
-            binding.CustomTargetTransform = target;
+            binding.CustomTargetTransform = transform;
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
