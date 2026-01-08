@@ -3,15 +3,30 @@ using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 
 namespace Plugins.Saneject.Experimental.Editor.Utils
 {
-    public static class FieldNodeUtility
+    public static class InjectionSiteUtility
     {
-        public static string GetPath(FieldNode fieldNode)
+        public static string GetInjectionSitePath(InjectionSiteNode injectionSiteNode)
+        {
+            return injectionSiteNode switch
+            {
+                FieldNode fieldNode => GetFieldPath(fieldNode),
+                MethodNode methodNode => GetMethodPath(methodNode),
+                _ => throw new ArgumentOutOfRangeException(nameof(injectionSiteNode), injectionSiteNode, null)
+            };
+        }
+        
+        public static string GetFieldPath(FieldNode fieldNode)
         {
             ComponentNode componentNode = fieldNode.ComponentNode;
             string goPath = GetHierarchyPath(componentNode.TransformNode);
             string componentName = componentNode.Component.GetType().Name;
             string memberName = StripPropertyBackingFieldPrefix(fieldNode.MemberName);
             return $"{goPath}/{componentName}/{memberName}";
+        }
+
+        public static string GetMethodPath(MethodNode methodNode)
+        {
+            return "";
         }
 
         private static string StripPropertyBackingFieldPrefix(string memberName)

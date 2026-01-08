@@ -35,6 +35,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     .OfType<GlobalComponentBindingNode>()
                     .Where(session.ValidBindings.Contains);
 
+            Dictionary<ScopeNode, HashSet<Object>> globalMap = new();
+
             foreach (GlobalComponentBindingNode binding in globalBindings)
             {
                 Locator.LocateDependencies
@@ -45,18 +47,27 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     out HashSet<Type> rejectedTypes
                 );
 
-                List<Object> resolved = dependencies.ToList();
+                Object resolved = dependencies.FirstOrDefault();
 
-                if (resolved is not { Count: > 0 })
+                if (resolved == null)
                     session.RegisterError(Error.CreateMissingGlobalDependencyError
                     (
                         binding,
                         rejectedTypes
                     ));
 
+                if (!globalMap.TryGetValue(binding.ScopeNode, out HashSet<Object> dependencySet))
+                {
+                    dependencySet = new HashSet<Object>();
+                    globalMap.Add(binding.ScopeNode, dependencySet);
+                }
+
+                dependencySet.Add(resolved);
                 session.RegisterUsedBinding(binding);
-                session.RegisterGlobalDependency(binding.ScopeNode, resolved.FirstOrDefault());
             }
+
+            foreach ((ScopeNode scopeNode, HashSet<Object> dependencies) in globalMap)
+                session.RegisterGlobalDependencies(scopeNode, dependencies);
         }
 
         private static void ResolveField(
@@ -92,7 +103,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
                 session.RegisterUsedBinding(bindingNode);
                 session.RegisterFieldDependencies(fieldNode, array);
-            }
+            } 
             else
             {
                 session.RegisterError(Error.CreateMissingBindingError(fieldNode));

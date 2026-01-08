@@ -5,25 +5,23 @@ using Plugins.Saneject.Experimental.Editor.Extensions;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
-    public class FieldNode : InjectionSiteNode
+    public class MethodParameterNode
     {
-        public FieldNode(
-            FieldInfo fieldInfo,
-            ComponentNode componentNode) : base(fieldInfo, componentNode)
+        public MethodParameterNode(
+            ParameterInfo parameterInfo,
+            MethodNode methodNode)
         {
-            FieldInfo = fieldInfo;
-            RequestedType = fieldInfo.FieldType.ResolveElementType();
+            MethodNode = methodNode;
+            RequestedType = parameterInfo.ParameterType.ResolveElementType();
             IsInterface = RequestedType.IsInterface;
-            IsPropertyBackingField = fieldInfo.Name.Contains(">k__BackingField");
-            TypeShape = fieldInfo.FieldType.GetTypeShape();
+            TypeShape = parameterInfo.ParameterType.GetTypeShape();
             IsCollection = TypeShape is TypeShape.Array or TypeShape.List;
         }
 
-        public FieldInfo FieldInfo { get; } 
+        public MethodNode MethodNode { get; }
         public Type RequestedType { get; }
         public TypeShape TypeShape { get; }
         public bool IsCollection { get; }
         public bool IsInterface { get; }
-        public bool IsPropertyBackingField { get; }
     }
 }

@@ -11,11 +11,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 {
     public class InjectionSession
     {
-        private readonly Dictionary<FieldNode, IEnumerable<Object>> fieldResolutionMap = new();
-        private readonly Dictionary<ScopeNode, List<Object>> globalResolutionMap = new();
-
         private readonly HashSet<BindingNode> usedBindings = new();
         private readonly HashSet<BindingNode> validBindings = new();
+        private readonly Dictionary<FieldNode, IReadOnlyList<Object>> fieldResolutionMap = new();
+        private readonly Dictionary<MethodNode, IReadOnlyList<Object>> methodResolutionMap = new();
+        private readonly Dictionary<ScopeNode, IReadOnlyList<Object>> globalResolutionMap = new();
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
         private readonly List<Error> errors = new();
         private readonly Stopwatch stopwatch = new();
@@ -28,44 +28,25 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             Graph = new InjectionGraph(startTransforms);
         }
 
-        public string Id { get; }
         public InjectionGraph Graph { get; }
+        public string Id { get; }
+        public long DurationMilliseconds => stopwatch.ElapsedMilliseconds;
 
         public IReadOnlyCollection<BindingNode> UsedBindings => usedBindings;
         public IReadOnlyCollection<BindingNode> ValidBindings => validBindings;
+        public IReadOnlyDictionary<FieldNode, IReadOnlyList<Object>> FieldResolutionMap => fieldResolutionMap;
+        public IReadOnlyDictionary<MethodNode, IReadOnlyList<Object>> MethodResolutionMap => methodResolutionMap;
+        public IReadOnlyDictionary<ScopeNode, IReadOnlyList<Object>> GlobalResolutionMap => globalResolutionMap;
         public IReadOnlyCollection<Error> Errors => errors;
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
-
-        public IReadOnlyDictionary<FieldNode, IReadOnlyList<Object>> FieldResolutionMap => fieldResolutionMap.ToDictionary(
-            kvp => kvp.Key,
-            kvp => (IReadOnlyList<Object>)kvp.Value
-        );
-
-        public IReadOnlyDictionary<ScopeNode, IReadOnlyList<Object>> GlobalResolutionMap => globalResolutionMap.ToDictionary
-        (
-            kvp => kvp.Key,
-            kvp => (IReadOnlyList<Object>)kvp.Value
-        );
-
-        public long DurationMilliseconds => stopwatch.ElapsedMilliseconds;
+        
         public bool IsSessionActive { get; private set; }
 
         public void EndSession()
         {
+            EnsureActiveSession();
             stopwatch.Stop();
             IsSessionActive = false;
-        }
-
-        public void RegisterGlobalDependency(
-            ScopeNode scopeNode,
-            Object globalObject)
-        {
-            EnsureActiveSession();
-
-            if (!globalResolutionMap.ContainsKey(scopeNode))
-                globalResolutionMap[scopeNode] = new List<Object>();
-
-            globalResolutionMap[scopeNode].Add(globalObject);
         }
 
         public void RegisterValidBinding(BindingNode bindingNode)
@@ -92,12 +73,28 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             this.errors.AddRange(errors);
         }
 
+        public void RegisterGlobalDependencies(
+            ScopeNode scopeNode,
+            IEnumerable<Object> dependencies)
+        {
+            EnsureActiveSession();
+            globalResolutionMap[scopeNode] = dependencies.ToList();
+        }
+
         public void RegisterFieldDependencies(
             FieldNode fieldNode,
             IEnumerable<Object> dependencies)
         {
             EnsureActiveSession();
-            fieldResolutionMap[fieldNode] = dependencies;
+            fieldResolutionMap[fieldNode] = dependencies.ToList();
+        }
+
+        public void RegisterMethodDependencies(
+            MethodNode methodNode,
+            IEnumerable<Object> dependencies)
+        {
+            EnsureActiveSession();
+            methodResolutionMap[methodNode] = dependencies.ToList();
         }
 
         public void RegisterCreatedProxyAsset(

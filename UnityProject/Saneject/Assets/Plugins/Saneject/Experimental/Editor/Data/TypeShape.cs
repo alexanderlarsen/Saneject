@@ -1,6 +1,6 @@
 ﻿namespace Plugins.Saneject.Experimental.Editor.Data
 {
-    public enum FieldShape
+    public enum TypeShape
     {
         Single,
         Array,

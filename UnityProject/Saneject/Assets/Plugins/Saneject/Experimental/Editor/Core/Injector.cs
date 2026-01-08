@@ -70,14 +70,14 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (depsArray.Length == 0)
                 return null;
 
-            switch (fieldNode.FieldShape)
+            switch (fieldNode.TypeShape)
             {
-                case FieldShape.Single:
+                case TypeShape.Single:
                 {
                     return depsArray.First();
                 }
 
-                case FieldShape.Array:
+                case TypeShape.Array:
                 {
                     Array array = Array.CreateInstance(fieldNode.RequestedType, depsArray.Length);
 
@@ -87,7 +87,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     return array;
                 }
 
-                case FieldShape.List:
+                case TypeShape.List:
                 {
                     IList list = (IList)Activator.CreateInstance(fieldNode.FieldInfo.FieldType);
 
