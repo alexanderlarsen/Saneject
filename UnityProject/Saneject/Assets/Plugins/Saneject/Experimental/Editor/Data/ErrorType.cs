@@ -3,8 +3,9 @@
     public enum ErrorType
     {
         InvalidBinding,
-        MissingBinding,
-        MissingGlobalDependency,
-        MissingDependency
+        MissingBinding, 
+        MissingGlobalObject,
+        MissingDependency,
+        MethodInvocationException
     }
 }

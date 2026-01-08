@@ -15,37 +15,40 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class Locator
     {
-        public static void LocateDependencies(
+        public static void LocateDependencyCandidates(
             BindingNode bindingNode,
             TransformNode injectionTargetNode,
-            out IEnumerable<Object> dependencies,
+            out Object[] candidates,
             out HashSet<Type> rejectedTypes)
         {
+            
+            
+            
             rejectedTypes = new HashSet<Type>();
 
-            IEnumerable<Object> allDependencies = bindingNode switch
+            IEnumerable<Object> allCandidates = bindingNode switch
             {
-                AssetBindingNode assetBindingNode => LocateAssetDependencies(assetBindingNode),
-                ComponentBindingNode componentBindingNode => LocateComponentDependencies(componentBindingNode, injectionTargetNode),
+                AssetBindingNode assetBindingNode => LocateAssetCandidates(assetBindingNode),
+                ComponentBindingNode componentBindingNode => LocateComponentCandidates(componentBindingNode, injectionTargetNode),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            List<Object> validDependencies = new();
+            List<Object> validCandidates = new();
 
-            foreach (Object dependency in allDependencies)
+            foreach (Object candidate in allCandidates)
             {
-                ContextIdentity dependencyContext = new(dependency);
+                ContextIdentity candidateContext = new(candidate);
 
-                if (!UserSettings.UseContextIsolation || dependencyContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
-                    validDependencies.Add(dependency);
+                if (!UserSettings.UseContextIsolation || candidateContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
+                    validCandidates.Add(candidate);
                 else
-                    rejectedTypes.Add(dependency.GetType());
+                    rejectedTypes.Add(candidate.GetType());
             }
 
-            dependencies = validDependencies;
+            candidates = validCandidates.ToArray();
         }
 
-        private static IEnumerable<Object> LocateComponentDependencies(
+        private static IEnumerable<Object> LocateComponentCandidates(
             ComponentBindingNode bindingNode,
             TransformNode injectionTargetNode)
         {
@@ -66,7 +69,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 _ => null
             };
 
-            IEnumerable<Component> dependencies = bindingNode.SearchDirection switch
+            IEnumerable<Component> candidates = bindingNode.SearchDirection switch
             {
                 SearchDirection.Self =>
                     origin?
@@ -119,18 +122,18 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            if (dependencies != null && bindingNode.DependencyFilters.Count > 0)
-                dependencies = dependencies.Where(component => bindingNode.DependencyFilters.All(f => f.Filter(component)));
+            if (candidates != null && bindingNode.DependencyFilters.Count > 0)
+                candidates = candidates.Where(component => bindingNode.DependencyFilters.All(f => f.Filter(component)));
 
-            return dependencies ?? Enumerable.Empty<Component>();
+            return candidates ?? Enumerable.Empty<Component>();
         }
 
-        private static IEnumerable<Object> LocateAssetDependencies(AssetBindingNode bindingNode)
+        private static IEnumerable<Object> LocateAssetCandidates(AssetBindingNode bindingNode)
         {
             Type targetType = bindingNode.InterfaceType ?? bindingNode.ConcreteType;
             string path = bindingNode.Path;
 
-            IEnumerable<Object> dependencies = bindingNode.AssetLoadType switch
+            IEnumerable<Object> candidates = bindingNode.AssetLoadType switch
             {
                 AssetLoadType.Resources =>
                     Resources.Load(path, targetType)
@@ -158,10 +161,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            if (dependencies != null && bindingNode.DependencyFilters.Count > 0)
-                dependencies = dependencies.Where(asset => bindingNode.DependencyFilters.All(f => f.Filter(asset)));
+            if (candidates != null && bindingNode.DependencyFilters.Count > 0)
+                candidates = candidates.Where(asset => bindingNode.DependencyFilters.All(f => f.Filter(asset)));
 
-            return dependencies ?? Enumerable.Empty<Object>();
+            return candidates ?? Enumerable.Empty<Object>();
         }
 
         private static IEnumerable<T> ToEnumerable<T>(this T item)

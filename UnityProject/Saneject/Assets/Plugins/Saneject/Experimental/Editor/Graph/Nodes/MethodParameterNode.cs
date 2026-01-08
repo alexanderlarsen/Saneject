@@ -12,6 +12,8 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             MethodNode methodNode)
         {
             MethodNode = methodNode;
+            ParameterName = parameterInfo.Name;
+            ParameterType = parameterInfo.ParameterType;
             RequestedType = parameterInfo.ParameterType.ResolveElementType();
             IsInterface = RequestedType.IsInterface;
             TypeShape = parameterInfo.ParameterType.GetTypeShape();
@@ -19,6 +21,8 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         }
 
         public MethodNode MethodNode { get; }
+        public string ParameterName { get; }
+        public Type ParameterType { get; }
         public Type RequestedType { get; }
         public TypeShape TypeShape { get; }
         public bool IsCollection { get; }

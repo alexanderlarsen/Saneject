@@ -9,17 +9,17 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class BindingValidator
     {
-        public static void ValidateBindings(InjectionSession session)
+        public static void ValidateBindings(InjectionContext context)
         {
             Dictionary<Type, GlobalComponentBindingNode> existingGlobalMap = new();
 
-            foreach (BindingNode binding in session.Graph.EnumerateAllBindingNodes())
-                ValidateBinding(binding, session, existingGlobalMap);
+            foreach (BindingNode binding in context.Graph.EnumerateAllBindingNodes())
+                ValidateBinding(binding, context, existingGlobalMap);
         }
 
         private static void ValidateBinding(
             BindingNode binding,
-            InjectionSession session,
+            InjectionContext context,
             Dictionary<Type, GlobalComponentBindingNode> existingGlobals)
         {
             List<Error> errors = new();
@@ -85,10 +85,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (!binding.LocatorStrategySpecified)
                 errors.Add(Error.CreateInvalidBindingError("Binding has no locator strategy (e.g. FromScopeSelf, FromAnywhereInScene).", binding));
 
-            session.RegisterErrors(errors);
+            context.RegisterErrors(errors);
 
             if (errors.Count == 0)
-                session.RegisterValidBinding(binding);
+                context.RegisterValidBinding(binding);
         }
     }
 }

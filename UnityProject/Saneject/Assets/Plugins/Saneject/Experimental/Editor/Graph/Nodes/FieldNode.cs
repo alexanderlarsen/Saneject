@@ -12,6 +12,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             ComponentNode componentNode) : base(fieldInfo, componentNode)
         {
             FieldInfo = fieldInfo;
+            FieldType = fieldInfo.FieldType;
             RequestedType = fieldInfo.FieldType.ResolveElementType();
             IsInterface = RequestedType.IsInterface;
             IsPropertyBackingField = fieldInfo.Name.Contains(">k__BackingField");
@@ -20,6 +21,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         }
 
         public FieldInfo FieldInfo { get; } 
+        public Type FieldType { get; }
         public Type RequestedType { get; }
         public TypeShape TypeShape { get; }
         public bool IsCollection { get; }

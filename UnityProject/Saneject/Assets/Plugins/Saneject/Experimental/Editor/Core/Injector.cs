@@ -1,33 +1,31 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class Injector
     {
-        public static void InjectDependencies(InjectionSession session)
+        public static void InjectDependencies(InjectionContext context)
         {
-            InjectGlobals(session);
-            InjectFields(session);
+            InjectScopeGlobals(context);
+            InjectFieldsAndMethods(context);
         }
 
-        private static void InjectGlobals(InjectionSession session)
+        private static void InjectScopeGlobals(InjectionContext context)
         {
-            IEnumerable<ScopeNode> allScopes = session.Graph
+            IEnumerable<ScopeNode> allScopes = context.Graph
                 .EnumerateAllTransformNodes()
                 .Select(scopeNode => scopeNode.DeclaredScopeNode)
                 .Where(scopeNode => scopeNode != null);
 
             foreach (ScopeNode scopeNode in allScopes)
             {
-                IEnumerable<Component> globalObjects = session.GlobalResolutionMap.TryGetValue(scopeNode, out IReadOnlyList<Object> objects)
+                IEnumerable<Component> globalObjects = context.ScopeGlobalResolutionMap.TryGetValue(scopeNode, out IReadOnlyList<object> objects)
                     ? objects.Cast<Component>()
                     : Enumerable.Empty<Component>();
 
@@ -36,69 +34,36 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             }
         }
 
-        private static void InjectFields(InjectionSession session)
+        private static void InjectFieldsAndMethods(InjectionContext context)
         {
-            IEnumerable<ComponentNode> allComponents = session.Graph
+            IEnumerable<ComponentNode> allComponents = context.Graph
                 .EnumerateAllTransformNodes()
                 .SelectMany(node => node.ComponentNodes);
 
             foreach (ComponentNode componentNode in allComponents)
             {
                 foreach (FieldNode fieldNode in componentNode.FieldNodes)
-                {
-                    IEnumerable<Object> dependencies = session.FieldResolutionMap.TryGetValue(fieldNode, out IReadOnlyList<Object> objects)
-                        ? objects
-                        : Enumerable.Empty<Object>();
-
                     fieldNode.FieldInfo.SetValue
                     (
                         componentNode.Component,
-                        ConvertDependencies(fieldNode, dependencies)
+                        context.FieldResolutionMap[fieldNode]
                     );
-                }
+
+                foreach (MethodNode methodNode in componentNode.MethodNodes)
+                    try
+                    {
+                        methodNode.MethodInfo.Invoke
+                        (
+                            componentNode.Component,
+                            context.MethodResolutionMap[methodNode].ToArray()
+                        );
+                    }
+                    catch (Exception e)
+                    {
+                        context.RegisterError(Error.CreateMethodInvocationError(methodNode, e));
+                    }
 
                 EditorUtility.SetDirty(componentNode.Component);
-            }
-        }
-
-        private static object ConvertDependencies(
-            FieldNode fieldNode,
-            IEnumerable<Object> dependencies)
-        {
-            Object[] depsArray = dependencies.ToArray();
-
-            if (depsArray.Length == 0)
-                return null;
-
-            switch (fieldNode.TypeShape)
-            {
-                case TypeShape.Single:
-                {
-                    return depsArray.First();
-                }
-
-                case TypeShape.Array:
-                {
-                    Array array = Array.CreateInstance(fieldNode.RequestedType, depsArray.Length);
-
-                    for (int i = 0; i < depsArray.Length; i++)
-                        array.SetValue(depsArray[i], i);
-
-                    return array;
-                }
-
-                case TypeShape.List:
-                {
-                    IList list = (IList)Activator.CreateInstance(fieldNode.FieldInfo.FieldType);
-
-                    foreach (Object d in depsArray)
-                        list.Add(d);
-
-                    return list;
-                }
-
-                default:
-                    throw new ArgumentOutOfRangeException();
             }
         }
     }

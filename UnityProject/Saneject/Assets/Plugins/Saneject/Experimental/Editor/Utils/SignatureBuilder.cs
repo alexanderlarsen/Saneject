@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
         public static string GetBindingSignature(BindingNode binding)
         {
             StringBuilder sb = new();
-            sb.Append("<b>");
+            sb.Append($"[Binding: ");
 
             sb.Append(binding switch
             {
@@ -60,7 +60,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
 
                     if (componentBinding.SearchOrigin == SearchOrigin.Scene && componentBinding.SearchDirection == SearchDirection.Anywhere)
                     {
-                        sb.Append($".FromAnywhere({nameof(FindObjectsInactive)}.{componentBinding.FindObjectsInactive}, {nameof(FindObjectsSortMode)}.{componentBinding.FindObjectsSortMode})");
+                        sb.Append($".FromAnywhere()");
                         break;
                     }
 
@@ -143,13 +143,12 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
                     }
                 }
 
-            sb.Append("</b>");
-            sb.Append($" [Scope: {binding.ScopeNode.Type.Name}]");
+            sb.Append($" | Scope: {binding.ScopeNode.Type.Name}]");
 
             return sb.ToString();
         }
 
-        public static string GetLossyBindingSignature(
+        public static string GetHypotheticalBindingSignature(
             Type requestedType,
             bool isCollection,
             ScopeNode scopeNode)
@@ -159,7 +158,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             bool isComponentType = typeof(Component).IsAssignableFrom(requestedType);
             bool isAssetType = typeof(Object).IsAssignableFrom(requestedType);
 
-            sb.Append("<b>");
+            sb.Append("[Binding: ");
 
             if (isComponentType)
                 sb.Append("BindComponent");
@@ -169,12 +168,8 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
             if (isCollection)
                 sb.Append("s");
 
-            sb.Append($"<{requestedType.Name}>()</b>");
-
-            if (isComponentType && !isCollection)
-                sb.Append($" or <b>BindGlobal<{requestedType.Name}>()</b>");
-
-            sb.Append($" [Nearest scope: {scopeNode.Type.Name}]");
+            sb.Append($"<{requestedType.Name}>()");
+            sb.Append($" | Nearest scope: {scopeNode.Type.Name}]");
 
             return sb.ToString();
         }
@@ -182,18 +177,51 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
         public static string GetFieldSignature(FieldNode fieldNode)
         {
             StringBuilder sb = new();
-            sb.Append("[Injected ");
-            sb.Append(fieldNode.IsPropertyBackingField ? "property" : "field");
+            sb.Append("[");
+            sb.Append(fieldNode.IsPropertyBackingField ? "Property" : "Field");
             sb.Append($": {fieldNode.DisplayPath}");
 
             if (!string.IsNullOrWhiteSpace(fieldNode.InjectId))
             {
-                sb.Append(" | ID: ");
+                sb.Append(" | Inject ID: ");
                 sb.Append(fieldNode.InjectId);
             }
 
             sb.Append("]");
             return sb.ToString();
         }
+
+        public static string GetMethodSignature(MethodNode methodNode)
+        {
+            StringBuilder sb = new();
+            sb.Append($"[Method: {methodNode.DisplayPath}");
+
+            if (!string.IsNullOrWhiteSpace(methodNode.InjectId))
+            {
+                sb.Append(" | Inject ID: ");
+                sb.Append(methodNode.InjectId);
+            }
+
+            sb.Append("]");
+            return sb.ToString();
+        }
+        
+        public static string GetMethodParameterSignature(MethodParameterNode parameterNode)
+        {
+            StringBuilder sb = new();
+            sb.Append($"[Method: {parameterNode.MethodNode.DisplayPath}");
+
+            if (!string.IsNullOrWhiteSpace(parameterNode.MethodNode.InjectId))
+            {
+                sb.Append(" | Inject ID: ");
+                sb.Append(parameterNode.MethodNode.InjectId);
+            }
+
+            sb.Append($" | Parameter: {parameterNode.ParameterName}");
+
+            sb.Append("]");
+            return sb.ToString();
+        }
+         
     }
 }

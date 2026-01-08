@@ -15,11 +15,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class ProxyProcessor
     {
-        public static ProxyCreationResult CreateProxies(InjectionSession session)
+        public static ProxyCreationResult CreateProxies(InjectionContext context)
         {
-            IReadOnlyCollection<Type> concreteTypes = session.Graph
+            IReadOnlyCollection<Type> concreteTypes = context.Graph
                 .EnumerateAllBindingNodes()
-                .Where(bindingNode => session.ValidBindings.Contains(bindingNode))
+                .Where(bindingNode => context.ValidBindings.Contains(bindingNode))
                 .Where(bindingNode => bindingNode is ComponentBindingNode { ResolveFromProxy: true })
                 .Select(bindingNode => bindingNode.ConcreteType)
                 .Where(type => type != null)
@@ -28,7 +28,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (TryCreateProxyStubs(concreteTypes))
                 return ProxyCreationResult.DomainReloadRequired;
 
-            CreateMissingProxyAssets(session, concreteTypes);
+            CreateMissingProxyAssets(context, concreteTypes);
             return ProxyCreationResult.Ready;
         }
 
@@ -76,7 +76,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         }
 
         private static void CreateMissingProxyAssets(
-            InjectionSession session,
+            InjectionContext context,
             IReadOnlyCollection<Type> concreteTypes)
         {
             string directory = UserSettings.ProxyAssetGenerationFolder;
@@ -93,7 +93,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 ScriptableObject instance = ScriptableObject.CreateInstance(proxyType);
                 AssetDatabase.CreateAsset(instance, path);
                 AssetDatabase.SaveAssets();
-                session.RegisterCreatedProxyAsset(instance, path);
+                context.RegisterCreatedProxyAsset(instance, path);
             }
         }
 

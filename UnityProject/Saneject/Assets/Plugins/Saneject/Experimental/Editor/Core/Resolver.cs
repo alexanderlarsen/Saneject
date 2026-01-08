@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
@@ -9,117 +10,189 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class Resolver
     {
-        public static void Resolve(InjectionSession session)
+        public static void Resolve(InjectionContext context)
         {
-            ResolveGlobals(session);
+            ResolveGlobals(context);
 
-            IEnumerable<ComponentNode> componentNodes = session.Graph
+            IEnumerable<ComponentNode> componentNodes = context.Graph
                 .EnumerateAllTransformNodes()
                 .SelectMany(transformNode => transformNode.ComponentNodes);
 
             foreach (ComponentNode componentNode in componentNodes)
             {
                 foreach (FieldNode fieldNode in componentNode.FieldNodes)
-                    ResolveField(fieldNode, session);
+                    ResolveField(fieldNode, context);
 
                 foreach (MethodNode methodNode in componentNode.MethodNodes)
-                    ResolveMethod(methodNode, session);
+                    ResolveMethod(methodNode, context);
             }
         }
 
-        private static void ResolveGlobals(InjectionSession session)
+        private static void ResolveGlobals(InjectionContext context)
         {
             IEnumerable<GlobalComponentBindingNode> globalBindings =
-                session.Graph
+                context.Graph
                     .EnumerateAllBindingNodes()
                     .OfType<GlobalComponentBindingNode>()
-                    .Where(session.ValidBindings.Contains);
+                    .Where(context.ValidBindings.Contains);
 
-            Dictionary<ScopeNode, HashSet<Object>> globalMap = new();
+            Dictionary<ScopeNode, HashSet<object>> globalMap = new();
 
             foreach (GlobalComponentBindingNode binding in globalBindings)
             {
-                Locator.LocateDependencies
+                Locator.LocateDependencyCandidates
                 (
                     binding,
                     injectionTargetNode: binding.ScopeNode.TransformNode,
-                    out IEnumerable<Object> dependencies,
+                    out Object[] candidates,
                     out HashSet<Type> rejectedTypes
                 );
 
-                Object resolved = dependencies.FirstOrDefault();
-
-                if (resolved == null)
-                    session.RegisterError(Error.CreateMissingGlobalDependencyError
+                if (candidates is not { Length: > 0 })
+                    context.RegisterError(Error.CreateMissingGlobalDependencyError
                     (
                         binding,
                         rejectedTypes
                     ));
 
-                if (!globalMap.TryGetValue(binding.ScopeNode, out HashSet<Object> dependencySet))
+                if (!globalMap.TryGetValue(binding.ScopeNode, out HashSet<object> dependencySet))
                 {
-                    dependencySet = new HashSet<Object>();
+                    dependencySet = new HashSet<object>();
                     globalMap.Add(binding.ScopeNode, dependencySet);
                 }
 
+                object resolved = candidates.FirstOrDefault();
                 dependencySet.Add(resolved);
-                session.RegisterUsedBinding(binding);
+                context.RegisterUsedBinding(binding);
             }
 
-            foreach ((ScopeNode scopeNode, HashSet<Object> dependencies) in globalMap)
-                session.RegisterGlobalDependencies(scopeNode, dependencies);
+            foreach ((ScopeNode scopeNode, HashSet<object> dependencies) in globalMap)
+                context.RegisterGlobalDependencies(scopeNode, dependencies);
         }
 
         private static void ResolveField(
             FieldNode fieldNode,
-            InjectionSession session)
+            InjectionContext context)
         {
             BindingNode bindingNode = FindMatchingBindingNode
             (
-                fieldNode,
-                fieldNode.ComponentNode.TransformNode.NearestScopeNode,
-                session
+                currentScope: fieldNode.ComponentNode.TransformNode.NearestScopeNode,
+                context: context,
+                declaringType: fieldNode.DeclaringType,
+                requestedType: fieldNode.RequestedType,
+                isInterface: fieldNode.IsInterface,
+                isCollection: fieldNode.IsCollection,
+                memberName: fieldNode.MemberName,
+                injectId: fieldNode.InjectId
             );
 
-            if (bindingNode != null)
+            object resolved = null;
+
+            if (bindingNode == null)
             {
-                Locator.LocateDependencies
+                context.RegisterError(Error.CreateMissingBindingError(fieldNode));
+            }
+            else
+            {
+                Locator.LocateDependencyCandidates
                 (
                     bindingNode,
                     injectionTargetNode: fieldNode.ComponentNode.TransformNode,
-                    out IEnumerable<Object> dependencies,
+                    out Object[] candidates,
                     out HashSet<Type> rejectedTypes
                 );
 
-                Object[] array = dependencies.ToArray();
-
-                if (array is not { Length: > 0 })
-                    session.RegisterError(Error.CreateMissingDependencyError
+                if (candidates is not { Length: > 0 })
+                    context.RegisterError(Error.CreateMissingDependencyError
                     (
                         bindingNode,
                         fieldNode,
                         rejectedTypes
                     ));
 
-                session.RegisterUsedBinding(bindingNode);
-                session.RegisterFieldDependencies(fieldNode, array);
-            } 
-            else
-            {
-                session.RegisterError(Error.CreateMissingBindingError(fieldNode));
+                resolved = ResolveCandidates
+                (
+                    fieldNode.FieldType,
+                    fieldNode.RequestedType,
+                    fieldNode.TypeShape,
+                    candidates
+                );
+
+                context.RegisterUsedBinding(bindingNode);
             }
+
+            context.RegisterFieldDependency(fieldNode, resolved);
         }
 
         private static void ResolveMethod(
             MethodNode methodNode,
-            InjectionSession session)
+            InjectionContext context)
         {
+            List<object> resolvedParameters = new();
+
+            foreach (MethodParameterNode parameterNode in methodNode.ParameterNodes)
+            {
+                BindingNode bindingNode = FindMatchingBindingNode
+                (
+                    currentScope: methodNode.ComponentNode.TransformNode.NearestScopeNode,
+                    context: context,
+                    declaringType: methodNode.DeclaringType,
+                    requestedType: parameterNode.RequestedType,
+                    isInterface: parameterNode.IsInterface,
+                    isCollection: parameterNode.IsCollection,
+                    memberName: methodNode.MemberName,
+                    injectId: methodNode.InjectId
+                );
+
+                object resolved = null;
+
+                if (bindingNode == null)
+                {
+                    context.RegisterError(Error.CreateMissingBindingError(parameterNode));
+                }
+                else
+                {
+                    Locator.LocateDependencyCandidates
+                    (
+                        bindingNode,
+                        injectionTargetNode: methodNode.ComponentNode.TransformNode,
+                        out Object[] candidates,
+                        out HashSet<Type> rejectedTypes
+                    );
+
+                    if (candidates is not { Length: > 0 })
+                        context.RegisterError(Error.CreateMissingDependencyError
+                        (
+                            bindingNode,
+                            parameterNode,
+                            rejectedTypes
+                        ));
+
+                    resolved = ResolveCandidates
+                    (
+                        parameterNode.ParameterType,
+                        parameterNode.RequestedType,
+                        parameterNode.TypeShape,
+                        candidates
+                    );
+                }
+
+                resolvedParameters.Add(resolved);
+                context.RegisterUsedBinding(bindingNode);
+            }
+
+            context.RegisterMethodDependencies(methodNode, resolvedParameters);
         }
 
         private static BindingNode FindMatchingBindingNode(
-            FieldNode fieldNode,
             ScopeNode currentScope,
-            InjectionSession session)
+            InjectionContext context,
+            Type declaringType,
+            Type requestedType,
+            bool isInterface,
+            bool isCollection,
+            string memberName,
+            string injectId)
         {
             while (currentScope != null)
             {
@@ -130,7 +203,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     .Where(MatchesTargetTypeQualifiers)
                     .Where(MatchesMemberNameQualifiers)
                     .Where(MatchesIdQualifiers)
-                    .FirstOrDefault(session.ValidBindings.Contains);
+                    .FirstOrDefault(context.ValidBindings.Contains);
 
                 if (binding != null)
                     return binding;
@@ -142,32 +215,73 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             bool MatchesRequestedType(BindingNode bindingNode)
             {
-                return fieldNode.IsInterface
-                    ? bindingNode.InterfaceType == fieldNode.RequestedType
-                    : bindingNode.ConcreteType == fieldNode.RequestedType;
+                return isInterface
+                    ? bindingNode.InterfaceType == requestedType
+                    : bindingNode.ConcreteType == requestedType;
             }
 
             bool MatchesIsCollection(BindingNode bindingNode)
             {
-                return bindingNode.IsCollectionBinding == fieldNode.IsCollection;
+                return bindingNode.IsCollectionBinding == isCollection;
             }
 
             bool MatchesTargetTypeQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.TargetTypeQualifiers.Count == 0 ||
-                       bindingNode.TargetTypeQualifiers.Contains(fieldNode.DeclaringType);
+                       bindingNode.TargetTypeQualifiers.Contains(declaringType);
             }
 
             bool MatchesMemberNameQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.MemberNameQualifiers.Count == 0 ||
-                       bindingNode.MemberNameQualifiers.Contains(fieldNode.MemberName);
+                       bindingNode.MemberNameQualifiers.Contains(memberName);
             }
 
             bool MatchesIdQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.IdQualifiers.Count == 0 ||
-                       bindingNode.IdQualifiers.Contains(fieldNode.InjectId);
+                       bindingNode.IdQualifiers.Contains(injectId);
+            }
+        }
+
+        private static object ResolveCandidates(
+            Type type,
+            Type requestedType,
+            TypeShape typeShape,
+            Object[] candidates)
+        {
+            if (candidates is not { Length: > 0 })
+                return null;
+
+            switch (typeShape)
+            {
+                case TypeShape.Single:
+                {
+                    return candidates.First();
+                }
+
+                case TypeShape.Array:
+                {
+                    Array array = Array.CreateInstance(requestedType, candidates.Length);
+
+                    for (int i = 0; i < candidates.Length; i++)
+                        array.SetValue(candidates[i], i);
+
+                    return array;
+                }
+
+                case TypeShape.List:
+                {
+                    IList list = (IList)Activator.CreateInstance(type);
+
+                    foreach (Object d in candidates)
+                        list.Add(d);
+
+                    return list;
+                }
+
+                default:
+                    throw new ArgumentOutOfRangeException();
             }
         }
     }

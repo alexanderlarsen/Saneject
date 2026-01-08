@@ -31,30 +31,55 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             return new Error
             (
                 ErrorType.InvalidBinding,
-                $"Invalid binding {SignatureBuilder.GetBindingSignature(bindingNode)} {errorMessage}",
+                $"{SignatureBuilder.GetBindingSignature(bindingNode)} {errorMessage}",
                 bindingNode.ScopeNode.TransformNode.Transform
             );
         }
 
         public static Error CreateMissingBindingError(FieldNode fieldNode)
         {
-            string expectedBindingSignature = SignatureBuilder.GetLossyBindingSignature(fieldNode.RequestedType, fieldNode.IsCollection, fieldNode.ComponentNode.TransformNode.NearestScopeNode);
+            string expectedBindingSignature = SignatureBuilder.GetHypotheticalBindingSignature
+            (
+                fieldNode.RequestedType,
+                fieldNode.IsCollection,
+                fieldNode.ComponentNode.TransformNode.NearestScopeNode
+            );
+
+            string fieldSignature = SignatureBuilder.GetFieldSignature(fieldNode);
 
             return new Error
             (
                 ErrorType.MissingBinding,
-                $"Missing binding, e.g., {expectedBindingSignature} {SignatureBuilder.GetFieldSignature(fieldNode)}",
+                $"{expectedBindingSignature} {fieldSignature}",
                 fieldNode.ComponentNode.TransformNode.Transform
             );
         }
-        
+
+        public static Error CreateMissingBindingError(MethodParameterNode parameterNode)
+        {
+            string expectedBindingSignature = SignatureBuilder.GetHypotheticalBindingSignature
+            (
+                parameterNode.RequestedType,
+                parameterNode.IsCollection,
+                parameterNode.MethodNode.ComponentNode.TransformNode.NearestScopeNode
+            );
+
+            string methodParameterSignature = SignatureBuilder.GetMethodParameterSignature(parameterNode);
+
+            return new Error
+            (
+                ErrorType.MissingBinding,
+                $"{expectedBindingSignature} {methodParameterSignature}",
+                parameterNode.MethodNode.ComponentNode.TransformNode.Transform
+            );
+        }
+
         public static Error CreateMissingGlobalDependencyError(
             BindingNode bindingNode,
             HashSet<Type> rejectedTypes)
         {
             StringBuilder msg = new();
-
-            msg.Append($"Missing dependency for binding {SignatureBuilder.GetBindingSignature(bindingNode)}");
+            msg.Append(SignatureBuilder.GetBindingSignature(bindingNode));
 
             if (rejectedTypes is { Count: > 0 })
             {
@@ -66,7 +91,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                ErrorType.MissingGlobalDependency,
+                ErrorType.MissingGlobalObject,
                 msg.ToString(),
                 bindingNode.ScopeNode.TransformNode.Transform
             );
@@ -78,8 +103,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             HashSet<Type> rejectedTypes)
         {
             StringBuilder msg = new();
-
-            msg.Append($"Missing dependency for binding {SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetFieldSignature(fieldNode)}");
+            msg.Append($"{SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetFieldSignature(fieldNode)}");
 
             if (rejectedTypes is { Count: > 0 })
             {
@@ -94,6 +118,42 @@ namespace Plugins.Saneject.Experimental.Editor.Data
                 ErrorType.MissingDependency,
                 msg.ToString(),
                 bindingNode.ScopeNode.TransformNode.Transform
+            );
+        }
+
+        public static Error CreateMissingDependencyError(
+            BindingNode bindingNode,
+            MethodParameterNode parameterNode,
+            HashSet<Type> rejectedTypes)
+        {
+            StringBuilder msg = new();
+            msg.Append($"{SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetMethodParameterSignature(parameterNode)}");
+
+            if (rejectedTypes is { Count: > 0 })
+            {
+                string typeList = string.Join(", ", rejectedTypes.Select(t => t.Name));
+                msg.AppendLine();
+                msg.AppendLine($"Candidates rejected due to scene/prefab or prefab/prefab context mismatch: {typeList}.");
+                msg.AppendLine("Use ProxyObjects for proper cross-context references, or disable filtering in User Settings (not recommended).");
+            }
+
+            return new Error
+            (
+                ErrorType.MissingDependency,
+                msg.ToString(),
+                bindingNode.ScopeNode.TransformNode.Transform
+            );
+        }
+
+        public static Error CreateMethodInvocationError(
+            MethodNode methodNode,
+            Exception exception)
+        {
+            return new Error
+            (
+                ErrorType.MethodInvocationException,
+                $"[Exception: {(exception.InnerException ?? exception).Message}] {SignatureBuilder.GetMethodSignature(methodNode)}",
+                methodNode.ComponentNode.TransformNode.Transform
             );
         }
     }

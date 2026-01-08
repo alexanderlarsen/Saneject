@@ -26,49 +26,63 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 ConsoleUtils.ClearLog();
         }
 
-        public static void LogErrors(InjectionSession session)
+        public static void LogErrors(InjectionContext context)
         {
-            foreach (Error error in session.Errors.OrderBy(e => ErrorPriority(e.ErrorType)))
-                Debug.LogError($"Saneject: {error.ErrorMessage}", error.LogContext);
+            foreach (Error error in context.Errors.OrderBy(e => ErrorPriority(e.ErrorType)))
+                Debug.LogError($"Saneject: {ErrorTypeToDisplayString(error.ErrorType)} {error.ErrorMessage}", error.LogContext);
 
             return;
 
-            static int ErrorPriority(ErrorType type)
+            static int ErrorPriority(ErrorType errorType)
             {
-                return type switch
+                return errorType switch
                 {
                     ErrorType.InvalidBinding => 0,
                     ErrorType.MissingBinding => 1,
-                    ErrorType.MissingGlobalDependency => 2,
+                    ErrorType.MissingGlobalObject => 2,
                     ErrorType.MissingDependency => 3,
+                    ErrorType.MethodInvocationException => 4,
                     _ => int.MaxValue
+                };
+            }
+
+            static string ErrorTypeToDisplayString(ErrorType type)
+            {
+                return type switch
+                {
+                    ErrorType.InvalidBinding => "Invalid binding",
+                    ErrorType.MissingBinding => "Missing binding. Expected something like",
+                    ErrorType.MissingGlobalObject => "Could not locate global object",
+                    ErrorType.MissingDependency => "Could not locate dependency",
+                    ErrorType.MethodInvocationException => "Method invocation exception",
+                    _ => "Unknown error"
                 };
             }
         }
 
-        public static void LogUnusedBindings(InjectionSession session)
+        public static void LogUnusedBindings(InjectionContext context)
         {
             if (!UserSettings.LogUnusedBindings)
                 return;
 
-            IEnumerable<BindingNode> unusedBindings = session
+            IEnumerable<BindingNode> unusedBindings = context
                 .Graph
                 .EnumerateAllBindingNodes()
-                .Where(binding => !session.UsedBindings.Contains(binding));
+                .Where(binding => !context.UsedBindings.Contains(binding));
 
             foreach (BindingNode binding in unusedBindings)
                 Debug.LogWarning($"Saneject: Unused binding {SignatureBuilder.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }
 
-        public static void LogCreatedProxyAssets(InjectionSession session)
+        public static void LogCreatedProxyAssets(InjectionContext context)
         {
-            foreach ((string path, Object instance) asset in session.CreatedProxyAssets)
+            foreach ((string path, Object instance) asset in context.CreatedProxyAssets)
                 Debug.Log($"Saneject: Created proxy asset at '{asset.path}'.", asset.instance);
         }
 
-        public static void LogStats(InjectionSession session)
+        public static void LogStats(InjectionContext context)
         {
-            Debug.Log($"Saneject: Injection took {session.DurationMilliseconds}ms | ID: {session.Id}.");
+            Debug.Log($"Saneject: Injection took {context.ElapsedMilliseconds}ms | ID: {context.Id}.");
         }
 
         public static void SaveProxyStubCreationCount(int count)

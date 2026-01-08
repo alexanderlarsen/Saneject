@@ -1,9 +1,9 @@
 {
   "rootNodes": [
     {
-      "name": "Game (Instance ID: 33398)",
+      "name": "Game (Instance ID: 32414)",
       "parent": null,
-      "context": "SceneObject (Key: -2108)",
+      "context": "SceneObject (Key: -1244)",
       "scope": {
         "type": "GameScope",
         "parentScope": null,
@@ -119,7 +119,7 @@
       },
       "components": [
         {
-          "name": "GameManager (Instance ID: 33400)",
+          "name": "GameManager (Instance ID: 32416)",
           "fields": [
             {
               "declaringType": "GameManager",
@@ -171,9 +171,9 @@
       ],
       "children": [
         {
-          "name": "Player (Instance ID: 33386)",
-          "parent": "Game (Instance ID: 33398)",
-          "context": "PrefabInstance (Key: -2110)",
+          "name": "Player (Instance ID: 32402)",
+          "parent": "Game (Instance ID: 32414)",
+          "context": "PrefabInstance (Key: -1246)",
           "scope": {
             "type": "PlayerScope",
             "parentScope": "GameScope",
@@ -316,7 +316,7 @@
           },
           "components": [
             {
-              "name": "Player (Instance ID: 33382)",
+              "name": "Player (Instance ID: 32398)",
               "fields": [
                 {
                   "declaringType": "Player",
@@ -407,30 +407,39 @@
                   "isPropertyBackingField": false
                 }
               ],
-              "methods": []
+              "methods": [
+                {
+                  "name": "Initialize",
+                  "parameters": [
+                    "PlayerMoveController"
+                  ],
+                  "injectId": null,
+                  "suppressMissingErrors": false
+                }
+              ]
             }
           ],
           "children": [
             {
-              "name": "MoveController (Instance ID: -2116)",
-              "parent": "Player (Instance ID: 33386)",
-              "context": "PrefabInstance (Key: -2110)",
+              "name": "MoveController (Instance ID: -1252)",
+              "parent": "Player (Instance ID: 32402)",
+              "context": "PrefabInstance (Key: -1246)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Colliders (Instance ID: -2120)",
-              "parent": "Player (Instance ID: 33386)",
-              "context": "PrefabInstance (Key: -2110)",
+              "name": "Colliders (Instance ID: -1256)",
+              "parent": "Player (Instance ID: 32402)",
+              "context": "PrefabInstance (Key: -1246)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "AudioSources (Instance ID: -2124)",
-              "parent": "Player (Instance ID: 33386)",
-              "context": "PrefabInstance (Key: -2110)",
+              "name": "AudioSources (Instance ID: -1260)",
+              "parent": "Player (Instance ID: 32402)",
+              "context": "PrefabInstance (Key: -1246)",
               "scope": null,
               "components": [],
               "children": []
@@ -438,9 +447,9 @@
           ]
         },
         {
-          "name": "Enemy (Instance ID: 33376)",
-          "parent": "Game (Instance ID: 33398)",
-          "context": "PrefabInstance (Key: -2126)",
+          "name": "Enemy (Instance ID: 32392)",
+          "parent": "Game (Instance ID: 32414)",
+          "context": "PrefabInstance (Key: -1262)",
           "scope": {
             "type": "EnemyScope",
             "parentScope": "GameScope",
@@ -487,7 +496,7 @@
           },
           "components": [
             {
-              "name": "Enemy (Instance ID: 33378)",
+              "name": "Enemy (Instance ID: 32394)",
               "fields": [
                 {
                   "declaringType": "Enemy",
@@ -517,9 +526,9 @@
           ],
           "children": [
             {
-              "name": "MoveController (Instance ID: -2132)",
-              "parent": "Enemy (Instance ID: 33376)",
-              "context": "PrefabInstance (Key: -2126)",
+              "name": "MoveController (Instance ID: -1268)",
+              "parent": "Enemy (Instance ID: 32392)",
+              "context": "PrefabInstance (Key: -1262)",
               "scope": null,
               "components": [],
               "children": []
