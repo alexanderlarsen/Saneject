@@ -6,6 +6,7 @@
         MissingBinding, 
         MissingGlobalObject,
         MissingDependency,
+        MissingDependencies,
         MethodInvocationException
     }
 }

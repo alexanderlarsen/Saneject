@@ -115,7 +115,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                ErrorType.MissingDependency,
+                bindingNode.IsCollectionBinding ? ErrorType.MissingDependencies : ErrorType.MissingDependency,
                 msg.ToString(),
                 bindingNode.ScopeNode.TransformNode.Transform
             );
@@ -139,7 +139,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                ErrorType.MissingDependency,
+                bindingNode.IsCollectionBinding ? ErrorType.MissingDependencies : ErrorType.MissingDependency,
                 msg.ToString(),
                 bindingNode.ScopeNode.TransformNode.Transform
             );

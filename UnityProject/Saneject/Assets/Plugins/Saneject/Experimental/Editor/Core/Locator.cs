@@ -21,9 +21,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             out Object[] candidates,
             out HashSet<Type> rejectedTypes)
         {
-            
-            
-            
             rejectedTypes = new HashSet<Type>();
 
             IEnumerable<Object> allCandidates = bindingNode switch

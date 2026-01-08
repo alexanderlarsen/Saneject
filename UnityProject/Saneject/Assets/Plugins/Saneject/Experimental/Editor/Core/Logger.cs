@@ -41,6 +41,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     ErrorType.MissingBinding => 1,
                     ErrorType.MissingGlobalObject => 2,
                     ErrorType.MissingDependency => 3,
+                    ErrorType.MissingDependencies => 3,
                     ErrorType.MethodInvocationException => 4,
                     _ => int.MaxValue
                 };
@@ -54,6 +55,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     ErrorType.MissingBinding => "Missing binding. Expected something like",
                     ErrorType.MissingGlobalObject => "Could not locate global object",
                     ErrorType.MissingDependency => "Could not locate dependency",
+                    ErrorType.MissingDependencies => "Could not locate dependencies",
                     ErrorType.MethodInvocationException => "Method invocation exception",
                     _ => "Unknown error"
                 };
