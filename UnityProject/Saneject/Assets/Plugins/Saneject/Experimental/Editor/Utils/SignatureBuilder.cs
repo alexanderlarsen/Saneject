@@ -60,7 +60,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utils
 
                     if (componentBinding.SearchOrigin == SearchOrigin.Scene && componentBinding.SearchDirection == SearchDirection.Anywhere)
                     {
-                        sb.Append($".FromAnywhere(FindObjectsInactive.{componentBinding.FindObjectsInactive}, FindObjectsSortMode.{componentBinding.FindObjectsSortMode})");
+                        sb.Append($".FromAnywhere({nameof(FindObjectsInactive)}.{componentBinding.FindObjectsInactive}, {nameof(FindObjectsSortMode)}.{componentBinding.FindObjectsSortMode})");
                         break;
                     }
 
