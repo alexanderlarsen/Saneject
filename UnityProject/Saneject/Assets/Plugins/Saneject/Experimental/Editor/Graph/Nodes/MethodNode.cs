@@ -4,7 +4,7 @@ using System.Reflection;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
-    public class MethodNode : InjectionSiteNode
+    public class MethodNode : MemberNode
     {
         public MethodNode(
             MethodInfo methodInfo,

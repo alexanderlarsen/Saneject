@@ -6,9 +6,9 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
-    public abstract class InjectionSiteNode
+    public abstract class MemberNode
     {
-        protected InjectionSiteNode(
+        protected MemberNode(
             MemberInfo memberInfo,
             ComponentNode componentNode)
         {
@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             InjectAttribute injectAttribute = memberInfo.GetCustomAttribute<InjectAttribute>();
             InjectId = injectAttribute.ID;
             SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
-            DisplayPath = InjectionSiteUtility.GetInjectionSitePath(this);
+            DisplayPath = MemberNodeUtility.GetInjectionSitePath(this);
         }
 
         public ComponentNode ComponentNode { get; }

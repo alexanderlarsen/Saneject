@@ -5,7 +5,7 @@ using Plugins.Saneject.Experimental.Editor.Extensions;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
-    public class FieldNode : InjectionSiteNode
+    public class FieldNode : MemberNode
     {
         public FieldNode(
             FieldInfo fieldInfo,

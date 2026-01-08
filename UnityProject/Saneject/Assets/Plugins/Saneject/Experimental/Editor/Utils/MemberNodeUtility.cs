@@ -3,30 +3,33 @@ using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 
 namespace Plugins.Saneject.Experimental.Editor.Utils
 {
-    public static class InjectionSiteUtility
+    public static class MemberNodeUtility
     {
-        public static string GetInjectionSitePath(InjectionSiteNode injectionSiteNode)
+        public static string GetInjectionSitePath(MemberNode node)
         {
-            return injectionSiteNode switch
+            return node switch
             {
                 FieldNode fieldNode => GetFieldPath(fieldNode),
                 MethodNode methodNode => GetMethodPath(methodNode),
-                _ => throw new ArgumentOutOfRangeException(nameof(injectionSiteNode), injectionSiteNode, null)
+                _ => throw new ArgumentOutOfRangeException(nameof(node), node, null)
             };
         }
         
-        public static string GetFieldPath(FieldNode fieldNode)
+        public static string GetFieldPath(FieldNode node)
         {
-            ComponentNode componentNode = fieldNode.ComponentNode;
+            ComponentNode componentNode = node.ComponentNode;
             string goPath = GetHierarchyPath(componentNode.TransformNode);
             string componentName = componentNode.Component.GetType().Name;
-            string memberName = StripPropertyBackingFieldPrefix(fieldNode.MemberName);
+            string memberName = StripPropertyBackingFieldPrefix(node.MemberName);
             return $"{goPath}/{componentName}/{memberName}";
         }
 
-        public static string GetMethodPath(MethodNode methodNode)
+        public static string GetMethodPath(MethodNode node)
         {
-            return "";
+            ComponentNode componentNode = node.ComponentNode;
+            string goPath = GetHierarchyPath(componentNode.TransformNode);
+            string componentName = componentNode.Component.GetType().Name;
+            return $"{goPath}/{componentName}/{node.MemberName}";
         }
 
         private static string StripPropertyBackingFieldPrefix(string memberName)
