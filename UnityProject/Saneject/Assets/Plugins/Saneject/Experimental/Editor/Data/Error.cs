@@ -14,11 +14,13 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             ErrorType errorType,
             string errorMessage,
             Object logContext,
+            bool suppressError,
             Exception exception = null)
         {
             ErrorType = errorType;
             ErrorMessage = errorMessage;
             LogContext = logContext;
+            SuppressError = suppressError;
             Exception = exception;
         }
 
@@ -26,6 +28,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public string ErrorMessage { get; }
         public Object LogContext { get; }
         public Exception Exception { get; }
+        public bool SuppressError { get; }
 
         public static Error CreateInvalidBindingError(
             string errorMessage,
@@ -33,9 +36,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             return new Error
             (
-                ErrorType.InvalidBinding,
-                $"{SignatureBuilder.GetBindingSignature(bindingNode)} {errorMessage}",
-                bindingNode.ScopeNode.TransformNode.Transform
+                errorType: ErrorType.InvalidBinding,
+                errorMessage: $"{SignatureBuilder.GetBindingSignature(bindingNode)} {errorMessage}",
+                logContext: bindingNode.ScopeNode.TransformNode.Transform,
+                suppressError: false
             );
         }
 
@@ -52,9 +56,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                ErrorType.MissingBinding,
-                $"{expectedBindingSignature} {fieldSignature}",
-                fieldNode.ComponentNode.TransformNode.Transform
+                errorType: ErrorType.MissingBinding,
+                errorMessage: $"{expectedBindingSignature} {fieldSignature}",
+                logContext: fieldNode.ComponentNode.TransformNode.Transform,
+                suppressError: fieldNode.SuppressMissingErrors
             );
         }
 
@@ -71,9 +76,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                ErrorType.MissingBinding,
-                $"{expectedBindingSignature} {methodParameterSignature}",
-                parameterNode.MethodNode.ComponentNode.TransformNode.Transform
+                errorType: ErrorType.MissingBinding,
+                errorMessage: $"{expectedBindingSignature} {methodParameterSignature}",
+                logContext: parameterNode.MethodNode.ComponentNode.TransformNode.Transform,
+                suppressError: parameterNode.MethodNode.SuppressMissingErrors
             );
         }
 
@@ -94,9 +100,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                ErrorType.MissingGlobalObject,
-                msg.ToString(),
-                bindingNode.ScopeNode.TransformNode.Transform
+                errorType: ErrorType.MissingGlobalObject,
+                errorMessage: msg.ToString(),
+                logContext: bindingNode.ScopeNode.TransformNode.Transform,
+                suppressError: false
             );
         }
 
@@ -118,9 +125,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                bindingNode.IsCollectionBinding ? ErrorType.MissingDependencies : ErrorType.MissingDependency,
-                msg.ToString(),
-                bindingNode.ScopeNode.TransformNode.Transform
+                errorType: bindingNode.IsCollectionBinding ? ErrorType.MissingDependencies : ErrorType.MissingDependency,
+                errorMessage: msg.ToString(),
+                logContext: bindingNode.ScopeNode.TransformNode.Transform,
+                suppressError: fieldNode.SuppressMissingErrors
             );
         }
 
@@ -142,9 +150,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
             return new Error
             (
-                bindingNode.IsCollectionBinding ? ErrorType.MissingDependencies : ErrorType.MissingDependency,
-                msg.ToString(),
-                bindingNode.ScopeNode.TransformNode.Transform
+                errorType: bindingNode.IsCollectionBinding ? ErrorType.MissingDependencies : ErrorType.MissingDependency,
+                errorMessage: msg.ToString(),
+                logContext: bindingNode.ScopeNode.TransformNode.Transform,
+                suppressError: parameterNode.MethodNode.SuppressMissingErrors
             );
         }
 
@@ -154,10 +163,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             return new Error
             (
-                ErrorType.MethodInvocationException,
-                $"{SignatureBuilder.GetMethodSignature(methodNode)}",
-                methodNode.ComponentNode.TransformNode.Transform,
-                exception
+                errorType: ErrorType.MethodInvocationException,
+                errorMessage: $"{SignatureBuilder.GetMethodSignature(methodNode)}",
+                logContext: methodNode.ComponentNode.TransformNode.Transform,
+                suppressError: false,
+                exception: exception
             );
         }
 
@@ -167,10 +177,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             return new Error
             (
-                ErrorType.BindingFilterException,
-                $"{SignatureBuilder.GetBindingSignature(bindingNode)}",
-                bindingNode.ScopeNode.TransformNode.Transform,
-                exception
+                errorType: ErrorType.BindingFilterException,
+                errorMessage: $"{SignatureBuilder.GetBindingSignature(bindingNode)}",
+                logContext: bindingNode.ScopeNode.TransformNode.Transform,
+                suppressError: false,
+                exception: exception
             );
         }
     }

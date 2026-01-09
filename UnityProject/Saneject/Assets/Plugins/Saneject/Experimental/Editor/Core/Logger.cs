@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Editor.Utility;
@@ -31,11 +32,15 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
         public static void LogErrors(InjectionContext context)
         {
-            foreach (Error error in context.Errors.OrderBy(e => ErrorPriority(e.ErrorType)))
+            IEnumerable<Error> errors = context
+                .Errors
+                .OrderBy(e => ErrorPriority(e.ErrorType))
+                .Where(error => !error.SuppressError);
+
+            foreach (Error error in errors)
                 if (error.Exception != null)
                 {
                     Debug.LogError($"Saneject: {ErrorTypeToDisplayString(error.ErrorType)} (exception details in next log) {error.ErrorMessage}", error.LogContext);
-                    
                     Debug.LogException(error.Exception, error.LogContext);
                 }
                 else
@@ -113,11 +118,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 .Append(summary.ElapsedMilliseconds)
                 .Append(" ms");
 
-            if (summary.SuppressedMissingCount > 0)
+            if (summary.SuppressedErrorCount > 0)
                 sb.Append("\n⚠️ ")
-                    .Append(summary.SuppressedMissingCount)
+                    .Append(summary.SuppressedErrorCount)
                     .Append(" missing binding/dependency ")
-                    .AppendQuantity(summary.SuppressedMissingCount, "error was", "errors were", addCount: false)
+                    .AppendQuantity(summary.SuppressedErrorCount, "error was", "errors were", addCount: false)
                     .Append(" suppressed due to [Inject(suppressMissingErrors: true)]. Remove the flag to view detailed logs.");
 
             switch (summary.GetLogSeverity())

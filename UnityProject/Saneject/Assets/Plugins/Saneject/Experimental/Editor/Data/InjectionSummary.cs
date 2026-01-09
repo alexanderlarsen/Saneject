@@ -11,11 +11,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             InjectedFieldCount = context.FieldResolutionMap.Keys.Count(field => !field.IsPropertyBackingField);
             InjectedPropertyCount = context.FieldResolutionMap.Keys.Count(field => field.IsPropertyBackingField);
             InjectedMethodCount = context.MethodResolutionMap.Count;
-            MissingBindingCount = context.Errors.Count(error => error.ErrorType == ErrorType.MissingBinding);
+            MissingBindingCount = context.Errors.Count(error => error.ErrorType == ErrorType.MissingBinding && !error.SuppressError);
             UnusedBindingCount = context.UnusedBindings.Count;
-            InvalidBindingCount = context.Errors.Count(error => error.ErrorType == ErrorType.InvalidBinding);
-            MissingDependencyCount = context.Errors.Count(error => error.ErrorType is ErrorType.MissingDependency or ErrorType.MissingDependencies);
-            SuppressedMissingCount = 2; // TODO: implement
+            InvalidBindingCount = context.Errors.Count(error => error.ErrorType == ErrorType.InvalidBinding && !error.SuppressError);
+            MissingDependencyCount = context.Errors.Count(error => error.ErrorType is ErrorType.MissingDependency or ErrorType.MissingDependencies && !error.SuppressError);
+            SuppressedErrorCount = context.Errors.Count(error => error.SuppressError);
 
             ScopesProcessedCount = context.Graph
                 .EnumerateAllTransformNodes()
@@ -33,7 +33,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public int MissingBindingCount { get; }
         public int InvalidBindingCount { get; }
         public int UnusedBindingCount { get; }
-        public int SuppressedMissingCount { get; }
+        public int SuppressedErrorCount { get; }
         public long ElapsedMilliseconds { get; }
 
         public LogSeverity GetLogSeverity()
