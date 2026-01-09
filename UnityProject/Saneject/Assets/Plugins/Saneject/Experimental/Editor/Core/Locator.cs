@@ -16,6 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     public static class Locator
     {
         public static void LocateDependencyCandidates(
+            InjectionContext context,
             BindingNode bindingNode,
             TransformNode injectionTargetNode,
             out Object[] candidates,
@@ -25,8 +26,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             IEnumerable<Object> allCandidates = bindingNode switch
             {
-                AssetBindingNode assetBindingNode => LocateAssetCandidates(assetBindingNode),
-                ComponentBindingNode componentBindingNode => LocateComponentCandidates(componentBindingNode, injectionTargetNode),
+                AssetBindingNode assetBindingNode => LocateAssetCandidates(context, assetBindingNode),
+                ComponentBindingNode componentBindingNode => LocateComponentCandidates(context, componentBindingNode, injectionTargetNode),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -46,6 +47,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         }
 
         private static IEnumerable<Object> LocateComponentCandidates(
+            InjectionContext context,
             ComponentBindingNode bindingNode,
             TransformNode injectionTargetNode)
         {
@@ -120,12 +122,21 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             };
 
             if (candidates != null && bindingNode.DependencyFilters.Count > 0)
-                candidates = candidates.Where(component => bindingNode.DependencyFilters.All(f => f.Filter(component)));
+                try
+                {
+                    candidates = candidates.Where(component => bindingNode.DependencyFilters.All(f => f.Filter(component))).ToArray();
+                }
+                catch (Exception e)
+                {
+                    context.RegisterError(Error.CreateBindingFilterException(bindingNode, e));
+                }
 
             return candidates ?? Enumerable.Empty<Component>();
         }
 
-        private static IEnumerable<Object> LocateAssetCandidates(AssetBindingNode bindingNode)
+        private static IEnumerable<Object> LocateAssetCandidates(
+            InjectionContext context,
+            AssetBindingNode bindingNode)
         {
             Type targetType = bindingNode.InterfaceType ?? bindingNode.ConcreteType;
             string path = bindingNode.Path;
@@ -159,7 +170,14 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             };
 
             if (candidates != null && bindingNode.DependencyFilters.Count > 0)
-                candidates = candidates.Where(asset => bindingNode.DependencyFilters.All(f => f.Filter(asset)));
+                try
+                {
+                    candidates = candidates.Where(asset => bindingNode.DependencyFilters.All(f => f.Filter(asset)));
+                }
+                catch (Exception e)
+                {
+                    context.RegisterError(Error.CreateBindingFilterException(bindingNode, e));
+                }
 
             return candidates ?? Enumerable.Empty<Object>();
         }

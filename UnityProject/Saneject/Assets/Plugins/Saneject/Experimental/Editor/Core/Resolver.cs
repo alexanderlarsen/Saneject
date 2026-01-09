@@ -42,6 +42,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             {
                 Locator.LocateDependencyCandidates
                 (
+                    context,
                     binding,
                     injectionTargetNode: binding.ScopeNode.TransformNode,
                     out Object[] candidates,
@@ -96,6 +97,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             {
                 Locator.LocateDependencyCandidates
                 (
+                    context,
                     bindingNode,
                     injectionTargetNode: fieldNode.ComponentNode.TransformNode,
                     out Object[] candidates,
@@ -154,6 +156,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 {
                     Locator.LocateDependencyCandidates
                     (
+                        context,
                         bindingNode,
                         injectionTargetNode: methodNode.ComponentNode.TransformNode,
                         out Object[] candidates,

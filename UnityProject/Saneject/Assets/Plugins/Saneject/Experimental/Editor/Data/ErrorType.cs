@@ -7,6 +7,7 @@
         MissingGlobalObject,
         MissingDependency,
         MissingDependencies,
-        MethodInvocationException
+        MethodInvocationException,
+        BindingFilterException,
     }
 }

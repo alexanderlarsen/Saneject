@@ -60,7 +60,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     }
                     catch (Exception e)
                     {
-                        context.RegisterError(Error.CreateMethodInvocationError(methodNode, e));
+                        context.RegisterError(Error.CreateMethodInvocationException(methodNode, e));
                     }
 
                 EditorUtility.SetDirty(componentNode.Component);

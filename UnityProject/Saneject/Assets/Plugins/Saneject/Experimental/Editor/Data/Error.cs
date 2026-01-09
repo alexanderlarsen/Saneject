@@ -13,16 +13,19 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         private Error(
             ErrorType errorType,
             string errorMessage,
-            Object logContext)
+            Object logContext,
+            Exception exception = null)
         {
             ErrorType = errorType;
             ErrorMessage = errorMessage;
             LogContext = logContext;
+            Exception = exception;
         }
 
         public ErrorType ErrorType { get; }
         public string ErrorMessage { get; }
         public Object LogContext { get; }
+        public Exception Exception { get; }
 
         public static Error CreateInvalidBindingError(
             string errorMessage,
@@ -145,15 +148,29 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             );
         }
 
-        public static Error CreateMethodInvocationError(
+        public static Error CreateMethodInvocationException(
             MethodNode methodNode,
             Exception exception)
         {
             return new Error
             (
                 ErrorType.MethodInvocationException,
-                $"[Exception: {(exception.InnerException ?? exception).Message}] {SignatureBuilder.GetMethodSignature(methodNode)}",
-                methodNode.ComponentNode.TransformNode.Transform
+                $"{SignatureBuilder.GetMethodSignature(methodNode)}",
+                methodNode.ComponentNode.TransformNode.Transform,
+                exception
+            );
+        }
+
+        public static Error CreateBindingFilterException(
+            BindingNode bindingNode,
+            Exception exception)
+        {
+            return new Error
+            (
+                ErrorType.BindingFilterException,
+                $"{SignatureBuilder.GetBindingSignature(bindingNode)}",
+                bindingNode.ScopeNode.TransformNode.Transform,
+                exception
             );
         }
     }
