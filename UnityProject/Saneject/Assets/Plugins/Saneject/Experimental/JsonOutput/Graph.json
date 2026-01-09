@@ -142,28 +142,6 @@
               "isCollection": false,
               "displayPath": "Game/GameManager/player",
               "isPropertyBackingField": false
-            },
-            {
-              "declaringType": "GameManager",
-              "memberName": "<PlayerProperty>k__BackingField",
-              "injectId": "LOL",
-              "suppressMissingErrors": false,
-              "requestedType": "Player",
-              "isInterface": false,
-              "isCollection": false,
-              "displayPath": "Game/GameManager/PlayerProperty",
-              "isPropertyBackingField": true
-            },
-            {
-              "declaringType": "GameManager",
-              "memberName": "crossbow",
-              "injectId": null,
-              "suppressMissingErrors": false,
-              "requestedType": "Crossbow",
-              "isInterface": false,
-              "isCollection": false,
-              "displayPath": "Game/GameManager/crossbow",
-              "isPropertyBackingField": false
             }
           ],
           "methods": []
@@ -199,56 +177,20 @@
               {
                 "interfaceType": "IMoveController",
                 "concreteType": null,
-                "isCollectionBinding": true,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scene",
-                "searchDirection": "Anywhere",
-                "findObjectsInactive": "Include",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              },
-              {
-                "interfaceType": null,
-                "concreteType": "PlayerMoveController",
-                "isCollectionBinding": true,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "Scene",
-                "searchDirection": "Anywhere",
-                "findObjectsInactive": "Include",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
-              },
-              {
-                "interfaceType": "IMoveController",
-                "concreteType": "EnemyMoveController",
                 "isCollectionBinding": false,
                 "locatorStrategySpecified": true,
                 "resolveFromInstances": [],
                 "idQualifiers": [],
                 "targetTypeQualifiers": [],
                 "memberNameQualifiers": [],
-                "searchOrigin": "Scope",
-                "searchDirection": "None",
-                "findObjectsInactive": "Exclude",
+                "searchOrigin": "Scene",
+                "searchDirection": "Anywhere",
+                "findObjectsInactive": "Include",
                 "findObjectsSortMode": "None",
                 "customTargetTransform": null,
                 "includeSelfInSearch": false,
                 "childIndexForSearch": 0,
-                "resolveFromProxy": true
+                "resolveFromProxy": false
               },
               {
                 "interfaceType": "IWeapon",
@@ -331,39 +273,6 @@
                 },
                 {
                   "declaringType": "Player",
-                  "memberName": "<MoveControllerArrayInterfaceProperty>k__BackingField",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IMoveController",
-                  "isInterface": true,
-                  "isCollection": true,
-                  "displayPath": "Game/Player/Player/MoveControllerArrayInterfaceProperty",
-                  "isPropertyBackingField": true
-                },
-                {
-                  "declaringType": "Player",
-                  "memberName": "<MoveControllerProperty>k__BackingField",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "PlayerMoveController",
-                  "isInterface": false,
-                  "isCollection": true,
-                  "displayPath": "Game/Player/Player/MoveControllerProperty",
-                  "isPropertyBackingField": true
-                },
-                {
-                  "declaringType": "Player",
-                  "memberName": "playerMoveControllersArray",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "PlayerMoveController",
-                  "isInterface": false,
-                  "isCollection": true,
-                  "displayPath": "Game/Player/Player/playerMoveControllersArray",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "Player",
                   "memberName": "weapon",
                   "injectId": null,
                   "suppressMissingErrors": false,
@@ -407,16 +316,7 @@
                   "isPropertyBackingField": false
                 }
               ],
-              "methods": [
-                {
-                  "name": "Initialize",
-                  "parameters": [
-                    "PlayerMoveController"
-                  ],
-                  "injectId": null,
-                  "suppressMissingErrors": false
-                }
-              ]
+              "methods": []
             }
           ],
           "children": [
@@ -441,6 +341,20 @@
               "parent": "Player (Instance ID: 32402)",
               "context": "PrefabInstance (Key: -1246)",
               "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
+              "name": "Crossbow (Instance ID: -24582)",
+              "parent": "Player (Instance ID: 32402)",
+              "context": "PrefabInstance (Key: -24580)",
+              "scope": {
+                "type": "WeaponScope",
+                "parentScope": "PlayerScope",
+                "componentBindings": [],
+                "assetBindings": [],
+                "globalBindings": []
+              },
               "components": [],
               "children": []
             }
@@ -530,6 +444,20 @@
               "parent": "Enemy (Instance ID: 32392)",
               "context": "PrefabInstance (Key: -1262)",
               "scope": null,
+              "components": [],
+              "children": []
+            },
+            {
+              "name": "Rifle (Instance ID: -25246)",
+              "parent": "Enemy (Instance ID: 32392)",
+              "context": "PrefabInstance (Key: -25244)",
+              "scope": {
+                "type": "WeaponScope",
+                "parentScope": "EnemyScope",
+                "componentBindings": [],
+                "assetBindings": [],
+                "globalBindings": []
+              },
               "components": [],
               "children": []
             }

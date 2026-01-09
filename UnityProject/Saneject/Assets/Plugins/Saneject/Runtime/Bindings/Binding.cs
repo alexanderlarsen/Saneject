@@ -50,7 +50,6 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// <summary>
         /// Custom equality comparison to determine if the binding is unique or a duplicate based on system rules.
         /// </summary>
-        // Equals (replace your current implementation)
         public bool Equals(Binding other)
         {
             if (other is null) return false;

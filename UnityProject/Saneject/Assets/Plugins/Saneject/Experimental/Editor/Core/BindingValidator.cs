@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Runtime.Global;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -12,17 +12,22 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         public static void ValidateBindings(InjectionContext context)
         {
             Dictionary<Type, GlobalComponentBindingNode> existingGlobalMap = new();
+            HashSet<BindingNode> existingBindings = new();
 
             foreach (BindingNode binding in context.Graph.EnumerateAllBindingNodes())
-                ValidateBinding(binding, context, existingGlobalMap);
+                ValidateBinding(binding, context, existingGlobalMap, existingBindings);
         }
 
         private static void ValidateBinding(
             BindingNode binding,
             InjectionContext context,
-            Dictionary<Type, GlobalComponentBindingNode> existingGlobals)
+            Dictionary<Type, GlobalComponentBindingNode> existingGlobals,
+            HashSet<BindingNode> existingBindings)
         {
             List<Error> errors = new();
+
+            if (!existingBindings.Add(binding))
+                errors.Add(Error.CreateInvalidBindingError("Duplicate binding within same Scope detected.", binding));
 
             switch (binding)
             {
@@ -73,7 +78,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     break;
                 }
             }
-            
+
             if (binding.InterfaceType is { IsInterface: false })
                 errors.Add(Error.CreateInvalidBindingError($"Binding interface type '{binding.InterfaceType.FullName}' is not an interface.", binding));
 
