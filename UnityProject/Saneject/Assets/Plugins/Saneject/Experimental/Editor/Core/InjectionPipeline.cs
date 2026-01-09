@@ -19,10 +19,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Resolver.Resolve(context);
             Injector.InjectDependencies(context);
             context.StopTimer();
+            context.CacheUnusedBindings();
             Logger.LogErrors(context);
             Logger.LogUnusedBindings(context);
             Logger.LogCreatedProxyAssets(context);
-            Logger.LogStats(context);
+            Logger.LogSummary(context);
             InjectionGraphJsonExporter.SaveGraphToJson(context.Graph);
         }
     }

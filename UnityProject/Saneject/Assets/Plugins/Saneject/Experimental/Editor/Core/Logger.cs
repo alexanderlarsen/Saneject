@@ -1,12 +1,15 @@
-﻿using System.Collections.Generic;
+﻿using System;
 using System.Linq;
+using System.Text;
 using Plugins.Saneject.Editor.Utility;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utils;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
@@ -67,12 +70,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (!UserSettings.LogUnusedBindings)
                 return;
 
-            IEnumerable<BindingNode> unusedBindings = context
-                .Graph
-                .EnumerateAllBindingNodes()
-                .Where(binding => !context.UsedBindings.Contains(binding));
-
-            foreach (BindingNode binding in unusedBindings)
+            foreach (BindingNode binding in context.UnusedBindings)
                 Debug.LogWarning($"Saneject: Unused binding {SignatureBuilder.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }
 
@@ -82,9 +80,52 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 Debug.Log($"Saneject: Created proxy asset at '{asset.path}'.", asset.instance);
         }
 
-        public static void LogStats(InjectionContext context)
+        public static void LogSummary(InjectionContext context)
         {
-            Debug.Log($"Saneject: Injection took {context.ElapsedMilliseconds}ms | ID: {context.Id}.");
+            if (!UserSettings.LogInjectionSummary)
+                return;
+
+            InjectionSummary summary = new(context);
+            StringBuilder sb = new();
+
+            sb.Append("Saneject: Injection complete | ")
+                .AppendQuantity(summary.ScopesProcessedCount, "scope processed", "scopes processed", " | ")
+                .AppendQuantity(summary.GlobalRegistrationCount, "global registered", "globals registered", " | ")
+                .AppendQuantity(summary.InjectedFieldCount, "field injected", "fields injected", " | ")
+                .AppendQuantity(summary.InjectedPropertyCount, "property injected", "properties injected", " | ")
+                .AppendQuantity(summary.InjectedMethodCount, "method injected", "methods injected", " | ")
+                .AppendQuantity(summary.MissingDependencyCount, "missing dependency", "missing dependencies", " | ")
+                .AppendQuantity(summary.MissingBindingCount, "missing binding", "missing bindings", " | ")
+                .AppendQuantity(summary.InvalidBindingCount, "invalid binding", "invalid bindings", " | ")
+                .AppendQuantity(summary.UnusedBindingCount, "unused binding", "unused bindings", " | ")
+                .Append("Completed in ")
+                .Append(summary.ElapsedMilliseconds)
+                .Append(" ms");
+
+            if (summary.SuppressedMissingCount > 0)
+                sb.Append("\n⚠️ ")
+                    .Append(summary.SuppressedMissingCount)
+                    .Append(" missing binding/dependency ")
+                    .AppendQuantity(summary.SuppressedMissingCount, "error was", "errors were", addCount: false)
+                    .Append(" suppressed due to [Inject(suppressMissingErrors: true)]. Remove the flag to view detailed logs.");
+
+            switch (summary.GetLogSeverity())
+            {
+                case LogSeverity.Info:
+                    Debug.Log(sb.ToString());
+                    break;
+
+                case LogSeverity.Warning:
+                    Debug.LogWarning(sb.ToString());
+                    break;
+
+                case LogSeverity.Error:
+                    Debug.LogError(sb.ToString());
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
         }
 
         public static void SaveProxyStubCreationCount(int count)
@@ -100,9 +141,13 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (count <= 0)
                 return;
 
-            string scriptsWord = count == 1 ? "script" : "scripts";
+            StringBuilder sb = new();
 
-            Debug.LogWarning($"Saneject: {count} proxy {scriptsWord} generated. Unity has recompiled and stopped the injection pass. Inject again to complete.");
+            sb.Append("Saneject: ")
+                .AppendQuantity(count, "proxy script", "proxy scripts")
+                .Append(" generated. Unity has recompiled and stopped the injection pass. Inject again to complete.");
+
+            Debug.LogWarning(sb.ToString());
         }
     }
 }

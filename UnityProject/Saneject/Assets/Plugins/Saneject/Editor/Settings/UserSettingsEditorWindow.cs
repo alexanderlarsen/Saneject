@@ -206,10 +206,10 @@ namespace Plugins.Saneject.Editor.Settings
             EditorGUILayout.LabelField("Editor Logging", EditorStyles.boldLabel);
 
             DrawToggle(
-                label: "Log Injection Stats",
-                tooltip: "Log stats on injection complete: Number of scopes processed, global dependencies added, injected fields, missing bindings, unused bindings, and injection duration.",
-                currentValue: UserSettings.LogInjectionStats,
-                onChanged: newValue => UserSettings.LogInjectionStats = newValue
+                label: "Log Injection Summary",
+                tooltip: "Log summary on injection complete: Number of scopes processed, globals registered, injected fields/properties, missing dependencies/bindings, invalid/unused bindings, suppressed error count, and injection run duration.",
+                currentValue: UserSettings.LogInjectionSummary,
+                onChanged: newValue => UserSettings.LogInjectionSummary = newValue
             );
 
             DrawToggle(

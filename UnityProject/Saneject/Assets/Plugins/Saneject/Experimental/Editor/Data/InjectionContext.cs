@@ -12,6 +12,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     public class InjectionContext
     {
         private readonly HashSet<BindingNode> usedBindings = new();
+        private readonly HashSet<BindingNode> unusedBindings = new();
         private readonly HashSet<BindingNode> validBindings = new();
         private readonly Dictionary<FieldNode, object> fieldResolutionMap = new();
         private readonly Dictionary<MethodNode, IReadOnlyList<object>> methodResolutionMap = new();
@@ -32,6 +33,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public long ElapsedMilliseconds => stopwatch.ElapsedMilliseconds;
 
         public IReadOnlyCollection<BindingNode> UsedBindings => usedBindings;
+        public IReadOnlyCollection<BindingNode> UnusedBindings => unusedBindings;
         public IReadOnlyCollection<BindingNode> ValidBindings => validBindings;
         public IReadOnlyDictionary<FieldNode, object> FieldResolutionMap => fieldResolutionMap;
         public IReadOnlyDictionary<MethodNode, IReadOnlyList<object>> MethodResolutionMap => methodResolutionMap;
@@ -42,6 +44,16 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public void StopTimer()
         {
             stopwatch.Stop();
+        }
+
+        public void CacheUnusedBindings()
+        {
+            unusedBindings.Clear();
+
+            foreach (BindingNode bindingNode in Graph
+                         .EnumerateAllBindingNodes()
+                         .Where(binding => !UsedBindings.Contains(binding)))
+                unusedBindings.Add(bindingNode);
         }
 
         public void RegisterValidBinding(BindingNode bindingNode)

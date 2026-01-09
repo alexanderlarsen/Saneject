@@ -80,7 +80,7 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
-        public static bool LogInjectionStats
+        public static bool LogInjectionSummary
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);

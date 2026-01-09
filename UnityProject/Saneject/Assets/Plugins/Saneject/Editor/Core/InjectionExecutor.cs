@@ -107,7 +107,7 @@ namespace Plugins.Saneject.Editor.Core
                 localStats.elapsedMilliseconds = stopwatch.ElapsedMilliseconds;
                 globalStats?.AddStats(localStats);
 
-                if (logStats && UserSettings.LogInjectionStats)
+                if (logStats && UserSettings.LogInjectionSummary)
                     localStats.LogStats(prefix: $"{statsLogPrefix} [{rootScope.gameObject.name}]");
             }
             catch (Exception e)
@@ -158,7 +158,7 @@ namespace Plugins.Saneject.Editor.Core
                     assetData,
                     globalStats);
 
-            if (logStats && UserSettings.LogInjectionStats)
+            if (logStats && UserSettings.LogInjectionSummary)
                 globalStats.LogStats(prefix: $"{statsLogPrefix}");
         }
 
