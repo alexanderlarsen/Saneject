@@ -110,7 +110,8 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                             ["name"] = methodNode.MethodInfo.Name,
                             ["parameters"] = new JArray(methodNode.MethodInfo.GetParameters().Select(p => p.ParameterType.Name)),
                             ["injectId"] = methodNode.InjectId,
-                            ["suppressMissingErrors"] = methodNode.SuppressMissingErrors
+                            ["suppressMissingErrors"] = methodNode.SuppressMissingErrors,
+                            ["displayPath"] = methodNode.DisplayPath
                         }))
                     }
                 )),

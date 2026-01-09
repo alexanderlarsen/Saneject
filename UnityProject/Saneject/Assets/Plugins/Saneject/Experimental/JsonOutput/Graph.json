@@ -261,6 +261,39 @@
               "name": "Player (Instance ID: 32398)",
               "fields": [
                 {
+                  "declaringType": "PlayerNested",
+                  "memberName": "moveControllerNested",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.moveControllerNested",
+                  "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "PlayerDeepNested",
+                  "memberName": "moveController",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.playerDeepNested.moveController",
+                  "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "PlayerDeepNested",
+                  "memberName": "<MoveControllerProperty>k__BackingField",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.playerDeepNested.MoveControllerProperty",
+                  "isPropertyBackingField": true
+                },
+                {
                   "declaringType": "Player",
                   "memberName": "moveController",
                   "injectId": null,
@@ -316,7 +349,29 @@
                   "isPropertyBackingField": false
                 }
               ],
-              "methods": []
+              "methods": [
+                {
+                  "name": "PlayerInit",
+                  "parameters": [],
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "displayPath": "Game/Player/Player/PlayerInit"
+                },
+                {
+                  "name": "PlayerNestedInit",
+                  "parameters": [],
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.PlayerNestedInit"
+                },
+                {
+                  "name": "PlayerDeepNestedInit",
+                  "parameters": [],
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.playerDeepNested.PlayerDeepNestedInit"
+                }
+              ]
             }
           ],
           "children": [

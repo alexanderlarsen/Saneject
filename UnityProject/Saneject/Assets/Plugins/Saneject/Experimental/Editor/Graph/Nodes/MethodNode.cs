@@ -7,8 +7,11 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
     public class MethodNode : MemberNode
     {
         public MethodNode(
+            object owner,
             MethodInfo methodInfo,
-            ComponentNode componentNode) : base(methodInfo, componentNode)
+            ComponentNode componentNode,
+            string pathFromComponent)
+            : base(owner, methodInfo, componentNode, pathFromComponent)
         {
             MethodInfo = methodInfo;
 

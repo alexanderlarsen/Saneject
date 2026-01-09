@@ -45,7 +45,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 foreach (FieldNode fieldNode in componentNode.FieldNodes)
                     fieldNode.FieldInfo.SetValue
                     (
-                        componentNode.Component,
+                         fieldNode.Owner,
                         context.FieldResolutionMap[fieldNode]
                     );
 
@@ -54,7 +54,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     {
                         methodNode.MethodInfo.Invoke
                         (
-                            componentNode.Component,
+                            methodNode.Owner,
                             context.MethodResolutionMap[methodNode].ToArray()
                         );
                     }

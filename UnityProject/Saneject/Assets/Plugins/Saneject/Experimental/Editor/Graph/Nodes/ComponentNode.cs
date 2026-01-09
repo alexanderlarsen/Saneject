@@ -2,6 +2,7 @@
 using System.Linq;
 using System.Reflection;
 using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
@@ -23,18 +24,30 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
                 BindingFlags.FlattenHierarchy;
 
             FieldNodes = component
-                .GetType()
-                .GetFields(bindingFlags)
-                // TODO: Temporarily exclude interface backing fields until they are removed entirely
-                .Where(fieldInfo => fieldInfo.HasAttribute<InjectAttribute>() && !fieldInfo.HasAttribute<InterfaceBackingFieldAttribute>())
-                .Select(fieldInfo => new FieldNode(fieldInfo, this))
+                .GetFieldsDeep(bindingFlags)
+                .Where(result =>
+                    result.FieldInfo.HasAttribute<InjectAttribute>()
+                    // TODO: remove when getting rid of InterfaceBackingFieldAttribute
+                    && !result.FieldInfo.HasAttribute<InterfaceBackingFieldAttribute>())
+                .Select(result => new FieldNode
+                (
+                    owner: result.Owner,
+                    fieldInfo: result.FieldInfo,
+                    componentNode: this,
+                    pathFromComponent: result.Path
+                ))
                 .ToList();
 
             MethodNodes = component
-                .GetType()
-                .GetMethods(bindingFlags)
-                .Where(methodInfo => methodInfo.HasAttribute<InjectAttribute>())
-                .Select(methodInfo => new MethodNode(methodInfo, this))
+                .GetMethodsDeep(bindingFlags)
+                .Where(result => result.MethodInfo.HasAttribute<InjectAttribute>())
+                .Select(result => new MethodNode
+                (
+                    owner: result.Owner,
+                    methodInfo: result.MethodInfo,
+                    componentNode: this,
+                    pathFromComponent: result.Path
+                ))
                 .ToList();
         }
 
