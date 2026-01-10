@@ -11,13 +11,13 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             object owner,
             MemberInfo memberInfo,
             ComponentNode componentNode,
-            string pathFromComponent)
+            string pathFromComponent,
+            InjectAttribute injectAttribute)
         {
             Owner = owner;
             ComponentNode = componentNode;
             DeclaringType = memberInfo.DeclaringType;
-            MemberName = memberInfo.Name;
-            InjectAttribute injectAttribute = memberInfo.GetCustomAttribute<InjectAttribute>();
+            MemberName = memberInfo.Name; 
             InjectId = injectAttribute.ID;
             SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
             DisplayPath = this.GetDisplayPath(pathFromComponent);

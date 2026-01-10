@@ -2,6 +2,7 @@
 using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
+using Plugins.Saneject.Runtime.Attributes;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
@@ -11,8 +12,9 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             object owner,
             FieldInfo fieldInfo,
             ComponentNode componentNode,
-            string pathFromComponent)
-            : base(owner, fieldInfo, componentNode, pathFromComponent)
+            string pathFromComponent,
+            InjectAttribute injectAttribute)
+            : base(owner, fieldInfo, componentNode, pathFromComponent, injectAttribute)
         {
             FieldInfo = fieldInfo;
             FieldType = fieldInfo.FieldType;

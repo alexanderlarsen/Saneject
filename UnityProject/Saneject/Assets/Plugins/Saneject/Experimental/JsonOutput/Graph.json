@@ -1,9 +1,9 @@
 {
   "rootNodes": [
     {
-      "name": "Game (Instance ID: 32414)",
+      "name": "Game (Instance ID: 35964)",
       "parent": null,
-      "context": "SceneObject (Key: -1244)",
+      "context": "SceneObject (Key: -20762)",
       "scope": {
         "type": "GameScope",
         "parentScope": null,
@@ -119,7 +119,7 @@
       },
       "components": [
         {
-          "name": "GameManager (Instance ID: 32416)",
+          "name": "GameManager (Instance ID: 35966)",
           "fields": [
             {
               "declaringType": "GameManager",
@@ -149,9 +149,9 @@
       ],
       "children": [
         {
-          "name": "Player (Instance ID: 32402)",
-          "parent": "Game (Instance ID: 32414)",
-          "context": "PrefabInstance (Key: -1246)",
+          "name": "Player (Instance ID: 35994)",
+          "parent": "Game (Instance ID: 35964)",
+          "context": "PrefabInstance (Key: -20764)",
           "scope": {
             "type": "PlayerScope",
             "parentScope": "GameScope",
@@ -231,26 +231,6 @@
                 "includeSelfInSearch": false,
                 "childIndexForSearch": 0,
                 "resolveFromProxy": false
-              },
-              {
-                "interfaceType": null,
-                "concreteType": "Collider",
-                "isCollectionBinding": true,
-                "locatorStrategySpecified": true,
-                "resolveFromInstances": [],
-                "idQualifiers": [
-                  "playerColliders"
-                ],
-                "targetTypeQualifiers": [],
-                "memberNameQualifiers": [],
-                "searchOrigin": "InjectionTarget",
-                "searchDirection": "Descendants",
-                "findObjectsInactive": "Exclude",
-                "findObjectsSortMode": "None",
-                "customTargetTransform": null,
-                "includeSelfInSearch": false,
-                "childIndexForSearch": 0,
-                "resolveFromProxy": false
               }
             ],
             "assetBindings": [],
@@ -258,41 +238,8 @@
           },
           "components": [
             {
-              "name": "Player (Instance ID: 32398)",
+              "name": "Player (Instance ID: 35990)",
               "fields": [
-                {
-                  "declaringType": "PlayerNested",
-                  "memberName": "moveControllerNested",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IMoveController",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Player/Player/PlayerNested.moveControllerNested",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "PlayerDeepNested",
-                  "memberName": "moveController",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IMoveController",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Player/Player/PlayerNested.playerDeepNested.moveController",
-                  "isPropertyBackingField": false
-                },
-                {
-                  "declaringType": "PlayerDeepNested",
-                  "memberName": "<MoveControllerProperty>k__BackingField",
-                  "injectId": null,
-                  "suppressMissingErrors": false,
-                  "requestedType": "IMoveController",
-                  "isInterface": true,
-                  "isCollection": false,
-                  "displayPath": "Game/Player/Player/PlayerNested.playerDeepNested.MoveControllerProperty",
-                  "isPropertyBackingField": true
-                },
                 {
                   "declaringType": "Player",
                   "memberName": "moveController",
@@ -308,7 +255,7 @@
                   "declaringType": "Player",
                   "memberName": "weapon",
                   "injectId": null,
-                  "suppressMissingErrors": false,
+                  "suppressMissingErrors": true,
                   "requestedType": "IWeapon",
                   "isInterface": true,
                   "isCollection": false,
@@ -341,12 +288,45 @@
                   "declaringType": "Player",
                   "memberName": "collidersArray",
                   "injectId": "playerColliders",
-                  "suppressMissingErrors": false,
+                  "suppressMissingErrors": true,
                   "requestedType": "Collider",
                   "isInterface": false,
                   "isCollection": true,
                   "displayPath": "Game/Player/Player/collidersArray",
                   "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "PlayerNested",
+                  "memberName": "moveControllerNested",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.moveControllerNested",
+                  "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "PlayerDeepNested",
+                  "memberName": "moveController",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.playerDeepNested.moveController",
+                  "isPropertyBackingField": false
+                },
+                {
+                  "declaringType": "PlayerDeepNested",
+                  "memberName": "<MoveControllerProperty>k__BackingField",
+                  "injectId": null,
+                  "suppressMissingErrors": false,
+                  "requestedType": "IMoveController",
+                  "isInterface": true,
+                  "isCollection": false,
+                  "displayPath": "Game/Player/Player/PlayerNested.playerDeepNested.MoveControllerProperty",
+                  "isPropertyBackingField": true
                 }
               ],
               "methods": [
@@ -376,49 +356,35 @@
           ],
           "children": [
             {
-              "name": "MoveController (Instance ID: -1252)",
-              "parent": "Player (Instance ID: 32402)",
-              "context": "PrefabInstance (Key: -1246)",
+              "name": "MoveController (Instance ID: -20770)",
+              "parent": "Player (Instance ID: 35994)",
+              "context": "PrefabInstance (Key: -20764)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Colliders (Instance ID: -1256)",
-              "parent": "Player (Instance ID: 32402)",
-              "context": "PrefabInstance (Key: -1246)",
+              "name": "Colliders (Instance ID: -20774)",
+              "parent": "Player (Instance ID: 35994)",
+              "context": "PrefabInstance (Key: -20764)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "AudioSources (Instance ID: -1260)",
-              "parent": "Player (Instance ID: 32402)",
-              "context": "PrefabInstance (Key: -1246)",
+              "name": "AudioSources (Instance ID: -20778)",
+              "parent": "Player (Instance ID: 35994)",
+              "context": "PrefabInstance (Key: -20764)",
               "scope": null,
-              "components": [],
-              "children": []
-            },
-            {
-              "name": "Crossbow (Instance ID: -24582)",
-              "parent": "Player (Instance ID: 32402)",
-              "context": "PrefabInstance (Key: -24580)",
-              "scope": {
-                "type": "WeaponScope",
-                "parentScope": "PlayerScope",
-                "componentBindings": [],
-                "assetBindings": [],
-                "globalBindings": []
-              },
               "components": [],
               "children": []
             }
           ]
         },
         {
-          "name": "Enemy (Instance ID: 32392)",
-          "parent": "Game (Instance ID: 32414)",
-          "context": "PrefabInstance (Key: -1262)",
+          "name": "Enemy (Instance ID: 35956)",
+          "parent": "Game (Instance ID: 35964)",
+          "context": "PrefabInstance (Key: -20780)",
           "scope": {
             "type": "EnemyScope",
             "parentScope": "GameScope",
@@ -465,7 +431,7 @@
           },
           "components": [
             {
-              "name": "Enemy (Instance ID: 32394)",
+              "name": "Enemy (Instance ID: 35958)",
               "fields": [
                 {
                   "declaringType": "Enemy",
@@ -495,17 +461,17 @@
           ],
           "children": [
             {
-              "name": "MoveController (Instance ID: -1268)",
-              "parent": "Enemy (Instance ID: 32392)",
-              "context": "PrefabInstance (Key: -1262)",
+              "name": "MoveController (Instance ID: -20786)",
+              "parent": "Enemy (Instance ID: 35956)",
+              "context": "PrefabInstance (Key: -20780)",
               "scope": null,
               "components": [],
               "children": []
             },
             {
-              "name": "Rifle (Instance ID: -25246)",
-              "parent": "Enemy (Instance ID: 32392)",
-              "context": "PrefabInstance (Key: -25244)",
+              "name": "Rifle (Instance ID: 35948)",
+              "parent": "Enemy (Instance ID: 35956)",
+              "context": "PrefabInstance (Key: -20788)",
               "scope": {
                 "type": "WeaponScope",
                 "parentScope": "EnemyScope",

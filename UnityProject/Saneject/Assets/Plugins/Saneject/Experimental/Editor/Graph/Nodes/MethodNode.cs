@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Plugins.Saneject.Runtime.Attributes;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
@@ -10,8 +11,9 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             object owner,
             MethodInfo methodInfo,
             ComponentNode componentNode,
-            string pathFromComponent)
-            : base(owner, methodInfo, componentNode, pathFromComponent)
+            string pathFromComponent,
+            InjectAttribute injectAttribute)
+            : base(owner, methodInfo, componentNode, pathFromComponent, injectAttribute)
         {
             MethodInfo = methodInfo;
 

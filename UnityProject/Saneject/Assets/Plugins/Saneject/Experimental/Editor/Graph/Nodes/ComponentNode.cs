@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using System.Reflection;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Runtime.Attributes;
@@ -17,36 +16,28 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             Component = component;
             TransformNode = transformNode;
 
-            const BindingFlags bindingFlags =
-                BindingFlags.Public |
-                BindingFlags.NonPublic |
-                BindingFlags.Instance |
-                BindingFlags.FlattenHierarchy;
-
             FieldNodes = component
-                .GetFieldsDeep(bindingFlags)
-                .Where(result =>
-                    result.FieldInfo.HasAttribute<InjectAttribute>()
-                    // TODO: remove when getting rid of InterfaceBackingFieldAttribute
-                    && !result.FieldInfo.HasAttribute<InterfaceBackingFieldAttribute>())
+                .EnumerateInjectionFieldsDeep()
+                .Where(result => !result.FieldInfo.HasAttribute<InterfaceBackingFieldAttribute>()) // TODO: remove when getting rid of InterfaceBackingFieldAttribute
                 .Select(result => new FieldNode
                 (
                     owner: result.Owner,
                     fieldInfo: result.FieldInfo,
                     componentNode: this,
-                    pathFromComponent: result.Path
+                    pathFromComponent: result.Path,
+                    injectAttribute: result.InjectAttribute
                 ))
                 .ToList();
 
             MethodNodes = component
-                .GetMethodsDeep(bindingFlags)
-                .Where(result => result.MethodInfo.HasAttribute<InjectAttribute>())
+                .EnumerateInjectionMethodsDeep()
                 .Select(result => new MethodNode
                 (
                     owner: result.Owner,
                     methodInfo: result.MethodInfo,
                     componentNode: this,
-                    pathFromComponent: result.Path
+                    pathFromComponent: result.Path,
+                    injectAttribute: result.InjectAttribute
                 ))
                 .ToList();
         }

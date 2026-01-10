@@ -1,7 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
+using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -11,35 +13,37 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
     public static class ComponentTraversalExtensions
     {
-        public static IEnumerable<FieldTraversalResult> GetFieldsDeep(
-            this Component component,
-            BindingFlags flags)
+        private const BindingFlags BindingFlags =
+            System.Reflection.BindingFlags.Public |
+            System.Reflection.BindingFlags.NonPublic |
+            System.Reflection.BindingFlags.Instance |
+            System.Reflection.BindingFlags.FlattenHierarchy;
+
+        public static IEnumerable<FieldTraversalResult> EnumerateInjectionFieldsDeep(this Component component)
         {
-            return WalkFields(component, flags, string.Empty);
+            return WalkFields(component, string.Empty);
         }
 
-        public static IEnumerable<MethodTraversalResult> GetMethodsDeep(
-            this Component component,
-            BindingFlags flags)
+        public static IEnumerable<MethodTraversalResult> EnumerateInjectionMethodsDeep(this Component component)
         {
-            return WalkMethods(component, flags, string.Empty);
+            return WalkMethods(component, string.Empty);
         }
 
         private static IEnumerable<FieldTraversalResult> WalkFields(
             object owner,
-            BindingFlags flags,
             string path)
         {
             Type type = owner.GetType();
 
-            foreach (FieldInfo field in type.GetFields(flags))
+            foreach (FieldInfo field in type.GetFields(BindingFlags))
             {
                 string fieldPath =
                     string.IsNullOrEmpty(path)
                         ? field.Name
                         : $"{path}.{field.Name}";
 
-                yield return new FieldTraversalResult(owner, field, fieldPath);
+                if (field.TryGetAttribute(out InjectAttribute injectAttribute))
+                    yield return new FieldTraversalResult(owner, field, fieldPath, injectAttribute);
 
                 if (!IsNestedSerializable(field.FieldType))
                     continue;
@@ -49,29 +53,29 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
                 if (nested == null)
                     continue;
 
-                foreach (FieldTraversalResult child in WalkFields(nested, flags, fieldPath))
+                foreach (FieldTraversalResult child in WalkFields(nested, fieldPath))
                     yield return child;
             }
         }
 
         private static IEnumerable<MethodTraversalResult> WalkMethods(
             object owner,
-            BindingFlags flags,
             string path)
         {
             Type type = owner.GetType();
 
-            foreach (MethodInfo method in type.GetMethods(flags))
+            foreach (MethodInfo method in type.GetMethods(BindingFlags))
             {
                 string methodPath =
                     string.IsNullOrEmpty(path)
                         ? method.Name
                         : $"{path}.{method.Name}";
 
-                yield return new MethodTraversalResult(owner, method, methodPath);
+                if (method.TryGetAttribute(out InjectAttribute injectAttribute))
+                    yield return new MethodTraversalResult(owner, method, methodPath, injectAttribute);
             }
 
-            foreach (FieldInfo field in type.GetFields(flags))
+            foreach (FieldInfo field in type.GetFields(BindingFlags))
             {
                 if (!IsNestedSerializable(field.FieldType))
                     continue;
@@ -86,10 +90,7 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
                         ? field.Name
                         : $"{path}.{field.Name}";
 
-                foreach (MethodTraversalResult child in WalkMethods(
-                             nested,
-                             flags,
-                             nestedPath))
+                foreach (MethodTraversalResult child in WalkMethods(nested, nestedPath))
                     yield return child;
             }
         }
