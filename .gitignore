@@ -38,9 +38,13 @@
 
 # ───────── SourceGenerators project ─────────
 
+/Build/
 /RoslynTools/bin/
 /RoslynTools/obj/
 !RoslynTools/RoslynTools.csproj
+
+**/bin/
+**/obj/
 
 # ───────── General tooling ─────────
 .vs/
