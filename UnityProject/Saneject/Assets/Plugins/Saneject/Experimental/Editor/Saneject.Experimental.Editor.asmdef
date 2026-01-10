@@ -1,0 +1,20 @@
+{
+    "name": "Saneject.Experimental.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9d4efcdc038880a47bec379313b2bed9",
+        "GUID:6709c1cfc2b446caa4818124a6c473b8",
+        "GUID:728b1107dc5548b68d74a99008c891db"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
