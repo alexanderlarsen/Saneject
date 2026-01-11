@@ -4,7 +4,7 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Runtime;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
-using Plugins.Saneject.Runtime.Settings;
+using Plugins.Saneject.Experimental.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {

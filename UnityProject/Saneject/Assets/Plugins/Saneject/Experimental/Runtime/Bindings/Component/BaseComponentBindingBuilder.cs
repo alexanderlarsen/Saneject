@@ -256,7 +256,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the injection target's own <see cref="Transform" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetSelf()
         {
@@ -268,7 +268,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the injection target's direct <see cref="Transform.parent" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetParent()
         {
@@ -281,7 +281,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Locate the <see cref="Component" /> on any ancestor <see cref="Transform" /> of the injection target.
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetAncestors(bool includeSelf = false)
         {
@@ -294,7 +294,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the injection target's first direct child <see cref="Transform" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetFirstChild()
         {
@@ -306,7 +306,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the injection target's last direct child <see cref="Transform" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetLastChild()
         {
@@ -318,7 +318,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         /// <summary>
         /// Locate the <see cref="Component" /> on the injection target's direct child <see cref="Transform" /> with index.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetChildWithIndex(int index)
         {
@@ -332,7 +332,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Locate the <see cref="Component" /> on any descendant <see cref="Transform" /> of the injection target.
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetDescendants(bool includeSelf = false)
         {
@@ -345,7 +345,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         /// <summary>
         /// Locate the <see cref="Component" /> on any sibling <see cref="Transform" /> of the injection target (other children of the same parent).
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         public ComponentFilterBuilder<TComponent> FromTargetSiblings()
         {

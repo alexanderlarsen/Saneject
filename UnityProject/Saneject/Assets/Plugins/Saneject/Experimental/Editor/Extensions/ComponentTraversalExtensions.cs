@@ -1,9 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Runtime.Attributes;
+using Plugins.Saneject.Experimental.Runtime.Attributes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

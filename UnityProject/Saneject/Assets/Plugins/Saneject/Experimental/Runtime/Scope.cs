@@ -8,7 +8,7 @@ using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
 using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
-using ReadOnlyAttribute = Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute;
+using ReadOnlyAttribute = Plugins.Saneject.Experimental.Runtime.Attributes.ReadOnlyAttribute;
 
 namespace Plugins.Saneject.Experimental.Runtime
 {

@@ -3,14 +3,14 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Experimental.Editor.Utils;
+using Plugins.Saneject.Experimental.Editor.Utility;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Json
 {
     public static class InjectionGraphJsonExporter
     {
-        private const string Path = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Experimental\JsonOutput\Graph.json";
+        private const string Path = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Dev\JsonOutput\Graph.json";
 
         public static void SaveGraphToJson(InjectionGraph graph)
         {

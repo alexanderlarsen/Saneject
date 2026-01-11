@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using System.Linq;
 using Microsoft.CodeAnalysis;
 
 // ReSharper disable ForeachCanBePartlyConvertedToQueryUsingAnotherGetEnumerator
@@ -8,6 +9,8 @@ namespace Saneject.SerializeInterface.Generator.Legacy.Utils;
 
 public static class AttributeUtils
 {
+    private const string AttributeNamespaceRoot = "Plugins.Saneject.Legacy.Runtime.Attributes";
+
     public static string GetAttributes(
         ISymbol symbol,
         ITypeSymbol typeSymbol)
@@ -15,7 +18,7 @@ public static class AttributeUtils
         List<string> attributes =
         [
             "UnityEngine.SerializeField",
-            $"Plugins.Saneject.Runtime.Attributes.InterfaceBackingFieldAttribute(typeof({typeSymbol.ToDisplayString()}))",
+            $"Plugins.Saneject.Legacy.Runtime.Attributes.InterfaceBackingFieldAttribute(typeof({typeSymbol.ToDisplayString()}))",
             "System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)"
         ];
 
@@ -23,7 +26,7 @@ public static class AttributeUtils
         {
             string attribute = attributeData.ToString();
 
-            if (attribute == "Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute")
+            if (IsSerializeInterfaceAttribute(attributeData))
                 continue;
 
             if (attributes.Contains(attribute))
@@ -38,5 +41,24 @@ public static class AttributeUtils
     public static string GetEditorBrowsableAttribute(EditorBrowsableState state)
     {
         return $"System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.{state.ToString()})";
+    }
+
+    public static bool HasSerializeInterfaceAttribute(ISymbol symbol)
+    {
+        return Enumerable.Any(symbol.GetAttributes(), IsSerializeInterfaceAttribute);
+    }
+
+    private static bool IsSerializeInterfaceAttribute(AttributeData attr)
+    {
+        INamedTypeSymbol attrClass = attr.AttributeClass;
+
+        if (attrClass == null)
+            return false;
+
+        if (attrClass.Name != "SerializeInterfaceAttribute")
+            return false;
+
+        string ns = attrClass.ContainingNamespace?.ToDisplayString();
+        return ns != null && ns.StartsWith(AttributeNamespaceRoot);
     }
 }

@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Experimental.Editor.Utils;
+using Plugins.Saneject.Experimental.Editor.Utility;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Data

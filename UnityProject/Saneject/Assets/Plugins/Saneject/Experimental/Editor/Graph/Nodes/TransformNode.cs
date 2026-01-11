@@ -2,7 +2,7 @@
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Runtime;
-using Plugins.Saneject.Runtime.Settings;
+using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes

@@ -6,7 +6,7 @@
         <DebugType>none</DebugType>
         <GenerateDependencyFile>false</GenerateDependencyFile>
         <RootNamespace>Saneject.SerializeInterface.Generator</RootNamespace>
-        <OutputPath>..\..\Build\Roslyn.Experimental\</OutputPath>
+        <OutputPath>..\..\Build\Roslyn.Default\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>
 

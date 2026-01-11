@@ -10,6 +10,8 @@ namespace Saneject.ProxyObject.Generator;
 [Generator]
 public class ProxyObjectGenerator : ISourceGenerator
 {
+    private const string NamespaceRoot = "Plugins.Saneject.Experimental.Runtime";
+    
     public void Initialize(GeneratorInitializationContext context)
     {
         context.RegisterForSyntaxNotifications(() => new ForwardMethodReceiver());
@@ -21,8 +23,8 @@ public class ProxyObjectGenerator : ISourceGenerator
             return;
 
         Compilation compilation = context.Compilation;
-        INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName("Plugins.Saneject.Runtime.Attributes.GenerateProxyObjectAttribute");
-        INamedTypeSymbol proxyBaseSymbol = compilation.GetTypeByMetadataName("Plugins.Saneject.Runtime.Proxy.ProxyObject`1");
+        INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Attributes.GenerateProxyObjectAttribute");
+        INamedTypeSymbol proxyBaseSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Proxy.ProxyObject`1");
 
         if (attrSymbol is null || proxyBaseSymbol is null)
             return;

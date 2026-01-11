@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Runtime.Global;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core

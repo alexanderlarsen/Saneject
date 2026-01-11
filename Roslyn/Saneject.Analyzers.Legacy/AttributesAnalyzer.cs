@@ -8,6 +8,8 @@ namespace Saneject.Analyzers.Legacy;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class AttributesAnalyzer : DiagnosticAnalyzer
 {
+    private const string AttributeNamespaceRoot = "Plugins.Saneject.Legacy.Runtime.Attributes";
+
     private static readonly DiagnosticDescriptor Rule = new(
         "INJ001",
         "[Inject] fields must have either [SerializeField], [SerializeInterface] or be public",
@@ -38,8 +40,8 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
     private void AnalyzeInjectUsage(SymbolAnalysisContext context)
     {
         ISymbol symbol = context.Symbol;
-        if (!HasAttribute(symbol, "Inject")) return;
-        if (HasAttribute(symbol, "SerializeField") || HasAttribute(symbol, "SerializeInterface") || IsPublic(symbol)) return;
+        if (!HasAttribute(symbol, AttributeNamespaceRoot, "Inject")) return;
+        if (HasAttribute(symbol, "UnityEngine", "SerializeField") || HasAttribute(symbol, AttributeNamespaceRoot, "SerializeInterface") || IsPublic(symbol)) return;
 
         context.ReportDiagnostic(Diagnostic.Create(Rule, symbol.Locations[0], symbol.Name));
     }
@@ -47,7 +49,7 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
     private void AnalyzeSerializeInterfaceUsage(SymbolAnalysisContext context)
     {
         if (context.Symbol is not IFieldSymbol field) return;
-        if (!HasAttribute(field, "SerializeInterface")) return;
+        if (!HasAttribute(field, AttributeNamespaceRoot, "SerializeInterface")) return;
 
         ITypeSymbol typeSymbol = field.Type;
 
@@ -72,11 +74,28 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
         return symbol.DeclaredAccessibility == Accessibility.Public;
     }
 
-    private bool HasAttribute(
+    public static bool HasAttribute(
         ISymbol symbol,
-        string attrName)
+        string ns,
+        string attributeName)
     {
-        return symbol.GetAttributes().Any(a =>
-            a.AttributeClass?.Name == attrName || a.AttributeClass?.Name == attrName + "Attribute");
+        return Enumerable.Any(symbol.GetAttributes(), attr => IsAttribute(attr, ns, attributeName));
+    }
+
+    private static bool IsAttribute(
+        AttributeData attr,
+        string ns,
+        string attributeName)
+    {
+        INamedTypeSymbol attrClass = attr.AttributeClass;
+
+        if (attrClass == null)
+            return false;
+
+        if (attrClass.Name != attributeName)
+            return false;
+
+        string attributeNamespace = attrClass.ContainingNamespace?.ToDisplayString();
+        return attributeNamespace != null && attributeNamespace.StartsWith(ns);
     }
 }

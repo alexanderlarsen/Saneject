@@ -47,18 +47,22 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 if (model.GetDeclaredSymbol(variable) is not IFieldSymbol fieldSymbol)
                     continue;
 
-                if (!fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.Name == "SerializeInterfaceAttribute"))
+                if (!AttributeUtils.HasSerializeInterfaceAttribute(fieldSymbol))
                     continue;
 
-                if (!fieldSymbol.Type.IsInterface() && !fieldSymbol.Type.IsInterfaceCollection())
+                if (!fieldSymbol.Type.IsInterface() &&
+                    !fieldSymbol.Type.IsInterfaceCollection())
                     continue;
 
                 INamedTypeSymbol owner = fieldSymbol.ContainingType;
 
-                if (!fieldsByClass.ContainsKey(owner))
-                    fieldsByClass[owner] = [];
+                if (!fieldsByClass.TryGetValue(owner, out List<IFieldSymbol> list))
+                {
+                    list = [];
+                    fieldsByClass[owner] = list;
+                }
 
-                fieldsByClass[owner].Add(fieldSymbol);
+                list.Add(fieldSymbol);
                 classesWithInterfaces.Add(owner);
             }
         }
@@ -72,23 +76,27 @@ public class SerializeInterfaceGenerator : ISourceGenerator
     {
         foreach (PropertyDeclarationSyntax candidate in receiver.PropertyCandidates)
         {
-            if (!candidate.AttributeLists.Any(al => al.Target?.Identifier.Text == "field" && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
-                continue;
-
             SemanticModel model = context.Compilation.GetSemanticModel(candidate.SyntaxTree);
 
             if (model.GetDeclaredSymbol(candidate) is not IPropertySymbol propertySymbol)
                 continue;
+            
+            if (!AttributeUtils.HasSerializeInterfaceAttribute(propertySymbol))
+                continue;
 
-            if (!propertySymbol.Type.IsInterface() && !propertySymbol.Type.IsInterfaceCollection())
+            if (!propertySymbol.Type.IsInterface() &&
+                !propertySymbol.Type.IsInterfaceCollection())
                 continue;
 
             INamedTypeSymbol owner = propertySymbol.ContainingType;
 
-            if (!propertiesByClass.ContainsKey(owner))
-                propertiesByClass[owner] = [];
+            if (!propertiesByClass.TryGetValue(owner, out List<IPropertySymbol> list))
+            {
+                list = [];
+                propertiesByClass[owner] = list;
+            }
 
-            propertiesByClass[owner].Add(propertySymbol);
+            list.Add(propertySymbol);
             classesWithInterfaces.Add(owner);
         }
     }
@@ -139,17 +147,17 @@ public class SerializeInterfaceGenerator : ISourceGenerator
 
                     if (fieldSymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol, array.ElementType)}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol)}]");
                         sb.AppendLine($"        private UnityEngine.Object[] __{name};");
                     }
                     else if (fieldSymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol, list.TypeArguments[0])}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol)}]");
                         sb.AppendLine($"        private System.Collections.Generic.List<UnityEngine.Object> __{name};");
                     }
                     else
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol, fieldSymbol.Type)}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol)}]");
                         sb.AppendLine($"        private UnityEngine.Object __{name};");
                     }
 
@@ -181,17 +189,17 @@ public class SerializeInterfaceGenerator : ISourceGenerator
 
                     if (propertySymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol, array.ElementType)}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol)}]");
                         sb.AppendLine($"        private UnityEngine.Object[] __{name};");
                     }
                     else if (propertySymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol, list.TypeArguments[0])}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol)}]");
                         sb.AppendLine($"        private System.Collections.Generic.List<UnityEngine.Object> __{name};");
                     }
                     else
                     {
-                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol, propertySymbol.Type)}]");
+                        sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol)}]");
                         sb.AppendLine($"        private UnityEngine.Object __{name};");
                     }
 

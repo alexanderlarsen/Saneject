@@ -47,18 +47,22 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 if (model.GetDeclaredSymbol(variable) is not IFieldSymbol fieldSymbol)
                     continue;
 
-                if (!fieldSymbol.GetAttributes().Any(a => a.AttributeClass?.Name == "SerializeInterfaceAttribute"))
+                if (!AttributeUtils.HasSerializeInterfaceAttribute(fieldSymbol))
                     continue;
 
-                if (!fieldSymbol.Type.IsInterface() && !fieldSymbol.Type.IsInterfaceCollection())
+                if (!fieldSymbol.Type.IsInterface() &&
+                    !fieldSymbol.Type.IsInterfaceCollection())
                     continue;
 
                 INamedTypeSymbol owner = fieldSymbol.ContainingType;
 
-                if (!fieldsByClass.ContainsKey(owner))
-                    fieldsByClass[owner] = [];
+                if (!fieldsByClass.TryGetValue(owner, out List<IFieldSymbol> list))
+                {
+                    list = [];
+                    fieldsByClass[owner] = list;
+                }
 
-                fieldsByClass[owner].Add(fieldSymbol);
+                list.Add(fieldSymbol);
                 classesWithInterfaces.Add(owner);
             }
         }
@@ -72,23 +76,27 @@ public class SerializeInterfaceGenerator : ISourceGenerator
     {
         foreach (PropertyDeclarationSyntax candidate in receiver.PropertyCandidates)
         {
-            if (!candidate.AttributeLists.Any(al => al.Target?.Identifier.Text == "field" && al.Attributes.Any(a => a.Name.ToString().Contains("SerializeInterface"))))
-                continue;
-
             SemanticModel model = context.Compilation.GetSemanticModel(candidate.SyntaxTree);
 
             if (model.GetDeclaredSymbol(candidate) is not IPropertySymbol propertySymbol)
                 continue;
 
-            if (!propertySymbol.Type.IsInterface() && !propertySymbol.Type.IsInterfaceCollection())
+            if (!AttributeUtils.HasSerializeInterfaceAttribute(propertySymbol))
+                continue;
+
+            if (!propertySymbol.Type.IsInterface() &&
+                !propertySymbol.Type.IsInterfaceCollection())
                 continue;
 
             INamedTypeSymbol owner = propertySymbol.ContainingType;
 
-            if (!propertiesByClass.ContainsKey(owner))
-                propertiesByClass[owner] = [];
+            if (!propertiesByClass.TryGetValue(owner, out List<IPropertySymbol> list))
+            {
+                list = [];
+                propertiesByClass[owner] = list;
+            }
 
-            propertiesByClass[owner].Add(propertySymbol);
+            list.Add(propertySymbol);
             classesWithInterfaces.Add(owner);
         }
     }

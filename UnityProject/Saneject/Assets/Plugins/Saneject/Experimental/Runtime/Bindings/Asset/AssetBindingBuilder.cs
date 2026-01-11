@@ -24,7 +24,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
 
         /// <summary>
         /// Qualifies this binding with an ID.
-        /// Only injection targets annotated with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />
+        /// Only injection targets annotated with <see cref="Attributes.InjectAttribute" />
         /// that specify the same ID will resolve using this binding.
         /// </summary>
         /// <param name="ids">The identifiers to match against injection targets.</param>
@@ -37,7 +37,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Qualifies this binding to apply only when the injection target is of the given type.
         /// The injection target is the <see cref="Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
         public AssetBindingBuilder<TAsset> ToTarget<TTarget>()
@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Qualifies this binding to apply only when the injection target is one of the specified types.
         /// The injection target is the <see cref="Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
         public AssetBindingBuilder<TAsset> ToTarget(params Type[] targetTypes)

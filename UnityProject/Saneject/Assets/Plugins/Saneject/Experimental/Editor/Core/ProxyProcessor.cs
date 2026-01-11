@@ -4,9 +4,9 @@ using System.IO;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Experimental.Editor.Utils;
-using Plugins.Saneject.Runtime.Proxy;
-using Plugins.Saneject.Runtime.Settings;
+using Plugins.Saneject.Experimental.Editor.Utility;
+using Plugins.Saneject.Experimental.Runtime.Proxy;
+using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -112,8 +112,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 return $@"
 namespace Plugins.Saneject.Generated.Proxies
 {{
-    [Plugins.Saneject.Runtime.Attributes.GenerateProxyObject]
-    public partial class {className} : Plugins.Saneject.Runtime.Proxy.ProxyObject<{concreteType.FullName}>
+    [Plugins.Saneject.Experimental.Runtime.Attributes.GenerateProxyObject]
+    public partial class {className} : Plugins.Saneject.Experimental.Runtime.Proxy.ProxyObject<{concreteType.FullName}>
     {{
     }}
 }}";

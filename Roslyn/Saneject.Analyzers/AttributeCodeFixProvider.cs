@@ -13,6 +13,15 @@ namespace Saneject.Analyzers;
 [ExportCodeFixProvider(LanguageNames.CSharp, Name = nameof(AttributeCodeFixProvider))]
 public class AttributeCodeFixProvider : CodeFixProvider
 {
+    private const string RuntimeAttributeRoot =
+        "Plugins.Saneject.Experimental.Runtime.Attributes";
+
+    private const string SerializeInterfaceFullName =
+        RuntimeAttributeRoot + ".SerializeInterface";
+
+    private const string SerializeFieldFullName =
+        "UnityEngine.SerializeField";
+
     public sealed override ImmutableArray<string> FixableDiagnosticIds =>
         ImmutableArray.Create("INJ001", "INJ002");
 
@@ -24,15 +33,24 @@ public class AttributeCodeFixProvider : CodeFixProvider
     public sealed override async Task RegisterCodeFixesAsync(CodeFixContext context)
     {
         Diagnostic diagnostic = context.Diagnostics.First();
-        SyntaxNode root = await context.Document.GetSyntaxRootAsync(context.CancellationToken).ConfigureAwait(false);
+
+        SyntaxNode root = await context.Document
+            .GetSyntaxRootAsync(context.CancellationToken)
+            .ConfigureAwait(false);
+
         SyntaxNode node = root.FindNode(diagnostic.Location.SourceSpan);
 
         if (node is not VariableDeclaratorSyntax varDecl ||
             varDecl.Parent?.Parent is not FieldDeclarationSyntax fieldDecl)
             return;
 
-        SemanticModel semanticModel = await context.Document.GetSemanticModelAsync(context.CancellationToken);
-        IFieldSymbol symbol = semanticModel.GetDeclaredSymbol(varDecl, context.CancellationToken) as IFieldSymbol;
+        SemanticModel semanticModel = await context.Document
+            .GetSemanticModelAsync(context.CancellationToken)
+            .ConfigureAwait(false);
+
+        IFieldSymbol symbol =
+            semanticModel.GetDeclaredSymbol(varDecl, context.CancellationToken) as IFieldSymbol;
+
         bool isInterface = symbol?.Type.TypeKind == TypeKind.Interface;
 
         switch (diagnostic.Id)
@@ -41,7 +59,11 @@ public class AttributeCodeFixProvider : CodeFixProvider
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         "Add [SerializeField]",
-                        c => AddAttributeAsync(context.Document, fieldDecl, "SerializeField", c),
+                        c => AddAttributeAsync(
+                            context.Document,
+                            fieldDecl,
+                            SerializeFieldFullName,
+                            c),
                         "AddSerializeField"),
                     diagnostic);
 
@@ -49,14 +71,21 @@ public class AttributeCodeFixProvider : CodeFixProvider
                     context.RegisterCodeFix(
                         CodeAction.Create(
                             "Add [SerializeInterface]",
-                            c => AddAttributeAsync(context.Document, fieldDecl, "SerializeInterface", c),
+                            c => AddAttributeAsync(
+                                context.Document,
+                                fieldDecl,
+                                SerializeInterfaceFullName,
+                                c),
                             "AddSerializeInterface"),
                         diagnostic);
 
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         "Make field public",
-                        c => MakeFieldPublicAsync(context.Document, fieldDecl, c),
+                        c => MakeFieldPublicAsync(
+                            context.Document,
+                            fieldDecl,
+                            c),
                         "MakePublic"),
                     diagnostic);
 
@@ -66,14 +95,23 @@ public class AttributeCodeFixProvider : CodeFixProvider
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         "Remove [SerializeInterface]",
-                        c => RemoveAttributeAsync(context.Document, fieldDecl, "SerializeInterface", c),
+                        c => RemoveAttributeAsync(
+                            context.Document,
+                            fieldDecl,
+                            "SerializeInterface",
+                            c),
                         "RemoveSerializeInterface"),
                     diagnostic);
 
                 context.RegisterCodeFix(
                     CodeAction.Create(
                         "Replace [SerializeInterface] with [SerializeField]",
-                        c => ReplaceAttributeAsync(context.Document, fieldDecl, "SerializeInterface", "SerializeField", c),
+                        c => ReplaceAttributeAsync(
+                            context.Document,
+                            fieldDecl,
+                            "SerializeInterface",
+                            SerializeFieldFullName,
+                            c),
                         "ReplaceSerializeInterface"),
                     diagnostic);
 
@@ -84,34 +122,36 @@ public class AttributeCodeFixProvider : CodeFixProvider
     private async Task<Document> AddAttributeAsync(
         Document document,
         FieldDeclarationSyntax field,
-        string attribute,
+        string fullyQualifiedAttribute,
         CancellationToken cancellationToken)
     {
         SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
 
-        AttributeSyntax newAttribute = SyntaxFactory.Attribute(SyntaxFactory.IdentifierName(attribute));
+        AttributeSyntax newAttribute =
+            SyntaxFactory.Attribute(SyntaxFactory.ParseName(fullyQualifiedAttribute));
+
         AttributeListSyntax existingList = field.AttributeLists.FirstOrDefault();
 
         SyntaxList<AttributeListSyntax> updatedLists;
 
         if (existingList != null)
         {
-            AttributeListSyntax mergedList = existingList.WithAttributes(
-                existingList.Attributes.Add(newAttribute));
+            AttributeListSyntax merged =
+                existingList.WithAttributes(existingList.Attributes.Add(newAttribute));
 
-            updatedLists = field.AttributeLists.Replace(existingList, mergedList);
+            updatedLists = field.AttributeLists.Replace(existingList, merged);
         }
         else
         {
-            AttributeListSyntax newList = SyntaxFactory.AttributeList(
-                SyntaxFactory.SingletonSeparatedList(newAttribute));
+            AttributeListSyntax newList =
+                SyntaxFactory.AttributeList(
+                    SyntaxFactory.SingletonSeparatedList(newAttribute));
 
             updatedLists = field.AttributeLists.Add(newList);
         }
 
         FieldDeclarationSyntax newField = field.WithAttributeLists(updatedLists);
-        SyntaxNode newRoot = root.ReplaceNode(field, newField);
-        return document.WithSyntaxRoot(newRoot);
+        return document.WithSyntaxRoot(root.ReplaceNode(field, newField));
     }
 
     private async Task<Document> RemoveAttributeAsync(
@@ -122,40 +162,45 @@ public class AttributeCodeFixProvider : CodeFixProvider
     {
         SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
 
-        SyntaxList<AttributeListSyntax> newAttrLists = SyntaxFactory.List(field.AttributeLists
-            .Select(al => al.WithAttributes(
-                SyntaxFactory.SeparatedList(
-                    al.Attributes.Where(attr => !IsMatchingAttribute(attr, attributeName)))))
-            .Where(al => al.Attributes.Count > 0));
+        SyntaxList<AttributeListSyntax> newAttrLists =
+            SyntaxFactory.List(
+                field.AttributeLists
+                    .Select(al =>
+                        al.WithAttributes(
+                            SyntaxFactory.SeparatedList(
+                                al.Attributes.Where(attr =>
+                                    !IsMatchingAttribute(attr, attributeName)))))
+                    .Where(al => al.Attributes.Count > 0));
 
         FieldDeclarationSyntax newField = field.WithAttributeLists(newAttrLists);
-        SyntaxNode newRoot = root.ReplaceNode(field, newField);
-        return document.WithSyntaxRoot(newRoot);
+        return document.WithSyntaxRoot(root.ReplaceNode(field, newField));
     }
 
     private async Task<Document> ReplaceAttributeAsync(
         Document document,
         FieldDeclarationSyntax field,
-        string oldAttribute,
-        string newAttribute,
+        string oldAttributeName,
+        string newFullyQualifiedAttribute,
         CancellationToken cancellationToken)
     {
         SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
 
-        SyntaxList<AttributeListSyntax> newAttrLists = SyntaxFactory.List(field.AttributeLists
-            .Select(al => al.WithAttributes(
-                SyntaxFactory.SeparatedList(
-                    al.Attributes.Select(attr =>
-                        IsMatchingAttribute(attr, oldAttribute)
-                            ? attr.WithName(SyntaxFactory.IdentifierName(newAttribute))
-                            : attr)))));
+        SyntaxList<AttributeListSyntax> newAttrLists =
+            SyntaxFactory.List(
+                field.AttributeLists.Select(al =>
+                    al.WithAttributes(
+                        SyntaxFactory.SeparatedList(
+                            al.Attributes.Select(attr =>
+                                IsMatchingAttribute(attr, oldAttributeName)
+                                    ? attr.WithName(
+                                        SyntaxFactory.ParseName(newFullyQualifiedAttribute))
+                                    : attr)))));
 
         FieldDeclarationSyntax newField = field.WithAttributeLists(newAttrLists);
-        SyntaxNode newRoot = root.ReplaceNode(field, newField);
-        return document.WithSyntaxRoot(newRoot);
+        return document.WithSyntaxRoot(root.ReplaceNode(field, newField));
     }
 
-    private bool IsMatchingAttribute(
+    private static bool IsMatchingAttribute(
         AttributeSyntax attr,
         string name)
     {
@@ -169,9 +214,11 @@ public class AttributeCodeFixProvider : CodeFixProvider
         CancellationToken cancellationToken)
     {
         SyntaxNode root = await document.GetSyntaxRootAsync(cancellationToken);
-        SyntaxTokenList newModifiers = SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+
+        SyntaxTokenList newModifiers =
+            SyntaxFactory.TokenList(SyntaxFactory.Token(SyntaxKind.PublicKeyword));
+
         FieldDeclarationSyntax newField = field.WithModifiers(newModifiers);
-        SyntaxNode newRoot = root.ReplaceNode(field, newField);
-        return document.WithSyntaxRoot(newRoot);
+        return document.WithSyntaxRoot(root.ReplaceNode(field, newField));
     }
 }

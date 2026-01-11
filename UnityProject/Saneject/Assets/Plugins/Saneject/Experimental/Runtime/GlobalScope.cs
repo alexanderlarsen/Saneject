@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Plugins.Saneject.Runtime.Settings;
+using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEngine;
 using Object = UnityEngine.Object;
 

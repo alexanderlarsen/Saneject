@@ -1,4 +1,5 @@
 ﻿using System;
+using Plugins.Saneject.Experimental.Runtime.Proxy;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
@@ -16,7 +17,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Creates or locates a <see cref="Plugins.Saneject.Runtime.Proxy.ProxyObject{TConcrete}" /> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component" /> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
+        /// Creates or locates a <see cref="ProxyObject{TConcrete}" /> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component" /> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
         /// </summary>
         public void FromProxy()
         {
@@ -28,7 +29,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
         /// <summary>
         /// Qualifies this binding with an ID.
-        /// Only injection targets annotated with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />
+        /// Only injection targets annotated with <see cref="Attributes.InjectAttribute" />
         /// that specify the same ID will resolve using this binding.
         /// </summary>
         /// <param name="ids">The identifiers to match against injection targets.</param>
@@ -41,7 +42,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Qualifies this binding to apply only when the injection target is of the given type.
         /// The injection target is the <see cref="UnityEngine.Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
         public ComponentBindingBuilder<TComponent> ToTarget<TTarget>()
@@ -53,7 +54,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// Qualifies this binding to apply only when the injection target is one of the specified types.
         /// The injection target is the <see cref="UnityEngine.Component" /> that owns the field or property
-        /// marked with <see cref="Plugins.Saneject.Runtime.Attributes.InjectAttribute" />.
+        /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
         public ComponentBindingBuilder<TComponent> ToTarget(params Type[] targetTypes)
