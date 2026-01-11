@@ -2,7 +2,7 @@
 Microsoft Visual Studio Solution File, Format Version 12.00
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saneject.SerializeInterface.Generator", "Saneject.SerializeInterface.Generator\Saneject.SerializeInterface.Generator.csproj", "{88D0EE52-DFAB-4C1F-AE0E-0A2339E02348}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saneject.ProxyObject.Generator", "Saneject.ProxyObject.Generator\Saneject.ProxyObject.Generator.csproj", "{782B5D11-4D39-4FFE-AC1F-878ACDF7D793}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saneject.RuntimeProxy.Generator", "Saneject.RuntimeProxy.Generator\Saneject.RuntimeProxy.Generator.csproj", "{782B5D11-4D39-4FFE-AC1F-878ACDF7D793}"
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Saneject.Analyzers", "Saneject.Analyzers\Saneject.Analyzers.csproj", "{9EC4EDB0-9D77-4E9B-A9A2-87A20D183E8A}"
 EndProject

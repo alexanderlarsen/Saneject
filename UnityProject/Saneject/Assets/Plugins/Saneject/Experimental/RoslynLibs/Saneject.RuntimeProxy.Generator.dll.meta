@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: adba7cf839fb62e46a5bfd1448674980
+guid: f50af3d89b92311429c0645fab5fae66
 labels:
 - RoslynAnalyzer
 PluginImporter:
@@ -24,7 +24,9 @@ PluginImporter:
     Editor:
       enabled: 0
       settings:
+        CPU: AnyCPU
         DefaultValueInitialized: true
+        OS: AnyOS
     Linux64:
       enabled: 0
       settings:

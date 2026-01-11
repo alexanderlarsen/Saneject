@@ -23,7 +23,7 @@ public class ProxyObjectGenerator : ISourceGenerator
             return;
 
         Compilation compilation = context.Compilation;
-        INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Attributes.GenerateProxyObjectAttribute");
+        INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Attributes.GenerateRuntimeProxyAttribute");
         INamedTypeSymbol proxyBaseSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Proxy.ProxyObject`1");
 
         if (attrSymbol is null || proxyBaseSymbol is null)
@@ -77,7 +77,7 @@ public class ProxyObjectGenerator : ISourceGenerator
                 sb.AppendLine("{");
             }
 
-            sb.AppendLine($"    [CreateAssetMenu(fileName = \"{classSymbol.Name}\", menuName = \"Saneject/ProxyObject/{classSymbol.Name}\")]");
+            sb.AppendLine($"    [CreateAssetMenu(fileName = \"{classSymbol.Name}\", menuName = \"Saneject/RuntimeProxy/{classSymbol.Name}\")]");
             sb.AppendLine($"    public partial class {classSymbol.Name} : {string.Join(", ", interfaces.Select(i => i.ToDisplayString()))}");
             sb.AppendLine("    {");
 
@@ -200,7 +200,7 @@ public class ProxyObjectGenerator : ISourceGenerator
         {
             if (node is ClassDeclarationSyntax cds &&
                 cds.AttributeLists.Any(al =>
-                    al.Attributes.Any(a => a.Name.ToString().Contains("GenerateProxyObject"))))
+                    al.Attributes.Any(a => a.Name.ToString().Contains("GenerateRuntimeProxy"))))
                 Candidates.Add(cds);
         }
     }

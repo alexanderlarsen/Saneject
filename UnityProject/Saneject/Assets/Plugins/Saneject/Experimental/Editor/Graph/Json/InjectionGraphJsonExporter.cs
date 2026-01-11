@@ -57,7 +57,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                             ["customTargetTransform"] = binding.CustomTargetTransform?.name,
                             ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
                             ["childIndexForSearch"] = binding.ChildIndexForSearch,
-                            ["resolveFromProxy"] = binding.ResolveFromProxy
+                            ["resolveFromProxy"] = binding.ResolveFromRuntimeProxy
                         }) ?? Array.Empty<JObject>()),
                         ["assetBindings"] = new JArray(node.DeclaredScopeNode?.BindingNodes?.OfType<AssetBindingNode>().Select(binding => new JObject
                         {
@@ -85,7 +85,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                             ["customTargetTransform"] = binding.CustomTargetTransform?.name,
                             ["includeSelfInSearch"] = binding.IncludeSelfInSearch,
                             ["childIndexForSearch"] = binding.ChildIndexForSearch,
-                            ["resolveFromProxy"] = binding.ResolveFromProxy
+                            ["resolveFromProxy"] = binding.ResolveFromRuntimeProxy
                         }) ?? Array.Empty<JObject>())
                     }
                     : null,

@@ -52,7 +52,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             {
                 case ComponentBindingNode componentBinding:
                 {
-                    if (componentBinding.ResolveFromProxy)
+                    if (componentBinding.ResolveFromRuntimeProxy)
                     {
                         sb.Append(".FromProxy()");
                         break;

@@ -6,11 +6,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
     /// <summary>
     /// Enables serialization of interface references to Unity objects between scenes and prefabs.
-    /// Use this as a base for proxies generated via Roslyn (see ProxyObjectGenerator.dll), which implement all interfaces on the concrete type at compile time and forwards methods, properties and events to a concrete instance located at runtime.
+    /// Use this as a base for proxies generated with Roslyn (via Saneject.RuntimeProxy.Generator.dll), which implement all interfaces on the concrete type at compile time and forwards methods, properties and events to a concrete instance located at runtime.
     /// Assign the proxy asset to a serialized interface field (e.g., <c>[SerializeInterface] IMyInterface myInterface</c>) at editor-time, and at runtime, the proxy resolves to the real instance using your chosen strategy.
     /// For details and usage examples, see the README.
     /// </summary>
-    public abstract class ProxyObject<TConcrete> : ProxyObjectBase
+    public abstract class RuntimeProxy<TConcrete> : RuntimeProxyBase
         where TConcrete : Component
     {
         [NonSerialized]
@@ -22,7 +22,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
              "FindInLoadedScenes: Finds the first matching component in any loaded scene using FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include).\n\n" +
              "FromComponentOnPrefab: Instantiates a prefab and finds the target component.\n\n" +
              "FromNewComponentOnNewGameObject: Creates a new GameObject and adds the component.\n\n" +
-             "ManualRegistration: You must call ProxyObject.RegisterInstance() at runtime.")]
+             "ManualRegistration: You must call RuntimeProxy.RegisterInstance() at runtime.")]
         private ResolveMethod resolveMethod;
 
         [SerializeField, Tooltip("The prefab from which to get the concrete instance.")]
@@ -122,10 +122,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
             if (dontDestroyOnLoad)
                 DontDestroyOnLoad(prefabInstance);
 
-            if (!prefabInstance.TryGetComponent(out TConcrete output))
-                throw new NullReferenceException($"Saneject: '{typeof(TConcrete)}' is not found on prefab instantiated by ScriptableObjectProxy");
-
-            return output;
+            return prefabInstance.TryGetComponent(out TConcrete output)
+                ? output
+                : throw new NullReferenceException($"Saneject: '{typeof(TConcrete)}' is not found on prefab instantiated by ScriptableObjectProxy");
         }
 
         private TConcrete CreateNewInstanceOnNewGameObject()

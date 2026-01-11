@@ -32,7 +32,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             {
                 case GlobalComponentBindingNode globalBinding:
                 {
-                    if (globalBinding.ResolveFromProxy)
+                    if (globalBinding.ResolveFromRuntimeProxy)
                         errors.Add(Error.CreateInvalidBindingError("A binding cannot be both Proxy and Global. Proxies consume globals; they are not globals themselves.", binding));
 
                     if (globalBinding.IsCollectionBinding)
@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
                 case ComponentBindingNode componentBinding:
                 {
-                    if (componentBinding.ResolveFromProxy)
+                    if (componentBinding.ResolveFromRuntimeProxy)
                     {
                         if (componentBinding.InterfaceType == null)
                             errors.Add(Error.CreateInvalidBindingError("Proxy bindings require an interface type so the ProxyObject can forward calls. Use BindComponent<IInterface, Concrete>().FromProxy().", binding));

@@ -13,6 +13,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public Transform CustomTargetTransform { get; set; }
         public bool IncludeSelfInSearch { get; set; }
         public int ChildIndexForSearch { get; set; }
-        public bool ResolveFromProxy { get; set; }
+        public bool ResolveFromRuntimeProxy { get; set; }
     }
 }

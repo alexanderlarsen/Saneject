@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             IReadOnlyCollection<Type> concreteTypes = context.Graph
                 .EnumerateAllBindingNodes()
                 .Where(bindingNode => context.ValidBindings.Contains(bindingNode))
-                .Where(bindingNode => bindingNode is ComponentBindingNode { ResolveFromProxy: true })
+                .Where(bindingNode => bindingNode is ComponentBindingNode { ResolveFromRuntimeProxy: true })
                 .Select(bindingNode => bindingNode.ConcreteType)
                 .Where(type => type != null)
                 .ToHashSet();
@@ -45,7 +45,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
         private static Type FindProxyStubType(Type concreteType)
         {
-            Type stubBaseType = typeof(ProxyObject<>).MakeGenericType(concreteType);
+            Type stubBaseType = typeof(RuntimeProxy<>).MakeGenericType(concreteType);
             return TypeCache.GetTypesDerivedFrom(stubBaseType).FirstOrDefault();
         }
 
@@ -100,7 +100,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         private static void GenerateProxyStub(Type concreteType)
         {
             Directory.CreateDirectory(UserSettings.ProxyAssetGenerationFolder);
-            string className = $"{concreteType.Name}Proxy";
+            string className = $"{concreteType.Name}RuntimeProxy";
             string proxyScriptPath = $"{UserSettings.ProxyAssetGenerationFolder}/{className}.cs";
             File.WriteAllText(proxyScriptPath, BuildProxyStubCode());
             AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
@@ -112,8 +112,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 return $@"
 namespace Plugins.Saneject.Generated.Proxies
 {{
-    [Plugins.Saneject.Experimental.Runtime.Attributes.GenerateProxyObject]
-    public partial class {className} : Plugins.Saneject.Experimental.Runtime.Proxy.ProxyObject<{concreteType.FullName}>
+    [Plugins.Saneject.Experimental.Runtime.Attributes.GenerateRuntimeProxy]
+    public partial class {className} : Plugins.Saneject.Experimental.Runtime.Proxy.RuntimeProxy<{concreteType.FullName}>
     {{
     }}
 }}";

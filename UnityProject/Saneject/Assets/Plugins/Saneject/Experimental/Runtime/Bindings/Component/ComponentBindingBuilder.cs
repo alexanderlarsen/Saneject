@@ -17,11 +17,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Creates or locates a <see cref="ProxyObject{TConcrete}" /> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component" /> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
+        /// Creates or locates a <see cref="RuntimeProxy{TConcrete}" /> for <c>TComponent</c>, acting as a weak reference that resolves to a concrete <see cref="Component" /> at runtime. This enables serializing references across boundaries Unity normally can’t (e.g. between scenes or prefabs). Uses the first existing proxy project-wide or generates a new one, including a stub script and proxy ScriptableObject asset if missing.
         /// </summary>
-        public void FromProxy()
+        public void FromRuntimeProxy()
         {
-            binding.ResolveFromProxy = true;
+            binding.ResolveFromRuntimeProxy = true;
             binding.LocatorStrategySpecified = true;
         }
 

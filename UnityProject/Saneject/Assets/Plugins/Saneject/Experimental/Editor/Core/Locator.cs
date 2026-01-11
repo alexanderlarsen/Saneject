@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             ComponentBindingNode bindingNode,
             TransformNode injectionTargetNode)
         {
-            if (bindingNode.ResolveFromProxy)
+            if (bindingNode.ResolveFromRuntimeProxy)
                 return new[] { ProxyProcessor.ResolveProxyAsset(bindingNode.ConcreteType) };
 
             if (bindingNode.SearchOrigin == SearchOrigin.Instance)

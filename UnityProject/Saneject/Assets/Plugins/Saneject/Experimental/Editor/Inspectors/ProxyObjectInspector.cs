@@ -9,10 +9,10 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Experimental.Editor.Inspectors
 {
     /// <summary>
-    /// Custom inspector for <see cref="ProxyObjectBase" />.
+    /// Custom inspector for <see cref="RuntimeProxyBase" />.
     /// Displays configuration and runtime info for interface proxy ScriptableObjects.
     /// </summary>
-    [CustomEditor(typeof(ProxyObjectBase), true)]
+    [CustomEditor(typeof(RuntimeProxyBase), true)]
     public class ProxyObjectInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
