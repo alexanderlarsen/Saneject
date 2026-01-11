@@ -44,7 +44,7 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
                 if (field.TryGetAttribute(out InjectAttribute injectAttribute))
                     yield return new FieldTraversalResult(owner, field, fieldPath, injectAttribute);
 
-                if (!IsNestedSerializable(field.FieldType))
+                if (!field.FieldType.IsNestedSerializable())
                     continue;
 
                 object nested = field.GetValue(owner);
@@ -76,7 +76,7 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
 
             foreach (FieldInfo field in type.GetFields(BindingFlags))
             {
-                if (!IsNestedSerializable(field.FieldType))
+                if (!field.FieldType.IsNestedSerializable())
                     continue;
 
                 object nested = field.GetValue(owner);
@@ -94,18 +94,6 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             }
         }
 
-        private static bool IsNestedSerializable(Type type)
-        {
-            if (type == null)
-                return false;
-
-            if (typeof(Object).IsAssignableFrom(type))
-                return false;
-
-            if (type.IsPrimitive || type == typeof(string))
-                return false;
-
-            return type.IsDefined(typeof(SerializableAttribute), inherit: false);
-        }
+     
     }
 }

@@ -4,15 +4,15 @@ using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
 {
-    public struct PropertyData
+    public sealed class FieldData
     {
-        public PropertyData(
+        public FieldData(
             SerializedProperty property,
             string displayName,
             bool isReadOnly,
             bool isSerializedInterface,
             Type expectedType,
-            List<PropertyData> children = null)
+            List<FieldData> children)
         {
             Property = property;
             DisplayName = displayName;
@@ -27,6 +27,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         public bool IsReadOnly { get; }
         public bool IsSerializedInterface { get; }
         public Type ExpectedType { get; }
-        public IReadOnlyList<PropertyData> Children { get; }
+        public IReadOnlyList<FieldData> Children { get; }
     }
 }

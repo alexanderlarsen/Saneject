@@ -16,10 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
     {
         public override void OnInspectorGUI()
         {
-            GUILayout.Label(ObjectNames.NicifyVariableName("_test"));
-            serializedObject.Update();
-            SanejectInspector.DrawDefault(target, serializedObject);
-            serializedObject.ApplyModifiedProperties();
+            SanejectInspector.OnInspectorGUI(target, serializedObject);
         }
 
         // TODO: Restore this functionality

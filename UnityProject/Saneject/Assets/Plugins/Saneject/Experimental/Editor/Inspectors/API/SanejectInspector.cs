@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Attributes;
 using Plugins.Saneject.Experimental.Runtime.Settings;
@@ -16,34 +17,18 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         #region Data collection
 
         /// <summary>
-        /// Collects PropertyData for all serializable fields of the given type and its base classes, including [SerializeInterface] fields.
-        /// </summary>
-        public static void CollectPropertyData(
-            SerializedObject serializedObject,
-            Object target,
-            out IReadOnlyCollection<PropertyData> properties)
-        {
-            properties = CollectForType
-            (
-                root: serializedObject,
-                parent: null,
-                type: target.GetType()
-            ).ToList();
-        }
-
-        /// <summary>
-        /// Recursively collects PropertyData for all serializable fields of the given type and its base classes,
+        /// Recursively collects InspectableField for all serializable fields of the given type and its base classes,
         /// including [SerializeInterface] fields and nested serializable types.
         /// </summary>
-        private static IEnumerable<PropertyData> CollectForType(
+        public static IEnumerable<FieldData> GetFields(
             SerializedObject root,
-            SerializedProperty parent,
-            Type type)
+            Type type,
+            SerializedProperty parent = null)
         {
-            foreach (FieldInfo field in type.GetDrawableFields())
+            foreach (FieldInfo field in type.GetFieldInfos())
             {
                 bool isSerializedInterface = field.IsSerializeInterface();
-                Type elementType = field.ResolveElementType();
+                Type elementType = field.FieldType.ResolveElementType();
                 string displayName = ObjectNames.NicifyVariableName(field.Name);
                 string path = field.Name;
 
@@ -60,23 +45,45 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
                 if (property == null)
                     continue;
 
-                List<PropertyData> children = null;
-
-                if (field.FieldType.IsNestedSerializable())
-                    children = CollectForType(
-                        root: root,
-                        parent: property,
-                        type: field.FieldType
-                    ).ToList();
-
-                yield return new PropertyData(
-                    property,
-                    displayName,
-                    field.HasInjectAttribute() || field.HasReadOnlyAttribute(),
-                    isSerializedInterface,
-                    elementType,
-                    children
+                yield return new FieldData
+                (
+                    property: property,
+                    displayName: displayName,
+                    isReadOnly: field.HasInjectAttribute() || field.HasReadOnlyAttribute(),
+                    isSerializedInterface: isSerializedInterface,
+                    expectedType: elementType,
+                    children: field.FieldType.IsNestedSerializable()
+                        ? GetFields(root, field.FieldType, property).ToList()
+                        : new List<FieldData>()
                 );
+            }
+        }
+
+        /// <summary>
+        /// Collects all drawable <see cref="FieldInfo" /> of the type, including base classes.
+        /// </summary>
+        private static IEnumerable<FieldInfo> GetFieldInfos(this Type type)
+        {
+            const BindingFlags flags =
+                BindingFlags.Instance |
+                BindingFlags.NonPublic |
+                BindingFlags.Public |
+                BindingFlags.DeclaredOnly;
+
+            Stack<Type> chain = new();
+
+            while (type != null && type != typeof(object))
+            {
+                chain.Push(type);
+                type = type.BaseType;
+            }
+
+            foreach (Type t in chain)
+            {
+                FieldInfo[] fields = t.GetFields(flags);
+
+                foreach (FieldInfo field in fields.Where(field => field.IsValid()))
+                    yield return field;
             }
         }
 
@@ -87,13 +94,23 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         /// <summary>
         /// Draws the complete default Saneject MonoBehaviour inspector, including the script field, all serializable fields in declaration order, injection-aware read-only handling, custom UI and validation for [SerializeInterface] fields, and recursive drawing of nested serializable types.
         /// </summary>
-        public static void DrawDefault(
+        public static void OnInspectorGUI(
             Object target,
             SerializedObject serializedObject)
         {
+            serializedObject.Update();
+
             DrawMonoBehaviourScriptField(target);
-            CollectPropertyData(serializedObject, target, out IReadOnlyCollection<PropertyData> properties);
-            DrawAndValidateProperties(properties);
+
+            foreach (FieldData field in GetFields(serializedObject, target.GetType()))
+            {
+                DrawField(field);
+
+                if (field.IsSerializedInterface)
+                    ValidateAssignment(field);
+            }
+
+            serializedObject.ApplyModifiedProperties();
         }
 
         /// <summary>
@@ -111,83 +128,77 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         }
 
         /// <summary>
-        /// Draws a collection of <see cref="PropertyData" /> with the given display names, read-only flags and validates interface fields.
-        /// </summary>
-        public static void DrawAndValidateProperties(IEnumerable<PropertyData> properties)
-        {
-            foreach (PropertyData data in properties)
-            {
-                DrawProperty(data);
-
-                if (data.IsSerializedInterface)
-                    ValidateProperty(data.Property, data.ExpectedType);
-            }
-        }
-
-        /// <summary>
-        /// Draws a single <see cref="PropertyData" /> with the given display name, read-only flag and validates interface fields, including nested serializable types.
+        /// Draws a single <see cref="FieldData" /> with the given display name, read-only flag and validates interface fields, including nested serializable types.
         /// </summary>
         /// <param name="data"></param>
-        public static void DrawProperty(PropertyData data)
+        public static void DrawField(FieldData data)
         {
-            if (data.Children is { Count: > 0 })
-            {
-                data.Property.isExpanded = EditorGUILayout.Foldout(
-                    data.Property.isExpanded,
-                    data.DisplayName,
-                    true);
-
-                if (data.Property.isExpanded)
-                {
-                    EditorGUI.indentLevel++;
-
-                    foreach (PropertyData child in data.Children)
-                        DrawProperty(child);
-
-                    EditorGUI.indentLevel--;
-                }
-            }
-            else
+            if (data.Children.Count <= 0)
             {
                 using (new EditorGUI.DisabledScope(data.IsReadOnly))
                 {
-                    EditorGUILayout.PropertyField(data.Property, new GUIContent(data.DisplayName), true);
+                    EditorGUILayout.PropertyField
+                    (
+                        data.Property,
+                        new GUIContent(data.DisplayName),
+                        true
+                    );
                 }
+
+                return;
             }
+
+            data.Property.isExpanded = EditorGUILayout.Foldout
+            (
+                data.Property.isExpanded,
+                new GUIContent(data.DisplayName),
+                true,
+                EditorStyles.foldoutHeader
+            );
+
+            if (!data.Property.isExpanded)
+                return;
+
+            EditorGUI.indentLevel++;
+
+            foreach (FieldData child in data.Children)
+                DrawField(child);
+
+            EditorGUI.indentLevel--;
         }
 
         #endregion
-
-        #region Helpers & extensions
+        
+        #region Validation
 
         /// <summary>
-        /// Validates that the property is assigned to an object that implements the expected type.
+        /// Validates that the field is assigned to an object that implements the expected type.
         /// </summary>
-        public static void ValidateProperty(
-            SerializedProperty property,
-            Type expectedType)
+        public static void ValidateAssignment(FieldData field)
         {
             // Validate collection
-            if (property.isArray && property.propertyType != SerializedPropertyType.String)
+            if (field.Property.isArray && field.Property.propertyType != SerializedPropertyType.String)
             {
-                for (int i = 0; i < property.arraySize; i++)
+                for (int i = 0; i < field.Property.arraySize; i++)
                 {
-                    SerializedProperty elementProperty = property.GetArrayElementAtIndex(i);
+                    SerializedProperty elementProperty = field.Property.GetArrayElementAtIndex(i);
 
                     if (elementProperty.propertyType != SerializedPropertyType.ObjectReference)
                         continue;
 
-                    Validate(elementProperty);
+                    Validate(elementProperty, field.ExpectedType);
                 }
 
                 return;
             }
 
             // Validate single value
-            Validate(property);
+            Validate(field.Property, field.ExpectedType);
             return;
 
-            void Validate(SerializedProperty prop)
+            static void Validate(
+                SerializedProperty prop,
+                Type expectedType)
             {
                 Object value = prop.objectReferenceValue;
 
@@ -208,10 +219,14 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
             }
         }
 
+        #endregion
+
+        #region Extensions
+
         /// <summary>
         /// Returns true if the field is valid for drawing in the inspector.
         /// </summary>
-        public static bool ShouldDraw(this FieldInfo field)
+        public static bool IsValid(this FieldInfo field)
         {
             if (field.Name == "m_Script")
                 return false;
@@ -252,62 +267,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         public static bool IsSerializeInterface(this FieldInfo field)
         {
             return field.IsDefined(typeof(SerializeInterfaceAttribute), false);
-        }
-
-        /// <summary>
-        /// Returns the element type of a single or collection type (array/list).
-        /// </summary>
-        public static Type ResolveElementType(this FieldInfo fieldInfo)
-        {
-            Type fieldType = fieldInfo.FieldType;
-
-            if (fieldType.IsArray)
-                return fieldType.GetElementType();
-
-            if (fieldType.IsGenericType && fieldType.GetGenericTypeDefinition() == typeof(List<>))
-                return fieldType.GetGenericArguments()[0];
-
-            return fieldType;
-        }
-
-        /// <summary>
-        /// Returns true if the type is a non-Unity serializable reference type suitable for custom nested drawing.
-        /// </summary>
-        public static bool IsNestedSerializable(this Type type)
-        {
-            return type.IsClass
-                   && type != typeof(string)
-                   && !typeof(Object).IsAssignableFrom(type)
-                   && (type.IsSerializable || type.IsDefined(typeof(SerializeField), true));
-        }
-
-        /// <summary>
-        /// Collects all drawable <see cref="FieldInfo" /> of the type, including base classes.
-        /// </summary>
-        public static IEnumerable<FieldInfo> GetDrawableFields(this Type type)
-        {
-            const BindingFlags flags =
-                BindingFlags.Instance |
-                BindingFlags.NonPublic |
-                BindingFlags.Public |
-                BindingFlags.DeclaredOnly;
-
-            Stack<Type> chain = new();
-
-            while (type != null && type != typeof(object))
-            {
-                chain.Push(type);
-                type = type.BaseType;
-            }
-
-            foreach (Type t in chain)
-            {
-                FieldInfo[] fields = t.GetFields(flags);
-
-                foreach (FieldInfo field in fields)
-                    if (field.ShouldDraw())
-                        yield return field;
-            }
         }
 
         #endregion
