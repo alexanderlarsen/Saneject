@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
@@ -18,7 +19,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         public static ProxyCreationResult CreateProxies(InjectionContext context)
         {
             IReadOnlyCollection<Type> concreteTypes = context.Graph
-                .EnumerateAllBindingNodes()
+                .GetAllBindingNodes()
                 .Where(bindingNode => context.ValidBindings.Contains(bindingNode))
                 .Where(bindingNode => bindingNode is ComponentBindingNode { ResolveFromRuntimeProxy: true })
                 .Select(bindingNode => bindingNode.ConcreteType)

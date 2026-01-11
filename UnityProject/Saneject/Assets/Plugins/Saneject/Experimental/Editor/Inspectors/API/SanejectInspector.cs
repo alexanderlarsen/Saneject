@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Attributes;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
@@ -39,21 +40,18 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
             SerializedProperty parent,
             Type type)
         {
-            foreach (FieldInfo field in type.GetAllFields())
+            foreach (FieldInfo field in type.GetDrawableFields())
             {
-                if (!field.ShouldDraw())
-                    continue;
-
                 bool isSerializedInterface = field.IsSerializeInterface();
                 Type elementType = field.ResolveElementType();
                 string displayName = ObjectNames.NicifyVariableName(field.Name);
+                string path = field.Name;
 
                 if (isSerializedInterface)
+                {
                     displayName += " (" + elementType.Name + ")";
-
-                string path = isSerializedInterface
-                    ? field.GetInterfaceBackingFieldName()
-                    : field.Name;
+                    path = $"__{BackingFieldNameUtility.GetLogicalName(field.Name)}";
+                }
 
                 SerializedProperty property = parent == null
                     ? root.FindProperty(path)
@@ -74,7 +72,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
                 yield return new PropertyData(
                     property,
                     displayName,
-                    field.IsReadOnly(),
+                    field.HasInjectAttribute() || field.HasReadOnlyAttribute(),
                     isSerializedInterface,
                     elementType,
                     children
@@ -118,14 +116,19 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         public static void DrawAndValidateProperties(IEnumerable<PropertyData> properties)
         {
             foreach (PropertyData data in properties)
-                DrawAndValidateProperty(data);
+            {
+                DrawProperty(data);
+
+                if (data.IsSerializedInterface)
+                    ValidateProperty(data.Property, data.ExpectedType);
+            }
         }
 
         /// <summary>
         /// Draws a single <see cref="PropertyData" /> with the given display name, read-only flag and validates interface fields, including nested serializable types.
         /// </summary>
         /// <param name="data"></param>
-        public static void DrawAndValidateProperty(PropertyData data)
+        public static void DrawProperty(PropertyData data)
         {
             if (data.Children is { Count: > 0 })
             {
@@ -139,7 +142,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
                     EditorGUI.indentLevel++;
 
                     foreach (PropertyData child in data.Children)
-                        DrawAndValidateProperty(child);
+                        DrawProperty(child);
 
                     EditorGUI.indentLevel--;
                 }
@@ -151,9 +154,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
                     EditorGUILayout.PropertyField(data.Property, new GUIContent(data.DisplayName), true);
                 }
             }
-
-            if (data.IsSerializedInterface)
-                ValidateProperty(data.Property, data.ExpectedType);
         }
 
         #endregion
@@ -201,7 +201,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
                 if (value != null && !expectedType.IsAssignableFrom(value.GetType()))
                 {
                     Debug.LogError($"Saneject: '{value.GetType().Name}' does not implement {expectedType.Name}", value);
-
                     value = null;
                 }
 
@@ -210,28 +209,10 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         }
 
         /// <summary>
-        /// Returns true if the field should be drawn as read-only due to [Inject] or [ReadOnly].
-        /// </summary>
-        public static bool IsReadOnly(this FieldInfo field)
-        {
-            return field.HasInjectAttribute() || field.HasReadOnlyAttribute();
-        }
-
-        /// <summary>
-        /// Returns true if the field is marked with [ReadOnly].
-        /// </summary>
-        public static bool HasReadOnlyAttribute(this FieldInfo field)
-        {
-            return field.IsDefined(typeof(ReadOnlyAttribute), false);
-        }
-
-        /// <summary>
         /// Returns true if the field is valid for drawing in the inspector.
         /// </summary>
         public static bool ShouldDraw(this FieldInfo field)
         {
-            // TODO: Reorder these and review if NonSerializedAttribute and HideInInspector is necessary to specify now that I draw with default property field
-
             if (field.Name == "m_Script")
                 return false;
 
@@ -244,9 +225,17 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
             if (field.HasInjectAttribute() && !UserSettings.ShowInjectedFieldsProperties)
                 return false;
 
-            return field.IsPublic
-                   || field.IsDefined(typeof(SerializeField), false)
-                   || field.IsSerializeInterface();
+            return field.IsPublic ||
+                   field.IsDefined(typeof(SerializeField), false) ||
+                   field.IsSerializeInterface();
+        }
+
+        /// <summary>
+        /// Returns true if the field is marked with [ReadOnly].
+        /// </summary>
+        public static bool HasReadOnlyAttribute(this FieldInfo field)
+        {
+            return field.IsDefined(typeof(ReadOnlyAttribute), false);
         }
 
         /// <summary>
@@ -282,26 +271,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         }
 
         /// <summary>
-        /// Returns the logical name of a field, stripping compiler auto-property
-        /// backing syntax (&lt;Name&gt;k__BackingField) when present and adds two leading underscores.
-        /// </summary>
-        public static string GetInterfaceBackingFieldName(this FieldInfo field)
-        {
-            string name = field.Name;
-
-            // Strip auto-property backing fields compiler names: <Name>k__BackingField
-            if (name.Length > 0 && name[0] == '<')
-            {
-                int end = name.IndexOf(">k__BackingField", StringComparison.Ordinal);
-
-                if (end > 1)
-                    name = name[1..end]; // "InterfaceB1"
-            }
-
-            return $"__{name}";
-        }
-
-        /// <summary>
         /// Returns true if the type is a non-Unity serializable reference type suitable for custom nested drawing.
         /// </summary>
         public static bool IsNestedSerializable(this Type type)
@@ -313,9 +282,9 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
         }
 
         /// <summary>
-        /// Collects all <see cref="FieldInfo" /> of the type, including base classes.
+        /// Collects all drawable <see cref="FieldInfo" /> of the type, including base classes.
         /// </summary>
-        public static IEnumerable<FieldInfo> GetAllFields(this Type type)
+        public static IEnumerable<FieldInfo> GetDrawableFields(this Type type)
         {
             const BindingFlags flags =
                 BindingFlags.Instance |
@@ -336,7 +305,8 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.API
                 FieldInfo[] fields = t.GetFields(flags);
 
                 foreach (FieldInfo field in fields)
-                    yield return field;
+                    if (field.ShouldDraw())
+                        yield return field;
             }
         }
 

@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             TransformNode = transformNode;
 
             FieldNodes = component
-                .EnumerateInjectionFieldsDeep()
+                .GetInjectionFieldsDeep()
                 .Select(result => new FieldNode
                 (
                     owner: result.Owner,
@@ -27,7 +27,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
                 .ToList();
 
             MethodNodes = component
-                .EnumerateInjectionMethodsDeep()
+                .GetInjectionMethodsDeep()
                 .Select(result => new MethodNode
                 (
                     owner: result.Owner,

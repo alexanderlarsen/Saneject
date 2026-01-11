@@ -3,6 +3,7 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Object = UnityEngine.Object;
 
@@ -15,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             ResolveGlobals(context);
 
             IEnumerable<ComponentNode> componentNodes = context.Graph
-                .EnumerateAllTransformNodes()
+                .GetAllTransformNodes()
                 .SelectMany(transformNode => transformNode.ComponentNodes);
 
             foreach (ComponentNode componentNode in componentNodes)
@@ -32,7 +33,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         {
             IEnumerable<GlobalComponentBindingNode> globalBindings =
                 context.Graph
-                    .EnumerateAllBindingNodes()
+                    .GetAllBindingNodes()
                     .OfType<GlobalComponentBindingNode>()
                     .Where(context.ValidBindings.Contains);
 

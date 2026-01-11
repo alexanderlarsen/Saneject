@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Diagnostics;
 using System.Linq;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEngine;
@@ -51,7 +52,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             unusedBindings.Clear();
 
             foreach (BindingNode bindingNode in Graph
-                         .EnumerateAllBindingNodes()
+                         .GetAllBindingNodes()
                          .Where(binding => !UsedBindings.Contains(binding)))
                 unusedBindings.Add(bindingNode);
         }

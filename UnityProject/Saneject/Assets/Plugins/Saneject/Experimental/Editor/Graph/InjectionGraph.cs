@@ -20,35 +20,5 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
         }
 
         public IReadOnlyList<TransformNode> RootTransformNodes { get; }
-
-        public IEnumerable<TransformNode> EnumerateAllTransformNodes()
-        {
-            foreach (TransformNode root in RootTransformNodes)
-                foreach (TransformNode node in EnumerateTransformNodesRecursive(root))
-                    yield return node;
-
-            yield break;
-
-            static IEnumerable<TransformNode> EnumerateTransformNodesRecursive(TransformNode node)
-            {
-                yield return node;
-
-                foreach (TransformNode child in node.ChildTransformNodes)
-                    foreach (TransformNode descendant in EnumerateTransformNodesRecursive(child))
-                        yield return descendant;
-            }
-        }
-
-        public IEnumerable<BindingNode> EnumerateAllBindingNodes()
-        {
-            foreach (TransformNode transformNode in EnumerateAllTransformNodes())
-            {
-                if (transformNode.DeclaredScopeNode == null)
-                    continue;
-
-                foreach (BindingNode binding in transformNode.DeclaredScopeNode.BindingNodes)
-                    yield return binding;
-            }
-        }
     }
 }

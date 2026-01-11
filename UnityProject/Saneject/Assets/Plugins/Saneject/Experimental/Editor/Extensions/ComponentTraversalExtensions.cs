@@ -18,12 +18,12 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             System.Reflection.BindingFlags.Instance |
             System.Reflection.BindingFlags.FlattenHierarchy;
 
-        public static IEnumerable<FieldTraversalResult> EnumerateInjectionFieldsDeep(this Component component)
+        public static IEnumerable<FieldTraversalResult> GetInjectionFieldsDeep(this Component component)
         {
             return WalkFields(component, string.Empty);
         }
 
-        public static IEnumerable<MethodTraversalResult> EnumerateInjectionMethodsDeep(this Component component)
+        public static IEnumerable<MethodTraversalResult> GetInjectionMethodsDeep(this Component component)
         {
             return WalkMethods(component, string.Empty);
         }

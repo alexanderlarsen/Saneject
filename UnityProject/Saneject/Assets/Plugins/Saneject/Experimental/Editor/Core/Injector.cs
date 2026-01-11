@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEditor;
 using UnityEngine;
@@ -19,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         private static void InjectScopeGlobals(InjectionContext context)
         {
             IEnumerable<ScopeNode> allScopes = context.Graph
-                .EnumerateAllTransformNodes()
+                .GetAllTransformNodes()
                 .Select(scopeNode => scopeNode.DeclaredScopeNode)
                 .Where(scopeNode => scopeNode != null);
 
@@ -37,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         private static void InjectFieldsAndMethods(InjectionContext context)
         {
             IEnumerable<ComponentNode> allComponents = context.Graph
-                .EnumerateAllTransformNodes()
+                .GetAllTransformNodes()
                 .SelectMany(node => node.ComponentNodes);
 
             foreach (ComponentNode componentNode in allComponents)
@@ -45,7 +46,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 foreach (FieldNode fieldNode in componentNode.FieldNodes)
                     fieldNode.FieldInfo.SetValue
                     (
-                         fieldNode.Owner,
+                        fieldNode.Owner,
                         context.FieldResolutionMap[fieldNode]
                     );
 

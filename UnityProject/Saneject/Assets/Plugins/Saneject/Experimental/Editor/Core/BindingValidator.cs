@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEngine;
 
@@ -13,7 +14,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Dictionary<Type, GlobalComponentBindingNode> existingGlobalMap = new();
             HashSet<BindingNode> existingBindings = new();
 
-            foreach (BindingNode binding in context.Graph.EnumerateAllBindingNodes())
+            foreach (BindingNode binding in context.Graph.GetAllBindingNodes())
                 ValidateBinding(binding, context, existingGlobalMap, existingBindings);
         }
 

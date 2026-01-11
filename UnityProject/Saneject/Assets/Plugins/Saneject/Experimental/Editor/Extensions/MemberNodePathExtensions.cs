@@ -1,5 +1,5 @@
-﻿using System;
-using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+﻿using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
@@ -21,19 +21,7 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             string[] pathParts = pathFromComponent.Split('.');
 
             for (int i = 0; i < pathParts.Length; i++)
-            {
-                string part = pathParts[i];
-
-                if (part.Length > 0 && part[0] == '<')
-                {
-                    int end = part.IndexOf(">k__BackingField", StringComparison.Ordinal);
-
-                    if (end > 1)
-                        part = part[1..end];
-                }
-
-                pathParts[i] = part;
-            }
+                pathParts[i] = BackingFieldNameUtility.GetLogicalName(pathParts[i]);
 
             return string.Join(".", pathParts);
         }
