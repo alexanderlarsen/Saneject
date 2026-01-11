@@ -8,7 +8,7 @@ using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Editor.Utility
+namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
     public static class SignatureBuilder
     {

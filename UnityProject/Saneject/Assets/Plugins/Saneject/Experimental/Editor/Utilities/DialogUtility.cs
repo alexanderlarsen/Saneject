@@ -1,6 +1,6 @@
 ﻿using UnityEditor;
 
-namespace Plugins.Saneject.Experimental.Editor.Utility
+namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
     public static class DialogUtility
     {

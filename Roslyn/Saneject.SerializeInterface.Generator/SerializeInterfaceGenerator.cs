@@ -145,12 +145,12 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     sb.AppendLine($"        /// Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{name}\" />. You should not interact with this backing field directly.");
                     sb.AppendLine("        /// </summary>");
 
-                    if (fieldSymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
+                    if (fieldSymbol.Type.IsInterfaceArray(out _))
                     {
                         sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol)}]");
                         sb.AppendLine($"        private UnityEngine.Object[] __{name};");
                     }
-                    else if (fieldSymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
+                    else if (fieldSymbol.Type.IsInterfaceList(out _))
                     {
                         sb.AppendLine($"        [{AttributeUtils.GetAttributes(fieldSymbol)}]");
                         sb.AppendLine($"        private System.Collections.Generic.List<UnityEngine.Object> __{name};");
@@ -187,12 +187,12 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                     sb.AppendLine($"        /// Auto-generated backing field used by Saneject to hold the value for the interface field <see cref=\"{name}\" />. You should not interact with this backing field directly.");
                     sb.AppendLine("        /// </summary>");
 
-                    if (propertySymbol.Type.IsInterfaceArray(out IArrayTypeSymbol array))
+                    if (propertySymbol.Type.IsInterfaceArray(out _))
                     {
                         sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol)}]");
                         sb.AppendLine($"        private UnityEngine.Object[] __{name};");
                     }
-                    else if (propertySymbol.Type.IsInterfaceList(out INamedTypeSymbol list))
+                    else if (propertySymbol.Type.IsInterfaceList(out _))
                     {
                         sb.AppendLine($"        [{AttributeUtils.GetAttributes(attributeSymbol)}]");
                         sb.AppendLine($"        private System.Collections.Generic.List<UnityEngine.Object> __{name};");

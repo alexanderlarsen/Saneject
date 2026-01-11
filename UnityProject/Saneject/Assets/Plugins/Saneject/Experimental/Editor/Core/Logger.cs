@@ -5,7 +5,7 @@ using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Experimental.Editor.Utility;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -26,7 +26,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         public static void TryClearLog()
         {
             if (UserSettings.ClearLogsOnInjection)
-                ConsoleUtils.ClearLog();
+                ConsoleUtility.ClearLog();
         }
 
         public static void LogErrors(InjectionContext context)

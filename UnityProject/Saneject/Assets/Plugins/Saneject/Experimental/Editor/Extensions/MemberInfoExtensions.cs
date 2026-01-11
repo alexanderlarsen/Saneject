@@ -3,7 +3,7 @@ using System.Reflection;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
-    public static class FieldInfoExtensions
+    public static class MemberInfoExtensions
     {
         public static bool TryGetAttribute<T>(
             this MemberInfo memberInfo,
@@ -12,11 +12,6 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
         {
             attribute = memberInfo.GetCustomAttribute<T>(inherit);
             return attribute != null;
-        }
-
-        public static bool HasAttribute<T>(this MemberInfo memberInfo) where T : Attribute
-        {
-            return memberInfo.TryGetAttribute<T>(out _);
-        }
+        } 
     }
 }

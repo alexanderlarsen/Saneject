@@ -10,7 +10,28 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     /// </summary>
     public static class UserSettings
     {
-        // Injection
+        #region Proxy Generation
+
+        public static string ProxyAssetGenerationFolder
+        {
+            get => GetString(defaultValue: "Assets/Generated");
+            set => SetString(value);
+        }
+
+        #endregion
+
+        #region Scope File Generation
+
+        public static bool GenerateScopeNamespaceFromFolder
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
+        #endregion
+
+        #region Injection
+
         public static bool AskBeforeSceneInjection
         {
             get => GetBool(defaultValue: true);
@@ -35,7 +56,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             set => SetBool(value);
         }
 
-        // Inspector
+        #endregion
+
+        #region Inspector
+
         public static bool ShowInjectedFieldsProperties
         {
             get => GetBool(defaultValue: true);
@@ -54,7 +78,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             set => SetBool(value);
         }
 
-        // Play Mode Logging
+        #endregion
+
+        #region Play Mode Logging
+
         public static bool LogProxyResolve
         {
             get => GetBool(defaultValue: true);
@@ -67,7 +94,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             set => SetBool(value);
         }
 
-        // Editor Logging
+        #endregion
+
+        #region Editor Logging
+
         public static bool LogDifferentContextSkipping
         {
             get => GetBool(defaultValue: true);
@@ -92,21 +122,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             set => SetBool(value);
         }
 
-        // Proxy Generation
-        public static string ProxyAssetGenerationFolder
-        {
-            get => GetString(defaultValue: "Assets/Generated");
-            set => SetString(value);
-        }
+        #endregion
 
-        // Scope File Generation
-        public static bool GenerateScopeNamespaceFromFolder
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        #region Batch Injection
 
-        // Batch Injection
         public static bool AskBeforeBatchInjectAll
         {
             get => GetBool(defaultValue: true);
@@ -125,7 +144,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             set => SetBool(value);
         }
 
-        // Shared helpers
+        #endregion
+
+        #region Shared helpers
+
         private static string GetString(
             string defaultValue,
             [CallerMemberName] string propertyName = null)
@@ -134,7 +156,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             string key = $"UserSettings_{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetString(key);
 #else
-            return string.Empty;
+                    return string.Empty;
 #endif
         }
 
@@ -156,7 +178,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             string key = $"UserSettings_{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetBool(key);
 #else
-            return false;
+                    return false;
 #endif
         }
 
@@ -169,5 +191,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             EditorPrefs.SetBool(key, value);
 #endif
         }
+
+        #endregion
     }
 }

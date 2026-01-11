@@ -1,7 +1,7 @@
 ﻿using System;
 using System.IO;
 
-namespace Plugins.Saneject.Experimental.Editor.Utility
+namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
     public static class DirectoryUtility
     {
