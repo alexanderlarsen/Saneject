@@ -5,10 +5,10 @@ using Microsoft.CodeAnalysis;
 using Microsoft.CodeAnalysis.CSharp.Syntax;
 using Microsoft.CodeAnalysis.Text;
 
-namespace Saneject.ProxyObject.Generator;
+namespace Saneject.RuntimeProxy.Generator;
 
 [Generator]
-public class ProxyObjectGenerator : ISourceGenerator
+public class RuntimeProxyGenerator : ISourceGenerator
 {
     private const string NamespaceRoot = "Plugins.Saneject.Experimental.Runtime";
     
@@ -24,7 +24,7 @@ public class ProxyObjectGenerator : ISourceGenerator
 
         Compilation compilation = context.Compilation;
         INamedTypeSymbol attrSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Attributes.GenerateRuntimeProxyAttribute");
-        INamedTypeSymbol proxyBaseSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Proxy.ProxyObject`1");
+        INamedTypeSymbol proxyBaseSymbol = compilation.GetTypeByMetadataName($"{NamespaceRoot}.Proxy.RuntimeProxy`1");
 
         if (attrSymbol is null || proxyBaseSymbol is null)
             return;

@@ -10,21 +10,24 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 {
     /// <summary>
     /// Custom inspector for <see cref="RuntimeProxyBase" />.
-    /// Displays configuration and runtime info for interface proxy ScriptableObjects.
+    /// Displays configuration and runtime info for RuntimeProxy ScriptableObjects.
     /// </summary>
     [CustomEditor(typeof(RuntimeProxyBase), true)]
-    public class ProxyObjectInspector : UnityEditor.Editor
+    public class RuntimeProxyInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()
         {
             if (UserSettings.ShowHelpBoxes)
-                EditorGUILayout.HelpBox(
+                EditorGUILayout.HelpBox
+                (
                     "• Allows serialization of interface-based references across scenes and prefabs.\n" +
                     "• Resolves or instantiates the actual object using the selected method at runtime.\n" +
                     "• A source generator (ProxyObjectGenerator.dll) implements all interfaces and forwards calls to the real instance.\n" +
                     "• Use the proxy like the real object - just through its interfaces.\n" +
                     "• To make the proxy as inexpensive as possible, it only tries to resolve the instance once at runtime, the first time you access it.",
-                    MessageType.None, true);
+                    MessageType.None,
+                    wide: true
+                );
 
             EditorGUI.BeginDisabledGroup(Application.isPlaying);
 
@@ -45,7 +48,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             SerializedProperty resolveMethodProp = serializedObject.FindProperty("resolveMethod");
             SerializedProperty prefabProp = serializedObject.FindProperty("prefab");
             SerializedProperty dontDestroyProp = serializedObject.FindProperty("dontDestroyOnLoad");
-
             EditorGUILayout.PropertyField(resolveMethodProp);
 
             string selected = resolveMethodProp.enumDisplayNames[resolveMethodProp.enumValueIndex];
@@ -61,30 +63,21 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                     break;
             }
 
-            if (selected is "From Component On Prefab" or "From New Component On New Game Object" &&
-                !dontDestroyProp.boolValue)
-                EditorGUILayout.HelpBox(
+            if (selected is "From Component On Prefab" or "From New Component On New Game Object" && !dontDestroyProp.boolValue)
+                EditorGUILayout.HelpBox
+                (
                     "This object will be destroyed on scene load. Unless you expect to re-resolve it, consider enabling 'Dont Destroy On Load'.",
-                    MessageType.Warning);
+                    MessageType.Warning
+                );
 
             serializedObject.ApplyModifiedProperties();
             EditorGUI.EndDisabledGroup();
-
             DrawInterfaceListAligned(target.GetType());
-        }
-
-        private void DrawWrappedLabel(string text)
-        {
-            GUILayout.Label(text, EditorStyles.wordWrappedLabel);
-            EditorGUILayout.Space(5);
         }
 
         private void DrawInterfaceListAligned(Type proxyType)
         {
             Type[] interfaces = proxyType.GetInterfaces();
-
-            if (interfaces.Length == 0)
-                return;
 
             EditorGUILayout.BeginHorizontal();
 
@@ -92,12 +85,19 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             GUILayout.Label("Interfaces", EditorStyles.wordWrappedLabel, GUILayout.Width(EditorGUIUtility.labelWidth));
 
             // Right column (list)
-            EditorGUILayout.BeginVertical();
+            if (interfaces.Length == 0)
+            {
+                EditorGUILayout.LabelField("No interfaces implemented.");
+            }
+            else
+            {
+                EditorGUILayout.BeginVertical();
 
-            foreach (Type iface in interfaces)
-                GUILayout.Label(iface.Name, EditorStyles.label);
+                foreach (Type @interface in interfaces)
+                    GUILayout.Label(@interface.Name, EditorStyles.label);
 
-            EditorGUILayout.EndVertical();
+                EditorGUILayout.EndVertical();
+            }
 
             EditorGUILayout.EndHorizontal();
         }

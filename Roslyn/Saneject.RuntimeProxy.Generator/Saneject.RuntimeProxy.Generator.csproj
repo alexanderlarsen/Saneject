@@ -5,7 +5,7 @@
         <EnforceExtendedAnalyzerRules>true</EnforceExtendedAnalyzerRules>
         <DebugType>none</DebugType>
         <GenerateDependencyFile>false</GenerateDependencyFile>
-        <RootNamespace>Saneject.ProxyObject.Generator</RootNamespace>
+        <RootNamespace>Saneject.RuntimeProxy.Generator</RootNamespace>
         <OutputPath>..\..\Build\Roslyn.Default\</OutputPath>
         <AppendTargetFrameworkToOutputPath>false</AppendTargetFrameworkToOutputPath>
     </PropertyGroup>

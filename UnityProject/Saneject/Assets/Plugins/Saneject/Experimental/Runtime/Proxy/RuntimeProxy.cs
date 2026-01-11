@@ -80,7 +80,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
         {
             if (!Application.isPlaying)
             {
-                Debug.LogWarning($"Saneject: ResolveInstance() for {typeof(TConcrete).Name} called in editor. Returning null.");
+                Debug.LogWarning($"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. This is not allowed. Returning null.");
                 return null;
             }
 
@@ -124,7 +124,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
 
             return prefabInstance.TryGetComponent(out TConcrete output)
                 ? output
-                : throw new NullReferenceException($"Saneject: '{typeof(TConcrete)}' is not found on prefab instantiated by ScriptableObjectProxy");
+                : throw new NullReferenceException($"Saneject: '{typeof(TConcrete)}' is not found on prefab instantiated by '{GetType().Name}'");
         }
 
         private TConcrete CreateNewInstanceOnNewGameObject()
