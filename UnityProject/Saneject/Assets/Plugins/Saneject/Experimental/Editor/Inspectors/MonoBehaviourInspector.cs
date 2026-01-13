@@ -1,4 +1,4 @@
-﻿using Plugins.Saneject.Experimental.Editor.Inspectors.API;
+﻿using Plugins.Saneject.Experimental.Editor.Inspectors.Models;
 using UnityEditor;
 using UnityEngine;
 
@@ -12,11 +12,18 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
     /// in your own inspector to preserve correct field ordering.
     /// </summary>
     [CustomEditor(typeof(MonoBehaviour), true, isFallback = true), CanEditMultipleObjects]
-    public class MonoBehaviourFallbackInspector : UnityEditor.Editor
+    public class MonoBehaviourInspector : UnityEditor.Editor
     {
+        private ComponentModel componentModel;
+
+        private void OnEnable()
+        {
+            componentModel = new ComponentModel(target, serializedObject);
+        }
+
         public override void OnInspectorGUI()
         {
-            SanejectInspector.OnInspectorGUI(target, serializedObject);
+            SanejectInspector.OnInspectorGUI(componentModel);
         }
 
         // TODO: Restore this functionality
