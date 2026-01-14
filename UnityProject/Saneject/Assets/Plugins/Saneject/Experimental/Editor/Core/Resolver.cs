@@ -84,7 +84,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 requestedType: fieldNode.RequestedType,
                 isInterface: fieldNode.IsInterface,
                 isCollection: fieldNode.IsCollection,
-                memberName: fieldNode.MemberName,
+                qualifyingMemberName: fieldNode.QualifyingName,
                 injectId: fieldNode.InjectId
             );
 
@@ -143,7 +143,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     requestedType: parameterNode.RequestedType,
                     isInterface: parameterNode.IsInterface,
                     isCollection: parameterNode.IsCollection,
-                    memberName: methodNode.MemberName,
+                    qualifyingMemberName: methodNode.QualifyingName,
                     injectId: methodNode.InjectId
                 );
 
@@ -195,7 +195,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Type requestedType,
             bool isInterface,
             bool isCollection,
-            string memberName,
+            string qualifyingMemberName,
             string injectId)
         {
             while (currentScope != null)
@@ -238,7 +238,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             bool MatchesMemberNameQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.MemberNameQualifiers.Count == 0 ||
-                       bindingNode.MemberNameQualifiers.Contains(memberName);
+                       bindingNode.MemberNameQualifiers.Contains(qualifyingMemberName);
             }
 
             bool MatchesIdQualifiers(BindingNode bindingNode)

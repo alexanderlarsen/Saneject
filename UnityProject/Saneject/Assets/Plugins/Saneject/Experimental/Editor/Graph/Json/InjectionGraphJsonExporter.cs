@@ -96,7 +96,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                         (fieldNode => new JObject
                         {
                             ["declaringType"] = fieldNode.DeclaringType?.Name,
-                            ["memberName"] = fieldNode.MemberName,
+                            ["memberName"] = fieldNode.QualifyingName,
                             ["injectId"] = fieldNode.InjectId,
                             ["suppressMissingErrors"] = fieldNode.SuppressMissingErrors,
                             ["requestedType"] = fieldNode.RequestedType.Name,
