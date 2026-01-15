@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Runtime;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
-using Plugins.Saneject.Experimental.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             TransformNode transformNode)
         {
             TransformNode = transformNode;
-            ParentScopeNode = FindParentScopeNode(transformNode);
+            ParentScopeNode = transformNode.ParentTransformNode.FindNearestScope();
             ScopeType = scope.GetType();
 
             BindingNodes = scope
@@ -32,30 +32,10 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             Scope = scope;
         }
 
+        public Scope Scope { get; }
         public TransformNode TransformNode { get; }
         public ScopeNode ParentScopeNode { get; }
         public Type ScopeType { get; }
         public IReadOnlyCollection<BindingNode> BindingNodes { get; }
-        public Scope Scope { get; }
-
-        private static ScopeNode FindParentScopeNode(TransformNode transformNode)
-        {
-            TransformNode currentTransformNode = transformNode.ParentTransformNode;
-            ScopeNode parentScope = null;
-
-            while (currentTransformNode != null)
-            {
-                if (currentTransformNode.DeclaredScopeNode == null || (UserSettings.UseContextIsolation && !currentTransformNode.ContextIdentity.Equals(transformNode.ContextIdentity)))
-                {
-                    currentTransformNode = currentTransformNode.ParentTransformNode;
-                    continue;
-                }
-
-                parentScope = currentTransformNode.DeclaredScopeNode;
-                break;
-            }
-
-            return parentScope;
-        }
     }
 }
