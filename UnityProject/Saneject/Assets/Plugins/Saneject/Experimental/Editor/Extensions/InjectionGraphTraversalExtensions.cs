@@ -6,7 +6,7 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
     public static class InjectionGraphTraversalExtensions
     {
-        public static IEnumerable<TransformNode> GetAllTransformNodes(this InjectionGraph graph)
+        public static IEnumerable<TransformNode> EnumerateAllTransformNodes(this InjectionGraph graph)
         {
             foreach (TransformNode root in graph.RootTransformNodes)
                 foreach (TransformNode node in EnumerateTransformNodesRecursive(root))
@@ -24,9 +24,9 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             }
         }
 
-        public static IEnumerable<BindingNode> GetAllBindingNodes(this InjectionGraph graph)
+        public static IEnumerable<BindingNode> EnumerateAllBindingNodes(this InjectionGraph graph)
         {
-            foreach (TransformNode transformNode in graph.GetAllTransformNodes())
+            foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
             {
                 if (transformNode.DeclaredScopeNode == null)
                     continue;

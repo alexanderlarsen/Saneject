@@ -16,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             ResolveGlobals(context);
 
             IEnumerable<ComponentNode> componentNodes = context.Graph
-                .GetAllTransformNodes()
+                .EnumerateAllTransformNodes()
                 .SelectMany(transformNode => transformNode.ComponentNodes);
 
             foreach (ComponentNode componentNode in componentNodes)
@@ -33,7 +33,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         {
             IEnumerable<GlobalComponentBindingNode> globalBindings =
                 context.Graph
-                    .GetAllBindingNodes()
+                    .EnumerateAllBindingNodes()
                     .OfType<GlobalComponentBindingNode>()
                     .Where(context.ValidBindings.Contains);
 

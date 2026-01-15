@@ -18,7 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             SuppressedErrorCount = context.Errors.Count(error => error.SuppressError);
 
             ScopesProcessedCount = context.Graph
-                .GetAllTransformNodes()
+                .EnumerateAllTransformNodes()
                 .Count(transformNode => transformNode.DeclaredScopeNode != null);
 
             ElapsedMilliseconds = context.ElapsedMilliseconds;

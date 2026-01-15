@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         private static void InjectScopeGlobals(InjectionContext context)
         {
             IEnumerable<ScopeNode> allScopes = context.Graph
-                .GetAllTransformNodes()
+                .EnumerateAllTransformNodes()
                 .Select(scopeNode => scopeNode.DeclaredScopeNode)
                 .Where(scopeNode => scopeNode != null);
 
@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         private static void InjectFieldsAndMethods(InjectionContext context)
         {
             IEnumerable<ComponentNode> allComponents = context.Graph
-                .GetAllTransformNodes()
+                .EnumerateAllTransformNodes()
                 .SelectMany(node => node.ComponentNodes);
 
             foreach (ComponentNode componentNode in allComponents)

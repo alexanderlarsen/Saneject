@@ -14,7 +14,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Dictionary<Type, GlobalComponentBindingNode> existingGlobalMap = new();
             HashSet<BindingNode> existingBindings = new();
 
-            foreach (BindingNode binding in context.Graph.GetAllBindingNodes())
+            foreach (BindingNode binding in context.Graph.EnumerateAllBindingNodes())
                 ValidateBinding(binding, context, existingGlobalMap, existingBindings);
         }
 

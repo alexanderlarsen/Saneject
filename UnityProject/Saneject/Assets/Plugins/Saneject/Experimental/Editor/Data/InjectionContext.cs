@@ -52,7 +52,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             unusedBindings.Clear();
 
             foreach (BindingNode bindingNode in Graph
-                         .GetAllBindingNodes()
+                         .EnumerateAllBindingNodes()
                          .Where(binding => !UsedBindings.Contains(binding)))
                 unusedBindings.Add(bindingNode);
         }
