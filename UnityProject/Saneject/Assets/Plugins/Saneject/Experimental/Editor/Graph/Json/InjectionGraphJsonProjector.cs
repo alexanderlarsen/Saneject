@@ -5,6 +5,7 @@ using Newtonsoft.Json.Linq;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Json
 {
@@ -22,6 +23,19 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
             Debug.Log($"Saneject: Injection graph JSON saved to '{path}'");
         }
 
+        #region Helpers
+
+        private static string GetNameAndInstanceId(Object obj)
+        {
+            return obj != null
+                ? $"{obj.name} (Instance ID: {obj.GetInstanceID()})"
+                : null;
+        }
+
+        #endregion
+
+        #region Graph/Node to JObject converters
+
         public static JObject BuildInjectionGraphJObject(InjectionGraph graph)
         {
             return new JObject
@@ -34,11 +48,11 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
         {
             return new JObject
             {
-                [nameof(TransformNode.ParentTransformNode)] = node.ParentTransformNode?.Transform.name,
+                [nameof(TransformNode.ParentTransformNode)] = GetNameAndInstanceId(node.ParentTransformNode?.Transform),
                 [nameof(TransformNode.ContextIdentity)] = $"{node.ContextIdentity?.Type} (Key: {node.ContextIdentity?.Key})",
                 [nameof(TransformNode.DeclaredScopeNode)] = BuildScopeNodeJObject(node.DeclaredScopeNode),
                 [nameof(TransformNode.NearestScopeNode)] = node.NearestScopeNode?.ScopeType?.Name,
-                [nameof(TransformNode.Transform)] = node.Transform?.name,
+                [nameof(TransformNode.Transform)] = GetNameAndInstanceId(node.Transform),
                 [nameof(TransformNode.ComponentNodes)] = new JArray(node.ComponentNodes.Select(BuildComponentNodeJObject)),
                 [nameof(TransformNode.ChildTransformNodes)] = new JArray(node.ChildTransformNodes.Select(BuildTransformNodeJObject))
             };
@@ -48,7 +62,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
         {
             return new JObject
             {
-                [nameof(ComponentNode.Component)] = node.Component?.GetType().Name,
+                [nameof(ComponentNode.Component)] = GetNameAndInstanceId(node.Component),
                 [nameof(ComponentNode.FieldNodes)] = new JArray(node.FieldNodes.Select(BuildFieldNodeJObject)),
                 [nameof(ComponentNode.MethodNodes)] = new JArray(node.MethodNodes.Select(BuildMethodNodeJObject))
             };
@@ -59,7 +73,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
             return new JObject
             {
                 [nameof(MemberNode.Owner)] = node.Owner?.GetType().Name,
-                [nameof(MemberNode.ComponentNode)] = node.ComponentNode?.Component.name,
+                [nameof(MemberNode.ComponentNode)] = GetNameAndInstanceId(node.ComponentNode?.Component),
                 [nameof(MemberNode.DeclaringType)] = node.DeclaringType?.Name,
                 [nameof(MemberNode.QualifyingName)] = node.QualifyingName,
                 [nameof(MemberNode.InjectId)] = node.InjectId,
@@ -112,8 +126,9 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
 
             return new JObject
             {
-                [nameof(ScopeNode.TransformNode)] = node.TransformNode?.Transform?.name,
-                [nameof(ScopeNode.ParentScopeNode)] = node.ParentScopeNode?.ScopeType?.Name,
+                [nameof(ScopeNode.Scope)] = GetNameAndInstanceId(node.Scope),
+                [nameof(ScopeNode.TransformNode)] = GetNameAndInstanceId(node.TransformNode?.Transform),
+                [nameof(ScopeNode.ParentScopeNode)] = GetNameAndInstanceId(node.ParentScopeNode?.Scope),
                 [nameof(ScopeNode.ScopeType)] = node.ScopeType?.Name,
                 [nameof(ScopeNode.BindingNodes)] = new JArray(node.BindingNodes.Select(BuildTypedBindingNodeJObject))
             };
@@ -140,7 +155,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
                 [nameof(BindingNode.IsCollectionBinding)] = node.IsCollectionBinding,
                 [nameof(BindingNode.LocatorStrategySpecified)] = node.LocatorStrategySpecified,
                 [nameof(BindingNode.DependencyFilters)] = node.DependencyFilters?.Count,
-                [nameof(BindingNode.ResolveFromInstances)] = new JArray(node.ResolveFromInstances.Select(instance => instance.GetType().Name)),
+                [nameof(BindingNode.ResolveFromInstances)] = new JArray(node.ResolveFromInstances.Select(GetNameAndInstanceId)),
                 [nameof(BindingNode.IdQualifiers)] = new JArray(node.IdQualifiers),
                 [nameof(BindingNode.MemberNameQualifiers)] = new JArray(node.MemberNameQualifiers),
                 [nameof(BindingNode.TargetTypeQualifiers)] = new JArray(node.TargetTypeQualifiers.Select(t => t.Name))
@@ -175,5 +190,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
             binding["IsGlobalComponentBinding"] = true;
             return binding;
         }
+
+        #endregion
     }
 }
