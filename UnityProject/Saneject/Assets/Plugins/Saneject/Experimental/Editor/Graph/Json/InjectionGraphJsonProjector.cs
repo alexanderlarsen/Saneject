@@ -28,7 +28,13 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
         private static string GetNameAndInstanceId(Object obj)
         {
             return obj != null
-                ? $"{obj.name} (Instance ID: {obj.GetInstanceID()})"
+                ? obj switch
+                {
+                    Transform transform => $"{transform.name} (Instance ID: {transform.GetInstanceID()})",
+                    Component component => $"{component.GetType().Name} (Instance ID: {component.GetInstanceID()})",
+                    GameObject gameObject => $"{gameObject.name} (Instance ID: {gameObject.GetInstanceID()})",
+                    _ => $"{obj.name} (Instance ID: {obj.GetInstanceID()})"
+                }
                 : null;
         }
 
@@ -48,11 +54,11 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
         {
             return new JObject
             {
-                [nameof(TransformNode.ParentTransformNode)] = GetNameAndInstanceId(node.ParentTransformNode?.Transform),
+                [nameof(TransformNode.Transform)] = GetNameAndInstanceId(node.Transform),
                 [nameof(TransformNode.ContextIdentity)] = $"{node.ContextIdentity?.Type} (Key: {node.ContextIdentity?.Key})",
+                [nameof(TransformNode.ParentTransformNode)] = GetNameAndInstanceId(node.ParentTransformNode?.Transform),
                 [nameof(TransformNode.DeclaredScopeNode)] = BuildScopeNodeJObject(node.DeclaredScopeNode),
                 [nameof(TransformNode.NearestScopeNode)] = node.NearestScopeNode?.ScopeType?.Name,
-                [nameof(TransformNode.Transform)] = GetNameAndInstanceId(node.Transform),
                 [nameof(TransformNode.ComponentNodes)] = new JArray(node.ComponentNodes.Select(BuildComponentNodeJObject)),
                 [nameof(TransformNode.ChildTransformNodes)] = new JArray(node.ChildTransformNodes.Select(BuildTransformNodeJObject))
             };
@@ -149,7 +155,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Json
         {
             return new JObject
             {
-                [nameof(BindingNode.ScopeNode)] = node.ScopeNode?.ScopeType?.Name,
+                [nameof(BindingNode.ScopeNode)] = GetNameAndInstanceId(node.ScopeNode?.Scope),
                 [nameof(BindingNode.InterfaceType)] = node.InterfaceType?.Name,
                 [nameof(BindingNode.ConcreteType)] = node.ConcreteType?.Name,
                 [nameof(BindingNode.IsCollectionBinding)] = node.IsCollectionBinding,
