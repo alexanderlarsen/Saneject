@@ -143,7 +143,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     }
                 }
 
-            sb.Append($" | Scope: {binding.ScopeNode.Type.Name}]");
+            sb.Append($" | Scope: {binding.ScopeNode.ScopeType.Name}]");
 
             return sb.ToString();
         }
@@ -176,7 +176,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     .Append(bindAsset);
 
             sb.Append(" | Nearest scope: ")
-                .Append(scopeNode.Type.Name)
+                .Append(scopeNode.ScopeType.Name)
                 .Append(']');
 
             return sb.ToString();

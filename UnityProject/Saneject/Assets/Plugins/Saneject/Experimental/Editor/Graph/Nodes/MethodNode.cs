@@ -16,6 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
             : base(owner, methodInfo, componentNode, pathFromComponent, injectAttribute)
         {
             MethodInfo = methodInfo;
+            MethodName = methodInfo.Name;
 
             ParameterNodes = methodInfo
                 .GetParameters()
@@ -24,6 +25,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         }
 
         public MethodInfo MethodInfo { get; }
+        public string MethodName { get; }
         public IReadOnlyList<MethodParameterNode> ParameterNodes { get; }
     }
 }

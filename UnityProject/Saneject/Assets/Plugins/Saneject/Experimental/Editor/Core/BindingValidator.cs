@@ -43,7 +43,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                         errors.Add(Error.CreateInvalidBindingError("Global bindings cannot have IDs. The GlobalScope always resolves by type only.", binding));
 
                     if (existingGlobals.TryGetValue(globalBinding.ConcreteType, out GlobalComponentBindingNode existingGlobal))
-                        errors.Add(Error.CreateInvalidBindingError($"Duplicate global binding '{globalBinding.ConcreteType.Name}' declared by '{globalBinding.ScopeNode.Type.Name}'. Already owned by '{existingGlobal.ScopeNode.Type.Name}'. Only one global per type is allowed.", binding));
+                        errors.Add(Error.CreateInvalidBindingError($"Duplicate global binding '{globalBinding.ConcreteType.Name}' declared by '{globalBinding.ScopeNode.ScopeType.Name}'. Already owned by '{existingGlobal.ScopeNode.ScopeType.Name}'. Only one global per type is allowed.", binding));
                     else
                         existingGlobals.Add(globalBinding.ConcreteType, globalBinding);
 

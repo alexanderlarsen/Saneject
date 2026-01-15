@@ -24,7 +24,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Logger.LogUnusedBindings(context);
             Logger.LogCreatedProxyAssets(context);
             Logger.LogSummary(context);
-            InjectionGraphJsonExporter.SaveGraphToJson(context.Graph);
+            InjectionGraphJsonProjector.SaveToDisk(context.Graph);
         }
     }
 }

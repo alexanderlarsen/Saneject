@@ -16,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         {
             TransformNode = transformNode;
             ParentScopeNode = FindParentScopeNode(transformNode);
-            Type = scope.GetType();
+            ScopeType = scope.GetType();
 
             BindingNodes = scope
                 .CollectBindings()
@@ -34,7 +34,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
         public TransformNode TransformNode { get; }
         public ScopeNode ParentScopeNode { get; }
-        public Type Type { get; }
+        public Type ScopeType { get; }
         public IReadOnlyCollection<BindingNode> BindingNodes { get; }
         public Scope Scope { get; }
 
