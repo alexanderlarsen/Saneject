@@ -3,7 +3,6 @@ using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Object = UnityEngine.Object;
 
@@ -15,11 +14,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         {
             ResolveGlobals(context);
 
-            IEnumerable<ComponentNode> componentNodes = context.Graph
-                .EnumerateAllTransformNodes()
-                .SelectMany(transformNode => transformNode.ComponentNodes);
-
-            foreach (ComponentNode componentNode in componentNodes)
+            foreach (ComponentNode componentNode in context.ActiveComponentNodes)
             {
                 foreach (FieldNode fieldNode in componentNode.FieldNodes)
                     ResolveField(fieldNode, context);
@@ -31,11 +26,9 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
         private static void ResolveGlobals(InjectionContext context)
         {
-            IEnumerable<GlobalComponentBindingNode> globalBindings =
-                context.Graph
-                    .EnumerateAllBindingNodes()
-                    .OfType<GlobalComponentBindingNode>()
-                    .Where(context.ValidBindings.Contains);
+            IEnumerable<GlobalComponentBindingNode> globalBindings = context
+                .ValidBindingNodes
+                .OfType<GlobalComponentBindingNode>();
 
             Dictionary<ScopeNode, HashSet<object>> globalMap = new();
 
@@ -207,7 +200,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     .Where(MatchesTargetTypeQualifiers)
                     .Where(MatchesMemberNameQualifiers)
                     .Where(MatchesIdQualifiers)
-                    .FirstOrDefault(context.ValidBindings.Contains);
+                    .FirstOrDefault(context.ValidBindingNodes.Contains);
 
                 if (binding != null)
                     return binding;

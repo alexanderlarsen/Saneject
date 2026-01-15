@@ -10,15 +10,15 @@ namespace Plugins.Saneject.Experimental.Editor.Graph
 {
     public class InjectionGraph
     {
-        public InjectionGraph(IEnumerable<Transform> startTransforms)
+        public InjectionGraph(Transform[] startTransforms)
         {
             RootTransformNodes = startTransforms
                 .Select(transform => transform.root)
                 .Distinct()
-                .Select(root => new TransformNode(root))
+                .Select(root => new TransformNode(root, startTransforms))
                 .ToList();
         }
 
-        public IReadOnlyList<TransformNode> RootTransformNodes { get; }
+        public IReadOnlyCollection<TransformNode> RootTransformNodes { get; }
     }
 }

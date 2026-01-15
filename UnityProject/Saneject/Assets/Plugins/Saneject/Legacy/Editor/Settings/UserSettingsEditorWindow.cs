@@ -122,11 +122,12 @@ namespace Plugins.Saneject.Legacy.Editor.Settings
             DrawToggle(
                 label: "Use Context Isolation",
                 tooltip:
-                "Controls both dependency resolution and hierarchy traversal during injection.\n\n" +
+                "Controls who is allowed to see what.\n\n" +
                 "When enabled, scenes and prefab instances are treated as separate contexts with a hard boundary. " +
                 "Scene injection ignores prefab instances entirely, and prefab injection ignores scene objects. " +
                 "Dependencies can only resolve within the same context.\n\n" +
-                "When disabled, scenes and prefab instances form a single unified hierarchy. Mixed scene and prefab instance hierarchies are processed together, " +
+                "When disabled, scene- and prefab instances can bleed into each other, fetching dependencies from each other. " +
+                "Prefab assets are always context isolated, regardless of this setting." +
                 "and dependencies may freely resolve across scene and prefab instance boundaries.\n\n" +
                 "NOTE: Keeping this enabled is recommended for most use cases to preserve isolation and reuse safety.",
                 currentValue: UserSettings.UseContextIsolation,

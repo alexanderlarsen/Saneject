@@ -26,6 +26,6 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
         public MethodInfo MethodInfo { get; }
         public string MethodName { get; }
-        public IReadOnlyList<MethodParameterNode> ParameterNodes { get; }
+        public IReadOnlyCollection<MethodParameterNode> ParameterNodes { get; }
     }
 }

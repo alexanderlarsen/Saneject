@@ -85,7 +85,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (!UserSettings.LogUnusedBindings)
                 return;
 
-            foreach (BindingNode binding in context.UnusedBindings)
+            foreach (BindingNode binding in context.UnusedBindingNodes)
                 Debug.LogWarning($"Saneject: Unused binding {SignatureBuilder.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }
 

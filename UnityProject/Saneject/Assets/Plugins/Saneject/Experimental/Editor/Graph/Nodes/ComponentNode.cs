@@ -41,8 +41,8 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
         public Component Component { get; }
         public TransformNode TransformNode { get; }
-        public IReadOnlyList<FieldNode> FieldNodes { get; }
-        public IReadOnlyList<MethodNode> MethodNodes { get; }
+        public IReadOnlyCollection<FieldNode> FieldNodes { get; }
+        public IReadOnlyCollection<MethodNode> MethodNodes { get; }
         public bool HasMembers => FieldNodes.Count > 0 || MethodNodes.Count > 0;
     }
 }

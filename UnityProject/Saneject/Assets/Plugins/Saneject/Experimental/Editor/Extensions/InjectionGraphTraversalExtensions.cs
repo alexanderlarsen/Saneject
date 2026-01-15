@@ -2,6 +2,9 @@
 using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 
+// ReSharper disable LoopCanBePartlyConvertedToQuery
+// ReSharper disable once LoopCanBeConvertedToQuery
+
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
     public static class InjectionGraphTraversalExtensions
@@ -24,16 +27,25 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             }
         }
 
-        public static IEnumerable<BindingNode> EnumerateAllBindingNodes(this InjectionGraph graph)
+        public static IEnumerable<ComponentNode> EnumerateAllComponentNodes(this IEnumerable<TransformNode> transformNodes)
         {
-            foreach (TransformNode transformNode in graph.EnumerateAllTransformNodes())
-            {
-                if (transformNode.DeclaredScopeNode == null)
-                    continue;
+            foreach (TransformNode transformNode in transformNodes)
+                foreach (ComponentNode componentNode in transformNode.ComponentNodes)
+                    yield return componentNode;
+        }
 
-                foreach (BindingNode binding in transformNode.DeclaredScopeNode.BindingNodes)
-                    yield return binding;
-            }
+        public static IEnumerable<ScopeNode> EnumerateAllScopeNodes(this IEnumerable<TransformNode> transformNodes)
+        {
+            foreach (TransformNode transformNode in transformNodes)
+                if (transformNode.DeclaredScopeNode != null)
+                    yield return transformNode.DeclaredScopeNode;
+        }
+
+        public static IEnumerable<BindingNode> EnumerateAllBindingNodes(this IEnumerable<ScopeNode> scopeNodes)
+        {
+            foreach (ScopeNode scopeNode in scopeNodes)
+                foreach (BindingNode bindingNode in scopeNode.BindingNodes)
+                    yield return bindingNode;
         }
     }
 }

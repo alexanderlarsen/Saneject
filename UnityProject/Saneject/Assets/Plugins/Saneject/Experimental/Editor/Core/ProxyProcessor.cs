@@ -18,9 +18,8 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static ProxyCreationResult CreateProxies(InjectionContext context)
         {
-            IReadOnlyCollection<Type> concreteTypes = context.Graph
-                .EnumerateAllBindingNodes()
-                .Where(bindingNode => context.ValidBindings.Contains(bindingNode))
+            IReadOnlyCollection<Type> concreteTypes = context
+                .ValidBindingNodes
                 .Where(bindingNode => bindingNode is ComponentBindingNode { ResolveFromRuntimeProxy: true })
                 .Select(bindingNode => bindingNode.ConcreteType)
                 .Where(type => type != null)

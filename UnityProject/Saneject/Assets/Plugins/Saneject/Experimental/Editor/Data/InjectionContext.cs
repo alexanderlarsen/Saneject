@@ -8,39 +8,85 @@ using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
+// ReSharper disable LoopCanBePartlyConvertedToQuery
+
 namespace Plugins.Saneject.Experimental.Editor.Data
 {
     public class InjectionContext
     {
         private readonly HashSet<BindingNode> usedBindings = new();
-        private readonly HashSet<BindingNode> unusedBindings = new();
-        private readonly HashSet<BindingNode> validBindings = new();
-        private readonly Dictionary<FieldNode, object> fieldResolutionMap = new();
-        private readonly Dictionary<MethodNode, IReadOnlyList<object>> methodResolutionMap = new();
-        private readonly Dictionary<ScopeNode, IReadOnlyList<object>> scopeGlobalResolutionMap = new();
+        private readonly HashSet<BindingNode> unusedBindingNodes = new();
+        private readonly HashSet<BindingNode> validBindingNodes = new();
+        private readonly Dictionary<FieldNode, object> fieldNodeResolutionMap = new();
+        private readonly Dictionary<MethodNode, IReadOnlyList<object>> methodNodeResolutionMap = new();
+        private readonly Dictionary<ScopeNode, IReadOnlyList<object>> scopeNodeGlobalResolutionMap = new();
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
         private readonly List<Error> errors = new();
         private readonly Stopwatch stopwatch = new();
 
-        private InjectionContext(IEnumerable<Transform> startTransforms)
+        public InjectionContext(
+            Transform[] startTransforms,
+            WalkFilter walkFilter)
         {
             stopwatch.Start();
-            Id = Guid.NewGuid().ToString();
-            Graph = new InjectionGraph(startTransforms);
+            InjectionGraph = new InjectionGraph(startTransforms);
+
+            switch (walkFilter)
+            {
+                case WalkFilter.All:
+                {
+                    ActiveTransformNodes = InjectionGraph
+                        .EnumerateAllTransformNodes()
+                        .ToList();
+
+                    break;
+                }
+
+                case WalkFilter.StartObjectsContext:
+                {
+                    HashSet<ContextIdentity> startObjectContextIdentities = startTransforms
+                        .Select(transform => new ContextIdentity(transform))
+                        .ToHashSet();
+
+                    ActiveTransformNodes = InjectionGraph
+                        .EnumerateAllTransformNodes()
+                        .Where(node => startObjectContextIdentities.Contains(node.ContextIdentity))
+                        .ToList();
+
+                    break;
+                }
+
+                default:
+                    throw new ArgumentOutOfRangeException(nameof(walkFilter), walkFilter, "Walk filter is not supported.");
+            }
+
+            ActiveComponentNodes = ActiveTransformNodes
+                .EnumerateAllComponentNodes()
+                .ToList();
+
+            ActiveScopeNodes = ActiveTransformNodes
+                .EnumerateAllScopeNodes()
+                .ToList();
+
+            ActiveBindingNodes = ActiveScopeNodes
+                .EnumerateAllBindingNodes()
+                .ToList();
         }
 
-        public InjectionGraph Graph { get; }
-        public string Id { get; }
-        public long ElapsedMilliseconds => stopwatch.ElapsedMilliseconds;
-
+        public InjectionGraph InjectionGraph { get; }
+        public IReadOnlyCollection<TransformNode> ActiveTransformNodes { get; }
+        public IReadOnlyCollection<ComponentNode> ActiveComponentNodes { get; }
+        public IReadOnlyCollection<ScopeNode> ActiveScopeNodes { get; }
+        public IReadOnlyCollection<BindingNode> ActiveBindingNodes { get; }
+        public IReadOnlyCollection<BindingNode> ValidBindingNodes => validBindingNodes;
         public IReadOnlyCollection<BindingNode> UsedBindings => usedBindings;
-        public IReadOnlyCollection<BindingNode> UnusedBindings => unusedBindings;
-        public IReadOnlyCollection<BindingNode> ValidBindings => validBindings;
-        public IReadOnlyDictionary<FieldNode, object> FieldResolutionMap => fieldResolutionMap;
-        public IReadOnlyDictionary<MethodNode, IReadOnlyList<object>> MethodResolutionMap => methodResolutionMap;
-        public IReadOnlyDictionary<ScopeNode, IReadOnlyList<object>> ScopeGlobalResolutionMap => scopeGlobalResolutionMap;
+        public IReadOnlyCollection<BindingNode> UnusedBindingNodes => unusedBindingNodes;
+        public IReadOnlyDictionary<FieldNode, object> FieldNodeResolutionMap => fieldNodeResolutionMap;
+        public IReadOnlyDictionary<MethodNode, IReadOnlyList<object>> MethodNodeResolutionMap => methodNodeResolutionMap;
+        public IReadOnlyDictionary<ScopeNode, IReadOnlyList<object>> ScopeNodeGlobalResolutionMap => scopeNodeGlobalResolutionMap;
         public IReadOnlyCollection<Error> Errors => errors;
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
+        public long ElapsedMilliseconds => stopwatch.ElapsedMilliseconds;
 
         public void StopTimer()
         {
@@ -49,17 +95,16 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 
         public void CacheUnusedBindings()
         {
-            unusedBindings.Clear();
+            unusedBindingNodes.Clear();
 
-            foreach (BindingNode bindingNode in Graph
-                         .EnumerateAllBindingNodes()
-                         .Where(binding => !UsedBindings.Contains(binding)))
-                unusedBindings.Add(bindingNode);
+            foreach (BindingNode bindingNode in ActiveBindingNodes)
+                if (!usedBindings.Contains(bindingNode))
+                    unusedBindingNodes.Add(bindingNode);
         }
 
         public void RegisterValidBinding(BindingNode bindingNode)
         {
-            validBindings.Add(bindingNode);
+            validBindingNodes.Add(bindingNode);
         }
 
         public void RegisterUsedBinding(BindingNode bindingNode)
@@ -81,21 +126,21 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             ScopeNode scopeNode,
             IEnumerable<object> dependencies)
         {
-            scopeGlobalResolutionMap[scopeNode] = dependencies.ToList();
+            scopeNodeGlobalResolutionMap[scopeNode] = dependencies.ToList();
         }
 
         public void RegisterFieldDependency(
             FieldNode fieldNode,
             object dependency)
         {
-            fieldResolutionMap[fieldNode] = dependency;
+            fieldNodeResolutionMap[fieldNode] = dependency;
         }
 
         public void RegisterMethodDependencies(
             MethodNode methodNode,
             IEnumerable<object> dependencies)
         {
-            methodResolutionMap[methodNode] = dependencies.ToList();
+            methodNodeResolutionMap[methodNode] = dependencies.ToList();
         }
 
         public void RegisterCreatedProxyAsset(
@@ -104,24 +149,5 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         {
             createdProxyAssets.Add((path, instance));
         }
-
-        #region Factory methods
-
-        public static InjectionContext Create(params GameObject[] startObjects)
-        {
-            return new InjectionContext(startObjects.Select(gameObject => gameObject.transform));
-        }
-
-        public static InjectionContext Create(params Transform[] startTransforms)
-        {
-            return new InjectionContext(startTransforms);
-        }
-
-        public static InjectionContext Create(params Component[] startComponents)
-        {
-            return new InjectionContext(startComponents.Select(component => component.transform));
-        }
-
-        #endregion
     }
 }

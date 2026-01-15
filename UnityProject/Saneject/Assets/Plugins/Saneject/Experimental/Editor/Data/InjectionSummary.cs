@@ -7,19 +7,47 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     {
         public InjectionSummary(InjectionContext context)
         {
-            GlobalRegistrationCount = context.ScopeGlobalResolutionMap.Count;
-            InjectedFieldCount = context.FieldResolutionMap.Keys.Count(field => !field.IsPropertyBackingField);
-            InjectedPropertyCount = context.FieldResolutionMap.Keys.Count(field => field.IsPropertyBackingField);
-            InjectedMethodCount = context.MethodResolutionMap.Count;
-            MissingBindingCount = context.Errors.Count(error => error.ErrorType == ErrorType.MissingBinding && !error.SuppressError);
-            UnusedBindingCount = context.UnusedBindings.Count;
-            InvalidBindingCount = context.Errors.Count(error => error.ErrorType == ErrorType.InvalidBinding && !error.SuppressError);
-            MissingDependencyCount = context.Errors.Count(error => error.ErrorType is ErrorType.MissingDependency or ErrorType.MissingDependencies && !error.SuppressError);
-            SuppressedErrorCount = context.Errors.Count(error => error.SuppressError);
+            GlobalRegistrationCount = context
+                .ScopeNodeGlobalResolutionMap
+                .Count;
 
-            ScopesProcessedCount = context.Graph
-                .EnumerateAllTransformNodes()
-                .Count(transformNode => transformNode.DeclaredScopeNode != null);
+            InjectedFieldCount = context
+                .FieldNodeResolutionMap
+                .Keys
+                .Count(field => !field.IsPropertyBackingField);
+
+            InjectedPropertyCount = context
+                .FieldNodeResolutionMap
+                .Keys
+                .Count(field => field.IsPropertyBackingField);
+
+            InjectedMethodCount = context
+                .MethodNodeResolutionMap
+                .Count;
+
+            MissingBindingCount = context
+                .Errors
+                .Count(error => error.ErrorType == ErrorType.MissingBinding && !error.SuppressError);
+
+            UnusedBindingCount = context
+                .UnusedBindingNodes
+                .Count;
+
+            InvalidBindingCount = context
+                .Errors
+                .Count(error => error.ErrorType == ErrorType.InvalidBinding && !error.SuppressError);
+
+            MissingDependencyCount = context
+                .Errors
+                .Count(error => error.ErrorType is ErrorType.MissingDependency or ErrorType.MissingDependencies && !error.SuppressError);
+
+            SuppressedErrorCount = context
+                .Errors
+                .Count(error => error.SuppressError);
+
+            ScopesProcessedCount = context
+                .ActiveScopeNodes
+                .Count;
 
             ElapsedMilliseconds = context.ElapsedMilliseconds;
         }

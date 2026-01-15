@@ -31,11 +31,11 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
         public bool IsCollectionBinding { get; }
         public bool LocatorStrategySpecified { get; }
 
-        public IReadOnlyList<DependencyFilter> DependencyFilters { get; }
-        public IReadOnlyList<Object> ResolveFromInstances { get; }
-        public IReadOnlyList<string> IdQualifiers { get; }
-        public IReadOnlyList<string> MemberNameQualifiers { get; }
-        public IReadOnlyList<Type> TargetTypeQualifiers { get; }
+        public IReadOnlyCollection<DependencyFilter> DependencyFilters { get; }
+        public IReadOnlyCollection<Object> ResolveFromInstances { get; }
+        public IReadOnlyCollection<string> IdQualifiers { get; }
+        public IReadOnlyCollection<string> MemberNameQualifiers { get; }
+        public IReadOnlyCollection<Type> TargetTypeQualifiers { get; }
 
         public bool Equals(BindingNode other)
         {

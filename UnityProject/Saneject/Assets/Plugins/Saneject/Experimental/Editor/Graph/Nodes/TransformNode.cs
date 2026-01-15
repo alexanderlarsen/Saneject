@@ -11,6 +11,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
     {
         public TransformNode(
             Transform transform,
+            Transform[] startTransforms,
             TransformNode parentTransformNode = null)
         {
             ParentTransformNode = parentTransformNode;
@@ -31,17 +32,16 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
             ChildTransformNodes = transform
                 .Cast<Transform>()
-                .Select(child => new TransformNode(child, this))
+                .Select(child => new TransformNode(child, startTransforms, this))
                 .ToList();
         }
 
+        public Transform Transform { get; }
         public TransformNode ParentTransformNode { get; }
         public ContextIdentity ContextIdentity { get; }
-        public ScopeNode DeclaredScopeNode { get; }
         public ScopeNode NearestScopeNode { get; }
-        public Transform Transform { get; }
-
-        public IReadOnlyList<ComponentNode> ComponentNodes { get; }
-        public IReadOnlyList<TransformNode> ChildTransformNodes { get; }
+        public ScopeNode DeclaredScopeNode { get; }
+        public IReadOnlyCollection<ComponentNode> ComponentNodes { get; }
+        public IReadOnlyCollection<TransformNode> ChildTransformNodes { get; }
     }
 }
