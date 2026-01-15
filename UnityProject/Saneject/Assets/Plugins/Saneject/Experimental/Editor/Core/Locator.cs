@@ -37,7 +37,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             {
                 ContextIdentity candidateContext = new(candidate);
 
-                if (!UserSettings.UseContextIsolation || candidateContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
+                if (!UserSettings.UseContextIsolation || candidateContext.Type == ContextType.Global || candidateContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
                     validCandidates.Add(candidate);
                 else
                     rejectedTypes.Add(candidate.GetType());
