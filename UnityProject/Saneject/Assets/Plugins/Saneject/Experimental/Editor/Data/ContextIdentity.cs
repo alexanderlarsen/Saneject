@@ -1,5 +1,6 @@
 ﻿using System;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -9,19 +10,17 @@ namespace Plugins.Saneject.Experimental.Editor.Data
     {
         public ContextIdentity(Object obj)
         {
-            GetContextTypeAndKey(obj, out (ContextType type, int key) result);
-            Type = result.type;
-            Key = result.key;
-            IsPrefab = result.type is ContextType.PrefabAsset or ContextType.PrefabInstance;
+            ContextData data = GetContextData(obj);
+            Type = data.Type;
+            Key = data.Key;
+            IsPrefab = data.Type is ContextType.PrefabAsset or ContextType.PrefabInstance;
         }
 
         public ContextType Type { get; }
         public int Key { get; }
         public bool IsPrefab { get; }
 
-        private static void GetContextTypeAndKey(
-            Object obj,
-            out (ContextType type, int key) result)
+        private static ContextData GetContextData(Object obj)
         {
             GameObject gameObject = obj switch
             {
@@ -30,34 +29,31 @@ namespace Plugins.Saneject.Experimental.Editor.Data
                 _ => null
             };
 
-            // Non-GameObjects (ScriptableObjects, etc.)
             if (!gameObject)
-            {
-                result.type = ContextType.Global;
-                result.key = 0;
-                return;
-            }
+                return new ContextData(ContextType.Global, 0); // Non-GameObjects (ScriptableObjects, etc.)
 
-            // Prefab asset
-            if (PrefabUtility.IsPartOfPrefabAsset(gameObject))
-            {
-                result.type = ContextType.PrefabAsset;
-                result.key = gameObject.transform.root.gameObject.GetInstanceID();
-                return;
-            }
+            if (PrefabUtility.IsPartOfPrefabAsset(gameObject) || PrefabStageUtility.GetCurrentPrefabStage() != null)
+                return new ContextData(ContextType.PrefabAsset, gameObject.transform.root.gameObject.GetInstanceID()); // Prefab asset
 
-            // Prefab instance
             GameObject prefabInstanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
 
-            if (prefabInstanceRoot)
+            return prefabInstanceRoot
+                ? new ContextData(ContextType.PrefabInstance, prefabInstanceRoot.GetInstanceID()) // Prefab instance
+                : new ContextData(ContextType.SceneObject, gameObject.scene.handle); // Scene object
+        }
+
+        private class ContextData
+        {
+            public ContextData(
+                ContextType type,
+                int key)
             {
-                result.type = ContextType.PrefabInstance;
-                result.key = prefabInstanceRoot.GetInstanceID();
-                return;
+                Type = type;
+                Key = key;
             }
 
-            result.type = ContextType.SceneObject;
-            result.key = gameObject.scene.handle;
+            public ContextType Type { get; }
+            public int Key { get; }
         }
 
         #region Equality logic
