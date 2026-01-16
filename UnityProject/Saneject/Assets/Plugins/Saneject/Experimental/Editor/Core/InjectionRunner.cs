@@ -1,29 +1,18 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Json;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    public static class InjectionPipeline
+    public static class InjectionRunner
     {
-        public static void Inject(
-            GameObject[] startGameObjects,
-            WalkFilter walkFilter)
-        {
-            Inject
-            (
-                startGameObjects.Select(gameObject => gameObject.transform).ToArray(),
-                walkFilter
-            );
-        }
-
-        public static void Inject(
-            Transform[] startTransforms,
+        public static void Run(
+            IEnumerable<GameObject> startGameObjects,
             WalkFilter walkFilter)
         {
             Logger.TryClearLog();
-            InjectionContext context = new(startTransforms, walkFilter);
+            InjectionContext context = new(startGameObjects, walkFilter);
             BindingValidator.ValidateBindings(context);
 
             if (ProxyProcessor.CreateProxies(context) != ProxyCreationResult.Ready)

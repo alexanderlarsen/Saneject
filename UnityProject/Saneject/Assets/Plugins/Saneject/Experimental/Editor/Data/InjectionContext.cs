@@ -25,9 +25,13 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         private readonly Stopwatch stopwatch = new();
 
         public InjectionContext(
-            Transform[] startTransforms,
+            IEnumerable<GameObject> startObjects,
             WalkFilter walkFilter)
         {
+            Transform[] startTransforms = startObjects
+                .Select(x => x.transform)
+                .ToArray();
+
             stopwatch.Start();
             InjectionGraph = new InjectionGraph(startTransforms);
 

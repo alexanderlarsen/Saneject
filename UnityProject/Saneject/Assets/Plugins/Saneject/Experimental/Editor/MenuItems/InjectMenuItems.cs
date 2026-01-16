@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Core;
 using Plugins.Saneject.Experimental.Editor.Data;
 using UnityEditor;
@@ -20,42 +21,39 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                 .GetActiveScene()
                 .GetRootGameObjects();
 
-            InjectionPipeline.Inject(startObjects, WalkFilter.All);
+            InjectionRunner.Run(startObjects, WalkFilter.All);
         }
 
         [MenuItem("GameObject/Saneject/Inject Entire Scene (Except Prefab Instances)", false, -10050),
          MenuItem("Saneject/Inject/Entire Scene (Except Prefab Instances)", false, -10050)]
         private static void InjectEntireSceneExceptPrefabInstances()
         {
-            GameObject[] startObjects = SceneManager
+            IEnumerable<GameObject> startObjects = SceneManager
                 .GetActiveScene()
                 .GetRootGameObjects()
-                .Where(obj => new ContextIdentity(obj).Type == ContextType.SceneObject)
-                .ToArray();
+                .Where(obj => new ContextIdentity(obj).Type == ContextType.SceneObject);
 
-            InjectionPipeline.Inject(startObjects, WalkFilter.StartObjectsContext);
+            InjectionRunner.Run(startObjects, WalkFilter.StartObjectsContext);
         }
 
         [MenuItem("GameObject/Saneject/Inject Selected Scene Objects (Full Walk)", false, -10001),
          MenuItem("Saneject/Inject/Selected Scene Objects (Full Walk)", false, -10001)]
         private static void InjectSelectedSceneObjectsFullWalk()
         {
-            GameObject[] startObjects = Selection.gameObjects
-                .Where(x => x.scene.IsValid())
-                .ToArray();
+            IEnumerable<GameObject> startObjects = Selection.gameObjects
+                .Where(x => x.scene.IsValid());
 
-            InjectionPipeline.Inject(startObjects, WalkFilter.All);
+            InjectionRunner.Run(startObjects, WalkFilter.All);
         }
 
         [MenuItem("GameObject/Saneject/Inject Selected Scene Objects (Context-Aware Walk)", false, -10000),
          MenuItem("Saneject/Inject/Selected Scene Objects (Context-Aware Walk)", false, -10000)]
         private static void InjectSelectedSceneObjectsContextAwareWalk()
         {
-            GameObject[] startObjects = Selection.gameObjects
-                .Where(x => x.scene.IsValid())
-                .ToArray();
+            IEnumerable<GameObject> startObjects = Selection.gameObjects
+                .Where(x => x.scene.IsValid());
 
-            InjectionPipeline.Inject(startObjects, WalkFilter.StartObjectsContext);
+            InjectionRunner.Run(startObjects, WalkFilter.StartObjectsContext);
         }
 
         [MenuItem("GameObject/Saneject/Inject Currently Open Prefab", false, -9951),
@@ -64,14 +62,14 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         {
             GameObject[] startObjects = { PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot };
 
-            InjectionPipeline.Inject(startObjects, WalkFilter.StartObjectsContext);
+            InjectionRunner.Run(startObjects, WalkFilter.StartObjectsContext);
         }
 
         [MenuItem("Assets/Saneject/Inject Selected Prefab Assets", false, -9950),
          MenuItem("Saneject/Inject/Selected Prefab Assets", false, -9950)]
         private static void InjectSelectedPrefabs()
         {
-            InjectionPipeline.Inject(Selection.gameObjects, WalkFilter.StartObjectsContext);
+            InjectionRunner.Run(Selection.gameObjects, WalkFilter.StartObjectsContext);
         }
 
         #endregion
