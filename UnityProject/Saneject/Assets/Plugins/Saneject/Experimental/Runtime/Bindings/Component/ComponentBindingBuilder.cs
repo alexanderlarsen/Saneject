@@ -1,5 +1,6 @@
 ﻿using System;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
+using Plugins.Saneject.Experimental.Runtime.Scopes;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component

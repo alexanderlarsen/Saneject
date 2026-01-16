@@ -3,6 +3,7 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Runtime;
+using Plugins.Saneject.Experimental.Runtime.Scopes;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes

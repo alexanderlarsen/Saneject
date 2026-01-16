@@ -4,7 +4,7 @@ using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Runtime
+namespace Plugins.Saneject.Experimental.Runtime.Scopes
 {
     /// <summary>
     /// Static global registry and service locator for <see cref="UnityEngine.Object" /> singletons.

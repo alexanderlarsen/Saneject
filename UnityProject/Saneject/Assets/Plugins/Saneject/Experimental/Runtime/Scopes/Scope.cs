@@ -10,7 +10,7 @@ using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
 using ReadOnlyAttribute = Plugins.Saneject.Experimental.Runtime.Attributes.ReadOnlyAttribute;
 
-namespace Plugins.Saneject.Experimental.Runtime
+namespace Plugins.Saneject.Experimental.Runtime.Scopes
 {
     [DisallowMultipleComponent, DefaultExecutionOrder(-10000)]
     public abstract class Scope : MonoBehaviour

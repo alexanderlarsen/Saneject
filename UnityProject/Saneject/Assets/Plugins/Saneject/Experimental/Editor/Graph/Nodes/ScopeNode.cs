@@ -5,6 +5,7 @@ using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Runtime;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Experimental.Runtime.Scopes;
 
 namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 {
