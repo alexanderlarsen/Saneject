@@ -3,35 +3,61 @@ using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Editor.Graph.Json
+namespace Plugins.Saneject.Experimental.Editor.Json
 {
-    public static class InjectionGraphJsonProjector
+    public static class InjectionContextJsonProjector
     {
-        private const string DefaultPath = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Dev\JsonOutput\Graph.json";
+        private const string DefaultPath = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Dev\JsonOutput\Context.json";
 
         public static void SaveToDisk(
-            InjectionGraph graph,
+            InjectionContext context,
             string path = null)
         {
             path ??= DefaultPath;
             DirectoryUtility.EnsureDirectoryExists(path);
-            File.WriteAllText(path, BuildInjectionGraphJObject(graph).ToString());
-            Debug.Log($"Saneject: Injection graph JSON saved to '{path}'");
+            File.WriteAllText(path, BuildInjectionContextJObject(context).ToString());
+            Debug.Log($"Saneject: Injection context JSON saved to '{path}'");
         }
 
-        public static JObject BuildInjectionGraphJObject(InjectionGraph graph)
+        public static JObject BuildInjectionContextJObject(InjectionContext context)
         {
             return new JObject
             {
-                [nameof(InjectionGraph)] = new JObject
+                [nameof(InjectionContext)] = new JObject
                 {
-                    [nameof(InjectionGraph.RootTransformNodes)] = new JArray(graph.RootTransformNodes.Select(BuildTransformNodeJObject))
+                    [nameof(InjectionContext.ActiveTransformNodes)] = new JArray(context.ActiveTransformNodes.Select(node => BuildObjectIdentity(node.Transform))),
+                    [nameof(InjectionContext.ActiveComponentNodes)] = new JArray(context.ActiveComponentNodes.Select(node => BuildObjectIdentity(node.Component))),
+                    [nameof(InjectionContext.ActiveScopeNodes)] = new JArray(context.ActiveScopeNodes.Select(node => BuildObjectIdentity(node.Scope))),
+                    [nameof(InjectionContext.ActiveBindingNodes)] = context.ActiveBindingNodes.Count,
+                    [nameof(InjectionContext.ValidBindingNodes)] = context.ValidBindingNodes.Count,
+                    [nameof(InjectionContext.UsedBindings)] = context.UsedBindings.Count,
+                    [nameof(InjectionContext.UnusedBindingNodes)] = context.UnusedBindingNodes.Count,
+                    [nameof(InjectionContext.FieldNodeResolutionMap)] = new JArray(context.FieldNodeResolutionMap.Select(x => $"{x.Key.DisplayPath} -> {x.Value?.GetType().Name ?? "null"}")),
+                    [nameof(InjectionContext.MethodNodeResolutionMap)] = new JArray(context.MethodNodeResolutionMap.Select(x => $"{x.Key.DisplayPath} -> {x.Value?.GetType().Name ?? "null"}")),
+                    [nameof(InjectionContext.ScopeNodeGlobalResolutionMap)] =
+                        new JObject(context.ScopeNodeGlobalResolutionMap.Select(kvp =>
+                            new JProperty(
+                                BuildObjectIdentity(kvp.Key.Scope),
+                                new JArray(kvp.Value?.Select(obj => obj?.GetType().Name ?? "null") ?? Enumerable.Empty<string>())
+                            ))),
+                    [nameof(InjectionContext.Errors)] = context.Errors.Count,
+                    [nameof(InjectionContext.CreatedProxyAssets)] = context.CreatedProxyAssets.Count,
+                    [nameof(InjectionGraph)] = BuildInjectionGraphJObject(context.InjectionGraph)
                 }
+            };
+        }
+
+        private static JObject BuildInjectionGraphJObject(InjectionGraph graph)
+        {
+            return new JObject
+            {
+                [nameof(InjectionGraph.RootTransformNodes)] = new JArray(graph.RootTransformNodes.Select(BuildTransformNodeJObject))
             };
         }
 

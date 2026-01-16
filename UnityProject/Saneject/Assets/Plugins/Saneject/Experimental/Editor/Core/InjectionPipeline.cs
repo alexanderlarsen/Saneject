@@ -1,6 +1,6 @@
 ﻿using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Graph.Json;
+using Plugins.Saneject.Experimental.Editor.Json;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
@@ -37,7 +37,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Logger.LogUnusedBindings(context);
             Logger.LogCreatedProxyAssets(context);
             Logger.LogSummary(context);
-            InjectionGraphJsonProjector.SaveToDisk(context.InjectionGraph);
+            InjectionContextJsonProjector.SaveToDisk(context);
         }
     }
 }
