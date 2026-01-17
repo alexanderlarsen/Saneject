@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
@@ -16,19 +15,22 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class ProxyProcessor
     {
-        public static ProxyCreationResult CreateProxies(InjectionContext context)
+        public static ProxyCreationResult CreateProxies(params InjectionContext[] contexts)
         {
-            IReadOnlyCollection<Type> concreteTypes = context
-                .ValidBindingNodes
-                .Where(bindingNode => bindingNode is ComponentBindingNode { ResolveFromRuntimeProxy: true })
-                .Select(bindingNode => bindingNode.ConcreteType)
-                .Where(type => type != null)
+            HashSet<Type> concreteTypes = contexts
+                .SelectMany(c => c.ValidBindingNodes)
+                .OfType<ComponentBindingNode>()
+                .Where(b => b.ResolveFromRuntimeProxy)
+                .Select(b => b.ConcreteType)
+                .Where(t => t != null)
                 .ToHashSet();
 
             if (TryCreateProxyStubs(concreteTypes))
                 return ProxyCreationResult.DomainReloadRequired;
 
-            CreateMissingProxyAssets(context, concreteTypes);
+            foreach (InjectionContext context in contexts)
+                CreateMissingProxyAssets(context, concreteTypes);
+
             return ProxyCreationResult.Ready;
         }
 

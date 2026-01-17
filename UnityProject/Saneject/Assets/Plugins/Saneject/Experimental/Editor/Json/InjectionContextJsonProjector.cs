@@ -25,7 +25,7 @@ namespace Plugins.Saneject.Experimental.Editor.Json
             Debug.Log($"Saneject: Injection context JSON saved to '{path}'");
         }
 
-        public static JObject BuildInjectionContextJObject(InjectionContext context)
+        private static JObject BuildInjectionContextJObject(InjectionContext context)
         {
             return new JObject
             {

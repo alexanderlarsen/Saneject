@@ -29,9 +29,69 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 ConsoleUtility.ClearLog();
         }
 
-        public static void LogErrors(InjectionContext context)
+        public static void LogResults(InjectionResults results)
         {
-            IEnumerable<Error> errors = context
+            LogErrors(results);
+            LogUnusedBindings(results);
+            LogCreatedProxyAssets(results);
+        }
+
+        public static void LogSummary(InjectionResults results)
+        {
+            if (!UserSettings.LogInjectionSummary)
+                return;
+
+            InjectionSummary summary = new(results);
+            StringBuilder sb = new();
+
+            sb.Append("Saneject: Injection complete | ")
+                .AppendQuantity(summary.ScopesProcessedCount, "scope processed", "scopes processed", " | ")
+                .AppendQuantity(summary.GlobalRegistrationCount, "global registered", "globals registered", " | ")
+                .AppendQuantity(summary.InjectedFieldCount, "field injected", "fields injected", " | ")
+                .AppendQuantity(summary.InjectedPropertyCount, "property injected", "properties injected", " | ")
+                .AppendQuantity(summary.InjectedMethodCount, "method injected", "methods injected", " | ")
+                .AppendQuantity(summary.MissingDependencyCount, "missing dependency", "missing dependencies", " | ")
+                .AppendQuantity(summary.MissingBindingCount, "missing binding", "missing bindings", " | ")
+                .AppendQuantity(summary.InvalidBindingCount, "invalid binding", "invalid bindings", " | ")
+                .AppendQuantity(summary.UnusedBindingCount, "unused binding", "unused bindings", " | ")
+                .Append("Completed in ")
+                .Append(summary.ElapsedMilliseconds)
+                .Append(" ms");
+
+            if (summary.SuppressedErrorCount > 0)
+                sb.Append("\n⚠️ ")
+                    .Append(summary.SuppressedErrorCount)
+                    .Append(" missing binding/dependency ")
+                    .AppendQuantity(summary.SuppressedErrorCount, "error was", "errors were", addCount: false)
+                    .Append(" suppressed due to [Inject(suppressMissingErrors: true)]. Remove the flag to view detailed logs.");
+
+            switch (summary.GetLogSeverity())
+            {
+                case LogSeverity.Info:
+                    Debug.Log(sb.ToString());
+                    break;
+
+                case LogSeverity.Warning:
+                    Debug.LogWarning(sb.ToString());
+                    break;
+
+                case LogSeverity.Error:
+                    Debug.LogError(sb.ToString());
+                    break;
+
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+        }
+
+        public static void SaveProxyStubCreationCount(int count)
+        {
+            SessionState.SetInt(ProxyStubCreationCountKey, count);
+        }
+
+        private static void LogErrors(InjectionResults results)
+        {
+            IEnumerable<Error> errors = results
                 .Errors
                 .OrderBy(e => ErrorPriority(e.ErrorType))
                 .Where(error => !error.SuppressError);
@@ -80,72 +140,19 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             }
         }
 
-        public static void LogUnusedBindings(InjectionContext context)
+        private static void LogUnusedBindings(InjectionResults results)
         {
             if (!UserSettings.LogUnusedBindings)
                 return;
 
-            foreach (BindingNode binding in context.UnusedBindingNodes)
+            foreach (BindingNode binding in results.UnusedBindingNodes)
                 Debug.LogWarning($"Saneject: Unused binding {SignatureBuilder.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }
 
-        public static void LogCreatedProxyAssets(InjectionContext context)
+        private static void LogCreatedProxyAssets(InjectionResults results)
         {
-            foreach ((string path, Object instance) asset in context.CreatedProxyAssets)
+            foreach ((string path, Object instance) asset in results.CreatedProxyAssets)
                 Debug.Log($"Saneject: Created proxy asset at '{asset.path}'.", asset.instance);
-        }
-
-        public static void LogSummary(InjectionContext context)
-        {
-            if (!UserSettings.LogInjectionSummary)
-                return;
-
-            InjectionSummary summary = new(context);
-            StringBuilder sb = new();
-
-            sb.Append("Saneject: Injection complete | ")
-                .AppendQuantity(summary.ScopesProcessedCount, "scope processed", "scopes processed", " | ")
-                .AppendQuantity(summary.GlobalRegistrationCount, "global registered", "globals registered", " | ")
-                .AppendQuantity(summary.InjectedFieldCount, "field injected", "fields injected", " | ")
-                .AppendQuantity(summary.InjectedPropertyCount, "property injected", "properties injected", " | ")
-                .AppendQuantity(summary.InjectedMethodCount, "method injected", "methods injected", " | ")
-                .AppendQuantity(summary.MissingDependencyCount, "missing dependency", "missing dependencies", " | ")
-                .AppendQuantity(summary.MissingBindingCount, "missing binding", "missing bindings", " | ")
-                .AppendQuantity(summary.InvalidBindingCount, "invalid binding", "invalid bindings", " | ")
-                .AppendQuantity(summary.UnusedBindingCount, "unused binding", "unused bindings", " | ")
-                .Append("Completed in ")
-                .Append(summary.ElapsedMilliseconds)
-                .Append(" ms");
-
-            if (summary.SuppressedErrorCount > 0)
-                sb.Append("\n⚠️ ")
-                    .Append(summary.SuppressedErrorCount)
-                    .Append(" missing binding/dependency ")
-                    .AppendQuantity(summary.SuppressedErrorCount, "error was", "errors were", addCount: false)
-                    .Append(" suppressed due to [Inject(suppressMissingErrors: true)]. Remove the flag to view detailed logs.");
-
-            switch (summary.GetLogSeverity())
-            {
-                case LogSeverity.Info:
-                    Debug.Log(sb.ToString());
-                    break;
-
-                case LogSeverity.Warning:
-                    Debug.LogWarning(sb.ToString());
-                    break;
-
-                case LogSeverity.Error:
-                    Debug.LogError(sb.ToString());
-                    break;
-
-                default:
-                    throw new ArgumentOutOfRangeException();
-            }
-        }
-
-        public static void SaveProxyStubCreationCount(int count)
-        {
-            SessionState.SetInt(ProxyStubCreationCountKey, count);
         }
 
         private static void TryLogProxyStubsCreated()

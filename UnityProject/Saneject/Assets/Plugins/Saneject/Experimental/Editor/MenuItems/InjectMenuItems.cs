@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Core;
 using Plugins.Saneject.Experimental.Editor.Data;
 using UnityEditor;
@@ -28,10 +27,11 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/Entire Scene (Except Prefab Instances)", false, -10050)]
         private static void InjectEntireSceneExceptPrefabInstances()
         {
-            IEnumerable<GameObject> startObjects = SceneManager
+            GameObject[] startObjects = SceneManager
                 .GetActiveScene()
                 .GetRootGameObjects()
-                .Where(obj => new ContextIdentity(obj).Type == ContextType.SceneObject);
+                .Where(obj => new ContextIdentity(obj).Type == ContextType.SceneObject)
+                .ToArray();
 
             InjectionRunner.Run(startObjects, WalkFilter.StartObjectsContext);
         }
@@ -40,8 +40,9 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/Selected Scene Objects (Full Walk)", false, -10001)]
         private static void InjectSelectedSceneObjectsFullWalk()
         {
-            IEnumerable<GameObject> startObjects = Selection.gameObjects
-                .Where(x => x.scene.IsValid());
+            GameObject[] startObjects = Selection.gameObjects
+                .Where(x => x.scene.IsValid())
+                .ToArray();
 
             InjectionRunner.Run(startObjects, WalkFilter.All);
         }
@@ -50,8 +51,9 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/Selected Scene Objects (Context-Aware Walk)", false, -10000)]
         private static void InjectSelectedSceneObjectsContextAwareWalk()
         {
-            IEnumerable<GameObject> startObjects = Selection.gameObjects
-                .Where(x => x.scene.IsValid());
+            GameObject[] startObjects = Selection.gameObjects
+                .Where(x => x.scene.IsValid())
+                .ToArray();
 
             InjectionRunner.Run(startObjects, WalkFilter.StartObjectsContext);
         }

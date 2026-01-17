@@ -5,51 +5,35 @@ namespace Plugins.Saneject.Experimental.Editor.Data
 {
     public class InjectionSummary
     {
-        public InjectionSummary(InjectionContext context)
+        public InjectionSummary(InjectionResults results)
         {
-            GlobalRegistrationCount = context
-                .ScopeNodeGlobalResolutionMap
-                .Count;
+            GlobalRegistrationCount = results.GlobalRegistrationCount;
+            InjectedFieldCount = results.InjectedFieldCount;
+            InjectedPropertyCount = results.InjectedPropertyCount;
+            InjectedMethodCount = results.InjectedMethodCount;
 
-            InjectedFieldCount = context
-                .FieldNodeResolutionMap
-                .Keys
-                .Count(field => !field.IsPropertyBackingField);
-
-            InjectedPropertyCount = context
-                .FieldNodeResolutionMap
-                .Keys
-                .Count(field => field.IsPropertyBackingField);
-
-            InjectedMethodCount = context
-                .MethodNodeResolutionMap
-                .Count;
-
-            MissingBindingCount = context
+            MissingBindingCount = results
                 .Errors
                 .Count(error => error.ErrorType == ErrorType.MissingBinding && !error.SuppressError);
 
-            UnusedBindingCount = context
+            UnusedBindingCount = results
                 .UnusedBindingNodes
                 .Count;
 
-            InvalidBindingCount = context
+            InvalidBindingCount = results
                 .Errors
                 .Count(error => error.ErrorType == ErrorType.InvalidBinding && !error.SuppressError);
 
-            MissingDependencyCount = context
+            MissingDependencyCount = results
                 .Errors
                 .Count(error => error.ErrorType is ErrorType.MissingDependency or ErrorType.MissingDependencies && !error.SuppressError);
 
-            SuppressedErrorCount = context
+            SuppressedErrorCount = results
                 .Errors
                 .Count(error => error.SuppressError);
 
-            ScopesProcessedCount = context
-                .ActiveScopeNodes
-                .Count;
-
-            ElapsedMilliseconds = context.ElapsedMilliseconds;
+            ScopesProcessedCount = results.ScopesProcessedCount;
+            ElapsedMilliseconds = results.ElapsedMilliseconds;
         }
 
         public int ScopesProcessedCount { get; }

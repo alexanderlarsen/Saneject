@@ -25,14 +25,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         private readonly Stopwatch stopwatch = new();
 
         public InjectionContext(
-            IEnumerable<GameObject> startObjects,
-            WalkFilter walkFilter)
+            WalkFilter walkFilter,
+            params Transform[] startTransforms)
         {
-            Transform[] startTransforms = startObjects
-                .Select(x => x.transform)
-                .ToArray();
-
             stopwatch.Start();
+
             InjectionGraph = new InjectionGraph(startTransforms);
 
             switch (walkFilter)
@@ -92,20 +89,6 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
         public long ElapsedMilliseconds => stopwatch.ElapsedMilliseconds;
 
-        public void StopTimer()
-        {
-            stopwatch.Stop();
-        }
-
-        public void CacheUnusedBindings()
-        {
-            unusedBindingNodes.Clear();
-
-            foreach (BindingNode bindingNode in ActiveBindingNodes)
-                if (!usedBindings.Contains(bindingNode))
-                    unusedBindingNodes.Add(bindingNode);
-        }
-
         public void RegisterValidBinding(BindingNode bindingNode)
         {
             validBindingNodes.Add(bindingNode);
@@ -152,6 +135,34 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             string path)
         {
             createdProxyAssets.Add((path, instance));
+        }
+
+        public InjectionResults GetResults()
+        {
+            unusedBindingNodes.Clear();
+
+            foreach (BindingNode bindingNode in ActiveBindingNodes)
+                if (!usedBindings.Contains(bindingNode))
+                    unusedBindingNodes.Add(bindingNode);
+
+            stopwatch.Stop();
+
+            return new InjectionResults
+            (
+                errors: errors,
+                unusedBindingNodes: unusedBindingNodes,
+                createdProxyAssets: createdProxyAssets,
+                globalRegistrationCount: scopeNodeGlobalResolutionMap.Count,
+                injectedFieldCount: fieldNodeResolutionMap
+                    .Keys
+                    .Count(field => !field.IsPropertyBackingField),
+                injectedPropertyCount: fieldNodeResolutionMap
+                    .Keys
+                    .Count(field => field.IsPropertyBackingField),
+                injectedMethodCount: methodNodeResolutionMap.Count,
+                scopesProcessedCount: ActiveScopeNodes.Count,
+                elapsedMilliseconds: ElapsedMilliseconds
+            );
         }
     }
 }
