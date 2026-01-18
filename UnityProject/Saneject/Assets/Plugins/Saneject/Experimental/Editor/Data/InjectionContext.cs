@@ -25,8 +25,8 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         private readonly Stopwatch stopwatch = new();
 
         public InjectionContext(
-            WalkFilter walkFilter,
-            params Transform[] startTransforms)
+            Transform[] startTransforms,
+            WalkFilter walkFilter)
         {
             stopwatch.Start();
 

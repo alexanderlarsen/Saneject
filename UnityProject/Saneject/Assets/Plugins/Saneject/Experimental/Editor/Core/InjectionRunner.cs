@@ -1,10 +1,12 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Json;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery
 
@@ -13,28 +15,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     public static class InjectionRunner
     {
         public static void Run(
-            IEnumerable<GameObject> startGameObjects,
-            WalkFilter walkFilter)
-        {
-            Transform[] startTransforms = startGameObjects
-                .Select(x => x.transform)
-                .ToArray();
-
-            Run(startTransforms, walkFilter);
-        }
-
-        public static void Run(
-            Transform[] startTransforms,
+            IEnumerable<Object> startObjects,
             WalkFilter walkFilter)
         {
             Logger.TryClearLog();
-            InjectionContext context = new(walkFilter, startTransforms);
-            BindingValidator.ValidateBindings(context);
-            Resolver.Resolve(context);
-            Injector.InjectDependencies(context);
-            InjectionContextJsonProjector.SaveToDisk(context); // TODO: Move out of this method
-            InjectionResults results = context.GetResults();
-            Logger.LogResults(results);
+            InjectionResults results = RunContext(startObjects, walkFilter);
             Logger.LogSummary(results);
         }
 
@@ -44,7 +29,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             WalkFilter walkFilter)
         {
             Logger.TryClearLog();
-
             InjectionResults sceneResults = new();
             InjectionResults prefabResults = new();
 
@@ -52,41 +36,56 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
 
-                Transform[] startTransforms = EditorSceneManager
+                IEnumerable<Transform> startObjects = EditorSceneManager
                     .OpenScene(path, OpenSceneMode.Single)
                     .GetRootGameObjects()
-                    .Select(x => x.transform)
-                    .ToArray();
+                    .Select(x => x.transform);
 
-                InjectionContext context = new(walkFilter, startTransforms);
-                BindingValidator.ValidateBindings(context);
-                Resolver.Resolve(context);
-                Injector.InjectDependencies(context);
-                InjectionResults results = context.GetResults();
+                InjectionResults results = RunContext(startObjects, walkFilter);
                 sceneResults.AddToResults(results);
-                Logger.LogResults(results);
             }
 
             foreach (string guid in prefabGuids)
             {
                 string path = AssetDatabase.GUIDToAssetPath(guid);
 
-                Transform startTransform = AssetDatabase
-                    .LoadAssetAtPath<GameObject>(path)
-                    .transform
-                    .root;
+                Transform[] startObjects =
+                {
+                    AssetDatabase
+                        .LoadAssetAtPath<GameObject>(path)
+                        .transform
+                        .root
+                };
 
-                InjectionContext context = new(walkFilter, startTransform);
-                BindingValidator.ValidateBindings(context);
-                Resolver.Resolve(context);
-                Injector.InjectDependencies(context);
-                InjectionResults results = context.GetResults();
+                InjectionResults results = RunContext(startObjects, walkFilter);
                 prefabResults.AddToResults(results);
-                Logger.LogResults(results);
             }
 
             Logger.LogSummary(sceneResults);
             Logger.LogSummary(prefabResults);
+        }
+
+        private static InjectionResults RunContext(
+            IEnumerable<Object> startObjects,
+            WalkFilter walkFilter)
+        {
+            Transform[] startTransforms = startObjects switch
+            {
+                Transform[] t => t,
+                IEnumerable<Transform> t => t.ToArray(),
+                IEnumerable<GameObject> g => g.Select(x => x.transform).ToArray(),
+                IEnumerable<Component> c => c.Select(x => x.transform).ToArray(),
+                _ => throw new Exception("Unsupported start object type.")
+            };
+
+            InjectionContext context = new(startTransforms, walkFilter);
+            BindingValidator.ValidateBindings(context);
+            Resolver.Resolve(context);
+            Injector.InjectDependencies(context);
+            InjectionResults results = context.GetResults();
+            Logger.LogResults(results);
+            InjectionContextJsonProjector.SaveToDisk(context); // TODO: Make batch friendly
+            return results;
         }
     }
 }
