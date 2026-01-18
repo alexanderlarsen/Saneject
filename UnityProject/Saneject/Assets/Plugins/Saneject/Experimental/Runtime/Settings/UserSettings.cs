@@ -12,6 +12,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     {
         #region Proxy Generation
 
+        public static bool GenerateProxyScriptsOnDomainReload
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
         public static string ProxyAssetGenerationFolder
         {
             get => GetString(defaultValue: "Assets/Generated");

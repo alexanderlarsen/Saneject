@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         [SerializeField, ReadOnly, Tooltip("These are automatically added to GlobalScope at Scope Awake and removed at OnDestroy"), EditorBrowsable(EditorBrowsableState.Never)]
         private List<Component> globalComponents = new();
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
         private void Awake()
         {
             foreach (Component obj in globalComponents)

@@ -1,7 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
-using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Json;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -30,10 +29,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Logger.TryClearLog();
             InjectionContext context = new(walkFilter, startTransforms);
             BindingValidator.ValidateBindings(context);
-
-            if (ProxyProcessor.CreateProxies(context) != ProxyCreationResult.Ready)
-                return;
-
             Resolver.Resolve(context);
             Injector.InjectDependencies(context);
             InjectionContextJsonProjector.SaveToDisk(context); // TODO: Move out of this method
@@ -50,10 +45,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Logger.TryClearLog();
 
             // TODO: This most likely won't work because the objects used to create the context/graph are destroyed when the scene is unloaded. Probably best to just gather all contexts in a single hashset, discard them after proxy generation and generate them again in each scene/prefab loop. Maybe build a cheap pre-pass graph that only finds and validates bindings, instead of the entire thing - or not even a graph but a binding scan across scenes and prefabs. Remember to use the walk filter to find the scopes.
-            
+
             Dictionary<string, InjectionContext> sceneContextMap = new();
             Dictionary<string, InjectionContext> prefabContextMap = new();
-            
+
             foreach (string scenePath in scenePaths)
             {
                 Scene scene = EditorSceneManager.OpenScene(scenePath);
@@ -82,14 +77,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 BindingValidator.ValidateBindings(context); // TODO: ... and here
                 prefabContextMap[prefabPath] = context;
             }
-
-            InjectionContext[] allContexts = sceneContextMap
-                .Values
-                .Concat(prefabContextMap.Values)
-                .ToArray();
-
-            if (ProxyProcessor.CreateProxies(allContexts) != ProxyCreationResult.Ready)
-                return;
 
             InjectionResults sceneResults = new();
             InjectionResults prefabResults = new();

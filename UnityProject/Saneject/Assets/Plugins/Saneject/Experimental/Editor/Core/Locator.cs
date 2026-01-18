@@ -4,6 +4,7 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using Plugins.Saneject.Experimental.Editor.RuntimeProxy;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using Plugins.Saneject.Experimental.Runtime.Settings;
@@ -52,7 +53,13 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             TransformNode injectionTargetNode)
         {
             if (bindingNode.ResolveFromRuntimeProxy)
-                return new[] { ProxyProcessor.ResolveProxyAsset(bindingNode.ConcreteType) };
+            {
+                Object proxyAsset = ProxyAssetResolver.Resolve(bindingNode.ConcreteType, context);
+
+                return proxyAsset != null
+                    ? new[] { proxyAsset }
+                    : Enumerable.Empty<Object>();
+            }
 
             if (bindingNode.SearchOrigin == SearchOrigin.Instance)
                 return bindingNode.ResolveFromInstances.OfType<Component>();
