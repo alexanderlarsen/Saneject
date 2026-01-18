@@ -8,7 +8,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Editor.RuntimeProxy
+namespace Plugins.Saneject.Experimental.Editor.Core
 {
     public static class ProxyAssetResolver
     {
