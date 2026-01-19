@@ -4,11 +4,11 @@ using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
-    public static class DialogUtility
+    public static class DisplayDialog
     {
         public static class ProxyGeneration
         {
-            public static void DisplayCreationDialog(int proxyCount)
+            public static void Create(int proxyCount)
             {
                 EditorUtility.DisplayDialog(
                     title: "Saneject: Runtime Proxy Generation",
@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 );
             }
 
-            public static void DisplayAlreadyExistDialog()
+            public static void AlreadyExist()
             {
                 EditorUtility.DisplayDialog(
                     title: "Saneject: Runtime Proxy Generation",
@@ -31,9 +31,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             }
         }
 
-        public static class InjectionMenus
+        public static class BatchInjection
         {
-            public static bool UserAcceptedBatchInjection(
+            public static bool UserConfirmed(
                 int sceneCount,
                 int prefabCount)
             {

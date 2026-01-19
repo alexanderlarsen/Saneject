@@ -26,7 +26,7 @@ namespace Plugins.Saneject.Experimental.Editor.RuntimeProxy
             if (missing.Count == 0)
                 return;
 
-            DialogUtility.ProxyGeneration.DisplayCreationDialog(missing.Count);
+            DisplayDialog.ProxyGeneration.Create(missing.Count);
             GenerateScriptsAndSave(missing);
         }
 
@@ -36,11 +36,11 @@ namespace Plugins.Saneject.Experimental.Editor.RuntimeProxy
 
             if (missing.Count == 0)
             {
-                DialogUtility.ProxyGeneration.DisplayAlreadyExistDialog();
+                DisplayDialog.ProxyGeneration.AlreadyExist();
                 return;
             }
 
-            DialogUtility.ProxyGeneration.DisplayCreationDialog(missing.Count);
+            DisplayDialog.ProxyGeneration.Create(missing.Count);
             GenerateScriptsAndSave(missing);
         }
 
