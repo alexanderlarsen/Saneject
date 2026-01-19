@@ -7,22 +7,13 @@ using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Settings;
-using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Core
 {
-    [InitializeOnLoad]
     public static class Logger
     {
-        private const string ProxyStubCreationCountKey = "Saneject.ProxyStubCreationCount";
-
-        static Logger()
-        {
-            AssemblyReloadEvents.afterAssemblyReload += TryLogProxyStubsCreated;
-        }
-
         public static void TryClearLog()
         {
             if (UserSettings.ClearLogsOnInjection)
@@ -36,7 +27,10 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             LogCreatedProxyAssets(results);
         }
 
-        public static void LogSummary(InjectionResults results, long elapsedMilliseconds)
+        public static void LogSummary(
+            string prefix,
+            InjectionResults results,
+            long elapsedMilliseconds)
         {
             if (!UserSettings.LogInjectionSummary)
                 return;
@@ -44,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             InjectionSummary summary = new(results);
             StringBuilder sb = new();
 
-            sb.Append("Saneject: Injection complete | ")
+            sb.Append($"Saneject: {prefix} | ")
                 .AppendQuantity(summary.ScopesProcessedCount, "scope processed", "scopes processed", " | ")
                 .AppendQuantity(summary.GlobalRegistrationCount, "global registered", "globals registered", " | ")
                 .AppendQuantity(summary.InjectedFieldCount, "field injected", "fields injected", " | ")
@@ -83,10 +77,15 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     throw new ArgumentOutOfRangeException();
             }
         }
-
-        public static void SaveProxyStubCreationCount(int count)
+        
+        public static void LogNothingToInject()
         {
-            SessionState.SetInt(ProxyStubCreationCountKey, count);
+            Debug.Log("Saneject: Nothing to inject.");
+        }
+        
+        public static void LogInjectionCancelledByUser()
+        {
+            Debug.Log("Saneject: Injection cancelled by user.");
         }
 
         private static void LogErrors(InjectionResults results)
@@ -153,23 +152,6 @@ namespace Plugins.Saneject.Experimental.Editor.Core
         {
             foreach ((string path, Object instance) asset in results.CreatedProxyAssets)
                 Debug.Log($"Saneject: Created proxy asset at '{asset.path}'.", asset.instance);
-        }
-
-        private static void TryLogProxyStubsCreated()
-        {
-            int count = SessionState.GetInt(ProxyStubCreationCountKey, 0);
-            SessionState.EraseInt(ProxyStubCreationCountKey);
-
-            if (count <= 0)
-                return;
-
-            StringBuilder sb = new();
-
-            sb.Append("Saneject: ")
-                .AppendQuantity(count, "proxy script", "proxy scripts")
-                .Append(" generated. Unity has recompiled and stopped the injection pass. Inject again to complete.");
-
-            Debug.LogWarning(sb.ToString());
         }
     }
 }

@@ -5,10 +5,10 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
 using Plugins.Saneject.Experimental.Editor.Graph;
 using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
-using Plugins.Saneject.Experimental.Editor.Json;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery
@@ -25,56 +25,108 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Stopwatch stopwatch = Stopwatch.StartNew();
             InjectionResults results = RunContext(startObjects, contextWalkFilter);
             stopwatch.Stop();
-            Logger.LogSummary(results, stopwatch.ElapsedMilliseconds);
+
+            Logger.LogSummary
+            (
+                prefix: "Injection complete",
+                results,
+                stopwatch.ElapsedMilliseconds
+            );
         }
 
-        public static void RunBatch(
-            string[] sceneGuids,
-            string[] prefabGuids,
-            ContextWalkFilter contextWalkFilter)
+        public static void RunBatch(IReadOnlyCollection<BatchItem> batchItems)
         {
+            HashSet<SceneBatchItem> sceneBatchItems = batchItems
+                .OfType<SceneBatchItem>()
+                .ToHashSet();
+
+            HashSet<PrefabBatchItem> prefabBatchItems = batchItems
+                .OfType<PrefabBatchItem>()
+                .ToHashSet();
+
             Logger.TryClearLog();
-            Stopwatch sceneStopwatch = new();
-            Stopwatch prefabStopwatch = new();
-            InjectionResults sceneResults = new();
-            InjectionResults prefabResults = new();
-            sceneStopwatch.Start();
 
-            foreach (string guid in sceneGuids)
+            if (sceneBatchItems.Count == 0 && prefabBatchItems.Count == 0)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
+                Logger.LogNothingToInject();
+                return;
+            }
 
-                IEnumerable<Transform> startObjects = EditorSceneManager
-                    .OpenScene(path, OpenSceneMode.Single)
+            if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
+            {
+                Logger.LogInjectionCancelledByUser();
+                return;
+            }
+
+            if (sceneBatchItems.Count > 0)
+                RunSceneBatch(sceneBatchItems);
+
+            if (prefabBatchItems.Count > 0)
+                RunPrefabBatch(prefabBatchItems);
+        }
+
+        private static void RunSceneBatch(IEnumerable<SceneBatchItem> batchItems)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            InjectionResults combinedResults = new();
+
+            string initialScenePath = SceneManager.GetActiveScene().path;
+
+            foreach (SceneBatchItem item in batchItems)
+            {
+                Scene scene = EditorSceneManager.OpenScene(item.Path, OpenSceneMode.Single);
+
+                IEnumerable<Transform> startObjects = scene
                     .GetRootGameObjects()
                     .Select(x => x.transform);
 
-                InjectionResults results = RunContext(startObjects, contextWalkFilter);
-                sceneResults.AddToResults(results);
+                InjectionResults results = RunContext(startObjects, item.ContextWalkFilter);
+                EditorSceneManager.SaveScene(scene);
+                combinedResults.AddToResults(results);
             }
 
-            sceneStopwatch.Stop();
-            prefabStopwatch.Start();
+            if (!string.IsNullOrEmpty(initialScenePath))
+                EditorSceneManager.OpenScene(initialScenePath, OpenSceneMode.Single);
 
-            foreach (string guid in prefabGuids)
+            stopwatch.Stop();
+
+            Logger.LogSummary
+            (
+                prefix: "Scene batch injection complete",
+                combinedResults,
+                stopwatch.ElapsedMilliseconds
+            );
+        }
+
+        private static void RunPrefabBatch(IEnumerable<PrefabBatchItem> batchItems)
+        {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            InjectionResults combinedResults = new();
+
+            foreach (PrefabBatchItem item in batchItems)
             {
-                string path = AssetDatabase.GUIDToAssetPath(guid);
-
                 Transform[] startObjects =
                 {
                     AssetDatabase
-                        .LoadAssetAtPath<GameObject>(path)
+                        .LoadAssetAtPath<GameObject>(item.Path)
                         .transform
                         .root
                 };
 
-                InjectionResults results = RunContext(startObjects, contextWalkFilter);
-                prefabResults.AddToResults(results);
+                InjectionResults results = RunContext(startObjects, ContextWalkFilter.PrefabAsset);
+                combinedResults.AddToResults(results);
             }
 
-            prefabStopwatch.Stop();
-            Logger.LogSummary(sceneResults, sceneStopwatch.ElapsedMilliseconds);
-            Logger.LogSummary(prefabResults, prefabStopwatch.ElapsedMilliseconds);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+            stopwatch.Stop();
+
+            Logger.LogSummary
+            (
+                prefix: "Prefab batch injection complete",
+                combinedResults,
+                stopwatch.ElapsedMilliseconds
+            );
         }
 
         private static InjectionResults RunContext(
@@ -98,7 +150,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             Injector.InjectDependencies(context);
             InjectionResults results = context.GetResults();
             Logger.LogResults(results);
-            InjectionContextJsonProjector.SaveToDisk(context, injectionGraph); // TODO: Make batch friendly
+            /*InjectionContextJsonProjector.SaveToDisk(context, injectionGraph);*/ // TODO: Make batch friendly
             return results;
         }
     }
