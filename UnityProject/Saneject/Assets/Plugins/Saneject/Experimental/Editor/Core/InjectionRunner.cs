@@ -58,16 +58,45 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 return;
             }
 
+            Stopwatch sceneStopwatch = null;
+            Stopwatch prefabStopwatch = null;
+
+            InjectionResults sceneResults = null;
+            InjectionResults prefabResults = null;
+
             if (sceneBatchItems.Count > 0)
-                RunSceneBatch(sceneBatchItems);
+            {
+                sceneStopwatch = Stopwatch.StartNew();
+                sceneResults = RunSceneBatch(sceneBatchItems);
+                sceneStopwatch.Stop();
+            }
 
             if (prefabBatchItems.Count > 0)
-                RunPrefabBatch(prefabBatchItems);
+            {
+                prefabStopwatch = Stopwatch.StartNew();
+                prefabResults = RunPrefabBatch(prefabBatchItems);
+                prefabStopwatch.Stop();
+            }
+
+            if (sceneResults != null)
+                Logger.LogSummary
+                (
+                    prefix: "Scene batch injection complete",
+                    sceneResults,
+                    sceneStopwatch.ElapsedMilliseconds
+                );
+
+            if (prefabResults != null)
+                Logger.LogSummary
+                (
+                    prefix: "Prefab batch injection complete",
+                    prefabResults,
+                    prefabStopwatch.ElapsedMilliseconds
+                );
         }
 
-        private static void RunSceneBatch(IEnumerable<SceneBatchItem> batchItems)
+        private static InjectionResults RunSceneBatch(IEnumerable<SceneBatchItem> batchItems)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             InjectionResults combinedResults = new();
 
             string initialScenePath = SceneManager.GetActiveScene().path;
@@ -88,19 +117,11 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             if (!string.IsNullOrEmpty(initialScenePath))
                 EditorSceneManager.OpenScene(initialScenePath, OpenSceneMode.Single);
 
-            stopwatch.Stop();
-
-            Logger.LogSummary
-            (
-                prefix: "Scene batch injection complete",
-                combinedResults,
-                stopwatch.ElapsedMilliseconds
-            );
+            return combinedResults;
         }
 
-        private static void RunPrefabBatch(IEnumerable<PrefabBatchItem> batchItems)
+        private static InjectionResults RunPrefabBatch(IEnumerable<PrefabBatchItem> batchItems)
         {
-            Stopwatch stopwatch = Stopwatch.StartNew();
             InjectionResults combinedResults = new();
 
             foreach (PrefabBatchItem item in batchItems)
@@ -119,14 +140,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            stopwatch.Stop();
-
-            Logger.LogSummary
-            (
-                prefix: "Prefab batch injection complete",
-                combinedResults,
-                stopwatch.ElapsedMilliseconds
-            );
+            return combinedResults;
         }
 
         private static InjectionResults RunContext(
