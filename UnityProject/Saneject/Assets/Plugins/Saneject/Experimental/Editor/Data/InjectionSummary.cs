@@ -33,7 +33,6 @@ namespace Plugins.Saneject.Experimental.Editor.Data
                 .Count(error => error.SuppressError);
 
             ScopesProcessedCount = results.ScopesProcessedCount;
-            ElapsedMilliseconds = results.ElapsedMilliseconds;
         }
 
         public int ScopesProcessedCount { get; }
@@ -46,7 +45,6 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public int InvalidBindingCount { get; }
         public int UnusedBindingCount { get; }
         public int SuppressedErrorCount { get; }
-        public long ElapsedMilliseconds { get; }
 
         public LogSeverity GetLogSeverity()
         {

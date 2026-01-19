@@ -12,7 +12,6 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
     {
         public TransformNode(
             Transform transform,
-            Transform[] startTransforms,
             TransformNode parentTransformNode = null)
         {
             ParentTransformNode = parentTransformNode;
@@ -33,7 +32,7 @@ namespace Plugins.Saneject.Experimental.Editor.Graph.Nodes
 
             ChildTransformNodes = transform
                 .Cast<Transform>()
-                .Select(child => new TransformNode(child, startTransforms, this))
+                .Select(child => new TransformNode(child, this))
                 .ToList();
         }
 

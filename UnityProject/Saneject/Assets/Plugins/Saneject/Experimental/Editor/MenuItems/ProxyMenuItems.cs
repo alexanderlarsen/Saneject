@@ -5,7 +5,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
     public static class ProxyMenuItems
     {
-        [MenuItem("Saneject/RuntimeProxy/Generate Missing Proxy Scripts", false, -10050)]
+        [MenuItem("Saneject/Runtime Proxy/Generate Missing Proxy Scripts", false, -10050)]
         private static void GenerateMissingProxyScripts()
         {
             ProxyScriptGenerator.GenerateMissingProxyScripts();

@@ -36,7 +36,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
             LogCreatedProxyAssets(results);
         }
 
-        public static void LogSummary(InjectionResults results)
+        public static void LogSummary(InjectionResults results, long elapsedMilliseconds)
         {
             if (!UserSettings.LogInjectionSummary)
                 return;
@@ -55,7 +55,7 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 .AppendQuantity(summary.InvalidBindingCount, "invalid binding", "invalid bindings", " | ")
                 .AppendQuantity(summary.UnusedBindingCount, "unused binding", "unused bindings", " | ")
                 .Append("Completed in ")
-                .Append(summary.ElapsedMilliseconds)
+                .Append(elapsedMilliseconds)
                 .Append(" ms");
 
             if (summary.SuppressedErrorCount > 0)

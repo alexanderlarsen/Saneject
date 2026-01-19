@@ -22,8 +22,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             int injectedFieldCount,
             int injectedPropertyCount,
             int injectedMethodCount,
-            int scopesProcessedCount,
-            long elapsedMilliseconds)
+            int scopesProcessedCount)
         {
             this.errors.AddRange(errors);
             this.unusedBindingNodes.AddRange(unusedBindingNodes);
@@ -33,7 +32,6 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             InjectedPropertyCount = injectedPropertyCount;
             InjectedMethodCount = injectedMethodCount;
             ScopesProcessedCount = scopesProcessedCount;
-            ElapsedMilliseconds = elapsedMilliseconds;
         }
 
         public IReadOnlyCollection<Error> Errors => errors;
@@ -45,7 +43,6 @@ namespace Plugins.Saneject.Experimental.Editor.Data
         public int InjectedPropertyCount { get; private set; }
         public int InjectedMethodCount { get; private set; }
         public int ScopesProcessedCount { get; private set; }
-        public long ElapsedMilliseconds { get; private set; }
 
         public void AddToResults(InjectionResults results)
         {
@@ -57,7 +54,6 @@ namespace Plugins.Saneject.Experimental.Editor.Data
             InjectedPropertyCount += results.InjectedPropertyCount;
             InjectedMethodCount += results.InjectedMethodCount;
             ScopesProcessedCount += results.ScopesProcessedCount;
-            ElapsedMilliseconds += results.ElapsedMilliseconds;
         }
     }
 }

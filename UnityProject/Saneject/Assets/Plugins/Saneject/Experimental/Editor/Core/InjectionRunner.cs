@@ -1,7 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Graph;
+using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Json;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -16,21 +19,26 @@ namespace Plugins.Saneject.Experimental.Editor.Core
     {
         public static void Run(
             IEnumerable<Object> startObjects,
-            WalkFilter walkFilter)
+            ContextWalkFilter contextWalkFilter)
         {
             Logger.TryClearLog();
-            InjectionResults results = RunContext(startObjects, walkFilter);
-            Logger.LogSummary(results);
+            Stopwatch stopwatch = Stopwatch.StartNew();
+            InjectionResults results = RunContext(startObjects, contextWalkFilter);
+            stopwatch.Stop();
+            Logger.LogSummary(results, stopwatch.ElapsedMilliseconds);
         }
 
         public static void RunBatch(
             string[] sceneGuids,
             string[] prefabGuids,
-            WalkFilter walkFilter)
+            ContextWalkFilter contextWalkFilter)
         {
             Logger.TryClearLog();
+            Stopwatch sceneStopwatch = new();
+            Stopwatch prefabStopwatch = new();
             InjectionResults sceneResults = new();
             InjectionResults prefabResults = new();
+            sceneStopwatch.Start();
 
             foreach (string guid in sceneGuids)
             {
@@ -41,9 +49,12 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                     .GetRootGameObjects()
                     .Select(x => x.transform);
 
-                InjectionResults results = RunContext(startObjects, walkFilter);
+                InjectionResults results = RunContext(startObjects, contextWalkFilter);
                 sceneResults.AddToResults(results);
             }
+
+            sceneStopwatch.Stop();
+            prefabStopwatch.Start();
 
             foreach (string guid in prefabGuids)
             {
@@ -57,17 +68,18 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                         .root
                 };
 
-                InjectionResults results = RunContext(startObjects, walkFilter);
+                InjectionResults results = RunContext(startObjects, contextWalkFilter);
                 prefabResults.AddToResults(results);
             }
 
-            Logger.LogSummary(sceneResults);
-            Logger.LogSummary(prefabResults);
+            prefabStopwatch.Stop();
+            Logger.LogSummary(sceneResults, sceneStopwatch.ElapsedMilliseconds);
+            Logger.LogSummary(prefabResults, prefabStopwatch.ElapsedMilliseconds);
         }
 
         private static InjectionResults RunContext(
             IEnumerable<Object> startObjects,
-            WalkFilter walkFilter)
+            ContextWalkFilter contextWalkFilter)
         {
             Transform[] startTransforms = startObjects switch
             {
@@ -78,13 +90,15 @@ namespace Plugins.Saneject.Experimental.Editor.Core
                 _ => throw new Exception("Unsupported start object type.")
             };
 
-            InjectionContext context = new(startTransforms, walkFilter);
+            InjectionGraph injectionGraph = new(startTransforms);
+            IReadOnlyCollection<TransformNode> activeTransformNodes = GraphFilter.ApplyWalkFilter(injectionGraph, startTransforms, contextWalkFilter);
+            InjectionContext context = new(activeTransformNodes);
             BindingValidator.ValidateBindings(context);
             Resolver.Resolve(context);
             Injector.InjectDependencies(context);
             InjectionResults results = context.GetResults();
             Logger.LogResults(results);
-            InjectionContextJsonProjector.SaveToDisk(context); // TODO: Make batch friendly
+            InjectionContextJsonProjector.SaveToDisk(context, injectionGraph); // TODO: Make batch friendly
             return results;
         }
     }

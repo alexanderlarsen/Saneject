@@ -17,11 +17,19 @@ namespace Plugins.Saneject.Experimental.Editor.Json
 
         public static void SaveToDisk(
             InjectionContext context,
+            InjectionGraph graph,
             string path = null)
         {
             path ??= DefaultPath;
             DirectoryUtility.EnsureDirectoryExists(path);
-            File.WriteAllText(path, BuildInjectionContextJObject(context).ToString());
+
+            JObject jobject = new()
+            {
+                [nameof(InjectionContext)] = BuildInjectionContextJObject(context),
+                [nameof(InjectionGraph)] = BuildInjectionGraphJObject(graph)
+            };
+
+            File.WriteAllText(path, jobject.ToString());
             Debug.Log($"Saneject: Injection context JSON saved to '{path}'");
         }
 
@@ -29,27 +37,23 @@ namespace Plugins.Saneject.Experimental.Editor.Json
         {
             return new JObject
             {
-                [nameof(InjectionContext)] = new JObject
-                {
-                    [nameof(InjectionContext.ActiveTransformNodes)] = new JArray(context.ActiveTransformNodes.Select(node => BuildObjectIdentity(node.Transform))),
-                    [nameof(InjectionContext.ActiveComponentNodes)] = new JArray(context.ActiveComponentNodes.Select(node => BuildObjectIdentity(node.Component))),
-                    [nameof(InjectionContext.ActiveScopeNodes)] = new JArray(context.ActiveScopeNodes.Select(node => BuildObjectIdentity(node.Scope))),
-                    [nameof(InjectionContext.ActiveBindingNodes)] = context.ActiveBindingNodes.Count,
-                    [nameof(InjectionContext.ValidBindingNodes)] = context.ValidBindingNodes.Count,
-                    [nameof(InjectionContext.UsedBindings)] = context.UsedBindings.Count,
-                    [nameof(InjectionContext.UnusedBindingNodes)] = context.UnusedBindingNodes.Count,
-                    [nameof(InjectionContext.FieldNodeResolutionMap)] = new JArray(context.FieldNodeResolutionMap.Select(x => $"{x.Key.DisplayPath} -> {x.Value?.GetType().Name ?? "null"}")),
-                    [nameof(InjectionContext.MethodNodeResolutionMap)] = new JArray(context.MethodNodeResolutionMap.Select(x => $"{x.Key.DisplayPath} -> {x.Value?.GetType().Name ?? "null"}")),
-                    [nameof(InjectionContext.ScopeNodeGlobalResolutionMap)] =
-                        new JObject(context.ScopeNodeGlobalResolutionMap.Select(kvp =>
-                            new JProperty(
-                                BuildObjectIdentity(kvp.Key.Scope),
-                                new JArray(kvp.Value?.Select(obj => obj?.GetType().Name ?? "null") ?? Enumerable.Empty<string>())
-                            ))),
-                    [nameof(InjectionContext.Errors)] = context.Errors.Count,
-                    [nameof(InjectionContext.CreatedProxyAssets)] = context.CreatedProxyAssets.Count,
-                    [nameof(InjectionGraph)] = BuildInjectionGraphJObject(context.InjectionGraph)
-                }
+                [nameof(InjectionContext.ActiveTransformNodes)] = new JArray(context.ActiveTransformNodes.Select(node => BuildObjectIdentity(node.Transform))),
+                [nameof(InjectionContext.ActiveComponentNodes)] = new JArray(context.ActiveComponentNodes.Select(node => BuildObjectIdentity(node.Component))),
+                [nameof(InjectionContext.ActiveScopeNodes)] = new JArray(context.ActiveScopeNodes.Select(node => BuildObjectIdentity(node.Scope))),
+                [nameof(InjectionContext.ActiveBindingNodes)] = context.ActiveBindingNodes.Count,
+                [nameof(InjectionContext.ValidBindingNodes)] = context.ValidBindingNodes.Count,
+                [nameof(InjectionContext.UsedBindings)] = context.UsedBindings.Count,
+                [nameof(InjectionContext.UnusedBindingNodes)] = context.UnusedBindingNodes.Count,
+                [nameof(InjectionContext.FieldNodeResolutionMap)] = new JArray(context.FieldNodeResolutionMap.Select(x => $"{x.Key.DisplayPath} -> {x.Value?.GetType().Name ?? "null"}")),
+                [nameof(InjectionContext.MethodNodeResolutionMap)] = new JArray(context.MethodNodeResolutionMap.Select(x => $"{x.Key.DisplayPath} -> {x.Value?.GetType().Name ?? "null"}")),
+                [nameof(InjectionContext.ScopeNodeGlobalResolutionMap)] =
+                    new JObject(context.ScopeNodeGlobalResolutionMap.Select(kvp =>
+                        new JProperty(
+                            BuildObjectIdentity(kvp.Key.Scope),
+                            new JArray(kvp.Value?.Select(obj => obj?.GetType().Name ?? "null") ?? Enumerable.Empty<string>())
+                        ))),
+                [nameof(InjectionContext.Errors)] = context.Errors.Count,
+                [nameof(InjectionContext.CreatedProxyAssets)] = context.CreatedProxyAssets.Count
             };
         }
 
