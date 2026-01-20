@@ -40,24 +40,22 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 StringBuilder messageBuilder = new();
 
                 messageBuilder.Append("Your selection includes ");
-                
+
                 if (sceneCount > 0)
                 {
                     messageBuilder.Append($"{sceneCount} {(sceneCount == 1 ? "scene" : "scenes")}");
-                    
+
                     if (prefabCount > 0)
                         messageBuilder.Append(" and ");
                 }
 
                 if (prefabCount > 0)
-                {
                     messageBuilder.Append($"{prefabCount} {(prefabCount == 1 ? "prefab" : "prefabs")}");
-                }
 
                 messageBuilder.Append(".");
                 messageBuilder.AppendLine();
                 messageBuilder.AppendLine();
-                messageBuilder.AppendLine("A batch injection operation will be performed on all selected assets."); 
+                messageBuilder.AppendLine("A batch injection operation will be performed on all selected assets.");
                 messageBuilder.AppendLine();
                 messageBuilder.Append("Do you want to continue?");
 

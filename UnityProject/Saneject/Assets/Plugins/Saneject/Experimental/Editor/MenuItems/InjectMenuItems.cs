@@ -1,7 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Plugins.Saneject.Experimental.Editor.Core;
-using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
+using Plugins.Saneject.Experimental.Editor.Data.Context;
+using Plugins.Saneject.Experimental.Editor.Extensions;
+using Plugins.Saneject.Experimental.Editor.Pipeline;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.SceneManagement;

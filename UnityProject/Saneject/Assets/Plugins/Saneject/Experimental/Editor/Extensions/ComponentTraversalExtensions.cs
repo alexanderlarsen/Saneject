@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Reflection;
-using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Data.TraversalResults;
 using Plugins.Saneject.Experimental.Runtime.Attributes;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery
 
@@ -93,7 +92,5 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
                     yield return child;
             }
         }
-
-     
     }
 }

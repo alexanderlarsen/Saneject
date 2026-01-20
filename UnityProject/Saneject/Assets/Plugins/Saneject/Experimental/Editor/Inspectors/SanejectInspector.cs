@@ -90,7 +90,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         }
 
         #endregion
-        
+
         #region Validation
 
         /// <summary>

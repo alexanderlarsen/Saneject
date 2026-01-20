@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Editor.Data;
+using Plugins.Saneject.Experimental.Editor.Data.Graph;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions

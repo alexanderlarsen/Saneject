@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Text;
-using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;

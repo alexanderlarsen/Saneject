@@ -1,4 +1,4 @@
-﻿using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+﻿using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions

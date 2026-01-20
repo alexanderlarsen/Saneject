@@ -19,4 +19,4 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 Directory.CreateDirectory(directoryName);
         }
     }
-} 
+}

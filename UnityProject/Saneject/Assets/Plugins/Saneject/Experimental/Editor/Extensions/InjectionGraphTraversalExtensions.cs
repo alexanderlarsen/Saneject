@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Editor.Graph;
-using Plugins.Saneject.Experimental.Editor.Graph.Nodes;
+using Plugins.Saneject.Experimental.Editor.Data.Graph;
+using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery
 // ReSharper disable once LoopCanBeConvertedToQuery

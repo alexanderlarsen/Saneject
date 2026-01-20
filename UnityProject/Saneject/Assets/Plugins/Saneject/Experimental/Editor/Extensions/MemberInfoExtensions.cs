@@ -12,6 +12,6 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
         {
             attribute = memberInfo.GetCustomAttribute<T>(inherit);
             return attribute != null;
-        } 
+        }
     }
 }
