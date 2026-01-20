@@ -93,7 +93,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                     .gameObjects
                     .Where(x => x.scene.IsValid());
 
-            InjectionRunner.Run(startObjects, ContextWalkFilter.SceneObject);
+            InjectionRunner.Run(startObjects, ContextWalkFilter.All);
         }
 
         [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchy (Start Object Contexts Only)", false, Priority_Item_InjectSelectedSceneHierarchyStartObjectContextOnly),
