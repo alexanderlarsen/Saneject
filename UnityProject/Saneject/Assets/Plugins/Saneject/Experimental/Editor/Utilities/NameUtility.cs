@@ -2,7 +2,7 @@
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
-    public static class BackingFieldNameUtility
+    public static class NameUtility
     {
         /// <summary>
         /// Returns the property name associated with a compiler-generated

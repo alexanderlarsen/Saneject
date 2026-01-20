@@ -24,7 +24,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.Models
             if (isSerializedInterface)
             {
                 displayName += $" ({elementType.Name})";
-                path = $"__{BackingFieldNameUtility.GetLogicalName(field.Name)}";
+                path = $"__{NameUtility.GetLogicalName(field.Name)}";
             }
 
             SerializedProperty = parent == null

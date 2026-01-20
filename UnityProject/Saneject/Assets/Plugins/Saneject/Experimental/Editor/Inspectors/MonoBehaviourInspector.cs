@@ -25,21 +25,5 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         {
             SanejectInspector.OnInspectorGUI(componentModel);
         }
-
-        // TODO: Restore this functionality
-
-        // [MenuItem("CONTEXT/Component/Filter Logs By This Component")]
-        // private static void FilterBindingLogsForComponent(MenuCommand command)
-        // {
-        //     Component comp = (Component)command.context;
-        //
-        //     if (comp is Scope scope)
-        //     {
-        //         ConsoleUtils.SetSearch($"{scope.GetType().Name}");
-        //         return;
-        //     }
-        //
-        //     ConsoleUtils.SetSearch($"{comp.GetComponentPath()}");
-        // }
     }
 }

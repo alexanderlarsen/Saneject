@@ -15,27 +15,27 @@ namespace Plugins.Saneject.Legacy.Editor.Inspectors
     /// </summary>
     
     // [CustomEditor(typeof(MonoBehaviour), true, isFallback = true), CanEditMultipleObjects]
-    public class MonoBehaviourFallbackInspector : UnityEditor.Editor
-    {
-        public override void OnInspectorGUI()
-        {
-            serializedObject.Update();
-            SanejectInspector.DrawDefault(target, serializedObject);
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        [MenuItem("CONTEXT/Component/Filter Logs By This Component")]
-        private static void FilterBindingLogsForComponent(MenuCommand command)
-        {
-            Component comp = (Component)command.context;
-
-            if (comp is Scope scope)
-            {
-                ConsoleUtils.SetSearch($"{scope.GetType().Name}");
-                return;
-            }
-
-            ConsoleUtils.SetSearch($"{comp.GetComponentPath()}");
-        }
-    }
+    // public class MonoBehaviourFallbackInspector : UnityEditor.Editor
+    // {
+    //     public override void OnInspectorGUI()
+    //     {
+    //         serializedObject.Update();
+    //         SanejectInspector.DrawDefault(target, serializedObject);
+    //         serializedObject.ApplyModifiedProperties();
+    //     }
+    //
+    //     [MenuItem("CONTEXT/Component/Filter Logs By This Component")]
+    //     private static void FilterBindingLogsForComponent(MenuCommand command)
+    //     {
+    //         Component comp = (Component)command.context;
+    //
+    //         if (comp is Scope scope)
+    //         {
+    //             ConsoleUtils.SetSearch($"{scope.GetType().Name}");
+    //             return;
+    //         }
+    //
+    //         ConsoleUtils.SetSearch($"{comp.GetComponentPath()}");
+    //     }
+    // }
 }

@@ -18,7 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
             Owner = owner;
             ComponentNode = componentNode;
             DeclaringType = memberInfo.DeclaringType;
-            QualifyingName = BackingFieldNameUtility.GetLogicalName(memberInfo.Name);
+            QualifyingName = NameUtility.GetLogicalName(memberInfo.Name);
             InjectId = injectAttribute.ID;
             SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
             DisplayPath = this.GetDisplayPath(pathFromComponent);

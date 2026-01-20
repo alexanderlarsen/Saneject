@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             string[] pathParts = pathFromComponent.Split('.');
 
             for (int i = 0; i < pathParts.Length; i++)
-                pathParts[i] = BackingFieldNameUtility.GetLogicalName(pathParts[i]);
+                pathParts[i] = NameUtility.GetLogicalName(pathParts[i]);
 
             return string.Join(".", pathParts);
         }
