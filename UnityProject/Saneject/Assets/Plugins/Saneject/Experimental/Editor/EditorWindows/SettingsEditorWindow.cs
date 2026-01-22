@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows
 {
-    public class UserSettingsEditorWindow : EditorWindow
+    public class SettingsEditorWindow : EditorWindow
     {
         private Vector2 scrollPos;
 

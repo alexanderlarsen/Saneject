@@ -22,8 +22,8 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         [MenuItem("Saneject/Settings", false, Priority_Item_ShowSettings)]
         private static void ShowSettings()
         {
-            UserSettingsEditorWindow editorWindow = EditorWindow.GetWindow<UserSettingsEditorWindow>();
-            editorWindow.titleContent = new GUIContent("Saneject User Settings");
+            SettingsEditorWindow editorWindow = EditorWindow.GetWindow<SettingsEditorWindow>();
+            editorWindow.titleContent = new GUIContent("Saneject Settings");
             editorWindow.Show();
         }
 
