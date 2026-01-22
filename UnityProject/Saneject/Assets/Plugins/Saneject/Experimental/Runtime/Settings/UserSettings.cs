@@ -103,13 +103,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         #endregion
 
         #region Editor Logging
-
-        public static bool LogDifferentContextSkipping
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
+ 
         public static bool LogUnusedBindings
         {
             get => GetBool(defaultValue: true);

@@ -10,7 +10,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
     public class UserSettingsEditorWindow : EditorWindow
     {
         private Vector2 scrollPos;
- 
+
         private void OnGUI()
         {
             scrollPos = EditorGUILayout.BeginScrollView(scrollPos);
@@ -130,13 +130,6 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 tooltip: "Log summary on injection complete: Number of scopes processed, globals registered, injected fields/properties, missing dependencies/bindings, invalid/unused bindings, suppressed error count, and injection run duration.",
                 currentValue: UserSettings.LogInjectionSummary,
                 onChanged: newValue => UserSettings.LogInjectionSummary = newValue
-            );
-
-            DrawToggle(
-                label: "Log Different Context Skipping",
-                tooltip: "Log a message when a scope is skipped due to a different context, i.e., when a prefab is skipped during scene injection pass or scene object is skipped during prefab instance injection pass.",
-                currentValue: UserSettings.LogDifferentContextSkipping,
-                onChanged: newValue => UserSettings.LogDifferentContextSkipping = newValue
             );
 
             DrawToggle(
