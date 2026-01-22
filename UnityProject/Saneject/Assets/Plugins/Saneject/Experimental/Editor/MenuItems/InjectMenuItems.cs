@@ -39,7 +39,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 
         #region Menu item methods
 
-        [MenuItem("GameObject/Saneject/Inject Current Scene", false, Priority_Item_InjectCurrentScene),
+        [MenuItem("GameObject/Saneject/Inject/Current Scene", false, Priority_Item_InjectCurrentScene),
          MenuItem("Saneject/Inject/Current Scene", false, Priority_Item_InjectCurrentScene)]
         private static void InjectCurrentScene()
         {
@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             InjectionRunner.Run(startObjects, ContextWalkFilter.All);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Current Prefab", false, Priority_Item_InjectCurrentPrefab),
+        [MenuItem("GameObject/Saneject/Inject/Current Prefab", false, Priority_Item_InjectCurrentPrefab),
          MenuItem("Saneject/Inject/Current Prefab", false, Priority_Item_InjectCurrentPrefab)]
         private static void InjectCurrentPrefab()
         {
@@ -60,7 +60,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             InjectionRunner.Run(startObjects, ContextWalkFilter.PrefabAsset);
         }
 
-        [MenuItem("GameObject/Saneject/Inject All Scene Objects", false, Priority_Item_InjectAllSceneObjects),
+        [MenuItem("GameObject/Saneject/Inject/All Scene Objects", false, Priority_Item_InjectAllSceneObjects),
          MenuItem("Saneject/Inject/All Scene Objects", false, Priority_Item_InjectAllSceneObjects)]
         private static void InjectAllSceneObjects()
         {
@@ -72,7 +72,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             InjectionRunner.Run(startObjects, ContextWalkFilter.SceneObject);
         }
 
-        [MenuItem("GameObject/Saneject/Inject All Scene Prefab Instances", false, Priority_Item_InjectAllScenePrefabInstances),
+        [MenuItem("GameObject/Saneject/Inject/All Scene Prefab Instances", false, Priority_Item_InjectAllScenePrefabInstances),
          MenuItem("Saneject/Inject/All Scene Prefab Instances", false, Priority_Item_InjectAllScenePrefabInstances)]
         private static void InjectAllScenePrefabInstances()
         {
@@ -84,7 +84,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             InjectionRunner.Run(startObjects, ContextWalkFilter.PrefabInstance);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchy (All Contexts)", false, Priority_Item_InjectSelectedSceneHierarchyAllContexts),
+        [MenuItem("GameObject/Saneject/Inject/Selected Scene Hierarchy (All Contexts)", false, Priority_Item_InjectSelectedSceneHierarchyAllContexts),
          MenuItem("Saneject/Inject/Selected Scene Hierarchy (All Contexts)", false, Priority_Item_InjectSelectedSceneHierarchyAllContexts)]
         private static void InjectSelectedSceneHierarchyAllContexts()
         {
@@ -96,7 +96,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             InjectionRunner.Run(startObjects, ContextWalkFilter.All);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchy (Start Object Contexts Only)", false, Priority_Item_InjectSelectedSceneHierarchyStartObjectContextOnly),
+        [MenuItem("GameObject/Saneject/Inject/Selected Scene Hierarchy (Start Object Contexts Only)", false, Priority_Item_InjectSelectedSceneHierarchyStartObjectContextOnly),
          MenuItem("Saneject/Inject/Selected Scene Hierarchy (Start Object Contexts Only)", false, Priority_Item_InjectSelectedSceneHierarchyStartObjectContextOnly)]
         private static void InjectSelectedSceneHierarchyStartObjectContextOnly()
         {
@@ -108,7 +108,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             InjectionRunner.Run(startObjects, ContextWalkFilter.SameAsStartObjects);
         }
 
-        [MenuItem("Assets/Saneject/Inject Selected Assets", false, Priority_Item_InjectSelectedAssets),
+        [MenuItem("Assets/Saneject/Inject/Selected Assets", false, Priority_Item_InjectSelectedAssets),
          MenuItem("Saneject/Inject/Selected Assets", false, Priority_Item_InjectSelectedAssets)]
         private static void InjectSelectedAssets()
         {
@@ -135,7 +135,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 
         #region Validation methods
 
-        [MenuItem("GameObject/Saneject/Inject Current Scene", true),
+        [MenuItem("GameObject/Saneject/Inject/Current Scene", true),
          MenuItem("Saneject/Inject/Current Scene", true)]
         private static bool Validate_InjectCurrentScene()
         {
@@ -143,14 +143,14 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                    PrefabStageUtility.GetCurrentPrefabStage() == null;
         }
 
-        [MenuItem("GameObject/Saneject/Inject Current Prefab", true),
+        [MenuItem("GameObject/Saneject/Inject/Current Prefab", true),
          MenuItem("Saneject/Inject/Current Prefab", true)]
         private static bool Validate_InjectCurrentPrefab()
         {
             return PrefabStageUtility.GetCurrentPrefabStage() != null;
         }
 
-        [MenuItem("GameObject/Saneject/Inject All Scene Objects", true),
+        [MenuItem("GameObject/Saneject/Inject/All Scene Objects", true),
          MenuItem("Saneject/Inject/All Scene Objects", true)]
         private static bool Validate_InjectAllSceneObjects()
         {
@@ -158,7 +158,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                    PrefabStageUtility.GetCurrentPrefabStage() == null;
         }
 
-        [MenuItem("GameObject/Saneject/Inject All Scene Prefab Instances", true),
+        [MenuItem("GameObject/Saneject/Inject/All Scene Prefab Instances", true),
          MenuItem("Saneject/Inject/All Scene Prefab Instances", true)]
         private static bool Validate_InjectAllScenePrefabInstances()
         {
@@ -166,7 +166,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                    PrefabStageUtility.GetCurrentPrefabStage() == null;
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchy (All Contexts)", true),
+        [MenuItem("GameObject/Saneject/Inject/Selected Scene Hierarchy (All Contexts)", true),
          MenuItem("Saneject/Inject/Selected Scene Hierarchy (All Contexts)", true)]
         private static bool Validate_InjectSelectedSceneHierarchyAllContexts()
         {
@@ -175,7 +175,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                    PrefabStageUtility.GetCurrentPrefabStage() == null;
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchy (Start Object Contexts Only)", true),
+        [MenuItem("GameObject/Saneject/Inject/Selected Scene Hierarchy (Start Object Contexts Only)", true),
          MenuItem("Saneject/Inject/Selected Scene Hierarchy (Start Object Contexts Only)", true)]
         private static bool Validate_InjectSelectedSceneHierarchyStartObjectContextOnly()
         {
@@ -184,7 +184,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                    PrefabStageUtility.GetCurrentPrefabStage() == null;
         }
 
-        [MenuItem("Assets/Saneject/Inject Selected Assets", true),
+        [MenuItem("Assets/Saneject/Inject/Selected Assets", true),
          MenuItem("Saneject/Inject/Selected Assets", true)]
         private static bool Validate_InjectSelectedAssets()
         {
