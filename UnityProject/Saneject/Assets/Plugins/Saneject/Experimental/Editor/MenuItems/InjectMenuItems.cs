@@ -44,7 +44,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/Current Scene", false, Priority_Item_Inject_CurrentScene)]
         private static void Inject_CurrentScene()
         {
-            if (!DisplayDialog.Injection.Confirm_Inject_CurrentScene())
+            if (!DialogUtility.Injection.Confirm_Inject_CurrentScene())
                 return;
 
             GameObject[] startObjects =
@@ -59,7 +59,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/Current Prefab", false, Priority_Item_Inject_CurrentPrefab)]
         private static void Inject_CurrentPrefab()
         {
-            if (!DisplayDialog.Injection.Confirm_Inject_CurrentPrefab())
+            if (!DialogUtility.Injection.Confirm_Inject_CurrentPrefab())
                 return;
             
             GameObject[] startObjects =
@@ -74,7 +74,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/All Scene Objects", false, Priority_Item_Inject_AllSceneObjects)]
         private static void Inject_AllSceneObjects()
         {
-            if (!DisplayDialog.Injection.Confirm_Inject_AllSceneObjects())
+            if (!DialogUtility.Injection.Confirm_Inject_AllSceneObjects())
                 return; 
             
             IEnumerable<GameObject> startObjects =
@@ -89,7 +89,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/All Scene Prefab Instances", false, Priority_Item_Inject_AllScenePrefabInstances)]
         private static void Inject_AllScenePrefabInstances()
         {
-            if (!DisplayDialog.Injection.Confirm_Inject_AllScenePrefabInstances())
+            if (!DialogUtility.Injection.Confirm_Inject_AllScenePrefabInstances())
                 return;
             
             IEnumerable<GameObject> startObjects =
@@ -104,7 +104,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/Selected Scene Hierarchies (All Contexts)", false, Priority_Item_Confirm_Inject_SelectedSceneHierarchy_AllContexts)]
         private static void Inject_SelectedSceneHierarchy_AllContexts()
         {
-            if (!DisplayDialog.Injection.Confirm_Inject_SelectedSceneHierarchy_AllContexts())
+            if (!DialogUtility.Injection.Confirm_Inject_SelectedSceneHierarchy_AllContexts())
                 return;
             
             IEnumerable<GameObject> startObjects =
@@ -119,7 +119,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject/Selected Scene Hierarchies (Selected Object Contexts Only)", false, Priority_Item_Inject_SelectedSceneHierarchies_SelectedObjectContextsOnly)]
         private static void Inject_SelectedSceneHierarchies_SelectedObjectContextsOnly()
         {
-            if (!DisplayDialog.Injection.Confirm_Inject_SelectedSceneHierarchies_SelectedObjectContextsOnly())
+            if (!DialogUtility.Injection.Confirm_Inject_SelectedSceneHierarchies_SelectedObjectContextsOnly())
                 return;
             
             IEnumerable<GameObject> startObjects =
@@ -141,7 +141,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             int sceneCount = batchItems.OfType<SceneBatchItem>().Count();
             int prefabCount = batchItems.OfType<PrefabBatchItem>().Count();
 
-            if (!DisplayDialog.Injection.Confirm_Inject_SelectedAssets_BatchInjection(sceneCount, prefabCount))
+            if (!DialogUtility.Injection.Confirm_Inject_SelectedAssets_BatchInjection(sceneCount, prefabCount))
                 return;
 
             InjectionRunner.RunBatch

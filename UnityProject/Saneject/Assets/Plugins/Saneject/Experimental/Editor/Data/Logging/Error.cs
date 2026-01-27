@@ -37,7 +37,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
             return new Error
             (
                 errorType: ErrorType.InvalidBinding,
-                errorMessage: $"{SignatureBuilder.GetBindingSignature(bindingNode)} {errorMessage}",
+                errorMessage: $"{SignatureUtility.GetBindingSignature(bindingNode)} {errorMessage}",
                 logContext: bindingNode.ScopeNode.TransformNode.Transform,
                 suppressError: false
             );
@@ -45,14 +45,14 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
 
         public static Error CreateMissingBindingError(FieldNode fieldNode)
         {
-            string expectedBindingSignature = SignatureBuilder.GetHypotheticalBindingSignature
+            string expectedBindingSignature = SignatureUtility.GetHypotheticalBindingSignature
             (
                 fieldNode.RequestedType,
                 fieldNode.IsCollection,
                 fieldNode.ComponentNode.TransformNode.NearestScopeNode
             );
 
-            string fieldSignature = SignatureBuilder.GetFieldSignature(fieldNode);
+            string fieldSignature = SignatureUtility.GetFieldSignature(fieldNode);
 
             return new Error
             (
@@ -65,14 +65,14 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
 
         public static Error CreateMissingBindingError(MethodParameterNode parameterNode)
         {
-            string expectedBindingSignature = SignatureBuilder.GetHypotheticalBindingSignature
+            string expectedBindingSignature = SignatureUtility.GetHypotheticalBindingSignature
             (
                 parameterNode.RequestedType,
                 parameterNode.IsCollection,
                 parameterNode.MethodNode.ComponentNode.TransformNode.NearestScopeNode
             );
 
-            string methodParameterSignature = SignatureBuilder.GetMethodParameterSignature(parameterNode);
+            string methodParameterSignature = SignatureUtility.GetMethodParameterSignature(parameterNode);
 
             return new Error
             (
@@ -88,7 +88,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
             HashSet<Type> rejectedTypes)
         {
             StringBuilder msg = new();
-            msg.Append(SignatureBuilder.GetBindingSignature(bindingNode));
+            msg.Append(SignatureUtility.GetBindingSignature(bindingNode));
 
             if (rejectedTypes is { Count: > 0 })
             {
@@ -113,7 +113,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
             HashSet<Type> rejectedTypes)
         {
             StringBuilder msg = new();
-            msg.Append($"{SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetFieldSignature(fieldNode)}");
+            msg.Append($"{SignatureUtility.GetBindingSignature(bindingNode)} {SignatureUtility.GetFieldSignature(fieldNode)}");
 
             if (rejectedTypes is { Count: > 0 })
             {
@@ -138,7 +138,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
             HashSet<Type> rejectedTypes)
         {
             StringBuilder msg = new();
-            msg.Append($"{SignatureBuilder.GetBindingSignature(bindingNode)} {SignatureBuilder.GetMethodParameterSignature(parameterNode)}");
+            msg.Append($"{SignatureUtility.GetBindingSignature(bindingNode)} {SignatureUtility.GetMethodParameterSignature(parameterNode)}");
 
             if (rejectedTypes is { Count: > 0 })
             {
@@ -164,7 +164,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
             return new Error
             (
                 errorType: ErrorType.MethodInvocationException,
-                errorMessage: $"{SignatureBuilder.GetMethodSignature(methodNode)}",
+                errorMessage: $"{SignatureUtility.GetMethodSignature(methodNode)}",
                 logContext: methodNode.ComponentNode.TransformNode.Transform,
                 suppressError: false,
                 exception: exception
@@ -178,7 +178,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Logging
             return new Error
             (
                 errorType: ErrorType.BindingFilterException,
-                errorMessage: $"{SignatureBuilder.GetBindingSignature(bindingNode)}",
+                errorMessage: $"{SignatureUtility.GetBindingSignature(bindingNode)}",
                 logContext: bindingNode.ScopeNode.TransformNode.Transform,
                 suppressError: false,
                 exception: exception

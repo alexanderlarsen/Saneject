@@ -146,7 +146,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 return;
 
             foreach (BindingNode binding in results.UnusedBindingNodes)
-                Debug.LogWarning($"Saneject: Unused binding {SignatureBuilder.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
+                Debug.LogWarning($"Saneject: Unused binding {SignatureUtility.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }
 
         private static void LogCreatedProxyAssets(InjectionResults results)

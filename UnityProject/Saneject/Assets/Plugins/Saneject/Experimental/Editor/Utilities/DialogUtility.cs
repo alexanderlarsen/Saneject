@@ -4,7 +4,7 @@ using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
-    public static class DisplayDialog
+    public static class DialogUtility
     {
         public static class Injection
         {
