@@ -10,9 +10,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
         {
             public static bool Confirm_Inject_CurrentScene()
             {
-                if (!UserSettings.AskBeforeCurrentScenePrefabInjection)
+                if (!UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab)
                     return true;
-                
+
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject Current Scene",
@@ -24,9 +24,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static bool Confirm_Inject_CurrentPrefab()
             {
-                if (!UserSettings.AskBeforeCurrentScenePrefabInjection)
+                if (!UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab)
                     return true;
-                
+
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject Current Prefab",
@@ -38,9 +38,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static bool Confirm_Inject_AllSceneObjects()
             {
-                if(!UserSettings.AskBeforeAllSceneObjectsPrefabInstancesInjection)
+                if (!UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances)
                     return true;
-                
+
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject All Scene Objects",
@@ -52,9 +52,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static bool Confirm_Inject_AllScenePrefabInstances()
             {
-                if(!UserSettings.AskBeforeAllSceneObjectsPrefabInstancesInjection)
+                if (!UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances)
                     return true;
-                
+
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject All Scene Prefab Instances",
@@ -66,9 +66,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static bool Confirm_Inject_SelectedSceneHierarchy_AllContexts()
             {
-                if (!UserSettings.AskBeforeSelectedSceneHierarchiesInjection)
+                if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
                     return true;
-                
+
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject Selected Scene Hierarchy (All Contexts)",
@@ -80,9 +80,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static bool Confirm_Inject_SelectedSceneHierarchies_SelectedObjectContextsOnly()
             {
-                if(!UserSettings.AskBeforeSelectedSceneHierarchiesInjection)
+                if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
                     return true;
-                
+
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject Selected Scene Hierarchies (Selected Object Contexts Only)",
@@ -91,14 +91,17 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     cancel: "Cancel"
                 );
             }
-            
-            public static bool Confirm_Inject_SelectedAssets_BatchInjection(
+        }
+
+        public static class BatchInjection
+        {
+            public static bool Confirm_BatchInject_SelectedAssets(
                 int sceneCount,
                 int prefabCount)
             {
                 if (!UserSettings.AskBeforeSelectedAssetsBatchInjection)
                     return true;
-                
+
                 StringBuilder messageBuilder = new();
 
                 messageBuilder.Append("Your selection includes ");

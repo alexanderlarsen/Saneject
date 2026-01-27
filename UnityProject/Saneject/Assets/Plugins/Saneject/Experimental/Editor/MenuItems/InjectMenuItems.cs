@@ -19,7 +19,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
     {
         #region Priority constants
 
-        private const int Priority_Base = MenuPriority.Root + MenuPriority.Section * 1;
+        private const int Priority_Base = MenuPriority.Root + MenuPriority.Section * 1 + 1;
 
         private const int Priority_Group_Current = Priority_Base + MenuPriority.Group * 0;
         private const int Priority_Item_Inject_CurrentScene = Priority_Group_Current + 1;
@@ -32,10 +32,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         private const int Priority_Group_Selected = Priority_Base + MenuPriority.Group * 2;
         private const int Priority_Item_Confirm_Inject_SelectedSceneHierarchy_AllContexts = Priority_Group_Selected + 1;
         private const int Priority_Item_Inject_SelectedSceneHierarchies_SelectedObjectContextsOnly = Priority_Group_Selected + 2;
-
-        private const int Priority_Group_Batch = Priority_Base + MenuPriority.Group * 3;
-        private const int Priority_Item_Inject_SelectedAssets_BatchInjection = Priority_Group_Batch + 1;
-
+        
         #endregion
 
         #region Menu item methods
@@ -130,26 +127,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             InjectionRunner.Run(startObjects, ContextWalkFilter.SameAsStartObjects);
         }
 
-        [MenuItem("Assets/Saneject/Inject/Selected Assets (Batch Injection)", false, Priority_Item_Inject_SelectedAssets_BatchInjection),
-         MenuItem("Saneject/Inject/Selected Assets (Batch Injection)", false, Priority_Item_Inject_SelectedAssets_BatchInjection)]
-        private static void Inject_SelectedAssets_BatchInjection()
-        {
-            BatchItem[] batchItems = Selection.GetFiltered<Object>(SelectionMode.DeepAssets)
-                .CreateBatchItemsFromObjects(ContextWalkFilter.All)
-                .ToArray();
-
-            int sceneCount = batchItems.OfType<SceneBatchItem>().Count();
-            int prefabCount = batchItems.OfType<PrefabBatchItem>().Count();
-
-            if (!DialogUtility.Injection.Confirm_Inject_SelectedAssets_BatchInjection(sceneCount, prefabCount))
-                return;
-
-            InjectionRunner.RunBatch
-            (
-                batchItems
-            );
-        }
-
+      
         #endregion
 
         #region Validation methods
@@ -203,14 +181,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                    PrefabStageUtility.GetCurrentPrefabStage() == null;
         }
 
-        [MenuItem("Assets/Saneject/Inject/Selected Assets (Batch Injection)", true),
-         MenuItem("Saneject/Inject/Selected Assets (Batch Injection)", true)]
-        private static bool Validate_Inject_SelectedAssets_BatchInjection()
-        {
-            return Selection
-                .GetFiltered<Object>(SelectionMode.DeepAssets)
-                .Any(x => x is GameObject or SceneAsset);
-        }
+      
 
         #endregion
     }

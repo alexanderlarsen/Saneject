@@ -12,19 +12,19 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     {
         #region Ask Before Injection
 
-        public static bool AskBeforeCurrentScenePrefabInjection
+        public static bool AskBefore_Inject_CurrentScene_Or_CurrentPrefab
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
         
-        public static bool AskBeforeAllSceneObjectsPrefabInstancesInjection
+        public static bool AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
         
-        public static bool AskBeforeSelectedSceneHierarchiesInjection
+        public static bool AskBefore_Inject_SelectedSceneHierarchies
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);

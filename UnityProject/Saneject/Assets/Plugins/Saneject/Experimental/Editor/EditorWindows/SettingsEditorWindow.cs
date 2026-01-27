@@ -21,24 +21,24 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             (
                 label: "Current Scene/Prefab",
                 tooltip: "Show a confirmation dialog before injecting the entire current scene or prefab.",
-                currentValue: UserSettings.AskBeforeCurrentScenePrefabInjection,
-                onChanged: newValue => UserSettings.AskBeforeCurrentScenePrefabInjection = newValue
+                currentValue: UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab,
+                onChanged: newValue => UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab = newValue
             );
 
             DrawToggle
             (
                 label: "All Scene Objects/Scene Prefab Instances",
                 tooltip: "Show a confirmation dialog before injecting all scene objects or prefab instances in the current scene.",
-                currentValue: UserSettings.AskBeforeAllSceneObjectsPrefabInstancesInjection,
-                onChanged: newValue => UserSettings.AskBeforeAllSceneObjectsPrefabInstancesInjection = newValue
+                currentValue: UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances,
+                onChanged: newValue => UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances = newValue
             );
 
             DrawToggle
             (
                 label: "Selected Scene Hierarchies",
                 tooltip: "Show a confirmation dialog before injecting all selected scene hierarchies in the Scene Hierarchy window.",
-                currentValue: UserSettings.AskBeforeSelectedSceneHierarchiesInjection,
-                onChanged: newValue => UserSettings.AskBeforeSelectedSceneHierarchiesInjection = newValue
+                currentValue: UserSettings.AskBefore_Inject_SelectedSceneHierarchies,
+                onChanged: newValue => UserSettings.AskBefore_Inject_SelectedSceneHierarchies = newValue
             );
 
             DrawToggle
