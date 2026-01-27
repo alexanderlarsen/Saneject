@@ -10,52 +10,36 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     /// </summary>
     public static class UserSettings
     {
-        #region Proxy Generation
+        #region Ask Before Injection
 
-        public static bool GenerateProxyScriptsOnDomainReload
+        public static bool AskBeforeCurrentScenePrefabInjection
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
         
-        public static string ProxyAssetGenerationFolder
+        public static bool AskBeforeAllSceneObjectsPrefabInstancesInjection
         {
-            get => GetString(defaultValue: "Assets/Generated");
-            set => SetString(value);
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
+        public static bool AskBeforeSelectedSceneHierarchiesInjection
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
         }
 
+        public static bool AskBeforeSelectedAssetsBatchInjection
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
         #endregion
-
-        #region Scope File Generation
-
-        public static bool GenerateScopeNamespaceFromFolder
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        #endregion
-
-        #region Injection
-
-        public static bool AskBeforeSceneInjection
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        public static bool AskBeforeHierarchyInjection
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        public static bool AskBeforePrefabInjection
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
+        
+        #region Context Isolation
+ 
         public static bool UseContextIsolation
         {
             get => GetBool(defaultValue: true);
@@ -63,7 +47,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         }
 
         #endregion
-
+        
         #region Inspector
 
         public static bool ShowInjectedFieldsProperties
@@ -85,7 +69,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         }
 
         #endregion
-
+        
         #region Play Mode Logging
 
         public static bool LogProxyResolve
@@ -123,29 +107,33 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         }
 
         #endregion
+        
+        #region Scope File Generation
 
-        #region Batch Injection
-
-        public static bool AskBeforeBatchInjectAll
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        public static bool AskBeforeBatchInjectScenes
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        public static bool AskBeforeBatchInjectPrefabs
+        public static bool GenerateScopeNamespaceFromFolder
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
         #endregion
+        
+        #region Proxy Generation
 
+        public static bool GenerateProxyScriptsOnDomainReload
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
+        public static string ProxyAssetGenerationFolder
+        {
+            get => GetString(defaultValue: "Assets/Generated");
+            set => SetString(value);
+        }
+
+        #endregion
+ 
         #region Shared helpers
 
         private static string GetString(
@@ -156,7 +144,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             string key = $"UserSettings_{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetString(key);
 #else
-                    return string.Empty;
+            return string.Empty;
 #endif
         }
 
@@ -178,7 +166,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             string key = $"UserSettings_{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetBool(key);
 #else
-                    return false;
+            return false;
 #endif
         }
 
