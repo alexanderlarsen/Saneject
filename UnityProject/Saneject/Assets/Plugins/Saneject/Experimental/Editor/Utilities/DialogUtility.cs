@@ -150,7 +150,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             {
                 EditorUtility.DisplayDialog(
                     title: "Saneject: Runtime Proxy Generation",
-                    message: "All necessary runtime proxy scripts already exist.",
+                    message: "All runtime proxy scripts needed for your FromRuntimeProxy() bindings already exist.",
                     ok: "Got it"
                 );
             }
