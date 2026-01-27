@@ -135,7 +135,8 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
         {
             public static void Create(int proxyCount)
             {
-                EditorUtility.DisplayDialog(
+                EditorUtility.DisplayDialog
+                (
                     title: "Saneject: Runtime Proxy Generation",
                     message:
                     $"{proxyCount} of your FromRuntimeProxy() bindings {(proxyCount == 1 ? "needs a proxy script" : "need proxy scripts")}.\n\n" +
@@ -148,7 +149,8 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static void AlreadyExist()
             {
-                EditorUtility.DisplayDialog(
+                EditorUtility.DisplayDialog
+                (
                     title: "Saneject: Runtime Proxy Generation",
                     message: "All runtime proxy scripts needed for your FromRuntimeProxy() bindings already exist.",
                     ok: "Got it"
