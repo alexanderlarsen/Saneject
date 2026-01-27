@@ -27,7 +27,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
 
             DrawToggle
             (
-                label: "All Scene Objects/Prefab Instances",
+                label: "All Scene Objects/Scene Prefab Instances",
                 tooltip: "Show a confirmation dialog before injecting all scene objects or prefab instances in the current scene.",
                 currentValue: UserSettings.AskBeforeAllSceneObjectsPrefabInstancesInjection,
                 onChanged: newValue => UserSettings.AskBeforeAllSceneObjectsPrefabInstancesInjection = newValue
