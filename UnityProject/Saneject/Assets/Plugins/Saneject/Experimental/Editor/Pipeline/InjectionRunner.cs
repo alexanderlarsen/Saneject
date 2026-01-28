@@ -30,7 +30,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
             Logger.LogSummary
             (
-                prefix: "Injection complete",
+                "Injection complete",
                 results,
                 stopwatch.ElapsedMilliseconds
             );
@@ -48,53 +48,29 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
             Logger.TryClearLog();
 
-            if (sceneBatchItems.Count == 0 && prefabBatchItems.Count == 0)
-            {
-                Logger.LogNothingToInject();
-                return;
-            }
-
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
             {
                 Logger.LogInjectionCancelledByUser();
                 return;
             }
 
-            Stopwatch sceneStopwatch = null;
-            Stopwatch prefabStopwatch = null;
+            Stopwatch sceneStopwatch = Stopwatch.StartNew();
+            InjectionResults sceneResults = RunSceneBatch(sceneBatchItems);
+            sceneStopwatch.Stop();
 
-            InjectionResults sceneResults = null;
-            InjectionResults prefabResults = null;
+            Stopwatch prefabStopwatch = Stopwatch.StartNew();
+            InjectionResults prefabResults = RunPrefabBatch(prefabBatchItems);
+            prefabStopwatch.Stop();
 
-            if (sceneBatchItems.Count > 0)
-            {
-                sceneStopwatch = Stopwatch.StartNew();
-                sceneResults = RunSceneBatch(sceneBatchItems);
-                sceneStopwatch.Stop();
-            }
-
-            if (prefabBatchItems.Count > 0)
-            {
-                prefabStopwatch = Stopwatch.StartNew();
-                prefabResults = RunPrefabBatch(prefabBatchItems);
-                prefabStopwatch.Stop();
-            }
-
-            if (sceneResults != null)
-                Logger.LogSummary
-                (
-                    prefix: "Scene batch injection complete",
-                    sceneResults,
-                    sceneStopwatch.ElapsedMilliseconds
-                );
-
-            if (prefabResults != null)
-                Logger.LogSummary
-                (
-                    prefix: "Prefab batch injection complete",
-                    prefabResults,
-                    prefabStopwatch.ElapsedMilliseconds
-                );
+            Logger.LogBatchSummary
+            (
+                sceneBatchItems.Count,
+                prefabBatchItems.Count,
+                sceneResults,
+                prefabResults,
+                sceneStopwatch.ElapsedMilliseconds,
+                prefabStopwatch.ElapsedMilliseconds
+            );
         }
 
         private static InjectionResults RunSceneBatch(IEnumerable<SceneBatchItem> batchItems)

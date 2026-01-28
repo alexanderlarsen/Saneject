@@ -30,6 +30,37 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             LogCreatedProxyAssets(results);
         }
 
+        public static void LogBatchSummary(
+            int sceneBatchItemsCount,
+            int prefabBatchItemsCount,
+            InjectionResults sceneResults,
+            InjectionResults prefabResults,
+            long sceneElapsedMilliseconds,
+            long prefabElapsedMilliseconds)
+        {
+            if (sceneBatchItemsCount + prefabBatchItemsCount == 0)
+            {
+                LogNoScopesFound("Batch injection complete");
+                return;
+            }
+
+            if (sceneBatchItemsCount > 0)
+                LogSummary
+                (
+                    "Scene batch injection complete",
+                    sceneResults,
+                    sceneElapsedMilliseconds
+                );
+
+            if (prefabBatchItemsCount > 0)
+                LogSummary
+                (
+                    "Prefab batch injection complete",
+                    prefabResults,
+                    prefabElapsedMilliseconds
+                );
+        }
+
         public static void LogSummary(
             string prefix,
             InjectionResults results,
@@ -37,7 +68,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
         {
             if (results.ScopesProcessedCount == 0)
             {
-                Debug.Log("Saneject: No scopes were found. Nothing was injected.");
+                LogNoScopesFound(prefix);
                 return;
             }
 
@@ -87,9 +118,9 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             }
         }
 
-        public static void LogNothingToInject()
+        public static void LogNoScopesFound(string prefix)
         {
-            Debug.Log("Saneject: Nothing to inject.");
+            Debug.Log($"Saneject: {prefix}. No scopes were found. Nothing was injected.");
         }
 
         public static void LogInjectionCancelledByUser()
