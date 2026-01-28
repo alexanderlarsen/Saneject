@@ -63,3 +63,5 @@ crashlytics-build.properties
 
 # ───────── Dev ─────────
 /UnityProject/Saneject/Assets/Dev/*
+/UnityProject/Saneject/Assets/SanejectGenerated/*
+/UnityProject/Saneject/Assets/SanejectGenerated.meta

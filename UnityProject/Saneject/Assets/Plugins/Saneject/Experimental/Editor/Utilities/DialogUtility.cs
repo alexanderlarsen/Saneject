@@ -99,7 +99,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 int sceneCount,
                 int prefabCount)
             {
-                if (!UserSettings.AskBeforeSelectedAssetsBatchInjection)
+                if (!UserSettings.AskBefore_BatchInject_SelectedAssets)
                     return true;
 
                 StringBuilder messageBuilder = new();
@@ -157,6 +157,20 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     title: "Saneject: Runtime Proxy Generation",
                     message: "All runtime proxy scripts needed for your FromRuntimeProxy() bindings already exist.",
                     ok: "Got it"
+                );
+            }
+        }
+
+        public static class Settings
+        {
+            public static bool Confirm_UseDefaultSettings()
+            {
+                return EditorUtility.DisplayDialog
+                (
+                    title: "Saneject: Use Default Settings",
+                    message: "Are you sure you want to reset the Saneject settings to their default values?",
+                    ok: "Reset",
+                    cancel: "Cancel"
                 );
             }
         }

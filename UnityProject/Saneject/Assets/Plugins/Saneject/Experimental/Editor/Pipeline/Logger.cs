@@ -17,8 +17,10 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
     {
         public static void TryClearLog()
         {
-            if (UserSettings.ClearLogsOnInjection)
-                ConsoleUtility.ClearLog();
+            if (!UserSettings.ClearLogsOnInjection)
+                return;
+
+            ConsoleUtility.ClearLog();
         }
 
         public static void LogResults(InjectionResults results)
