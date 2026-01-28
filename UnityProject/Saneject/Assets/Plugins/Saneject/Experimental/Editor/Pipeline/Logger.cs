@@ -35,6 +35,12 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             InjectionResults results,
             long elapsedMilliseconds)
         {
+            if (results.ScopesProcessedCount == 0)
+            {
+                Debug.Log("Saneject: No scopes were found. Nothing was injected.");
+                return;
+            }
+
             if (!UserSettings.LogInjectionSummary)
                 return;
 
