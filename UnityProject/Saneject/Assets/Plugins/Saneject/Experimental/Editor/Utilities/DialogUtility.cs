@@ -6,7 +6,20 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
     public static class DialogUtility
     {
-        public static class Injection
+        public static class InjectionPipeline
+        {
+            public static void Display_EditorOnlyInjection()
+            {
+                EditorUtility.DisplayDialog
+                (
+                    title: "Saneject",
+                    message: "Injection is editor-only. Exit Play Mode to inject.",
+                    ok: "Got it"
+                );
+            }
+        }
+
+        public static class InjectionMenus
         {
             public static bool Confirm_Inject_CurrentScene()
             {
@@ -93,7 +106,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             }
         }
 
-        public static class BatchInjection
+        public static class BatchInjectionMenus
         {
             public static bool Confirm_BatchInject_SelectedAssets(
                 int sceneCount,
@@ -136,21 +149,20 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         public static class ProxyGeneration
         {
-            public static void Create(int proxyCount)
+            public static void Display_ProxyCreate(int proxyCount)
             {
                 EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Runtime Proxy Generation",
-                    message:
-                    $"{proxyCount} of your FromRuntimeProxy() bindings {(proxyCount == 1 ? "needs a proxy script" : "need proxy scripts")}.\n\n" +
-                    $"{(proxyCount == 1 ? "It" : "They")} will be generated during this domain reload and saved to:\n\n" +
-                    $"{UserSettings.ProxyAssetGenerationFolder}\n\n" +
-                    "You can disable automatic proxy generation in the Saneject settings and run it manually from the Saneject menu instead.",
+                    message: $"{proxyCount} of your FromRuntimeProxy() bindings {(proxyCount == 1 ? "needs a proxy script" : "need proxy scripts")}.\n\n" +
+                             $"{(proxyCount == 1 ? "It" : "They")} will be generated during this domain reload and saved to:\n\n" +
+                             $"{UserSettings.ProxyAssetGenerationFolder}\n\n" +
+                             "You can disable automatic proxy generation in the Saneject settings and run it manually from the Saneject menu instead.",
                     ok: "Got it"
                 );
             }
 
-            public static void AlreadyExist()
+            public static void Display_ProxyAlreadyExist()
             {
                 EditorUtility.DisplayDialog
                 (

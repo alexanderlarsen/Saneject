@@ -7,6 +7,7 @@ using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Data.Graph;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Data.Injection;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -23,6 +24,12 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             IEnumerable<Object> startObjects,
             ContextWalkFilter contextWalkFilter)
         {
+            if (Application.isPlaying)
+            {
+                DialogUtility.InjectionPipeline.Display_EditorOnlyInjection();
+                return;
+            }
+
             Logger.TryClearLog();
             Stopwatch stopwatch = Stopwatch.StartNew();
             InjectionResults results = RunContext(startObjects, contextWalkFilter);
@@ -30,7 +37,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
             Logger.LogSummary
             (
-                "Injection complete",
+                prefix: "Injection complete",
                 results,
                 stopwatch.ElapsedMilliseconds
             );
@@ -38,6 +45,12 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
         public static void RunBatch(IReadOnlyCollection<BatchItem> batchItems)
         {
+            if (Application.isPlaying)
+            {
+                DialogUtility.InjectionPipeline.Display_EditorOnlyInjection();
+                return;
+            }
+
             HashSet<SceneBatchItem> sceneBatchItems = batchItems
                 .OfType<SceneBatchItem>()
                 .ToHashSet();

@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             int sceneCount = batchItems.OfType<SceneBatchItem>().Count();
             int prefabCount = batchItems.OfType<PrefabBatchItem>().Count();
 
-            if (!DialogUtility.BatchInjection.Confirm_BatchInject_SelectedAssets(sceneCount, prefabCount))
+            if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject_SelectedAssets(sceneCount, prefabCount))
                 return;
 
             InjectionRunner.RunBatch
