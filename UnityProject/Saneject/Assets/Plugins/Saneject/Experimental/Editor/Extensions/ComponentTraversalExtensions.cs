@@ -31,6 +31,9 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             object owner,
             string path)
         {
+            if(owner == null)
+                yield break;
+            
             Type type = owner.GetType();
 
             foreach (FieldInfo field in type.GetFields(BindingFlags))
@@ -60,6 +63,9 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             object owner,
             string path)
         {
+            if(owner == null)
+                yield break;
+            
             Type type = owner.GetType();
 
             foreach (MethodInfo method in type.GetMethods(BindingFlags))
