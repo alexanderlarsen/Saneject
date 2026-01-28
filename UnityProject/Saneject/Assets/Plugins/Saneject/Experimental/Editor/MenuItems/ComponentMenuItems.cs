@@ -22,18 +22,18 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         #region Menu item methods
 
         [MenuItem("CONTEXT/Scope/Saneject/Filter Logs By Scope Type", false, Priority_Item_FilterLogsByScopeType)]
-        private static void FilterLogsByScopeType(MenuCommand command)
+        private static void FilterLogsByScopeType(MenuCommand cmd)
         {
-            Scope scope = (Scope)command.context;
+            Scope scope = (Scope)cmd.context;
             string query = $"Scope: {scope.GetType().Name}";
             ConsoleUtility.SetSearch(query);
         }
 
         [MenuItem("CONTEXT/MonoBehaviour/Saneject/Filter Logs By Component Path", false, Priority_Item_FilterLogsByComponentPath),
          MenuItem("CONTEXT/Scope/Saneject/Filter Logs By Component Path", false, Priority_Item_FilterLogsByComponentPath)]
-        private static void FilterLogsByComponentPath(MenuCommand command)
+        private static void FilterLogsByComponentPath(MenuCommand cmd)
         {
-            Component component = (Component)command.context;
+            Component component = (Component)cmd.context;
             string query = PathUtility.GetComponentPath(component);
             ConsoleUtility.SetSearch(query);
         }

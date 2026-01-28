@@ -28,8 +28,11 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Scene", false,
              Priority_Item_SelectSameContextInScene),
          MenuItem("Saneject/Select Same Context Objects/In Scene", false, Priority_Item_SelectSameContextInScene)]
-        private static void SelectSameContextInScene()
+        private static void SelectSameContextInScene(MenuCommand cmd)
         {
+            if (!MenuCommandUtility.IsFirstInvocation(cmd))
+                return;
+
             IEnumerable<GameObject> validGameObjects = Object
                 .FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                 .Where(x => x.scene.IsValid());
@@ -58,8 +61,11 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
              Priority_Item_SelectSameContextInHierarchy),
          MenuItem("Saneject/Select Same Context Objects/In Hierarchy", false,
              Priority_Item_SelectSameContextInHierarchy)]
-        private static void SelectSameContextInHierarchy()
+        private static void SelectSameContextInHierarchy(MenuCommand cmd)
         {
+            if (!MenuCommandUtility.IsFirstInvocation(cmd))
+                return;
+
             HashSet<GameObject> validGameObjects = Selection
                 .gameObjects
                 .Where(x => x.scene.IsValid())

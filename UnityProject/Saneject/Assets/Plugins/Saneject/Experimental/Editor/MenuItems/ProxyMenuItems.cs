@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         private const int Priority_Item_GenerateMissingProxyScripts = Priority_Group_Default + 1;
 
         #endregion
-        
+
         #region Menu item methods
 
         [MenuItem("Saneject/Runtime Proxy/Generate Missing Proxy Scripts", false, Priority_Item_GenerateMissingProxyScripts)]
