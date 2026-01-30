@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEditor;
@@ -17,6 +16,57 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     public static class UserSettings
     {
         private const string SettingsPrefix = "SanejectSettings_";
+
+        #region Ask Before Batch Injection
+
+        public static bool AskBefore_BatchInject_SelectedAssets
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
+        #endregion
+
+        #region Context Isolation
+
+        public static bool UseContextIsolation
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
+        #endregion
+
+        #region Scope File Generation
+
+        public static bool GenerateScopeNamespaceFromFolder
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+
+        #endregion
+
+        #region Methods
+
+        public static void UseDefaultSettings()
+        {
+#if UNITY_EDITOR
+            string[] prefsKeys = typeof(UserSettings)
+                .GetProperties(BindingFlags.Public | BindingFlags.Static)
+                .Where(prop => prop.CanWrite)
+                .Select(prop => $"{SettingsPrefix}{prop.Name}")
+                .Where(EditorPrefs.HasKey)
+                .ToArray();
+
+            foreach (string key in prefsKeys)
+                EditorPrefs.DeleteKey(key);
+
+            Debug.Log("Saneject: All settings were reset to default values.");
+#endif
+        }
+
+        #endregion
 
         #region Ask Before Injection
 
@@ -40,26 +90,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         #endregion
 
-        #region Ask Before Batch Injection
-
-        public static bool AskBefore_BatchInject_SelectedAssets
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        #endregion
-
-        #region Context Isolation
-
-        public static bool UseContextIsolation
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        #endregion
-
         #region Inspector
 
         public static bool ShowInjectedFieldsProperties
@@ -67,14 +97,14 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
-
-        public static bool ShowHelpBoxes
+        
+        public static bool ShowInjectButtonsInScopeInspector
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
-        public static bool ShowScopePath
+        public static bool ShowHelpBoxes
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
@@ -113,16 +143,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         }
 
         public static bool ClearLogsOnInjection
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        #endregion
-
-        #region Scope File Generation
-
-        public static bool GenerateScopeNamespaceFromFolder
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
@@ -189,27 +209,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 #if UNITY_EDITOR
             string key = $"{SettingsPrefix}{propertyName}";
             EditorPrefs.SetBool(key, value);
-#endif
-        }
-
-        #endregion
-
-        #region Methods
-
-        public static void UseDefaultSettings()
-        {
-#if UNITY_EDITOR
-            string[] prefsKeys = typeof(UserSettings)
-                .GetProperties(BindingFlags.Public | BindingFlags.Static)
-                .Where(prop => prop.CanWrite)
-                .Select(prop => $"{SettingsPrefix}{prop.Name}")
-                .Where(EditorPrefs.HasKey)
-                .ToArray();
-
-            foreach (string key in prefsKeys)
-                EditorPrefs.DeleteKey(key);
-
-            Debug.Log("Saneject: All settings were reset to default values.");
 #endif
         }
 

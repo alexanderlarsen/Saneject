@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Text;
+using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
@@ -12,13 +14,30 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Context
         {
             ContextData data = GetContextData(obj);
             Type = data.Type;
-            Key = data.Key;
+            Id = data.Key;
             IsPrefab = data.Type is ContextType.PrefabAsset or ContextType.PrefabInstance;
         }
 
         public ContextType Type { get; }
-        public int Key { get; }
+        public int Id { get; }
         public bool IsPrefab { get; }
+
+        public override string ToString()
+        {
+            StringBuilder sb = new();
+            sb.Append(ObjectNames.NicifyVariableName(Type.ToString()));
+            sb.Append(" (");
+
+            sb.Append(
+                UserSettings.UseContextIsolation
+                    ? $"ID: {Id}"
+                    : "Context Isolation Off"
+            );
+
+            sb.Append(")");
+
+            return sb.ToString();
+        }
 
         private static ContextData GetContextData(Object obj)
         {
@@ -67,7 +86,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Context
                 return false;
 
             return Type == other.Type &&
-                   Key == other.Key;
+                   Id == other.Id;
         }
 
         public override bool Equals(object obj)
@@ -77,7 +96,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Context
 
         public override int GetHashCode()
         {
-            return HashCode.Combine(Type, Key);
+            return HashCode.Combine(Type, Id);
         }
 
         #endregion

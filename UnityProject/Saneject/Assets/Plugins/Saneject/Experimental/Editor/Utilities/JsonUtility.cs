@@ -228,7 +228,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
         private static string BuildContextIdentity(ContextIdentity identity)
         {
             return identity != null
-                ? $"{identity.Type} (Key: {identity.Key})"
+                ? $"{identity.Type} (Key: {identity.Id})"
                 : null;
         }
     }

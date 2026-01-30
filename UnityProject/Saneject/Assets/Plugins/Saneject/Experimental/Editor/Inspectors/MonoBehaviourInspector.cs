@@ -11,7 +11,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
     /// You can safely remove this class and call <see cref="SanejectInspector" />
     /// in your own inspector to preserve correct field ordering.
     /// </summary>
-    [CustomEditor(typeof(MonoBehaviour), true, isFallback = true), CanEditMultipleObjects]
+    [CustomEditor(typeof(MonoBehaviour), true, isFallback = false), CanEditMultipleObjects]
     public class MonoBehaviourInspector : UnityEditor.Editor
     {
         private ComponentModel componentModel;

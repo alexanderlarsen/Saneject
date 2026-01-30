@@ -15,12 +15,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
     [DisallowMultipleComponent, DefaultExecutionOrder(-10000)]
     public abstract class Scope : MonoBehaviour
     {
-        #region INTERNAL
+        #region Internal stuff
 
-        [SerializeField, ReadOnly, Tooltip("These are automatically added to GlobalScope at Scope Awake and removed at OnDestroy"), EditorBrowsable(EditorBrowsableState.Never)]
+        [SerializeField, HideInInspector, Tooltip("These are automatically added to GlobalScope at Scope Awake and removed at OnDestroy"), EditorBrowsable(EditorBrowsableState.Never)]
         private List<Component> globalComponents = new();
 
-        [System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)]
+        [EditorBrowsable(EditorBrowsableState.Never)]
         private void Awake()
         {
             foreach (Component obj in globalComponents)
@@ -62,14 +62,14 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         #endregion
 
-        #region USER-FACING
+        #region User-facing stuff
 
         /// <summary>
         /// Set up your bindings in this method.
         /// </summary>
         protected abstract void DeclareBindings();
 
-        #region COMPONENT METHODS
+        #region Component methods
 
         /// <summary>
         /// Registers a binding for a single <typeparamref name="T" /> component or interface type in this scope.
@@ -186,7 +186,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         #endregion
 
-        #region ASSET METHODS
+        #region Asset methods
 
         /// <summary>
         /// Registers a binding for a single asset of type <typeparamref name="TConcrete" />.
@@ -249,7 +249,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
             AssetBinding binding = new()
             {
                 InterfaceType = typeof(TInterface),
-                ConcreteType = typeof(TConcrete),
+                ConcreteType = typeof(TConcrete)
             };
 
             bindings.Add(binding);
@@ -295,7 +295,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         #endregion
 
-        #region GLOBAL METHODS
+        #region Global methods
 
         /// <summary>
         /// Registers a global binding for the scene component <typeparamref name="TConcrete" />.

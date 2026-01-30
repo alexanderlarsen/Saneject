@@ -84,13 +84,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 onChanged: newValue => UserSettings.ShowInjectedFieldsProperties = newValue,
                 repaintInspectors: true
             );
-
+            
             DrawToggle
             (
-                label: "Show Scope Path",
-                tooltip: "Display scope path, from ancestor scopes down to the selected scope, in the scope inspector.",
-                currentValue: UserSettings.ShowScopePath,
-                onChanged: newValue => UserSettings.ShowScopePath = newValue,
+                label: "Show Inject Buttons in Scope Inspector",
+                tooltip: "Decides whether to draw Inject-buttons in the Scope Inspector.",
+                currentValue: UserSettings.ShowInjectButtonsInScopeInspector,
+                onChanged: newValue => UserSettings.ShowInjectButtonsInScopeInspector = newValue,
                 repaintInspectors: true
             );
 
@@ -180,7 +180,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             );
 
             EditorGUILayout.Space(10);
-            
+
             if (GUILayout.Button("Use Default Settings") && DialogUtility.Settings.Confirm_UseDefaultSettings())
             {
                 UserSettings.UseDefaultSettings();
