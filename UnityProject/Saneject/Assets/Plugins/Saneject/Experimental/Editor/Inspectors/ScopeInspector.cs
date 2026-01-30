@@ -1,6 +1,7 @@
 ﻿using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Inspectors.Models;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
@@ -51,24 +52,12 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             {
                 // DrawHelpBox();
                 DrawContext();
-                DrawGlobalComponents();
                 DrawScopeHierarchy();
+                DrawGlobalComponents();
                 DrawInjectButtons();
             }
 
-            if (componentModel.Properties.Count == 0)
-                return;
-
-            EditorGUILayout.Space(8);
-            componentModel.SerializedObject.Update();
-
-            foreach (PropertyModel propertyData in componentModel.Properties)
-            {
-                SanejectInspector.DrawProperty(propertyData);
-                SanejectInspector.ValidateProperty(propertyData);
-            }
-
-            componentModel.SerializedObject.ApplyModifiedProperties();
+            DrawDefault();
         }
 
         private static void DrawHelpBox()
@@ -90,37 +79,46 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
         private void DrawGlobalComponents()
         {
+            SerializedProperty property = serializedObject.FindProperty("globalComponents");
+
+            if (property.arraySize <= 1)
+                return;
+
+            bool isFoldedOut = InspectorUtility.PersistentFoldout
+            (
+                text: "Global Components",
+                tooltip: "This scope declares global components. They will be added to the global scope at runtime and can be fetched by proxies or manually.",
+                defaultFoldoutState: true,
+                prefsKey: "Saneject.ScopeInspector.Foldouts.GlobalComponents"
+            );
+
+            if (!isFoldedOut)
+                return;
+
             using (new EditorGUI.DisabledScope(true))
             {
-                SerializedProperty globalComponentsProp = serializedObject.FindProperty("globalComponents");
-
-                if (globalComponentsProp.arraySize > 1)
-                    EditorGUILayout.PropertyField(globalComponentsProp);
+                for (int i = 0; i < property.arraySize; i++)
+                {
+                    SerializedProperty element = property.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(element);
+                }
             }
         }
 
         private void DrawScopeHierarchy()
         {
-            const string foldOutKey = "Saneject.Scope.ScopeHierarchy.Foldout";
-            bool isFoldedOut = EditorPrefs.GetBool(foldOutKey, true);
-
-            isFoldedOut = EditorGUILayout.Foldout
+            bool isFoldedOut = InspectorUtility.PersistentFoldout
             (
-                foldout: isFoldedOut,
-                content: new GUIContent(
-                    "Scope Hierarchy",
-                    "Click on a hierarchy item to navigate to its GameObject. Different context scopes are grayed out."
-                ),
-                toggleOnLabelClick: true
+                text: "Scope Hierarchy",
+                tooltip: "Click on a hierarchy item to navigate to its GameObject. Different context scopes are grayed out.",
+                defaultFoldoutState: true,
+                prefsKey: "Saneject.ScopeInspector.Foldouts.ScopeHierarchy"
             );
-
-            EditorPrefs.SetBool(foldOutKey, isFoldedOut);
 
             if (!isFoldedOut)
                 return;
 
             DrawHierarchyRecursive(scopeHierarchyModel);
-            EditorGUILayout.Space(2);
 
             return;
 
@@ -128,11 +126,8 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    GUILayout.Space(EditorGUI.indentLevel * 15f);
+                    GUILayout.Space(EditorGUI.indentLevel * 15);
                     StringBuilder sb = new();
-
-                    if (model.IsCurrent)
-                        sb.Append("→ ");
 
                     sb.Append($"{model.GameObject.name} ({model.ScopeName})");
 
@@ -147,15 +142,14 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                                      : $"Click to navigate to GameObject: {model.GameObject.name}")
                     );
 
-                    GUIStyle style = new
-                    (
-                        model.IsCurrent
-                            ? EditorStyles.miniBoldLabel
-                            : EditorStyles.miniLabel
-                    )
+                    GUIStyle styleToCopy = model.IsCurrent
+                        ? EditorStyles.boldLabel
+                        : EditorStyles.label;
+
+                    GUIStyle style = new(styleToCopy)
                     {
-                        margin = EditorStyles.miniLabel.margin,
-                        padding = EditorStyles.miniLabel.padding
+                        margin = EditorStyles.label.margin,
+                        padding = EditorStyles.label.padding
                     };
 
                     Color textColor = style.normal.textColor;
@@ -192,36 +186,100 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
         private void DrawInjectButtons()
         {
-            if (!UserSettings.ShowInjectButtonsInScopeInspector)
+            bool isFoldedOut = InspectorUtility.PersistentFoldout
+            (
+                text: "Injection Controls",
+                tooltip: string.Empty,
+                defaultFoldoutState: true,
+                prefsKey: "Saneject.ScopeInspector.Foldouts.InjectionControls"
+            );
+
+            if (!isFoldedOut)
                 return;
 
             switch (contextIdentity.Type)
             {
                 case ContextType.SceneObject or ContextType.PrefabInstance:
                 {
-                    if (GUILayout.Button("Inject Scene"))
-                        Debug.Log("Inject Scene");
+                    EditorGUILayout.LabelField("Inject Entire Scene By Context");
 
-                    if (GUILayout.Button("Inject Hierarchy (All)"))
-                        Debug.Log("Inject Hierarchy (All)");
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        if (GUILayout.Button(new GUIContent(
+                                text: "All",
+                                tooltip: "Injects the entire scene, including prefabs instances.")))
+                            InjectionUtility.Inject.CurrentScene();
 
-                    if (GUILayout.Button("Inject Hierarchy (Scene Objects)"))
-                        Debug.Log("Inject Hierarchy (Scene Objects)");
+                        if (GUILayout.Button(new GUIContent(
+                                text: "Scene Objects",
+                                tooltip: "Injects all scene objects, excluding prefabs instances.")))
+                            InjectionUtility.Inject.AllSceneObjects();
 
-                    if (GUILayout.Button("Inject Hierarchy (Prefab Instances)"))
-                        Debug.Log("Inject Hierarchy (Prefab Instances)");
+                        if (GUILayout.Button(new GUIContent(
+                                text: "Prefab Instances",
+                                tooltip: "Injects all prefab instances in the scene.")))
+                            InjectionUtility.Inject.AllScenePrefabInstances();
+                    }
+
+                    EditorGUILayout.LabelField("Inject Hierarchy By Context");
+
+                    using (new EditorGUILayout.HorizontalScope())
+                    {
+                        if (GUILayout.Button(new GUIContent(
+                                text: "All",
+                                tooltip: "Injects the entire hierarchy, including both scene objects and prefabs instances.")))
+                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.All);
+
+                        if (GUILayout.Button(new GUIContent(
+                                text: "This",
+                                tooltip: "Injects all hierarchy objects that are the same context as this scope.")))
+                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.SameAsStartObjects);
+
+                        if (GUILayout.Button(new GUIContent(
+                                text: "Scene Objects",
+                                tooltip: "Injects all scene objects in the hierarchy, excluding prefabs instances.")))
+                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.SceneObjects);
+
+                        if (GUILayout.Button(new GUIContent(
+                                text: "Prefab Instances",
+                                tooltip: "Injects all prefab instances in the hierarchy.")))
+                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.PrefabInstances);
+                    }
+
+                    EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
+
+                    EditorGUILayout.EndHorizontal();
 
                     break;
                 }
 
                 case ContextType.PrefabAsset:
                 {
-                    if (GUILayout.Button("Inject Prefab"))
-                        Debug.Log("Inject Prefab");
+                    if (GUILayout.Button(new GUIContent(
+                            text: "Inject Prefab",
+                            tooltip: "Injects the entire prefab asset.")))
+                        InjectionUtility.Inject.SpecificPrefabAsset(scope.gameObject);
 
                     break;
                 }
             }
+        }
+
+        private void DrawDefault()
+        {
+            if (componentModel.Properties.Count == 0)
+                return;
+
+            EditorGUILayout.Space(4);
+            componentModel.SerializedObject.Update();
+
+            foreach (PropertyModel propertyData in componentModel.Properties)
+            {
+                SanejectInspector.DrawProperty(propertyData);
+                SanejectInspector.ValidateProperty(propertyData);
+            }
+
+            componentModel.SerializedObject.ApplyModifiedProperties();
         }
 
         private void BuildScopeHierarchy()

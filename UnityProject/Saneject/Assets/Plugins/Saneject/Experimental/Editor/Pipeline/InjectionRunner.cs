@@ -125,7 +125,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                         .root
                 };
 
-                InjectionResults results = RunContext(startObjects, ContextWalkFilter.PrefabAsset);
+                InjectionResults results = RunContext(startObjects, ContextWalkFilter.PrefabAssets);
                 combinedResults.AddToResults(results);
             }
 

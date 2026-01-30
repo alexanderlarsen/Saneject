@@ -1,4 +1,5 @@
 ﻿using System.Text;
+using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 
@@ -21,35 +22,35 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         public static class InjectionMenus
         {
-            public static bool Confirm_Inject_CurrentScene()
+            public static bool Confirm_Inject_Scene(string sceneName)
             {
                 if (!UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab)
                     return true;
 
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Inject Current Scene",
-                    message: "Are you sure you want to inject the entire current scene, including prefabs instances?",
+                    title: "Saneject: Inject Scene",
+                    message: $"Are you sure you want to inject the entire {sceneName} scene, including prefabs instances?",
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool Confirm_Inject_CurrentPrefab()
+            public static bool Confirm_Inject_PrefabAsset(string prefabName)
             {
                 if (!UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab)
                     return true;
 
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Inject Current Prefab",
-                    message: "Are you sure you want to inject the currently open prefab?",
+                    title: "Saneject: Inject Prefab",
+                    message: $"Are you sure you want to inject the {prefabName} prefab?",
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool Confirm_Inject_AllSceneObjects()
+            public static bool Confirm_Inject_AllSceneObjects(string sceneName)
             {
                 if (!UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances)
                     return true;
@@ -57,13 +58,13 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject All Scene Objects",
-                    message: "Are you sure you want to inject all scene objects in the current scene?",
+                    message: $"Are you sure you want to inject all scene objects in the {sceneName} scene?",
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool Confirm_Inject_AllScenePrefabInstances()
+            public static bool Confirm_Inject_AllScenePrefabInstances(string sceneName)
             {
                 if (!UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances)
                     return true;
@@ -71,27 +72,27 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Inject All Scene Prefab Instances",
-                    message: "Are you sure you want to inject all prefab instances in the current scene?",
+                    message: $"Are you sure you want to inject all prefab instances in the {sceneName} scene?",
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool Confirm_Inject_SelectedSceneHierarchy_AllContexts()
+            public static bool Confirm_Inject_SelectedSceneHierarchies_AllContexts()
             {
                 if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
                     return true;
 
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Inject Selected Scene Hierarchy (All Contexts)",
-                    message: "Are you sure you want to inject all contexts in the selected scene hierarchy?",
+                    title: "Saneject: Inject Selected Scene Hierarchies (All Contexts)",
+                    message: "Are you sure you want to inject all scene objects and prefab instances in the selected scene hierarchies?",
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool Confirm_Inject_SelectedSceneHierarchies_SelectedObjectContextsOnly()
+            public static bool SelectedSceneHierarchies_SelectedObjectContextsOnly()
             {
                 if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
                     return true;
@@ -100,6 +101,33 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 (
                     title: "Saneject: Inject Selected Scene Hierarchies (Selected Object Contexts Only)",
                     message: "Are you sure you want to inject the selected hierarchies filtered by the selected object contexts?",
+                    ok: "Inject",
+                    cancel: "Cancel"
+                );
+            }
+
+            public static bool Confirm_Inject_Single_SceneHierarchy_ByContext(ContextWalkFilter walkFilter)
+            {
+                if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
+                    return true;
+
+                string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString()).ToLower();
+                string message;
+
+                if (walkFilter == ContextWalkFilter.All)
+                    message = "Are you sure you want to inject all scene objects and prefab instances in the selected scene hierarchy?";
+                else if (walkFilter == ContextWalkFilter.SameAsStartObjects)
+                    message = "Are you sure you want to inject the selected hierarchy filtered by the same object contexts as the selected object?";
+                else
+                    message = $"Are you sure you want to inject the selected hierarchy filtered by {walkFilterString}?";
+                
+                return EditorUtility.DisplayDialog
+                (
+                    title:
+                    walkFilter == ContextWalkFilter.All
+                        ? "Saneject: Inject Selected Scene Hierarchy (All)"
+                        : $"Saneject: Inject Selected Scene Hierarchy ({walkFilterString})",
+                    message: message,
                     ok: "Inject",
                     cancel: "Cancel"
                 );

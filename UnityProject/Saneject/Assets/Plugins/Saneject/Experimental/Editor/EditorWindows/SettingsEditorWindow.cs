@@ -84,15 +84,6 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 onChanged: newValue => UserSettings.ShowInjectedFieldsProperties = newValue,
                 repaintInspectors: true
             );
-            
-            DrawToggle
-            (
-                label: "Show Inject Buttons in Scope Inspector",
-                tooltip: "Decides whether to draw Inject-buttons in the Scope Inspector.",
-                currentValue: UserSettings.ShowInjectButtonsInScopeInspector,
-                onChanged: newValue => UserSettings.ShowInjectButtonsInScopeInspector = newValue,
-                repaintInspectors: true
-            );
 
             DrawToggle
             (

@@ -96,13 +96,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
-        }
-        
-        public static bool ShowInjectButtonsInScopeInspector
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        } 
 
         public static bool ShowHelpBoxes
         {

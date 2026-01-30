@@ -74,8 +74,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             (
                 model.SerializedProperty.isExpanded,
                 new GUIContent(model.DisplayName),
-                true,
-                EditorStyles.foldoutHeader
+                true
             );
 
             if (!model.SerializedProperty.isExpanded)

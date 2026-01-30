@@ -43,7 +43,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     break;
                 }
 
-                case ContextWalkFilter.SceneObject:
+                case ContextWalkFilter.SceneObjects:
                 {
                     nodes = injectionGraph
                         .EnumerateAllTransformNodes()
@@ -53,7 +53,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     break;
                 }
 
-                case ContextWalkFilter.PrefabInstance:
+                case ContextWalkFilter.PrefabInstances:
                 {
                     nodes = injectionGraph
                         .EnumerateAllTransformNodes()
@@ -63,7 +63,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     break;
                 }
 
-                case ContextWalkFilter.PrefabAsset:
+                case ContextWalkFilter.PrefabAssets:
                 {
                     nodes = injectionGraph
                         .EnumerateAllTransformNodes()
