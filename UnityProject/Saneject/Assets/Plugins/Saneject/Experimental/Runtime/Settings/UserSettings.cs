@@ -31,7 +31,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         public static bool UseContextIsolation
         {
-            get => GetBool(defaultValue: true);
+            get => GetBool(defaultValue: false);
             set => SetBool(value);
         }
 

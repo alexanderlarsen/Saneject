@@ -66,8 +66,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 "Dependencies can only resolve within the same context.\n\n" +
                 "When disabled, scene- and prefab instances can bleed into each other, fetching dependencies from each other. " +
                 "Prefab assets are always context isolated, regardless of this setting." +
-                "and dependencies may freely resolve across scene and prefab instance boundaries.\n\n" +
-                "NOTE: Keeping this enabled is recommended for most use cases to preserve isolation and reuse safety.",
+                "and dependencies may freely resolve across scene and prefab instance boundaries.",
                 currentValue: UserSettings.UseContextIsolation,
                 onChanged: newValue => UserSettings.UseContextIsolation = newValue,
                 repaintInspectors: true
