@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
-    public static class InspectorUtility
+    public static class EditorLayoutUtility
     {
         public static bool PersistentFoldout(
             string text,

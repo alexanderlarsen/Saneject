@@ -2,7 +2,6 @@
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
-using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEngine;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery

@@ -8,7 +8,6 @@ using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using UnityEngine;
 using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
-using ReadOnlyAttribute = Plugins.Saneject.Experimental.Runtime.Attributes.ReadOnlyAttribute;
 
 namespace Plugins.Saneject.Experimental.Runtime.Scopes
 {
@@ -17,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
     {
         #region Internal stuff
 
-        [SerializeField, HideInInspector, Tooltip("These are automatically added to GlobalScope at Scope Awake and removed at OnDestroy"), EditorBrowsable(EditorBrowsableState.Never)]
+        [SerializeField, HideInInspector, EditorBrowsable(EditorBrowsableState.Never)]
         private List<Component> globalComponents = new();
 
         [EditorBrowsable(EditorBrowsableState.Never)]

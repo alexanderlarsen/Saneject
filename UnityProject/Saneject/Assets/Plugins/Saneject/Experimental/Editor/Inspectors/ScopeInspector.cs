@@ -23,7 +23,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             contextIdentity = new ContextIdentity(scope);
             componentModel = new ComponentModel(target, serializedObject);
             BuildScopeHierarchy();
-
             EditorApplication.hierarchyChanged += BuildScopeHierarchy;
         }
 
@@ -65,7 +64,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             if (!UserSettings.ShowHelpBoxes)
                 return;
 
-            EditorGUILayout.HelpBox("N/A", MessageType.None, true);
+            EditorGUILayout.HelpBox("N/A", MessageType.Info, true);
         }
 
         private void DrawContext()
@@ -84,10 +83,10 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             if (property.arraySize <= 1)
                 return;
 
-            bool isFoldedOut = InspectorUtility.PersistentFoldout
+            bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: "Global Components",
-                tooltip: "This scope declares global components. They will be added to the global scope at runtime and can be fetched by proxies or manually.",
+                tooltip: "This scope declares global components. These are automatically added to GlobalScope on Scope.Awake, removed on Scope.OnDestroy, and can be fetched from the GlobalScope by proxies or manually.",
                 defaultFoldoutState: true,
                 prefsKey: "Saneject.ScopeInspector.Foldouts.GlobalComponents"
             );
@@ -107,7 +106,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
         private void DrawScopeHierarchy()
         {
-            bool isFoldedOut = InspectorUtility.PersistentFoldout
+            bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: "Scope Hierarchy",
                 tooltip: "Click on a hierarchy item to navigate to its GameObject. Different context scopes are grayed out.",
@@ -119,7 +118,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                 return;
 
             DrawHierarchyRecursive(scopeHierarchyModel);
-
             return;
 
             static void DrawHierarchyRecursive(ScopeHierarchyModel model)
@@ -154,9 +152,10 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
                     Color textColor = style.normal.textColor;
 
-                    textColor.a = !UserSettings.UseContextIsolation || model.IsSameContext
-                        ? 1
-                        : 0.5f;
+                    textColor.a =
+                        !UserSettings.UseContextIsolation || model.IsSameContext
+                            ? 1
+                            : 0.5f;
 
                     style.normal.textColor = textColor;
                     style.hover.textColor = textColor;
@@ -186,7 +185,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
         private void DrawInjectButtons()
         {
-            bool isFoldedOut = InspectorUtility.PersistentFoldout
+            bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: "Injection Controls",
                 tooltip: string.Empty,
@@ -245,10 +244,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                                 tooltip: "Injects all prefab instances in the hierarchy.")))
                             InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.PrefabInstances);
                     }
-
-                    EditorGUILayout.BeginHorizontal(EditorStyles.toolbar);
-
-                    EditorGUILayout.EndHorizontal();
 
                     break;
                 }
