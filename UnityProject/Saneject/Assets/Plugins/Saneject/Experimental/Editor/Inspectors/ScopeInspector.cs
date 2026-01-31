@@ -51,8 +51,8 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             {
                 DrawHelpBox();
                 DrawContext();
-                DrawScopeHierarchy();
                 DrawGlobalComponents();
+                DrawScopeHierarchy();
                 DrawInjectButtons();
             }
 
@@ -64,7 +64,8 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             if (!UserSettings.ShowHelpBoxes)
                 return;
 
-            EditorGUILayout.HelpBox(
+            EditorGUILayout.HelpBox
+            (
                 "A Scope is where you declare bindings. When a component needs a dependency, it is resolved from the nearest Scope above it in the hierarchy, with fallback to parent Scopes if no local binding is found.\n\n" +
                 "Bindings are only used for objects that belong to the same context as the Scope. A context is a serialization boundary: Scene Object, Prefab Instance, Prefab Asset, or Global (assets like ScriptableObjects, textures, audio clips, etc.).\n\n" +
                 "Context isolation can be enabled to enforce stricter separation between scenes and prefabs. When enabled, scopes do not cross contexts. Scene objects and prefab instances are resolved separately, even if they live in the same hierarchy. Scopes from other contexts are shown but grayed out because they will not be used.\n\n" +
@@ -91,7 +92,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
             bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
-                text: "Global Components",
+                text: $"Global Components ({property.arraySize})",
                 tooltip: "This scope declares global components. These are automatically added to GlobalScope on Scope.Awake, removed on Scope.OnDestroy, and can be fetched from the GlobalScope by proxies or manually.",
                 defaultFoldoutState: true,
                 prefsKey: "Saneject.ScopeInspector.Foldouts.GlobalComponents"
