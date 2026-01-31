@@ -13,16 +13,12 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
         {
             bool isFoldedOut = EditorPrefs.GetBool(prefsKey, defaultFoldoutState);
 
-            isFoldedOut = EditorGUILayout.Foldout
-            (
-                foldout: isFoldedOut,
-                content: new GUIContent(
-                    text,
-                    tooltip
-                ),
-                toggleOnLabelClick: true
+            isFoldedOut = EditorGUILayout.BeginFoldoutHeaderGroup(
+                isFoldedOut,
+                new GUIContent(text, tooltip)
             );
 
+            EditorGUILayout.EndFoldoutHeaderGroup();
             EditorPrefs.SetBool(prefsKey, isFoldedOut);
             return isFoldedOut;
         }

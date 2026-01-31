@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             }
             else
             {
-                // DrawHelpBox();
+                DrawHelpBox();
                 DrawContext();
                 DrawScopeHierarchy();
                 DrawGlobalComponents();
@@ -64,7 +64,15 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             if (!UserSettings.ShowHelpBoxes)
                 return;
 
-            EditorGUILayout.HelpBox("N/A", MessageType.Info, true);
+            EditorGUILayout.HelpBox(
+                "A Scope is where you declare bindings. When a component needs a dependency, it is resolved from the nearest Scope on the same level or above it in the hierarchy, with fallback to parent Scopes if no local binding is found.\n\n" +
+                "Bindings are only used for objects that belong to the same context as the Scope. A context is a serialization boundary: Scene Object, Prefab Instance, Prefab Asset, or Global (assets like ScriptableObjects, textures, audio clips, etc.).\n\n" +
+                "With context isolation enabled, scopes do not cross contexts. Scene objects and prefab instances are resolved separately, even if they live in the same hierarchy. Scopes from other contexts are shown in the hierarchy but grayed out because they will not be used.\n\n" +
+                "Unity already prevents prefab assets from referencing scene objects, but prefab instances can reference scene objects and vice versa. Saneject blocks this by default because injection happens at edit time. Allowing it would make the prefab depend on the current scene and break when moved to another scene.\n\n" +
+                "If you need cross context references, use proxies. Disabling context isolation is an escape hatch for debugging, not a recommended architectural pattern.",
+                MessageType.None,
+                true
+            );
         }
 
         private void DrawContext()
@@ -80,9 +88,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         {
             SerializedProperty property = serializedObject.FindProperty("globalComponents");
 
-            if (property.arraySize <= 1)
-                return;
-
             bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: "Global Components",
@@ -93,6 +98,12 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
             if (!isFoldedOut)
                 return;
+
+            if (property.arraySize == 0)
+            {
+                EditorGUILayout.LabelField("No global components declared in this scope.");
+                return;
+            }
 
             using (new EditorGUI.DisabledScope(true))
             {
@@ -118,13 +129,14 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                 return;
 
             DrawHierarchyRecursive(scopeHierarchyModel);
+            GUILayout.Space(2);
             return;
 
             static void DrawHierarchyRecursive(ScopeHierarchyModel model)
             {
                 using (new EditorGUILayout.HorizontalScope())
                 {
-                    GUILayout.Space(EditorGUI.indentLevel * 15);
+                    GUILayout.Space(EditorGUI.indentLevel * 15 + 2);
                     StringBuilder sb = new();
 
                     sb.Append($"{model.GameObject.name} ({model.ScopeName})");
