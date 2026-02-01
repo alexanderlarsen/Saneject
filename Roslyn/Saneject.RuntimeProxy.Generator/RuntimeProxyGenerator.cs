@@ -51,13 +51,13 @@ public class RuntimeProxyGenerator : ISourceGenerator
             if (concreteType is null)
                 continue;
 
-            List<ISymbol> interfaces = concreteType.AllInterfaces
+            List<ISymbol> allInterfaces = concreteType.AllInterfaces
                 .Where(i => i.DeclaredAccessibility == Accessibility.Public && !i.IsGenericType && i.ToDisplayString() != "UnityEngine.ISerializationCallbackReceiver")
                 .Where(s => s is not null)
                 .Distinct(SymbolEqualityComparer.Default)
                 .ToList();
 
-            if (interfaces.Count == 0)
+            if (allInterfaces.Count == 0)
                 continue;
 
             string ns = classSymbol.ContainingNamespace?.ToDisplayString();
@@ -77,128 +77,152 @@ public class RuntimeProxyGenerator : ISourceGenerator
             }
 
             sb.AppendLine($"    [CreateAssetMenu(fileName = \"{classSymbol.Name}\", menuName = \"Saneject/RuntimeProxy/{classSymbol.Name}\")]");
-            sb.AppendLine($"    public partial class {classSymbol.Name} : {string.Join(", ", interfaces.Select(i => i.ToDisplayString()))}");
+            sb.AppendLine($"    public partial class {classSymbol.Name} : {string.Join(", ", allInterfaces.Select(i => i.ToDisplayString()))}");
             sb.AppendLine("    {");
 
             HashSet<string> generatedMethods = [];
             HashSet<string> generatedProperties = [];
             HashSet<string> generatedEvents = [];
 
-            foreach (INamedTypeSymbol ifaceSymbol in interfaces.OfType<INamedTypeSymbol>())
+            List<string> subscriptionFields = [];
+
+            List<INamedTypeSymbol> interfaces = allInterfaces.OfType<INamedTypeSymbol>().ToList();
+
+            List<IEventSymbol> events = interfaces
+                .SelectMany(i => i.GetMembers().OfType<IEventSymbol>())
+                .Where(e => e.DeclaredAccessibility == Accessibility.Public)
+                .Where(evt => generatedEvents.Add(evt.Name))
+                .ToList();
+
+            List<IPropertySymbol> properties = interfaces
+                .SelectMany(i => i.GetMembers().OfType<IPropertySymbol>())
+                .Where(p => p.DeclaredAccessibility == Accessibility.Public)
+                .Where(p => generatedProperties.Add(p.Name))
+                .ToList();
+
+            List<IMethodSymbol> methods = interfaces
+                .SelectMany(i => i.GetMembers().OfType<IMethodSymbol>())
+                .Where(m => m.MethodKind == MethodKind.Ordinary)
+                .Where(m => m.DeclaredAccessibility == Accessibility.Public)
+                .Where(method => generatedMethods.Add($"{method.Name}({string.Join(",", method.Parameters.Select(p => p.Type.ToDisplayString()))})"))
+                .ToList();
+
+            foreach (IEventSymbol evt in events)
             {
-                List<IEventSymbol> events = ifaceSymbol
-                    .GetMembers()
-                    .OfType<IEventSymbol>()
-                    .Where(e => e.DeclaredAccessibility == Accessibility.Public)
-                    .Where(evt => generatedEvents.Add(evt.Name))
-                    .ToList();
+                string eventType = evt.Type.ToDisplayString();
+                string eventName = evt.Name;
+                string subsField = $"__{eventName}Subscriptions";
+                subscriptionFields.Add(subsField);
+                sb.AppendLine($"        private readonly List<({concreteName} target, {eventType} handler)> {subsField} = new();");
+            }
 
-                foreach (IEventSymbol evt in events)
+            foreach (IEventSymbol evt in events)
+            {
+                string eventType = evt.Type.ToDisplayString();
+                string eventName = evt.Name;
+                string subsField = $"__{eventName}Subscriptions";
+
+                sb.AppendLine();
+                sb.AppendLine($"        public event {eventType} {eventName}");
+                sb.AppendLine("        {");
+                sb.AppendLine("            add");
+                sb.AppendLine("            {");
+                sb.AppendLine("                if (!instance)");
+                sb.AppendLine("                    ResolveInstance();");
+                sb.AppendLine();
+                sb.AppendLine("                var target = instance;");
+                sb.AppendLine($"                target.{eventName} += value;");
+                sb.AppendLine($"                {subsField}.Add((target, value));");
+                sb.AppendLine("                eventSubscriberCount++;");
+                sb.AppendLine("            }");
+                sb.AppendLine("            remove");
+                sb.AppendLine("            {");
+                sb.AppendLine($"                int index = {subsField}.FindIndex(x => x.handler == value);");
+                sb.AppendLine();
+                sb.AppendLine("                if (index < 0)");
+                sb.AppendLine("                    return;");
+                sb.AppendLine();
+                sb.AppendLine($"                var sub = {subsField}[index];");
+                sb.AppendLine();
+                sb.AppendLine("                if (sub.target && !sub.target.Equals(null))");
+                sb.AppendLine($"                    sub.target.{eventName} -= value;");
+                sb.AppendLine();
+                sb.AppendLine($"                {subsField}.RemoveAt(index);");
+                sb.AppendLine("                eventSubscriberCount--;");
+                sb.AppendLine("            }");
+                sb.AppendLine("        }");
+            }
+
+            if (properties.Count > 0)
+                sb.AppendLine();
+
+            foreach (IPropertySymbol property in properties)
+            {
+                sb.AppendLine($"        public {property.Type.ToDisplayString()} {property.Name}");
+                sb.AppendLine("        {");
+
+                if (property.GetMethod != null)
                 {
-                    string eventType = evt.Type.ToDisplayString();
-                    string eventName = evt.Name;
-                    string subsField = $"__{eventName}Subscriptions";
-
-                    sb.AppendLine($"        private readonly List<({concreteName} target, {eventType} handler)> {subsField} = new();");
-                    sb.AppendLine();
-                    sb.AppendLine($"        public event {eventType} {eventName}");
-                    sb.AppendLine("        {");
-                    sb.AppendLine("            add");
+                    sb.AppendLine("            get");
                     sb.AppendLine("            {");
                     sb.AppendLine("                if (!instance)");
-                    sb.AppendLine("                    instance = ResolveInstance();");
+                    sb.AppendLine("                    ResolveInstance();");
                     sb.AppendLine();
-                    sb.AppendLine("                var target = instance;");
-                    sb.AppendLine($"                target.{eventName} += value;");
-                    sb.AppendLine($"                {subsField}.Add((target, value));");
+                    sb.AppendLine($"                return instance.{property.Name};");
                     sb.AppendLine("            }");
-                    sb.AppendLine("            remove");
+                }
+
+                if (property.SetMethod != null)
+                {
+                    sb.AppendLine("            set");
                     sb.AppendLine("            {");
-                    sb.AppendLine($"                var sub = {subsField}.Find(x => x.handler == value);");
+                    sb.AppendLine("                if (!instance)");
+                    sb.AppendLine("                    ResolveInstance();");
                     sb.AppendLine();
-                    sb.AppendLine("                if (sub.target != null && !sub.target.Equals(null))");
-                    sb.AppendLine($"                    sub.target.{eventName} -= value;");
-                    sb.AppendLine();
-                    sb.AppendLine($"                {subsField}.RemoveAll(x => x.handler == value);");
+                    sb.AppendLine($"                instance.{property.Name} = value;");
                     sb.AppendLine("            }");
-                    sb.AppendLine("        }");
-
-                    if (events.IndexOf(evt) != events.Count - 1)
-                        sb.AppendLine();
                 }
 
-                List<IPropertySymbol> properties = ifaceSymbol
-                    .GetMembers()
-                    .OfType<IPropertySymbol>()
-                    .Where(p => p.DeclaredAccessibility == Accessibility.Public)
-                    .Where(property => generatedProperties.Add(property.Name))
-                    .ToList();
+                sb.AppendLine("        }");
 
-                if (properties.Count > 0)
+                if (properties.IndexOf(property) != properties.Count - 1)
                     sb.AppendLine();
+            }
 
-                foreach (IPropertySymbol property in properties)
-                {
-                    sb.AppendLine($"        public {property.Type.ToDisplayString()} {property.Name}");
-                    sb.AppendLine("        {");
+            if (methods.Count > 0)
+                sb.AppendLine();
 
-                    if (property.GetMethod != null)
-                    {
-                        sb.AppendLine("            get");
-                        sb.AppendLine("            {");
-                        sb.AppendLine("                if (!instance)");
-                        sb.AppendLine("                    instance = ResolveInstance();");
-                        sb.AppendLine();
-                        sb.AppendLine($"                return instance.{property.Name};");
-                        sb.AppendLine("            }");
-                    }
+            foreach (IMethodSymbol method in methods)
+            {
+                string returnType = method.ReturnType.ToDisplayString();
+                string[] paramList = method.Parameters.Select(p => $"{p.Type.ToDisplayString()} {p.Name}").ToArray();
+                string[] argList = method.Parameters.Select(p => p.Name).ToArray();
 
-                    if (property.SetMethod != null)
-                    {
-                        sb.AppendLine("            set");
-                        sb.AppendLine("            {");
-                        sb.AppendLine("                if (!instance)");
-                        sb.AppendLine("                    instance = ResolveInstance();");
-                        sb.AppendLine();
-                        sb.AppendLine($"                instance.{property.Name} = value;");
-                        sb.AppendLine("            }");
-                    }
+                sb.AppendLine($"        public {returnType} {method.Name}({string.Join(", ", paramList)})");
+                sb.AppendLine("        {");
+                sb.AppendLine("            if (!instance)");
+                sb.AppendLine("                ResolveInstance();");
+                sb.AppendLine();
+                string call = $"instance.{method.Name}({string.Join(", ", argList)})";
+                sb.AppendLine(method.ReturnsVoid ? $"            {call};" : $"            return {call};");
+                sb.AppendLine("        }");
 
-                    sb.AppendLine("        }");
-
-                    if (properties.IndexOf(property) != properties.Count - 1)
-                        sb.AppendLine();
-                }
-
-                List<IMethodSymbol> methods = ifaceSymbol
-                    .GetMembers()
-                    .OfType<IMethodSymbol>()
-                    .Where(m => m.MethodKind == MethodKind.Ordinary)
-                    .Where(m => m.DeclaredAccessibility == Accessibility.Public)
-                    .Where(method => generatedMethods.Add($"{method.Name}({string.Join(",", method.Parameters.Select(p => p.Type.ToDisplayString()))})"))
-                    .ToList();
-
-                if (methods.Count > 0)
+                if (methods.IndexOf(method) != methods.Count - 1)
                     sb.AppendLine();
+            }
 
-                foreach (IMethodSymbol method in methods)
-                {
-                    string returnType = method.ReturnType.ToDisplayString();
-                    string[] paramList = method.Parameters.Select(p => $"{p.Type.ToDisplayString()} {p.Name}").ToArray();
-                    string[] argList = method.Parameters.Select(p => p.Name).ToArray();
+            if (subscriptionFields.Count > 0)
+            {
+                sb.AppendLine();
+                sb.AppendLine("        protected override void OnTargetInstanceLost()");
+                sb.AppendLine("        {");
+                sb.AppendLine("            base.OnTargetInstanceLost();");
+                sb.AppendLine();
 
-                    sb.AppendLine($"        public {returnType} {method.Name}({string.Join(", ", paramList)})");
-                    sb.AppendLine("        {");
-                    sb.AppendLine("            if (!instance)");
-                    sb.AppendLine("                instance = ResolveInstance();");
-                    sb.AppendLine();
-                    string call = $"instance.{method.Name}({string.Join(", ", argList)})";
-                    sb.AppendLine(method.ReturnsVoid ? $"            {call};" : $"            return {call};");
-                    sb.AppendLine("        }");
+                foreach (string field in subscriptionFields)
+                    sb.AppendLine($"            {field}.Clear();");
 
-                    if (methods.IndexOf(method) != methods.Count - 1)
-                        sb.AppendLine();
-                }
+                sb.AppendLine("        }");
             }
 
             sb.AppendLine("    }"); // end class

@@ -7,8 +7,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
     /// <summary>
     /// Enables serialization of interface references to Unity objects between scenes and prefabs.
-    /// Use this as a base for proxies generated with Roslyn (via Saneject.RuntimeProxy.Generator.dll), which implement all interfaces on the concrete type at compile time and forwards methods, properties and events to a concrete instance located at runtime.
-    /// Assign the proxy asset to a serialized interface field (e.g., <c>[SerializeInterface] IMyInterface myInterface</c>) at editor-time, and at runtime, the proxy resolves to the real instance using your chosen strategy.
+    /// Use this as a base for proxies generated with Roslyn (via Saneject.RuntimeProxy.Generator.dll),
+    /// which implement all interfaces on the concrete type at compile time and forward methods,
+    /// properties and events to a concrete instance located at runtime.
+    /// Assign the proxy asset to a serialized interface field (e.g.,
+    /// <c>[SerializeInterface] IMyInterface myInterface</c>) at editor-time, and at runtime,
+    /// the proxy resolves to the real instance using your chosen strategy.
     /// For details and usage examples, see the README.
     /// </summary>
     public abstract class RuntimeProxy<TConcrete> : RuntimeProxyBase
@@ -17,13 +21,16 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
         [NonSerialized]
         protected TConcrete instance;
 
+        protected int eventSubscriberCount;
+
         [SerializeField, Tooltip(
              "Determines how the proxy locates or creates the target instance at runtime.\n\n" +
              "FromGlobalScope: Uses GlobalScopeRegistry. Instance must be registered using RegisterGlobalComponent or RegisterGlobalObject in a scope.\n\n" +
              "FindInLoadedScenes: Finds the first matching component in any loaded scene using FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include).\n\n" +
              "FromComponentOnPrefab: Instantiates a prefab and finds the target component.\n\n" +
              "FromNewComponentOnNewGameObject: Creates a new GameObject and adds the component.\n\n" +
-             "ManualRegistration: You must call RuntimeProxy.RegisterInstance() at runtime.")]
+             "ManualRegistration: You must call RuntimeProxy.RegisterInstance() at runtime.")
+        ]
         private ResolveMethod resolveMethod;
 
         [SerializeField, Tooltip("The prefab from which to get the concrete instance.")]
@@ -31,6 +38,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
 
         [SerializeField, Tooltip("Do not destroy the target Object when loading a new Scene.")]
         private bool dontDestroyOnLoad = true;
+
+        private bool hadInstanceBefore;
 
         private enum ResolveMethod
         {
@@ -42,11 +51,18 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
         }
 
         /// <summary>
-        /// Manually register an instance for this proxy. Only required for <see cref="ResolveMethod.ManualRegistration" /> resolve method.
+        /// Manually register an instance for this proxy.
+        /// Only required for <see cref="ResolveMethod.ManualRegistration" /> resolve method.
         /// </summary>
-        public void RegisterInstance(TConcrete instance)
+        public void RegisterInstance(TConcrete newInstance)
         {
-            this.instance = instance;
+            if (hadInstanceBefore)
+                OnTargetInstanceLost();
+
+            instance = newInstance;
+
+            if (instance)
+                hadInstanceBefore = true;
         }
 
         /// <summary>
@@ -54,6 +70,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
         /// </summary>
         public void UnregisterInstance()
         {
+            if (hadInstanceBefore)
+                OnTargetInstanceLost();
+
             instance = null;
         }
 
@@ -74,18 +93,24 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
         }
 
         /// <summary>
-        /// Resolves and returns the underlying concrete instance according to the configured resolve strategy.
+        /// Resolves the underlying concrete instance according to the configured resolve strategy.
         /// Called automatically by the generated proxy when the instance is null.
         /// </summary>
-        protected TConcrete ResolveInstance()
+        protected void ResolveInstance()
         {
             if (!Application.isPlaying)
             {
-                Debug.LogWarning($"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. This is not allowed. Returning null.");
-                return null;
+                Debug.LogWarning(
+                    $"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. " +
+                    "This is not allowed.");
+
+                return;
             }
 
-            TConcrete output = resolveMethod switch
+            if (instance)
+                return;
+
+            TConcrete resolved = resolveMethod switch
             {
                 ResolveMethod.FromGlobalScope => GetFromGlobalScope(),
                 ResolveMethod.ManualRegistration => instance,
@@ -95,15 +120,45 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 _ => throw new ArgumentOutOfRangeException()
             };
 
+            if (hadInstanceBefore)
+                OnTargetInstanceLost();
+
+            instance = resolved;
+
+            if (instance)
+                hadInstanceBefore = true;
+
             if (UserSettings.LogProxyResolve)
             {
-                if (output)
+                if (instance)
                     Debug.Log($"Saneject: '{GetType().Name}' resolved its instance using {resolveMethod}.");
                 else
                     Debug.LogWarning($"Saneject: '{GetType().Name}' instance is null.");
             }
+        }
 
-            return output;
+        /// <summary>
+        /// Called when the proxy switches from one concrete target instance to another.
+        /// Generated proxies should override this to clear or replay event subscriptions.
+        /// </summary>
+        protected virtual void OnTargetInstanceLost()
+        {
+            if (!hadInstanceBefore)
+                return;
+
+            if (eventSubscriberCount <= 0)
+                return;
+
+            Debug.LogWarning
+            (
+                $"Saneject: '{GetType().Name}' target lost. " +
+                $"The previous instance had {eventSubscriberCount} event " +
+                $"{(eventSubscriberCount == 1 ? "subscriber" : "subscribers")}. " +
+                "Event subscriptions are instance-bound and were not transferred. " +
+                "Re-subscribe via this proxy if needed."
+            );
+
+            eventSubscriberCount = 0;
         }
 
         private TConcrete GetFromGlobalScope()
@@ -125,7 +180,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
 
             return prefabInstance.TryGetComponent(out TConcrete output)
                 ? output
-                : throw new NullReferenceException($"Saneject: '{typeof(TConcrete)}' is not found on prefab instantiated by '{GetType().Name}'");
+                : throw new NullReferenceException(
+                    $"Saneject: '{typeof(TConcrete)}' is not found on prefab instantiated by '{GetType().Name}'");
         }
 
         private TConcrete CreateNewInstanceOnNewGameObject()
