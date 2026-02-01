@@ -219,6 +219,14 @@ public class RuntimeProxyGenerator : ISourceGenerator
                 sb.AppendLine("            base.OnTargetInstanceLost();");
                 sb.AppendLine();
 
+                for (int i = 0; i < subscriptionFields.Count; i++)
+                {   
+                    sb.AppendLine($"            foreach (var sub in {subscriptionFields[i]})");
+                    sb.AppendLine("                if (sub.target && !sub.target.Equals(null))");
+                    sb.AppendLine($"                    sub.target.{events[i].Name} -= sub.handler;");
+                    sb.AppendLine();
+                }
+                 
                 foreach (string field in subscriptionFields)
                     sb.AppendLine($"            {field}.Clear();");
 
