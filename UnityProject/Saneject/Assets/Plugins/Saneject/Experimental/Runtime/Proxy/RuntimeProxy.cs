@@ -154,7 +154,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 $"Saneject: '{GetType().Name}' target lost. " +
                 $"The previous instance had {eventSubscriberCount} event " +
                 $"{(eventSubscriberCount == 1 ? "subscriber" : "subscribers")}. " +
-                "Event subscriptions are instance-bound and were not transferred. " +
+                "Event subscriptions are instance-bound and will not be transferred to new instance. " +
                 "Re-subscribe via this proxy if needed."
             );
 
