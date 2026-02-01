@@ -39,8 +39,7 @@ public class RuntimeProxyGenerator : ISourceGenerator
             if (!classSymbol.GetAttributes().Any(a => SymbolEqualityComparer.Default.Equals(a.AttributeClass, attrSymbol)))
                 continue;
 
-            if (classSymbol.BaseType is not INamedTypeSymbol baseType ||
-                baseType.ConstructedFrom is null ||
+            if (classSymbol.BaseType is not { } baseType ||
                 !SymbolEqualityComparer.Default.Equals(baseType.ConstructedFrom, proxyBaseSymbol))
                 continue;
 
@@ -54,7 +53,7 @@ public class RuntimeProxyGenerator : ISourceGenerator
 
             List<ISymbol> interfaces = concreteType.AllInterfaces
                 .Where(i => i.DeclaredAccessibility == Accessibility.Public && !i.IsGenericType && i.ToDisplayString() != "UnityEngine.ISerializationCallbackReceiver")
-                .OfType<INamedTypeSymbol>()
+                .Where(s => s is not null)
                 .Distinct(SymbolEqualityComparer.Default)
                 .ToList();
 
@@ -87,16 +86,15 @@ public class RuntimeProxyGenerator : ISourceGenerator
 
             foreach (INamedTypeSymbol ifaceSymbol in interfaces.OfType<INamedTypeSymbol>())
             {
-                var events = ifaceSymbol.GetMembers().OfType<IEventSymbol>().ToList();
-                
+                List<IEventSymbol> events = ifaceSymbol
+                    .GetMembers()
+                    .OfType<IEventSymbol>()
+                    .Where(e => e.DeclaredAccessibility == Accessibility.Public)
+                    .Where(evt => generatedEvents.Add(evt.Name))
+                    .ToList();
+
                 foreach (IEventSymbol evt in events)
                 {
-                    if (evt.DeclaredAccessibility != Accessibility.Public)
-                        continue;
-
-                    if (!generatedEvents.Add(evt.Name))
-                        continue;
-
                     string eventType = evt.Type.ToDisplayString();
                     string eventName = evt.Name;
                     string subsField = $"__{eventName}Subscriptions";
@@ -124,24 +122,23 @@ public class RuntimeProxyGenerator : ISourceGenerator
                     sb.AppendLine($"                {subsField}.RemoveAll(x => x.handler == value);");
                     sb.AppendLine("            }");
                     sb.AppendLine("        }");
-                    
-                    if(events.IndexOf(evt) != events.Count - 1)
+
+                    if (events.IndexOf(evt) != events.Count - 1)
                         sb.AppendLine();
                 }
 
-                List<IPropertySymbol> properties = ifaceSymbol.GetMembers().OfType<IPropertySymbol>().ToList();
+                List<IPropertySymbol> properties = ifaceSymbol
+                    .GetMembers()
+                    .OfType<IPropertySymbol>()
+                    .Where(p => p.DeclaredAccessibility == Accessibility.Public)
+                    .Where(property => generatedProperties.Add(property.Name))
+                    .ToList();
 
                 if (properties.Count > 0)
                     sb.AppendLine();
-                
+
                 foreach (IPropertySymbol property in properties)
                 {
-                    if (property.DeclaredAccessibility != Accessibility.Public)
-                        continue;
-
-                    if (!generatedProperties.Add(property.Name))
-                        continue;
-
                     sb.AppendLine($"        public {property.Type.ToDisplayString()} {property.Name}");
                     sb.AppendLine("        {");
 
@@ -173,21 +170,19 @@ public class RuntimeProxyGenerator : ISourceGenerator
                         sb.AppendLine();
                 }
 
-                List<IMethodSymbol> methods = ifaceSymbol.GetMembers().OfType<IMethodSymbol>().ToList();
+                List<IMethodSymbol> methods = ifaceSymbol
+                    .GetMembers()
+                    .OfType<IMethodSymbol>()
+                    .Where(m => m.MethodKind == MethodKind.Ordinary)
+                    .Where(m => m.DeclaredAccessibility == Accessibility.Public)
+                    .Where(method => generatedMethods.Add($"{method.Name}({string.Join(",", method.Parameters.Select(p => p.Type.ToDisplayString()))})"))
+                    .ToList();
 
                 if (methods.Count > 0)
                     sb.AppendLine();
 
                 foreach (IMethodSymbol method in methods)
                 {
-                    if (method.MethodKind != MethodKind.Ordinary || method.DeclaredAccessibility != Accessibility.Public)
-                        continue;
-
-                    string methodKey = $"{method.Name}({string.Join(",", method.Parameters.Select(p => p.Type.ToDisplayString()))})";
-
-                    if (!generatedMethods.Add(methodKey))
-                        continue;
-
                     string returnType = method.ReturnType.ToDisplayString();
                     string[] paramList = method.Parameters.Select(p => $"{p.Type.ToDisplayString()} {p.Name}").ToArray();
                     string[] argList = method.Parameters.Select(p => p.Name).ToArray();
@@ -222,14 +217,17 @@ public class RuntimeProxyGenerator : ISourceGenerator
 
     private class ForwardMethodReceiver : ISyntaxReceiver
     {
-        public List<ClassDeclarationSyntax> Candidates { get; } = new();
+        public List<ClassDeclarationSyntax> Candidates { get; } = [];
 
         public void OnVisitSyntaxNode(SyntaxNode node)
         {
-            if (node is ClassDeclarationSyntax cds &&
-                cds.AttributeLists.Any(al =>
-                    al.Attributes.Any(a => a.Name.ToString().Contains("GenerateRuntimeProxy"))))
-                Candidates.Add(cds);
+            if (node is not ClassDeclarationSyntax cds)
+                return;
+
+            if (!cds.AttributeLists.Any(list => list.Attributes.Any(attribute => attribute.Name.ToString().Contains("GenerateRuntimeProxy"))))
+                return;
+
+            Candidates.Add(cds);
         }
     }
 }
