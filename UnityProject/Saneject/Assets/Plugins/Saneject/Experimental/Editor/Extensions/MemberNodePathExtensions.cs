@@ -9,14 +9,14 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
             this MemberNode node,
             string pathFromComponent)
         {
-            pathFromComponent = StripPropertyBackingFieldPrefix(pathFromComponent);
+            pathFromComponent = pathFromComponent.StripPropertyBackingFieldSyntax();
             ComponentNode componentNode = node.ComponentNode;
             string goPath = GetHierarchyPath(componentNode.TransformNode);
             string componentName = componentNode.Component.GetType().Name;
             return $"{goPath}/{componentName}/{pathFromComponent}";
-        }
+        } 
 
-        private static string StripPropertyBackingFieldPrefix(string pathFromComponent)
+        public static string StripPropertyBackingFieldSyntax(this string pathFromComponent)
         {
             string[] pathParts = pathFromComponent.Split('.');
 

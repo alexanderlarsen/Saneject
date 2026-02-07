@@ -31,16 +31,17 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             }
 
             Logger.TryClearLog();
-            Stopwatch stopwatch = Stopwatch.StartNew();
-            InjectionResults results = RunContext(startObjects, contextWalkFilter);
-            stopwatch.Stop();
+            InjectionProgressTracker progressTracker = new(totalSegments: 10);
+            progressTracker.SetTitle("Injecting");
 
-            Logger.LogSummary
+            RunContext
             (
-                prefix: "Injection complete",
-                results,
-                stopwatch.ElapsedMilliseconds
+                startObjects,
+                contextWalkFilter,
+                progressTracker
             );
+
+            progressTracker.ClearProgressBar();
         }
 
         public static void RunBatch(IReadOnlyCollection<BatchItem> batchItems)
@@ -67,13 +68,26 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 return;
             }
 
+            InjectionProgressTracker progressTracker = new(totalSegments: (sceneBatchItems.Count + prefabBatchItems.Count) * 10);
             Stopwatch sceneStopwatch = Stopwatch.StartNew();
-            InjectionResults sceneResults = RunSceneBatch(sceneBatchItems);
-            sceneStopwatch.Stop();
 
+            InjectionResults sceneResults = RunSceneBatch
+            (
+                sceneBatchItems,
+                progressTracker
+            );
+
+            sceneStopwatch.Stop();
             Stopwatch prefabStopwatch = Stopwatch.StartNew();
-            InjectionResults prefabResults = RunPrefabBatch(prefabBatchItems);
+
+            InjectionResults prefabResults = RunPrefabBatch
+            (
+                prefabBatchItems,
+                progressTracker
+            );
+
             prefabStopwatch.Stop();
+            progressTracker.ClearProgressBar();
 
             Logger.LogBatchSummary
             (
@@ -86,47 +100,91 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             );
         }
 
-        private static InjectionResults RunSceneBatch(IEnumerable<SceneBatchItem> batchItems)
+        private static InjectionResults RunSceneBatch(
+            IEnumerable<SceneBatchItem> batchItems,
+            InjectionProgressTracker progressTracker)
         {
+            batchItems = batchItems.ToArray();
             InjectionResults combinedResults = new();
-
             string initialScenePath = SceneManager.GetActiveScene().path;
+
+            if (batchItems.Any())
+                Logger.LogBatchInjectHeader(batchItems);
 
             foreach (SceneBatchItem item in batchItems)
             {
-                Scene scene = EditorSceneManager.OpenScene(item.Path, OpenSceneMode.Single);
+                Scene scene = EditorSceneManager.OpenScene
+                (
+                    item.Path,
+                    OpenSceneMode.Single
+                );
+
+                progressTracker.SetTitle($"Batch injecting scene: {scene.name}");
 
                 IEnumerable<Transform> startObjects = scene
                     .GetRootGameObjects()
                     .Select(x => x.transform);
 
-                InjectionResults results = RunContext(startObjects, item.ContextWalkFilter);
+                using (new Logger.BatchInjectionScope(item))
+                {
+                    InjectionResults results = RunContext
+                    (
+                        startObjects,
+                        item.ContextWalkFilter,
+                        progressTracker
+                    );
+
+                    combinedResults.AddToResults(results);
+                }
+
                 EditorSceneManager.SaveScene(scene);
-                combinedResults.AddToResults(results);
             }
 
             if (!string.IsNullOrEmpty(initialScenePath))
-                EditorSceneManager.OpenScene(initialScenePath, OpenSceneMode.Single);
+                EditorSceneManager.OpenScene
+                (
+                    initialScenePath,
+                    OpenSceneMode.Single
+                );
 
             return combinedResults;
         }
 
-        private static InjectionResults RunPrefabBatch(IEnumerable<PrefabBatchItem> batchItems)
+        private static InjectionResults RunPrefabBatch(
+            IEnumerable<PrefabBatchItem> batchItems,
+            InjectionProgressTracker progressTracker)
         {
+            batchItems = batchItems.ToArray();
             InjectionResults combinedResults = new();
+
+            if (batchItems.Any())
+                Logger.LogBatchInjectHeader(batchItems);
 
             foreach (PrefabBatchItem item in batchItems)
             {
+                Transform prefabRoot = AssetDatabase
+                    .LoadAssetAtPath<GameObject>(item.Path)
+                    .transform
+                    .root;
+
+                progressTracker.SetTitle($"Batch injecting prefab: {prefabRoot.name}");
+
                 Transform[] startObjects =
                 {
-                    AssetDatabase
-                        .LoadAssetAtPath<GameObject>(item.Path)
-                        .transform
-                        .root
+                    prefabRoot
                 };
 
-                InjectionResults results = RunContext(startObjects, ContextWalkFilter.PrefabAssets);
-                combinedResults.AddToResults(results);
+                using (new Logger.BatchInjectionScope(item))
+                {
+                    InjectionResults results = RunContext
+                    (
+                        startObjects,
+                        ContextWalkFilter.PrefabAssets,
+                        progressTracker
+                    );
+
+                    combinedResults.AddToResults(results);
+                }
             }
 
             AssetDatabase.SaveAssets();
@@ -136,8 +194,11 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
         private static InjectionResults RunContext(
             IEnumerable<Object> startObjects,
-            ContextWalkFilter contextWalkFilter)
+            ContextWalkFilter contextWalkFilter,
+            InjectionProgressTracker progressTracker)
         {
+            Stopwatch stopwatch = Stopwatch.StartNew();
+
             Transform[] startTransforms = startObjects switch
             {
                 Transform[] t => t,
@@ -147,14 +208,54 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 _ => throw new Exception("Unsupported start object type.")
             };
 
+            progressTracker.BeginSegment(stepCount: 1);
+            progressTracker.UpdateInfoText("Building injection graph");
             InjectionGraph injectionGraph = new(startTransforms);
-            IReadOnlyCollection<TransformNode> activeTransformNodes = GraphFilter.ApplyWalkFilter(injectionGraph, startTransforms, contextWalkFilter);
-            InjectionContext context = new(activeTransformNodes);
-            BindingValidator.ValidateBindings(context);
-            Resolver.Resolve(context);
-            Injector.InjectDependencies(context);
+            progressTracker.NextStep();
+
+            IReadOnlyCollection<TransformNode> activeTransformNodes = GraphFilter.ApplyWalkFilter
+            (
+                injectionGraph,
+                startTransforms,
+                contextWalkFilter,
+                progressTracker
+            );
+
+            InjectionContext context = new
+            (
+                activeTransformNodes,
+                progressTracker
+            );
+
+            BindingValidator.ValidateBindings
+            (
+                context,
+                progressTracker
+            );
+
+            Resolver.Resolve
+            (
+                context,
+                progressTracker
+            );
+
+            Injector.InjectDependencies
+            (
+                context,
+                progressTracker
+            );
+
             InjectionResults results = context.GetResults();
+            stopwatch.Stop();
             Logger.LogResults(results);
+
+            Logger.LogSummary
+            (
+                prefix: "Injection complete",
+                results,
+                stopwatch.ElapsedMilliseconds
+            );
+
             /*InjectionContextJsonProjector.SaveToDisk(context, injectionGraph);*/ // TODO: Make batch friendly
             return results;
         }

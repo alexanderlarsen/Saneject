@@ -11,16 +11,26 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
     public static class Injector
     {
-        public static void InjectDependencies(InjectionContext context)
+        public static void InjectDependencies(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
         {
-            InjectScopeGlobals(context);
-            InjectFieldsAndMethods(context);
+            InjectScopeGlobals(context, progressTracker);
+            InjectFields(context, progressTracker);
+            InjectMethods(context, progressTracker);
+            SetComponentsDirty(context);
         }
 
-        private static void InjectScopeGlobals(InjectionContext context)
+        private static void InjectScopeGlobals(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
         {
+            progressTracker.BeginSegment(stepCount: context.ActiveScopeNodes.Count);
+
             foreach (ScopeNode scopeNode in context.ActiveScopeNodes)
             {
+                progressTracker.UpdateInfoText($"Injecting global dependency: {scopeNode.ScopeType.Name}");
+
                 IEnumerable<Component> globalObjects = context
                     .ScopeNodeGlobalResolutionMap
                     .TryGetValue(scopeNode, out IReadOnlyList<object> objects)
@@ -29,36 +39,71 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
                 scopeNode.Scope.UpdateGlobalComponents(globalObjects);
                 EditorUtility.SetDirty(scopeNode.Scope);
+                progressTracker.NextStep();
             }
         }
 
-        private static void InjectFieldsAndMethods(InjectionContext context)
+        private static void InjectFields(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
+        {
+            List<FieldNode> fieldNodes = context
+                .ActiveComponentNodes
+                .SelectMany(componentNode => componentNode.FieldNodes)
+                .ToList();
+
+            progressTracker.BeginSegment(stepCount: fieldNodes.Count);
+
+            foreach (FieldNode fieldNode in fieldNodes)
+            {
+                progressTracker.UpdateInfoText($"Injecting field: {fieldNode.ShortPath}");
+
+                fieldNode.FieldInfo.SetValue
+                (
+                    fieldNode.Owner,
+                    context.FieldNodeResolutionMap[fieldNode]
+                );
+
+                progressTracker.NextStep();
+            }
+        }
+
+        private static void InjectMethods(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
+        {
+            List<MethodNode> methodNodes = context
+                .ActiveComponentNodes
+                .SelectMany(componentNode => componentNode.MethodNodes)
+                .ToList();
+
+            progressTracker.BeginSegment(stepCount: methodNodes.Count);
+
+            foreach (MethodNode methodNode in methodNodes)
+            {
+                progressTracker.UpdateInfoText($"Injecting method: {methodNode.ShortPath}");
+
+                try
+                {
+                    methodNode.MethodInfo.Invoke
+                    (
+                        methodNode.Owner,
+                        context.MethodNodeResolutionMap[methodNode].ToArray()
+                    );
+                }
+                catch (Exception e)
+                {
+                    context.RegisterError(Error.CreateMethodInvocationException(methodNode, e));
+                }
+
+                progressTracker.NextStep();
+            }
+        }
+
+        private static void SetComponentsDirty(InjectionContext context)
         {
             foreach (ComponentNode componentNode in context.ActiveComponentNodes)
-            {
-                foreach (FieldNode fieldNode in componentNode.FieldNodes)
-                    fieldNode.FieldInfo.SetValue
-                    (
-                        fieldNode.Owner,
-                        context.FieldNodeResolutionMap[fieldNode]
-                    );
-
-                foreach (MethodNode methodNode in componentNode.MethodNodes)
-                    try
-                    {
-                        methodNode.MethodInfo.Invoke
-                        (
-                            methodNode.Owner,
-                            context.MethodNodeResolutionMap[methodNode].ToArray()
-                        );
-                    }
-                    catch (Exception e)
-                    {
-                        context.RegisterError(Error.CreateMethodInvocationException(methodNode, e));
-                    }
-
                 EditorUtility.SetDirty(componentNode.Component);
-            }
         }
     }
 }

@@ -82,6 +82,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                         break;
                     }
 
+                    if (!componentBinding.LocatorStrategySpecified)
+                        break;
+                    
                     sb.Append(componentBinding.SearchOrigin switch
                     {
                         SearchOrigin.Scope => ".From",
@@ -108,6 +111,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
                 case AssetBindingNode assetBinding:
                 {
+                    if (!assetBinding.LocatorStrategySpecified)
+                        break;
+                    
                     sb.Append(assetBinding.AssetLoadType switch
                     {
                         AssetLoadType.Resources => $".FromResources(\"{assetBinding.Path}\")",

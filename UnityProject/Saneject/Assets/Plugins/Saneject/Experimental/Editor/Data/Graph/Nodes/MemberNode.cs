@@ -22,6 +22,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
             InjectId = injectAttribute.ID;
             SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
             DisplayPath = this.GetDisplayPath(pathFromComponent);
+            ShortPath = $"{owner.GetType().Name}.{memberInfo.Name.StripPropertyBackingFieldSyntax()}";
         }
 
         public object Owner { get; }
@@ -31,5 +32,6 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
         public string InjectId { get; }
         public bool SuppressMissingErrors { get; }
         public string DisplayPath { get; }
+        public string ShortPath { get; }
     }
 }

@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Data.Injection;
 using Plugins.Saneject.Experimental.Editor.Data.Logging;
@@ -15,6 +16,8 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
     public static class Logger
     {
+        private const string BatchInjectHeaderLine = "────────────";
+
         public static void TryClearLog()
         {
             if (!UserSettings.ClearLogsOnInjection)
@@ -28,37 +31,6 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             LogErrors(results);
             LogUnusedBindings(results);
             LogCreatedProxyAssets(results);
-        }
-
-        public static void LogBatchSummary(
-            int sceneBatchItemsCount,
-            int prefabBatchItemsCount,
-            InjectionResults sceneResults,
-            InjectionResults prefabResults,
-            long sceneElapsedMilliseconds,
-            long prefabElapsedMilliseconds)
-        {
-            if (sceneBatchItemsCount + prefabBatchItemsCount == 0)
-            {
-                LogNoScopesFound("Batch injection complete");
-                return;
-            }
-
-            if (sceneBatchItemsCount > 0)
-                LogSummary
-                (
-                    "Scene batch injection complete",
-                    sceneResults,
-                    sceneElapsedMilliseconds
-                );
-
-            if (prefabBatchItemsCount > 0)
-                LogSummary
-                (
-                    "Prefab batch injection complete",
-                    prefabResults,
-                    prefabElapsedMilliseconds
-                );
         }
 
         public static void LogSummary(
@@ -128,6 +100,51 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             Debug.Log("Saneject: Injection cancelled by user.");
         }
 
+        public static void LogBatchInjectHeader(IEnumerable<SceneBatchItem> batchItems)
+        {
+            int count = batchItems.Count();
+            Debug.Log($"<b>{BatchInjectHeaderLine}  Saneject: Scene batch injection ({count} {(count == 1 ? "scene" : "scenes")})  {BatchInjectHeaderLine}</b>");
+        }
+
+        public static void LogBatchInjectHeader(IEnumerable<PrefabBatchItem> batchItems)
+        {
+            int count = batchItems.Count();
+            Debug.Log($"<b>{BatchInjectHeaderLine}  Saneject: Prefab batch injection ({count} {(count == 1 ? "prefab" : "prefabs")})  {BatchInjectHeaderLine}</b>");
+        }
+
+        public static void LogBatchSummary(
+            int sceneBatchItemsCount,
+            int prefabBatchItemsCount,
+            InjectionResults sceneResults,
+            InjectionResults prefabResults,
+            long sceneElapsedMilliseconds,
+            long prefabElapsedMilliseconds)
+        {
+            if (sceneBatchItemsCount + prefabBatchItemsCount == 0)
+            {
+                LogNoScopesFound("Batch injection complete");
+                return;
+            }
+
+            Debug.Log($"<b>{BatchInjectHeaderLine}  Saneject: Batch injection summary  {BatchInjectHeaderLine}</b>");
+
+            if (sceneBatchItemsCount > 0)
+                LogSummary
+                (
+                    "Scene batch injection complete",
+                    sceneResults,
+                    sceneElapsedMilliseconds
+                );
+
+            if (prefabBatchItemsCount > 0)
+                LogSummary
+                (
+                    "Prefab batch injection complete",
+                    prefabResults,
+                    prefabElapsedMilliseconds
+                );
+        }
+
         private static void LogErrors(InjectionResults results)
         {
             IEnumerable<Error> errors = results
@@ -192,6 +209,50 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
         {
             foreach ((string path, Object instance) asset in results.CreatedProxyAssets)
                 Debug.Log($"Saneject: Created proxy asset at '{asset.path}'.", asset.instance);
+        }
+
+        public readonly struct BatchInjectionScope : IDisposable
+        {
+            private static readonly string[] LogColors =
+            {
+                "#E57373", // soft red
+                "#81C784", // soft green
+                "#64B5F6", // soft blue
+                "#FFD54F", // soft amber/yellow
+                "#BA68C8", // soft magenta
+                "#4DD0E1" // soft cyan
+            };
+
+            private static int logColorIndex;
+
+            private readonly string contents;
+            private readonly string color;
+
+            public BatchInjectionScope(SceneBatchItem batchItem)
+            {
+                color = PickColor();
+                contents = $"scene injection: {batchItem.Path}";
+                Debug.Log($"<color={color}>↓↓↓ Start {contents} ↓↓↓</color>");
+            }
+
+            public BatchInjectionScope(PrefabBatchItem batchItem)
+            {
+                color = PickColor();
+                contents = $"prefab injection: {batchItem.Path}";
+                Debug.Log($"<color={color}>↓↓↓ Start {contents} ↓↓↓</color>");
+            }
+
+            public void Dispose()
+            {
+                Debug.Log($"<color={color}>↑↑↑ End {contents} ↑↑↑</color>");
+            }
+
+            private static string PickColor()
+            {
+                int index = logColorIndex;
+                logColorIndex = (logColorIndex + 1) % LogColors.Length;
+                return LogColors[index];
+            }
         }
     }
 }

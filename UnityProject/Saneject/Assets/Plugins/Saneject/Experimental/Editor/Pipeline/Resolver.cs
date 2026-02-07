@@ -12,30 +12,31 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
     public static class Resolver
     {
-        public static void Resolve(InjectionContext context)
+        public static void Resolve(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
         {
-            ResolveGlobals(context);
-
-            foreach (ComponentNode componentNode in context.ActiveComponentNodes)
-            {
-                foreach (FieldNode fieldNode in componentNode.FieldNodes)
-                    ResolveField(fieldNode, context);
-
-                foreach (MethodNode methodNode in componentNode.MethodNodes)
-                    ResolveMethod(methodNode, context);
-            }
+            ResolveGlobals(context, progressTracker);
+            ResolveFields(context, progressTracker);
+            ResolveMethods(context, progressTracker);
         }
 
-        private static void ResolveGlobals(InjectionContext context)
+        private static void ResolveGlobals(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
         {
-            IEnumerable<GlobalComponentBindingNode> globalBindings = context
+            List<GlobalComponentBindingNode> globalBindings = context
                 .ValidBindingNodes
-                .OfType<GlobalComponentBindingNode>();
+                .OfType<GlobalComponentBindingNode>()
+                .ToList();
 
+            progressTracker.BeginSegment(stepCount: globalBindings.Count);
             Dictionary<ScopeNode, HashSet<object>> globalMap = new();
 
             foreach (GlobalComponentBindingNode binding in globalBindings)
             {
+                progressTracker.UpdateInfoText($"Resolving global dependency: {binding.ScopeNode.ScopeType.Name}.{binding.ConcreteType}");
+
                 Locator.LocateDependencyCandidates
                 (
                     context,
@@ -61,10 +62,49 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 object resolved = candidates.FirstOrDefault();
                 dependencySet.Add(resolved);
                 context.RegisterUsedBinding(binding);
+                progressTracker.NextStep();
             }
 
             foreach ((ScopeNode scopeNode, HashSet<object> dependencies) in globalMap)
                 context.RegisterGlobalDependencies(scopeNode, dependencies);
+        }
+
+        private static void ResolveFields(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
+        {
+            List<FieldNode> fieldNodes = context
+                .ActiveComponentNodes
+                .SelectMany(componentNode => componentNode.FieldNodes)
+                .ToList();
+
+            progressTracker.BeginSegment(stepCount: fieldNodes.Count);
+
+            foreach (FieldNode fieldNode in fieldNodes)
+            {
+                progressTracker.UpdateInfoText($"Resolving field: {fieldNode.ShortPath}");
+                ResolveField(fieldNode, context);
+                progressTracker.NextStep();
+            }
+        }
+
+        private static void ResolveMethods(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
+        {
+            List<MethodNode> methodNodes = context
+                .ActiveComponentNodes
+                .SelectMany(componentNode => componentNode.MethodNodes)
+                .ToList();
+
+            progressTracker.BeginSegment(stepCount: methodNodes.Count);
+
+            foreach (MethodNode methodNode in methodNodes)
+            {
+                progressTracker.UpdateInfoText($"Resolving method: {methodNode.ShortPath}");
+                ResolveMethod(methodNode, context);
+                progressTracker.NextStep();
+            }
         }
 
         private static void ResolveField(

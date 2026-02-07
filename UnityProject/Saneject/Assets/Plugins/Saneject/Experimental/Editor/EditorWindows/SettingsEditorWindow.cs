@@ -145,7 +145,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             DrawToggle
             (
                 label: "Generate Scope Namespace From Folder",
-                tooltip: "When enabled, a new Scope created via 'Assets/Create/Saneject/Scope' gets a namespace matching its folder path (relative to Assets). When disabled, the Scope is created without a namespace.",
+                tooltip: "When enabled, a new Scope created via 'Assets/Saneject/Create New Scope' gets a namespace matching its folder path (relative to Assets). When disabled, the Scope is created without a namespace.",
                 currentValue: UserSettings.GenerateScopeNamespaceFromFolder,
                 onChanged: newValue => UserSettings.GenerateScopeNamespaceFromFolder = newValue
             );

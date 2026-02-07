@@ -76,7 +76,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             );
         }
 
-
         private void DrawContext()
         {
             EditorGUILayout.LabelField

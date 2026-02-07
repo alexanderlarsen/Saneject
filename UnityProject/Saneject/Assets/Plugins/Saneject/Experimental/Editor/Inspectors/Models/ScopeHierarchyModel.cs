@@ -32,7 +32,6 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.Models
         public bool IsCurrent { get; }
         public ContextIdentity ContextIdentity { get; }
         public bool IsSameContext { get; }
-
         public IReadOnlyList<ScopeHierarchyModel> Children { get; }
 
         private static IEnumerable<ScopeHierarchyModel> EnumerateScopes(

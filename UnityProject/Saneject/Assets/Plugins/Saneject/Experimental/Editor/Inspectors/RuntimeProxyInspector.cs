@@ -93,8 +93,8 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             {
                 EditorGUILayout.BeginVertical();
 
-                foreach (Type @interface in interfaces)
-                    GUILayout.Label(@interface.Name, EditorStyles.label);
+                foreach (Type iface in interfaces)
+                    GUILayout.Label(iface.Name, EditorStyles.label);
 
                 EditorGUILayout.EndVertical();
             }

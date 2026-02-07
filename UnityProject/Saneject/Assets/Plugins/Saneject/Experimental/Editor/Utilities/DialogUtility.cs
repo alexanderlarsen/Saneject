@@ -161,7 +161,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 messageBuilder.Append(".");
                 messageBuilder.AppendLine();
                 messageBuilder.AppendLine();
-                messageBuilder.AppendLine("A batch injection operation will be performed on all selected assets that contain at least one scope.");
+                messageBuilder.AppendLine("A batch injection operation will be performed on all selected assets and sub-assets that contain one or more scopes.");
                 messageBuilder.AppendLine();
                 messageBuilder.Append("Do you want to continue?");
 

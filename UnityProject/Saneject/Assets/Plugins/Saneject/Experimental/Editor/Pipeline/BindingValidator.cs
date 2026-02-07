@@ -3,19 +3,28 @@ using System.Collections.Generic;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Data.Injection;
 using Plugins.Saneject.Experimental.Editor.Data.Logging;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
     public static class BindingValidator
     {
-        public static void ValidateBindings(InjectionContext context)
+        public static void ValidateBindings(
+            InjectionContext context,
+            InjectionProgressTracker progressTracker)
         {
+            progressTracker.BeginSegment(stepCount: context.ActiveBindingNodes.Count);
+
             Dictionary<Type, GlobalComponentBindingNode> existingGlobalMap = new();
             HashSet<BindingNode> existingBindings = new();
 
             foreach (BindingNode binding in context.ActiveBindingNodes)
+            {
+                progressTracker.UpdateInfoText($"Validating binding: {SignatureUtility.GetBindingSignature(binding)}");
                 ValidateBinding(binding, context, existingGlobalMap, existingBindings);
+                progressTracker.NextStep();
+            }
         }
 
         private static void ValidateBinding(
@@ -33,15 +42,6 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             {
                 case GlobalComponentBindingNode globalBinding:
                 {
-                    if (globalBinding.ResolveFromRuntimeProxy)
-                        errors.Add(Error.CreateInvalidBindingError("A binding cannot be both Proxy and Global. Proxies consume globals; they are not globals themselves.", binding));
-
-                    if (globalBinding.IsCollectionBinding)
-                        errors.Add(Error.CreateInvalidBindingError("Global bindings must be singletons. Collections are not supported in the GlobalScope.", binding));
-
-                    if (globalBinding.IdQualifiers.Count > 0)
-                        errors.Add(Error.CreateInvalidBindingError("Global bindings cannot have IDs. The GlobalScope always resolves by type only.", binding));
-
                     if (existingGlobals.TryGetValue(globalBinding.ConcreteType, out GlobalComponentBindingNode existingGlobal))
                         errors.Add(Error.CreateInvalidBindingError($"Duplicate global binding '{globalBinding.ConcreteType.Name}' declared by '{globalBinding.ScopeNode.ScopeType.Name}'. Already owned by '{existingGlobal.ScopeNode.ScopeType.Name}'. Only one global per type is allowed.", binding));
                     else
@@ -88,7 +88,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 errors.Add(Error.CreateInvalidBindingError($"Concrete type '{binding.ConcreteType.Name}' does not implement interface '{binding.InterfaceType.Name}'.", binding));
 
             if (!binding.LocatorStrategySpecified)
-                errors.Add(Error.CreateInvalidBindingError("Binding has no locator strategy (e.g. FromScopeSelf, FromAnywhereInScene).", binding));
+                errors.Add(Error.CreateInvalidBindingError("Binding has no locator strategy (e.g. FromScopeSelf, FromAnywhere).", binding));
 
             context.RegisterErrors(errors);
 

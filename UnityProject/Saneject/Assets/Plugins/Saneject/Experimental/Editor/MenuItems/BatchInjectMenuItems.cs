@@ -9,15 +9,21 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
     public class BatchInjectMenuItems
     {
+        #region Priority constants
+
+        private const int Priority_Base = MenuPriority.Root + MenuPriority.Section * 1 + 2;
+
+        private const int Priority_Group_SelectedAssets = Priority_Base + MenuPriority.Group * 0;
+        private const int Priority_Item_Inject_SelectedAssets_BatchInjection = Priority_Group_SelectedAssets + 1;
+
+        #endregion
+        
         #region Menu item methods
 
         [MenuItem("Assets/Saneject/Batch Inject/Selected Assets", false, Priority_Item_Inject_SelectedAssets_BatchInjection),
          MenuItem("Saneject/Batch Inject/Selected Assets", false, Priority_Item_Inject_SelectedAssets_BatchInjection)]
         private static void BatchInject_SelectedAssets(MenuCommand cmd)
         {
-            if (!MenuCommandUtility.IsFirstInvocation(cmd))
-                return;
-
             InjectionUtility.BatchInject.SelectedAssets();
         }
 
@@ -33,15 +39,6 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                 .GetFiltered<Object>(SelectionMode.DeepAssets)
                 .Any(x => x is GameObject or SceneAsset);
         }
-
-        #endregion
-
-        #region Priority constants
-
-        private const int Priority_Base = MenuPriority.Root + MenuPriority.Section * 1 + 2;
-
-        private const int Priority_Group_SelectedAssets = Priority_Base + MenuPriority.Group * 0;
-        private const int Priority_Item_Inject_SelectedAssets_BatchInjection = Priority_Group_SelectedAssets + 1;
 
         #endregion
     }

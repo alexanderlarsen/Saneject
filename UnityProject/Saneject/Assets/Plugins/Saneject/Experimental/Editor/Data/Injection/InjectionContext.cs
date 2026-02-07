@@ -20,21 +20,37 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
         private readonly List<Error> errors = new();
 
-        public InjectionContext(IReadOnlyCollection<TransformNode> activeTransformNodes)
+        public InjectionContext(
+            IReadOnlyCollection<TransformNode> activeTransformNodes,
+            InjectionProgressTracker progressTracker)
         {
+            progressTracker.BeginSegment(stepCount: 4);
+            progressTracker.UpdateInfoText("Creating injection context: Finding transforms");
+
             ActiveTransformNodes = activeTransformNodes;
+
+            progressTracker.NextStep();
+            progressTracker.UpdateInfoText("Creating injection context: Filtering transforms");
 
             ActiveComponentNodes = ActiveTransformNodes
                 .EnumerateAllComponentNodes()
                 .ToList();
 
+            progressTracker.NextStep();
+            progressTracker.UpdateInfoText("Creating injection context: Filtering scopes");
+
             ActiveScopeNodes = ActiveTransformNodes
                 .EnumerateAllScopeNodes()
                 .ToList();
 
+            progressTracker.NextStep();
+            progressTracker.UpdateInfoText("Creating injection context: Filtering bindings");
+
             ActiveBindingNodes = ActiveScopeNodes
                 .EnumerateAllBindingNodes()
                 .ToList();
+
+            progressTracker.NextStep();
         }
 
         public IReadOnlyCollection<TransformNode> ActiveTransformNodes { get; }
