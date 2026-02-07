@@ -166,7 +166,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                     Color textColor = style.normal.textColor;
 
                     textColor.a =
-                        !UserSettings.UseContextIsolation || model.IsSameContext
+                        !ProjectSettings.UseContextIsolation || model.IsSameContext
                             ? 1
                             : 0.5f;
 

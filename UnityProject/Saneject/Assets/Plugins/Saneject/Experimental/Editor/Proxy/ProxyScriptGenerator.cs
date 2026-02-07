@@ -18,7 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
     {
         static ProxyScriptGenerator()
         {
-            if (!UserSettings.GenerateProxyScriptsOnDomainReload)
+            if (!ProjectSettings.GenerateProxyScriptsOnDomainReload)
                 return;
 
             HashSet<Type> missing = EnumerateMissingTypes().ToHashSet();
@@ -82,9 +82,9 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
         {
             foreach (Type type in types)
             {
-                Directory.CreateDirectory(UserSettings.ProxyAssetGenerationFolder);
+                Directory.CreateDirectory(ProjectSettings.ProxyAssetGenerationFolder);
                 string className = $"{type.Name}RuntimeProxy";
-                string proxyScriptPath = $"{UserSettings.ProxyAssetGenerationFolder}/{className}.cs";
+                string proxyScriptPath = $"{ProjectSettings.ProxyAssetGenerationFolder}/{className}.cs";
                 File.WriteAllText(proxyScriptPath, GetScriptCode(className, type.FullName));
                 AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
             }

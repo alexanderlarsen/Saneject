@@ -39,7 +39,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             {
                 ContextIdentity candidateContext = new(candidate);
 
-                if (!UserSettings.UseContextIsolation || candidateContext.Type == ContextType.Global || candidateContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
+                if (!ProjectSettings.UseContextIsolation || candidateContext.Type == ContextType.Global || candidateContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
                     validCandidates.Add(candidate);
                 else
                     rejectedTypes.Add(candidate.GetType());
@@ -58,7 +58,10 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 Object proxyAsset = ProxyAssetResolver.Resolve(bindingNode.ConcreteType, context);
 
                 return proxyAsset != null
-                    ? new[] { proxyAsset }
+                    ? new[]
+                    {
+                        proxyAsset
+                    }
                     : Enumerable.Empty<Object>();
             }
 
@@ -167,7 +170,10 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                         .Where(asset => asset.GetType() == targetType),
 
                 AssetLoadType.Folder =>
-                    AssetDatabase.FindAssets($"t:{targetType.Name}", new[] { path })
+                    AssetDatabase.FindAssets($"t:{targetType.Name}", new[]
+                        {
+                            path
+                        })
                         .Select(AssetDatabase.GUIDToAssetPath)
                         .Select(assetPath => AssetDatabase.LoadAssetAtPath(assetPath, targetType))
                         .Where(obj => obj != null),
@@ -193,7 +199,10 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
         private static IEnumerable<T> ToEnumerable<T>(this T item)
         {
             return item != null
-                ? new[] { item }
+                ? new[]
+                {
+                    item
+                }
                 : Enumerable.Empty<T>();
         }
     }

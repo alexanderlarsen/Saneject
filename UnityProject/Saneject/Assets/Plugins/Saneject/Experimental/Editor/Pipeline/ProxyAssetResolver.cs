@@ -47,7 +47,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             Type proxyType,
             InjectionContext context)
         {
-            string directory = UserSettings.ProxyAssetGenerationFolder;
+            string directory = ProjectSettings.ProxyAssetGenerationFolder;
             string path = $"{directory}/{proxyType.Name}.asset";
 
             Directory.CreateDirectory(directory);

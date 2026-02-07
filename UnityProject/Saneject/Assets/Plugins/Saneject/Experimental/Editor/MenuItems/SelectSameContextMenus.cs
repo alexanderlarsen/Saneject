@@ -37,7 +37,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                 .FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
                 .Where(x => x.scene.IsValid());
 
-            if (!UserSettings.UseContextIsolation)
+            if (!ProjectSettings.UseContextIsolation)
             {
                 Selection.objects = validGameObjects.ToArray<Object>();
                 SceneHierarchyUtility.Expand(Selection.objects);
@@ -75,7 +75,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                 .Select(x => x.transform.root)
                 .ToHashSet();
 
-            if (!UserSettings.UseContextIsolation)
+            if (!ProjectSettings.UseContextIsolation)
             {
                 Selection.objects = roots
                     .SelectMany(x => x.GetComponentsInChildren<Transform>())

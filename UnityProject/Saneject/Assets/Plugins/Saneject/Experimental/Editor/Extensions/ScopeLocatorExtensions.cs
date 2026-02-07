@@ -14,7 +14,7 @@ namespace Plugins.Saneject.Experimental.Editor.Extensions
                 ScopeNode scope = current.DeclaredScopeNode;
 
                 if (scope != null &&
-                    (!UserSettings.UseContextIsolation ||
+                    (!ProjectSettings.UseContextIsolation ||
                      current.ContextIdentity.Equals(start.ContextIdentity)))
                     return scope;
 

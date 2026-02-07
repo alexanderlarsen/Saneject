@@ -120,7 +120,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     message = "Are you sure you want to inject the selected hierarchy filtered by the same object contexts as the selected object?";
                 else
                     message = $"Are you sure you want to inject the selected hierarchy filtered by {walkFilterString}?";
-                
+
                 return EditorUtility.DisplayDialog
                 (
                     title:
@@ -184,7 +184,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     title: "Saneject: Runtime Proxy Generation",
                     message: $"{proxyCount} of your FromRuntimeProxy() bindings {(proxyCount == 1 ? "needs a proxy script" : "need proxy scripts")}.\n\n" +
                              $"{(proxyCount == 1 ? "It" : "They")} will be generated during this domain reload and saved to:\n\n" +
-                             $"{UserSettings.ProxyAssetGenerationFolder}\n\n" +
+                             $"{ProjectSettings.ProxyAssetGenerationFolder}\n\n" +
                              "You can disable automatic proxy generation in the Saneject settings and run it manually from the Saneject menu instead.",
                     ok: "Got it"
                 );
@@ -203,12 +203,24 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         public static class Settings
         {
-            public static bool Confirm_UseDefaultSettings()
+            public static bool Confirm_UseDefaultUserSettings()
             {
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Use Default Settings",
-                    message: "Are you sure you want to reset the Saneject settings to their default values?",
+                    title: "Saneject: Use Default User Settings",
+                    message: "Are you sure you want to reset the Saneject user settings to their default values?",
+                    ok: "Reset",
+                    cancel: "Cancel"
+                );
+            }
+
+            public static bool Confirm_UseDefaultProjectSettings()
+            {
+                return EditorUtility.DisplayDialog
+                (
+                    title: "Saneject: Use Default Project Settings",
+                    message: "Are you sure you want to reset the Saneject project settings to their default values?\n\n" +
+                             "Warning: These settings are project-wide and affect all users of this project.",
                     ok: "Reset",
                     cancel: "Cancel"
                 );

@@ -27,47 +27,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         #endregion
 
-        #region Context Isolation
-
-        public static bool UseContextIsolation
-        {
-            get => GetBool(defaultValue: false);
-            set => SetBool(value);
-        }
-
-        #endregion
-
-        #region Scope File Generation
-
-        public static bool GenerateScopeNamespaceFromFolder
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        #endregion
-
-        #region Methods
-
-        public static void UseDefaultSettings()
-        {
-#if UNITY_EDITOR
-            string[] prefsKeys = typeof(UserSettings)
-                .GetProperties(BindingFlags.Public | BindingFlags.Static)
-                .Where(prop => prop.CanWrite)
-                .Select(prop => $"{SettingsPrefix}{prop.Name}")
-                .Where(EditorPrefs.HasKey)
-                .ToArray();
-
-            foreach (string key in prefsKeys)
-                EditorPrefs.DeleteKey(key);
-
-            Debug.Log("Saneject: All settings were reset to default values.");
-#endif
-        }
-
-        #endregion
-
         #region Ask Before Injection
 
         public static bool AskBefore_Inject_CurrentScene_Or_CurrentPrefab
@@ -96,7 +55,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
-        } 
+        }
 
         public static bool ShowHelpBoxes
         {
@@ -144,18 +103,23 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         #endregion
 
-        #region Proxy Generation
+        #region Methods
 
-        public static bool GenerateProxyScriptsOnDomainReload
+        public static void UseDefaultSettings()
         {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+#if UNITY_EDITOR
+            string[] prefsKeys = typeof(UserSettings)
+                .GetProperties(BindingFlags.Public | BindingFlags.Static)
+                .Where(prop => prop.CanWrite)
+                .Select(prop => $"{SettingsPrefix}{prop.Name}")
+                .Where(EditorPrefs.HasKey)
+                .ToArray();
 
-        public static string ProxyAssetGenerationFolder
-        {
-            get => GetString(defaultValue: "Assets/SanejectGenerated/RuntimeProxy");
-            set => SetString(value);
+            foreach (string key in prefsKeys)
+                EditorPrefs.DeleteKey(key);
+
+            Debug.Log("Saneject: All user settings were reset to default values.");
+#endif
         }
 
         #endregion
@@ -179,6 +143,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
+            if (Application.isPlaying)
+            {
+                Debug.LogWarning("Saneject: User settings can only be modified in edit mode.");
+                return;
+            }
+
             string key = $"{SettingsPrefix}{propertyName}";
             EditorPrefs.SetString(key, value);
 #endif
@@ -201,6 +171,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
+            if (Application.isPlaying)
+            {
+                Debug.LogWarning("Saneject: User settings can only be modified in edit mode.");
+                return;
+            }
+
             string key = $"{SettingsPrefix}{propertyName}";
             EditorPrefs.SetBool(key, value);
 #endif

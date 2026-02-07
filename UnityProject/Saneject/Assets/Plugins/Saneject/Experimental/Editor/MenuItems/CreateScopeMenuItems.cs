@@ -42,7 +42,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
             string className = Path.GetFileNameWithoutExtension(filePath);
 
             // Derive namespace if enabled
-            string namespaceLine = UserSettings.GenerateScopeNamespaceFromFolder
+            string namespaceLine = ProjectSettings.GenerateScopeNamespaceFromFolder
                 ? GetNamespaceFromPath(Path.GetDirectoryName(filePath))
                 : string.Empty;
 
@@ -115,7 +115,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         {
             if (string.IsNullOrEmpty(namespaceLine))
                 return
-$@"using Plugins.Saneject.Experimental.Runtime.Scopes;
+                    $@"using Plugins.Saneject.Experimental.Runtime.Scopes;
 
 public class {className} : Scope
 {{
@@ -125,7 +125,7 @@ public class {className} : Scope
 }}";
 
             return
-$@"using Plugins.Saneject.Experimental.Runtime.Scopes;
+                $@"using Plugins.Saneject.Experimental.Runtime.Scopes;
 
 {namespaceLine}
 {{

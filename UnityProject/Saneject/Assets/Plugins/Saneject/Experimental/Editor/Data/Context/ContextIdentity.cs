@@ -29,7 +29,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Context
             sb.Append(" (");
 
             sb.Append(
-                UserSettings.UseContextIsolation
+                ProjectSettings.UseContextIsolation
                     ? $"ID: {Id}"
                     : "Context Isolation Off"
             );
