@@ -97,6 +97,8 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
             string className,
             string typeFullName)
         {
+            typeFullName = typeFullName.Replace("+", ".");
+            
             return $@"
 namespace Plugins.Saneject.Generated.Proxies
 {{
