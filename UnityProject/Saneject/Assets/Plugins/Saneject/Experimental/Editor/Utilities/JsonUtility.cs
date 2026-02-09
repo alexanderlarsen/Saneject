@@ -193,7 +193,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             binding[nameof(ComponentBindingNode.CustomTargetTransform)] = node.CustomTargetTransform?.name;
             binding[nameof(ComponentBindingNode.IncludeSelfInSearch)] = node.IncludeSelfInSearch;
             binding[nameof(ComponentBindingNode.ChildIndexForSearch)] = node.ChildIndexForSearch;
-            binding[nameof(ComponentBindingNode.ResolveFromRuntimeProxy)] = node.ResolveFromRuntimeProxy;
+            binding[nameof(ComponentBindingNode.RuntimeProxyConfig)] = node.RuntimeProxyConfig != null;
             return binding;
         }
 

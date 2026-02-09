@@ -53,9 +53,14 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             ComponentBindingNode bindingNode,
             TransformNode injectionTargetNode)
         {
-            if (bindingNode.ResolveFromRuntimeProxy)
+            if (bindingNode.RuntimeProxyConfig != null)
             {
-                Object proxyAsset = ProxyAssetResolver.Resolve(bindingNode.ConcreteType, context);
+                Object proxyAsset = ProxyAssetResolver.Resolve
+                (
+                    bindingNode.ConcreteType,
+                    bindingNode.RuntimeProxyConfig,
+                    context
+                );
 
                 return proxyAsset != null
                     ? new[]

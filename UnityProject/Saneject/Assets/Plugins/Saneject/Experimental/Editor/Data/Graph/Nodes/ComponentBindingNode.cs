@@ -17,7 +17,8 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
             CustomTargetTransform = binding.CustomTargetTransform;
             IncludeSelfInSearch = binding.IncludeSelfInSearch;
             ChildIndexForSearch = binding.ChildIndexForSearch;
-            ResolveFromRuntimeProxy = binding.ResolveFromRuntimeProxy;
+
+            RuntimeProxyConfig = binding.RuntimeProxyConfig?.Clone();
         }
 
         public SearchOrigin SearchOrigin { get; }
@@ -28,6 +29,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
         public Transform CustomTargetTransform { get; }
         public bool IncludeSelfInSearch { get; }
         public int ChildIndexForSearch { get; }
-        public bool ResolveFromRuntimeProxy { get; }
+
+        public RuntimeProxyConfig RuntimeProxyConfig { get; }
     }
 }

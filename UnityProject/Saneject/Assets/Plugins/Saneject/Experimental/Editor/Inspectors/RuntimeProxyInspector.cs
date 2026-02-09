@@ -29,7 +29,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                     wide: true
                 );
 
-            EditorGUI.BeginDisabledGroup(Application.isPlaying);
+            EditorGUI.BeginDisabledGroup(true);
 
             serializedObject.Update();
 
@@ -71,8 +71,8 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                 );
 
             serializedObject.ApplyModifiedProperties();
-            EditorGUI.EndDisabledGroup();
             DrawInterfaceListAligned(target.GetType());
+            EditorGUI.EndDisabledGroup();
         }
 
         private void DrawInterfaceListAligned(Type proxyType)

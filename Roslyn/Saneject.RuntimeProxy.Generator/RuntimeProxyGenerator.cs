@@ -76,7 +76,6 @@ public class RuntimeProxyGenerator : ISourceGenerator
                 sb.AppendLine("{");
             }
 
-            sb.AppendLine($"    [CreateAssetMenu(fileName = \"{classSymbol.Name}\", menuName = \"Saneject Runtime Proxy/{classSymbol.Name}\")]");
             sb.AppendLine($"    public partial class {classSymbol.Name} : {string.Join(", ", allInterfaces.Select(i => i.ToDisplayString()))}");
             sb.AppendLine("    {");
 

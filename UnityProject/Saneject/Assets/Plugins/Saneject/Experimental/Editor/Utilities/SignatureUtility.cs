@@ -5,6 +5,7 @@ using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Experimental.Runtime.Proxy;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -52,9 +53,20 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             {
                 case ComponentBindingNode componentBinding:
                 {
-                    if (componentBinding.ResolveFromRuntimeProxy)
+                    if (componentBinding.RuntimeProxyConfig != null)
                     {
-                        sb.Append(".FromProxy()");
+                        sb.Append(".FromRuntimeProxy()");
+
+                        sb.Append(componentBinding.RuntimeProxyConfig.ResolveMethod switch
+                        {
+                            ProxyResolveMethod.FromGlobalScope => ".FromGlobalScope()",
+                            ProxyResolveMethod.FromAnywhereInLoadedScenes => ".FromAnywhereInLoadedScenes()",
+                            ProxyResolveMethod.FromComponentOnPrefab => ".FromComponentOnPrefab()",
+                            ProxyResolveMethod.FromNewComponentOnNewGameObject => ".FromNewComponentOnNewGameObject()",
+                            ProxyResolveMethod.FromManualRegistration => ".FromManualRegistration()",
+                            _ => ""
+                        });
+                        
                         break;
                     }
 

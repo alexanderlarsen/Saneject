@@ -21,38 +21,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
         [NonSerialized]
         protected TConcrete instance;
 
-        protected int eventSubscriberCount;
-
-        [SerializeField, Tooltip(
-             "Determines how the proxy locates or creates the target instance at runtime.\n\n" +
-             "FromGlobalScope: Uses GlobalScopeRegistry. Instance must be registered using RegisterGlobalComponent or RegisterGlobalObject in a scope.\n\n" +
-             "FindInLoadedScenes: Finds the first matching component in any loaded scene using FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include).\n\n" +
-             "FromComponentOnPrefab: Instantiates a prefab and finds the target component.\n\n" +
-             "FromNewComponentOnNewGameObject: Creates a new GameObject and adds the component.\n\n" +
-             "ManualRegistration: You must call RuntimeProxy.RegisterInstance() at runtime.")
-        ]
-        private ResolveMethod resolveMethod;
-
-        [SerializeField, Tooltip("The prefab from which to get the concrete instance.")]
-        private GameObject prefab;
-
-        [SerializeField, Tooltip("Do not destroy the target Object when loading a new Scene.")]
-        private bool dontDestroyOnLoad = true;
-
-        private bool hadInstanceBefore;
-
-        private enum ResolveMethod
-        {
-            FromGlobalScope,
-            FindInLoadedScenes,
-            FromComponentOnPrefab,
-            FromNewComponentOnNewGameObject,
-            ManualRegistration
-        }
-
         /// <summary>
         /// Manually register an instance for this proxy.
-        /// Only required for <see cref="ResolveMethod.ManualRegistration" /> resolve method.
+        /// Only required for <see cref="ProxyResolveMethod.FromManualRegistration" /> resolve method.
         /// </summary>
         public void RegisterInstance(TConcrete newInstance)
         {
@@ -112,11 +83,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
 
             TConcrete resolved = resolveMethod switch
             {
-                ResolveMethod.FromGlobalScope => GetFromGlobalScope(),
-                ResolveMethod.ManualRegistration => instance,
-                ResolveMethod.FromComponentOnPrefab => GetFromPrefab(),
-                ResolveMethod.FromNewComponentOnNewGameObject => CreateNewInstanceOnNewGameObject(),
-                ResolveMethod.FindInLoadedScenes => FindObjectInAnyScene(),
+                ProxyResolveMethod.FromGlobalScope => GetFromGlobalScope(),
+                ProxyResolveMethod.FromManualRegistration => instance,
+                ProxyResolveMethod.FromComponentOnPrefab => GetFromPrefab(),
+                ProxyResolveMethod.FromNewComponentOnNewGameObject => CreateNewInstanceOnNewGameObject(),
+                ProxyResolveMethod.FromAnywhereInLoadedScenes => FindObjectInAnyScene(),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
@@ -135,30 +106,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 else
                     Debug.LogWarning($"Saneject: '{GetType().Name}' instance is null.");
             }
-        }
-
-        /// <summary>
-        /// Called when the proxy switches from one concrete target instance to another.
-        /// Generated proxies should override this to clear or replay event subscriptions.
-        /// </summary>
-        protected virtual void OnTargetInstanceLost()
-        {
-            if (!hadInstanceBefore)
-                return;
-
-            if (eventSubscriberCount <= 0)
-                return;
-
-            Debug.LogWarning
-            (
-                $"Saneject: '{GetType().Name}' target lost. " +
-                $"The previous instance had {eventSubscriberCount} event " +
-                $"{(eventSubscriberCount == 1 ? "subscriber" : "subscribers")}. " +
-                "Event subscriptions are instance-bound and will not be transferred to new instance. " +
-                "Re-subscribe via this proxy if needed."
-            );
-
-            eventSubscriberCount = 0;
         }
 
         private TConcrete GetFromGlobalScope()

@@ -52,7 +52,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
                 case ComponentBindingNode componentBinding:
                 {
-                    if (componentBinding.ResolveFromRuntimeProxy)
+                    if (componentBinding.RuntimeProxyConfig != null)
                     {
                         if (componentBinding.InterfaceType == null)
                             errors.Add(Error.CreateInvalidBindingError("Proxy bindings require an interface type so the ProxyObject can forward calls. Use BindComponent<IInterface, Concrete>().FromProxy().", binding));
