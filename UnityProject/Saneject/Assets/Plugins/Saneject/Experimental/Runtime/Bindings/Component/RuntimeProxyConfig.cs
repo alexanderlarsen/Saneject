@@ -18,15 +18,5 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ProxyResolveMethod ResolveMethod { get; }
         public GameObject Prefab { get; }
         public bool DontDestroyOnLoad { get; }
-
-        public RuntimeProxyConfig Clone()
-        {
-            return new RuntimeProxyConfig
-            (
-                ResolveMethod,
-                Prefab,
-                DontDestroyOnLoad
-            );
-        }
     }
 }

@@ -13,12 +13,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
             SearchDirection = binding.SearchDirection;
             FindObjectsInactive = binding.FindObjectsInactive;
             FindObjectsSortMode = binding.FindObjectsSortMode;
-
             CustomTargetTransform = binding.CustomTargetTransform;
             IncludeSelfInSearch = binding.IncludeSelfInSearch;
             ChildIndexForSearch = binding.ChildIndexForSearch;
-
-            RuntimeProxyConfig = binding.RuntimeProxyConfig?.Clone();
+            RuntimeProxyConfig = binding.RuntimeProxyConfig;
         }
 
         public SearchOrigin SearchOrigin { get; }
