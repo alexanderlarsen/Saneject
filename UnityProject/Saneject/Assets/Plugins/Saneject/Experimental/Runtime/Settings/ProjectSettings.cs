@@ -44,7 +44,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         public static string ProxyAssetGenerationFolder
         {
-            get => Get(defaultValue: "Assets/SanejectGenerated/RuntimeProxy");
+            get => Get(defaultValue: "Assets/SanejectGenerated/RuntimeProxies");
             set => Set(value);
         }
 

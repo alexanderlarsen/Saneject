@@ -100,7 +100,7 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
             typeFullName = typeFullName.Replace("+", ".");
             
             return $@"
-namespace Plugins.Saneject.Generated.Proxies
+namespace {ProjectSettings.ProxyAssetGenerationFolder.Replace("/", ".")["Assets.".Length..]}
 {{
     [Plugins.Saneject.Experimental.Runtime.Attributes.GenerateRuntimeProxy]
     public partial class {className} : Plugins.Saneject.Experimental.Runtime.Proxy.RuntimeProxy<{typeFullName}>
