@@ -295,7 +295,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 options: GUILayout.ExpandWidth(false)
             );
 
-            EditorGUILayout.TextField
+            string newPath = EditorGUILayout.TextField
             (
                 text: string.IsNullOrEmpty(currentPath) ? "<none>" : currentPath,
                 style: EditorStyles.textField,
@@ -310,26 +310,21 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 if (!string.IsNullOrEmpty(selected))
                 {
                     if (!selected.StartsWith(absProjectPath))
-                    {
                         Debug.LogWarning("Saneject: Selected folder is not inside this project's Assets folder.");
-                    }
                     else
-                    {
-                        string relativePath = "Assets" + selected[absProjectPath.Length..];
-
-                        if (relativePath != currentPath)
-                        {
-                            onChanged(relativePath);
-                            AssetDatabase.Refresh();
-
-                            if (repaintInspectors)
-                                RepaintAllInspectors();
-                        }
-                    }
+                        newPath = "Assets" + selected[absProjectPath.Length..];
                 }
             }
 
             EditorGUILayout.EndHorizontal();
+
+            if (currentPath != newPath)
+            {
+                onChanged(newPath);
+
+                if (repaintInspectors)
+                    RepaintAllInspectors();
+            }
         }
 
         private static void RepaintAllInspectors()
