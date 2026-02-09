@@ -189,7 +189,7 @@ public class RuntimeProxyGenerator : ISourceGenerator
                     sb.AppendLine();
             }
 
-            if (methods.Count > 0)
+            if (properties.Count > 0 && methods.Count > 0)
                 sb.AppendLine();
 
             foreach (IMethodSymbol method in methods)
