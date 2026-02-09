@@ -319,8 +319,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             EditorGUILayout.EndHorizontal();
 
             if (currentPath != newPath)
-            {
-                onChanged(newPath);
+            {   
+                onChanged(PathUtility.SanitizeFolderPath(newPath));
 
                 if (repaintInspectors)
                     RepaintAllInspectors();

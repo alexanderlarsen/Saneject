@@ -1,9 +1,37 @@
-﻿using UnityEngine;
+﻿using System.IO;
+using System.Linq;
+using System.Text;
+using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
     public static class PathUtility
     {
+        private static readonly char[] IllegalPathChars =
+        {
+            '<',
+            '>',
+            ':',
+            '"',
+            '|',
+            '?',
+            '*'
+        };
+
+        public static string SanitizeFolderPath(string path)
+        {
+            if (string.IsNullOrEmpty(path))
+                return path;
+
+            path = path.Replace('\\', '/');
+            StringBuilder sb = new(path.Length);
+
+            foreach (char c in path.Where(c => !IllegalPathChars.Contains(c)))
+                sb.Append(c);
+
+            return sb.ToString();
+        }
+
         public static string GetComponentPath(Component component)
         {
             string goPath = GetTransformPath(component.transform);
