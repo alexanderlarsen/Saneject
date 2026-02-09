@@ -23,11 +23,9 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
         public SearchDirection SearchDirection { get; }
         public FindObjectsInactive FindObjectsInactive { get; }
         public FindObjectsSortMode FindObjectsSortMode { get; }
-
         public Transform CustomTargetTransform { get; }
         public bool IncludeSelfInSearch { get; }
         public int ChildIndexForSearch { get; }
-
         public RuntimeProxyConfig RuntimeProxyConfig { get; }
     }
 }
