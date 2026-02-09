@@ -97,7 +97,17 @@ public class AssemblyProxyManifestGenerator : ISourceGenerator
         return false;
     }
 
-    // Finds candidates for BindComponent<,>().FromRuntimeProxy()
+    // Finds BindComponent<TInterface, TConcrete>() calls that eventually
+    // participate in a fluent chain containing `.FromRuntimeProxy()`.
+    //
+    // Example patterns this must support:
+    //
+    //   BindComponent<I, C>().FromRuntimeProxy();
+    //   BindComponent<I, C>().ToMember(...).FromRuntimeProxy();
+    //   BindComponent<I, C>().ToMember(...).FromRuntimeProxy().FromGlobalScope();
+    //
+    // The important detail is that FromRuntimeProxy() is NOT necessarily
+    // called directly on BindComponent(), so we must walk the fluent chain backwards.
     private sealed class BindingMethodReceiver : ISyntaxReceiver
     {
         public List<(MethodDeclarationSyntax method, GenericNameSyntax generic)> Candidates { get; } = [];
@@ -127,30 +137,36 @@ public class AssemblyProxyManifestGenerator : ISourceGenerator
             // 6. Scan invocations inside the method body
             foreach (InvocationExpressionSyntax invocation in method.Body.DescendantNodes().OfType<InvocationExpressionSyntax>())
             {
-                // We only care about `.FromRuntimeProxy()`
-                if (invocation.Expression is not MemberAccessExpressionSyntax member)
+                // Match `.FromRuntimeProxy()`
+                if (invocation.Expression is not MemberAccessExpressionSyntax member ||
+                    member.Name.Identifier.Text != "FromRuntimeProxy")
                     continue;
 
-                if (member.Name.Identifier.Text != "FromRuntimeProxy")
+                // Walk left through the fluent call chain to find BindComponent<,>()
+                InvocationExpressionSyntax current = invocation;
+                GenericNameSyntax genericNameSyntax = null;
+
+                while (current != null)
+                {
+                    // Step left through chained calls
+                    if (current.Expression is MemberAccessExpressionSyntax ma)
+                    {
+                        current = ma.Expression as InvocationExpressionSyntax;
+                        continue;
+                    }
+
+                    // Root of the chain: BindComponent<TInterface, TConcrete>()
+                    if (current.Expression is GenericNameSyntax { Identifier.Text: "BindComponent", TypeArgumentList.Arguments.Count: 2 } gns)
+                        genericNameSyntax = gns;
+
+                    break;
+                }
+
+                if (genericNameSyntax == null)
                     continue;
 
-                // The expression before `.FromRuntimeProxy()`
-                if (member.Expression is not InvocationExpressionSyntax bindInvocation)
-                    continue;
-
-                // Must be BindComponent<,>()
-                if (bindInvocation.Expression is not GenericNameSyntax generic)
-                    continue;
-
-                if (generic.Identifier.Text != "BindComponent")
-                    continue;
-
-                // Must have exactly two generic args <TInterface, TConcrete>
-                if (generic.TypeArgumentList.Arguments.Count != 2)
-                    continue;
-
-                // At this point, this is a valid syntax match
-                Candidates.Add((method, generic));
+                // Found BindComponent<,>() → FromRuntimeProxy() chain
+                Candidates.Add((method, genericNameSyntax));
             }
         }
     }
