@@ -13,6 +13,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 
         private const int Priority_Group_Default = Priority_Base + MenuPriority.Group * 0;
         private const int Priority_Item_GenerateMissingProxyScripts = Priority_Group_Default + 1;
+        private const int Priority_Item_CleanUpUnusedScriptsAndAssets = Priority_Group_Default + 2;
 
         #endregion
 
@@ -21,7 +22,13 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         [MenuItem("Saneject/Runtime Proxy/Generate Missing Proxy Scripts", false, Priority_Item_GenerateMissingProxyScripts)]
         private static void GenerateMissingProxyScripts()
         {
-            ProxyScriptGenerator.GenerateMissingProxyScripts();
+            RuntimeProxyScriptGenerator.GenerateMissingProxyScripts();
+        }
+        
+        [MenuItem("Saneject/Runtime Proxy/Clean Up Unused Scripts And Assets", false, Priority_Item_CleanUpUnusedScriptsAndAssets)]
+        private static void CleanUpUnusedScriptsAndAssets()
+        {
+            RuntimeProxyCleaner.CleanUnusedScriptsAndAssets();
         }
 
         #endregion

@@ -100,6 +100,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
+        
+        public static bool LogUnusedRuntimeProxiesOnDomainReload
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
 
         #endregion
 

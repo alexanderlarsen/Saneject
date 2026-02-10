@@ -155,6 +155,14 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
 
             DrawToggle
             (
+                label: "Clear Logs On Injection",
+                tooltip: "Clear console logs before injection starts.",
+                currentValue: UserSettings.ClearLogsOnInjection,
+                onChanged: newValue => UserSettings.ClearLogsOnInjection = newValue
+            );
+            
+            DrawToggle
+            (
                 label: "Log Injection Summary",
                 tooltip: "Log summary on injection complete: Number of scopes processed, globals registered, injected fields/properties, missing dependencies/bindings, invalid/unused bindings, suppressed error count, and injection run duration.",
                 currentValue: UserSettings.LogInjectionSummary,
@@ -168,13 +176,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 currentValue: UserSettings.LogUnusedBindings,
                 onChanged: newValue => UserSettings.LogUnusedBindings = newValue
             );
-
+            
             DrawToggle
             (
-                label: "Clear Logs On Injection",
-                tooltip: "Clear console logs before injection starts.",
-                currentValue: UserSettings.ClearLogsOnInjection,
-                onChanged: newValue => UserSettings.ClearLogsOnInjection = newValue
+                label: "Log Unused Runtime Proxies On Domain Reload",
+                tooltip: "If enabled, Saneject will scan and report unused runtime proxy scripts and assets during domain reload. They are considered unused, if no Scope binding is referencing them. This can help you keep your project clean and organized.",
+                currentValue: UserSettings.LogUnusedRuntimeProxiesOnDomainReload,
+                onChanged: newValue => UserSettings.LogUnusedRuntimeProxiesOnDomainReload = newValue
             );
 
             EditorGUILayout.EndScrollView();

@@ -14,14 +14,17 @@ using UnityEditor;
 namespace Plugins.Saneject.Experimental.Editor.Proxy
 {
     [InitializeOnLoad]
-    public static class ProxyScriptGenerator
+    public static class RuntimeProxyScriptGenerator
     {
-        static ProxyScriptGenerator()
+        static RuntimeProxyScriptGenerator()
         {
             if (!ProjectSettings.GenerateProxyScriptsOnDomainReload)
                 return;
 
-            HashSet<Type> missing = EnumerateMissingTypes().ToHashSet();
+            HashSet<Type> missing = RuntimeProxyManifestUtility
+                .EnumerateManifestTypes()
+                .Where(IsMissingScript)
+                .ToHashSet();
 
             if (missing.Count == 0)
                 return;
@@ -32,7 +35,11 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
 
         public static void GenerateMissingProxyScripts()
         {
-            HashSet<Type> missing = EnumerateMissingTypes().ToHashSet();
+            // HashSet<Type> missing = EnumerateMissingTypes().ToHashSet();
+            HashSet<Type> missing = RuntimeProxyManifestUtility
+                .EnumerateManifestTypes()
+                .Where(IsMissingScript)
+                .ToHashSet();
 
             if (missing.Count == 0)
             {
@@ -44,38 +51,10 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
             GenerateScriptsAndSave(missing);
         }
 
-        private static IEnumerable<Type> EnumerateMissingTypes()
-        {
-            const string manifestFullName = "Saneject.RuntimeProxy.Generator.AssemblyProxyManifest";
-            string scopeAssemblyName = typeof(Scope).Assembly.GetName().Name;
-            const BindingFlags bindingFlags = BindingFlags.Public | BindingFlags.Static;
-
-            // Assemblies that reference the Scope's assembly (Saneject.Runtime)
-            IEnumerable<Assembly> assemblies = AppDomain
-                .CurrentDomain
-                .GetAssemblies()
-                .Where(asm => asm
-                    .GetReferencedAssemblies()
-                    .Any(r => r.Name == scopeAssemblyName)
-                );
-
-            foreach (Assembly assembly in assemblies)
-            {
-                FieldInfo proxyTargetsField = assembly
-                    .GetType(manifestFullName, throwOnError: false)?
-                    .GetField("RequiredProxyTargets", bindingFlags);
-
-                if (proxyTargetsField?.GetValue(null) is Type[] targets)
-                    foreach (Type t in targets)
-                        if (IsMissingScript(t))
-                            yield return t;
-            }
-        }
-
         private static bool IsMissingScript(Type concreteType)
         {
-            Type stubBaseType = typeof(RuntimeProxy<>).MakeGenericType(concreteType);
-            return TypeCache.GetTypesDerivedFrom(stubBaseType).FirstOrDefault() == null;
+            Type scriptBaseType = typeof(RuntimeProxy<>).MakeGenericType(concreteType);
+            return TypeCache.GetTypesDerivedFrom(scriptBaseType).FirstOrDefault() == null;
         }
 
         private static void GenerateScriptsAndSave(IEnumerable<Type> types)

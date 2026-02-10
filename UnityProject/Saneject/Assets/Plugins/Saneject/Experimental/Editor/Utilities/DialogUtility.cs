@@ -1,4 +1,6 @@
-﻿using System.Text;
+﻿using System.Collections.Generic;
+using System.Linq;
+using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
@@ -182,7 +184,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Runtime Proxy Generation",
-                    message: $"{proxyCount} of your FromRuntimeProxy() bindings {(proxyCount == 1 ? "needs a proxy script" : "need proxy scripts")}.\n\n" +
+                    message: $"One or more FromRuntimeProxy() bindings {(proxyCount == 1 ? "needs a proxy script" : "need proxy scripts")}.\n\n" +
                              $"{(proxyCount == 1 ? "It" : "They")} will be generated during this domain reload and saved to:\n\n" +
                              $"{ProjectSettings.ProxyAssetGenerationFolder}\n\n" +
                              "You can disable automatic proxy generation in the Saneject settings and run it manually from the Saneject menu instead.",
@@ -197,6 +199,52 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     title: "Saneject: Runtime Proxy Generation",
                     message: "All runtime proxy scripts needed for your FromRuntimeProxy() bindings already exist.",
                     ok: "Got it"
+                );
+            }
+        }
+
+        public static class ProxyCleaner
+        {
+            public static void Display_NoUnusedProxies()
+            {
+                EditorUtility.DisplayDialog
+                (
+                    title: "Saneject: Delete Unused Runtime Proxies",
+                    message: "Your project is already clean. No unused runtime proxy assets or scripts were found.",
+                    ok: "Got it"
+                );
+            }
+
+            public static bool Confirm_DeleteAssets(
+                int assetCount,
+                IEnumerable<string> unusedTypeNames)
+            {
+                unusedTypeNames = unusedTypeNames.ToHashSet();
+
+                return EditorUtility.DisplayDialog
+                (
+                    title: "Saneject: Delete Unused Runtime Proxies",
+                    message: $"Found {assetCount} unused runtime proxy {(assetCount == 1 ? "asset" : "assets")} for {(unusedTypeNames.Count() == 1 ? "type" : "types")}:\n\n" +
+                             $"{string.Join(", ", unusedTypeNames)}\n\n" +
+                             $"Do you want to delete {(assetCount == 1 ? "it" : "them")}?",
+                    ok: "Delete",
+                    cancel: "Cancel"
+                );
+            }
+
+            public static bool Confirm_DeleteScripts(IEnumerable<string> unusedTypeNames)
+            {
+                unusedTypeNames = unusedTypeNames.ToHashSet();
+                int count = unusedTypeNames.Count();
+
+                return EditorUtility.DisplayDialog
+                (
+                    title: "Saneject: Delete Unused Runtime Proxies",
+                    message: $"Found {count} unused runtime proxy {(count == 1 ? "script" : "scripts")}:\n\n" +
+                             $"{string.Join(", ", unusedTypeNames)}\n\n" +
+                             $"Do you want to delete {(count == 1 ? "it" : "them")}?",
+                    ok: "Delete",
+                    cancel: "Cancel"
                 );
             }
         }
