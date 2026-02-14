@@ -91,6 +91,12 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             if (config.DontDestroyOnLoad)
                 sb.Append(", DDOL");
 
+            if (config.ResolveMethod is RuntimeProxyResolveMethod.FromComponentOnPrefab or RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject)
+            {
+                sb.Append(", ");
+                sb.Append(config.InstanceMode);
+            }
+
             sb.Append(")");
             return sb.ToString();
         }

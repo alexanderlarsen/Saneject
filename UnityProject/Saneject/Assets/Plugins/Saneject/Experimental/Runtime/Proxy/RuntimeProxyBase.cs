@@ -1,5 +1,4 @@
-﻿using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
@@ -25,6 +24,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
         [SerializeField, Tooltip("Do not destroy the target Object when loading a new Scene.")]
         protected bool dontDestroyOnLoad = true;
 
+        [SerializeField]
+        protected RuntimeProxyInstanceMode instanceMode;
+
         public abstract object ResolveInstance();
 
         public void AssignConfig(RuntimeProxyConfig config)
@@ -32,13 +34,15 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
             resolveMethod = config.ResolveMethod;
             prefab = config.Prefab;
             dontDestroyOnLoad = config.DontDestroyOnLoad;
+            instanceMode = config.InstanceMode;
         }
 
         public bool HasConfig(RuntimeProxyConfig config)
         {
             return resolveMethod == config.ResolveMethod &&
                    prefab == config.Prefab &&
-                   dontDestroyOnLoad == config.DontDestroyOnLoad;
+                   dontDestroyOnLoad == config.DontDestroyOnLoad &&
+                   instanceMode == config.InstanceMode;
         }
     }
 }

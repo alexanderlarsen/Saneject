@@ -17,28 +17,60 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
     /// </summary>
     public abstract class RuntimeProxy<TConcrete> : RuntimeProxyBase
         where TConcrete : Component
-    { 
+    {
         public override object ResolveInstance()
         {
             if (!Application.isPlaying)
             {
-                Debug.LogWarning($"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. This is not allowed.");
+                Debug.LogWarning(
+                    $"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. This is not allowed.");
+
                 return null;
             }
 
+            // Pure lookup-only
+            if (resolveMethod == RuntimeProxyResolveMethod.FromGlobalScope)
+                return GlobalScope.GetComponent<TConcrete>();
+
+            // Global get-or-create pre-check
+            if (instanceMode == RuntimeProxyInstanceMode.Singleton &&
+                GlobalScope.TryGetComponent(out TConcrete existing))
+                return existing;
+
+            // Resolve via configured source
             TConcrete resolved = resolveMethod switch
             {
-                RuntimeProxyResolveMethod.FromGlobalScope => GlobalScope.GetComponent<TConcrete>(),
-                RuntimeProxyResolveMethod.FromComponentOnPrefab => GetFromPrefab(),
-                RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject => CreateNewInstanceOnNewGameObject(),
-                RuntimeProxyResolveMethod.FromAnywhereInLoadedScenes => FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include),
+                RuntimeProxyResolveMethod.FromComponentOnPrefab
+                    => GetFromPrefab(),
+
+                RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject
+                    => CreateNewInstanceOnNewGameObject(),
+
+                RuntimeProxyResolveMethod.FromAnywhereInLoadedScenes
+                    => FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include),
+                
+                RuntimeProxyResolveMethod.FromGlobalScope => throw new InvalidOperationException("Saneject: Resolve method should never reach this switch arm."),
+                
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            if (resolved != null && UserSettings.LogProxyResolve)
-                Debug.Log($"Saneject: '{typeof(TConcrete)}' resolved by '{GetType().Name}' using '{resolveMethod}'.");
-            else
-                Debug.LogError($"Saneject: '{typeof(TConcrete)}' could not be resolved by '{GetType().Name}' using '{resolveMethod}'.");
+            if (resolved == null)
+            {
+                Debug.LogError(
+                    $"Saneject: '{typeof(TConcrete)}' could not be resolved by '{GetType().Name}' using '{resolveMethod}'.");
+
+                return null;
+            }
+
+            // Register instance only if this proxy created it and policy demands it
+            if (instanceMode == RuntimeProxyInstanceMode.Singleton &&
+                resolveMethod is RuntimeProxyResolveMethod.FromComponentOnPrefab or RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject)
+                if (!GlobalScope.IsRegistered<TConcrete>())
+                    GlobalScope.RegisterComponent(resolved, this);
+
+            if (UserSettings.LogProxyResolve)
+                Debug.Log(
+                    $"Saneject: '{typeof(TConcrete)}' resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
             return resolved;
         }

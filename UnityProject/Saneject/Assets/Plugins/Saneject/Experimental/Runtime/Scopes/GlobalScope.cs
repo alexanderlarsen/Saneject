@@ -125,6 +125,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
             return Instances.ContainsKey(typeof(T));
         }
 
+        public static bool TryGetComponent<T>(out T component) where T : Component
+        {
+            component = GetComponent<T>();
+            return component != null;
+        }
+        
         private static bool CheckModificationAllowed()
         {
             if (!IsModificationAllowed)

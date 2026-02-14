@@ -48,6 +48,8 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             SerializedProperty resolveMethodProp = serializedObject.FindProperty("resolveMethod");
             SerializedProperty prefabProp = serializedObject.FindProperty("prefab");
             SerializedProperty dontDestroyProp = serializedObject.FindProperty("dontDestroyOnLoad");
+            SerializedProperty instanceModeProp = serializedObject.FindProperty("instanceMode");
+            
             EditorGUILayout.PropertyField(resolveMethodProp);
 
             string selected = resolveMethodProp.enumDisplayNames[resolveMethodProp.enumValueIndex];
@@ -55,10 +57,12 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             switch (selected)
             {
                 case "From Component On Prefab":
+                    EditorGUILayout.PropertyField(instanceModeProp);
                     EditorGUILayout.PropertyField(prefabProp);
                     EditorGUILayout.PropertyField(dontDestroyProp);
                     break;
                 case "From New Component On New Game Object":
+                    EditorGUILayout.PropertyField(instanceModeProp);
                     EditorGUILayout.PropertyField(dontDestroyProp);
                     break;
             }

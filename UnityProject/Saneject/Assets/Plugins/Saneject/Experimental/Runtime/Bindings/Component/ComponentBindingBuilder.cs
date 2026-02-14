@@ -1,4 +1,5 @@
 ﻿using System;
+using Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
 using UnityEngine;
@@ -26,7 +27,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
-                RuntimeProxyResolveMethod.FromGlobalScope,
+                resolveMethod: RuntimeProxyResolveMethod.FromGlobalScope,
+                instanceMode: RuntimeProxyInstanceMode.Singleton,
                 prefab: null,
                 dontDestroyOnLoad: false
             );
