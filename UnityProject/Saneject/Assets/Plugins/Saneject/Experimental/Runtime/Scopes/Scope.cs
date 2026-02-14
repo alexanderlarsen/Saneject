@@ -5,6 +5,7 @@ using System.Linq;
 using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Experimental.Runtime.Proxy;
 using UnityEngine;
 using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
@@ -19,11 +20,17 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         [SerializeField, HideInInspector, EditorBrowsable(EditorBrowsableState.Never)]
         private List<Component> globalComponents = new();
 
+        [SerializeField, HideInInspector, EditorBrowsable(EditorBrowsableState.Never)]
+        private List<Component> proxySwapTargets = new();
+        
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void Awake()
         {
             foreach (Component obj in globalComponents)
                 GlobalScope.RegisterComponent(obj, this);
+
+            foreach (IRuntimeProxySwapTarget swapTarget in proxySwapTargets.OfType<IRuntimeProxySwapTarget>())
+                swapTarget.SwapProxiesWithRealInstances();
         }
 
         [EditorBrowsable(EditorBrowsableState.Never)]
@@ -37,7 +44,22 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         public void UpdateGlobalComponents(IEnumerable<Component> globalObjects)
         {
             globalComponents.Clear();
-            globalComponents.AddRange(globalObjects.Where(obj => obj != null));
+            globalComponents.AddRange(globalObjects.Where(obj => obj));
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void ClearProxySwapTargets()
+        {
+            proxySwapTargets.Clear();
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public void AddProxySwapTarget(Component component)
+        {
+            if (component is not IRuntimeProxySwapTarget)
+                throw new ArgumentException($"Component {component.name} does not implement {nameof(IRuntimeProxySwapTarget)}");
+            
+            proxySwapTargets.Add(component);
         }
 
         /// <summary>

@@ -20,6 +20,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
             IReadOnlyCollection<BindingNode> unusedBindingNodes,
             IReadOnlyCollection<(string path, Object instance)> createdProxyAssets,
             int globalRegistrationCount,
+            int proxySwapTargetsCount,
             int injectedFieldCount,
             int injectedPropertyCount,
             int injectedMethodCount,
@@ -29,6 +30,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
             this.unusedBindingNodes.AddRange(unusedBindingNodes);
             this.createdProxyAssets.AddRange(createdProxyAssets);
             GlobalRegistrationCount = globalRegistrationCount;
+            ProxySwapTargetsCount = proxySwapTargetsCount;
             InjectedFieldCount = injectedFieldCount;
             InjectedPropertyCount = injectedPropertyCount;
             InjectedMethodCount = injectedMethodCount;
@@ -40,6 +42,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
 
         public int GlobalRegistrationCount { get; private set; }
+        public int ProxySwapTargetsCount { get; private set; }
         public int InjectedFieldCount { get; private set; }
         public int InjectedPropertyCount { get; private set; }
         public int InjectedMethodCount { get; private set; }
@@ -51,6 +54,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
             unusedBindingNodes.AddRange(results.UnusedBindingNodes);
             createdProxyAssets.AddRange(results.CreatedProxyAssets);
             GlobalRegistrationCount += results.GlobalRegistrationCount;
+            ProxySwapTargetsCount += results.ProxySwapTargetsCount;
             InjectedFieldCount += results.InjectedFieldCount;
             InjectedPropertyCount += results.InjectedPropertyCount;
             InjectedMethodCount += results.InjectedMethodCount;

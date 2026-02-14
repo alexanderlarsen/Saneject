@@ -1,4 +1,5 @@
 ﻿using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+using Plugins.Saneject.Experimental.Runtime.Proxy;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes

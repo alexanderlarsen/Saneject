@@ -184,7 +184,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Runtime Proxy Generation",
-                    message: $"One or more FromRuntimeProxy() bindings {(proxyCount == 1 ? "needs a proxy script" : "need proxy scripts")}.\n\n" +
+                    message: $"One or more FromRuntimeProxy() bindings {(proxyCount == 1 ? $"needs {proxyCount} runtime proxy script" : $"need {proxyCount} runtime proxy scripts")}.\n\n" +
                              $"{(proxyCount == 1 ? "It" : "They")} will be generated during this domain reload and saved to:\n\n" +
                              $"{ProjectSettings.ProxyAssetGenerationFolder}\n\n" +
                              "You can disable automatic proxy generation in the Saneject settings and run it manually from the Saneject menu instead.",

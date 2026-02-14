@@ -57,11 +57,12 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             foreach (FieldNode fieldNode in fieldNodes)
             {
                 progressTracker.UpdateInfoText($"Injecting field: {fieldNode.ShortPath}");
+                object injectObject = context.FieldNodeResolutionMap[fieldNode];
 
                 fieldNode.FieldInfo.SetValue
                 (
                     fieldNode.Owner,
-                    context.FieldNodeResolutionMap[fieldNode]
+                    injectObject
                 );
 
                 progressTracker.NextStep();

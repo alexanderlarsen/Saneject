@@ -3,7 +3,6 @@ using System.IO;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Injection;
-using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
@@ -81,6 +80,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             RuntimeProxyConfig config)
         {
             StringBuilder sb = new();
+
             sb.Append(proxyType.Name);
             sb.Append(" (");
             sb.Append(config.ResolveMethod);

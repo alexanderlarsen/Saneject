@@ -187,11 +187,11 @@ namespace Plugins.Saneject.Legacy.Editor.Settings
             );
 
             EditorGUILayout.Space(10);
-            EditorGUILayout.LabelField("Play Mode Logging (Editor Only)", EditorStyles.boldLabel);
+            EditorGUILayout.LabelField("Play Mode Logging", EditorStyles.boldLabel);
 
             DrawToggle(
-                label: "Log On Proxy Instance Resolve",
-                tooltip: "Log when a proxy instance is resolved at runtime.",
+                label: "Log On Runtime Proxy Instance Resolve",
+                tooltip: "Log when a runtime proxy instance is resolved at runtime.",
                 currentValue: UserSettings.LogProxyResolve,
                 onChanged: newValue => UserSettings.LogProxyResolve = newValue
             );

@@ -53,6 +53,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
             sb.Append($"Saneject: {prefix} | ")
                 .AppendQuantity(summary.ScopesProcessedCount, "scope processed", "scopes processed", " | ")
                 .AppendQuantity(summary.GlobalRegistrationCount, "global registered", "globals registered", " | ")
+                .AppendQuantity(summary.ProxySwapTargetsCount, "proxy swap target registered", "proxy swap targets registered", " | ")
                 .AppendQuantity(summary.InjectedFieldCount, "field injected", "fields injected", " | ")
                 .AppendQuantity(summary.InjectedPropertyCount, "property injected", "properties injected", " | ")
                 .AppendQuantity(summary.InjectedMethodCount, "method injected", "methods injected", " | ")
@@ -200,7 +201,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
         {
             if (!UserSettings.LogUnusedBindings)
                 return;
-
+            
             foreach (BindingNode binding in results.UnusedBindingNodes)
                 Debug.LogWarning($"Saneject: Unused binding {SignatureUtility.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }

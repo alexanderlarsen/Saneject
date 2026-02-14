@@ -1,11 +1,10 @@
 ﻿namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
-    public enum ProxyResolveMethod
+    public enum RuntimeProxyResolveMethod
     {
         FromGlobalScope,
         FromAnywhereInLoadedScenes,
         FromComponentOnPrefab,
-        FromNewComponentOnNewGameObject,
-        FromManualRegistration
+        FromNewComponentOnNewGameObject
     }
 }

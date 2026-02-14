@@ -17,105 +17,30 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
     /// </summary>
     public abstract class RuntimeProxy<TConcrete> : RuntimeProxyBase
         where TConcrete : Component
-    {
-        [NonSerialized]
-        protected TConcrete instance;
-
-        /// <summary>
-        /// Manually register an instance for this proxy.
-        /// Only required for <see cref="ProxyResolveMethod.FromManualRegistration" /> resolve method.
-        /// </summary>
-        public void RegisterInstance(TConcrete newInstance)
-        {
-            if (hadInstanceBefore)
-                OnTargetInstanceLost();
-
-            instance = newInstance;
-
-            if (instance)
-                hadInstanceBefore = true;
-        }
-
-        /// <summary>
-        /// Unregisters the currently registered instance, if any.
-        /// </summary>
-        public void UnregisterInstance()
-        {
-            if (hadInstanceBefore)
-                OnTargetInstanceLost();
-
-            instance = null;
-        }
-
-        /// <summary>
-        /// Returns the resolved concrete instance as <typeparamref name="T" />, or null if not resolved.
-        /// Use if you need to access or cache the direct instance for performance-critical scenarios.
-        /// </summary>
-        /// <returns>The concrete instance cast to T.</returns>
-        public T GetInstanceAs<T>() where T : TConcrete
-        {
-            if (!instance)
-            {
-                Debug.LogWarning($"Saneject: '{GetType().Name}' instance not resolved. Returning null.");
-                return null;
-            }
-
-            return (T)instance;
-        }
-
-        /// <summary>
-        /// Resolves the underlying concrete instance according to the configured resolve strategy.
-        /// Called automatically by the generated proxy when the instance is null.
-        /// </summary>
-        protected void ResolveInstance()
+    { 
+        public override object ResolveInstance()
         {
             if (!Application.isPlaying)
             {
-                Debug.LogWarning(
-                    $"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. " +
-                    "This is not allowed.");
-
-                return;
+                Debug.LogWarning($"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. This is not allowed.");
+                return null;
             }
-
-            if (instance)
-                return;
 
             TConcrete resolved = resolveMethod switch
             {
-                ProxyResolveMethod.FromGlobalScope => GetFromGlobalScope(),
-                ProxyResolveMethod.FromManualRegistration => instance,
-                ProxyResolveMethod.FromComponentOnPrefab => GetFromPrefab(),
-                ProxyResolveMethod.FromNewComponentOnNewGameObject => CreateNewInstanceOnNewGameObject(),
-                ProxyResolveMethod.FromAnywhereInLoadedScenes => FindObjectInAnyScene(),
+                RuntimeProxyResolveMethod.FromGlobalScope => GlobalScope.GetComponent<TConcrete>(),
+                RuntimeProxyResolveMethod.FromComponentOnPrefab => GetFromPrefab(),
+                RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject => CreateNewInstanceOnNewGameObject(),
+                RuntimeProxyResolveMethod.FromAnywhereInLoadedScenes => FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include),
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            if (hadInstanceBefore)
-                OnTargetInstanceLost();
+            if (resolved != null && UserSettings.LogProxyResolve)
+                Debug.Log($"Saneject: '{typeof(TConcrete)}' resolved by '{GetType().Name}' using '{resolveMethod}'.");
+            else
+                Debug.LogError($"Saneject: '{typeof(TConcrete)}' could not be resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
-            instance = resolved;
-
-            if (instance)
-                hadInstanceBefore = true;
-
-            if (UserSettings.LogProxyResolve)
-            {
-                if (instance)
-                    Debug.Log($"Saneject: '{GetType().Name}' resolved its instance using {resolveMethod}.");
-                else
-                    Debug.LogWarning($"Saneject: '{GetType().Name}' instance is null.");
-            }
-        }
-
-        private TConcrete GetFromGlobalScope()
-        {
-            return GlobalScope.GetComponent<TConcrete>();
-        }
-
-        private TConcrete FindObjectInAnyScene()
-        {
-            return FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include);
+            return resolved;
         }
 
         private TConcrete GetFromPrefab()

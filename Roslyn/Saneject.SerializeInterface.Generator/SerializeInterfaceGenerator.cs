@@ -80,7 +80,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
 
             if (model.GetDeclaredSymbol(candidate) is not IPropertySymbol propertySymbol)
                 continue;
-            
+
             if (!AttributeUtils.HasSerializeInterfaceAttribute(propertySymbol))
                 continue;
 
@@ -131,7 +131,7 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 sb.AppendLine("{");
             }
 
-            sb.AppendLine($"    public partial class {classSymbol.Name} : UnityEngine.ISerializationCallbackReceiver");
+            sb.AppendLine($"    public partial class {classSymbol.Name} : UnityEngine.ISerializationCallbackReceiver, Plugins.Saneject.Experimental.Runtime.Proxy.IRuntimeProxySwapTarget");
             sb.AppendLine("    {");
 
             // Generate backing fields for fields
@@ -321,6 +321,45 @@ public class SerializeInterfaceGenerator : ISourceGenerator
                 }
 
             sb.AppendLine("        }");
+            sb.AppendLine();
+            sb.AppendLine($"        [{AttributeUtils.GetEditorBrowsableAttribute(EditorBrowsableState.Never)}]");
+            sb.AppendLine("        public void SwapProxiesWithRealInstances()");
+            sb.AppendLine("        {");
+
+            if (propertiesByClass.TryGetValue(classSymbol, out propertySymbols))
+                foreach (IPropertySymbol propertySymbol in propertySymbols)
+                {
+                    string name = propertySymbol.Name;
+
+                    if (propertySymbol.Type.IsInterfaceArray(out IArrayTypeSymbol _))
+                        continue;
+
+                    if (propertySymbol.Type.IsInterfaceList(out INamedTypeSymbol _))
+                        continue;
+
+                    string type = propertySymbol.Type.ToDisplayString();
+                    sb.AppendLine($"            if(__{name} is Plugins.Saneject.Experimental.Runtime.Proxy.RuntimeProxyBase {name}Proxy)");
+                    sb.AppendLine($"                {name} = {name}Proxy.ResolveInstance() as {type};");
+                }
+
+            if (fieldsByClass.TryGetValue(classSymbol, out fieldSymbols))
+                foreach (IFieldSymbol fieldSymbol in fieldSymbols)
+                {
+                    string name = fieldSymbol.Name;
+
+                    if (fieldSymbol.Type.IsInterfaceArray(out IArrayTypeSymbol _))
+                        continue;
+
+                    if (fieldSymbol.Type.IsInterfaceList(out INamedTypeSymbol _))
+                        continue;
+
+                    string type = fieldSymbol.Type.ToDisplayString();
+                    sb.AppendLine($"            if(__{name} is Plugins.Saneject.Experimental.Runtime.Proxy.RuntimeProxyBase {name}Proxy)");
+                    sb.AppendLine($"                {name} = {name}Proxy.ResolveInstance() as {type};");
+                }
+
+            sb.AppendLine("        }");
+
             sb.AppendLine("    }");
             if (hasNamespace) sb.AppendLine("}");
 

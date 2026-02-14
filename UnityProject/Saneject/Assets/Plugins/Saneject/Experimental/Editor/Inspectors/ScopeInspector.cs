@@ -52,6 +52,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                 DrawHelpBox();
                 DrawContext();
                 DrawGlobalComponents();
+                DrawProxySwapTargets();
                 DrawScopeHierarchy();
                 DrawInjectButtons();
             }
@@ -92,7 +93,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: $"Global Components ({property.arraySize})",
-                tooltip: "This scope declares global components. These are automatically added to GlobalScope on Scope.Awake, removed on Scope.OnDestroy, and can be fetched from the GlobalScope by proxies or manually.",
+                tooltip: "This scope declares global components. These are automatically added to GlobalScope on Scope.Awake (DefaultExecutionOrder: -10000), removed on Scope.OnDestroy, and can be fetched from the GlobalScope by proxies or manually.",
                 defaultFoldoutState: true,
                 prefsKey: "Saneject.ScopeInspector.Foldouts.GlobalComponents"
             );
@@ -103,6 +104,37 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             if (property.arraySize == 0)
             {
                 EditorGUILayout.LabelField("No global components declared in this scope.");
+                return;
+            }
+
+            using (new EditorGUI.DisabledScope(true))
+            {
+                for (int i = 0; i < property.arraySize; i++)
+                {
+                    SerializedProperty element = property.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(element);
+                }
+            }
+        }
+
+        private void DrawProxySwapTargets()
+        {
+            SerializedProperty property = serializedObject.FindProperty("proxySwapTargets");
+
+            bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
+            (
+                text: $"Runtime Proxy Swap Targets ({property.arraySize})",
+                tooltip: "Components, in this Scope, with fields that contain runtime proxies. At runtime, the Scope swaps each proxy with its resolved instance before any Awake() methods execute.",
+                defaultFoldoutState: true,
+                prefsKey: "Saneject.ScopeInspector.Foldouts.RuntimeProxySwapTargets"
+            );
+
+            if (!isFoldedOut)
+                return;
+
+            if (property.arraySize == 0)
+            {
+                EditorGUILayout.LabelField("No proxy swap targets declared in this scope.");
                 return;
             }
 

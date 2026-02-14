@@ -51,14 +51,15 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Context
             if (!gameObject)
                 return new ContextData(ContextType.Global, 0); // Non-GameObjects (ScriptableObjects, etc.)
 
-            if (PrefabUtility.IsPartOfPrefabAsset(gameObject) || PrefabStageUtility.GetCurrentPrefabStage() != null)
-                return new ContextData(ContextType.PrefabAsset, gameObject.transform.root.gameObject.GetInstanceID()); // Prefab asset
-
             GameObject prefabInstanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
 
-            return prefabInstanceRoot
-                ? new ContextData(ContextType.PrefabInstance, prefabInstanceRoot.GetInstanceID()) // Prefab instance
-                : new ContextData(ContextType.SceneObject, gameObject.scene.handle); // Scene object
+            if (prefabInstanceRoot)
+                return new ContextData(ContextType.PrefabInstance, prefabInstanceRoot.GetInstanceID()); // Prefab instance
+
+            if (PrefabUtility.IsPartOfPrefabAsset(gameObject) || PrefabStageUtility.GetCurrentPrefabStage())
+                return new ContextData(ContextType.PrefabAsset, gameObject.transform.root.gameObject.GetInstanceID()); // Prefab asset
+
+            return new ContextData(ContextType.SceneObject, gameObject.scene.handle); // Scene object
         }
 
         private class ContextData

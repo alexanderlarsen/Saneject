@@ -19,6 +19,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
         private readonly Dictionary<ScopeNode, IReadOnlyList<object>> scopeNodeGlobalResolutionMap = new();
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
         private readonly List<Error> errors = new();
+        private readonly List<ComponentNode> proxySwapTargetNodes = new();
 
         public InjectionContext(
             IReadOnlyCollection<TransformNode> activeTransformNodes,
@@ -113,6 +114,11 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
         {
             createdProxyAssets.Add((path, instance));
         }
+        
+        public void RegisterProxySwapTarget(ComponentNode componentNode)
+        {
+            proxySwapTargetNodes.Add(componentNode);
+        }
 
         public InjectionResults GetResults()
         {
@@ -125,9 +131,10 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
             return new InjectionResults
             (
                 errors: errors,
-                unusedBindingNodes: unusedBindingNodes,
+                unusedBindingNodes: unusedBindingNodes.Where(b => validBindingNodes.Contains(b)).ToList().AsReadOnly(),
                 createdProxyAssets: createdProxyAssets,
                 globalRegistrationCount: scopeNodeGlobalResolutionMap.Count,
+                proxySwapTargetsCount: proxySwapTargetNodes.Count,
                 injectedFieldCount: fieldNodeResolutionMap
                     .Keys
                     .Count(field => !field.IsPropertyBackingField),

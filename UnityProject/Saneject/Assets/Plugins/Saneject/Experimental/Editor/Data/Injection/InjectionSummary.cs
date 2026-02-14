@@ -8,6 +8,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
         public InjectionSummary(InjectionResults results)
         {
             GlobalRegistrationCount = results.GlobalRegistrationCount;
+            ProxySwapTargetsCount = results.ProxySwapTargetsCount;
             InjectedFieldCount = results.InjectedFieldCount;
             InjectedPropertyCount = results.InjectedPropertyCount;
             InjectedMethodCount = results.InjectedMethodCount;
@@ -37,6 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
 
         public int ScopesProcessedCount { get; }
         public int GlobalRegistrationCount { get; }
+        public int ProxySwapTargetsCount { get; }
         public int InjectedFieldCount { get; }
         public int InjectedPropertyCount { get; }
         public int InjectedMethodCount { get; }

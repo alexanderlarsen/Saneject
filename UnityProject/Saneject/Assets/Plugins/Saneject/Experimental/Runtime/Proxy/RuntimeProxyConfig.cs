@@ -1,12 +1,11 @@
-﻿using Plugins.Saneject.Experimental.Runtime.Proxy;
-using UnityEngine;
+﻿using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
+namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
     public class RuntimeProxyConfig
     {
         public RuntimeProxyConfig(
-            ProxyResolveMethod resolveMethod,
+            RuntimeProxyResolveMethod resolveMethod,
             GameObject prefab,
             bool dontDestroyOnLoad)
         {
@@ -15,7 +14,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             DontDestroyOnLoad = dontDestroyOnLoad;
         }
 
-        public ProxyResolveMethod ResolveMethod { get; }
+        public RuntimeProxyResolveMethod ResolveMethod { get; }
         public GameObject Prefab { get; }
         public bool DontDestroyOnLoad { get; }
     }

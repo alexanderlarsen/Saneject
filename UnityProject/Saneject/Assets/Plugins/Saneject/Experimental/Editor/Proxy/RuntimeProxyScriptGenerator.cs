@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
-using Plugins.Saneject.Experimental.Runtime.Scopes;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 
@@ -62,7 +62,11 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
             foreach (Type type in types)
             {
                 Directory.CreateDirectory(ProjectSettings.ProxyAssetGenerationFolder);
-                string className = $"{type.Name}RuntimeProxy";
+                string className = $"{type.Name}Proxy";
+
+                if (!string.IsNullOrWhiteSpace(type.Namespace))
+                    className += $"{StableHash(type.FullName)}";
+
                 string proxyScriptPath = $"{ProjectSettings.ProxyAssetGenerationFolder}/{className}.cs";
                 File.WriteAllText(proxyScriptPath, GetScriptCode(className, type.FullName));
                 AssetDatabase.ImportAsset(proxyScriptPath, ImportAssetOptions.ForceSynchronousImport);
@@ -77,10 +81,17 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
             string typeFullName)
         {
             typeFullName = typeFullName.Replace("+", ".");
-            
+
             return $@"
 {NamespaceUtility.GetNamespaceFromAssetsRelativePath(ProjectSettings.ProxyAssetGenerationFolder)}
 {{
+    /// <summary>
+    /// Auto-generated runtime proxy for a concrete Component type.
+    /// Acts as a serialized placeholder that resolves to the real instance at runtime
+    /// according to its resolve strategy. The appended string is a deterministic hash
+    /// of the full original type name, ensuring a unique proxy type when multiple
+    /// classes share the same simple name.
+    /// </summary>
     [Plugins.Saneject.Experimental.Runtime.Attributes.GenerateRuntimeProxy]
     public partial class {className} : Plugins.Saneject.Experimental.Runtime.Proxy.RuntimeProxy<{typeFullName}>
     {{
@@ -88,5 +99,21 @@ namespace Plugins.Saneject.Experimental.Editor.Proxy
 }}
 ";
         }
+
+        private static string StableHash(string input)
+        {
+            using SHA1 sha1 = SHA1.Create();
+
+            byte[] bytes = Encoding.UTF8.GetBytes(input);
+            byte[] hash = sha1.ComputeHash(bytes);
+
+            // First 4 bytes = 8 hex chars
+            StringBuilder sb = new(8);
+
+            for (int i = 0; i < 4; i++)
+                sb.Append(hash[i].ToString("X2"));
+
+            return sb.ToString();
+        }
     }
-} 
+}

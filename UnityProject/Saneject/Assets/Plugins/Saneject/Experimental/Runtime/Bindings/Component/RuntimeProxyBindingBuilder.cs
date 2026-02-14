@@ -16,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
-                ProxyResolveMethod.FromGlobalScope,
+                RuntimeProxyResolveMethod.FromGlobalScope,
                 prefab: null,
                 dontDestroyOnLoad: false
             );
@@ -26,7 +26,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
-                ProxyResolveMethod.FromAnywhereInLoadedScenes,
+                RuntimeProxyResolveMethod.FromAnywhereInLoadedScenes,
                 prefab: null,
                 dontDestroyOnLoad: false
             );
@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
-                ProxyResolveMethod.FromComponentOnPrefab,
+                RuntimeProxyResolveMethod.FromComponentOnPrefab,
                 prefab,
                 dontDestroyOnLoad
             );
@@ -48,19 +48,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
-                ProxyResolveMethod.FromNewComponentOnNewGameObject,
+                RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject,
                 prefab: null,
                 dontDestroyOnLoad
-            );
-        }
-
-        public void FromManualRegistration()
-        {
-            binding.RuntimeProxyConfig = new RuntimeProxyConfig
-            (
-                ProxyResolveMethod.FromManualRegistration,
-                prefab: null,
-                dontDestroyOnLoad: false
             );
         }
     }

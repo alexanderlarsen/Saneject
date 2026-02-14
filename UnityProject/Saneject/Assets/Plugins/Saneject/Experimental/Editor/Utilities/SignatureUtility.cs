@@ -59,14 +59,13 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
                         sb.Append(componentBinding.RuntimeProxyConfig.ResolveMethod switch
                         {
-                            ProxyResolveMethod.FromGlobalScope => ".FromGlobalScope()",
-                            ProxyResolveMethod.FromAnywhereInLoadedScenes => ".FromAnywhereInLoadedScenes()",
-                            ProxyResolveMethod.FromComponentOnPrefab => ".FromComponentOnPrefab()",
-                            ProxyResolveMethod.FromNewComponentOnNewGameObject => ".FromNewComponentOnNewGameObject()",
-                            ProxyResolveMethod.FromManualRegistration => ".FromManualRegistration()",
+                            RuntimeProxyResolveMethod.FromGlobalScope => ".FromGlobalScope()",
+                            RuntimeProxyResolveMethod.FromAnywhereInLoadedScenes => ".FromAnywhereInLoadedScenes()",
+                            RuntimeProxyResolveMethod.FromComponentOnPrefab => ".FromComponentOnPrefab()",
+                            RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject => ".FromNewComponentOnNewGameObject()",
                             _ => ""
                         });
-                        
+
                         break;
                     }
 
@@ -96,7 +95,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
                     if (!componentBinding.LocatorStrategySpecified)
                         break;
-                    
+
                     sb.Append(componentBinding.SearchOrigin switch
                     {
                         SearchOrigin.Scope => ".From",
@@ -125,7 +124,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 {
                     if (!assetBinding.LocatorStrategySpecified)
                         break;
-                    
+
                     sb.Append(assetBinding.AssetLoadType switch
                     {
                         AssetLoadType.Resources => $".FromResources(\"{assetBinding.Path}\")",

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using Plugins.Saneject.Experimental.Runtime.Proxy;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component

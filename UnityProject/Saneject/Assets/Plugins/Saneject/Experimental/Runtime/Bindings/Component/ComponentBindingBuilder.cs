@@ -26,7 +26,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
-                ProxyResolveMethod.FromGlobalScope,
+                RuntimeProxyResolveMethod.FromGlobalScope,
                 prefab: null,
                 dontDestroyOnLoad: false
             );

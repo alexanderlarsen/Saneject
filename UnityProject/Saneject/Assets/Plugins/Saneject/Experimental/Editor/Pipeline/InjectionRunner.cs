@@ -245,6 +245,12 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 progressTracker
             );
 
+            ProxySwapTargetCollector.CollectSwapTargets
+            (
+                context,
+                progressTracker
+            );
+
             InjectionResults results = context.GetResults();
             stopwatch.Stop();
             Logger.LogResults(results);
