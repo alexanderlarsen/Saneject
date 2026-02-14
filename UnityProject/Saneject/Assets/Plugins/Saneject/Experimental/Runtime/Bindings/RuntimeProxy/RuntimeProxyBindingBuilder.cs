@@ -37,7 +37,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy
 
         public RuntimeProxyInstanceModeBuilder FromComponentOnPrefab(
             GameObject prefab,
-            bool dontDestroyOnLoad)
+            bool dontDestroyOnLoad = false)
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
@@ -50,7 +50,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy
             return new RuntimeProxyInstanceModeBuilder(binding);
         }
 
-        public RuntimeProxyInstanceModeBuilder FromNewComponentOnNewGameObject(bool dontDestroyOnLoad)
+        public RuntimeProxyInstanceModeBuilder FromNewComponentOnNewGameObject(bool dontDestroyOnLoad = false)
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
             (
