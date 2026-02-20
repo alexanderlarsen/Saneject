@@ -1,9 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Enums;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Utilities
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
     public static class SortingUtils
     {

@@ -1,12 +1,12 @@
 ﻿using System;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Enums;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Persistence;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Drawers
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
     public static class AssetListDrawer
     {

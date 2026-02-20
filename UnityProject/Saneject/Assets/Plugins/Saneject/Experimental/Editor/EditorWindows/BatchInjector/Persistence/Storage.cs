@@ -1,9 +1,9 @@
 ﻿using System;
 using System.IO;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Persistence
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence
 {
     public static class Storage
     {

@@ -1,11 +1,11 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Persistence;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Utilities
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
     public static class PrefabListUtils
     {

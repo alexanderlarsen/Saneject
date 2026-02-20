@@ -1,12 +1,12 @@
-﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Drawers;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Persistence;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Utilities;
+﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.EditorWindows
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
 {
     public class BatchInjectorEditorWindow : EditorWindow
     {

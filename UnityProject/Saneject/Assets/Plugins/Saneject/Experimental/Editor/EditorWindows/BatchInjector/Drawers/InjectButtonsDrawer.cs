@@ -2,13 +2,13 @@
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.Pipeline;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Drawers
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
     public static class InjectButtonsDrawer
     {

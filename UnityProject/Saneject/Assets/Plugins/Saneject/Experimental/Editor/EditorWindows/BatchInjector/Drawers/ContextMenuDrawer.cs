@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Enums;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using Plugins.Saneject.Experimental.Editor.Pipeline;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
@@ -12,7 +12,7 @@ using UnityEditorInternal;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Drawers
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
     public static class ContextMenuDrawer
     {

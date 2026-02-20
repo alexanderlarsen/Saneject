@@ -1,7 +1,7 @@
 ﻿using UnityEditor;
 using UnityEngine;
 
-namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Drawers
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
     public static class SearchBarDrawer
     {
