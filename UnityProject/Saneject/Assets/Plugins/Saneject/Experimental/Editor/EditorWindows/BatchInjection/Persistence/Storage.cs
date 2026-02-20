@@ -1,14 +1,14 @@
 ﻿using System;
 using System.IO;
-using Plugins.Saneject.Legacy.Editor.BatchInjection.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
 using UnityEngine;
 
-namespace Plugins.Saneject.Legacy.Editor.BatchInjection.Persistence
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Persistence
 {
     public static class Storage
     {
         private static readonly string Folder = Path.GetFullPath(Path.Combine(Application.dataPath, "../ProjectSettings/Saneject"));
-        private static readonly string FullPath = Path.Combine(Folder, "LegacyBatchInjectorData.json");
+        private static readonly string FullPath = Path.Combine(Folder, "BatchInjectorData.json");
 
         public static void SaveData(BatchInjectorData injectorData)
         {

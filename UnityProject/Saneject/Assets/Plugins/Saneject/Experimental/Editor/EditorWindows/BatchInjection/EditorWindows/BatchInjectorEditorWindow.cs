@@ -1,12 +1,12 @@
-﻿using Plugins.Saneject.Legacy.Editor.BatchInjection.Data;
-using Plugins.Saneject.Legacy.Editor.BatchInjection.Drawers;
-using Plugins.Saneject.Legacy.Editor.BatchInjection.Persistence;
-using Plugins.Saneject.Legacy.Editor.BatchInjection.Utilities;
+﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Data;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Drawers;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Persistence;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.Utilities;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
 
-namespace Plugins.Saneject.Legacy.Editor.BatchInjection.EditorWindows
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjection.EditorWindows
 {
     public class BatchInjectorEditorWindow : EditorWindow
     {
@@ -20,10 +20,10 @@ namespace Plugins.Saneject.Legacy.Editor.BatchInjection.EditorWindows
         private bool clickedAnyListItem;
         private GUIStyle titleStyle;
 
-        [MenuItem("Saneject/Legacy/Batch Injector")]
+        [MenuItem("Saneject/Batch Inject/Show Batch Injector Window")]
         public static void ShowWindow()
         {
-            BatchInjectorEditorWindow window = GetWindow<BatchInjectorEditorWindow>("Saneject Batch Injector (Legacy)");
+            BatchInjectorEditorWindow window = GetWindow<BatchInjectorEditorWindow>("Saneject Batch Injector");
             window.minSize = new Vector2(420, 400);
             window.Show();
         }

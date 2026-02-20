@@ -138,16 +138,16 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         public static class BatchInjectionMenus
         {
-            public static bool Confirm_BatchInject_SelectedAssets(
+            public static bool Confirm_BatchInject(
                 int sceneCount,
                 int prefabCount)
             {
-                if (!UserSettings.AskBefore_BatchInject_SelectedAssets)
+                if (!UserSettings.AskBefore_BatchInject)
                     return true;
 
                 StringBuilder messageBuilder = new();
 
-                messageBuilder.Append("Your selection includes ");
+                messageBuilder.Append("You are about to batch inject ");
 
                 if (sceneCount > 0)
                 {
@@ -163,13 +163,13 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 messageBuilder.Append(".");
                 messageBuilder.AppendLine();
                 messageBuilder.AppendLine();
-                messageBuilder.AppendLine("A batch injection operation will be performed on all selected assets and sub-assets that contain one or more scopes.");
+                messageBuilder.AppendLine("A batch injection operation will be performed on all selected scenes, prefab assets and sub-assets that contain one or more scopes.");
                 messageBuilder.AppendLine();
                 messageBuilder.Append("Do you want to continue?");
 
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Inject Selected Assets (Batch Injection)",
+                    title: "Saneject: Batch Inject Selected Assets",
                     message: messageBuilder.ToString(),
                     ok: "Inject",
                     cancel: "Cancel"

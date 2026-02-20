@@ -16,17 +16,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     public static class UserSettings
     {
         private const string SettingsPrefix = "SanejectSettings_";
-
-        #region Ask Before Batch Injection
-
-        public static bool AskBefore_BatchInject_SelectedAssets
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        #endregion
-
+ 
         #region Ask Before Injection
 
         public static bool AskBefore_Inject_CurrentScene_Or_CurrentPrefab
@@ -42,6 +32,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         }
 
         public static bool AskBefore_Inject_SelectedSceneHierarchies
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
+        public static bool AskBefore_BatchInject
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);

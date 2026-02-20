@@ -97,17 +97,14 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 tooltip: "Show a confirmation dialog before injecting all selected scene hierarchies in the Scene Hierarchy window.",
                 currentValue: UserSettings.AskBefore_Inject_SelectedSceneHierarchies,
                 onChanged: newValue => UserSettings.AskBefore_Inject_SelectedSceneHierarchies = newValue
-            );
-
-            EditorGUILayout.Space(8);
-            EditorGUILayout.LabelField("Ask Before Batch Injection", EditorStyles.boldLabel);
+            ); 
 
             DrawToggle
             (
-                label: "Selected Assets",
-                tooltip: "Show a confirmation dialog before batch injecting all selected assets or folders in the project window.",
-                currentValue: UserSettings.AskBefore_BatchInject_SelectedAssets,
-                onChanged: newValue => UserSettings.AskBefore_BatchInject_SelectedAssets = newValue
+                label: "Batch Injection",
+                tooltip: "Show a confirmation dialog before batch injecting all selected scenes and prefab assets.",
+                currentValue: UserSettings.AskBefore_BatchInject,
+                onChanged: newValue => UserSettings.AskBefore_BatchInject = newValue
             );
 
             EditorGUILayout.Space(8);
