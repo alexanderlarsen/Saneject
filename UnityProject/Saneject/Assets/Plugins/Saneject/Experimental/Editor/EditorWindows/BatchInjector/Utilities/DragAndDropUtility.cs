@@ -11,7 +11,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
-    public static class DragAndDropUtils
+    public static class DragAndDropUtility
     {
         public static void HandleDragAndDrop(
             Rect dropArea,

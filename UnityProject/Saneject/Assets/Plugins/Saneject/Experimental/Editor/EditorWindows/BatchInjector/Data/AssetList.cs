@@ -70,7 +70,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 
         public void Sort()
         {
-            SortingUtils.SortList(list, sortMode);
+            SortingUtility.SortList(list, sortMode);
         }
 
         public AssetData[] GetEnabled()

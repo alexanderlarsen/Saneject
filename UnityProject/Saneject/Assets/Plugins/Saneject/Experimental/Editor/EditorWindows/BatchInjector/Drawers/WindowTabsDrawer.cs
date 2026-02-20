@@ -37,6 +37,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             switch (injectorData.windowTab)
             {
                 case WindowTab.Scenes:
+                {
                     AssetListDrawer.DrawListHeader
                     (
                         injectorData: injectorData,
@@ -44,9 +45,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         title: "Scenes",
                         buttons: new (string, Action)[]
                         {
-                            ("Add Open Scenes", () => SceneListUtils.AddOpenScenes(injectorData)),
-                            ("Add All Project Scenes", () => SceneListUtils.AddAllProjectScenes(injectorData)),
-                            ("Clear All", () => SceneListUtils.ClearScenes(injectorData))
+                            ("Add Open Scenes", () => SceneListUtility.AddOpenScenes(injectorData)),
+                            ("Add All Project Scenes", () => SceneListUtility.AddAllProjectScenes(injectorData)),
+                            ("Clear All", () => SceneListUtility.ClearScenes(injectorData))
                         },
                         repaint: repaint
                     );
@@ -71,8 +72,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     );
 
                     break;
+                }
 
                 case WindowTab.Prefabs:
+                {
                     AssetListDrawer.DrawListHeader
                     (
                         injectorData: injectorData,
@@ -80,9 +83,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         title: "Prefabs",
                         buttons: new (string, Action)[]
                         {
-                            ("Add All Prefabs In Current Scene", () => PrefabListUtils.AddAllPrefabsInScene(injectorData)),
-                            ("Add All Project Prefabs", () => PrefabListUtils.AddAllProjectPrefabs(injectorData)),
-                            ("Clear All", () => PrefabListUtils.ClearPrefabs(injectorData))
+                            ("Add All Prefabs In Current Scene", () => PrefabListUtility.AddAllPrefabsInScene(injectorData)),
+                            ("Add All Project Prefabs", () => PrefabListUtility.AddAllProjectPrefabs(injectorData)),
+                            ("Clear All", () => PrefabListUtility.ClearPrefabs(injectorData))
                         },
                         repaint: repaint
                     );
@@ -107,6 +110,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     );
 
                     break;
+                }
             }
 
             EditorGUILayout.EndScrollView();

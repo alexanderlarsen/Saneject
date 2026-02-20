@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
-    public static class PrefabListUtils
+    public static class PrefabListUtility
     {
         public static void AddAllPrefabsInScene(BatchInjectorData injectorData)
         {

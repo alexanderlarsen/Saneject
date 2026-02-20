@@ -39,7 +39,7 @@
         }
     },
     "prefabList": {
-        "sortMode": 2,
+        "sortMode": 0,
         "list": [
             {
                 "guid": "aa04bdaf9cd95e64a843eab43c573001",
@@ -67,5 +67,5 @@
             "y": 0.0
         }
     },
-    "windowTab": 1
+    "windowTab": 0
 }

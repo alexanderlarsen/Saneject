@@ -1,9 +1,9 @@
-﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
+﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Controls;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
@@ -13,35 +13,25 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
         private const float WindowPadding = 5f;
 
         private BatchInjectorData injectorData = new();
-        private ReorderableList sceneList;
-        private ReorderableList prefabList;
+        private ReorderableAssetList sceneList;
+        private ReorderableAssetList prefabList;
         private Rect sceneListRect;
         private Rect prefabListRect;
         private bool clickedAnyListItem;
         private GUIStyle titleStyle;
 
-        [MenuItem("Saneject/Batch Inject/Open Batch Injector Window")]
-        public static void ShowWindow()
-        {
-            BatchInjectorEditorWindow window = GetWindow<BatchInjectorEditorWindow>("Saneject Batch Injector");
-            window.minSize = new Vector2(420, 400);
-            window.Show();
-        }
-
         private void OnEnable()
         {
             injectorData = Storage.LoadOrCreateData();
 
-            sceneList = ReorderableListUtils.CreateReorderableList
+            sceneList = new ReorderableAssetList
             (
-                injectorData: injectorData,
                 assetList: injectorData.sceneList,
                 onModified: () => Storage.SaveData(injectorData)
             );
 
-            prefabList = ReorderableListUtils.CreateReorderableList
+            prefabList = new ReorderableAssetList
             (
-                injectorData: injectorData,
                 assetList: injectorData.prefabList,
                 onModified: () => Storage.SaveData(injectorData)
             );
@@ -52,9 +42,17 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             Storage.SaveData(injectorData);
         }
 
+        [MenuItem("Saneject/Batch Inject/Open Batch Injector Window")]
+        public static void ShowWindow()
+        {
+            BatchInjectorEditorWindow window = GetWindow<BatchInjectorEditorWindow>("Saneject Batch Injector");
+            window.minSize = new Vector2(420, 400);
+            window.Show();
+        }
+
         private void OnGUI()
         {
-            DragAndDropUtils.HandleDragAndDrop
+            DragAndDropUtility.HandleDragAndDrop
             (
                 dropArea: position,
                 injectorData: injectorData,
@@ -108,10 +106,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             {
                 fontSize = 14,
                 fontStyle = FontStyle.Bold,
-                normal =
-                {
-                    textColor = EditorStyles.label.normal.textColor
-                }
+                normal = { textColor = EditorStyles.label.normal.textColor }
             };
 
             EditorGUILayout.LabelField("Batch Injector", titleStyle);

@@ -6,7 +6,7 @@ using UnityEngine.SceneManagement;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
-    public static class SceneListUtils
+    public static class SceneListUtility
     {
         public static void AddOpenScenes(BatchInjectorData injectorData)
         {

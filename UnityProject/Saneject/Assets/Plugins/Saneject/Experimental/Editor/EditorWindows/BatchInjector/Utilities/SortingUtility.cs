@@ -5,7 +5,7 @@ using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
-    public static class SortingUtils
+    public static class SortingUtility
     {
         public static void SortList(
             List<AssetData> list,
