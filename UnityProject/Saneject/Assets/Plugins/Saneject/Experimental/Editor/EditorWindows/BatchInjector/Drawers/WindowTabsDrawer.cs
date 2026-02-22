@@ -20,6 +20,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             ref bool clickedAnyListItem,
             Action repaint)
         {
+            WindowTab previousTab = batchInjectorData.windowTab;
+
             // Tab controls
             batchInjectorData.windowTab = (WindowTab)GUILayout.Toolbar
             (
@@ -30,6 +32,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     $"Prefabs ({batchInjectorData.prefabList.TotalCount})"
                 }
             );
+
+            if (previousTab != batchInjectorData.windowTab)
+                batchInjectorData.isDirty = true;
 
             GUILayout.Space(8);
 

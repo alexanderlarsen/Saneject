@@ -131,7 +131,6 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             string pathLabelText = hasAsset
                 ? assetData.GetAssetPath()
                 : "Deleted";
- 
 
             EditorGUI.LabelField
             (
@@ -152,7 +151,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
 
                 Rect popupRect = new
                 (
-                    x: rect.xMax - width - 25,
+                    x: rect.xMax - width - 30,
                     y: rect.y,
                     width: width,
                     height: rect.height
@@ -161,7 +160,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                 GUIContent content = new
                 (
                     ObjectNames.NicifyVariableName(sceneAssetData.ContextWalkFilter.ToString()),
-                    "Controls which contexts are included in the walk when injecting this scene"
+                    "Context walk filter: Controls which contexts are included in the walk when injecting this scene"
                 );
 
                 // EditorGUI.EnumPopup() does not reliably show tooltips in this context,
