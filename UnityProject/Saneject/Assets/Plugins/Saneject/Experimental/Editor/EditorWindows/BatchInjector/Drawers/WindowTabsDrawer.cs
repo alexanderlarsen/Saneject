@@ -1,6 +1,7 @@
 ﻿using System;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Extensions;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
 using UnityEditor;
@@ -12,63 +13,48 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
     public static class WindowTabsDrawer
     {
         public static void DrawTabs(
-            BatchInjectorData injectorData,
-            ReorderableList sceneList,
+            BatchInjectorData data,
+            ReorderableList reorderableSceneList,
             Rect sceneListRect,
-            ReorderableList prefabList,
+            ReorderableList reorderablePrefabList,
             Rect prefabListRect,
             ref bool clickedAnyListItem,
             Action repaint)
         {
             // Tab controls
-            injectorData.windowTab = (WindowTab)GUILayout.Toolbar
+            data.windowTab = (WindowTab)GUILayout.Toolbar
             (
-                selected: (int)injectorData.windowTab,
+                selected: (int)data.windowTab,
                 texts: new[]
                 {
-                    $"Scenes ({injectorData.sceneList.TotalCount})",
-                    $"Prefabs ({injectorData.prefabList.TotalCount})"
+                    $"Scenes ({data.sceneList.TotalCount})",
+                    $"Prefabs ({data.prefabList.TotalCount})"
                 }
             );
 
             GUILayout.Space(8);
 
             // Tab content
-            switch (injectorData.windowTab)
+            switch (data.windowTab)
             {
                 case WindowTab.Scenes:
                 {
-                    AssetListDrawer.DrawListHeader
+                    DrawTab
                     (
-                        injectorData: injectorData,
-                        list: injectorData.sceneList,
                         title: "Scenes",
+                        injectorData: data,
+                        assetList: data.sceneList,
+                        reorderableList: reorderableSceneList,
+                        listRect: sceneListRect,
+                        clickedListAnyItem: ref clickedAnyListItem,
+                        repaint: repaint,
                         buttons: new (string, Action)[]
                         {
-                            ("Add Open Scenes", () => SceneListUtility.AddOpenScenes(injectorData)),
-                            ("Add All Project Scenes", () => SceneListUtility.AddAllProjectScenes(injectorData)),
-                            ("Clear All", () => SceneListUtility.ClearScenes(injectorData))
-                        },
-                        repaint: repaint
-                    );
-
-                    GUILayout.Space(5);
-                    injectorData.sceneList.Scroll = EditorGUILayout.BeginScrollView(injectorData.sceneList.Scroll);
-
-                    AssetListDrawer.DrawList
-                    (
-                        list: sceneList,
-                        rect: ref sceneListRect,
-                        clickedListAnyItem: ref clickedAnyListItem
-                    );
-
-                    ContextMenuDrawer.DrawContextMenu
-                    (
-                        list: sceneList,
-                        assetList: injectorData.sceneList,
-                        tab: injectorData.windowTab,
-                        rect: sceneListRect,
-                        onModified: () => Storage.SaveData(injectorData)
+                            ("Add Open Scenes", () => SceneListUtility.AddOpenScenes(data)),
+                            ("Add All Project Scenes", () => SceneListUtility.AddAllProjectScenes(data)),
+                            ("Clear All", () => SceneListUtility.ClearScenes(data)),
+                            ($"Sort: {data.sceneList.SortMode.GetDisplayString()}", () => SortMenuDrawer.DrawSortMenu(data, data.sceneList, repaint))
+                        }
                     );
 
                     break;
@@ -76,37 +62,22 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
                 case WindowTab.Prefabs:
                 {
-                    AssetListDrawer.DrawListHeader
+                    DrawTab
                     (
-                        injectorData: injectorData,
-                        list: injectorData.prefabList,
                         title: "Prefabs",
+                        injectorData: data,
+                        assetList: data.prefabList,
+                        reorderableList: reorderablePrefabList,
+                        listRect: prefabListRect,
+                        clickedListAnyItem: ref clickedAnyListItem,
+                        repaint: repaint,
                         buttons: new (string, Action)[]
                         {
-                            ("Add All Prefabs In Current Scene", () => PrefabListUtility.AddAllPrefabsInScene(injectorData)),
-                            ("Add All Project Prefabs", () => PrefabListUtility.AddAllProjectPrefabs(injectorData)),
-                            ("Clear All", () => PrefabListUtility.ClearPrefabs(injectorData))
-                        },
-                        repaint: repaint
-                    );
-
-                    GUILayout.Space(5);
-                    injectorData.prefabList.Scroll = EditorGUILayout.BeginScrollView(injectorData.prefabList.Scroll);
-
-                    AssetListDrawer.DrawList
-                    (
-                        list: prefabList,
-                        rect: ref prefabListRect,
-                        clickedListAnyItem: ref clickedAnyListItem
-                    );
-
-                    ContextMenuDrawer.DrawContextMenu
-                    (
-                        list: prefabList,
-                        assetList: injectorData.prefabList,
-                        tab: injectorData.windowTab,
-                        rect: prefabListRect,
-                        onModified: () => Storage.SaveData(injectorData)
+                            ("Add All Prefabs In Current Scene", () => PrefabListUtility.AddAllPrefabsInScene(data)),
+                            ("Add All Project Prefabs", () => PrefabListUtility.AddAllProjectPrefabs(data)),
+                            ("Clear All", () => PrefabListUtility.ClearPrefabs(data)),
+                            ($"Sort: {data.prefabList.SortMode.GetDisplayString()}", () => SortMenuDrawer.DrawSortMenu(data, data.prefabList, repaint))
+                        }
                     );
 
                     break;
@@ -114,6 +85,42 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             }
 
             EditorGUILayout.EndScrollView();
+        }
+
+        private static void DrawTab(
+            string title,
+            BatchInjectorData injectorData,
+            AssetList assetList,
+            ReorderableList reorderableList,
+            Rect listRect,
+            ref bool clickedListAnyItem,
+            Action repaint,
+            (string label, Action onClick)[] buttons)
+        {
+            AssetListDrawer.DrawListHeader
+            (title: title,
+                buttons: buttons,
+                repaint: repaint
+            );
+
+            GUILayout.Space(5);
+            assetList.Scroll = EditorGUILayout.BeginScrollView(assetList.Scroll);
+
+            AssetListDrawer.DrawList
+            (
+                list: reorderableList,
+                rect: ref listRect,
+                clickedListAnyItem: ref clickedListAnyItem
+            );
+
+            ContextMenuDrawer.DrawContextMenu
+            (
+                list: reorderableList,
+                assetList: assetList,
+                tab: injectorData.windowTab,
+                rect: listRect,
+                onModified: () => Storage.SaveData(injectorData)
+            );
         }
     }
 }

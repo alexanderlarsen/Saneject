@@ -44,7 +44,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneBatchItems.Length, 0))
                 return;
  
-            InjectionRunner.RunBatch(sceneBatchItems.ToArray());
+            InjectionRunner.RunBatch(sceneBatchItems);
         }
         
         public static void InjectPrefabs(BatchInjectorData data)
@@ -58,7 +58,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(0, prefabBatchItems.Length))
                 return;
  
-            InjectionRunner.RunBatch(prefabBatchItems.ToArray());
+            InjectionRunner.RunBatch(prefabBatchItems);
         }
     }
 }

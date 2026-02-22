@@ -88,7 +88,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             GUILayout.FlexibleSpace();
             InjectButtonsDrawer.DrawInjectButtons(injectorData);
 
-            AssetListDrawer.HandleInput
+            InputUtility.HandleInput
             (
                 clickedAnyListItem: ref clickedAnyListItem,
                 tab: injectorData.windowTab,
