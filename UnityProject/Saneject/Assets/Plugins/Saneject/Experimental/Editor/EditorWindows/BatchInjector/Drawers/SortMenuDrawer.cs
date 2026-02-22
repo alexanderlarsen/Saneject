@@ -38,7 +38,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     {
                         list.SortMode = sortMode;
                         list.Sort();
-                        Storage.SaveData(data);
+                        data.isDirty = true;
                         repaint?.Invoke();
                     }
                 );

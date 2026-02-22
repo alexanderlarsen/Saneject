@@ -27,19 +27,19 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             sceneList = new ReorderableAssetList
             (
                 assetList: data.sceneList,
-                onModified: () => Storage.SaveData(data)
+                onModified: () => data.isDirty = true
             );
 
             prefabList = new ReorderableAssetList
             (
                 assetList: data.prefabList,
-                onModified: () => Storage.SaveData(data)
+                onModified: () => data.isDirty = true
             );
         }
 
         private void OnDisable()
         {
-            Storage.SaveData(data);
+            Storage.SaveIfDirty(data);
         }
 
         [MenuItem("Saneject/Batch Inject/Open Batch Injector Window")]
@@ -55,7 +55,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             DragAndDropUtility.HandleDragAndDrop
             (
                 dropArea: position,
-                injectorData: data,
+                data: data,
                 sceneList: sceneList,
                 prefabList: prefabList,
                 repaint: Repaint
@@ -98,6 +98,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             );
 
             GUILayout.EndArea();
+            Storage.SaveIfDirty(data);
         }
 
         private void DrawHeaderLabels()

@@ -2,7 +2,6 @@
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Extensions;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
 using UnityEditor;
 using UnityEditorInternal;
@@ -42,7 +41,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     DrawTab
                     (
                         title: "Scenes",
-                        injectorData: data,
+                        data: data,
                         assetList: data.sceneList,
                         reorderableList: reorderableSceneList,
                         listRect: sceneListRect,
@@ -77,7 +76,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     DrawTab
                     (
                         title: "Prefabs",
-                        injectorData: data,
+                        data: data,
                         assetList: data.prefabList,
                         reorderableList: reorderablePrefabList,
                         listRect: prefabListRect,
@@ -113,7 +112,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
         private static void DrawTab(
             string title,
-            BatchInjectorData injectorData,
+            BatchInjectorData data,
             AssetList assetList,
             ReorderableList reorderableList,
             Rect listRect,
@@ -141,9 +140,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             (
                 list: reorderableList,
                 assetList: assetList,
-                tab: injectorData.windowTab,
+                tab: data.windowTab,
                 rect: listRect,
-                onModified: () => Storage.SaveData(injectorData)
+                onModified: () => data.isDirty = true
             );
         }
     }

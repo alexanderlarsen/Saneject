@@ -9,5 +9,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
         public AssetList sceneList = new();
         public AssetList prefabList = new();
         public WindowTab windowTab = WindowTab.Scenes;
+
+        [NonSerialized]
+        public bool isDirty;
     }
 }

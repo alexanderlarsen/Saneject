@@ -10,11 +10,15 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persi
         private static readonly string Folder = Path.GetFullPath(Path.Combine(Application.dataPath, "../ProjectSettings/Saneject"));
         private static readonly string FullPath = Path.Combine(Folder, "BatchInjectorData.json");
 
-        public static void SaveData(BatchInjectorData injectorData)
+        public static void SaveIfDirty(BatchInjectorData data)
         {
+            if (!data.isDirty)
+                return;
+
             Directory.CreateDirectory(Folder);
-            string json = JsonUtility.ToJson(injectorData, prettyPrint: true);
+            string json = JsonUtility.ToJson(data, prettyPrint: true);
             File.WriteAllText(FullPath, json);
+            data.isDirty = false;
         }
 
         public static BatchInjectorData LoadOrCreateData()
@@ -33,7 +37,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persi
             {
                 Debug.LogError($"Saneject: Batch Injector failed to load configuration data. {e.Message} Creating new file.");
                 data = new BatchInjectorData();
-                SaveData(data);
+                data.isDirty = true;
+                SaveIfDirty(data);
             }
 
             return data;
