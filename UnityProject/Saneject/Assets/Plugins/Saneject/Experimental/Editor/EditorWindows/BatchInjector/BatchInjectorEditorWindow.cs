@@ -107,7 +107,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             {
                 fontSize = 14,
                 fontStyle = FontStyle.Bold,
-                normal = { textColor = EditorStyles.label.normal.textColor }
+                normal =
+                {
+                    textColor = EditorStyles.label.normal.textColor
+                }
             };
 
             EditorGUILayout.LabelField("Batch Injector", titleStyle);

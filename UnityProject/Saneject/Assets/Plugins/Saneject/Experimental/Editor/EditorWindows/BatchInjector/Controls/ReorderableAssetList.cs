@@ -95,7 +95,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                 GUI.changed = true;
             }
 
-            var elementAsset = element.GetAsset();
+            Object elementAsset = element.GetAsset();
 
             using (new EditorGUI.DisabledScope(true))
             {

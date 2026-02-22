@@ -2,7 +2,6 @@
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Extensions;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using UnityEditor;
 using UnityEngine;
 

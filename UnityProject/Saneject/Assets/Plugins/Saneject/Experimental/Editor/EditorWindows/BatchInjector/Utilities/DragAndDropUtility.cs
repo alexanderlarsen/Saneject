@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -57,7 +56,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                         : prefabObjectIndices
                 );
 
-                data.isDirty = true; 
+                data.isDirty = true;
                 repaint.Invoke();
                 return;
             }

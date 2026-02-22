@@ -1,6 +1,5 @@
 ﻿using System.Linq;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
