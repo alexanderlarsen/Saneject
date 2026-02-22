@@ -28,15 +28,15 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
             return;
 
-            void AddItem(SortMode mode)
+            void AddItem(SortMode sortMode)
             {
                 menu.AddItem
                 (
-                    content: new GUIContent(mode.GetDisplayString()),
-                    on: list.SortMode == mode,
+                    content: new GUIContent(sortMode.GetDisplayString()),
+                    on: list.SortMode == sortMode,
                     func: () =>
                     {
-                        list.SortMode = mode;
+                        list.SortMode = sortMode;
                         list.Sort();
                         Storage.SaveData(data);
                         repaint?.Invoke();

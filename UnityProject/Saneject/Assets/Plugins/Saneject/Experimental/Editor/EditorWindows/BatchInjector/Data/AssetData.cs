@@ -27,9 +27,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
         }
 
         public string Guid => guid;
-        public Object Asset => asset ??= AssetDatabase.LoadAssetAtPath<Object>(AssetDatabase.GUIDToAssetPath(guid));
+        public Object Asset => asset ??= AssetDatabase.LoadAssetAtPath<Object>(Path);
         public string Path => AssetDatabase.GUIDToAssetPath(guid);
-        public string Name => Asset ? Asset.name : string.Empty;
+        public string Name => Asset?.name ?? string.Empty;
 
         public bool Enabled
         {

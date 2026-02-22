@@ -42,13 +42,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
             list.Clear();
         }
 
-        public bool TryAddByPath(string path)
+        public bool TryAddAssetByPath(string path)
         {
             string guid = AssetDatabase.AssetPathToGUID(path);
-            return TryAddByGuid(guid);
+            return TryAddAssetByGuid(guid);
         }
 
-        public bool TryAddByGuid(string guid)
+        public bool TryAddAssetByGuid(string guid)
         {
             if (list.Any(item => item.Guid == guid))
                 return false;
