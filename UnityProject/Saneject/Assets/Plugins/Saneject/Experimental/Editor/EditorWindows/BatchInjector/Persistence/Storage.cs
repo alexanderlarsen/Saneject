@@ -15,9 +15,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persi
             if (!data.isDirty)
                 return;
 
-            Directory.CreateDirectory(Folder);
-            string json = JsonUtility.ToJson(data, prettyPrint: true);
-            File.WriteAllText(FullPath, json);
+            Save(data);
             data.isDirty = false;
         }
 
@@ -37,11 +35,17 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persi
             {
                 Debug.LogError($"Saneject: Batch Injector failed to load configuration data. {e.Message} Creating new file.");
                 data = new BatchInjectorData();
-                data.isDirty = true;
-                SaveIfDirty(data);
+                Save(data);
             }
 
             return data;
+        }
+
+        private static void Save(BatchInjectorData data)
+        {
+            Directory.CreateDirectory(Folder);
+            string json = JsonUtility.ToJson(data, prettyPrint: true);
+            File.WriteAllText(FullPath, json);
         }
     }
 }
