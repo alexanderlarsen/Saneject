@@ -156,17 +156,17 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             );
         }
 
-        private void OnRemove(ReorderableList reorderable)
+        private void OnRemove(ReorderableList _)
         {
-            if (reorderable.selectedIndices.Count == 0)
+            if (selectedIndices.Count == 0)
                 return;
 
-            List<int> indices = reorderable.selectedIndices?.Distinct()
+            List<int> indices = selectedIndices?.Distinct()
                 .Where(i => i >= 0 && i < assetList.TotalCount)
                 .OrderByDescending(i => i)
                 .ToList() ?? new List<int>
             {
-                reorderable.index
+                index
             };
 
             if (!EditorUtility.DisplayDialog
@@ -179,8 +179,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                 return;
 
             indices.ForEach(i => assetList.RemoveAt(i));
-            reorderable.ClearSelection();
-            reorderable.index = Mathf.Clamp(reorderable.index, 0, assetList.TotalCount - 1);
+            ClearSelection();
+            index = Mathf.Clamp(index, 0, assetList.TotalCount - 1);
             onModified?.Invoke();
             GUI.changed = true;
         }

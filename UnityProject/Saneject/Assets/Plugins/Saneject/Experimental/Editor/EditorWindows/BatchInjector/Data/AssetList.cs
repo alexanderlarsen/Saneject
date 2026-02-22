@@ -37,6 +37,11 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
             set => scroll = value;
         }
 
+        public void Clear()
+        {
+            list.Clear();
+        }
+
         public bool TryAddByPath(string path)
         {
             string guid = AssetDatabase.AssetPathToGUID(path);
@@ -91,11 +96,6 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
                 return;
 
             Sort();
-        }
-
-        public void Clear()
-        {
-            list.Clear();
         }
 
         public int FindIndexByPath(string path)
