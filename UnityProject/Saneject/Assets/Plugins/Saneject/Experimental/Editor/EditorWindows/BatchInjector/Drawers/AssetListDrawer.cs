@@ -22,7 +22,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 foreach ((string label, Action onClick) button in buttons)
                     if (GUILayout.Button(button.label))
                     {
-                        button.onClick();
+                        button.onClick.Invoke();
                         repaint?.Invoke();
                     }
             }

@@ -50,10 +50,22 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         repaint: repaint,
                         buttons: new (string, Action)[]
                         {
-                            ("Add Open Scenes", () => SceneListUtility.AddOpenScenes(data)),
-                            ("Add All Project Scenes", () => SceneListUtility.AddAllProjectScenes(data)),
-                            ("Clear All", () => SceneListUtility.ClearScenes(data)),
-                            ($"Sort: {data.sceneList.SortMode.GetDisplayString()}", () => SortMenuDrawer.DrawSortMenu(data, data.sceneList, repaint))
+                            (
+                                "Add Open Scenes",
+                                () => SceneListUtility.AddOpenScenes(data)
+                            ),
+                            (
+                                "Add All Project Scenes",
+                                () => SceneListUtility.AddAllProjectScenes(data)
+                            ),
+                            (
+                                "Clear All",
+                                () => SceneListUtility.ClearScenes(data)
+                            ),
+                            (
+                                $"Sort: {data.sceneList.SortMode.GetDisplayString()}",
+                                () => SortMenuDrawer.DrawSortMenu(data, data.sceneList, repaint)
+                            )
                         }
                     );
 
@@ -73,10 +85,22 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         repaint: repaint,
                         buttons: new (string, Action)[]
                         {
-                            ("Add All Prefabs In Current Scene", () => PrefabListUtility.AddAllPrefabsInScene(data)),
-                            ("Add All Project Prefabs", () => PrefabListUtility.AddAllProjectPrefabs(data)),
-                            ("Clear All", () => PrefabListUtility.ClearPrefabs(data)),
-                            ($"Sort: {data.prefabList.SortMode.GetDisplayString()}", () => SortMenuDrawer.DrawSortMenu(data, data.prefabList, repaint))
+                            (
+                                "Add All Prefabs In Current Scene",
+                                () => PrefabListUtility.AddAllPrefabsInScene(data)
+                            ),
+                            (
+                                "Add All Project Prefabs",
+                                () => PrefabListUtility.AddAllProjectPrefabs(data)
+                            ),
+                            (
+                                "Clear All",
+                                () => PrefabListUtility.ClearPrefabs(data)
+                            ),
+                            (
+                                $"Sort: {data.prefabList.SortMode.GetDisplayString()}",
+                                () => SortMenuDrawer.DrawSortMenu(data, data.prefabList, repaint)
+                            )
                         }
                     );
 
