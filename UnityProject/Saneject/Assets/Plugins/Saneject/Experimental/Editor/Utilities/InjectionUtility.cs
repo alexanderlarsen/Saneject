@@ -25,7 +25,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 GameObject[] startObjects = activeScene
                     .GetRootGameObjects();
 
-                InjectionRunner.Run(startObjects, ContextWalkFilter.All);
+                InjectionRunner.Run(startObjects, ContextWalkFilter.AllContexts);
             }
 
             public static void CurrentPrefabAsset()
@@ -92,7 +92,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                         .gameObjects
                         .Where(x => x.scene.IsValid());
 
-                InjectionRunner.Run(startObjects, ContextWalkFilter.All);
+                InjectionRunner.Run(startObjects, ContextWalkFilter.AllContexts);
             }
 
             public static void SelectedSceneHierarchies_SelectedObjectContextsOnly()
@@ -129,7 +129,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             public static void SelectedAssets()
             {
                 BatchItem[] batchItems = Selection.GetFiltered<Object>(SelectionMode.DeepAssets)
-                    .CreateBatchItemsFromObjects(ContextWalkFilter.All)
+                    .CreateBatchItemsFromObjects(ContextWalkFilter.AllContexts)
                     .ToArray();
 
                 int sceneCount = batchItems.OfType<SceneBatchItem>().Count();

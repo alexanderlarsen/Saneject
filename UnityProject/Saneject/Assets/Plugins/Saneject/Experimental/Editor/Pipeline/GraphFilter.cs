@@ -25,7 +25,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
 
             switch (contextWalkFilter)
             {
-                case ContextWalkFilter.All:
+                case ContextWalkFilter.AllContexts:
                 {
                     nodes = injectionGraph
                         .EnumerateAllTransformNodes()

@@ -272,7 +272,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                         if (GUILayout.Button(new GUIContent(
                                 text: "All",
                                 tooltip: "Injects the entire hierarchy, including both scene objects and prefabs instances.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.All);
+                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.AllContexts);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "This",

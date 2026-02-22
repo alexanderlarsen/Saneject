@@ -9,7 +9,7 @@
         /// Includes all transforms in the injection graph.
         /// Context isolation rules are unaffected by this setting.
         /// </summary>
-        All,
+        AllContexts,
 
         /// <summary>
         /// Includes transforms in the injection graph that belong to the same context(s) as the selected start objects.

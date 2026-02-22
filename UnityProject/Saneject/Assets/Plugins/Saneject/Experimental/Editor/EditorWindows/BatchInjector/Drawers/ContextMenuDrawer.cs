@@ -92,6 +92,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 else
                     foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
                     {
+                        if(value is ContextWalkFilter.SameAsStartObjects or ContextWalkFilter.PrefabAssets)
+                            continue;
+                        
                         ContextWalkFilter captured = value;
 
                         menu.AddItem
