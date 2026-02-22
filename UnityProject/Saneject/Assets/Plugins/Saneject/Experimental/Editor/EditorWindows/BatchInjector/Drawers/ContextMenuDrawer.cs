@@ -1,6 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
+using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
@@ -40,10 +42,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
             menu.AddItem
             (
-                label: $"Inject {selected.Count} Selected {(tab == WindowTab.Scenes ? "Scene" : "Prefab")}{(selected.Count == 1 ? "" : "s")}",
+                label: $"Inject {(selected.Count > 0 ? selected.Count + " " : "")}Selected {(tab == WindowTab.Scenes ? "Scene" : "Prefab")}{(selected.Count == 1 ? "" : "s")}",
                 isEnabled: hasSelection,
                 onClick: () => InjectSelected(batchInjectorData, assetList, tab, selected)
             );
+
+            menu.AddSeparator("");
 
             menu.AddItem
             (
@@ -63,7 +67,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
             menu.AddItem
             (
-                label: "Clear Injection Status",
+                label: $"Clear Injection Status",
                 isEnabled: hasSelection,
                 onClick: () => ClearSelectedInjectStatus(batchInjectorData, assetList, selected)
             );
@@ -72,10 +76,32 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
             menu.AddItem
             (
-                label: "Remove Selected",
+                label: "Remove",
                 isEnabled: hasSelection,
                 onClick: () => RemoveSelected(batchInjectorData, list, assetList, selected)
             );
+
+            if (tab == WindowTab.Scenes)
+            {
+                menu.AddSeparator("");
+
+                const string baseLabel = "Set Context Walk Filter";
+
+                if (!hasSelection)
+                    menu.AddDisabledItem(new GUIContent(baseLabel));
+                else
+                    foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
+                    {
+                        ContextWalkFilter captured = value;
+
+                        menu.AddItem
+                        (
+                            label: $"{baseLabel}/{ObjectNames.NicifyVariableName(value.ToString())}",
+                            isEnabled: true,
+                            onClick: () => SetSelectedContextFilter(batchInjectorData, assetList, selected, captured)
+                        );
+                    }
+            }
 
             menu.ShowAsContext();
             e.Use();
@@ -210,6 +236,19 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             list.ClearSelection();
             batchInjectorData.isDirty = true;
             GUI.changed = true;
+        }
+
+        private static void SetSelectedContextFilter(
+            BatchInjectorData batchInjectorData,
+            AssetList assetList,
+            List<int> selected,
+            ContextWalkFilter filter)
+        {
+            foreach (int i in selected)
+                if (assetList.GetElementAt(i) is SceneAssetData scene)
+                    scene.ContextWalkFilter = filter;
+
+            batchInjectorData.isDirty = true;
         }
 
         #endregion
