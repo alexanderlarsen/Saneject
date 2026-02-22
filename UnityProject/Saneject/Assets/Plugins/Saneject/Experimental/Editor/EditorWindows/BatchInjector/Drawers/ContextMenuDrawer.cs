@@ -10,7 +10,6 @@ using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
@@ -88,29 +87,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                             break;
                         }
                     }
-                });
-
-            menu.AddSeparator("");
-
-            AddItem
-            (
-                menu: menu,
-                label: "Find in Project",
-                isEnabled: selected.Count == 1,
-                onClick: () =>
-                {
-                    foreach (int i in selected)
-                    {
-                        AssetData data = assetList.GetElementAt(i);
-                        Object asset = data.Asset;
-
-                        if (asset)
-                            EditorGUIUtility.PingObject(asset);
-                    }
                 }
             );
-
-            menu.AddSeparator("");
 
             AddItem
             (
