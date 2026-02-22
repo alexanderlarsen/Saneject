@@ -12,7 +12,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
     {
         private const float WindowPadding = 5f;
 
-        private BatchInjectorData data = new();
+        private BatchInjectorData batchInjectorData = new();
         private ReorderableAssetList sceneList;
         private ReorderableAssetList prefabList;
         private Rect sceneListRect;
@@ -22,24 +22,24 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
 
         private void OnEnable()
         {
-            data = Storage.LoadOrCreateData();
+            batchInjectorData = Storage.LoadOrCreateData();
 
             sceneList = new ReorderableAssetList
             (
-                assetList: data.sceneList,
-                onModified: () => data.isDirty = true
+                assetList: batchInjectorData.sceneList,
+                onModified: () => batchInjectorData.isDirty = true
             );
 
             prefabList = new ReorderableAssetList
             (
-                assetList: data.prefabList,
-                onModified: () => data.isDirty = true
+                assetList: batchInjectorData.prefabList,
+                onModified: () => batchInjectorData.isDirty = true
             );
         }
 
         private void OnDisable()
         {
-            Storage.SaveIfDirty(data);
+            Storage.SaveIfDirty(batchInjectorData);
         }
 
         [MenuItem("Saneject/Batch Inject/Open Batch Injector Window")]
@@ -55,7 +55,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             DragAndDropUtility.HandleDragAndDrop
             (
                 dropArea: position,
-                data: data,
+                batchInjectorData: batchInjectorData,
                 sceneList: sceneList,
                 prefabList: prefabList,
                 repaint: Repaint
@@ -76,7 +76,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
 
             WindowTabsDrawer.DrawTabs
             (
-                data,
+                batchInjectorData,
                 sceneList,
                 sceneListRect,
                 prefabList,
@@ -86,19 +86,19 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             );
 
             GUILayout.FlexibleSpace();
-            InjectButtonsDrawer.DrawInjectButtons(data);
+            InjectButtonsDrawer.DrawInjectButtons(batchInjectorData);
 
             InputUtility.HandleInput
             (
                 clickedAnyListItem: ref clickedAnyListItem,
-                tab: data.windowTab,
+                tab: batchInjectorData.windowTab,
                 sceneList: sceneList,
                 prefabList: prefabList,
                 repaint: Repaint
             );
 
             GUILayout.EndArea();
-            Storage.SaveIfDirty(data);
+            Storage.SaveIfDirty(batchInjectorData);
         }
 
         private void DrawHeaderLabels()

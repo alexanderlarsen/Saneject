@@ -135,6 +135,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     );
 
                     combinedResults.AddToResults(results);
+                    item.Status = results.GetStatus();
                 }
 
                 EditorSceneManager.SaveScene(scene);
@@ -184,6 +185,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     );
 
                     combinedResults.AddToResults(results);
+                    item.Status = results.GetStatus();
                 }
             }
 

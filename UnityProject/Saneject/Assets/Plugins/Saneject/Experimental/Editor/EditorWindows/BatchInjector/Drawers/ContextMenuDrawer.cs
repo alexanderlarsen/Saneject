@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
-using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
-using Plugins.Saneject.Experimental.Editor.Pipeline;
-using Plugins.Saneject.Experimental.Editor.Utilities;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
 using UnityEditor;
 using UnityEditorInternal;
 using UnityEngine;
@@ -16,11 +13,11 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
     public static class ContextMenuDrawer
     {
         public static void DrawContextMenu(
+            BatchInjectorData batchInjectorData,
             ReorderableList list,
             AssetList assetList,
             WindowTab tab,
-            Rect rect,
-            Action onModified)
+            Rect rect)
         {
             Event e = Event.current;
 
@@ -36,7 +33,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             (
                 label: "Select All",
                 isEnabled: selected.Count != list.count,
-                onClick: () => SelectAll(list, assetList, onModified)
+                onClick: () => SelectAll(batchInjectorData, list, assetList)
             );
 
             menu.AddSeparator("");
@@ -45,21 +42,21 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             (
                 label: $"Inject {selected.Count} Selected {(tab == WindowTab.Scenes ? "Scene" : "Prefab")}{(selected.Count == 1 ? "" : "s")}",
                 isEnabled: hasSelection,
-                onClick: () => InjectSelected(assetList, tab, selected)
+                onClick: () => InjectSelected(batchInjectorData, assetList, tab, selected)
             );
 
             menu.AddItem
             (
                 label: "Enable",
                 isEnabled: selected.Count(i => assetList.GetElementAt(i).Enabled) != selected.Count,
-                onClick: () => EnableSelected(assetList, onModified, selected)
+                onClick: () => EnableSelected(batchInjectorData, assetList, selected)
             );
 
             menu.AddItem
             (
                 label: "Disable",
                 isEnabled: selected.Count(i => assetList.GetElementAt(i).Enabled) != 0,
-                onClick: () => DisableSelected(assetList, onModified, selected)
+                onClick: () => DisableSelected(batchInjectorData, assetList, selected)
             );
 
             menu.AddSeparator("");
@@ -68,7 +65,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             (
                 label: "Clear Injection Status",
                 isEnabled: hasSelection,
-                onClick: () => ClearSelectedInjectStatus(assetList, onModified, selected)
+                onClick: () => ClearSelectedInjectStatus(batchInjectorData, assetList, selected)
             );
 
             menu.AddSeparator("");
@@ -77,7 +74,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             (
                 label: "Remove Selected",
                 isEnabled: hasSelection,
-                onClick: () => RemoveSelected(list, assetList, onModified, selected)
+                onClick: () => RemoveSelected(batchInjectorData, list, assetList, selected)
             );
 
             menu.ShowAsContext();
@@ -106,22 +103,23 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
         #region Context menu action methods
 
         private static void SelectAll(
+            BatchInjectorData batchInjectorData,
             ReorderableList list,
-            AssetList assetList,
-            Action onModified)
+            AssetList assetList)
         {
             list.GrabKeyboardFocus();
             list.SelectRange(0, list.count - 1);
             assetList.TrySortByEnabledOrDisabled();
-            onModified.Invoke();
+            batchInjectorData.isDirty = true;
         }
 
         private static void InjectSelected(
+            BatchInjectorData batchInjectorData,
             AssetList assetList,
             WindowTab tab,
             List<int> selected)
         {
-            AssetData[] assets = selected
+            AssetData[] selectedAssets = selected
                 .Select(assetList.GetElementAt)
                 .ToArray();
 
@@ -129,35 +127,33 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             {
                 case WindowTab.Scenes:
                 {
-                    SceneBatchItem[] sceneBatchItems = assets
-                        .Select(asset => new SceneBatchItem(asset.GetAssetPath(), ContextWalkFilter.All))
-                        .ToArray();
+                    InjectionUtility.Inject
+                    (
+                        sceneAssets: selectedAssets,
+                        prefabAssets: null,
+                        onInjectionComplete: () => batchInjectorData.isDirty = true
+                    );
 
-                    if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneBatchItems.Length, 0))
-                        return;
-
-                    InjectionRunner.RunBatch(sceneBatchItems);
                     break;
                 }
 
                 case WindowTab.Prefabs:
                 {
-                    PrefabBatchItem[] prefabBatchItems = assets
-                        .Select(asset => new PrefabBatchItem(asset.GetAssetPath()))
-                        .ToArray();
+                    InjectionUtility.Inject
+                    (
+                        sceneAssets: null,
+                        prefabAssets: selectedAssets,
+                        onInjectionComplete: () => batchInjectorData.isDirty = true
+                    );
 
-                    if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(0, prefabBatchItems.Length))
-                        return;
-
-                    InjectionRunner.RunBatch(prefabBatchItems);
                     break;
                 }
             }
         }
 
         private static void EnableSelected(
+            BatchInjectorData batchInjectorData,
             AssetList assetList,
-            Action onModified,
             List<int> selected)
         {
             foreach (int i in selected)
@@ -165,12 +161,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     .Enabled = true;
 
             assetList.TrySortByEnabledOrDisabled();
-            onModified?.Invoke();
+            batchInjectorData.isDirty = true;
         }
 
         private static void DisableSelected(
+            BatchInjectorData batchInjectorData,
             AssetList assetList,
-            Action onModified,
             List<int> selected)
         {
             foreach (int i in selected)
@@ -178,25 +174,25 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     .Enabled = false;
 
             assetList.TrySortByEnabledOrDisabled();
-            onModified?.Invoke();
+            batchInjectorData.isDirty = true;
         }
 
         private static void ClearSelectedInjectStatus(
+            BatchInjectorData batchInjectorData,
             AssetList assetList,
-            Action onModified,
             List<int> selected)
         {
             foreach (int i in selected.OrderByDescending(i => i))
                 assetList.GetElementAt(i).Status = InjectionStatus.Unknown;
 
-            onModified?.Invoke();
+            batchInjectorData.isDirty = true;
             GUI.changed = true;
         }
 
         private static void RemoveSelected(
+            BatchInjectorData batchInjectorData,
             ReorderableList list,
             AssetList assetList,
-            Action onModified,
             List<int> selected)
         {
             if (!EditorUtility.DisplayDialog
@@ -212,7 +208,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 assetList.RemoveAt(i);
 
             list.ClearSelection();
-            onModified?.Invoke();
+            batchInjectorData.isDirty = true;
             GUI.changed = true;
         }
 

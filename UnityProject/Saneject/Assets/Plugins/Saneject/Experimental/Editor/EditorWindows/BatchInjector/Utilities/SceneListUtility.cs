@@ -7,7 +7,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 {
     public static class SceneListUtility
     {
-        public static void AddOpenScenes(BatchInjectorData data)
+        public static void AddOpenScenes(BatchInjectorData batchInjectorData)
         {
             for (int i = 0; i < SceneManager.sceneCount; i++)
             {
@@ -16,21 +16,21 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                data.sceneList.TryAddAssetByPath(scene.path);
+                batchInjectorData.sceneList.TryAddAssetByPath(scene.path);
             }
 
-            data.sceneList.Sort();
-            data.isDirty = true;
+            batchInjectorData.sceneList.Sort();
+            batchInjectorData.isDirty = true;
         }
 
-        public static void AddAllProjectScenes(BatchInjectorData data)
+        public static void AddAllProjectScenes(BatchInjectorData batchInjectorData)
         {
             string[] guids = AssetDatabase.FindAssets("t:Scene", new[]
             {
                 "Assets"
             });
 
-            string[] newGuids = data.sceneList.FindGuidsNotInList(guids).ToArray();
+            string[] newGuids = batchInjectorData.sceneList.FindGuidsNotInList(guids).ToArray();
 
             if (newGuids.Length == 0)
             {
@@ -45,20 +45,20 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                     "Yes", "No"))
             {
                 foreach (string guid in newGuids)
-                    data.sceneList.TryAddAssetByGuid(guid);
+                    batchInjectorData.sceneList.TryAddAssetByGuid(guid);
 
-                data.sceneList.Sort();
-                data.isDirty = true;
+                batchInjectorData.sceneList.Sort();
+                batchInjectorData.isDirty = true;
             }
         }
 
-        public static void ClearScenes(BatchInjectorData data)
+        public static void ClearScenes(BatchInjectorData batchInjectorData)
         {
             if (!EditorUtility.DisplayDialog("Batch Injector", "Remove all scenes from list?", "Yes", "Cancel"))
                 return;
 
-            data.sceneList.Clear();
-            data.isDirty = true;
+            batchInjectorData.sceneList.Clear();
+            batchInjectorData.isDirty = true;
         }
     }
 }

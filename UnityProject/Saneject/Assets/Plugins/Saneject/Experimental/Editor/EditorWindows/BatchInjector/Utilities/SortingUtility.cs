@@ -73,12 +73,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 
             return;
 
-            string GetSortString(AssetData data)
+            string GetSortString(AssetData assetData)
             {
                 return mode switch
                 {
-                    SortMode.PathAtoZ or SortMode.PathZtoA => data.GetAssetPath(),
-                    SortMode.NameAtoZ or SortMode.NameZtoA => data.GetAssetName(),
+                    SortMode.PathAtoZ or SortMode.PathZtoA => assetData.GetAssetPath(),
+                    SortMode.NameAtoZ or SortMode.NameZtoA => assetData.GetAssetName(),
                     _ => null
                 };
             }

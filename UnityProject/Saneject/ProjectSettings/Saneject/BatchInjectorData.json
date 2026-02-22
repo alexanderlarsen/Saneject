@@ -5,7 +5,7 @@
             {
                 "guid": "54f834272f369b64fadd0131ae7e0acd",
                 "enabled": true,
-                "status": 0
+                "status": 3
             }
         ],
         "scroll": {
@@ -19,22 +19,22 @@
             {
                 "guid": "aa04bdaf9cd95e64a843eab43c573001",
                 "enabled": true,
-                "status": 0
+                "status": 1
             },
             {
                 "guid": "51ae0f3c36a0ace4fafe4a97c43c8377",
                 "enabled": true,
-                "status": 0
+                "status": 1
             },
             {
                 "guid": "0711ab3157ab95b418f36215c883bbed",
                 "enabled": true,
-                "status": 0
+                "status": 1
             },
             {
                 "guid": "1cb02eb5fed69a34784db75b97931149",
                 "enabled": true,
-                "status": 0
+                "status": 1
             }
         ],
         "scroll": {
@@ -42,5 +42,5 @@
             "y": 0.0
         }
     },
-    "windowTab": 0
+    "windowTab": 1
 }

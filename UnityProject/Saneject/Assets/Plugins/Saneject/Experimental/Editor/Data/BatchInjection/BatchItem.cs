@@ -8,5 +8,6 @@
         }
 
         public string Path { get; }
+        public InjectionStatus Status { get; set; }
     }
 }

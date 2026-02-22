@@ -1,5 +1,5 @@
 ﻿using System;
-using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
+using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;

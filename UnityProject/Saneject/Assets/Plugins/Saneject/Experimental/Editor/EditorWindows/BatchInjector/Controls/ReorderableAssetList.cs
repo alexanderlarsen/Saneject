@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using UnityEditor;
@@ -12,7 +13,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
 {
     public class ReorderableAssetList : ReorderableList
     {
-        private static GUIStyle missingPathLabel;
+        private static GUIStyle missingPathLabelStyle;
 
         private readonly AssetList assetList;
         private readonly Action onModified;
@@ -118,7 +119,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
 
             GUIStyle pathLabelStyle = hasAsset
                 ? EditorStyles.miniLabel
-                : missingPathLabel ??= new GUIStyle(EditorStyles.miniLabel)
+                : missingPathLabelStyle ??= new GUIStyle(EditorStyles.miniLabel)
                 {
                     normal =
                     {

@@ -8,7 +8,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 {
     public static class PrefabListUtility
     {
-        public static void AddAllPrefabsInScene(BatchInjectorData data)
+        public static void AddAllPrefabsInScene(BatchInjectorData batchInjectorData)
         {
             HashSet<string> paths = new();
 
@@ -28,20 +28,20 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             }
 
             foreach (string path in paths)
-                data.prefabList.TryAddAssetByPath(path);
+                batchInjectorData.prefabList.TryAddAssetByPath(path);
 
-            data.prefabList.Sort();
-            data.isDirty = true;
+            batchInjectorData.prefabList.Sort();
+            batchInjectorData.isDirty = true;
         }
 
-        public static void AddAllProjectPrefabs(BatchInjectorData data)
+        public static void AddAllProjectPrefabs(BatchInjectorData batchInjectorData)
         {
             string[] guids = AssetDatabase.FindAssets("t:Prefab", new[]
             {
                 "Assets"
             });
 
-            string[] newGuids = data.prefabList.FindGuidsNotInList(guids).ToArray();
+            string[] newGuids = batchInjectorData.prefabList.FindGuidsNotInList(guids).ToArray();
 
             if (newGuids.Length == 0)
             {
@@ -64,14 +64,14 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 ))
             {
                 foreach (string guid in newGuids)
-                    data.prefabList.TryAddAssetByGuid(guid);
+                    batchInjectorData.prefabList.TryAddAssetByGuid(guid);
 
-                data.prefabList.Sort();
-                data.isDirty = true;
+                batchInjectorData.prefabList.Sort();
+                batchInjectorData.isDirty = true;
             }
         }
 
-        public static void ClearPrefabs(BatchInjectorData data)
+        public static void ClearPrefabs(BatchInjectorData batchInjectorData)
         {
             if (!EditorUtility.DisplayDialog
                 (
@@ -82,8 +82,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 ))
                 return;
 
-            data.prefabList.Clear();
-            data.isDirty = true;
+            batchInjectorData.prefabList.Clear();
+            batchInjectorData.isDirty = true;
         }
     }
 }

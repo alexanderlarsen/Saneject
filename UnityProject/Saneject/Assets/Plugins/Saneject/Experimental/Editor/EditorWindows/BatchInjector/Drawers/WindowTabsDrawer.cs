@@ -12,7 +12,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
     public static class WindowTabsDrawer
     {
         public static void DrawTabs(
-            BatchInjectorData data,
+            BatchInjectorData batchInjectorData,
             ReorderableList reorderableSceneList,
             Rect sceneListRect,
             ReorderableList reorderablePrefabList,
@@ -21,28 +21,28 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             Action repaint)
         {
             // Tab controls
-            data.windowTab = (WindowTab)GUILayout.Toolbar
+            batchInjectorData.windowTab = (WindowTab)GUILayout.Toolbar
             (
-                selected: (int)data.windowTab,
+                selected: (int)batchInjectorData.windowTab,
                 texts: new[]
                 {
-                    $"Scenes ({data.sceneList.TotalCount})",
-                    $"Prefabs ({data.prefabList.TotalCount})"
+                    $"Scenes ({batchInjectorData.sceneList.TotalCount})",
+                    $"Prefabs ({batchInjectorData.prefabList.TotalCount})"
                 }
             );
 
             GUILayout.Space(8);
 
             // Tab content
-            switch (data.windowTab)
+            switch (batchInjectorData.windowTab)
             {
                 case WindowTab.Scenes:
                 {
                     DrawTab
                     (
                         title: "Scenes",
-                        data: data,
-                        assetList: data.sceneList,
+                        batchInjectorData: batchInjectorData,
+                        assetList: batchInjectorData.sceneList,
                         reorderableList: reorderableSceneList,
                         listRect: sceneListRect,
                         clickedListAnyItem: ref clickedAnyListItem,
@@ -51,19 +51,19 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         {
                             (
                                 "Add Open Scenes",
-                                () => SceneListUtility.AddOpenScenes(data)
+                                () => SceneListUtility.AddOpenScenes(batchInjectorData)
                             ),
                             (
                                 "Add All Project Scenes",
-                                () => SceneListUtility.AddAllProjectScenes(data)
+                                () => SceneListUtility.AddAllProjectScenes(batchInjectorData)
                             ),
                             (
                                 "Clear All",
-                                () => SceneListUtility.ClearScenes(data)
+                                () => SceneListUtility.ClearScenes(batchInjectorData)
                             ),
                             (
-                                $"Sort: {data.sceneList.SortMode.GetDisplayString()}",
-                                () => SortMenuDrawer.DrawSortMenu(data, data.sceneList, repaint)
+                                $"Sort: {batchInjectorData.sceneList.SortMode.GetDisplayString()}",
+                                () => SortMenuDrawer.DrawSortMenu(batchInjectorData, batchInjectorData.sceneList, repaint)
                             )
                         }
                     );
@@ -76,8 +76,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     DrawTab
                     (
                         title: "Prefabs",
-                        data: data,
-                        assetList: data.prefabList,
+                        batchInjectorData: batchInjectorData,
+                        assetList: batchInjectorData.prefabList,
                         reorderableList: reorderablePrefabList,
                         listRect: prefabListRect,
                         clickedListAnyItem: ref clickedAnyListItem,
@@ -86,19 +86,19 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         {
                             (
                                 "Add All Prefabs In Current Scene",
-                                () => PrefabListUtility.AddAllPrefabsInScene(data)
+                                () => PrefabListUtility.AddAllPrefabsInScene(batchInjectorData)
                             ),
                             (
                                 "Add All Project Prefabs",
-                                () => PrefabListUtility.AddAllProjectPrefabs(data)
+                                () => PrefabListUtility.AddAllProjectPrefabs(batchInjectorData)
                             ),
                             (
                                 "Clear All",
-                                () => PrefabListUtility.ClearPrefabs(data)
+                                () => PrefabListUtility.ClearPrefabs(batchInjectorData)
                             ),
                             (
-                                $"Sort: {data.prefabList.SortMode.GetDisplayString()}",
-                                () => SortMenuDrawer.DrawSortMenu(data, data.prefabList, repaint)
+                                $"Sort: {batchInjectorData.prefabList.SortMode.GetDisplayString()}",
+                                () => SortMenuDrawer.DrawSortMenu(batchInjectorData, batchInjectorData.prefabList, repaint)
                             )
                         }
                     );
@@ -112,7 +112,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
         private static void DrawTab(
             string title,
-            BatchInjectorData data,
+            BatchInjectorData batchInjectorData,
             AssetList assetList,
             ReorderableList reorderableList,
             Rect listRect,
@@ -138,11 +138,11 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
             ContextMenuDrawer.DrawContextMenu
             (
+                batchInjectorData: batchInjectorData,
                 list: reorderableList,
                 assetList: assetList,
-                tab: data.windowTab,
-                rect: listRect,
-                onModified: () => data.isDirty = true
+                tab: batchInjectorData.windowTab,
+                rect: listRect
             );
         }
     }

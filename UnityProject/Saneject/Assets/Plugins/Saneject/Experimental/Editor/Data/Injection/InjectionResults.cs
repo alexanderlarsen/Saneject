@@ -1,4 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Data.Logging;
 using UnityEngine;
@@ -60,5 +62,15 @@ namespace Plugins.Saneject.Experimental.Editor.Data.Injection
             InjectedMethodCount += results.InjectedMethodCount;
             ScopesProcessedCount += results.ScopesProcessedCount;
         }
+
+        public InjectionStatus GetStatus()
+        {
+            if (errors.Count(error => !error.SuppressError) > 0)
+                return InjectionStatus.Error;
+
+            return unusedBindingNodes.Count > 0
+                ? InjectionStatus.Warning
+                : InjectionStatus.Success;
+        }
     }
-}
+} 

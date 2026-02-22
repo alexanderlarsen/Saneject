@@ -10,13 +10,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persi
         private static readonly string Folder = Path.GetFullPath(Path.Combine(Application.dataPath, "../ProjectSettings/Saneject"));
         private static readonly string FullPath = Path.Combine(Folder, "BatchInjectorData.json");
 
-        public static void SaveIfDirty(BatchInjectorData data)
+        public static void SaveIfDirty(BatchInjectorData batchInjectorData)
         {
-            if (!data.isDirty)
+            if (!batchInjectorData.isDirty)
                 return;
 
-            Save(data);
-            data.isDirty = false;
+            Save(batchInjectorData);
+            batchInjectorData.isDirty = false;
         }
 
         public static BatchInjectorData LoadOrCreateData()
@@ -24,27 +24,27 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persi
             if (!File.Exists(FullPath))
                 return new BatchInjectorData();
 
-            BatchInjectorData data;
+            BatchInjectorData batchInjectorData;
 
             try
             {
                 string json = File.ReadAllText(FullPath);
-                data = JsonUtility.FromJson<BatchInjectorData>(json);
+                batchInjectorData = JsonUtility.FromJson<BatchInjectorData>(json);
             }
             catch (Exception e)
             {
                 Debug.LogError($"Saneject: Batch Injector failed to load configuration data. {e.Message} Creating new file.");
-                data = new BatchInjectorData();
-                Save(data);
+                batchInjectorData = new BatchInjectorData();
+                Save(batchInjectorData);
             }
 
-            return data;
+            return batchInjectorData;
         }
 
-        private static void Save(BatchInjectorData data)
+        private static void Save(BatchInjectorData batchInjectorData)
         {
             Directory.CreateDirectory(Folder);
-            string json = JsonUtility.ToJson(data, prettyPrint: true);
+            string json = JsonUtility.ToJson(batchInjectorData, prettyPrint: true);
             File.WriteAllText(FullPath, json);
         }
     }

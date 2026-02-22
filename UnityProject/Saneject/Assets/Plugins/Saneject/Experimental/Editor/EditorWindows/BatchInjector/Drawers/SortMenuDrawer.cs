@@ -10,8 +10,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
     public static class SortMenuDrawer
     {
         public static void DrawSortMenu(
-            BatchInjectorData data,
-            AssetList list,
+            BatchInjectorData batchInjectorData,
+            AssetList assetList,
             Action repaint)
         {
             GenericMenu menu = new();
@@ -32,12 +32,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 menu.AddItem
                 (
                     content: new GUIContent(sortMode.GetDisplayString()),
-                    on: list.SortMode == sortMode,
+                    on: assetList.SortMode == sortMode,
                     func: () =>
                     {
-                        list.SortMode = sortMode;
-                        list.Sort();
-                        data.isDirty = true;
+                        assetList.SortMode = sortMode;
+                        assetList.Sort();
+                        batchInjectorData.isDirty = true;
                         repaint?.Invoke();
                     }
                 );
