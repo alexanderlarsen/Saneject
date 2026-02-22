@@ -17,7 +17,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
         [SerializeField]
         private SortMode sortMode = SortMode.NameAtoZ;
 
-        [SerializeField]
+        [SerializeReference]
         private List<AssetData> list = new();
 
         [SerializeField]
@@ -43,18 +43,20 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 
         #region List CRUD methods
 
-        public bool TryAddAssetByPath(string path)
+        public bool TryAddAssetByPath<TAsset>(string path)where TAsset : AssetData 
         {
             string guid = AssetDatabase.AssetPathToGUID(path);
-            return TryAddAssetByGuid(guid);
+            return TryAddAssetByGuid<TAsset>(guid);
         }
 
-        public bool TryAddAssetByGuid(string guid)
+        public bool TryAddAssetByGuid<TAsset>(string guid)  where TAsset : AssetData 
         {
             if (list.Any(item => item.Guid == guid))
                 return false;
+            
+            TAsset asset = (TAsset)Activator.CreateInstance(typeof(TAsset), guid);
 
-            list.Add(new AssetData(guid));
+            list.Add(asset);
             return true;
         }
 

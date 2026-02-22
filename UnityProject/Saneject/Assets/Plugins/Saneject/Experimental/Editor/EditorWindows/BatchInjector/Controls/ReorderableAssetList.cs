@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
+using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using UnityEditor;
@@ -71,7 +72,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             const float toggleWidth = 20f;
             const float objWidth = 220f;
 
-            AssetData element = assetList.GetElementAt(index);
+            AssetData assetData = assetList.GetElementAt(index);
 
             rect.y += 2;
             rect.height = EditorGUIUtility.singleLineHeight;
@@ -85,18 +86,18 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                     width: toggleWidth,
                     height: rect.height
                 ),
-                value: element.Enabled
+                value: assetData.Enabled
             );
 
-            if (toggle != element.Enabled)
+            if (toggle != assetData.Enabled)
             {
-                element.Enabled = toggle;
+                assetData.Enabled = toggle;
                 assetList.TrySortByEnabledOrDisabled();
                 onModified?.Invoke();
                 GUI.changed = true;
             }
 
-            Object elementAsset = element.GetAsset();
+            Object elementAsset = assetData.GetAsset();
 
             using (new EditorGUI.DisabledScope(true))
             {
@@ -127,9 +128,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                     }
                 };
 
-            string labelText = hasAsset
-                ? element.GetAssetPath()
+            string pathLabelText = hasAsset
+                ? assetData.GetAssetPath()
                 : "Deleted";
+ 
 
             EditorGUI.LabelField
             (
@@ -140,11 +142,55 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                     width: rect.width - objWidth - 40,
                     height: rect.height
                 ),
-                label: labelText,
+                label: pathLabelText,
                 style: pathLabelStyle
             );
 
-            InjectionStatus status = assetList.GetElementAt(index).Status;
+            if (assetData is SceneAssetData sceneAssetData)
+            {
+                const float width = 160;
+
+                Rect popupRect = new
+                (
+                    x: rect.xMax - width - 25,
+                    y: rect.y,
+                    width: width,
+                    height: rect.height
+                );
+
+                GUIContent content = new
+                (
+                    ObjectNames.NicifyVariableName(sceneAssetData.ContextWalkFilter.ToString()),
+                    "Controls which contexts are included in the walk when injecting this scene"
+                );
+
+                // EditorGUI.EnumPopup() does not reliably show tooltips in this context,
+                // so a custom DropdownButton + GenericMenu is used instead.
+                if (EditorGUI.DropdownButton(popupRect, content, FocusType.Passive))
+                {
+                    GenericMenu menu = new();
+
+                    foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
+                    {
+                        ContextWalkFilter selected = value;
+
+                        menu.AddItem
+                        (
+                            content: new GUIContent(ObjectNames.NicifyVariableName(value.ToString())),
+                            on: value == sceneAssetData.ContextWalkFilter,
+                            func: () =>
+                            {
+                                sceneAssetData.ContextWalkFilter = selected;
+                                onModified?.Invoke();
+                            }
+                        );
+                    }
+
+                    menu.DropDown(popupRect);
+                }
+            }
+
+            InjectionStatus status = assetData.Status;
 
             EditorGUI.LabelField
             (

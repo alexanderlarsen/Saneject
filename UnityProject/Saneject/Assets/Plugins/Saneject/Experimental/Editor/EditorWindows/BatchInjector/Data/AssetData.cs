@@ -7,7 +7,7 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 {
     [Serializable]
-    public class AssetData
+    public abstract class AssetData
     {
         public AssetData(string guid)
         {

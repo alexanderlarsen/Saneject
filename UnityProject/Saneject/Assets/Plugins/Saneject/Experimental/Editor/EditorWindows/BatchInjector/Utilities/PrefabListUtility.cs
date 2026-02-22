@@ -28,7 +28,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             }
 
             foreach (string path in paths)
-                batchInjectorData.prefabList.TryAddAssetByPath(path);
+                batchInjectorData.prefabList.TryAddAssetByPath<PrefabAssetData>(path);
 
             batchInjectorData.prefabList.Sort();
             batchInjectorData.isDirty = true;
@@ -64,7 +64,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 ))
             {
                 foreach (string guid in newGuids)
-                    batchInjectorData.prefabList.TryAddAssetByGuid(guid);
+                    batchInjectorData.prefabList.TryAddAssetByGuid<PrefabAssetData>(guid);
 
                 batchInjectorData.prefabList.Sort();
                 batchInjectorData.isDirty = true;

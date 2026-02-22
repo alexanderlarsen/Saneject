@@ -76,12 +76,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 if (obj is SceneAsset && path.EndsWith(".unity"))
                 {
                     isScene = true;
-                    batchInjectorData.sceneList.TryAddAssetByPath(path);
+                    batchInjectorData.sceneList.TryAddAssetByPath<SceneAssetData>(path);
                 }
                 else if (obj is GameObject && path.EndsWith(".prefab"))
                 {
                     isPrefab = true;
-                    batchInjectorData.prefabList.TryAddAssetByPath(path);
+                    batchInjectorData.prefabList.TryAddAssetByPath<PrefabAssetData>(path);
                 }
             }
         }

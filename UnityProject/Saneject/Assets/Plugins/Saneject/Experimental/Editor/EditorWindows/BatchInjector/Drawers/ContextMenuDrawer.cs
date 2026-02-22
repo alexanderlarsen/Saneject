@@ -129,7 +129,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 {
                     InjectionUtility.Inject
                     (
-                        sceneAssets: selectedAssets,
+                        sceneAssets: selectedAssets.OfType<SceneAssetData>(),
                         prefabAssets: null,
                         onInjectionComplete: () => batchInjectorData.isDirty = true
                     );
@@ -142,7 +142,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     InjectionUtility.Inject
                     (
                         sceneAssets: null,
-                        prefabAssets: selectedAssets,
+                        prefabAssets: selectedAssets.OfType<PrefabAssetData>(),
                         onInjectionComplete: () => batchInjectorData.isDirty = true
                     );
 

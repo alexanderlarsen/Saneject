@@ -3,9 +3,19 @@
         "sortMode": 1,
         "list": [
             {
-                "guid": "54f834272f369b64fadd0131ae7e0acd",
-                "enabled": true,
-                "status": 3
+                "rid": 1000
+            },
+            {
+                "rid": 1001
+            },
+            {
+                "rid": 1002
+            },
+            {
+                "rid": 1003
+            },
+            {
+                "rid": 1004
             }
         ],
         "scroll": {
@@ -17,24 +27,16 @@
         "sortMode": 0,
         "list": [
             {
-                "guid": "aa04bdaf9cd95e64a843eab43c573001",
-                "enabled": true,
-                "status": 1
+                "rid": 1005
             },
             {
-                "guid": "51ae0f3c36a0ace4fafe4a97c43c8377",
-                "enabled": true,
-                "status": 1
+                "rid": 1006
             },
             {
-                "guid": "0711ab3157ab95b418f36215c883bbed",
-                "enabled": true,
-                "status": 1
+                "rid": 1007
             },
             {
-                "guid": "1cb02eb5fed69a34784db75b97931149",
-                "enabled": true,
-                "status": 1
+                "rid": 1008
             }
         ],
         "scroll": {
@@ -42,5 +44,132 @@
             "y": 0.0
         }
     },
-    "windowTab": 1
+    "windowTab": 1,
+    "references": {
+        "version": 2,
+        "RefIds": [
+            {
+                "rid": 1000,
+                "type": {
+                    "class": "SceneAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "2bdff45184871b443a5f546d1b949697",
+                    "enabled": true,
+                    "status": 3,
+                    "walkFilter": 0
+                }
+            },
+            {
+                "rid": 1001,
+                "type": {
+                    "class": "SceneAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "9706e582d4de70a48866d1aaae584a7f",
+                    "enabled": true,
+                    "status": 3,
+                    "walkFilter": 0
+                }
+            },
+            {
+                "rid": 1002,
+                "type": {
+                    "class": "SceneAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "1da4cd71e9abcaf41b17bc0bd81f53af",
+                    "enabled": true,
+                    "status": 3,
+                    "walkFilter": 1
+                }
+            },
+            {
+                "rid": 1003,
+                "type": {
+                    "class": "SceneAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "8647bc7a64e7b4f47a3bbe2da0d3690d",
+                    "enabled": true,
+                    "status": 1,
+                    "walkFilter": 3
+                }
+            },
+            {
+                "rid": 1004,
+                "type": {
+                    "class": "SceneAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "54f834272f369b64fadd0131ae7e0acd",
+                    "enabled": true,
+                    "status": 3,
+                    "walkFilter": 2
+                }
+            },
+            {
+                "rid": 1005,
+                "type": {
+                    "class": "PrefabAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "aa04bdaf9cd95e64a843eab43c573001",
+                    "enabled": true,
+                    "status": 1
+                }
+            },
+            {
+                "rid": 1006,
+                "type": {
+                    "class": "PrefabAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "51ae0f3c36a0ace4fafe4a97c43c8377",
+                    "enabled": true,
+                    "status": 1
+                }
+            },
+            {
+                "rid": 1007,
+                "type": {
+                    "class": "PrefabAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "0711ab3157ab95b418f36215c883bbed",
+                    "enabled": true,
+                    "status": 1
+                }
+            },
+            {
+                "rid": 1008,
+                "type": {
+                    "class": "PrefabAssetData",
+                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
+                    "asm": "Saneject.Experimental.Editor"
+                },
+                "data": {
+                    "guid": "1cb02eb5fed69a34784db75b97931149",
+                    "enabled": true,
+                    "status": 1
+                }
+            }
+        ]
+    }
 }

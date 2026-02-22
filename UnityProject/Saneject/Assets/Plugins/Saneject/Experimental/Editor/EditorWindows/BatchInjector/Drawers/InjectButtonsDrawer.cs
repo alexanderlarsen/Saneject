@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
+﻿using System.Linq;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
 using UnityEditor;
 using UnityEngine;
@@ -21,8 +22,14 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     if (GUILayout.Button("Inject All"))
                         InjectionUtility.Inject
                         (
-                            sceneAssets: batchInjectorData.sceneList.GetEnabled(),
-                            prefabAssets: batchInjectorData.prefabList.GetEnabled(),
+                            sceneAssets: batchInjectorData
+                                .sceneList
+                                .GetEnabled()
+                                .OfType<SceneAssetData>(),
+                            prefabAssets: batchInjectorData
+                                .prefabList
+                                .GetEnabled()
+                                .OfType<PrefabAssetData>(),
                             onInjectionComplete: () => batchInjectorData.isDirty = true
                         );
                 }
@@ -32,7 +39,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     if (GUILayout.Button($"Inject Scenes ({sceneCount})"))
                         InjectionUtility.Inject
                         (
-                            sceneAssets: batchInjectorData.sceneList.GetEnabled(),
+                            sceneAssets: batchInjectorData
+                                .sceneList
+                                .GetEnabled()
+                                .OfType<SceneAssetData>(),
                             prefabAssets: null,
                             onInjectionComplete: () => batchInjectorData.isDirty = true
                         );
@@ -44,7 +54,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         InjectionUtility.Inject
                         (
                             sceneAssets: null,
-                            prefabAssets: batchInjectorData.prefabList.GetEnabled(),
+                            prefabAssets: batchInjectorData
+                                .prefabList
+                                .GetEnabled()
+                                .OfType<PrefabAssetData>(),
                             onInjectionComplete: () => batchInjectorData.isDirty = true
                         );
                 }

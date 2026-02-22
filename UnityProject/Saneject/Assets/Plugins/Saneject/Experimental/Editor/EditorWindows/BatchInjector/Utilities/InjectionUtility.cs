@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
-using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.Pipeline;
 using Plugins.Saneject.Experimental.Editor.Utilities;
@@ -10,28 +10,28 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 {
     public static class InjectionUtility
     {
-        public static void Inject( 
-            AssetData[] sceneAssets,
-            AssetData[] prefabAssets,
+        public static void Inject(
+            IEnumerable<SceneAssetData> sceneAssets,
+            IEnumerable<PrefabAssetData> prefabAssets,
             Action onInjectionComplete = null)
         {
-            sceneAssets ??= Array.Empty<AssetData>();
-            prefabAssets ??= Array.Empty<AssetData>();
+            sceneAssets = sceneAssets?.ToArray() ?? Array.Empty<SceneAssetData>();
+            prefabAssets = prefabAssets?.ToArray() ?? Array.Empty<PrefabAssetData>();
 
-            if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneAssets.Length, prefabAssets.Length))
+            if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneAssets.Count(), prefabAssets.Count()))
                 return;
 
             Dictionary<AssetData, BatchItem> map = new();
             List<BatchItem> batchItems = new();
 
-            foreach (AssetData assetData in sceneAssets)
+            foreach (SceneAssetData assetData in sceneAssets)
             {
-                SceneBatchItem batchItem = new(assetData.GetAssetPath(), ContextWalkFilter.All);
+                SceneBatchItem batchItem = new(assetData.GetAssetPath(), assetData.ContextWalkFilter);
                 batchItems.Add(batchItem);
                 map.Add(assetData, batchItem);
             }
 
-            foreach (AssetData assetData in prefabAssets)
+            foreach (PrefabAssetData assetData in prefabAssets)
             {
                 PrefabBatchItem batchItem = new(assetData.GetAssetPath());
                 batchItems.Add(batchItem);
@@ -46,4 +46,4 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             onInjectionComplete?.Invoke();
         }
     }
-} 
+}

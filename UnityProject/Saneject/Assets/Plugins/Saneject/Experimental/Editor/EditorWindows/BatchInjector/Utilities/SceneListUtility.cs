@@ -16,7 +16,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                batchInjectorData.sceneList.TryAddAssetByPath(scene.path);
+                batchInjectorData.sceneList.TryAddAssetByPath<SceneAssetData>(scene.path);
             }
 
             batchInjectorData.sceneList.Sort();
@@ -45,7 +45,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                     "Yes", "No"))
             {
                 foreach (string guid in newGuids)
-                    batchInjectorData.sceneList.TryAddAssetByGuid(guid);
+                    batchInjectorData.sceneList.TryAddAssetByGuid<SceneAssetData>(guid);
 
                 batchInjectorData.sceneList.Sort();
                 batchInjectorData.isDirty = true;
