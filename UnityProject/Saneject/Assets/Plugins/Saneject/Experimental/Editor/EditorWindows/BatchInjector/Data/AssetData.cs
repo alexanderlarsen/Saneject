@@ -9,6 +9,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
     [Serializable]
     public class AssetData
     {
+        public AssetData(string guid)
+        {
+            this.guid = guid;
+        }
+
+        #region Fields/properties
+
         [SerializeField]
         private string guid;
 
@@ -18,18 +25,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
         [SerializeField]
         private InjectionStatus status;
 
-        [NonSerialized]
         private Object asset;
 
-        public AssetData(string guid)
-        {
-            this.guid = guid;
-        }
-
         public string Guid => guid;
-        public Object Asset => asset ??= AssetDatabase.LoadAssetAtPath<Object>(Path);
-        public string Path => AssetDatabase.GUIDToAssetPath(guid);
-        public string Name => Asset?.name ?? string.Empty;
 
         public bool Enabled
         {
@@ -42,5 +40,38 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
             get => status;
             set => status = value;
         }
+
+        #endregion
+
+        #region Asset methods
+
+        public Object GetAsset()
+        {
+            if (asset == null)
+            {
+                string path = GetAssetPath();
+
+                if (string.IsNullOrEmpty(path))
+                    return null;
+
+                asset = AssetDatabase.LoadAssetAtPath<Object>(path);
+            }
+
+            return asset;
+        }
+
+        public string GetAssetPath()
+        {
+            return string.IsNullOrEmpty(guid)
+                ? string.Empty
+                : AssetDatabase.GUIDToAssetPath(guid);
+        }
+
+        public string GetAssetName()
+        {
+            return GetAsset()?.name ?? string.Empty;
+        }
+
+        #endregion
     }
 }

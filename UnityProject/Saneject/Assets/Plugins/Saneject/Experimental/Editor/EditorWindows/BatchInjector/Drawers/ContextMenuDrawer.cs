@@ -130,7 +130,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 case WindowTab.Scenes:
                 {
                     SceneBatchItem[] sceneBatchItems = assets
-                        .Select(asset => new SceneBatchItem(asset.Path, ContextWalkFilter.All))
+                        .Select(asset => new SceneBatchItem(asset.GetAssetPath(), ContextWalkFilter.All))
                         .ToArray();
 
                     if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneBatchItems.Length, 0))
@@ -143,7 +143,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 case WindowTab.Prefabs:
                 {
                     PrefabBatchItem[] prefabBatchItems = assets
-                        .Select(asset => new PrefabBatchItem(asset.Path))
+                        .Select(asset => new PrefabBatchItem(asset.GetAssetPath()))
                         .ToArray();
 
                     if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(0, prefabBatchItems.Length))

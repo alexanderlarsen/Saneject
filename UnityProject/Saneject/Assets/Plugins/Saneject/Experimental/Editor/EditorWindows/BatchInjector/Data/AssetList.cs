@@ -12,6 +12,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
     [Serializable]
     public class AssetList
     {
+        #region Fields/properties
+
         [SerializeField]
         private SortMode sortMode = SortMode.NameAtoZ;
 
@@ -37,10 +39,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
             set => scroll = value;
         }
 
-        public void Clear()
-        {
-            list.Clear();
-        }
+        #endregion
+
+        #region List CRUD methods
 
         public bool TryAddAssetByPath(string path)
         {
@@ -55,6 +56,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 
             list.Add(new AssetData(guid));
             return true;
+        }
+
+        public AssetData[] GetEnabled()
+        {
+            return list
+                .Where(item => item.Enabled)
+                .ToArray();
         }
 
         public AssetData GetElementAt(int index)
@@ -73,21 +81,18 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
             list.RemoveAt(index);
         }
 
+        public void Clear()
+        {
+            list.Clear();
+        }
+
+        #endregion
+
+        #region Helper methods
+
         public void Sort()
         {
             SortingUtility.SortList(list, sortMode);
-        }
-
-        public AssetData[] GetEnabled()
-        {
-            return list
-                .Where(item => item.Enabled)
-                .ToArray();
-        }
-
-        public IEnumerable<string> FindGuidsNotInList(IEnumerable<string> guids)
-        {
-            return guids.Where(guid => list.All(item => item.Guid != guid));
         }
 
         public void TrySortByEnabledOrDisabled()
@@ -100,7 +105,14 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 
         public int FindIndexByPath(string path)
         {
-            return list.FindIndex(asset => asset.Path == path);
+            return list.FindIndex(asset => asset.GetAssetPath() == path);
         }
+
+        public IEnumerable<string> FindGuidsNotInList(IEnumerable<string> guids)
+        {
+            return guids.Where(guid => list.All(item => item.Guid != guid));
+        }
+
+        #endregion
     }
 }

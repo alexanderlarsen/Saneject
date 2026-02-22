@@ -95,6 +95,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                 GUI.changed = true;
             }
 
+            var elementAsset = element.GetAsset();
+
             using (new EditorGUI.DisabledScope(true))
             {
                 EditorGUI.ObjectField
@@ -106,13 +108,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                         width: objWidth,
                         height: rect.height
                     ),
-                    obj: element.Asset,
+                    obj: elementAsset,
                     objType: typeof(Object),
                     allowSceneObjects: false
                 );
             }
 
-            bool hasAsset = element.Asset != null;
+            bool hasAsset = elementAsset != null;
 
             GUIStyle pathLabelStyle = hasAsset
                 ? EditorStyles.miniLabel
@@ -125,7 +127,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                 };
 
             string labelText = hasAsset
-                ? element.Path
+                ? element.GetAssetPath()
                 : "Deleted";
 
             EditorGUI.LabelField

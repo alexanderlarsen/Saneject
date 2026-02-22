@@ -27,8 +27,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                             return flagCompare;
 
                         // Secondary alphabetical sort (by Name, then Path)
-                        int nameCompare = Compare(a.Name, b.Name);
-                        return nameCompare != 0 ? nameCompare : Compare(a.Path, b.Path);
+                        int nameCompare = Compare(a.GetAssetName(), b.GetAssetName());
+                        return nameCompare != 0 ? nameCompare : Compare(a.GetAssetPath(), b.GetAssetPath());
                     });
 
                     return;
@@ -44,8 +44,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                             return flagCompare;
 
                         // Secondary alphabetical sort (by Name, then Path)
-                        int nameCompare = Compare(a.Name, b.Name);
-                        return nameCompare != 0 ? nameCompare : Compare(a.Path, b.Path);
+                        int nameCompare = Compare(a.GetAssetName(), b.GetAssetName());
+                        return nameCompare != 0 ? nameCompare : Compare(a.GetAssetPath(), b.GetAssetPath());
                     });
 
                     return;
@@ -77,8 +77,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             {
                 return mode switch
                 {
-                    SortMode.PathAtoZ or SortMode.PathZtoA => data.Path,
-                    SortMode.NameAtoZ or SortMode.NameZtoA => data.Name,
+                    SortMode.PathAtoZ or SortMode.PathZtoA => data.GetAssetPath(),
+                    SortMode.NameAtoZ or SortMode.NameZtoA => data.GetAssetName(),
                     _ => null
                 };
             }

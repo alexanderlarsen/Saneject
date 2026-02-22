@@ -48,13 +48,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             SceneBatchItem[] sceneBatchItems = data
                 .sceneList
                 .GetEnabled()
-                .Select(asset => new SceneBatchItem(asset.Path, ContextWalkFilter.All))
+                .Select(asset => new SceneBatchItem(asset.GetAssetPath(), ContextWalkFilter.All))
                 .ToArray();
 
             PrefabBatchItem[] prefabBatchItems = data
                 .prefabList
                 .GetEnabled()
-                .Select(asset => new PrefabBatchItem(asset.Path))
+                .Select(asset => new PrefabBatchItem(asset.GetAssetPath()))
                 .ToArray();
 
             if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneBatchItems.Length, prefabBatchItems.Length))
@@ -71,7 +71,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             SceneBatchItem[] sceneBatchItems = data
                 .sceneList
                 .GetEnabled()
-                .Select(asset => new SceneBatchItem(asset.Path, ContextWalkFilter.All))
+                .Select(asset => new SceneBatchItem(asset.GetAssetPath(), ContextWalkFilter.All))
                 .ToArray();
 
             if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneBatchItems.Length, 0))
@@ -85,7 +85,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             PrefabBatchItem[] prefabBatchItems = data
                 .prefabList
                 .GetEnabled()
-                .Select(asset => new PrefabBatchItem(asset.Path))
+                .Select(asset => new PrefabBatchItem(asset.GetAssetPath()))
                 .ToArray();
 
             if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(0, prefabBatchItems.Length))
