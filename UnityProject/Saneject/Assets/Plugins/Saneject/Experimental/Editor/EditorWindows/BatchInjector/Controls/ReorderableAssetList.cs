@@ -14,7 +14,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
 {
     public class ReorderableAssetList : ReorderableList
     {
+        private static GUIStyle toggleStyle;
+        private static GUIStyle defaultPathLabelStyle;
         private static GUIStyle missingPathLabelStyle;
+        private static GUIStyle statusLabelStyle;
 
         private readonly AssetList assetList;
         private readonly Action onModified;
@@ -42,22 +45,6 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             onReorderCallback = OnReorder;
         }
 
-        #region Static helpers
-
-        private static GUIContent GetInjectionStatusGUIContent(InjectionStatus status)
-        {
-            return status switch
-            {
-                InjectionStatus.Unknown => new GUIContent("❔", "Run injection to get a status"),
-                InjectionStatus.Success => new GUIContent("✅", "Succesfully injected"),
-                InjectionStatus.Warning => new GUIContent("⚠️", "Injected with warnings. See console for details"),
-                InjectionStatus.Error => new GUIContent("❌", "Injection failed with errors. See console for details"),
-                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
-            };
-        }
-
-        #endregion
-
         #region Callbacks
 
         private void OnDraw(
@@ -66,145 +53,57 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             bool b1,
             bool b2)
         {
+            CreateStyles();
+
             if (index < 0 || index >= assetList.TotalCount)
                 return;
 
-            const float toggleWidth = 20f;
-            const float objWidth = 220f;
-
             AssetData assetData = assetList.GetElementAt(index);
+            SceneAssetData sceneAssetData = assetData as SceneAssetData;
+            Object elementAsset = assetData.GetAsset();
+            bool isSceneList = sceneAssetData != null;
 
-            rect.y += 2;
+            rect.y += 1.5f;
             rect.height = EditorGUIUtility.singleLineHeight;
 
-            bool toggle = EditorGUI.Toggle
-            (
-                position: new Rect
-                (
-                    x: rect.x + 4,
-                    y: rect.y,
-                    width: toggleWidth,
-                    height: rect.height
-                ),
-                value: assetData.Enabled
-            );
+            const float space = 6f;
+            const float toggleWidth = 14f;
+            const float objectFieldWidth = 220f;
+            const float contextWalkFilterWidth = 118f;
+            const float statusWidth = 18f;
 
-            if (toggle != assetData.Enabled)
+            float x = rect.x - 4 + space;
+            float y = rect.y;
+            float height = rect.height;
+
+            DrawToggle(assetData, x, y, toggleWidth, height);
+            x += toggleWidth + space;
+
+            DrawObjectField(elementAsset, x, y, objectFieldWidth, height);
+            x += objectFieldWidth + space;
+
+            float rightReserved = statusWidth;
+
+            if (isSceneList)
+                rightReserved += space + contextWalkFilterWidth;
+
+            rightReserved += space;
+
+            float pathLabelWidth = rect.xMax - x - rightReserved;
+
+            if (pathLabelWidth < 0f)
+                pathLabelWidth = 0f;
+
+            DrawPathLabel(assetData, elementAsset, x, y, pathLabelWidth, height);
+            x += pathLabelWidth + space;
+
+            if (isSceneList)
             {
-                assetData.Enabled = toggle;
-                assetList.TrySortByEnabledOrDisabled();
-                onModified?.Invoke();
-                GUI.changed = true;
+                DrawContextWalkFilter(sceneAssetData, x, y, contextWalkFilterWidth, height);
+                x += contextWalkFilterWidth + space;
             }
 
-            Object elementAsset = assetData.GetAsset();
-
-            using (new EditorGUI.DisabledScope(true))
-            {
-                EditorGUI.ObjectField
-                (
-                    position: new Rect
-                    (
-                        x: rect.x + toggleWidth + 2,
-                        y: rect.y,
-                        width: objWidth,
-                        height: rect.height
-                    ),
-                    obj: elementAsset,
-                    objType: typeof(Object),
-                    allowSceneObjects: false
-                );
-            }
-
-            bool hasAsset = elementAsset != null;
-
-            GUIStyle pathLabelStyle = hasAsset
-                ? EditorStyles.miniLabel
-                : missingPathLabelStyle ??= new GUIStyle(EditorStyles.miniLabel)
-                {
-                    normal =
-                    {
-                        textColor = new Color(0.9f, 0.45f, 0.4f, 1f)
-                    }
-                };
-
-            string pathLabelText = hasAsset
-                ? assetData.GetAssetPath()
-                : "Deleted";
-
-            EditorGUI.LabelField
-            (
-                position: new Rect
-                (
-                    x: rect.x + toggleWidth + objWidth + 7,
-                    y: rect.y,
-                    width: rect.width - objWidth - 40,
-                    height: rect.height
-                ),
-                label: pathLabelText,
-                style: pathLabelStyle
-            );
-
-            if (assetData is SceneAssetData sceneAssetData)
-            {
-                const float width = 160;
-
-                Rect popupRect = new
-                (
-                    x: rect.xMax - width - 30,
-                    y: rect.y,
-                    width: width,
-                    height: rect.height
-                );
-
-                GUIContent content = new
-                (
-                    ObjectNames.NicifyVariableName(sceneAssetData.ContextWalkFilter.ToString()),
-                    "Context walk filter: Controls which contexts are included in the walk when injecting this scene"
-                );
-
-                // EditorGUI.EnumPopup() does not reliably show tooltips in this context,
-                // so a custom DropdownButton + GenericMenu is used instead.
-                if (EditorGUI.DropdownButton(popupRect, content, FocusType.Passive))
-                {
-                    GenericMenu menu = new();
-
-                    foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
-                    {
-                        if(value is ContextWalkFilter.SameAsStartObjects or ContextWalkFilter.PrefabAssets)
-                            continue;
-                        
-                        ContextWalkFilter selected = value;
-
-                        menu.AddItem
-                        (
-                            content: new GUIContent(ObjectNames.NicifyVariableName(value.ToString())),
-                            on: value == sceneAssetData.ContextWalkFilter,
-                            func: () =>
-                            {
-                                sceneAssetData.ContextWalkFilter = selected;
-                                onModified?.Invoke();
-                            }
-                        );
-                    }
-
-                    menu.DropDown(popupRect);
-                }
-            }
-
-            InjectionStatus status = assetData.Status;
-
-            EditorGUI.LabelField
-            (
-                position: new Rect
-                (
-                    x: rect.width,
-                    y: rect.y,
-                    width: 20,
-                    height: 20
-                ),
-                label: GetInjectionStatusGUIContent(status)
-            );
+            DrawStatusLabel(assetData, x, y, statusWidth, height);
         }
 
         private void OnRemove(ReorderableList _)
@@ -240,6 +139,189 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
         {
             assetList.SortMode = SortMode.Custom;
             onModified?.Invoke();
+        }
+
+        #endregion
+
+        #region Draw methods
+
+        private void DrawToggle(
+            AssetData assetData,
+            float x,
+            float y,
+            float width,
+            float height)
+        {
+            bool enabled = EditorGUI.Toggle
+            (
+                position: new Rect(x, y, width, height),
+                value: assetData.Enabled,
+                style: toggleStyle
+            );
+
+            if (enabled == assetData.Enabled)
+                return;
+
+            assetData.Enabled = enabled;
+            assetList.TrySortByEnabledOrDisabled();
+            onModified?.Invoke();
+            GUI.changed = true;
+        }
+
+        private static void DrawObjectField(
+            Object asset,
+            float x,
+            float y,
+            float width,
+            float height)
+        {
+            using (new EditorGUI.DisabledScope(true))
+            {
+                EditorGUI.ObjectField
+                (
+                    position: new Rect(x, y, width, height),
+                    obj: asset,
+                    objType: typeof(Object),
+                    allowSceneObjects: false
+                );
+            }
+        }
+
+        private static void DrawPathLabel(
+            AssetData assetData,
+            Object asset,
+            float x,
+            float y,
+            float width,
+            float height)
+        {
+            bool hasAsset = asset != null;
+
+            GUIStyle pathLabelStyle = hasAsset
+                ? defaultPathLabelStyle
+                : missingPathLabelStyle;
+
+            string pathLabelText = hasAsset
+                ? assetData.GetAssetPath()
+                : "Deleted";
+
+            EditorGUI.LabelField
+            (
+                position: new Rect(x, y, width, height),
+                label: pathLabelText,
+                style: pathLabelStyle
+            );
+        }
+
+        private void DrawContextWalkFilter(
+            SceneAssetData sceneAssetData,
+            float x,
+            float y,
+            float width,
+            float height)
+        {
+            if (sceneAssetData == null)
+                return;
+
+            Rect popupRect = new(x, y, width, height);
+
+            GUIContent content = new
+            (
+                ObjectNames.NicifyVariableName(sceneAssetData.ContextWalkFilter.ToString()),
+                "Context walk filter: Controls which contexts are included in the walk when injecting this scene"
+            );
+
+            // EditorGUI.EnumPopup() does not reliably show tooltips in this context,
+            // so a custom DropdownButton + GenericMenu is used instead.
+            if (EditorGUI.DropdownButton(popupRect, content, FocusType.Passive))
+            {
+                GenericMenu menu = new();
+
+                foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
+                {
+                    if (value is ContextWalkFilter.SameAsStartObjects or ContextWalkFilter.PrefabAssets)
+                        continue;
+
+                    ContextWalkFilter selected = value;
+
+                    menu.AddItem
+                    (
+                        content: new GUIContent(ObjectNames.NicifyVariableName(value.ToString())),
+                        on: value == sceneAssetData.ContextWalkFilter,
+                        func: () =>
+                        {
+                            sceneAssetData.ContextWalkFilter = selected;
+                            onModified?.Invoke();
+                        }
+                    );
+                }
+
+                menu.DropDown(popupRect);
+            }
+        }
+
+        private static void DrawStatusLabel(
+            AssetData assetData,
+            float x,
+            float y,
+            float width,
+            float height)
+        {
+            InjectionStatus status = assetData.Status;
+
+            EditorGUI.LabelField
+            (
+                position: new Rect(x, y, width, height),
+                label: GetInjectionStatusGUIContent(status),
+                style: statusLabelStyle
+            );
+        }
+
+        #endregion
+
+        #region Static helpers
+
+        private static void CreateStyles()
+        {
+            toggleStyle ??= new GUIStyle(EditorStyles.toggle)
+            {
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(0, 0, 0, 0)
+            };
+
+            defaultPathLabelStyle ??= new GUIStyle(EditorStyles.miniLabel)
+            {
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(0, 0, 0, 0)
+            };
+
+            missingPathLabelStyle ??= new GUIStyle(EditorStyles.miniLabel)
+            {
+                normal =
+                {
+                    textColor = new Color(0.9f, 0.45f, 0.4f, 1f)
+                },
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(0, 0, 0, 0)
+            };
+
+            statusLabelStyle ??= new GUIStyle(EditorStyles.label)
+            {
+                margin = new RectOffset(0, 0, 0, 0),
+                padding = new RectOffset(0, 0, 0, 0)
+            };
+        }
+
+        private static GUIContent GetInjectionStatusGUIContent(InjectionStatus status)
+        {
+            return status switch
+            {
+                InjectionStatus.Unknown => new GUIContent("❔", "Run injection to get a status"),
+                InjectionStatus.Success => new GUIContent("✅", "Succesfully injected"),
+                InjectionStatus.Warning => new GUIContent("⚠️", "Injected with warnings. See console for details"),
+                InjectionStatus.Error => new GUIContent("❌", "Injection failed with errors. See console for details"),
+                _ => throw new ArgumentOutOfRangeException(nameof(status), status, null)
+            };
         }
 
         #endregion

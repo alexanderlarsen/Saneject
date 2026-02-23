@@ -1,6 +1,6 @@
 {
     "sceneList": {
-        "sortMode": 1,
+        "sortMode": 0,
         "list": [
             {
                 "rid": 1000
@@ -56,10 +56,10 @@
                     "asm": "Saneject.Experimental.Editor"
                 },
                 "data": {
-                    "guid": "2bdff45184871b443a5f546d1b949697",
+                    "guid": "54f834272f369b64fadd0131ae7e0acd",
                     "enabled": true,
-                    "status": 0,
-                    "walkFilter": 3
+                    "status": 1,
+                    "walkFilter": 0
                 }
             },
             {
@@ -70,10 +70,10 @@
                     "asm": "Saneject.Experimental.Editor"
                 },
                 "data": {
-                    "guid": "9706e582d4de70a48866d1aaae584a7f",
+                    "guid": "8647bc7a64e7b4f47a3bbe2da0d3690d",
                     "enabled": true,
                     "status": 0,
-                    "walkFilter": 3
+                    "walkFilter": 0
                 }
             },
             {
@@ -87,7 +87,7 @@
                     "guid": "1da4cd71e9abcaf41b17bc0bd81f53af",
                     "enabled": true,
                     "status": 0,
-                    "walkFilter": 3
+                    "walkFilter": 0
                 }
             },
             {
@@ -98,10 +98,10 @@
                     "asm": "Saneject.Experimental.Editor"
                 },
                 "data": {
-                    "guid": "8647bc7a64e7b4f47a3bbe2da0d3690d",
+                    "guid": "9706e582d4de70a48866d1aaae584a7f",
                     "enabled": true,
                     "status": 0,
-                    "walkFilter": 3
+                    "walkFilter": 2
                 }
             },
             {
@@ -112,7 +112,7 @@
                     "asm": "Saneject.Experimental.Editor"
                 },
                 "data": {
-                    "guid": "54f834272f369b64fadd0131ae7e0acd",
+                    "guid": "2bdff45184871b443a5f546d1b949697",
                     "enabled": true,
                     "status": 0,
                     "walkFilter": 3
