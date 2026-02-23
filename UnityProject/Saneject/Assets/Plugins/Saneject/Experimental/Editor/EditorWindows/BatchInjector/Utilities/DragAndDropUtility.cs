@@ -44,7 +44,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 AddObjectsToList(batchInjectorData, ref isScene, ref isPrefab);
                 SortObjects(batchInjectorData, isScene, isPrefab);
                 FindObjectIndices(batchInjectorData, sceneObjectIndices, prefabObjectIndices);
-                batchInjectorData.windowTab = isScene ? WindowTab.Scenes : WindowTab.Prefabs;
+                batchInjectorData.WindowTab = isScene ? WindowTab.Scenes : WindowTab.Prefabs;
 
                 SelectListItems
                 (
@@ -56,7 +56,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                         : prefabObjectIndices
                 );
 
-                batchInjectorData.isDirty = true;
+                batchInjectorData.IsDirty = true;
                 repaint.Invoke();
                 return;
             }
@@ -76,12 +76,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 if (obj is SceneAsset && path.EndsWith(".unity"))
                 {
                     isScene = true;
-                    batchInjectorData.sceneList.TryAddAssetByPath<SceneAssetData>(path);
+                    batchInjectorData.SceneList.TryAddAssetByPath<SceneAssetData>(path);
                 }
                 else if (obj is GameObject && path.EndsWith(".prefab"))
                 {
                     isPrefab = true;
-                    batchInjectorData.prefabList.TryAddAssetByPath<PrefabAssetData>(path);
+                    batchInjectorData.PrefabList.TryAddAssetByPath<PrefabAssetData>(path);
                 }
             }
         }
@@ -92,9 +92,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             bool isPrefab)
         {
             if (isScene)
-                batchInjectorData.sceneList.Sort();
+                batchInjectorData.SceneList.Sort();
             else if (isPrefab)
-                batchInjectorData.prefabList.Sort();
+                batchInjectorData.PrefabList.Sort();
         }
 
         private static void FindObjectIndices(
@@ -107,9 +107,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 string path = AssetDatabase.GetAssetPath(obj);
 
                 if (obj is SceneAsset && path.EndsWith(".unity"))
-                    indices.Add(batchInjectorData.sceneList.FindIndexByPath(path));
+                    indices.Add(batchInjectorData.SceneList.FindIndexByPath(path));
                 else if (obj is GameObject && path.EndsWith(".prefab"))
-                    addedPrefabIndices.Add(batchInjectorData.prefabList.FindIndexByPath(path));
+                    addedPrefabIndices.Add(batchInjectorData.PrefabList.FindIndexByPath(path));
             }
         }
 

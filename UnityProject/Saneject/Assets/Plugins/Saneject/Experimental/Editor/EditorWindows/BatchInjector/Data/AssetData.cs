@@ -9,7 +9,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
     [Serializable]
     public abstract class AssetData
     {
-        public AssetData(string guid)
+        protected AssetData(string guid)
         {
             this.guid = guid;
         }

@@ -16,11 +16,11 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 if (string.IsNullOrEmpty(scene.path) || !scene.path.EndsWith(".unity"))
                     continue;
 
-                batchInjectorData.sceneList.TryAddAssetByPath<SceneAssetData>(scene.path);
+                batchInjectorData.SceneList.TryAddAssetByPath<SceneAssetData>(scene.path);
             }
 
-            batchInjectorData.sceneList.Sort();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.SceneList.Sort();
+            batchInjectorData.IsDirty = true;
         }
 
         public static void AddAllProjectScenes(BatchInjectorData batchInjectorData)
@@ -30,7 +30,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 "Assets"
             });
 
-            string[] newGuids = batchInjectorData.sceneList.FindGuidsNotInList(guids).ToArray();
+            string[] newGuids = batchInjectorData.SceneList.FindGuidsNotInList(guids).ToArray();
 
             if (newGuids.Length == 0)
             {
@@ -45,10 +45,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                     "Yes", "No"))
             {
                 foreach (string guid in newGuids)
-                    batchInjectorData.sceneList.TryAddAssetByGuid<SceneAssetData>(guid);
+                    batchInjectorData.SceneList.TryAddAssetByGuid<SceneAssetData>(guid);
 
-                batchInjectorData.sceneList.Sort();
-                batchInjectorData.isDirty = true;
+                batchInjectorData.SceneList.Sort();
+                batchInjectorData.IsDirty = true;
             }
         }
 
@@ -57,8 +57,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             if (!EditorUtility.DisplayDialog("Batch Injector", "Remove all scenes from list?", "Yes", "Cancel"))
                 return;
 
-            batchInjectorData.sceneList.Clear();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.SceneList.Clear();
+            batchInjectorData.IsDirty = true;
         }
     }
 }

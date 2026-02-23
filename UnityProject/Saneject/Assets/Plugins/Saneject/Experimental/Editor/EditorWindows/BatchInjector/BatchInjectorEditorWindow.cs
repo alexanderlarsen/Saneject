@@ -26,14 +26,14 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
 
             sceneList = new ReorderableAssetList
             (
-                assetList: batchInjectorData.sceneList,
-                onModified: () => batchInjectorData.isDirty = true
+                assetList: batchInjectorData.SceneList,
+                onModified: () => batchInjectorData.IsDirty = true
             );
 
             prefabList = new ReorderableAssetList
             (
-                assetList: batchInjectorData.prefabList,
-                onModified: () => batchInjectorData.isDirty = true
+                assetList: batchInjectorData.PrefabList,
+                onModified: () => batchInjectorData.IsDirty = true
             );
         }
 
@@ -91,7 +91,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             InputUtility.HandleInput
             (
                 clickedAnyListItem: ref clickedAnyListItem,
-                tab: batchInjectorData.windowTab,
+                tab: batchInjectorData.WindowTab,
                 sceneList: sceneList,
                 prefabList: prefabList,
                 repaint: Repaint

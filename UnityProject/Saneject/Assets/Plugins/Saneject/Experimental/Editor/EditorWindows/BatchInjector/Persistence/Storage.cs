@@ -12,11 +12,11 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persi
 
         public static void SaveIfDirty(BatchInjectorData batchInjectorData)
         {
-            if (!batchInjectorData.isDirty)
+            if (!batchInjectorData.IsDirty)
                 return;
 
             Save(batchInjectorData);
-            batchInjectorData.isDirty = false;
+            batchInjectorData.IsDirty = false;
         }
 
         public static BatchInjectorData LoadOrCreateData()

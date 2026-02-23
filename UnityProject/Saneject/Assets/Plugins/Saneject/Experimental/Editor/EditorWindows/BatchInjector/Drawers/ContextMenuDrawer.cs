@@ -139,7 +139,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             list.GrabKeyboardFocus();
             list.SelectRange(0, list.count - 1);
             assetList.TrySortByEnabledOrDisabled();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.IsDirty = true;
         }
 
         private static void InjectSelected(
@@ -160,7 +160,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     (
                         sceneAssets: selectedAssets.OfType<SceneAssetData>(),
                         prefabAssets: null,
-                        onInjectionComplete: () => batchInjectorData.isDirty = true
+                        onInjectionComplete: () => batchInjectorData.IsDirty = true
                     );
 
                     break;
@@ -172,7 +172,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     (
                         sceneAssets: null,
                         prefabAssets: selectedAssets.OfType<PrefabAssetData>(),
-                        onInjectionComplete: () => batchInjectorData.isDirty = true
+                        onInjectionComplete: () => batchInjectorData.IsDirty = true
                     );
 
                     break;
@@ -190,7 +190,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     .Enabled = true;
 
             assetList.TrySortByEnabledOrDisabled();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.IsDirty = true;
         }
 
         private static void DisableSelected(
@@ -203,7 +203,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     .Enabled = false;
 
             assetList.TrySortByEnabledOrDisabled();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.IsDirty = true;
         }
 
         private static void ClearSelectedInjectStatus(
@@ -214,7 +214,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             foreach (int i in selected.OrderByDescending(i => i))
                 assetList.GetElementAt(i).Status = InjectionStatus.Unknown;
 
-            batchInjectorData.isDirty = true;
+            batchInjectorData.IsDirty = true;
             GUI.changed = true;
         }
 
@@ -237,7 +237,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 assetList.RemoveAt(i);
 
             list.ClearSelection();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.IsDirty = true;
             GUI.changed = true;
         }
 
@@ -251,7 +251,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 if (assetList.GetElementAt(i) is SceneAssetData scene)
                     scene.ContextWalkFilter = filter;
 
-            batchInjectorData.isDirty = true;
+            batchInjectorData.IsDirty = true;
         }
 
         #endregion

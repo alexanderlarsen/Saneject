@@ -20,26 +20,26 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             ref bool clickedAnyListItem,
             Action repaint)
         {
-            WindowTab previousTab = batchInjectorData.windowTab;
+            WindowTab previousTab = batchInjectorData.WindowTab;
 
             // Tab controls
-            batchInjectorData.windowTab = (WindowTab)GUILayout.Toolbar
+            batchInjectorData.WindowTab = (WindowTab)GUILayout.Toolbar
             (
-                selected: (int)batchInjectorData.windowTab,
+                selected: (int)batchInjectorData.WindowTab,
                 texts: new[]
                 {
-                    $"Scenes ({batchInjectorData.sceneList.TotalCount})",
-                    $"Prefabs ({batchInjectorData.prefabList.TotalCount})"
+                    $"Scenes ({batchInjectorData.SceneList.TotalCount})",
+                    $"Prefabs ({batchInjectorData.PrefabList.TotalCount})"
                 }
             );
 
-            if (previousTab != batchInjectorData.windowTab)
-                batchInjectorData.isDirty = true;
+            if (previousTab != batchInjectorData.WindowTab)
+                batchInjectorData.IsDirty = true;
 
             GUILayout.Space(8);
 
             // Tab content
-            switch (batchInjectorData.windowTab)
+            switch (batchInjectorData.WindowTab)
             {
                 case WindowTab.Scenes:
                 {
@@ -47,7 +47,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     (
                         title: "Scenes",
                         batchInjectorData: batchInjectorData,
-                        assetList: batchInjectorData.sceneList,
+                        assetList: batchInjectorData.SceneList,
                         reorderableList: reorderableSceneList,
                         listRect: sceneListRect,
                         clickedListAnyItem: ref clickedAnyListItem,
@@ -67,8 +67,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                                 () => SceneListUtility.ClearScenes(batchInjectorData)
                             ),
                             (
-                                $"Sort: {batchInjectorData.sceneList.SortMode.GetDisplayString()}",
-                                () => SortMenuDrawer.DrawSortMenu(batchInjectorData, batchInjectorData.sceneList, repaint)
+                                $"Sort: {batchInjectorData.SceneList.SortMode.GetDisplayString()}",
+                                () => SortMenuDrawer.DrawSortMenu(batchInjectorData, batchInjectorData.SceneList, repaint)
                             )
                         }
                     );
@@ -82,7 +82,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     (
                         title: "Prefabs",
                         batchInjectorData: batchInjectorData,
-                        assetList: batchInjectorData.prefabList,
+                        assetList: batchInjectorData.PrefabList,
                         reorderableList: reorderablePrefabList,
                         listRect: prefabListRect,
                         clickedListAnyItem: ref clickedAnyListItem,
@@ -102,8 +102,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                                 () => PrefabListUtility.ClearPrefabs(batchInjectorData)
                             ),
                             (
-                                $"Sort: {batchInjectorData.prefabList.SortMode.GetDisplayString()}",
-                                () => SortMenuDrawer.DrawSortMenu(batchInjectorData, batchInjectorData.prefabList, repaint)
+                                $"Sort: {batchInjectorData.PrefabList.SortMode.GetDisplayString()}",
+                                () => SortMenuDrawer.DrawSortMenu(batchInjectorData, batchInjectorData.PrefabList, repaint)
                             )
                         }
                     );
@@ -146,7 +146,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 batchInjectorData: batchInjectorData,
                 list: reorderableList,
                 assetList: assetList,
-                tab: batchInjectorData.windowTab,
+                tab: batchInjectorData.WindowTab,
                 rect: listRect
             );
         }

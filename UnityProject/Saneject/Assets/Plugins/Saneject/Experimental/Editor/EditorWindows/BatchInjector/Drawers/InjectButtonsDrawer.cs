@@ -10,8 +10,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
     {
         public static void DrawInjectButtons(BatchInjectorData batchInjectorData)
         {
-            int sceneCount = batchInjectorData.sceneList.EnabledCount;
-            int prefabCount = batchInjectorData.prefabList.EnabledCount;
+            int sceneCount = batchInjectorData.SceneList.EnabledCount;
+            int prefabCount = batchInjectorData.PrefabList.EnabledCount;
 
             GUILayout.Space(6);
 
@@ -23,14 +23,14 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         InjectionUtility.Inject
                         (
                             sceneAssets: batchInjectorData
-                                .sceneList
+                                .SceneList
                                 .GetEnabled()
                                 .OfType<SceneAssetData>(),
                             prefabAssets: batchInjectorData
-                                .prefabList
+                                .PrefabList
                                 .GetEnabled()
                                 .OfType<PrefabAssetData>(),
-                            onInjectionComplete: () => batchInjectorData.isDirty = true
+                            onInjectionComplete: () => batchInjectorData.IsDirty = true
                         );
                 }
 
@@ -40,11 +40,11 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         InjectionUtility.Inject
                         (
                             sceneAssets: batchInjectorData
-                                .sceneList
+                                .SceneList
                                 .GetEnabled()
                                 .OfType<SceneAssetData>(),
                             prefabAssets: null,
-                            onInjectionComplete: () => batchInjectorData.isDirty = true
+                            onInjectionComplete: () => batchInjectorData.IsDirty = true
                         );
                 }
 
@@ -55,10 +55,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                         (
                             sceneAssets: null,
                             prefabAssets: batchInjectorData
-                                .prefabList
+                                .PrefabList
                                 .GetEnabled()
                                 .OfType<PrefabAssetData>(),
-                            onInjectionComplete: () => batchInjectorData.isDirty = true
+                            onInjectionComplete: () => batchInjectorData.IsDirty = true
                         );
                 }
             }

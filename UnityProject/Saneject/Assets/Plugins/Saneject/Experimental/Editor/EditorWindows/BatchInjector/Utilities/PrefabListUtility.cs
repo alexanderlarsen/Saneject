@@ -28,10 +28,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             }
 
             foreach (string path in paths)
-                batchInjectorData.prefabList.TryAddAssetByPath<PrefabAssetData>(path);
+                batchInjectorData.PrefabList.TryAddAssetByPath<PrefabAssetData>(path);
 
-            batchInjectorData.prefabList.Sort();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.PrefabList.Sort();
+            batchInjectorData.IsDirty = true;
         }
 
         public static void AddAllProjectPrefabs(BatchInjectorData batchInjectorData)
@@ -41,7 +41,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 "Assets"
             });
 
-            string[] newGuids = batchInjectorData.prefabList.FindGuidsNotInList(guids).ToArray();
+            string[] newGuids = batchInjectorData.PrefabList.FindGuidsNotInList(guids).ToArray();
 
             if (newGuids.Length == 0)
             {
@@ -64,10 +64,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 ))
             {
                 foreach (string guid in newGuids)
-                    batchInjectorData.prefabList.TryAddAssetByGuid<PrefabAssetData>(guid);
+                    batchInjectorData.PrefabList.TryAddAssetByGuid<PrefabAssetData>(guid);
 
-                batchInjectorData.prefabList.Sort();
-                batchInjectorData.isDirty = true;
+                batchInjectorData.PrefabList.Sort();
+                batchInjectorData.IsDirty = true;
             }
         }
 
@@ -82,8 +82,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                 ))
                 return;
 
-            batchInjectorData.prefabList.Clear();
-            batchInjectorData.isDirty = true;
+            batchInjectorData.PrefabList.Clear();
+            batchInjectorData.IsDirty = true;
         }
     }
 }
