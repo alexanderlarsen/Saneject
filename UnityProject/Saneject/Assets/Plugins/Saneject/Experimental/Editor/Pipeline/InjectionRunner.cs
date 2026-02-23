@@ -180,7 +180,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     InjectionResults results = RunContext
                     (
                         startObjects,
-                        ContextWalkFilter.PrefabAssets,
+                        ContextWalkFilter.PrefabAssetObjects,
                         progressTracker
                     );
 

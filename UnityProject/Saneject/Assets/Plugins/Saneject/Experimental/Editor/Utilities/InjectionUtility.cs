@@ -40,7 +40,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     prefab
                 };
 
-                InjectionRunner.Run(startObjects, ContextWalkFilter.PrefabAssets);
+                InjectionRunner.Run(startObjects, ContextWalkFilter.PrefabAssetObjects);
             }
 
             public static void AllSceneObjects()

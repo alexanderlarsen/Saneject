@@ -33,6 +33,6 @@
         /// Includes transforms in the injection graph that belong to a prefab asset (not instance).
         /// Context isolation rules are unaffected by this setting.
         /// </summary>
-        PrefabAssets
+        PrefabAssetObjects
     }
 }

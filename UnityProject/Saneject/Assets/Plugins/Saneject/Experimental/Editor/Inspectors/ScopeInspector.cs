@@ -315,7 +315,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                         if (GUILayout.Button(new GUIContent(
                                 text: "Prefab Asset",
                                 tooltip: "Injects the entire prefab asset, excluding prefabs instances.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.PrefabAssets);
+                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.PrefabAssetObjects);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Prefab Instance",

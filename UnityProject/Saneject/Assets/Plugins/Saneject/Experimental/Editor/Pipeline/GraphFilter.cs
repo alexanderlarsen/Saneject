@@ -68,7 +68,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     break;
                 }
 
-                case ContextWalkFilter.PrefabAssets:
+                case ContextWalkFilter.PrefabAssetObjects:
                 {
                     nodes = injectionGraph
                         .EnumerateAllTransformNodes()
