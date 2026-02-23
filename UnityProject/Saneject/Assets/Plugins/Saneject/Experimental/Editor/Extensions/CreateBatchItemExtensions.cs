@@ -9,35 +9,7 @@ using UnityEngine;
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
     public static class CreateBatchItemExtensions
-    {
-        /// <summary>
-        /// Creates a sequence of <see cref="BatchItem" />s from a collection of asset paths.
-        /// Scene assets are converted to <see cref="SceneBatchItem" /> using the provided
-        /// <paramref name="sceneWalkFilter" />, while prefab assets are converted to
-        /// <see cref="PrefabBatchItem" />. Unsupported paths are skipped.
-        /// </summary>
-        /// <param name="paths">
-        /// Asset paths to process. Paths that are null, empty, or do not resolve to
-        /// supported asset types are ignored.
-        /// </param>
-        /// <param name="sceneWalkFilter">
-        /// The <see cref="ContextWalkFilter" /> to apply to all scene batch items.
-        /// This value is ignored for prefab assets.
-        /// </param>
-        /// <returns>
-        /// An enumerable sequence of batch items suitable for passing to
-        /// <c>InjectionRunner.RunBatch</c>.
-        /// </returns>
-        public static IEnumerable<BatchItem> CreateBatchItemsFromPaths(
-            IEnumerable<string> paths,
-            ContextWalkFilter sceneWalkFilter)
-        {
-            foreach (string path in paths)
-            {
-                foreach (BatchItem item in GetBatchItemsFromPath(path, sceneWalkFilter))
-                    yield return item;
-            }
-        }
+    { 
 
         /// <summary>
         /// Creates a sequence of <see cref="BatchItem" />s from a collection of Unity objects,

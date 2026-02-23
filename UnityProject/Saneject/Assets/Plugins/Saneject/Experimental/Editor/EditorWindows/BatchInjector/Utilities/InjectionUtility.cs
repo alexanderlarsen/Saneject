@@ -18,7 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             sceneAssets = sceneAssets?.ToArray() ?? Array.Empty<SceneAssetData>();
             prefabAssets = prefabAssets?.ToArray() ?? Array.Empty<PrefabAssetData>();
 
-            if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInject(sceneAssets.Count(), prefabAssets.Count()))
+            if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInjector_Inject(sceneAssets.Count(), prefabAssets.Count()))
                 return;
 
             Dictionary<AssetData, BatchItem> map = new();

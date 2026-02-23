@@ -138,39 +138,62 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         public static class BatchInjectionMenus
         {
-            public static bool Confirm_BatchInject(
+            public static bool Confirm_BatchInjector_Inject(
                 int sceneCount,
                 int prefabCount)
+            {
+                return Confirm_BatchInject(sceneCount, prefabCount, true);
+            }
+
+            public static bool Confirm_BatchInject_SelectedAssets(
+                int sceneCount,
+                int prefabCount)
+            {
+                return Confirm_BatchInject(sceneCount, prefabCount, false);
+            }
+
+            private static bool Confirm_BatchInject(
+                int sceneCount,
+                int prefabCount,
+                bool isBatchInjectorEditorWindow)
             {
                 if (!UserSettings.AskBefore_BatchInject)
                     return true;
 
-                StringBuilder messageBuilder = new();
+                StringBuilder sb = new();
 
-                messageBuilder.Append("You are about to batch inject ");
+                sb.Append("You are about to batch inject ");
 
                 if (sceneCount > 0)
                 {
-                    messageBuilder.Append($"{sceneCount} {(sceneCount == 1 ? "scene" : "scenes")}");
+                    sb.Append($"{sceneCount} {(sceneCount == 1 ? "scene" : "scenes")}");
 
                     if (prefabCount > 0)
-                        messageBuilder.Append(" and ");
+                        sb.Append(" and ");
                 }
 
                 if (prefabCount > 0)
-                    messageBuilder.Append($"{prefabCount} {(prefabCount == 1 ? "prefab" : "prefabs")}");
+                    sb.Append($"{prefabCount} {(prefabCount == 1 ? "prefab" : "prefabs")}");
 
-                messageBuilder.Append(".");
-                messageBuilder.AppendLine();
-                messageBuilder.AppendLine();
-                messageBuilder.AppendLine("A batch injection operation will be performed on all selected scenes, prefab assets and sub-assets that contain one or more scopes.");
-                messageBuilder.AppendLine();
-                messageBuilder.Append("Do you want to continue?");
+                sb.AppendLine(".");
+                sb.AppendLine();
+                sb.AppendLine("Injection will be performed on all selected assets that contain one or more scopes.");
+                sb.AppendLine();
+
+                sb.AppendLine
+                (
+                    isBatchInjectorEditorWindow
+                        ? "Each asset will be injected using its context walk filter configured in the Batch Injector."
+                        : "Assets will be fully injected, including scene objects, prefab instances, and prefab assets."
+                );
+
+                sb.AppendLine();
+                sb.AppendLine("Do you want to continue?");
 
                 return EditorUtility.DisplayDialog
                 (
                     title: "Saneject: Batch Inject Selected Assets",
-                    message: messageBuilder.ToString(),
+                    message: sb.ToString(),
                     ok: "Inject",
                     cancel: "Cancel"
                 );
