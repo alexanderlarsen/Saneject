@@ -43,19 +43,6 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 InjectionRunner.Run(startObjects, ContextWalkFilter.PrefabAssets);
             }
 
-            public static void SpecificPrefabAsset(GameObject prefab)
-            {
-                if (!DialogUtility.InjectionMenus.Confirm_Inject_PrefabAsset(prefab.name))
-                    return;
-
-                GameObject[] startObjects =
-                {
-                    prefab
-                };
-
-                InjectionRunner.Run(startObjects, ContextWalkFilter.PrefabAssets);
-            }
-
             public static void AllSceneObjects()
             {
                 Scene activeScene = SceneManager.GetActiveScene();

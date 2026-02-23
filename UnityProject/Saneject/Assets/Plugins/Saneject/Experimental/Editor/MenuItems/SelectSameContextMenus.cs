@@ -35,7 +35,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 
             IEnumerable<GameObject> validGameObjects = Object
                 .FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-                .Where(x => x.scene.IsValid());
+                .Where(x => new ContextIdentity(x).Type is ContextType.SceneObject or ContextType.PrefabInstance);
 
             if (!ProjectSettings.UseContextIsolation)
             {
@@ -68,7 +68,6 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 
             HashSet<GameObject> validGameObjects = Selection
                 .gameObjects
-                .Where(x => x.scene.IsValid())
                 .ToHashSet();
 
             HashSet<Transform> roots = validGameObjects
@@ -110,8 +109,10 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         private static bool Validate_SelectSameContextInScene()
         {
             return Selection
-                .objects
-                .Any(x => x is GameObject gameObject && gameObject.scene.IsValid());
+                .gameObjects
+                .Select(x => x.transform.root)
+                .Distinct()
+                .Any(x => new ContextIdentity(x).Type is ContextType.SceneObject or ContextType.PrefabInstance); 
         }
 
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Hierarchy", true,
