@@ -24,112 +24,97 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         public static class InjectionMenus
         {
-            public static bool Confirm_Inject_Scene(string sceneName)
+            public static bool Confirm_InjectCurrentScene(
+                string sceneName,
+                ContextWalkFilter walkFilter)
             {
-                if (!UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab)
+                if (!UserSettings.AskBefore_Inject_Scene)
                     return true;
+
+                string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
 
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Inject Scene",
-                    message: $"Are you sure you want to inject the entire {sceneName} scene, including prefabs instances?",
+                    title: $"Saneject: Inject Current Scene ({walkFilterString})",
+                    message: walkFilter switch
+                    {
+                        ContextWalkFilter.AllContexts => $"Are you sure you want to inject the entire {sceneName} scene, including scene objects and prefab instances?",
+                        ContextWalkFilter.SceneObjects => $"Are you sure you want to inject all scene objects in the {sceneName} scene, excluding prefab instances?",
+                        ContextWalkFilter.PrefabInstances => $"Are you sure you want to inject all prefab instances in the {sceneName} scene, excluding scene objects?",
+                        ContextWalkFilter.SameContextsAsSelection => $"Are you sure you want to inject all objects in the {sceneName} scene that are the same context as the selection?",
+                        _ => $"The {walkFilter} context walk filter is not supported for scene injection."
+                    },
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool Confirm_Inject_PrefabAsset(string prefabName)
+            public static bool Confirm_InjectCurrentPrefabAsset(
+                string prefabName,
+                ContextWalkFilter walkFilter)
             {
-                if (!UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab)
+                if (!UserSettings.AskBefore_Inject_PrefabAsset)
                     return true;
+
+                string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
 
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Inject Prefab",
-                    message: $"Are you sure you want to inject the {prefabName} prefab?",
+                    title: $"Saneject: Inject Prefab Asset ({walkFilterString})",
+                    message: walkFilter switch
+                    {
+                        ContextWalkFilter.AllContexts => $"Are you sure you want to inject the entire {prefabName} prefab asset, including prefab asset objects and prefab instances?",
+                        ContextWalkFilter.PrefabAssetObjects => $"Are you sure you want to inject all prefab asset objects in the {prefabName} prefab asset, excluding prefab instances?",
+                        ContextWalkFilter.PrefabInstances => $"Are you sure you want to inject all prefab instances in the {prefabName} prefab asset, excluding prefab asset objects?",
+                        ContextWalkFilter.SameContextsAsSelection => $"Are you sure you want to inject all objects in the {prefabName} prefab asset that are the same context as the selection?",
+                        _ => "Are you sure you want to inject the selected hierarchy?"
+                    },
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool Confirm_Inject_AllSceneObjects(string sceneName)
-            {
-                if (!UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances)
-                    return true;
-
-                return EditorUtility.DisplayDialog
-                (
-                    title: "Saneject: Inject All Scene Objects",
-                    message: $"Are you sure you want to inject all scene objects in the {sceneName} scene?",
-                    ok: "Inject",
-                    cancel: "Cancel"
-                );
-            }
-
-            public static bool Confirm_Inject_AllScenePrefabInstances(string sceneName)
-            {
-                if (!UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances)
-                    return true;
-
-                return EditorUtility.DisplayDialog
-                (
-                    title: "Saneject: Inject All Scene Prefab Instances",
-                    message: $"Are you sure you want to inject all prefab instances in the {sceneName} scene?",
-                    ok: "Inject",
-                    cancel: "Cancel"
-                );
-            }
-
-            public static bool Confirm_Inject_SelectedSceneHierarchies_AllContexts()
+            public static bool Confirm_InjectSceneHierarchy(ContextWalkFilter walkFilter)
             {
                 if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
                     return true;
 
+                string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
+
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Inject Selected Scene Hierarchies (All Contexts)",
-                    message: "Are you sure you want to inject all scene objects and prefab instances in the selected scene hierarchies?",
+                    title: $"Saneject: Inject Scene Hierarchy ({walkFilterString})",
+                    message: walkFilter switch
+                    {
+                        ContextWalkFilter.AllContexts => "Are you sure you want to inject all objects in the selected scene hierarchy, including scene objects and prefab instances?",
+                        ContextWalkFilter.SceneObjects => "Are you sure you want to inject all scene objects in the selected scene hierarchy, excluding prefab instances?",
+                        ContextWalkFilter.PrefabInstances => "Are you sure you want to inject all prefab instances in the selected scene hierarchy, excluding scene objects?",
+                        ContextWalkFilter.SameContextsAsSelection => "Are you sure you want to inject all objects in the selected scene hierarchy that are the same context as the selected object?",
+                        _ => "Are you sure you want to inject the selected scene hierarchy?"
+                    },
                     ok: "Inject",
                     cancel: "Cancel"
                 );
             }
 
-            public static bool SelectedSceneHierarchies_SelectedObjectContextsOnly()
+            public static bool Confirm_InjectSelectedSceneHierarchies(ContextWalkFilter walkFilter)
             {
                 if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
                     return true;
 
-                return EditorUtility.DisplayDialog
-                (
-                    title: "Saneject: Inject Selected Scene Hierarchies (Selected Object Contexts Only)",
-                    message: "Are you sure you want to inject the selected hierarchies filtered by the selected object contexts?",
-                    ok: "Inject",
-                    cancel: "Cancel"
-                );
-            }
-
-            public static bool Confirm_Inject_Single_SceneHierarchy_ByContext(ContextWalkFilter walkFilter)
-            {
-                if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
-                    return true;
-
-                string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString()).ToLower();
-                string message;
-
-                if (walkFilter == ContextWalkFilter.AllContexts)
-                    message = "Are you sure you want to inject all scene objects and prefab instances in the selected scene hierarchy?";
-                else if (walkFilter == ContextWalkFilter.SameAsSelection)
-                    message = "Are you sure you want to inject the selected hierarchy filtered by the same object contexts as the selected object?";
-                else
-                    message = $"Are you sure you want to inject the selected hierarchy filtered by {walkFilterString}?";
+                string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
 
                 return EditorUtility.DisplayDialog
                 (
-                    title:
-                    walkFilter == ContextWalkFilter.AllContexts
-                        ? "Saneject: Inject Selected Scene Hierarchy (All)"
-                        : $"Saneject: Inject Selected Scene Hierarchy ({walkFilterString})",
-                    message: message,
+                    title: $"Saneject: Inject Selected Scene Hierarchies ({walkFilterString})",
+                    message: walkFilter switch
+                    {
+                        ContextWalkFilter.AllContexts => "Are you sure you want to inject all objects in the selected scene hierarchies, including scene objects and prefab instances?",
+                        ContextWalkFilter.SceneObjects => "Are you sure you want to inject all scene objects in the selected scene hierarchies, excluding prefab instances?",
+                        ContextWalkFilter.PrefabInstances => "Are you sure you want to inject all prefab instances in the selected scene hierarchies, excluding scene objects?",
+                        ContextWalkFilter.SameContextsAsSelection => "Are you sure you want to inject all objects in the selected scene hierarchies that are the same context as the selected object?",
+                        _ => "Are you sure you want to inject the selected scene hierarchies?"
+                    },
                     ok: "Inject",
                     cancel: "Cancel"
                 );
@@ -192,7 +177,9 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
                 return EditorUtility.DisplayDialog
                 (
-                    title: "Saneject: Batch Inject Selected Assets",
+                    title: isBatchInjectorEditorWindow
+                        ? "Saneject: Batch Inject Selected Assets"
+                        : "Saneject: Batch Inject Selected Assets (All Contexts)",
                     message: sb.ToString(),
                     ok: "Inject",
                     cancel: "Cancel"

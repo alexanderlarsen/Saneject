@@ -239,7 +239,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
 
                 foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
                 {
-                    if (value is ContextWalkFilter.SameAsSelection or ContextWalkFilter.PrefabAssetObjects)
+                    if (value is ContextWalkFilter.SameContextsAsSelection or ContextWalkFilter.PrefabAssetObjects)
                         continue;
 
                     ContextWalkFilter selected = value;

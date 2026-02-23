@@ -11,7 +11,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
     {
         #region Priority constants
 
-        private const int Priority_Base = MenuPriority.Root + MenuPriority.Section * 1 + 2;
+        private const int Priority_Base = MenuPriority.Root + MenuPriority.Section * 1 + 10;
 
         private const int Priority_Group_SelectedAssets = Priority_Base + MenuPriority.Group * 0;
         private const int Priority_Item_Inject_SelectedAssets_BatchInjection = Priority_Group_SelectedAssets + 1;
@@ -24,7 +24,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Batch Inject/Selected Assets", false, Priority_Item_Inject_SelectedAssets_BatchInjection)]
         private static void BatchInject_SelectedAssets(MenuCommand cmd)
         {
-            InjectionUtility.BatchInject.SelectedAssets();
+            InjectionUtility.BatchInjectSelectedAssets();
         }
 
         #endregion

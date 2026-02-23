@@ -77,24 +77,24 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
 
             DrawToggle
             (
-                label: "Current Scene/Prefab",
-                tooltip: "Show a confirmation dialog before injecting the entire current scene or prefab.",
-                currentValue: UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab,
-                onChanged: newValue => UserSettings.AskBefore_Inject_CurrentScene_Or_CurrentPrefab = newValue
+                label: "Scene",
+                tooltip: "Show a confirmation dialog before injecting a whole scene.",
+                currentValue: UserSettings.AskBefore_Inject_Scene,
+                onChanged: newValue => UserSettings.AskBefore_Inject_Scene = newValue
             );
-
+            
             DrawToggle
             (
-                label: "All Scene Objects/Scene Prefab Instances",
-                tooltip: "Show a confirmation dialog before injecting all scene objects or prefab instances in the current scene.",
-                currentValue: UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances,
-                onChanged: newValue => UserSettings.AskBefore_Inject_AllSceneObjects_Or_AllScenePrefabInstances = newValue
-            );
-
+                label: "Prefab Asset",
+                tooltip: "Show a confirmation dialog before injecting a prefab asset.",
+                currentValue: UserSettings.AskBefore_Inject_PrefabAsset,
+                onChanged: newValue => UserSettings.AskBefore_Inject_PrefabAsset = newValue
+            ); 
+            
             DrawToggle
             (
                 label: "Selected Scene Hierarchies",
-                tooltip: "Show a confirmation dialog before injecting all selected scene hierarchies in the Scene Hierarchy window.",
+                tooltip: "Show a confirmation dialog before injecting selected scene hierarchies.",
                 currentValue: UserSettings.AskBefore_Inject_SelectedSceneHierarchies,
                 onChanged: newValue => UserSettings.AskBefore_Inject_SelectedSceneHierarchies = newValue
             ); 
@@ -102,7 +102,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             DrawToggle
             (
                 label: "Batch Injection",
-                tooltip: "Show a confirmation dialog before batch injecting all selected scenes and prefab assets.",
+                tooltip: "Show a confirmation dialog before batch injecting scenes and prefab assets.",
                 currentValue: UserSettings.AskBefore_BatchInject,
                 onChanged: newValue => UserSettings.AskBefore_BatchInject = newValue
             );

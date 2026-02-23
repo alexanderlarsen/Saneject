@@ -1,5 +1,4 @@
-﻿using System;
-using System.Text;
+﻿using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Inspectors.Models;
 using Plugins.Saneject.Experimental.Editor.Utilities;
@@ -243,7 +242,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
             if (!isFoldedOut)
                 return;
-            
+
             switch (rootContextIdentity.Type)
             {
                 case ContextType.SceneObject or ContextType.PrefabInstance:
@@ -255,17 +254,17 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                         if (GUILayout.Button(new GUIContent(
                                 text: "All",
                                 tooltip: "Injects the entire scene, including prefabs instances.")))
-                            InjectionUtility.Inject.CurrentScene();
+                            InjectionUtility.InjectCurrentScene(ContextWalkFilter.AllContexts);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Scene Object",
                                 tooltip: "Injects all scene objects, excluding prefabs instances.")))
-                            InjectionUtility.Inject.AllSceneObjects();
+                            InjectionUtility.InjectCurrentScene(ContextWalkFilter.SceneObjects);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Prefab Instance",
                                 tooltip: "Injects all prefab instances in the scene.")))
-                            InjectionUtility.Inject.AllScenePrefabInstances();
+                            InjectionUtility.InjectCurrentScene(ContextWalkFilter.PrefabInstances);
                     }
 
                     EditorGUILayout.LabelField("Inject Hierarchy By Context");
@@ -275,22 +274,22 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                         if (GUILayout.Button(new GUIContent(
                                 text: "All",
                                 tooltip: "Injects the entire hierarchy, including both scene objects and prefabs instances.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.AllContexts);
+                            InjectionUtility.InjectSceneHierarchy(scope.gameObject, ContextWalkFilter.AllContexts);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "This",
                                 tooltip: "Injects all hierarchy objects that are the same context as this scope.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.SameAsSelection);
+                            InjectionUtility.InjectSceneHierarchy(scope.gameObject, ContextWalkFilter.SameContextsAsSelection);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Scene Object",
                                 tooltip: "Injects all scene objects in the hierarchy, excluding prefabs instances.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.SceneObjects);
+                            InjectionUtility.InjectSceneHierarchy(scope.gameObject, ContextWalkFilter.SceneObjects);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Prefab Instance",
                                 tooltip: "Injects all prefab instances in the hierarchy.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.PrefabInstances);
+                            InjectionUtility.InjectSceneHierarchy(scope.gameObject, ContextWalkFilter.PrefabInstances);
                     }
 
                     break;
@@ -305,23 +304,23 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                         if (GUILayout.Button(new GUIContent(
                                 text: "All",
                                 tooltip: "Injects the entire prefab asset, including prefabs instances.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.AllContexts);
+                            InjectionUtility.InjectPrefabAssetHierarchy(scope.gameObject, ContextWalkFilter.AllContexts);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "This",
                                 tooltip: "Injects all objects that are the same context as this scope.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.SameAsSelection);
+                            InjectionUtility.InjectPrefabAssetHierarchy(scope.gameObject, ContextWalkFilter.SameContextsAsSelection);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Prefab Asset",
                                 tooltip: "Injects the entire prefab asset, excluding prefabs instances.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.PrefabAssetObjects);
+                            InjectionUtility.InjectPrefabAssetHierarchy(scope.gameObject, ContextWalkFilter.PrefabAssetObjects);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Prefab Instance",
                                 tooltip: "Injects all nested prefab instances in this prefab asset.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.PrefabInstances);
-                    } 
+                            InjectionUtility.InjectPrefabAssetHierarchy(scope.gameObject, ContextWalkFilter.PrefabInstances);
+                    }
 
                     break;
                 }
