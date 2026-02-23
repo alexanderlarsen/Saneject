@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 
@@ -17,9 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             switch (mode)
             {
                 case SortMode.DisabledToEnabled:
-                    list.Sort((
-                        a,
-                        b) =>
+                    list.Sort((a, b) =>
                     {
                         int flagCompare = a.Enabled.CompareTo(b.Enabled);
 
@@ -28,15 +27,16 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 
                         // Secondary alphabetical sort (by Name, then Path)
                         int nameCompare = Compare(a.GetAssetName(), b.GetAssetName());
-                        return nameCompare != 0 ? nameCompare : Compare(a.GetAssetPath(), b.GetAssetPath());
+                        
+                        return nameCompare != 0 
+                            ? nameCompare 
+                            : Compare(a.GetAssetPath(), b.GetAssetPath());
                     });
 
                     return;
 
                 case SortMode.EnabledToDisabled:
-                    list.Sort((
-                        a,
-                        b) =>
+                    list.Sort((a, b) =>
                     {
                         int flagCompare = b.Enabled.CompareTo(a.Enabled);
 
@@ -45,26 +45,46 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 
                         // Secondary alphabetical sort (by Name, then Path)
                         int nameCompare = Compare(a.GetAssetName(), b.GetAssetName());
-                        return nameCompare != 0 ? nameCompare : Compare(a.GetAssetPath(), b.GetAssetPath());
+                        
+                        return nameCompare != 0 
+                            ? nameCompare 
+                            : Compare(a.GetAssetPath(), b.GetAssetPath());
                     });
 
+                    return;
+                
+                
+                case SortMode.StatusSuccessToError:
+                    list.Sort((a, b) =>
+                    {
+                        int statusCompare = GetStatusPrioritySuccessToError(a.Status)
+                            .CompareTo(GetStatusPrioritySuccessToError(b.Status));
+
+                        return statusCompare != 0 
+                            ? statusCompare 
+                            : SecondaryAlphabeticalCompare(a, b);
+                    });
+                    return;
+
+                case SortMode.StatusErrorToSuccess:
+                    list.Sort((a, b) =>
+                    {
+                        int statusCompare = GetStatusPriorityErrorToSuccess(a.Status)
+                            .CompareTo(GetStatusPriorityErrorToSuccess(b.Status));
+
+                        return statusCompare != 0 
+                            ? statusCompare 
+                            : SecondaryAlphabeticalCompare(a, b);
+                    });
                     return;
             }
 
             Comparison<AssetData> comparison = mode switch
             {
-                SortMode.PathAtoZ => (
-                    a,
-                    b) => Compare(GetSortString(a), GetSortString(b)),
-                SortMode.PathZtoA => (
-                    a,
-                    b) => Compare(GetSortString(b), GetSortString(a)),
-                SortMode.NameAtoZ => (
-                    a,
-                    b) => Compare(GetSortString(a), GetSortString(b)),
-                SortMode.NameZtoA => (
-                    a,
-                    b) => Compare(GetSortString(b), GetSortString(a)),
+                SortMode.PathAtoZ => (a, b) => Compare(GetSortString(a), GetSortString(b)),
+                SortMode.PathZtoA => (a, b) => Compare(GetSortString(b), GetSortString(a)),
+                SortMode.NameAtoZ => (a, b) => Compare(GetSortString(a), GetSortString(b)),
+                SortMode.NameZtoA => (a, b) => Compare(GetSortString(b), GetSortString(a)),
                 _ => null
             };
 
@@ -134,6 +154,39 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             }
 
             return a.Length.CompareTo(b.Length);
+        }
+        
+        private static int GetStatusPrioritySuccessToError(InjectionStatus status)
+        {
+            return status switch
+            {
+                InjectionStatus.Success => 0,
+                InjectionStatus.Warning => 1,
+                InjectionStatus.Error   => 2,
+                InjectionStatus.Unknown => 3,
+                _ => 4
+            };
+        }
+
+        private static int GetStatusPriorityErrorToSuccess(InjectionStatus status)
+        {
+            return status switch
+            {
+                InjectionStatus.Error   => 0,
+                InjectionStatus.Warning => 1,
+                InjectionStatus.Success => 2,
+                InjectionStatus.Unknown => 3,
+                _ => 4
+            };
+        }
+
+        private static int SecondaryAlphabeticalCompare(AssetData a, AssetData b)
+        {
+            int nameCompare = Compare(a.GetAssetName(), b.GetAssetName());
+            
+            return nameCompare != 0
+                ? nameCompare
+                : Compare(a.GetAssetPath(), b.GetAssetPath());
         }
     }
 }

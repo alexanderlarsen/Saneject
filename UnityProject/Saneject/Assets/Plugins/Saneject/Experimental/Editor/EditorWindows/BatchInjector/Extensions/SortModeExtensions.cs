@@ -14,6 +14,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Exten
                 SortMode.NameZtoA => "Name Z-A",
                 SortMode.EnabledToDisabled => "Enabled-Disabled",
                 SortMode.DisabledToEnabled => "Disabled-Enabled",
+                SortMode.StatusSuccessToError => "Success-Error",
+                SortMode.StatusErrorToSuccess => "Error-Success",
                 _ => "Custom"
             };
         }

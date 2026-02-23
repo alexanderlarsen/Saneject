@@ -8,6 +8,8 @@
         PathZtoA,
         EnabledToDisabled,
         DisabledToEnabled,
+        StatusSuccessToError,
+        StatusErrorToSuccess,
         Custom
     }
 }

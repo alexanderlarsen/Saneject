@@ -23,6 +23,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             menu.AddSeparator("");
             AddItem(SortMode.EnabledToDisabled);
             AddItem(SortMode.DisabledToEnabled);
+            menu.AddSeparator("");
+            AddItem(SortMode.StatusSuccessToError);
+            AddItem(SortMode.StatusErrorToSuccess);
             menu.ShowAsContext();
 
             return;
