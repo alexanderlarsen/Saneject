@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Reflection;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
-using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -17,17 +17,14 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
     {
         public override void OnInspectorGUI()
         {
-            if (UserSettings.ShowHelpBoxes)
-                EditorGUILayout.HelpBox
-                (
-                    "• Allows serialization of interface-based references across scenes and prefabs.\n" +
-                    "• Resolves or instantiates the actual object using the selected method at runtime.\n" +
-                    "• A source generator (ProxyObjectGenerator.dll) implements all interfaces and forwards calls to the real instance.\n" +
-                    "• Use the proxy like the real object - just through its interfaces.\n" +
-                    "• To make the proxy as inexpensive as possible, it only tries to resolve the instance once at runtime, the first time you access it.",
-                    MessageType.None,
-                    wide: true
-                );
+            HelpBoxUtility.DrawHelpBox
+            (
+                "• Allows serialization of interface-based references across scenes and prefabs.\n" +
+                "• Resolves or instantiates the actual object using the selected method at runtime.\n" +
+                "• A source generator (ProxyObjectGenerator.dll) implements all interfaces and forwards calls to the real instance.\n" +
+                "• Use the proxy like the real object - just through its interfaces.\n" +
+                "• To make the proxy as inexpensive as possible, it only tries to resolve the instance once at runtime, the first time you access it."
+            );
 
             EditorGUI.BeginDisabledGroup(true);
 
@@ -49,7 +46,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
             SerializedProperty prefabProp = serializedObject.FindProperty("prefab");
             SerializedProperty dontDestroyProp = serializedObject.FindProperty("dontDestroyOnLoad");
             SerializedProperty instanceModeProp = serializedObject.FindProperty("instanceMode");
-            
+
             EditorGUILayout.PropertyField(resolveMethodProp);
 
             string selected = resolveMethodProp.enumDisplayNames[resolveMethodProp.enumValueIndex];

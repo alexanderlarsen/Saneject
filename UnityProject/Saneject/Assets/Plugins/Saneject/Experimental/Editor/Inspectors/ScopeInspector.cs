@@ -64,18 +64,13 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
         private static void DrawHelpBox()
         {
-            if (!UserSettings.ShowHelpBoxes)
-                return;
-
-            EditorGUILayout.HelpBox
+            HelpBoxUtility.DrawHelpBox
             (
                 "A Scope is where you declare bindings. When a component needs a dependency, it is resolved from the nearest Scope above it in the hierarchy, with fallback to parent Scopes if no local binding is found.\n\n" +
                 "Bindings are only used for objects that belong to the same context as the Scope. A context is a serialization boundary: Scene Object, Prefab Instance, Prefab Asset, or Global (assets like ScriptableObjects, textures, audio clips, etc.).\n\n" +
                 "Context isolation can be enabled to enforce stricter separation between scenes and prefabs. When enabled, scopes do not cross contexts. Scene objects and prefab instances are resolved separately, even if they live in the same hierarchy. Scopes from other contexts are shown but grayed out because they will not be used.\n\n" +
                 "Unity already prevents prefab assets from referencing scene objects, but prefab instances can reference scene objects. Since injection happens at edit time, this can make a prefab depend on the scene it was authored in and break when moved to another scene.\n\n" +
-                "If a dependency needs to survive across scenes or prefabs, use a proxy. Context isolation turns these situations into errors, but even with isolation disabled they are a sign that a proxy is the correct solution.",
-                MessageType.None,
-                true
+                "If a dependency needs to survive across scenes or prefabs, use a proxy. Context isolation turns these situations into errors, but even with isolation disabled they are a sign that a proxy is the correct solution."
             );
         }
 
