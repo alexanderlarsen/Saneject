@@ -34,7 +34,7 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                     break;
                 }
 
-                case ContextWalkFilter.SameAsStartObjects:
+                case ContextWalkFilter.SameAsSelection:
                 {
                     HashSet<ContextIdentity> startIdentities = startTransforms
                         .Select(transform => new ContextIdentity(transform))

@@ -15,7 +15,7 @@
         /// Includes transforms in the injection graph that belong to the same context(s) as the selected start objects.
         /// Context isolation rules are unaffected by this setting.
         /// </summary>
-        SameAsStartObjects,
+        SameAsSelection,
 
         /// <summary>
         /// Includes transforms in the injection graph that belong to a scene object.

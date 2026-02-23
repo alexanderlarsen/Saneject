@@ -105,7 +105,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                         .gameObjects
                         .Where(x => x.scene.IsValid());
 
-                InjectionRunner.Run(startObjects, ContextWalkFilter.SameAsStartObjects);
+                InjectionRunner.Run(startObjects, ContextWalkFilter.SameAsSelection);
             }
 
             public static void Single_SceneHierarchy_ByContext(

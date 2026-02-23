@@ -277,7 +277,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
                         if (GUILayout.Button(new GUIContent(
                                 text: "This",
                                 tooltip: "Injects all hierarchy objects that are the same context as this scope.")))
-                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.SameAsStartObjects);
+                            InjectionUtility.Inject.Single_SceneHierarchy_ByContext(scope.gameObject, ContextWalkFilter.SameAsSelection);
 
                         if (GUILayout.Button(new GUIContent(
                                 text: "Scene Objects",

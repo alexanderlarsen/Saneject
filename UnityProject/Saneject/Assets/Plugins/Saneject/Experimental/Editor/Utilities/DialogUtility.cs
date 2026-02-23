@@ -118,7 +118,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
                 if (walkFilter == ContextWalkFilter.AllContexts)
                     message = "Are you sure you want to inject all scene objects and prefab instances in the selected scene hierarchy?";
-                else if (walkFilter == ContextWalkFilter.SameAsStartObjects)
+                else if (walkFilter == ContextWalkFilter.SameAsSelection)
                     message = "Are you sure you want to inject the selected hierarchy filtered by the same object contexts as the selected object?";
                 else
                     message = $"Are you sure you want to inject the selected hierarchy filtered by {walkFilterString}?";
