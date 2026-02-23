@@ -22,6 +22,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     if (GUILayout.Button("Inject All"))
                         InjectionUtility.Inject
                         (
+                            batchInjectorData,
                             sceneAssets: batchInjectorData
                                 .SceneList
                                 .GetEnabled()
@@ -29,8 +30,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                             prefabAssets: batchInjectorData
                                 .PrefabList
                                 .GetEnabled()
-                                .OfType<PrefabAssetData>(),
-                            onInjectionComplete: () => batchInjectorData.IsDirty = true
+                                .OfType<PrefabAssetData>()
                         );
                 }
 
@@ -39,12 +39,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     if (GUILayout.Button($"Inject Scenes ({sceneCount})"))
                         InjectionUtility.Inject
                         (
+                            batchInjectorData,
                             sceneAssets: batchInjectorData
                                 .SceneList
                                 .GetEnabled()
                                 .OfType<SceneAssetData>(),
-                            prefabAssets: null,
-                            onInjectionComplete: () => batchInjectorData.IsDirty = true
+                            prefabAssets: null
                         );
                 }
 
@@ -53,12 +53,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                     if (GUILayout.Button($"Inject Prefabs ({prefabCount})"))
                         InjectionUtility.Inject
                         (
+                            batchInjectorData,
                             sceneAssets: null,
                             prefabAssets: batchInjectorData
                                 .PrefabList
                                 .GetEnabled()
-                                .OfType<PrefabAssetData>(),
-                            onInjectionComplete: () => batchInjectorData.IsDirty = true
+                                .OfType<PrefabAssetData>()
                         );
                 }
             }

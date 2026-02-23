@@ -59,9 +59,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                 return;
 
             AssetData assetData = assetList.GetElementAt(index);
-            SceneAssetData sceneAssetData = assetData as SceneAssetData;
             Object elementAsset = assetData.GetAsset();
-            bool isSceneList = sceneAssetData != null;
 
             rect.y += 1.5f;
             rect.height = EditorGUIUtility.singleLineHeight;
@@ -69,7 +67,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             const float space = 6f;
             const float toggleWidth = 14f;
             const float objectFieldWidth = 220f;
-            const float contextWalkFilterWidth = 118f;
+            const float contextWalkFilterWidth = 145f;
             const float statusWidth = 18f;
 
             float x = rect.x - 4 + space;
@@ -82,13 +80,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             DrawObjectField(elementAsset, x, y, objectFieldWidth, height);
             x += objectFieldWidth + space;
 
-            float rightReserved = statusWidth;
-
-            if (isSceneList)
-                rightReserved += space + contextWalkFilterWidth;
-
-            rightReserved += space;
-
+            const float rightReserved = statusWidth + contextWalkFilterWidth + space * 2;
             float pathLabelWidth = rect.xMax - x - rightReserved;
 
             if (pathLabelWidth < 0f)
@@ -97,11 +89,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             DrawPathLabel(assetData, elementAsset, x, y, pathLabelWidth, height);
             x += pathLabelWidth + space;
 
-            if (isSceneList)
-            {
-                DrawContextWalkFilter(sceneAssetData, x, y, contextWalkFilterWidth, height);
-                x += contextWalkFilterWidth + space;
-            }
+            DrawContextWalkFilter(assetData, x, y, contextWalkFilterWidth, height);
+            x += contextWalkFilterWidth + space;
 
             DrawStatusLabel(assetData, x, y, statusWidth, height);
         }
@@ -214,21 +203,21 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
         }
 
         private void DrawContextWalkFilter(
-            SceneAssetData sceneAssetData,
+            AssetData assetData,
             float x,
             float y,
             float width,
             float height)
         {
-            if (sceneAssetData == null)
+            if (assetData == null)
                 return;
 
             Rect popupRect = new(x, y, width, height);
 
             GUIContent content = new
             (
-                ObjectNames.NicifyVariableName(sceneAssetData.ContextWalkFilter.ToString()),
-                "Context walk filter: Controls which contexts are included in the walk when injecting this scene"
+                text: ObjectNames.NicifyVariableName(assetData.ContextWalkFilter.ToString()),
+                tooltip: "Context Walk Filter: Controls which contexts are included in the walk when injecting this asset"
             );
 
             // EditorGUI.EnumPopup() does not reliably show tooltips in this context,
@@ -239,7 +228,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
 
                 foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
                 {
-                    if (value is ContextWalkFilter.SameContextsAsSelection or ContextWalkFilter.PrefabAssetObjects)
+                    if (assetData is SceneAssetData &&
+                        value is ContextWalkFilter.PrefabAssetObjects or ContextWalkFilter.SameContextsAsSelection)
+                        continue;
+
+                    if (assetData is PrefabAssetData &&
+                        value is ContextWalkFilter.SceneObjects or ContextWalkFilter.SameContextsAsSelection)
                         continue;
 
                     ContextWalkFilter selected = value;
@@ -247,11 +241,11 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                     menu.AddItem
                     (
                         content: new GUIContent(ObjectNames.NicifyVariableName(value.ToString())),
-                        on: value == sceneAssetData.ContextWalkFilter,
+                        on: value == assetData.ContextWalkFilter,
                         func: () =>
                         {
-                            sceneAssetData.ContextWalkFilter = selected;
-                            onModified?.Invoke();
+                            assetData.ContextWalkFilter = selected;
+                            onModified?.Invoke(); 
                         }
                     );
                 }

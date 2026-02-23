@@ -1,5 +1,6 @@
 ﻿using System;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
+using Plugins.Saneject.Experimental.Editor.Data.Context;
 using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -24,6 +25,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 
         [SerializeField]
         private InjectionStatus status;
+        
+        [SerializeField]
+        private ContextWalkFilter walkFilter;
 
         private Object asset;
 
@@ -39,6 +43,12 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
         {
             get => status;
             set => status = value;
+        }
+        
+        public ContextWalkFilter ContextWalkFilter
+        {
+            get => walkFilter;
+            set => walkFilter = value;
         }
 
         #endregion

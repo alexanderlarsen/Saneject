@@ -24,15 +24,15 @@
         SceneObjects,
 
         /// <summary>
-        /// Includes transforms in the injection graph that belong to a prefab instance.
-        /// Context isolation rules are unaffected by this setting.
-        /// </summary>
-        PrefabInstances,
-
-        /// <summary>
         /// Includes transforms in the injection graph that belong to a prefab asset (not instance).
         /// Context isolation rules are unaffected by this setting.
         /// </summary>
-        PrefabAssetObjects
+        PrefabAssetObjects,
+
+        /// <summary>
+        /// Includes transforms in the injection graph that belong to a prefab instance.
+        /// Context isolation rules are unaffected by this setting.
+        /// </summary>
+        PrefabInstances
     }
 }

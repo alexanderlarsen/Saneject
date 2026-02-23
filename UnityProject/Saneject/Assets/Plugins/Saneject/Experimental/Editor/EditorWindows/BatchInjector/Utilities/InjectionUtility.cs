@@ -11,9 +11,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
     public static class InjectionUtility
     {
         public static void Inject(
+            BatchInjectorData batchInjectorData,
             IEnumerable<SceneAssetData> sceneAssets,
-            IEnumerable<PrefabAssetData> prefabAssets,
-            Action onInjectionComplete = null)
+            IEnumerable<PrefabAssetData> prefabAssets)
         {
             sceneAssets = sceneAssets?.ToArray() ?? Array.Empty<SceneAssetData>();
             prefabAssets = prefabAssets?.ToArray() ?? Array.Empty<PrefabAssetData>();
@@ -24,18 +24,18 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             Dictionary<AssetData, BatchItem> map = new();
             List<BatchItem> batchItems = new();
 
-            foreach (SceneAssetData assetData in sceneAssets)
+            foreach (SceneAssetData sceneAssetData in sceneAssets)
             {
-                SceneBatchItem batchItem = new(assetData.GetAssetPath(), assetData.ContextWalkFilter);
+                SceneBatchItem batchItem = new(sceneAssetData.GetAssetPath(), sceneAssetData.ContextWalkFilter);
                 batchItems.Add(batchItem);
-                map.Add(assetData, batchItem);
+                map.Add(sceneAssetData, batchItem);
             }
 
-            foreach (PrefabAssetData assetData in prefabAssets)
+            foreach (PrefabAssetData prefabAssetData in prefabAssets)
             {
-                PrefabBatchItem batchItem = new(assetData.GetAssetPath());
+                PrefabBatchItem batchItem = new(prefabAssetData.GetAssetPath(), prefabAssetData.ContextWalkFilter);
                 batchItems.Add(batchItem);
-                map.Add(assetData, batchItem);
+                map.Add(prefabAssetData, batchItem);
             }
 
             InjectionRunner.RunBatch(batchItems.ToArray());
@@ -43,7 +43,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             foreach ((AssetData asset, BatchItem item) in map)
                 asset.Status = item.Status;
 
-            onInjectionComplete?.Invoke();
+            batchInjectorData.IsDirty = true;
         }
     }
 }

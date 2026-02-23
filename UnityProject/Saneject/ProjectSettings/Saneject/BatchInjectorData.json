@@ -50,7 +50,7 @@
                     "guid": "0c50d0bbcbf5e2546b026174741e0b95",
                     "enabled": true,
                     "status": 0,
-                    "walkFilter": 2
+                    "walkFilter": 0
                 }
             },
             {
@@ -64,7 +64,7 @@
                     "guid": "54f834272f369b64fadd0131ae7e0acd",
                     "enabled": true,
                     "status": 0,
-                    "walkFilter": 2
+                    "walkFilter": 0
                 }
             },
             {
@@ -77,7 +77,8 @@
                 "data": {
                     "guid": "aa04bdaf9cd95e64a843eab43c573001",
                     "enabled": true,
-                    "status": 1
+                    "status": 1,
+                    "walkFilter": 3
                 }
             },
             {
@@ -90,7 +91,8 @@
                 "data": {
                     "guid": "0711ab3157ab95b418f36215c883bbed",
                     "enabled": true,
-                    "status": 1
+                    "status": 1,
+                    "walkFilter": 3
                 }
             },
             {
@@ -103,7 +105,8 @@
                 "data": {
                     "guid": "51ae0f3c36a0ace4fafe4a97c43c8377",
                     "enabled": true,
-                    "status": 1
+                    "status": 1,
+                    "walkFilter": 3
                 }
             },
             {
@@ -116,7 +119,8 @@
                 "data": {
                     "guid": "1cb02eb5fed69a34784db75b97931149",
                     "enabled": true,
-                    "status": 1
+                    "status": 1,
+                    "walkFilter": 3
                 }
             }
         ]

@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.Collections.Generic;
+using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Extensions;
@@ -7,12 +8,13 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+// ReSharper disable LoopCanBeConvertedToQuery
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
     public static class InjectionUtility
     {
-        #region Scene
+        #region Scene injection
 
         public static void InjectCurrentScene(ContextWalkFilter walkFilter)
         {
@@ -56,7 +58,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         #endregion
 
-        #region Prefab asset
+        #region Prefab asset injection
 
         public static void InjectCurrentPrefabAsset(ContextWalkFilter walkFilter)
         {
@@ -104,11 +106,30 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
         #endregion
 
+        #region Batch injection
+
         public static void BatchInjectSelectedAssets()
         {
-            BatchItem[] batchItems = Selection.GetFiltered<Object>(SelectionMode.DeepAssets)
-                .CreateBatchItemsFromObjects(ContextWalkFilter.AllContexts)
-                .ToArray();
+            Object[] assets = Selection.GetFiltered<Object>(SelectionMode.DeepAssets);
+            List<BatchItem> batchItems = new();
+
+            foreach (Object asset in assets)
+            {
+                string path = AssetDatabase.GetAssetPath(asset);
+
+                if (string.IsNullOrEmpty(path))
+                    continue;
+
+                BatchItem batchItem = AssetDatabase.LoadAssetAtPath<Object>(path) switch
+                {
+                    SceneAsset => new SceneBatchItem(path, ContextWalkFilter.AllContexts),
+                    GameObject => new PrefabBatchItem(path, ContextWalkFilter.AllContexts),
+                    _ => null
+                };
+
+                if (batchItem != null)
+                    batchItems.Add(batchItem);
+            }
 
             int sceneCount = batchItems.OfType<SceneBatchItem>().Count();
             int prefabCount = batchItems.OfType<PrefabBatchItem>().Count();
@@ -121,5 +142,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 batchItems
             );
         }
+
+        #endregion
     }
 }

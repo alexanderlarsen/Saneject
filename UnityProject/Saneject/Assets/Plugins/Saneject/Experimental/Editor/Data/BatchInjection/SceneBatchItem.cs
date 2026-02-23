@@ -7,11 +7,8 @@ namespace Plugins.Saneject.Experimental.Editor.Data.BatchInjection
         public SceneBatchItem(
             string path,
             ContextWalkFilter contextWalkFilter)
-            : base(path)
+            : base(path, contextWalkFilter)
         {
-            ContextWalkFilter = contextWalkFilter;
         }
-
-        public ContextWalkFilter ContextWalkFilter { get; }
     }
 }

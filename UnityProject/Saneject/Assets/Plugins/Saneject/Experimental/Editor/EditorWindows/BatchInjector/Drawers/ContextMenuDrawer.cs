@@ -67,7 +67,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
 
             menu.AddItem
             (
-                label: $"Clear Injection Status",
+                label: "Clear Injection Status",
                 isEnabled: hasSelection,
                 onClick: () => ClearSelectedInjectStatus(batchInjectorData, assetList, selected)
             );
@@ -81,30 +81,32 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 onClick: () => RemoveSelected(batchInjectorData, list, assetList, selected)
             );
 
-            if (tab == WindowTab.Scenes)
-            {
-                menu.AddSeparator("");
+            menu.AddSeparator("");
 
-                const string baseLabel = "Set Context Walk Filter";
+            const string walkFilterBaseLabel = "Set Context Walk Filter";
 
-                if (!hasSelection)
-                    menu.AddDisabledItem(new GUIContent(baseLabel));
-                else
-                    foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
-                    {
-                        if(value is ContextWalkFilter.SameContextsAsSelection or ContextWalkFilter.PrefabAssetObjects)
-                            continue;
-                        
-                        ContextWalkFilter captured = value;
+            if (!hasSelection)
+                menu.AddDisabledItem(new GUIContent(walkFilterBaseLabel));
+            else
+                foreach (ContextWalkFilter value in Enum.GetValues(typeof(ContextWalkFilter)))
+                {
+                    if (tab == WindowTab.Scenes &&
+                        value is ContextWalkFilter.PrefabAssetObjects or ContextWalkFilter.SameContextsAsSelection)
+                        continue;
 
-                        menu.AddItem
-                        (
-                            label: $"{baseLabel}/{ObjectNames.NicifyVariableName(value.ToString())}",
-                            isEnabled: true,
-                            onClick: () => SetSelectedContextFilter(batchInjectorData, assetList, selected, captured)
-                        );
-                    }
-            }
+                    if (tab == WindowTab.Prefabs &&
+                        value is ContextWalkFilter.SceneObjects or ContextWalkFilter.SameContextsAsSelection)
+                        continue;
+
+                    ContextWalkFilter captured = value;
+
+                    menu.AddItem
+                    (
+                        label: $"{walkFilterBaseLabel}/{ObjectNames.NicifyVariableName(value.ToString())}",
+                        isEnabled: true,
+                        onClick: () => SetSelectedContextFilter(batchInjectorData, assetList, selected, captured)
+                    );
+                }
 
             menu.ShowAsContext();
             e.Use();
@@ -158,9 +160,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 {
                     InjectionUtility.Inject
                     (
+                        batchInjectorData,
                         sceneAssets: selectedAssets.OfType<SceneAssetData>(),
-                        prefabAssets: null,
-                        onInjectionComplete: () => batchInjectorData.IsDirty = true
+                        prefabAssets: null
                     );
 
                     break;
@@ -170,9 +172,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
                 {
                     InjectionUtility.Inject
                     (
+                        batchInjectorData,
                         sceneAssets: null,
-                        prefabAssets: selectedAssets.OfType<PrefabAssetData>(),
-                        onInjectionComplete: () => batchInjectorData.IsDirty = true
+                        prefabAssets: selectedAssets.OfType<PrefabAssetData>()
                     );
 
                     break;
@@ -248,8 +250,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             ContextWalkFilter filter)
         {
             foreach (int i in selected)
-                if (assetList.GetElementAt(i) is SceneAssetData scene)
-                    scene.ContextWalkFilter = filter;
+                assetList.GetElementAt(i).ContextWalkFilter = filter;
 
             batchInjectorData.IsDirty = true;
         }

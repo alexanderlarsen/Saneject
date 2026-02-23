@@ -63,10 +63,10 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                     title: $"Saneject: Inject Prefab Asset ({walkFilterString})",
                     message: walkFilter switch
                     {
-                        ContextWalkFilter.AllContexts => $"Are you sure you want to inject the entire {prefabName} prefab asset, including prefab asset objects and prefab instances?",
-                        ContextWalkFilter.PrefabAssetObjects => $"Are you sure you want to inject all prefab asset objects in the {prefabName} prefab asset, excluding prefab instances?",
-                        ContextWalkFilter.PrefabInstances => $"Are you sure you want to inject all prefab instances in the {prefabName} prefab asset, excluding prefab asset objects?",
-                        ContextWalkFilter.SameContextsAsSelection => $"Are you sure you want to inject all objects in the {prefabName} prefab asset that are the same context as the selection?",
+                        ContextWalkFilter.AllContexts => $"Are you sure you want to inject the entire {prefabName} prefab hierarchy, including prefab asset objects and prefab instances?",
+                        ContextWalkFilter.PrefabAssetObjects => $"Are you sure you want to inject all prefab asset objects in the {prefabName} prefab hierarchy, excluding prefab instances?",
+                        ContextWalkFilter.PrefabInstances => $"Are you sure you want to inject all prefab instances in the {prefabName} prefab hierarchy, excluding prefab asset objects?",
+                        ContextWalkFilter.SameContextsAsSelection => $"Are you sure you want to inject all objects in the {prefabName} prefab hierarchy that are the same context as the selection?",
                         _ => "Are you sure you want to inject the selected hierarchy?"
                     },
                     ok: "Inject",
