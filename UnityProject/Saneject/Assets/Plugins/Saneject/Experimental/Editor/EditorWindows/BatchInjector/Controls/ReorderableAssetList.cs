@@ -27,7 +27,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
             Action onModified) :
             base
             (
-                assetList.Elements,
+                assetList.List,
                 typeof(AssetData),
                 draggable: true,
                 displayHeader: false,

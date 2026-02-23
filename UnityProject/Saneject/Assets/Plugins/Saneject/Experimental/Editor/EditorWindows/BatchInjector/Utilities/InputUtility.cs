@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 
             void SelectAll()
             {
-                ReorderableList list = tab == 0 ? sceneList : prefabList;
+                ReorderableList list = tab == WindowTab.Scenes ? sceneList : prefabList;
                 list.GrabKeyboardFocus();
                 list.SelectRange(0, list.count - 1);
                 repaint.Invoke();
@@ -57,7 +57,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 
             void ClearSelection()
             {
-                ReorderableList list = tab == 0 ? sceneList : prefabList;
+                ReorderableList list = tab == WindowTab.Scenes ? sceneList : prefabList;
                 list.ClearSelection();
                 repaint.Invoke();
             }

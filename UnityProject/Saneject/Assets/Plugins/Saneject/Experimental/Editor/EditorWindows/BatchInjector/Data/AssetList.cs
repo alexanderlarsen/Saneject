@@ -25,7 +25,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 
         public int EnabledCount => list.Count(item => item.Enabled);
         public int TotalCount => list.Count;
-        public IList Elements => list;
+        public IList List => list;
 
         public SortMode SortMode
         {
@@ -43,17 +43,17 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 
         #region List CRUD methods
 
-        public bool TryAddAssetByPath<TAsset>(string path)where TAsset : AssetData 
+        public bool TryAddAssetByPath<TAsset>(string path) where TAsset : AssetData
         {
             string guid = AssetDatabase.AssetPathToGUID(path);
             return TryAddAssetByGuid<TAsset>(guid);
         }
 
-        public bool TryAddAssetByGuid<TAsset>(string guid)  where TAsset : AssetData 
+        public bool TryAddAssetByGuid<TAsset>(string guid) where TAsset : AssetData
         {
             if (list.Any(item => item.Guid == guid))
                 return false;
-            
+
             TAsset asset = (TAsset)Activator.CreateInstance(typeof(TAsset), guid);
 
             list.Add(asset);
