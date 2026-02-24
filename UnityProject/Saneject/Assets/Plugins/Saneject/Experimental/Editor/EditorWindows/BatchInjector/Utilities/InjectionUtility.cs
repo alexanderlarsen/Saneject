@@ -10,8 +10,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
 {
     public static class InjectionUtility
     {
-        public static void Inject(
-            BatchInjectorData batchInjectorData,
+        public static bool TryInject( 
             IEnumerable<SceneAssetData> sceneAssets,
             IEnumerable<PrefabAssetData> prefabAssets)
         {
@@ -19,7 +18,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             prefabAssets = prefabAssets?.ToArray() ?? Array.Empty<PrefabAssetData>();
 
             if (!DialogUtility.BatchInjectionMenus.Confirm_BatchInjector_Inject(sceneAssets.Count(), prefabAssets.Count()))
-                return;
+                return false;
 
             Dictionary<AssetData, BatchItem> map = new();
             List<BatchItem> batchItems = new();
@@ -43,7 +42,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
             foreach ((AssetData asset, BatchItem item) in map)
                 asset.Status = item.Status;
 
-            batchInjectorData.IsDirty = true;
+            return true;
         }
     }
 }

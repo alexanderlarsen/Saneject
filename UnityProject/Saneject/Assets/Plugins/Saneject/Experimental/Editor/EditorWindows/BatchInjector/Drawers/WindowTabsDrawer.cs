@@ -144,7 +144,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawe
             ContextMenuDrawer.DrawContextMenu
             (
                 batchInjectorData: batchInjectorData,
-                list: reorderableList,
+                reorderableList: reorderableList,
                 assetList: assetList,
                 tab: batchInjectorData.WindowTab,
                 rect: listRect
