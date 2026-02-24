@@ -96,14 +96,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
         {
             SortingUtility.SortList(list, sortMode);
         }
-
-        public void TrySortByEnabledOrDisabled()
-        {
-            if (sortMode is not (SortMode.EnabledToDisabled or SortMode.DisabledToEnabled))
-                return;
-
-            Sort();
-        }
+ 
 
         public int FindIndexByPath(string path)
         {

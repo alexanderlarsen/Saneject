@@ -32,7 +32,6 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                             ? nameCompare 
                             : Compare(a.GetAssetPath(), b.GetAssetPath());
                     });
-
                     return;
 
                 case SortMode.EnabledToDisabled:
@@ -50,7 +49,6 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utili
                             ? nameCompare 
                             : Compare(a.GetAssetPath(), b.GetAssetPath());
                     });
-
                     return;
                 
                 

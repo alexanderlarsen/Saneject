@@ -152,7 +152,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Contr
                 return;
 
             assetData.Enabled = enabled;
-            assetList.TrySortByEnabledOrDisabled();
+            assetList.Sort();
             onModified?.Invoke();
             GUI.changed = true;
         }
