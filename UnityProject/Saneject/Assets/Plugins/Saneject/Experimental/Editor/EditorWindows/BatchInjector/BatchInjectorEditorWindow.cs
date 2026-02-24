@@ -13,8 +13,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
         private const float WindowPadding = 5f;
 
         private BatchInjectorData batchInjectorData = new();
-        private ReorderableAssetList sceneList;
-        private ReorderableAssetList prefabList;
+        private ReorderableAssetList reorderableSceneList;
+        private ReorderableAssetList reorderablePrefabList;
         private Rect sceneListRect;
         private Rect prefabListRect;
         private bool clickedAnyListItem;
@@ -24,13 +24,13 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
         {
             batchInjectorData = Storage.LoadOrCreateData();
 
-            sceneList = new ReorderableAssetList
+            reorderableSceneList = new ReorderableAssetList
             (
                 assetList: batchInjectorData.SceneList,
                 onModified: () => batchInjectorData.IsDirty = true
             );
 
-            prefabList = new ReorderableAssetList
+            reorderablePrefabList = new ReorderableAssetList
             (
                 assetList: batchInjectorData.PrefabList,
                 onModified: () => batchInjectorData.IsDirty = true
@@ -56,8 +56,8 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             (
                 dropArea: position,
                 batchInjectorData: batchInjectorData,
-                sceneList: sceneList,
-                prefabList: prefabList,
+                sceneList: reorderableSceneList,
+                prefabList: reorderablePrefabList,
                 repaint: Repaint
             );
 
@@ -77,23 +77,29 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
             WindowTabsDrawer.DrawTabs
             (
                 batchInjectorData,
-                sceneList,
+                reorderableSceneList,
                 sceneListRect,
-                prefabList,
+                reorderablePrefabList,
                 prefabListRect,
                 ref clickedAnyListItem,
                 Repaint
             );
 
             GUILayout.FlexibleSpace();
-            InjectButtonsDrawer.DrawInjectButtons(batchInjectorData);
+
+            InjectButtonsDrawer.DrawInjectButtons
+            (
+                batchInjectorData,
+                reorderableSceneList,
+                reorderablePrefabList
+            );
 
             InputUtility.HandleInput
             (
                 clickedAnyListItem: ref clickedAnyListItem,
                 tab: batchInjectorData.WindowTab,
-                sceneList: sceneList,
-                prefabList: prefabList,
+                sceneList: reorderableSceneList,
+                prefabList: reorderablePrefabList,
                 repaint: Repaint
             );
 
