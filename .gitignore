@@ -1,4 +1,4 @@
-# ───────── Unity ─────────
+# Unity project
 /UnityProject/Saneject/[Ll]ibrary/
 /UnityProject/Saneject/[Tt]emp/
 /UnityProject/Saneject/[Oo]bj/
@@ -19,16 +19,15 @@
 /UnityProject/Saneject/*.mdb
 /UnityProject/Saneject/*.VC.db
 
-# JetBrains Rider plugin generated inside Unity
-/UnityProject/Saneject/Assets/Plugins/Editor/JetBrains*
-
+# Dev
+/UnityProject/Saneject/Assets/Dev/*
+/UnityProject/Saneject/Assets/SanejectGenerated/*
+/UnityProject/Saneject/Assets/SanejectGenerated.meta
+ 
 # Addressables blobs
 /UnityProject/Saneject/Assets/[Aa]ddressable[Aa]ssets[Dd]ata/*/*.bin*
 /UnityProject/Saneject/Assets/[Ss]treamingAssets/aa.meta
 /UnityProject/Saneject/Assets/[Ss]treamingAssets/aa/*
-
-# Unity crash/sysinfo
-/UnityProject/Saneject/sysinfo.txt
 
 # Unity builds & packages
 *.apk
@@ -36,17 +35,16 @@
 *.unitypackage
 *.app
 
-# ───────── SourceGenerators project ─────────
+# Roslyn
 
 /Build/
 /RoslynTools/bin/
 /RoslynTools/obj/
 !RoslynTools/RoslynTools.csproj
-
 **/bin/
 **/obj/
 
-# ───────── General tooling ─────────
+# Misc
 .vs/
 .gradle/
 .idea/
@@ -61,7 +59,5 @@
 crashlytics-build.properties
 /UnityProject/Saneject/Saneject.sln.DotSettings
 
-# ───────── Dev ─────────
-/UnityProject/Saneject/Assets/Dev/*
-/UnityProject/Saneject/Assets/SanejectGenerated/*
-/UnityProject/Saneject/Assets/SanejectGenerated.meta
+# Docs
+/Docs/_site/
