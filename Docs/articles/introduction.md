@@ -1,25 +1,15 @@
 # Introduction
 
-
-
-```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
-using UnityEngine;
-
-namespace Dev.Experimental.Scenarios.Demo
-{
-    public partial class GameManager : MonoBehaviour
-    {
-        [Inject, SerializeInterface]
-        private IPlayer player;
-    }
-}
-```
-
+> 🚀 **Quick start**  
+> Install, learn the basics, and inject your first scene in 5 minutes → [Jump to quick start](quick-start.html)
 
 ## What is this?
 
 Saneject is a middle-ground between hand-wiring references and a full runtime DI container. It resolves dependencies in the Unity Editor using familiar DI syntax and workflows, writes them straight into serialized fields (including interfaces), and keeps your classes free of `GetComponent`, static singletons, manual look-ups, etc. At runtime it's just regular, serialized Unity objects. No reflection, no container, no startup hit.
+
+## What is dependency injection?
+
+Dependency injection (DI) is a design pattern where objects receive their dependencies from an external source, rather than creating or locating them themselves. Instead of calling `new()`, or searching the scene themselves (`GetComponent`, `FindFirstObjectOfType`, etc.), an external system supplies the needed objects.
 
 ## Why another DI tool?
 
@@ -35,17 +25,24 @@ Saneject is a middle-ground between hand-wiring references and a full runtime DI
 
 Saneject isn't meant to replace full runtime frameworks like Zenject or VContainer. It's an alternative workflow for projects that value determinism, Inspector visibility, and minimal runtime overhead.
 
-## Features
+## How runtime DI typically works
 
-### Injection & binding
+In most DI frameworks like Zenject or VContainer, you declare bindings in code or installers. At runtime, a container resolves and injects all dependencies before or during startup. This provides flexibility, supports unit testing, and allows highly dynamic setups. However, it introduces complexity, runtime overhead (reflection, allocations, container resolving), a second lifecycle on top of Unity's (`Awake`, `Start`, `OnEnable`, etc.) and the wiring can feel less transparent to non-programmers,
+since it's not always visible in the Inspector.
 
-- **Editor-time, deterministic injection:** Bindings are resolved in the editor, stored directly in serialized fields, including nested serialized classes.
-- **Fluent, scope-aware binding API:** Search hierarchy or project, filter by tag/layer/name, bind by type or ID.
-- **Bind Components and Assets:** Use familiar APIs with context-aware methods. Component methods traverse GameObject hierarchies; asset bindings can load from Resources, folders, and more.
-- **Collection binding support:** Inject arrays or lists with full support for filters, scoping, and binding IDs.
-- **Method injection:** Inject dependencies as method parameters. Supports single values, arrays, and lists, and works alongside field injection, including inside nested serialized classes.
-- **Context isolation:** Prefabs and scenes are injected in isolation. A prefab inside a scene will not be used to resolve scene dependencies and vice versa.
-- **Flexible filtering:** Predicate-based filtering system for both components and assets. Compact, composable, and extensible with user-defined helper methods.
-- **Target qualification:** Inject by ID, target type, or member name. Target bindings can specify which classes and members to apply to, working on fields, properties, and methods.
-- **Unified Scope component:** One `Scope` type handles both scenes and prefabs, with automatic context detection.
-- **Batch injection:** Editor window to inject all or selected scenes and prefabs in the project with one click, with detailed logs per item and cumulative summary stats at the end.
+## How Saneject DI works
+
+Saneject flips the model: you still declare bindings in code (via a `Scope`), but all bindings are resolved in the Unity Editor. The results are written directly to serialized fields. There's no container or injection step at runtime. At startup, Unity loads the scene with references already assigned. This has both benefits and trade-offs compared to runtime DI, outlined below.
+
+## Runtime DI vs Saneject
+
+| Approach             | Runtime DI (Zenject, etc.)                               | Saneject                                                                                         |
+|----------------------|----------------------------------------------------------|--------------------------------------------------------------------------------------------------|
+| Injection timing     | Runtime (container initialization)                       | Editor-time (stored as serialized fields)                                                        |
+| Lifecycle            | More complex - adds a second lifecycle on top of Unity's | Regular Unity lifecycle (Awake, Start, etc.)                                                     |
+| Performance          | Some startup cost (reflection, allocations)              | Zero reflection or container at runtime (small runtime lookup if using global dependencies)      |
+| Inspector visibility | Limited - container handles wiring                       | All dependencies are visible in the Inspector                                                    |
+| Flexibility          | High - bindings can change at runtime                    | Lower - wiring is fixed after injection                                                          |
+| Testing / mocking    | Strong - easy to substitute in unit tests                | Less ergonomic - requires setting serialized data                                                |
+| Visual debuggability | Can be opaque - dynamic graph                            | Fully deterministic - just look at the fields for missing dependencies                           |
+| Plain C# classes     | Full support - constructor injection, POCO creation      | No constructor injection and POCO creation. Does support injection into serialized nested POCOs. |

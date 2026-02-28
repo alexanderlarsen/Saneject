@@ -1,4 +1,50 @@
 - name: Introduction
   href: introduction.md
-- name: Getting Started
-  href: getting-started.md
+
+- name: Feature overview
+  href: feature-overview.md
+
+- name: Getting started
+  items:
+    - name: Quick start
+      href: getting-started/quick-start.md
+    - name: Sample game
+      href: getting-started/sample-game.md
+
+- name: Core concepts
+  items:
+    - name: Scopes
+      href: core-concepts/scopes.md
+    - name: Bindings
+      href: core-concepts/bindings.md
+    - name: Contexts
+      href: core-concepts/contexts.md
+    - name: Serialized interfaces
+      href: core-concepts/serialized-interfaces.md
+    - name: Method injection
+      href: core-concepts/method-injection.md
+    - name: Proxies
+      href: core-concepts/proxies.md
+
+- name: Editor & tooling
+  items:
+    - name: Batch injector window
+      href: editor-and-tooling/batch-injector-window.md
+    - name: Custom inspector
+      href: editor-and-tooling/custom-inspector.md
+    - name: Roslyn tools
+      href: editor-and-tooling/roslyn-tools.md 
+    - name: Settings
+      href: editor-and-tooling/settings.md
+
+- name: Architecture
+  items:
+    - name: Injection pipeline
+      href: architecture/injection-pipeline.md 
+      
+- name: Reference
+  items:   
+    - name: Tested Unity versions
+      href: reference/tested-unity-versions.md
+    - name: MIT license
+      href: reference/mit-license.md

@@ -1,8 +1,8 @@
 <p>
     <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="Docs/logo-light.webp">
-      <source media="(prefers-color-scheme: light)" srcset="Docs/logo-dark.webp">
-      <img src="Docs/logo-light.webp" alt="Saneject logo" width="300">
+      <source media="(prefers-color-scheme: dark)" srcset="Docs/images/logo-light.webp">
+      <source media="(prefers-color-scheme: light)" srcset="Docs/images/logo-dark.webp">
+      <img src="Docs/images/logo-light.webp" alt="Saneject logo" width="300">
     </picture>
 </p>
 
