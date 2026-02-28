@@ -1,14 +1,7 @@
 {
     "sceneList": {
         "sortMode": 6,
-        "list": [
-            {
-                "rid": 1000
-            },
-            {
-                "rid": 1001
-            }
-        ],
+        "list": [],
         "scroll": {
             "x": 0.0,
             "y": 0.0
@@ -16,20 +9,7 @@
     },
     "prefabList": {
         "sortMode": 6,
-        "list": [
-            {
-                "rid": 1002
-            },
-            {
-                "rid": 1003
-            },
-            {
-                "rid": 1004
-            },
-            {
-                "rid": 1005
-            }
-        ],
+        "list": [],
         "scroll": {
             "x": 0.0,
             "y": 0.0
@@ -38,91 +18,6 @@
     "windowTab": 0,
     "references": {
         "version": 2,
-        "RefIds": [
-            {
-                "rid": 1000,
-                "type": {
-                    "class": "SceneAssetData",
-                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
-                    "asm": "Saneject.Experimental.Editor"
-                },
-                "data": {
-                    "guid": "0c50d0bbcbf5e2546b026174741e0b95",
-                    "enabled": true,
-                    "status": 0,
-                    "walkFilter": 0
-                }
-            },
-            {
-                "rid": 1001,
-                "type": {
-                    "class": "SceneAssetData",
-                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
-                    "asm": "Saneject.Experimental.Editor"
-                },
-                "data": {
-                    "guid": "54f834272f369b64fadd0131ae7e0acd",
-                    "enabled": true,
-                    "status": 0,
-                    "walkFilter": 0
-                }
-            },
-            {
-                "rid": 1002,
-                "type": {
-                    "class": "PrefabAssetData",
-                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
-                    "asm": "Saneject.Experimental.Editor"
-                },
-                "data": {
-                    "guid": "aa04bdaf9cd95e64a843eab43c573001",
-                    "enabled": true,
-                    "status": 1,
-                    "walkFilter": 3
-                }
-            },
-            {
-                "rid": 1003,
-                "type": {
-                    "class": "PrefabAssetData",
-                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
-                    "asm": "Saneject.Experimental.Editor"
-                },
-                "data": {
-                    "guid": "0711ab3157ab95b418f36215c883bbed",
-                    "enabled": true,
-                    "status": 1,
-                    "walkFilter": 3
-                }
-            },
-            {
-                "rid": 1004,
-                "type": {
-                    "class": "PrefabAssetData",
-                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
-                    "asm": "Saneject.Experimental.Editor"
-                },
-                "data": {
-                    "guid": "51ae0f3c36a0ace4fafe4a97c43c8377",
-                    "enabled": true,
-                    "status": 1,
-                    "walkFilter": 3
-                }
-            },
-            {
-                "rid": 1005,
-                "type": {
-                    "class": "PrefabAssetData",
-                    "ns": "Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data",
-                    "asm": "Saneject.Experimental.Editor"
-                },
-                "data": {
-                    "guid": "1cb02eb5fed69a34784db75b97931149",
-                    "enabled": true,
-                    "status": 1,
-                    "walkFilter": 3
-                }
-            }
-        ]
+        "RefIds": []
     }
 }

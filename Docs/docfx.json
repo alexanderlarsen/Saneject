@@ -1,0 +1,50 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../UnityProject/Saneject",
+          "files": [
+            "**/Saneject.Experimental.Runtime.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "filter": "filter.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**"
+        ]
+      }
+    ],
+    "output": "_site",
+    "template": [
+      "default",
+      "modern",
+      "templates/custom"
+    ],
+    "globalMetadata": {
+      "_appName": "Saneject",
+      "_appTitle": "Saneject – Documentation",
+      "_enableSearch": true,
+      "_enableSearchInGeneratedFiles": true, 
+      "_disableContribution": "true",
+      "pdf": false
+    }
+  }
+}

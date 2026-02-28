@@ -1,0 +1,8 @@
+﻿apiRules:
+
+  - include:
+      hasAttribute:
+        uid: Plugins.Saneject.Experimental.Runtime.Attributes.PublicApiAttribute
+
+  - exclude:
+      uidRegex: .*
