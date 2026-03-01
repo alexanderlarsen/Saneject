@@ -1,13 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Data.Injection;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
-using UnityEngine;
+using Component = UnityEngine.Component;
 
 namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ProxySwapTargetCollector
     {
         public static void CollectSwapTargets(

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
@@ -7,6 +8,7 @@ using Plugins.Saneject.Experimental.Runtime.Scopes;
 
 namespace Plugins.Saneject.Experimental.Editor.Proxy
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class RuntimeProxyManifestUtility
     {
         public static IEnumerable<Type> EnumerateManifestTypes()

@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Injection
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class InjectionResults
     {
         private readonly List<Error> errors = new();

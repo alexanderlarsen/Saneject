@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
@@ -11,10 +12,12 @@ using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
+using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class Locator
     {
         public static void LocateDependencyCandidates(

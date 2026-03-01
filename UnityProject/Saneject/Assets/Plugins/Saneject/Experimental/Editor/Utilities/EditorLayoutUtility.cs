@@ -1,8 +1,10 @@
-﻿using UnityEditor;
+﻿using System.ComponentModel;
+using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class EditorLayoutUtility
     {
         public static bool PersistentFoldout(

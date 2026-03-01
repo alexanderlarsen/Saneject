@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
@@ -7,6 +8,7 @@ using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class DialogUtility
     {
         public static class InjectionPipeline

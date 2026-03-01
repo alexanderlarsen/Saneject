@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System.ComponentModel;
+using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
@@ -6,6 +7,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
     /// Non-generic base class for <see cref="RuntimeProxy{TConcrete}" />.
     /// Required so that Unity Editor scripts can target proxy assets regardless of generic type.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class RuntimeProxyBase : ScriptableObject
     {
         [SerializeField, Tooltip(

@@ -1,8 +1,15 @@
 ﻿apiRules:
 
-  - include:
+  # Exclude anything tagged [EditorBrowsable(EditorBrowsableState.Never)]
+  - exclude:
       hasAttribute:
-        uid: Plugins.Saneject.Experimental.Runtime.Attributes.PublicApiAttribute
+        uid: System.ComponentModel.EditorBrowsableAttribute
+        ctorArguments:
+          - System.ComponentModel.EditorBrowsableState.Never
+
+  # Include everything in the Experimental namespace
+  - include:
+      uidRegex: ^Plugins\.Saneject\.Experimental(\..*)?$
 
   - exclude:
       uidRegex: .*

@@ -1,4 +1,5 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
+using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Inspectors.Models;
 using Plugins.Saneject.Experimental.Editor.Utilities;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Inspectors
 {
-    [CustomEditor(typeof(Scope), true, isFallback = false), CanEditMultipleObjects]
+    [EditorBrowsable(EditorBrowsableState.Never), CustomEditor(typeof(Scope), true, isFallback = false), CanEditMultipleObjects]
     public class ScopeInspector : UnityEditor.Editor
     {
         private Scope scope;

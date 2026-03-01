@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
@@ -11,7 +12,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Proxy
 {
-    [InitializeOnLoad]
+    [EditorBrowsable(EditorBrowsableState.Never), InitializeOnLoad]
     public static class RuntimeProxyCleaner
     {
         static RuntimeProxyCleaner()

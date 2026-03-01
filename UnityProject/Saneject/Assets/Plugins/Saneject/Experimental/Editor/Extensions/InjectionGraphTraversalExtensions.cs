@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Editor.Data.Graph;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 
@@ -7,6 +8,7 @@ using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectionGraphTraversalExtensions
     {
         public static IEnumerable<TransformNode> EnumerateAllTransformNodes(this InjectionGraph graph)

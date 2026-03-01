@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
@@ -8,6 +9,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Logging
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class Error
     {
         private Error(

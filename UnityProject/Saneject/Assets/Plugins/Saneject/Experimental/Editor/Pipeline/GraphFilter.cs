@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Data.Graph;
@@ -10,6 +11,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class GraphFilter
     {
         public static IReadOnlyCollection<TransformNode> ApplyWalkFilter(

@@ -1,5 +1,8 @@
-﻿namespace Plugins.Saneject.Experimental.Editor.MenuItems
+﻿using System.ComponentModel;
+
+namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     internal static class MenuPriority
     {
         public const int Root = -10000;

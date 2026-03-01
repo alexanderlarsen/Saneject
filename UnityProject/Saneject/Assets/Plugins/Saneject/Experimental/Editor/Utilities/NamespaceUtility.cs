@@ -1,9 +1,11 @@
-﻿using System.IO;
+﻿using System.ComponentModel;
+using System.IO;
 using System.Linq;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class NamespaceUtility
     {
         public static string GetNamespaceFromFullPath(string fullPath)

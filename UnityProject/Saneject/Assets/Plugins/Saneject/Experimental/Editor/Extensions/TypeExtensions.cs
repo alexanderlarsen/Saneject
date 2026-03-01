@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Editor.Data.Graph;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class TypeExtensions
     {
         /// <summary>

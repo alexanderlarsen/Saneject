@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
@@ -8,6 +9,7 @@ using Plugins.Saneject.Experimental.Editor.Utilities;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectionUtility
     {
         public static bool TryInject( 

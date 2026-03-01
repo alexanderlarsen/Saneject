@@ -1,8 +1,10 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Logging;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Injection
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class InjectionSummary
     {
         public InjectionSummary(InjectionResults results)

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
@@ -6,11 +7,12 @@ using Plugins.Saneject.Experimental.Runtime.Bindings;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
-using UnityEngine;
+using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SignatureUtility
     {
         public static string GetBindingSignature(BindingNode binding)
@@ -143,7 +145,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             foreach (DependencyFilter filter in binding.DependencyFilters)
                 switch (filter)
                 {
-                    case ComponentDependencyFilter componentFilter:
+                    case ComponentFilter componentFilter:
                     {
                         if (componentFilter.FilterType != ComponentFilterType.None)
                             sb.Append($".{componentFilter.FilterType}(...)");
@@ -151,7 +153,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                         break;
                     }
 
-                    case AssetDependencyFilter assetFilter:
+                    case AssetFilter assetFilter:
                     {
                         if (assetFilter.FilterType != AssetFilterType.None)
                             sb.Append($".{assetFilter.FilterType}(...)");

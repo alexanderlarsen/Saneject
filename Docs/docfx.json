@@ -6,7 +6,8 @@
         {
           "src": "../UnityProject/Saneject",
           "files": [
-            "**/Saneject.Experimental.Runtime.csproj"
+            "**/Saneject.Experimental.Runtime.csproj",
+            "**/Saneject.Experimental.Editor.csproj"
           ]
         }
       ],
@@ -21,7 +22,8 @@
           "**/*.{md,yml}"
         ],
         "exclude": [
-          "_site/**"
+          "_site/**",
+          "filter.yml"
         ]
       }
     ],
@@ -41,8 +43,8 @@
       "_appName": "Saneject",
       "_appTitle": "Saneject – Documentation",
       "_enableSearch": true,
-      "_enableSearchInGeneratedFiles": true, 
-      "_disableContribution": "true",
+      "_enableSearchInGeneratedFiles": true,
+      "_disableContribution": "true", 
       "pdf": false
     }
   }

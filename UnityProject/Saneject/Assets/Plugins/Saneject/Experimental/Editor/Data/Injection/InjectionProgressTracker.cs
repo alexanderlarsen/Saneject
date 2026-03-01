@@ -1,7 +1,9 @@
-﻿using UnityEditor;
+﻿using System.ComponentModel;
+using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Injection
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class InjectionProgressTracker
     {
         private readonly int totalSegments;

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Extensions;
@@ -9,6 +10,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class WindowTabsDrawer
     {
         public static void DrawTabs(

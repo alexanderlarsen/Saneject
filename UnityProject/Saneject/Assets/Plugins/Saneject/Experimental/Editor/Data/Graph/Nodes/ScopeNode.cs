@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
@@ -8,6 +9,7 @@ using Plugins.Saneject.Experimental.Runtime.Scopes;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ScopeNode
     {
         public ScopeNode(

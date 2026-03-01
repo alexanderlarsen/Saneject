@@ -1,7 +1,9 @@
-﻿using System.Text;
+﻿using System.ComponentModel;
+using System.Text;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class StringBuilderExtensions
     {
         public static StringBuilder AppendQuantity(

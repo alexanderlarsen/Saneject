@@ -1,8 +1,10 @@
-﻿using UnityEditor;
+﻿using System.ComponentModel;
+using UnityEditor;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SearchBarDrawer
     {
         public static void DrawSearchBar(ref string searchQuery)

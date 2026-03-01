@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
 using UnityEngine;
@@ -7,6 +8,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class BatchInjectMenuItems
     {
         #region Priority constants

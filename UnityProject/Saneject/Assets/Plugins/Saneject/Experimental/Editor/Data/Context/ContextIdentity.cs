@@ -1,13 +1,16 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Text;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Context
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ContextIdentity : IEquatable<ContextIdentity>
     {
         public ContextIdentity(Object obj)

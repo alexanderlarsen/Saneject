@@ -1,8 +1,10 @@
-﻿using System.Reflection;
+﻿using System.ComponentModel;
+using System.Reflection;
 using Plugins.Saneject.Experimental.Runtime.Attributes;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.TraversalResults
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public readonly struct FieldTraversalResult
     {
         public FieldTraversalResult(

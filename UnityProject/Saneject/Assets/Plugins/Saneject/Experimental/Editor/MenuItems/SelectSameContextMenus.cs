@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Utilities;
@@ -11,6 +12,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SelectSameContextMenus
     {
         #region Priority constants

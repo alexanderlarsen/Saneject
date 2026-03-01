@@ -1,8 +1,10 @@
-﻿using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class MemberNodePathExtensions
     {
         public static string GetDisplayPath(

@@ -1,5 +1,8 @@
-﻿namespace Plugins.Saneject.Experimental.Editor.Data.BatchInjection
+﻿using System.ComponentModel;
+
+namespace Plugins.Saneject.Experimental.Editor.Data.BatchInjection
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public enum InjectionStatus
     {
         Unknown,

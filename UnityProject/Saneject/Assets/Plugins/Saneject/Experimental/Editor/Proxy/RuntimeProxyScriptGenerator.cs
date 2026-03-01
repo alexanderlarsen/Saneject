@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
@@ -13,7 +14,7 @@ using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Proxy
 {
-    [InitializeOnLoad]
+    [EditorBrowsable(EditorBrowsableState.Never), InitializeOnLoad]
     public static class RuntimeProxyScriptGenerator
     {
         static RuntimeProxyScriptGenerator()

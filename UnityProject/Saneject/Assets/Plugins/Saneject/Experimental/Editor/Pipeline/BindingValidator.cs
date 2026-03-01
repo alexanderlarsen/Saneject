@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Data.Injection;
 using Plugins.Saneject.Experimental.Editor.Data.Logging;
 using Plugins.Saneject.Experimental.Editor.Utilities;
-using UnityEngine;
+using Component = UnityEngine.Component;
 
 namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class BindingValidator
     {
         public static void ValidateBindings(

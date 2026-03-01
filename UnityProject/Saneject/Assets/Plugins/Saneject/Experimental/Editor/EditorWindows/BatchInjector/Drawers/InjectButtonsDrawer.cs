@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Controls;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectButtonsDrawer
     {
         public static void DrawInjectButtons(

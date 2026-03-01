@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using UnityEngine;
+using Component = UnityEngine.Component;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class TransformExtensions
     {
         public static IEnumerable<Component> GetComponentsInAncestors(

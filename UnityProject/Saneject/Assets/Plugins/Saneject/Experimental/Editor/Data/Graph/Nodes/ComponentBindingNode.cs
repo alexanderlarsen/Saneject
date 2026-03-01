@@ -1,9 +1,11 @@
-﻿using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Runtime.Bindings.Component;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ComponentBindingNode : BindingNode
     {
         public ComponentBindingNode(

@@ -1,8 +1,10 @@
-﻿using Plugins.Saneject.Experimental.Runtime.Settings;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class HelpBoxUtility
     {
         public static void DrawHelpBox(

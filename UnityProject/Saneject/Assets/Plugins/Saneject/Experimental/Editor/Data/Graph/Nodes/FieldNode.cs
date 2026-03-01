@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Runtime.Attributes;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class FieldNode : MemberNode
     {
         public FieldNode(

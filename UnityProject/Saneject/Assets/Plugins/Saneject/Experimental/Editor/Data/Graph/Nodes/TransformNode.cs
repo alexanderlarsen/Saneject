@@ -1,12 +1,15 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
 using UnityEngine;
+using Component = UnityEngine.Component;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class TransformNode
     {
         public TransformNode(

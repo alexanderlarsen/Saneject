@@ -1,5 +1,8 @@
-﻿namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums
+﻿using System.ComponentModel;
+
+namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public enum SortMode
     {
         NameAtoZ,

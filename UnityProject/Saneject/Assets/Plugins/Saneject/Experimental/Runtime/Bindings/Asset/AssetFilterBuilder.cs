@@ -20,7 +20,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         public AssetFilterBuilder<TAsset> Where(Func<TAsset, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new AssetDependencyFilter
+                new AssetFilter
                 (
                     AssetFilterType.Where,
                     o => o is TAsset t && predicate(t)

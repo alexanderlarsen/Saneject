@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities;
@@ -9,7 +10,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 {
-    [Serializable]
+    [EditorBrowsable(EditorBrowsableState.Never), Serializable]
     public class AssetList
     {
         #region Fields/properties

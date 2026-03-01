@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class MemberInfoExtensions
     {
         public static bool TryGetAttribute<T>(

@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using UnityEditorInternal;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InputUtility
     {
         public static void HandleInput(

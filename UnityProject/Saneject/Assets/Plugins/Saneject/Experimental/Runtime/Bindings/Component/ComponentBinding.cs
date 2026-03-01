@@ -1,9 +1,10 @@
-﻿using System.Collections.Generic;
+﻿using System.ComponentModel;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ComponentBinding : Binding
     {
         public SearchOrigin SearchOrigin { get; set; }
@@ -14,7 +15,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public Transform CustomTargetTransform { get; set; }
         public bool IncludeSelfInSearch { get; set; }
         public int ChildIndexForSearch { get; set; }
-        
+
         public RuntimeProxyConfig RuntimeProxyConfig { get; set; }
     }
 }

@@ -1,7 +1,9 @@
-﻿using UnityEngine;
+﻿using System.ComponentModel;
+using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class RuntimeProxyConfig
     {
         public RuntimeProxyConfig(

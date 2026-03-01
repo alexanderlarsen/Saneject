@@ -1,7 +1,9 @@
-﻿using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Runtime.Bindings.Asset;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class AssetBindingNode : BindingNode
     {
         public AssetBindingNode(

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Graph;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
@@ -10,6 +11,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class Resolver
     {
         public static void Resolve(

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using UnityEditor;
 using UnityEngine;
@@ -6,6 +7,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SceneHierarchyUtility
     {
         public static void Expand(Object[] objects)

@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Data.TraversalResults;
 using Plugins.Saneject.Experimental.Runtime.Attributes;
-using UnityEngine;
+using Component = UnityEngine.Component;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery
 
 namespace Plugins.Saneject.Experimental.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ComponentTraversalExtensions
     {
         private const BindingFlags BindingFlags =

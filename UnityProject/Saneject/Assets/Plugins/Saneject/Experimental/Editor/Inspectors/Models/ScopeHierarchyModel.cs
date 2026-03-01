@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Inspectors.Models
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ScopeHierarchyModel
     {
         public ScopeHierarchyModel(

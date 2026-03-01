@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Controls;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Controls;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class BatchInjectorEditorWindow : EditorWindow
     {
         private const float WindowPadding = 5f;

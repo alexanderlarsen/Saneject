@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using UnityEditor;
@@ -6,6 +7,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class PrefabListUtility
     {
         public static void AddAllPrefabsInScene(BatchInjectorData batchInjectorData)

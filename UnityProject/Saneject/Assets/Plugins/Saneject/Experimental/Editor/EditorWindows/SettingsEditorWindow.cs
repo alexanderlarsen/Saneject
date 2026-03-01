@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Settings;
@@ -8,6 +9,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class SettingsEditorWindow : EditorWindow
     {
         private Vector2 userSettingsScrollPos;

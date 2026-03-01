@@ -21,7 +21,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> Where(Func<TComponent, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.Where,
                     o => o is TComponent t && predicate(t)
@@ -36,7 +36,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereComponent(Func<UnityEngine.Component, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereComponent,
                     t => t is UnityEngine.Component c && c && predicate(c)
@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereTransform(Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereTransform,
                     t => t is UnityEngine.Component c && c && predicate(c.transform)
@@ -66,7 +66,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereGameObject(Func<GameObject, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereGameObject,
                     o => o is UnityEngine.Component c && c && predicate(c.gameObject)
@@ -85,7 +85,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereParent(Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereParent,
                     t => t is UnityEngine.Component c && c && predicate(c.transform.parent)
@@ -104,7 +104,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             int maxDepth = int.MaxValue)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereAnyAncestor,
                     o =>
@@ -136,7 +136,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereRoot(Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereRoot,
                     t => t is UnityEngine.Component c && c && c.transform.root && predicate(c.transform.root)
@@ -155,7 +155,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereAnyChild(Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereAnyChild,
                     t =>
@@ -184,7 +184,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereChildAt,
                     t =>
@@ -211,7 +211,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereFirstChild(Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereFirstChild,
                     t =>
@@ -230,7 +230,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereLastChild(Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereLastChild,
                     t =>
@@ -260,7 +260,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
             bool includeSelf = false)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereAnyDescendant,
                     t =>
@@ -301,7 +301,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> WhereAnySibling(Func<Transform, bool> predicate)
         {
             binding.DependencyFilters.Add(
-                new ComponentDependencyFilter
+                new ComponentFilter
                 (
                     ComponentFilterType.WhereAnySibling,
                     t =>

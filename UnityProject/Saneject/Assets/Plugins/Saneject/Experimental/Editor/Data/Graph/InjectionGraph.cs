@@ -1,10 +1,12 @@
 ﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class InjectionGraph
     {
         public InjectionGraph(IEnumerable<Transform> startTransforms)

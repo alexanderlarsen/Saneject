@@ -72,12 +72,14 @@ namespace Plugins.Saneject.Experimental.Runtime.Attributes
         /// <summary>
         /// The binding ID used for matching against a <see cref="Legacy.Runtime.Scopes.Scope" /> binding.
         /// </summary>
+
         public string ID { get; }
 
         /// <summary>
         /// If <c>true</c>, Saneject suppresses missing-binding and missing-dependency error logs for this member.
         /// Such missing references are still counted and noted below the injection summary log.
         /// </summary>
+
         public bool SuppressMissingErrors { get; }
     }
 }

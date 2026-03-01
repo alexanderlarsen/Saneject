@@ -1,7 +1,9 @@
 ﻿using System;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEngine;
+using Component = UnityEngine.Component;
 
 namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
@@ -15,6 +17,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
     /// the proxy resolves to the real instance using your chosen strategy.
     /// For details and usage examples, see the README.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class RuntimeProxy<TConcrete> : RuntimeProxyBase
         where TConcrete : Component
     {

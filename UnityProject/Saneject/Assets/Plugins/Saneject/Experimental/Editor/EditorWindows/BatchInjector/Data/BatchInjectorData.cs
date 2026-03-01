@@ -1,10 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 {
-    [Serializable]
+    [EditorBrowsable(EditorBrowsableState.Never), Serializable]
     public class BatchInjectorData
     {
         [SerializeField]

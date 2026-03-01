@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
@@ -14,6 +15,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Pipeline
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class Logger
     {
         private const string BatchInjectHeaderLine = "────────────";

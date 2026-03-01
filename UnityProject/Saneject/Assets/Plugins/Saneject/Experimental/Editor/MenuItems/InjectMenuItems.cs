@@ -1,4 +1,5 @@
-﻿using Plugins.Saneject.Experimental.Editor.Data.Context;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -8,6 +9,7 @@ using UnityEngine.SceneManagement;
 
 namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectMenuItems
     {
         #region Priority constants

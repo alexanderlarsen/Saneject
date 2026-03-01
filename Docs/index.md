@@ -9,14 +9,14 @@ Editor-time dependency injection for Unity.
 ## Get Started
 
 - [Introduction](articles/introduction.md)
-- [Getting Started](articles/getting-started.md)
+- [Getting Started](articles/getting-started/quick-start.md)
 
 ## Core Concepts
 
 - Binding API
 - Scopes
-- ProxyObject
+- Proxies
 
 ## API Reference
 
-- [Runtime API](api/)
+- [API Reference](api/index.md)

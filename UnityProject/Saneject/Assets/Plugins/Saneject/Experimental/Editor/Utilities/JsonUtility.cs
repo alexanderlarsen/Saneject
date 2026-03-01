@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using System.Linq;
 using Newtonsoft.Json.Linq;
@@ -7,10 +8,12 @@ using Plugins.Saneject.Experimental.Editor.Data.Graph;
 using Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Experimental.Editor.Data.Injection;
 using UnityEngine;
+using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class JsonUtility
     {
         private const string DefaultPath = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Dev\JsonOutput\Context.json";

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Runtime.Attributes;
 using Plugins.Saneject.Experimental.Runtime.Settings;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -12,7 +11,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
     /// Allows systems to register, query, and remove global instances by type at runtime.
     /// Intended for play mode usage only; not available in Edit Mode.
     /// </summary>
-    [PublicApi]
     public static class GlobalScope
     {
         private static readonly Dictionary<Type, Component> Instances = new();
@@ -28,7 +26,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         /// <summary>
         /// Register a global instance. Only valid in Play Mode. Only one instance per type.
         /// </summary>
-        [PublicApi]
         public static void RegisterComponent(
             Component instance,
             Object caller)
@@ -61,7 +58,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         /// <summary>
         /// Unregister a global instance. Only valid in Play Mode.
         /// </summary>
-        [PublicApi]
         public static void UnregisterComponent(
             Component instance,
             Object caller)
@@ -99,7 +95,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         /// <summary>
         /// Returns true if a global instance of type <typeparamref name="T" /> is registered.
         /// </summary>
-        [PublicApi]
         public static bool IsRegistered<T>() where T : Component
         {
             return Instances.ContainsKey(typeof(T));
@@ -108,7 +103,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         /// <summary>
         /// Get the registered global instance of type <typeparamref name="T" />. Returns <c>null</c> if not registered.
         /// </summary>
-        [PublicApi]
         public static T GetComponent<T>() where T : Component
         {
             return Instances.TryGetValue(typeof(T), out Component instance)
@@ -116,7 +110,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
                 : null;
         }
 
-        [PublicApi]
         public static bool TryGetComponent<T>(out T component) where T : Component
         {
             component = GetComponent<T>();
@@ -126,7 +119,6 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         /// <summary>
         /// Remove all registered global instances. Only valid in Play Mode.
         /// </summary>
-        [PublicApi]
         public static void Clear()
         {
             if (!CheckModificationAllowed())

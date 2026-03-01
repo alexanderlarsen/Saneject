@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
@@ -12,6 +13,7 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Drawers
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ContextMenuDrawer
     {
         public static void DrawContextMenu(

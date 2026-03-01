@@ -1,7 +1,9 @@
-﻿using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Enums;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SortModeExtensions
     {
         public static string GetDisplayString(this SortMode mode)

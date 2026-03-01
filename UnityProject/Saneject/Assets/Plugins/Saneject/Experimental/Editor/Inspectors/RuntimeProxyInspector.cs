@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Proxy;
@@ -12,7 +13,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
     /// Custom inspector for <see cref="RuntimeProxyBase" />.
     /// Displays configuration and runtime info for RuntimeProxy ScriptableObjects.
     /// </summary>
-    [CustomEditor(typeof(RuntimeProxyBase), true)]
+    [EditorBrowsable(EditorBrowsableState.Never), CustomEditor(typeof(RuntimeProxyBase), true)]
     public class RuntimeProxyInspector : UnityEditor.Editor
     {
         public override void OnInspectorGUI()

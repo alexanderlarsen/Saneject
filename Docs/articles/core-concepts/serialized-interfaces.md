@@ -65,4 +65,4 @@ public partial class Enemy : ISerializationCallbackReceiver
 
 The backing field is drawn next to its corresponding interface field — not at the bottom of the Inspector where auto-generated fields normally appear. This is handled by Saneject's `MonoBehaviourInspector`. See [Custom inspector](../editor-and-tooling/custom-inspector.md) if you need to integrate this with your own editor class.
 
-![Interface field visible in the Inspector](../images/serialize-interface-inspector-example.webp)
+

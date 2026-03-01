@@ -1,10 +1,12 @@
-﻿using System.Linq;
+﻿using System.ComponentModel;
+using System.Linq;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using UnityEditor;
 using UnityEngine.SceneManagement;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SceneListUtility
     {
         public static void AddOpenScenes(BatchInjectorData batchInjectorData)

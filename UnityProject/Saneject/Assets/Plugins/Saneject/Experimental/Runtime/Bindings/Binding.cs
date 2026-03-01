@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class Binding
     {
         public Type InterfaceType { get; set; }

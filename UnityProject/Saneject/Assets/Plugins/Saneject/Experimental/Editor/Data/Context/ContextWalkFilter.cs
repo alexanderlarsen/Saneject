@@ -1,8 +1,11 @@
-﻿namespace Plugins.Saneject.Experimental.Editor.Data.Context
+﻿using System.ComponentModel;
+
+namespace Plugins.Saneject.Experimental.Editor.Data.Context
 {
     /// <summary>
     /// Filter options for pre-filtering transforms in the injection graph based on their context, before injection starts.
     /// </summary>
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public enum ContextWalkFilter
     {
         /// <summary>

@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using UnityEditor;
@@ -7,7 +8,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data
 {
-    [Serializable]
+    [EditorBrowsable(EditorBrowsableState.Never), Serializable]
     public abstract class AssetData
     {
         protected AssetData(string guid)

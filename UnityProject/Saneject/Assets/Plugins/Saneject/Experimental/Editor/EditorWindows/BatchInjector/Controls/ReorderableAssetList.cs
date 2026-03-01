@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Data.BatchInjection;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
@@ -12,6 +13,7 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Controls
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class ReorderableAssetList : ReorderableList
     {
         private static GUIStyle toggleStyle;

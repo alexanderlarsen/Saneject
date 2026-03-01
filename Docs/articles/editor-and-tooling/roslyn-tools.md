@@ -16,4 +16,4 @@ Saneject ships three Roslyn DLLs in `Saneject/RoslynLibs`:
 
 For setup details and Unity version requirements, see the [Unity Roslyn Analyzers documentation](https://docs.unity3d.com/Manual/roslyn-analyzers.html).
 
-The Roslyn source code is in the [RoslynTools](../../../Roslyn) folder of the repository.
+The Roslyn source code is in the `Roslyn` folder of the repository.

@@ -1,12 +1,14 @@
-﻿using Plugins.Saneject.Experimental.Editor.Utilities;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Editor.Utilities;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
 using UnityEditor;
-using UnityEngine;
+using Component = UnityEngine.Component;
 
 // ReSharper disable InconsistentNaming
 
 namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ComponentMenuItems
     {
         #region Priority constants

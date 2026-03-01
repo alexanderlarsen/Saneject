@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using System.IO;
 using Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Data;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Editor.EditorWindows.BatchInjector.Persistence
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class Storage
     {
         private static readonly string Folder = Path.GetFullPath(Path.Combine(Application.dataPath, "../ProjectSettings/Saneject"));

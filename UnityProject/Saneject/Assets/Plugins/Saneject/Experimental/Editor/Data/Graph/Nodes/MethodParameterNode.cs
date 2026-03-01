@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Extensions;
 
 namespace Plugins.Saneject.Experimental.Editor.Data.Graph.Nodes
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public class MethodParameterNode
     {
         public MethodParameterNode(

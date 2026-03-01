@@ -1,10 +1,12 @@
-﻿using Plugins.Saneject.Experimental.Editor.Proxy;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Experimental.Editor.Proxy;
 using UnityEditor;
 
 // ReSharper disable InconsistentNaming
 
 namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ProxyMenuItems
     {
         #region Priority constants

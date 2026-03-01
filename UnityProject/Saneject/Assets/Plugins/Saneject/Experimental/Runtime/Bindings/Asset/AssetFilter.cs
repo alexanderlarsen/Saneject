@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
 {
-    public class AssetDependencyFilter : DependencyFilter
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class AssetFilter : DependencyFilter
     {
-        public AssetDependencyFilter(
+        public AssetFilter(
             AssetFilterType filterType,
             Func<object, bool> filter) : base(filter)
         {

@@ -1,7 +1,9 @@
-﻿using UnityEditor;
+﻿using System.ComponentModel;
+using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class MenuCommandUtility
     {
         public static bool IsFirstInvocation(MenuCommand cmd)
