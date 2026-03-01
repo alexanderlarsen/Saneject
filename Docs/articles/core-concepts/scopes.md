@@ -1,72 +1,84 @@
-﻿# Scopes & resolution order
+# Scopes
 
-| **Concept**               | **What it means in Saneject**                                                                                                                                                                                                                                                                                                |
-|---------------------------|------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **Scope component**       | A `MonoBehaviour` that declares bindings for how to resolve dependencies in `Components` **below** its `Transform`.                                                                                                                                                                                                          |
-| **Root-scope scan**       | No matter which `Scope` you start the injection on, Saneject walks up to the top-most Scope first, then injects downward once.                                                                                                                                                                                               |
-| **Resolution fallback**   | When a binding isn't found in the current `Scope`, the injector climbs upward through parent `Scopes` until it finds one (or fails).                                                                                                                                                                                         |
-| **Scene Scope**           | Lives on a (non-prefab) scene `GameObject`. Can bind to any `Component` or `Object` in the scene or project folder, including prefabs.                                                                                                                                                                                       |
-| **Prefab Scope**          | Lives on a prefab. Can bind to any `Component` or `Object` in the prefab itself or project folder. Prefab Scopes present in the scene are skipped during scene injection, to keep the prefab self-contained.<br><br>Need a scene reference inside a prefab? Use an `ProxyObject` `ScriptableObject` and inject that instead. |
-| **Scene vs prefab Scope** | Same `Component` but the DI system treats them as different contexts.                                                                                                                                                                                                                                                        |
+A `Scope` is a `MonoBehaviour` that declares where dependencies come from. You create a subclass, override `DeclareBindings()`, and place it on a `GameObject` in the scene or prefab. When injection runs, Saneject reads the bindings from every `Scope` in the hierarchy and resolves them against the components below.
 
-An example of how scoped resolution works (code below):
+## Declaring bindings
+
+```csharp
+public class GameScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindComponent<IGameStateObservable, GameStateManager>()
+            .FromAnywhere();
+
+        BindComponent<CharacterController>()
+            .FromTargetSelf();
+    }
+}
+```
+
+`Scope` has `[DisallowMultipleComponent]`, so only one `Scope` is allowed per `GameObject`.
+
+## Root-scope scan
+
+No matter which `Scope` you trigger injection on, Saneject walks up to the topmost `Scope` in the hierarchy first, then injects downward in a single pass. This means parent scopes always run before child scopes, and the injection order is deterministic.
+
+## Resolution fallback
+
+When a field needs a dependency, Saneject looks for a matching binding in the nearest `Scope` above the injection target. If no match is found there, it walks up through parent `Scopes` until it finds one, or reports a missing binding error.
 
 ```mermaid
 flowchart TD
-  subgraph Editor
-    PrefabDI["Prefab injection pass"]
-    DI["Scene injection pass"]
+  subgraph Scene
+    RootScope["RootScope (scene root)"]
+    EnemyScope["EnemyScope (Enemy)"]
+    Enemy_audioService["Enemy.audioService (IAudioService)"]
+    Enemy_controller["Enemy.controller (AIController)"]
   end
 
-  subgraph Scene
-    PrefabDI -->|Inject| UIScope["UIScope (Prefab)"]
-    DI -->|Skip injection| UIScope
-    DI -->|Inject| EnemyAudioService["Enemy.audioService (IAudioService)"]
-    DI -->|Inject| EnemyAIController["Enemy.aiController (AIController)"]
-    EnemyAudioService -->|"Try resolve IAudioService → Binding not found"| EnemyScope
-    EnemyAIController -->|"Try resolve AIController → Binding found"| EnemyScope
-    EnemyScope -->|"Try resolve IAudioService → Binding found"| RootScope
-  end
+  Enemy_audioService -->|"IAudioService — not in EnemyScope, bubble up"| EnemyScope
+  EnemyScope -->|"IAudioService — found in RootScope"| RootScope
+  Enemy_controller -->|"AIController — found in EnemyScope"| EnemyScope
 ```
 
-> ⚠️ Last time I checked, Mermaid diagrams don't render in the GitHub mobile app. Use a browser to view them properly.
-
-`DependencyInjector` (injection passes) first queries `EnemyScope` for `IAudioService` but a binding isn't defined there, so the request bubbles up to `RootScope` which has the binding and provides the `Object`.
-
-`AIController` is resolved directly from `EnemyScope`, so no fallback is needed.
-
-Any scopes that live on prefabs (like `UIScope` above) are skipped during a scene-wide injection pass - they get their own dependencies when the prefab is injected in isolation, or you can inject scene objects into a prefab via an `ProxyObject`.
+In this example, `AIController` is bound in `EnemyScope` and resolves immediately. `IAudioService` is not bound there, so the request bubbles up to `RootScope`.
 
 ```csharp
 public class RootScope : Scope
 {
-    public override void Configure()
+    protected override void DeclareBindings()
     {
-        BindAsset<IAudioService>().FromResources("Audio/Service");
+        BindComponent<IAudioService, AudioService>()
+            .FromAnywhere();
     }
 }
-```
 
-```csharp
 public class EnemyScope : Scope
 {
-    public override void Configure()
+    protected override void DeclareBindings()
     {
-        // Enemy-local AIController only; no IAudioService here.
-        BindComponent<AIController>().FromScopeSelf();
+        BindComponent<AIController>()
+            .FromSelf();
     }
 }
 ```
 
-After injection:
+## Scene Scopes and Prefab Scopes
 
-```csharp
-public class Enemy : MonoBehaviour
-{
-    [Inject, SerializeInterface] 
-    IAudioService audioService; // Resolved from RootScope
-    
-    [Inject]
-    AIController aiController; // Resolved from EnemyScope        
-}
-```
+The `Scope` component type is the same regardless of where it lives, but Saneject treats its context differently:
+
+| | Scene Scope | Prefab Scope |
+|---|---|---|
+| Lives on | A non-prefab scene `GameObject` | A prefab (asset or instance) |
+| Can bind to | Components and assets anywhere in the scene or project | Components and assets within the prefab itself or the project |
+| During scene injection pass | Processed normally | **Skipped** — prefab instances in a scene are not processed during a scene pass |
+| During prefab injection pass | Skipped | Processed in isolation |
+
+Prefab instances in a scene get their own isolated injection pass and are never processed as part of the scene pass. This keeps prefabs self-contained and their bindings from leaking into the scene hierarchy.
+
+To inject a scene object into a prefab, use a [RuntimeProxy](proxies.md).
+
+## Creating a Scope
+
+Scope boilerplate can be generated via **Saneject → Create New Scope** or **Assets → Create → Saneject → Create New Scope**. If **Generate Scope Namespace From Folder** is enabled in User Settings, the generated class will have a namespace matching its folder path relative to `Assets/`.

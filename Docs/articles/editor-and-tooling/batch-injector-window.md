@@ -1,23 +1,36 @@
-﻿# Batch injection
+# Batch injector window
 
-## Batch injector editor window
+The Batch Injector lets you inject multiple scenes and prefabs across your project in one pass. Open it via **Saneject → Batch Injector**.
 
-The Batch Injector lets you inject multiple scenes and prefabs across your entire project in one click, which can be quite the time-saver as your project grows.
+## Managing the asset list
 
-Open it via `Saneject/Batch Injector`
+- **Add assets** by dragging scenes and prefabs into the window, or using the add buttons.
+- **Toggle items on or off** to control which assets are included when you run a batch.
+- **GUID-based tracking** keeps entries stable when assets are moved or renamed.
 
-- **Add scenes and prefabs** by dragging them into the window or using buttons, making it easy to build and manage large injection lists.
-- **Toggle items on or off** to decide exactly which assets will be included when you run a batch injection.
-- **Inject scenes, inject prefabs, or inject everything** with dedicated buttons so you can target only what you need.
-- **Status indicators** show whether each asset succeeded, warned, or failed during the last injection, helping you spot issues at a glance.
-- **Sorting and search** let you quickly find or organize assets when working with large projects.
-- **Context menu actions** let you bulk-select, enable, disable, remove entries, clear injection status, or inject only the selected assets for fast list management.
-- **GUID based tracking** keeps entries stable even if assets move or get renamed in the project.
-- **Confirmation dialogs** let you avoid accidental large batch operations, with per-operation control in User Settings.
-- **Save prompts** ensure you don't lose unsaved scene changes before injection starts.
-- **Log pinging** lets you click a log entry to highlight the scene or prefab it refers to, speeding up debugging.
-- **Scope-level injection logs** show which scopes ran and what was injected for each asset, making results transparent.
-- **Batch injection summaries** give a final report of everything processed, including counts for scenes, prefabs, scopes, fields, methods, globals, and suppressed errors.
+## Running injection
 
-![Batch Injector editor window](Docs/batch-injector-window.webp)
-![Batch Injector logs](Docs/batch-injector-logs.webp)
+Three buttons let you target exactly what you need:
+
+- **Inject Scenes** — injects only the scene assets in the list.
+- **Inject Prefabs** — injects only the prefab assets in the list.
+- **Inject All** — injects everything that's enabled in the list.
+
+Before injection starts, Saneject prompts you to save any unsaved scene changes.
+
+## Results and logging
+
+- **Status indicators** on each entry show whether the last injection succeeded, warned, or failed.
+- **Scope-level logs** show which scopes ran and what was injected for each asset.
+- **Log pinging** — click a log entry to highlight the corresponding scene or prefab in the Project window.
+- **Batch summary** reports total counts for scenes processed, prefabs processed, scopes run, fields injected, methods called, globals registered, and suppressed errors.
+
+## List management
+
+Right-clicking the list opens a context menu with bulk actions: select all, enable/disable selected, remove selected, clear injection status, and inject only selected entries.
+
+The search bar and sort menu let you find and organize entries when working with large projects.
+
+## Confirmation dialogs
+
+Each injection operation (scenes, prefabs, all) has an independent confirmation dialog that can be turned on or off from **Saneject → User Settings → Ask Before Batch Inject**.

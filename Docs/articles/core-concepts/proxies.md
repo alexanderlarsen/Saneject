@@ -1,161 +1,118 @@
-﻿# ProxyObject
+# Proxies
 
-`ProxyObject<T>` is a special Roslyn-generated `ScriptableObject` that:
+Unity cannot serialize a direct reference from one scene to another, or from a scene into a prefab asset. If you store a scene object reference in a prefab, Unity will lose it the moment the scene is unloaded or the prefab is opened in isolation.
 
-- Implements every interface on `T` at compile-time.
-- Generates forwarding code for all method calls, property gets/sets, and event subscriptions at compile-time.
-- The actual `T` instance is resolved at runtime – cheaply if using `BindGlobal<TComponent>` to register it to the `GlobalScope`.
+`RuntimeProxy<T>` solves this by providing a `ScriptableObject` intermediary — a serializable project asset that knows how to find the real instance at runtime.
 
-Why? Unity can't serialize direct references to scene objects across scenes or into prefabs. The proxy asset is serializable, so you assign it in the Inspector or inject it. At runtime, it finds and links to the actual instance the first time it's used. This makes it ideal for cross-context injections.
+## How it works
 
-## Auto-generation
+A `RuntimeProxy<T>` is a `ScriptableObject` that implements the same interfaces as `T` and forwards all calls to the real instance. Because it's a project asset, it can be referenced from anywhere — scenes, prefabs, other ScriptableObjects — just like any other asset.
 
-Think of it as a serializable weak reference that resolves quickly at runtime. Whenever you need to inject a `Component` from outside the current serialization context, just bind like this:
-
-`BindComponent<IInterface, Concrete>().FromProxy()`
-
-At injection time, this will:
-
-- Generate a proxy script implementing all interfaces of `Concrete` (if one doesn't already exist).
-- Trigger a standard Unity script recompilation if a new proxy script has to be generated, stopping the current injection pass. In this case, click Inject again to continue.
-- Create a `ScriptableObject` proxy asset at `Assets/Generated` (if one doesn't already exist).
-- Reuse the first found proxy asset if it already exists somewhere in the project.
-
-## Manual generation
-
-`FromProxy()` always reuses a single proxy asset per type project-wide. For advanced cases (like different resolution strategies per object), you can add more manually:
-
-Right-click any `MonoScript` that implements one or more interfaces and select **Generate Proxy Object**.
-
-This creates:
-
-- A proxy script for the class.
-- A proxy `ScriptableObject` asset in `Assets/Generated` (path is configurable in settings).
-
-Or write the stub manually and create the proxy `ScriptableObject` with right-click project folders → `Create/Saneject/Proxy`.
-
-## Example
+At runtime, the proxy resolves its target the first time it's accessed, then caches it. If the cached instance goes null (e.g. after a scene reload), it re-resolves automatically.
 
 ```mermaid
 flowchart TD
-Proxy["GameManagerProxy : IGameManager (ScriptableObject)"]
-PauseMenuUI["PauseMenuUI (Prefab)"]
+  Proxy["GameStateManagerProxy (ScriptableObject)"]
 
-subgraph "Scene A"
-GameManager["GameManager : IGameManager (Scene instance)"]
-end
+  subgraph "Game Scene"
+    GameStateManager["GameStateManager (scene instance)"]
+  end
 
-subgraph "Scene B"
-EnemySpawner["EnemySpawner (Scene instance)"]
-end
+  subgraph "UI Scene"
+    HUDController["HUDController"]
+    GameOverController["GameOverController"]
+  end
 
-EnemySpawner -->|References IGameManager| Proxy
-PauseMenuUI  -->|References IGameManager| Proxy
-Proxy -->|Forwards calls| GameManager
+  HUDController -->|"[Inject, SerializeInterface] IGameStateObservable"| Proxy
+  GameOverController -->|"[Inject, SerializeInterface] IGameStateObservable"| Proxy
+  Proxy -->|"Forwards calls at runtime"| GameStateManager
 ```
 
-> ⚠️ Last time I checked, Mermaid diagrams don't render in the GitHub mobile app. Use a browser to view them properly.
+## The `[GenerateRuntimeProxy]` attribute
 
-Example interface:
+To generate a proxy for a class, create a partial stub and mark it with `[GenerateRuntimeProxy]`:
 
 ```csharp
-public interface IGameManager
+[GenerateRuntimeProxy]
+public partial class GameStateManagerProxy : RuntimeProxy<GameStateManager> { }
+```
+
+The Roslyn generator emits a second partial that implements all interfaces of `GameStateManager` and forwards every method, property, and event to the resolved instance.
+
+You don't write or maintain the forwarding code — it's generated from the interface definitions at compile time.
+
+## Binding with `FromRuntimeProxy()`
+
+To have Saneject automatically create and wire a proxy during injection, add `.FromRuntimeProxy()` to a component binding:
+
+```csharp
+BindComponent<IGameStateObservable, GameStateManager>()
+    .FromRuntimeProxy()
+    .FromGlobalScope();
+```
+
+At injection time, Saneject:
+
+1. Generates a proxy script (if one doesn't already exist for `GameStateManager`).
+2. Triggers a script recompilation if a new script was generated — click **Inject** again after recompilation completes.
+3. Creates a proxy `ScriptableObject` asset in the configured folder (default: `Assets/Generated`), or reuses an existing one.
+4. Injects the proxy asset into any field typed as `IGameStateObservable`.
+
+## Resolve methods
+
+After `.FromRuntimeProxy()`, chain a resolve method to tell the proxy how to find its target instance at runtime:
+
+```csharp
+// Resolve from GlobalScope — zero-cost dictionary lookup
+// Requires the target to be registered via BindGlobal<T>()
+.FromRuntimeProxy().FromGlobalScope()
+
+// Find the first instance in any loaded scene
+.FromRuntimeProxy().FromAnywhereInLoadedScenes()
+
+// Instantiate a prefab and get the component
+.FromRuntimeProxy().FromComponentOnPrefab(myPrefab, dontDestroyOnLoad: true)
+
+// Create a new GameObject and add the component
+.FromRuntimeProxy().FromNewComponentOnNewGameObject(dontDestroyOnLoad: true)
+```
+
+For `FromComponentOnPrefab` and `FromNewComponentOnNewGameObject`, also chain an instance mode:
+
+```csharp
+.FromRuntimeProxy()
+    .FromComponentOnPrefab(myPrefab, dontDestroyOnLoad: true)
+    .AsSingleton();   // Registers in GlobalScope after creation — only created once
+
+.FromRuntimeProxy()
+    .FromNewComponentOnNewGameObject(dontDestroyOnLoad: false)
+    .AsTransient();   // Creates a new instance every time the proxy resolves
+```
+
+`FromGlobalScope` and `FromAnywhereInLoadedScenes` don't require an instance mode.
+
+## Manual proxy creation
+
+`FromRuntimeProxy()` always reuses a single proxy asset per type across the project. For cases where you need multiple distinct proxy assets (e.g. different resolve strategies for the same type), create them manually:
+
+1. Right-click any `MonoScript` → **Generate Proxy Object** — creates both the generated script and a `ScriptableObject` asset.
+2. Or write the partial stub manually and create the asset via **Create → Saneject → Proxy**.
+
+## `IRuntimeProxySwapTarget`
+
+For advanced scenarios where a proxy should be replaced with the real instance after injection (e.g. to avoid proxy forwarding overhead in hot paths), your component can implement `IRuntimeProxySwapTarget`:
+
+```csharp
+public interface IRuntimeProxySwapTarget
 {
-    bool IsGameOver { get; }
-    void RestartGame();
+    void SwapProxiesWithRealInstances();
 }
 ```
 
-Concrete class:
+Saneject calls `SwapProxiesWithRealInstances()` on `Awake` on all components registered via `Scope.AddProxySwapTarget`. This allows the component to replace its proxy references with direct instance references at startup.
 
-```csharp
-public class GameManager : MonoBehaviour, IGameManager
-{
-    public bool IsGameOver { get; private set; }
-    public void RestartGame() { }
-}
-```
+## Performance
 
-Generated stub (once per class):
+The proxy resolves its target the first time it's accessed and caches it. Subsequent calls pay only the cost of a null check plus the interface method dispatch.
 
-```csharp
-[GenerateProxyObject]
-public partial class GameManagerProxy : ProxyObject<GameManager> { }
-```
-
-Roslyn-generated proxy forwarding:
-
-```csharp
-public partial class GameManagerProxy : IGameManager
-{
-    public bool IsGameOver
-    {
-        get
-        {
-            if (!instance) instance = ResolveInstance();
-            return instance.IsGameOver;
-        }
-    }
-
-    public void RestartGame()
-    {
-        if (!instance) instance = ResolveInstance();
-        instance.RestartGame();
-    }
-}
-```
-
-Now you can drag the `GameManagerProxy` asset into any `[SerializeInterface] IGameManager` field, whether it's in a scene, a prefab, or resolved through injection.
-
-## Resolve strategies
-
-| Resolve method                    | What it does                                                                                                               |
-|-----------------------------------|----------------------------------------------------------------------------------------------------------------------------|
-| `FromGlobalScope`                 | Pulls the instance from `GlobalScope`. Register it via `BindGlobal` in a `Scope`. No reflection, just a dictionary lookup. |
-| `FindInLoadedScenes`              | Uses `FindFirstObjectByType<T>(FindObjectsInactive.Include)` across all loaded scenes.                                     |
-| `FromComponentOnPrefab`           | Instantiates the given prefab and returns the component.                                                                   |
-| `FromNewComponentOnNewGameObject` | Creates a new `GameObject` and adds the component.                                                                         |
-| `ManualRegistration`              | You call `proxy.RegisterInstance(instance)` at runtime before the proxy is used.                                           |
-
-## Performance note
-
-The proxy resolves its target the first time it's accessed and then caches it. If the cached instance goes null (for example, after a scene reload), the proxy will resolve it again automatically.
-
-Forwarded calls include a null-check, which makes them about 8x slower than a direct call. In practice that means nanoseconds of overhead, which is negligible outside of extremely tight loops.
-
-In a stress test, one million proxy calls in a single frame to a trivial method took ~5 ms on an Intel i7-9700K CPU. If you ever need to squeeze out that last bit of performance in a hot path, grab the concrete instance once with `proxy.GetInstanceAs<TConcrete>()` and call it directly.
-
-
-
-# GlobalScope
-
-The `GlobalScope` is a static service locator that `ProxyObject` can fetch from at near-zero cost (dictionary lookup).
-Use it to register scene objects or assets as cross-scene singletons. The `GlobalScope` can only hold one instance per unique type.
-
-Bindings are added via `BindGlobal<TComponent>()` inside a `Scope`. This stores the binding into a `SceneGlobalContainer` component.
-
-At runtime, on `Awake()` (with `[DefaultExecutionOrder(-10000)]`), the `SceneGlobalContainer` adds all its references to the `GlobalScope`.
-
-Only one `SceneGlobalContainer` is allowed per scene - it's created automatically during scene injection and manual creation is not allowed. If another instance of the same type is registered, the registration fails and an error is logged. The original instance remains.
-
-## Global binding API
-
-Register global singletons in the `Scope` using the following methods.
-
-| Method                     | Description                                                              |
-|----------------------------|--------------------------------------------------------------------------|
-| `BindGlobal<TComponent>()` | Adds a scene `Component` to the global scope via `SceneGlobalContainer`. |
-
-## GlobalScope API
-
-| Method                          | Description                                                       |
-|---------------------------------|-------------------------------------------------------------------|
-| `GlobalScope.Register<T>(T)`    | Registers an instance globally. Only one per type.                |
-| `GlobalScope.Get<T>()`          | Returns the registered instance (or `null`).                      |
-| `GlobalScope.Unregister<T>()`   | Removes a registered instance of type `T`.                        |
-| `GlobalScope.IsRegistered<T>()` | Returns `true` if an instance of type `T` is in the global scope. |
-| `GlobalScope.Clear()`           | Clears all global registrations (Play Mode only).                 |
-
-If you're using `ProxyObject`, global registration is one of the ways to resolve its target instance.
-
-💡 You can toggle logging for global registration under `Saneject/User Settings/Editor Logging`.
+If you have a very tight loop that calls through a proxy millions of times per frame, cache the underlying instance directly. For reference: in a stress test, one million proxy calls to a trivial method took approximately 5 ms on an Intel i7-9700K. In normal gameplay code, proxy overhead is negligible.

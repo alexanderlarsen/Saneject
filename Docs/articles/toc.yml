@@ -1,8 +1,8 @@
 - name: Introduction
   href: introduction.md
 
-- name: Feature overview
-  href: feature-overview.md
+- name: Key concepts
+  href: key-concepts.md
 
 - name: Getting started
   items:
@@ -25,6 +25,8 @@
       href: core-concepts/method-injection.md
     - name: Proxies
       href: core-concepts/proxies.md
+    - name: GlobalScope
+      href: core-concepts/global-scope.md
 
 - name: Editor & tooling
   items:
@@ -33,17 +35,19 @@
     - name: Custom inspector
       href: editor-and-tooling/custom-inspector.md
     - name: Roslyn tools
-      href: editor-and-tooling/roslyn-tools.md 
+      href: editor-and-tooling/roslyn-tools.md
     - name: Settings
       href: editor-and-tooling/settings.md
 
 - name: Architecture
   items:
     - name: Injection pipeline
-      href: architecture/injection-pipeline.md 
-      
+      href: architecture/injection-pipeline.md
+
 - name: Reference
-  items:   
+  items:
+    - name: Troubleshooting
+      href: reference/troubleshooting.md
     - name: Tested Unity versions
       href: reference/tested-unity-versions.md
     - name: MIT license

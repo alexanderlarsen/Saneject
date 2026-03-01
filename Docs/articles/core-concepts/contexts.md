@@ -1,83 +1,61 @@
-﻿# Context isolation
+# Contexts
 
-Saneject enforces *context isolation* by default during injection to prevent references that Unity cannot serialize safely and to keep prefabs reusable and deterministic.
+Saneject enforces *context isolation* by default to prevent serialization issues and keep prefabs deterministic and reusable.
 
-Context isolation affects both dependency resolution and hierarchy traversal.
-
-When enabled, scenes, prefab instances, and prefab assets are treated as separate, hard-isolated contexts.
+Context isolation affects two things: which candidates are eligible to resolve a dependency, and which transforms are traversed during an injection pass.
 
 ## What counts as a context
 
-A context is one of the following:
-
 - A **scene**
-- A **single prefab instance** in a scene. Each prefab instance is its own context, even if multiple instances come from the same prefab asset
+- A **prefab instance** in a scene (each instance is its own context, even when multiple instances share the same source prefab)
 - A **prefab asset** opened or injected directly from the Project window
 
-ScriptableObjects and other project assets are not context-restricted.
+`ScriptableObject`s and other project assets are not context-restricted and can be resolved from any context.
 
 ## Rules when context isolation is enabled
 
 ### Dependency resolution
 
-An injected dependency is only allowed if the injection target and the candidate belong to the same context.
+An injected dependency is only eligible if the injection target and the candidate belong to the same context:
 
-- Scene objects only resolve dependencies from the same scene
-- A prefab instance only resolves dependencies from within that same prefab instance
-- A prefab asset only resolves dependencies from within its own asset root
-- Prefab instances cannot resolve from other prefab instances, even if they share the same prefab source
-- Scene objects cannot resolve from prefab instances or prefab assets
-- ScriptableObjects and other assets can be resolved from any context
+- Scene objects only resolve dependencies from the same scene.
+- A prefab instance only resolves dependencies from within that same prefab instance.
+- A prefab asset only resolves dependencies from within its own asset root.
+- Prefab instances cannot resolve from other prefab instances, even if they share the same source prefab.
+- Scene objects cannot resolve from prefab instances or prefab assets.
+- `ScriptableObject`s and other project assets can be resolved from any context.
 
-Rejected candidates are filtered before assignment and reported in a single, contextual error message.
+Candidates that fail the context check are filtered out before assignment and reported in a single error message.
 
-### Hierarchy traversal during injection
+### Hierarchy traversal
 
-Injection traversal is also context-aware.
+Context isolation also limits which transforms are traversed during injection:
 
-- **Scene injection pass**
-    - Traverses only scene objects
-    - Prefab instances, prefab scopes, and prefab components are completely ignored
-- **Prefab injection pass**
-    - Traverses only the targeted prefab instance or prefab asset hierarchy
-    - Scene objects and scene scopes are ignored
-- Nested prefabs are treated as separate contexts
-- Injecting one prefab instance never injects on its parents, siblings, or children, even if they are the same prefab
+- **Scene injection pass** — traverses only scene objects. Prefab instances, prefab scopes, and prefab components are completely ignored.
+- **Prefab injection pass** — traverses only the targeted prefab instance or prefab asset hierarchy. Scene objects and scene scopes are ignored. Nested prefabs are treated as separate contexts.
 
-This applies equally to:
+This applies to field injection, method injection, scope parent resolution, and scope hierarchy traversal.
 
-- Field injection
-- Method injection
-- Scope parent resolution
-- Scope hierarchy traversal
+## Disabling context isolation
 
-## Turning it off
-
-Context isolation is controlled in **User Settings** via **Use Context Isolation**.
+Context isolation is toggled via **Saneject → User Settings → Use Context Isolation**.
 
 When disabled:
 
-- Scenes and prefab instances form a single unified hierarchy
-- Injection traversal crosses scene and prefab boundaries
-- Dependencies can resolve freely across contexts
+- Scenes and prefab instances form a single unified hierarchy.
+- Injection traversal crosses scene and prefab boundaries.
+- Dependencies can resolve freely across contexts.
 
-This mode exists as an escape hatch but is unsafe for most workflows. Unity does not reliably serialize these links, and removing a prefab instance or scene will break dependencies.
-
-Keeping context isolation enabled and structuring your dependencies around that is strongly recommended.
+This mode exists as an escape hatch. Unity does not reliably serialize cross-context references, so removing a prefab instance or unloading a scene will break those dependencies. Keeping context isolation enabled is strongly recommended.
 
 ## Cross-context references
 
-If a prefab needs to reference a scene object, or multiple scenes need to reference shared instances, use **ProxyObjects**.
-
-Proxies are serializable assets that resolve their real target at runtime and are the supported way to bridge contexts without breaking isolation.
+If a prefab needs to reference a scene object, or if multiple scenes need to share an instance, use a [RuntimeProxy](proxies.md). Proxies are serializable project assets that resolve their target at runtime and are the supported way to bridge contexts without violating isolation.
 
 ## Global bindings and context filtering
 
-The same context rules also apply to global bindings.
+The same isolation rules apply to `BindGlobal<T>()` bindings.
 
-When **Filter By Same Context** is enabled:
+When **Filter By Same Context** is enabled (the default), prefab components are filtered out when resolving global bindings. Only scene objects in the matching context are eligible for promotion to the global scope. This prevents accidentally registering a prefab component that may not be present when the game runs.
 
-- Prefab components are automatically filtered out when resolving global bindings, so only scene objects in the same context can be promoted to the global scope
-- This prevents accidentally registering prefab components that might be missing at runtime
-
-Disabling the setting removes that safeguard and allows prefab components to be registered globally, which can break if the prefab is not present when the game runs.
+Disabling the setting removes that safeguard and allows prefab components to be registered globally.

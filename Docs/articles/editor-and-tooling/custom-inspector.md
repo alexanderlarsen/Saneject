@@ -1,75 +1,61 @@
-﻿# Custom inspector
+# Custom inspector
 
-Unity’s default inspector draws fields in declaration order, but Roslyn generated interface backing fields live in a partial class, which normally causes them to appear at the bottom of the Inspector. This breaks expected grouping and makes injected interfaces harder to interpret.
+## MonoBehaviourInspector
 
-`MonoBehaviourFallbackInspector` is a global fallback custom `Editor` for all `MonoBehaviour`s.  
-It is only used when no more specific inspector exists for the target type, ensuring Saneject's intended UI/UX is always applied by default.
+Saneject includes a `MonoBehaviourInspector` that acts as a fallback editor for all `MonoBehaviour` subclasses. It draws:
 
-Instead of custom per field drawing, the fallback inspector delegates entirely to `SanejectInspector.DrawDefault`, which uses a structured, data driven pipeline that closely mirrors Unity’s native inspector behavior.
+- The script reference field at the top.
+- All serializable fields in declaration order, including fields defined in base classes.
+- `[SerializeInterface]` backing fields next to their corresponding interface fields (rather than at the bottom where the Roslyn-generated partial would normally place them).
+- Nested `[Serializable]` classes as collapsible foldouts with correct field ordering.
+- `[Inject]` fields as read-only when **Show Injected Fields/Properties** is enabled in User Settings.
+- Interface field validation — if a manually assigned object doesn't implement the expected interface, it's cleared to `null` with an error log.
 
-Specifically, it:
+## Conflicts with other custom inspectors
 
-- Draws the non-editable script field at the top of the inspector.
-- Discovers all serializable fields and interfaces in the correct declaration order, including base types.
-- Renders fields using Unity’s built in `PropertyField`, so standard attributes like `Header`, `Tooltip`, spacing, etc. behave exactly like the default inspector.
-- Shows `[Inject]` and `[ReadOnly]` fields as read-only.
-- Displays `[SerializeInterface]` fields with interface type labels and validation.
-- Supports arrays and lists using Unity’s native collection UI.
-- Recursively renders nested `[Serializable]` reference types.
-- Validates assigned interface values and resolves components from assigned `GameObject`s when possible.
-- Omits non-serialized, backing only, or hidden fields automatically.
+If another plugin registers a `[CustomEditor(typeof(MyComponent))]` for a type, that inspector takes priority and Saneject's fallback is bypassed. The result is typically incorrect field ordering — `[SerializeInterface]` backing fields appear at the bottom, and nested class fields may be out of order.
 
-If you create your own inspector for a specific type, or a catch all `Editor` for `MonoBehaviour`, Unity will use that instead of Saneject’s fallback inspector. In that case, Saneject’s inspector behavior will not apply unless you explicitly call back into it.
+## Restoring Saneject layout in your own editor
 
-You can fully restore Saneject’s inspector behavior inside a custom editor by calling:
+If you need a custom editor for a type that also uses Saneject features, construct a `ComponentModel` and delegate drawing to `SanejectInspector`:
 
 ```csharp
-SanejectInspector.DrawDefault(target, serializedObject);
+using Plugins.Saneject.Experimental.Editor.Inspectors;
+using Plugins.Saneject.Experimental.Editor.Inspectors.Models;
+using UnityEditor;
+
+[CustomEditor(typeof(MyComponent))]
+public class MyComponentEditor : Editor
+{
+    private ComponentModel componentModel;
+
+    private void OnEnable()
+    {
+        componentModel = new ComponentModel(target, serializedObject);
+    }
+
+    public override void OnInspectorGUI()
+    {
+        SanejectInspector.OnInspectorGUI(componentModel);
+    }
+}
 ```
 
-You can also restore the behavior more granularly by using individual static methods from `SanejectInspector` (explained below).
+`ComponentModel` collects all drawable fields from the target type (including base class fields) and builds the model that `SanejectInspector` uses for rendering. Construct it once in `OnEnable` and reuse it.
 
-## Saneject inspector API
+## Drawing individual properties
 
-`SanejectInspector` contains the full inspector rendering system used by Saneject.  
-It is built around a data collection phase followed by a deterministic rendering phase that relies on Unity’s native `PropertyField` UI.
-
-You can use the full system:
+If you only want Saneject to handle part of your inspector, you can call the lower-level methods directly:
 
 ```csharp
-SanejectInspector.DrawDefault(target, serializedObject);
+// Draw a single property with Saneject's read-only and interface-validation logic
+SanejectInspector.DrawProperty(propertyModel);
+
+// Validate a single property (clears invalid interface assignments)
+SanejectInspector.ValidateProperty(propertyModel);
+
+// Draw just the script reference field
+SanejectInspector.DrawMonoBehaviourScriptField(target);
 ```
 
-Or integrate individual parts for advanced tooling or custom inspectors.
-
-### Data collection
-
-| Method                | Description                                                                                                                          |
-|-----------------------|--------------------------------------------------------------------------------------------------------------------------------------|
-| `CollectPropertyData` | Collects `PropertyData` for all serializable fields of the given type and its base classes, including `[SerializeInterface]` fields. |
-
-### Drawing & validation
-
-| Method                         | Description                                                                                                                                                                                                                                                                                |
-|--------------------------------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `DrawDefault`                  | Draws the complete default Saneject MonoBehaviour inspector, including the script field, all serializable fields in declaration order, injection aware read only handling, custom UI and validation for `[SerializeInterface]` fields, and recursive drawing of nested serializable types. |
-| `DrawMonoBehaviourScriptField` | Draws the default script field at the top of a MonoBehaviour inspector.                                                                                                                                                                                                                    |
-| `DrawAndValidateProperties`    | Draws a collection of `PropertyData` with the given display names, read only flags and validates interface fields.                                                                                                                                                                         |
-| `DrawAndValidateProperty`      | Draws a single `PropertyData` with the given display name, read only flag and validates interface fields, including nested serializable types.                                                                                                                                             |
-
-### Helpers & extensions
-
-| Method                         | Description                                                                                                                         |
-|--------------------------------|-------------------------------------------------------------------------------------------------------------------------------------|
-| `ValidateProperty`             | Validates that the property is assigned to an object that implements the expected type.                                             |
-| `IsReadOnly`                   | Returns true if the field should be drawn as read only due to `[Inject]` or `[ReadOnly]`.                                           |
-| `HasReadOnlyAttribute`         | Returns true if the field is marked with `[ReadOnly]`.                                                                              |
-| `ShouldDraw`                   | Returns true if the field is valid for drawing in the inspector.                                                                    |
-| `HasInjectAttribute`           | Returns true if the field is marked with `[Inject]`.                                                                                |
-| `IsSerializeInterface`         | Returns true if the field is marked with `[SerializeInterface]`.                                                                    |
-| `ResolveType`                  | Returns the element type of a single or collection type (array or list).                                                            |
-| `GetInterfaceBackingFieldName` | Returns the logical name of a field, stripping compiler auto property backing syntax when present and adds two leading underscores. |
-| `IsNestedSerializable`         | Returns true if the type is a non Unity serializable reference type suitable for custom nested drawing.                             |
-| `GetAllFields`                 | Collects all `FieldInfo` of the type, including base classes.                                                                       |
-
-These APIs are intended for integrating Saneject’s inspector behavior into custom editors, building editor tooling, or selectively reusing parts of the inspector pipeline while preserving correct ordering, validation, and visibility rules.
+`PropertyModel` instances are available via `componentModel.Properties`.

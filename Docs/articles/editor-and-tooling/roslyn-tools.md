@@ -1,22 +1,19 @@
-﻿# Roslyn tools
+# Roslyn tools
 
-Roslyn tools enhance your compile-time experience using C#'s powerful compiler APIs.
+Saneject ships three Roslyn DLLs in `Saneject/RoslynLibs`:
 
-- A **Roslyn analyzer** inspects code and reports diagnostics (like errors or suggestions).
-- A **Roslyn code fix** provides a quick-fix action for an analyzer error.
-- A **Roslyn source generator** adds new C# code to your project during compilation.
+| DLL | Type | Purpose |
+|---|---|---|
+| `SerializeInterfaceGenerator.dll` | Source generator | For every `[SerializeInterface]` field, emits a hidden `Object` backing field and `ISerializationCallbackReceiver` implementation in a matching partial class. This is what makes interface fields appear in the Inspector and survive serialization. |
+| `ProxyObjectGenerator.dll` | Source generator | For every partial class marked `[GenerateRuntimeProxy]`, emits a second partial that implements the same interfaces as the bound type and forwards all method calls, property accesses, and event subscriptions to the resolved runtime instance. |
+| `AttributesAnalyzer.dll` | Analyzer + code fix | Validates correct usage of `[Inject]`, `[SerializeField]`, and `[SerializeInterface]`. Reports errors for patterns like using `[SerializeInterface]` without `partial`, or combining incompatible attribute combinations. Provides quick-fix actions in IDEs that support the Roslyn code fix protocol (e.g. Rider). |
 
-Saneject ships with three Roslyn tool DLLs (in `Saneject/RoslynLibs`):
+## How Roslyn tools work in Unity
 
-| DLL                                 | Type                | Purpose                                                                                                                                                                                            |
-|-------------------------------------|---------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| **SerializeInterfaceGenerator.dll** | Source generator    | Generates hidden backing fields and serialization hooks for `[SerializeInterface]` members.                                                                                                        |
-| **ProxyObjectGenerator.dll**        | Source generator    | Emits proxy classes for types marked with `[GenerateProxyObject]`. Each proxy is a `ScriptableObject` that implements the same interfaces and forwards all calls to the resolved runtime instance. |
-| **AttributesAnalyzer.dll**          | Analyzer + code fix | Validates field decoration rules for `[Inject]`, `[SerializeField]`, and `[SerializeInterface]`. Includes context-aware quick fixes in supported IDEs (like Rider).                                |
+- A **source generator** runs during compilation and adds new C# source to the project. The generated code is not written to disk — it lives in memory and is compiled alongside your code.
+- An **analyzer** inspects your code as you type and reports diagnostics in supported IDEs and in the Unity console.
+- A **code fix** provides an automated repair action when an analyzer reports an error.
 
-Unity's official Roslyn analyzer documentation (including setup instructions):  
-<https://docs.unity3d.com/Manual/roslyn-analyzers.html>
+For setup details and Unity version requirements, see the [Unity Roslyn Analyzers documentation](https://docs.unity3d.com/Manual/roslyn-analyzers.html).
 
-Use that guide if you want to plug in custom Roslyn tooling or integrate Saneject's tools in other project structures.
-
-Roslyn source code is in the [RoslynTools](RoslynTools) folder.
+The Roslyn source code is in the [RoslynTools](../../../Roslyn) folder of the repository.
