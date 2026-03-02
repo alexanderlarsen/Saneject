@@ -8,8 +8,23 @@ using UnityEditor;
 
 namespace Plugins.Saneject.Experimental.Editor.Inspectors.Models
 {
+    /// <summary>
+    /// Encapsulates metadata and state for a serializable property in the custom Saneject inspector.
+    /// This model combines reflection information about a field with its serialized property representation,
+    /// handling special cases like <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.SerializeInterfaceAttribute" /> fields, nested serializable types, injected fields,
+    /// and read-only properties. It supports hierarchical property structures for nested types and collections.
+    /// </summary>
     public sealed class PropertyModel
     {
+        /// <summary>
+        /// Initializes a new instance of the <see cref="PropertyModel"/> class.
+        /// </summary>
+        /// <param name="root">The root <see cref="SerializedObject" /> used to find top-level properties.</param>
+        /// <param name="field">The FieldInfo representing the property.</param>
+        /// <param name="parent">
+        /// The parent <see cref="SerializedProperty" /> if this property is nested within another serializable type.
+        /// If null, the property is resolved from the root <see cref="SerializedObject" />.
+        /// </param>
         public PropertyModel(
             SerializedObject root,
             FieldInfo field,
@@ -47,13 +62,49 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.Models
                 : new List<PropertyModel>();
         }
 
+        /// <summary>
+        /// Gets the serialized property representation of this field.
+        /// </summary>
         public SerializedProperty SerializedProperty { get; }
+
+        /// <summary>
+        /// Gets the display name for this property in the inspector, nicified and with type information
+        /// for <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.SerializeInterfaceAttribute" /> fields.
+        /// </summary>
         public string DisplayName { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this property should be drawn as read-only in the inspector.
+        /// This is true if the field is marked with <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.InjectAttribute" />  or <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.ReadOnlyAttribute" /> .
+        /// </summary>
         public bool IsReadOnly { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this property is marked with the <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.SerializeInterfaceAttribute" /> attribute.
+        /// </summary>
         public bool IsSerializedInterface { get; }
+
+        /// <summary>
+        /// Gets the expected element type for this property.
+        /// For <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.SerializeInterfaceAttribute" /> fields, this is the interface type.
+        /// For non-generic properties, this is the field type itself.
+        /// </summary>
         public Type ExpectedType { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this property is marked with the <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.InjectAttribute" /> attribute.
+        /// </summary>
         public bool HasInjectAttribute { get; }
+
+        /// <summary>
+        /// Gets a value indicating whether this property is an array or list type.
+        /// </summary>
         public bool IsCollection { get; }
+
+        /// <summary>
+        /// Gets the read-only collection of child PropertyModel instances for nested serializable types.
+        /// Empty if this property is not a nested serializable type or if no children are found.
+        /// </summary>
         public IReadOnlyList<PropertyModel> Children { get; }
     }
 }

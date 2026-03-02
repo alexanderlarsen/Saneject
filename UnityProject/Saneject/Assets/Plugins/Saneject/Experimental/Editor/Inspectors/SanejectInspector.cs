@@ -11,13 +11,20 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Editor.Inspectors
 {
+    /// <summary>
+    /// Provides UI drawing and validation logic for the custom Saneject inspector.
+    /// Handles rendering of serialized properties with injection-aware read-only states,
+    /// custom handling for <see cref="SerializeInterfaceAttribute" /> fields, nested serializable types, and validation
+    /// to ensure assigned objects implement expected interface types.
+    /// </summary>
     public static class SanejectInspector
     {
         #region Drawing
 
         /// <summary>
-        /// Draws the complete default Saneject MonoBehaviour inspector, including the script field, all serializable fields in declaration order, injection-aware read-only handling, custom UI and validation for [SerializeInterface] fields, and recursive drawing of nested serializable types.
+        /// Draws the complete default Saneject <see cref="MonoBehaviour" /> inspector, including the script field, all serializable fields and interfaces in declaration order, injection-aware read-only handling, custom UI and validation for <see cref="SerializeInterfaceAttribute" /> fields, and recursive drawing of nested serializable types.
         /// </summary>
+        /// <param name="componentModel">The component model containing the target object and its inspectable properties.</param>
         public static void OnInspectorGUI(ComponentModel componentModel)
         {
             componentModel.SerializedObject.Update();
@@ -33,8 +40,9 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         }
 
         /// <summary>
-        /// Draws the default script field at the top of a MonoBehaviour inspector.
+        /// Draws the default script field at the top of a <see cref="MonoBehaviour" /> inspector.
         /// </summary>
+        /// <param name="target">The target object. If not a <see cref="MonoBehaviour" />, this method returns without drawing anything.</param>
         public static void DrawMonoBehaviourScriptField(Object target)
         {
             if (target is not MonoBehaviour mono)
@@ -47,9 +55,9 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         }
 
         /// <summary>
-        /// Draws a single <see cref="model" /> with the given display name, read-only flag and validates interface fields, including nested serializable types.
+        /// Draws a single property with the given display name and read-only state, handling foldouts for nested serializable types.
         /// </summary>
-        /// <param name="model"></param>
+        /// <param name="model">The property model to draw.</param>
         public static void DrawProperty(PropertyModel model)
         {
             if (model.HasInjectAttribute && !UserSettings.ShowInjectedFieldsProperties)
@@ -94,7 +102,10 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
         /// <summary>
         /// Validates that the field is assigned to an object that implements the expected type.
+        /// For <see cref="SerializeInterfaceAttribute" /> fields, validates each element if the property is a collection,
+        /// or the single value if not. Also recursively validates child properties.
         /// </summary>
+        /// <param name="property">The property model to validate.</param>
         public static void ValidateProperty(PropertyModel property)
         {
             if (property.IsSerializedInterface)
@@ -172,7 +183,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         }
 
         /// <summary>
-        /// Returns true if the field is marked with [ReadOnly].
+        /// Returns true if the field is marked with <see cref="ReadOnlyAttribute"/>.
         /// </summary>
         public static bool HasReadOnlyAttribute(this FieldInfo field)
         {
@@ -180,7 +191,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         }
 
         /// <summary>
-        /// Returns true if the field is marked with [Inject].
+        /// Returns true if the field is marked with <see cref="InjectAttribute"/>.
         /// </summary>
         public static bool HasInjectAttribute(this FieldInfo field)
         {
@@ -188,7 +199,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
         }
 
         /// <summary>
-        /// Returns true if the field is marked with [SerializeInterface].
+        /// Returns true if the field is marked with <see cref="SerializeInterfaceAttribute"/>.
         /// </summary>
         public static bool IsSerializeInterface(this FieldInfo field)
         {
