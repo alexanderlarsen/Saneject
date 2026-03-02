@@ -8,19 +8,28 @@ using Component = UnityEngine.Component;
 namespace Plugins.Saneject.Experimental.Runtime.Proxy
 {
     /// <summary>
-    /// Enables serialization of interface references to Unity objects between scenes and prefabs.
-    /// Use this as a base for proxies generated with Roslyn (via Saneject.RuntimeProxy.Generator.dll),
-    /// which implement all interfaces on the concrete type at compile time and forward methods,
-    /// properties and events to a concrete instance located at runtime.
-    /// Assign the proxy asset to a serialized interface field (e.g.,
-    /// <c>[SerializeInterface] IMyInterface myInterface</c>) at editor-time, and at runtime,
-    /// the proxy resolves to the real instance using your chosen strategy.
-    /// For details and usage examples, see the README.
+    /// A generic base class for serializable proxy assets that resolve to real component instances at runtime.
     /// </summary>
+    /// <remarks>
+    /// A <see cref="RuntimeProxy{TConcrete}" /> is a <see cref="ScriptableObject" /> that serves as an editor-time placeholder for a <see cref="UnityEngine.Component" />.
+    /// It implements all interfaces of the target type with stub implementations (which throw exceptions). At runtime, a Scope resolves the proxy
+    /// to the real instance using the configured <see cref="RuntimeProxyResolveMethod" /> and replaces all proxy references via <see cref="IRuntimeProxySwapTarget.SwapProxiesWithRealInstances" />.
+    /// This design allows you to serialize interface references between scenes and prefabs, solving the problem that Unity cannot serialize
+    /// direct cross-scene, scene-to-prefab and prefab-to-prefab references.
+    /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public abstract class RuntimeProxy<TConcrete> : RuntimeProxyBase
-        where TConcrete : Component
+    public abstract class RuntimeProxy<TComponent> : RuntimeProxyBase
+        where TComponent : Component
     {
+        /// <summary>
+        /// Resolves and returns the real instance for this proxy using the configured resolution strategy.
+        /// </summary>
+        /// <remarks>
+        /// This method uses the <see cref="RuntimeProxyResolveMethod" /> configured on this proxy to locate or create the target instance.
+        /// If a <see cref="RuntimeProxyInstanceMode.Singleton" /> instance is requested, the instance is resolved from the <see cref="GlobalScope" />.
+        /// Cannot be called in the editor; logs a warning and returns null if attempted outside play mode.
+        /// </remarks>
+        /// <returns>The resolved component instance, or null if resolution fails.</returns>
         public override object ResolveInstance()
         {
             if (!Application.isPlaying)
@@ -33,15 +42,15 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
 
             // Pure lookup-only
             if (resolveMethod == RuntimeProxyResolveMethod.FromGlobalScope)
-                return GlobalScope.GetComponent<TConcrete>();
+                return GlobalScope.GetComponent<TComponent>();
 
             // Global get-or-create pre-check
             if (instanceMode == RuntimeProxyInstanceMode.Singleton &&
-                GlobalScope.TryGetComponent(out TConcrete existing))
+                GlobalScope.TryGetComponent(out TComponent existing))
                 return existing;
 
             // Resolve via configured source
-            TConcrete resolved = resolveMethod switch
+            TComponent resolved = resolveMethod switch
             {
                 RuntimeProxyResolveMethod.FromComponentOnPrefab
                     => GetFromPrefab(),
@@ -50,17 +59,17 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                     => CreateNewInstanceOnNewGameObject(),
 
                 RuntimeProxyResolveMethod.FromAnywhereInLoadedScenes
-                    => FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include),
-                
+                    => FindFirstObjectByType<TComponent>(FindObjectsInactive.Include),
+
                 RuntimeProxyResolveMethod.FromGlobalScope => throw new InvalidOperationException("Saneject: Resolve method should never reach this switch arm."),
-                
+
                 _ => throw new ArgumentOutOfRangeException()
             };
 
             if (resolved == null)
             {
                 Debug.LogError(
-                    $"Saneject: '{typeof(TConcrete)}' could not be resolved by '{GetType().Name}' using '{resolveMethod}'.");
+                    $"Saneject: '{typeof(TComponent)}' could not be resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
                 return null;
             }
@@ -68,37 +77,37 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
             // Register instance only if this proxy created it and policy demands it
             if (instanceMode == RuntimeProxyInstanceMode.Singleton &&
                 resolveMethod is RuntimeProxyResolveMethod.FromComponentOnPrefab or RuntimeProxyResolveMethod.FromNewComponentOnNewGameObject)
-                if (!GlobalScope.IsRegistered<TConcrete>())
+                if (!GlobalScope.IsRegistered<TComponent>())
                     GlobalScope.RegisterComponent(resolved, this);
 
             if (UserSettings.LogProxyResolve)
                 Debug.Log(
-                    $"Saneject: '{typeof(TConcrete)}' resolved by '{GetType().Name}' using '{resolveMethod}'.");
+                    $"Saneject: '{typeof(TComponent)}' resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
             return resolved;
         }
 
-        private TConcrete GetFromPrefab()
+        private TComponent GetFromPrefab()
         {
             GameObject prefabInstance = Instantiate(prefab);
 
             if (dontDestroyOnLoad)
                 DontDestroyOnLoad(prefabInstance);
 
-            return prefabInstance.TryGetComponent(out TConcrete output)
+            return prefabInstance.TryGetComponent(out TComponent output)
                 ? output
                 : throw new NullReferenceException(
-                    $"Saneject: '{typeof(TConcrete)}' is not found on prefab instantiated by '{GetType().Name}'");
+                    $"Saneject: '{typeof(TComponent)}' is not found on prefab instantiated by '{GetType().Name}'");
         }
 
-        private TConcrete CreateNewInstanceOnNewGameObject()
+        private TComponent CreateNewInstanceOnNewGameObject()
         {
-            GameObject gameObj = new(typeof(TConcrete).Name);
+            GameObject gameObj = new(typeof(TComponent).Name);
 
             if (dontDestroyOnLoad)
                 DontDestroyOnLoad(gameObj);
 
-            return gameObj.AddComponent<TConcrete>();
+            return gameObj.AddComponent<TComponent>();
         }
     }
 }

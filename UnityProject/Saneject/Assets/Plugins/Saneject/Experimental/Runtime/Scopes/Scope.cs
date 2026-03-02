@@ -23,6 +23,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         [SerializeField, HideInInspector, EditorBrowsable(EditorBrowsableState.Never)]
         private List<Component> proxySwapTargets = new();
 
+        /// <summary>
+        /// Called by Unity on initialization. Registers global components in GlobalScope and swaps all proxy references with real instances.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void Awake()
         {
@@ -33,6 +36,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
                 swapTarget.SwapProxiesWithRealInstances();
         }
 
+        /// <summary>
+        /// Called by Unity when this Scope is destroyed. Unregisters all global components from GlobalScope.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void OnDestroy()
         {
@@ -40,6 +46,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
                 GlobalScope.UnregisterComponent(obj, this);
         }
 
+        /// <summary>
+        /// Updates the collection of components to register in GlobalScope when this Scope initializes.
+        /// Called by the editor injection system.
+        /// </summary>
+        /// <param name="globalObjects">The components to register globally.</param>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void UpdateGlobalComponents(IEnumerable<Component> globalObjects)
         {
@@ -47,12 +58,20 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
             globalComponents.AddRange(globalObjects.Where(obj => obj));
         }
 
+        /// <summary>
+        /// Clears the collection of proxy swap targets. Called by the editor injection system.
+        /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void ClearProxySwapTargets()
         {
             proxySwapTargets.Clear();
         }
 
+        /// <summary>
+        /// Registers a component to have its proxy references swapped with real instances on Awake.
+        /// </summary>
+        /// <param name="component">The component implementing <see cref="IRuntimeProxySwapTarget"/>.</param>
+        /// <exception cref="ArgumentException">Thrown if the component does not implement <see cref="IRuntimeProxySwapTarget"/>.</exception>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public void AddProxySwapTarget(Component component)
         {
@@ -63,15 +82,16 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         }
 
         /// <summary>
-        /// For internal use by Saneject. Not intended for user code.
+        /// Collection of bindings declared in this scope. For internal use only.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private readonly HashSet<Binding> bindings = new();
 
         /// <summary>
-        /// For internal use by Saneject. Not intended for user code.
-        /// Initializes bindings, copies them to new collection and disposes the original bindings.
+        /// Called by the Saneject injection system to collect all bindings declared in this scope.
+        /// Invokes <see cref="DeclareBindings"/> to populate the bindings collection, then returns a copy.
         /// </summary>
+        /// <returns>A read-only collection of all bindings declared in this scope.</returns>
         [EditorBrowsable(EditorBrowsableState.Never)]
         public IReadOnlyCollection<Binding> CollectBindings()
         {
@@ -94,9 +114,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         /// <summary>
         /// Registers a binding for a single <typeparamref name="T" /> component or interface type in this scope.
-        /// Use this for concrete <see cref="UnityEngine.Component" /> or interface you wish to inject directly.
+        /// Use this for concrete <see cref="UnityEngine.Component" /> or interface you wish to inject.
         /// </summary>
-        /// <typeparam name="T">The concrete component type to bind.</typeparam>
+        /// <typeparam name="T">The concrete component or interface type to bind.</typeparam>
         /// <returns>A fluent builder for configuring the component binding.</returns>
         protected ComponentBindingBuilder<T> BindComponent<T>() where T : class
         {
@@ -115,10 +135,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         /// <summary>
         /// Registers a collection binding for <typeparamref name="T" /> component type in this scope.
-        /// Use this to inject all matching components as a collection.
+        /// Use this to inject all matching components or interfaces as a collection.
         /// Shorthand for <see cref="BindMultipleComponents{T}" />.
         /// </summary>
-        /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
+        /// <typeparam name="T">The concrete component or interface type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
         protected ComponentBindingBuilder<T> BindComponents<T>() where T : class
         {
@@ -129,7 +149,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         /// Registers a collection binding for <typeparamref name="T" /> component type in this scope.
         /// Use this to inject all matching components or interfaces as a collection.
         /// </summary>
-        /// <typeparam name="T">The concrete component type to bind as a collection.</typeparam>
+        /// <typeparam name="T">The concrete component or interface type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the component collection binding.</returns>
         protected ComponentBindingBuilder<T> BindMultipleComponents<T>() where T : class
         {
@@ -211,9 +231,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         /// <summary>
         /// Registers a binding for a single asset of type <typeparamref name="TConcrete" />.
-        /// Use this to inject a specific asset (e.g. <see cref="Material" />, <see cref="Texture" />, etc.) by reference.
+        /// Use this to inject a specific asset (e.g. <see cref="GameObject" />, <see cref="Material" />, <see cref="Texture" />, etc.) by reference.
         /// </summary>
-        /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind.</typeparam>
+        /// <typeparam name="TConcrete">The <see cref="UnityEngine.Object"/>-derived asset type to bind.</typeparam>
         /// <returns>A fluent builder for configuring the asset binding.</returns>
         protected AssetBindingBuilder<TConcrete> BindAsset<TConcrete>() where TConcrete : Object
         {
@@ -228,7 +248,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         /// <summary>
         /// Registers a collection binding for all assets of type <typeparamref name="TConcrete" />.
-        /// Use this to inject multiple assets (e.g. from a folder or group) as a collection.
+        /// Use this to inject multiple assets (e.g. from a folder) as a collection.
         /// Shorthand for <see cref="BindMultipleAssets{TConcrete}" />.
         /// </summary>
         /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind as a collection.</typeparam>
@@ -240,9 +260,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         /// <summary>
         /// Registers a collection binding for all assets of type <typeparamref name="TConcrete" />.
-        /// Use this to inject multiple assets (e.g. from a folder or group) as a collection.
+        /// Use this to inject multiple assets (e.g. from a folder) as a collection.
         /// </summary>
-        /// <typeparam name="TConcrete">The UnityEngine.Object-derived asset type to bind as a collection.</typeparam>
+        /// <typeparam name="TConcrete">The <see cref="UnityEngine.Object"/>-derived asset type to bind as a collection.</typeparam>
         /// <returns>A fluent builder for configuring the asset collection binding.</returns>
         protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TConcrete>() where TConcrete : Object
         {
@@ -258,7 +278,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
 
         /// <summary>
         /// Registers a binding from interface type <typeparamref name="TInterface" /> to asset type <typeparamref name="TConcrete" />.
-        /// Use this to inject an asset by interface abstraction (e.g. ScriptableObject implementing an interface).
+        /// Use this to inject an asset by interface abstraction (e.g. <see cref="ScriptableObject"/> implementing an interface).
         /// </summary>
         /// <typeparam name="TInterface">The interface type to inject.</typeparam>
         /// <typeparam name="TConcrete">The concrete asset type that implements the interface.</typeparam>
@@ -319,10 +339,14 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
         #region Global methods
 
         /// <summary>
-        /// Registers a global binding for the scene component <typeparamref name="TConcrete" />.
-        /// Promotes the component into the global scope via <c>SceneGlobalContainer</c>.
-        /// Enables cross-scene access through global resolution (e.g., via <c>ProxyObject</c>).
+        /// Registers a scene component globally, enabling efficient cross-scene and prefab resolution through <see cref="GlobalScope"/>.
         /// </summary>
+        /// <remarks>
+        /// During editor-time injection, this binding stores a reference to the target <typeparamref name="TConcrete"/> in this scope. 
+        /// At runtime, before any Awake methods run and before proxies are resolved, the target is added to the <see cref="GlobalScope"/>
+        /// This allows <see cref="Plugins.Saneject.Experimental.Runtime.Proxy.RuntimeProxy{TComponent}"/> to resolve the component via fast dictionary lookup.
+        /// Only works for components that exist in the scene or prefab at edit time.
+        /// </remarks>
         /// <typeparam name="TConcrete">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>
         protected GlobalComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component
