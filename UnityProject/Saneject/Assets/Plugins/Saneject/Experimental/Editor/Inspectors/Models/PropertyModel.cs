@@ -87,7 +87,7 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors.Models
         /// <summary>
         /// Gets the expected element type for this property.
         /// For <see cref="Plugins.Saneject.Experimental.Runtime.Attributes.SerializeInterfaceAttribute" /> fields, this is the interface type.
-        /// For non-generic properties, this is the field type itself.
+        /// For non-interface properties, this is the field type itself.
         /// </summary>
         public Type ExpectedType { get; }
 
