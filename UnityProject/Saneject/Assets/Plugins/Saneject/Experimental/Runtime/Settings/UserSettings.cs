@@ -12,6 +12,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     /// Provides access to user-specific settings stored locally for this user.
     /// <remarks>
     /// Settings are stored locally in <see cref="UnityEditor.EditorPrefs" />.
+    /// Properties are only editable in the editor outside Play Mode and will return default values when accessed outside the editor.
     /// </remarks>
     /// </summary>
     public static class UserSettings
@@ -178,7 +179,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             string key = $"{SettingsPrefix}{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetString(key);
 #else
-            return string.Empty;
+            return defaultValue;
 #endif
         }
 
@@ -206,7 +207,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
             string key = $"{SettingsPrefix}{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetBool(key);
 #else
-            return false;
+            return defaultValue;
 #endif
         }
 

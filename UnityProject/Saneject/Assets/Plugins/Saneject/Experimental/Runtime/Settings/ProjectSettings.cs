@@ -11,6 +11,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
     /// Provides access to project-wide settings shared across all users.
     /// <remarks>
     /// Settings are stored in <c>ProjectSettings/Saneject/ProjectSettings.json</c>.
+    /// Properties are only editable in the editor outside Play Mode and will return default values when accessed outside the editor.
     /// </remarks>
     /// </summary>
     public static class ProjectSettings
