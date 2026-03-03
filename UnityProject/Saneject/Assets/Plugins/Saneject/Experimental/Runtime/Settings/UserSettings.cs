@@ -9,9 +9,8 @@ using UnityEngine;
 namespace Plugins.Saneject.Experimental.Runtime.Settings
 {
     /// <summary>
-    /// Provides strongly-typed accessors for Saneject user/editor settings, backed by <see cref="UnityEditor.EditorPrefs" /> and is used by an <see cref="UnityEditor.EditorWindow" /> found under <c>Saneject/User Settings</c>.
-    /// Settings affect injection prompts, inspector options, and logging behavior in the Unity Editor.
-    /// These settings have no effect at runtime.
+    /// Provides access to user-specific settings stored locally for this user.
+    /// Settings are backed stored in <see cref="UnityEditor.EditorPrefs" />.
     /// </summary>
     public static class UserSettings
     {
@@ -19,24 +18,36 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
  
         #region Ask Before Injection
 
+        /// <summary>
+        /// Show a confirmation dialog before injecting a whole scene.
+        /// </summary>
         public static bool AskBefore_Inject_Scene
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
         
+        /// <summary>
+        /// Show a confirmation dialog before injecting a prefab asset.
+        /// </summary>
         public static bool AskBefore_Inject_PrefabAsset
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         } 
 
+        /// <summary>
+        /// Show a confirmation dialog before injecting selected scene hierarchies.
+        /// </summary>
         public static bool AskBefore_Inject_SelectedSceneHierarchies
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
         
+        /// <summary>
+        /// Show a confirmation dialog before batch injecting scenes and prefab assets.
+        /// </summary>
         public static bool AskBefore_BatchInject
         {
             get => GetBool(defaultValue: true);
@@ -47,12 +58,18 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         #region Inspector
 
+        /// <summary>
+        /// Show [Inject] fields and [field: Inject] auto-properties in the Inspector.
+        /// </summary>
         public static bool ShowInjectedFieldsProperties
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Show help boxes in the Inspector.
+        /// </summary>
         public static bool ShowHelpBoxes
         {
             get => GetBool(defaultValue: true);
@@ -63,12 +80,18 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         #region Play Mode Logging
 
+        /// <summary>
+        /// Log when a proxy instance is resolved at runtime.
+        /// </summary>
         public static bool LogProxyResolve
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Log when objects are registered or unregistered with the global scope at runtime.
+        /// </summary>
         public static bool LogGlobalScopeRegistration
         {
             get => GetBool(defaultValue: true);
@@ -79,24 +102,38 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         #region Editor Logging
 
+        /// <summary>
+        /// Log a message when a binding is unused during injection.
+        /// This can happen when a binding is registered in a scope but never used in the scene or prefab.
+        /// </summary>
         public static bool LogUnusedBindings
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Log a summary on injection complete.
+        /// </summary>
         public static bool LogInjectionSummary
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Clear console logs before injection starts. Useful for only seeing logs related to the latest injection run.
+        /// </summary>
         public static bool ClearLogsOnInjection
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
         
+        /// <summary>
+        /// If enabled, Saneject will scan and report unused runtime proxy scripts and assets during domain reload.
+        /// They are considered unused, if no Scope binding is referencing them. This can help you keep your project clean and organized.
+        /// </summary>
         public static bool LogUnusedRuntimeProxiesOnDomainReload
         {
             get => GetBool(defaultValue: true);
@@ -107,6 +144,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 
         #region Methods
 
+        /// <summary>
+        /// Resets all user settings to their default values.
+        /// </summary>
         public static void UseDefaultSettings()
         {
 #if UNITY_EDITOR

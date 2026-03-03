@@ -84,22 +84,22 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 currentValue: UserSettings.AskBefore_Inject_Scene,
                 onChanged: newValue => UserSettings.AskBefore_Inject_Scene = newValue
             );
-            
+
             DrawToggle
             (
                 label: "Prefab Asset",
                 tooltip: "Show a confirmation dialog before injecting a prefab asset.",
                 currentValue: UserSettings.AskBefore_Inject_PrefabAsset,
                 onChanged: newValue => UserSettings.AskBefore_Inject_PrefabAsset = newValue
-            ); 
-            
+            );
+
             DrawToggle
             (
                 label: "Selected Scene Hierarchies",
                 tooltip: "Show a confirmation dialog before injecting selected scene hierarchies.",
                 currentValue: UserSettings.AskBefore_Inject_SelectedSceneHierarchies,
                 onChanged: newValue => UserSettings.AskBefore_Inject_SelectedSceneHierarchies = newValue
-            ); 
+            );
 
             DrawToggle
             (
@@ -155,15 +155,15 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             DrawToggle
             (
                 label: "Clear Logs On Injection",
-                tooltip: "Clear console logs before injection starts.",
+                tooltip: "Clear console logs before injection starts. Useful for only seeing logs related to the latest injection run.",
                 currentValue: UserSettings.ClearLogsOnInjection,
                 onChanged: newValue => UserSettings.ClearLogsOnInjection = newValue
             );
-            
+
             DrawToggle
             (
                 label: "Log Injection Summary",
-                tooltip: "Log summary on injection complete: Number of scopes processed, globals registered, injected fields/properties, missing dependencies/bindings, invalid/unused bindings, suppressed error count, and injection run duration.",
+                tooltip: "Log a summary on injection complete.",
                 currentValue: UserSettings.LogInjectionSummary,
                 onChanged: newValue => UserSettings.LogInjectionSummary = newValue
             );
@@ -175,7 +175,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
                 currentValue: UserSettings.LogUnusedBindings,
                 onChanged: newValue => UserSettings.LogUnusedBindings = newValue
             );
-            
+
             DrawToggle
             (
                 label: "Log Unused Runtime Proxies On Domain Reload",
@@ -207,13 +207,10 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             (
                 label: "Use Context Isolation",
                 tooltip:
-                "Controls who is allowed to see what.\n\n" +
-                "When enabled, scenes and prefab instances are treated as separate contexts with a hard boundary. " +
-                "Scene injection ignores prefab instances entirely, and prefab injection ignores scene objects. " +
-                "Dependencies can only resolve within the same context.\n\n" +
-                "When disabled, scene- and prefab instances can bleed into each other, fetching dependencies from each other. " +
-                "Prefab assets are always context isolated, regardless of this setting." +
-                "and dependencies may freely resolve across scene and prefab instance boundaries.",
+                "Controls dependency resolution boundaries between scenes and prefab instances.\n\n" +
+                "When enabled, scenes and prefab instances are treated as separate contexts with a hard boundary; dependencies can only resolve within the same context.\n\n" +
+                "When disabled, scene and prefab instances can fetch dependencies from each other.\n\n" +
+                "Prefab assets are always context isolated, regardless of this setting.",
                 currentValue: ProjectSettings.UseContextIsolation,
                 onChanged: newValue => ProjectSettings.UseContextIsolation = newValue,
                 repaintInspectors: true
@@ -225,7 +222,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             DrawToggle
             (
                 label: "Generate Scope Namespace From Folder",
-                tooltip: "When enabled, a new Scope created via 'Assets/Saneject/Create New Scope' gets a namespace matching its folder path (relative to Assets). When disabled, the Scope is created without a namespace.",
+                tooltip:
+                "When enabled, a new Scope created via 'Assets/Saneject/Create New Scope' gets a namespace matching its folder path.\n\n" +
+                "When disabled, the Scope is created without a namespace.",
                 currentValue: ProjectSettings.GenerateScopeNamespaceFromFolder,
                 onChanged: newValue => ProjectSettings.GenerateScopeNamespaceFromFolder = newValue
             );
@@ -236,7 +235,9 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             DrawToggle
             (
                 label: "Generate Proxy Scripts On Domain Reload",
-                tooltip: "When enabled, all proxy scripts are generated from your declared bindings on domain reload. This is usually the preferred option, but in some cases, this can slow domain reload down. If disabled, you can generate them manually from the Saneject menu.",
+                tooltip: 
+                "When enabled, all proxy scripts are generated from declared bindings on domain reload.\n\n" +
+                "When disabled, they must be generated manually from the Saneject menu.",
                 currentValue: ProjectSettings.GenerateProxyScriptsOnDomainReload,
                 onChanged: newValue => ProjectSettings.GenerateProxyScriptsOnDomainReload = newValue
             );
@@ -326,7 +327,7 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             EditorGUILayout.EndHorizontal();
 
             if (currentPath != newPath)
-            {   
+            {
                 onChanged(PathUtility.SanitizeFolderPath(newPath));
 
                 if (repaintInspectors)
