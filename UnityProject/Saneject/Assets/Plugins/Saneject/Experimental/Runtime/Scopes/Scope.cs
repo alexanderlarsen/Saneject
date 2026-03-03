@@ -12,6 +12,14 @@ using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Experimental.Runtime.Scopes
 {
+    /// <summary>
+    /// Base class for declaring dependency bindings within a <see cref="GameObject" /> hierarchy.
+    /// A <c>Scope</c> locates dependencies for components below itself with bindings declared in <see cref="DeclareBindings" />.
+    /// Saneject resolves dependencies by searching this scope and walking up the parent scope hierarchy until a match is found, allowing lower-level scopes to override bindings from higher-level scopes.
+    /// <remarks>
+    /// Although primarily used for editor-time DI, a <c>Scope</c> also manages runtime initialization by registering global components in <see cref="GlobalScope"/> and swapping <see cref="Plugins.Saneject.Experimental.Runtime.Proxy.RuntimeProxy{T}"/> placeholders with their real instances.
+    /// </remarks>
+    /// </summary>
     [DisallowMultipleComponent, DefaultExecutionOrder(-10000)]
     public abstract class Scope : MonoBehaviour
     {
