@@ -4,15 +4,26 @@ using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy
 {
+    /// <summary>
+    /// Builder for configuring runtime proxy resolution strategies.
+    /// </summary>
     public class RuntimeProxyBindingBuilder
     {
         private readonly ComponentBinding binding;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="RuntimeProxyBindingBuilder"/> class.
+        /// </summary>
+        /// <param name="binding">The component binding to configure.</param>
         public RuntimeProxyBindingBuilder(ComponentBinding binding)
         {
             this.binding = binding;
         }
 
+        /// <summary>
+        /// Resolves the target <see cref="Component"/> from the <see cref="Plugins.Saneject.Experimental.Runtime.Scopes.GlobalScope"/>.
+        /// Requires the target <see cref="Component"/> to be registered to the <see cref="Plugins.Saneject.Experimental.Runtime.Scopes.GlobalScope"/> via a global component binding.
+        /// </summary>
         public void FromGlobalScope()
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
@@ -24,6 +35,10 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy
             );
         }
 
+        /// <summary>
+        /// Resolves the target <see cref="Component"/> by finding the first instance of that type in any loaded scene.
+        /// Includes inactive objects in the search.
+        /// </summary>
         public void FromAnywhereInLoadedScenes()
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig
@@ -35,6 +50,12 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy
             );
         }
 
+        /// <summary>
+        /// Resolves the proxy by instantiating the specified prefab and getting the target <see cref="Component"/> from it.
+        /// </summary>
+        /// <param name="prefab">The prefab to instantiate.</param>
+        /// <param name="dontDestroyOnLoad">Whether to apply DontDestroyOnLoad to the instantiated object.</param>
+        /// <returns>A <see cref="RuntimeProxyInstanceModeBuilder"/> to configure the instance mode.</returns>
         public RuntimeProxyInstanceModeBuilder FromComponentOnPrefab(
             GameObject prefab,
             bool dontDestroyOnLoad = false)
@@ -50,6 +71,11 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy
             return new RuntimeProxyInstanceModeBuilder(binding);
         }
 
+        /// <summary>
+        /// Resolves the target <see cref="Component"/> by creating a new <see cref="GameObject"/> and adding the <see cref="Component"/> to it.
+        /// </summary>
+        /// <param name="dontDestroyOnLoad">Whether to apply DontDestroyOnLoad to the new object.</param>
+        /// <returns>A <see cref="RuntimeProxyInstanceModeBuilder"/> to configure the instance mode.</returns>
         public RuntimeProxyInstanceModeBuilder FromNewComponentOnNewGameObject(bool dontDestroyOnLoad = false)
         {
             binding.RuntimeProxyConfig = new RuntimeProxyConfig

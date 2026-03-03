@@ -2,6 +2,9 @@
 
 namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
 {
+    /// <summary>
+    /// Represents a global binding to a Unity <see cref="UnityEngine.Component"/>.
+    /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class GlobalComponentBinding : ComponentBinding
     {

@@ -9,13 +9,17 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
 {
     /// <summary>
     /// Fluent builder for configuring asset bindings in a <see cref="Scope" />.
-    /// Allows locating and binding <see cref="UnityEngine.Object" /> assets via direct instance, Resources, or AssetDatabase.
-    /// Typically returned from <c>BindAsset&lt;TAsset&gt;()</c> or <c>BindAssets&lt;TAsset&gt;()</c>.
+    /// Allows specifying how to locate <see cref="UnityEngine.Object" /> assets via direct instance, Resources, or AssetDatabase.
+    /// Returned from <c>BindAsset&lt;TAsset&gt;()</c> or <c>BindAssets&lt;TAsset&gt;()</c>.
     /// </summary>
     public class AssetBindingBuilder<TAsset> where TAsset : Object
     {
         private readonly AssetBinding binding;
 
+        /// <summary>
+        /// Initializes a new instance of the <see cref="AssetBindingBuilder{TAsset}"/> class.
+        /// </summary>
+        /// <param name="binding">The <see cref="AssetBinding"/> to configure.</param>
         public AssetBindingBuilder(AssetBinding binding)
         {
             this.binding = binding;
@@ -29,6 +33,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// that specify the same ID will resolve using this binding.
         /// </summary>
         /// <param name="ids">The identifiers to match against injection targets.</param>
+        /// <returns>The builder instance for fluent chaining.</returns>
         public AssetBindingBuilder<TAsset> ToID(params string[] ids)
         {
             binding.IdQualifiers.AddRange(ids);
@@ -41,6 +46,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
+        /// <returns>The builder instance for fluent chaining.</returns>
         public AssetBindingBuilder<TAsset> ToTarget<TTarget>()
         {
             binding.TargetTypeQualifiers.Add(typeof(TTarget));
@@ -53,6 +59,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
+        /// <returns>The builder instance for fluent chaining.</returns>
         public AssetBindingBuilder<TAsset> ToTarget(params Type[] targetTypes)
         {
             binding.TargetTypeQualifiers.AddRange(targetTypes);
@@ -64,6 +71,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// has one of the specified names.
         /// </summary>
         /// <param name="memberNames">The field or property names on the injection target that this binding should apply to.</param>
+        /// <returns>The builder instance for fluent chaining.</returns>
         public AssetBindingBuilder<TAsset> ToMember(params string[] memberNames)
         {
             binding.MemberNameQualifiers.AddRange(memberNames);
@@ -77,6 +85,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Locate the <see cref="Object" /> in a <see cref="Resources" /> folder at the specified path using <see cref="Resources.Load(string)" />.
         /// </summary>
+        /// <param name="path">The resource path.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromResources(string path)
         {
             binding.AssetPath = path;
@@ -88,6 +98,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Locate all <see cref="Object" />s in a <see cref="Resources" /> folder at the specified path using <see cref="Resources.LoadAll(string, System.Type)" />.
         /// </summary>
+        /// <param name="path">The resource path.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromResourcesAll(string path)
         {
             binding.AssetPath = path;
@@ -99,6 +111,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Locate the <see cref="Object" /> asset at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAssetAtPath(string, System.Type)" />.
         /// </summary>
+        /// <param name="assetPath">The asset path.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromAssetLoad(string assetPath)
         {
             binding.AssetPath = assetPath;
@@ -111,6 +125,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// Locate all sub-assets of type <see cref="Object" /> in a single asset file
         /// at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAllAssetsAtPath(string)" />.
         /// </summary>
+        /// <param name="assetPath">The asset path.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromAssetLoadAll(string assetPath)
         {
             binding.AssetPath = assetPath;
@@ -123,6 +139,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// Locate all <see cref="Object" />s of type <typeparamref name="TAsset" /> in the specified folder
         /// using <see cref="UnityEditor.AssetDatabase.FindAssets(string, string[])" />.
         /// </summary>
+        /// <param name="folderPath">The folder path.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromFolder(string folderPath)
         {
             binding.AssetPath = folderPath;
@@ -138,6 +156,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Bind to the specified <see cref="Object" /> instance.
         /// </summary>
+        /// <param name="instance">The asset instance.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromInstance(TAsset instance)
         {
             binding.AssetLoadType = AssetLoadType.Instance;
@@ -149,6 +169,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Locate the <see cref="Object" /> using the provided method.
         /// </summary>
+        /// <param name="method">The method to resolve the asset.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromMethod(Func<TAsset> method)
         {
             binding.AssetLoadType = AssetLoadType.Instance;
@@ -160,6 +182,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Asset
         /// <summary>
         /// Locate multiple <see cref="Object" />s using the provided method.
         /// </summary>
+        /// <param name="method">The method to resolve the assets.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromMethod(Func<IEnumerable<TAsset>> method)
         {
             binding.AssetLoadType = AssetLoadType.Instance;
