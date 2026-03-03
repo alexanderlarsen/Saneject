@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Experimental.Runtime.Scopes;
 using UnityEngine;
@@ -16,6 +17,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         /// <summary>
         /// The <see cref="ComponentBinding"/> being configured.
         /// </summary>
+        [EditorBrowsable(EditorBrowsableState.Never)]
         protected readonly ComponentBinding binding;
 
         /// <summary>
@@ -119,7 +121,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         #region SCOPE LOCATOR METHODS
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" />'s own <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" />'s own <see cref="Transform" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromScopeSelf()
@@ -131,7 +133,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" />'s direct <see cref="Transform.parent" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" />'s direct <see cref="Transform.parent" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromScopeParent()
@@ -143,7 +145,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any ancestor <see cref="Transform" /> of the <see cref="Scope" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on any ancestor <see cref="Transform" /> of the <see cref="Scope" />.
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
         /// </summary>
         /// <param name="includeSelf">Whether to include the current transform in the search.</param>
@@ -158,7 +160,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" />'s first direct child <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" />'s first direct child <see cref="Transform" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromScopeFirstChild()
@@ -170,7 +172,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" />'s last direct child <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" />'s last direct child <see cref="Transform" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromScopeLastChild()
@@ -182,7 +184,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" />'s direct child <see cref="Transform" /> with index.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" />'s direct child <see cref="Transform" /> with index.
         /// </summary>
         /// <param name="index">The child index.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -196,7 +198,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any descendant <see cref="Transform" /> of the <see cref="Scope" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on any descendant <see cref="Transform" /> of the <see cref="Scope" />.
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// </summary>
         /// <param name="includeSelf">Whether to include the current transform in the search.</param>
@@ -211,7 +213,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any sibling <see cref="Transform" /> of the <see cref="Scope" /> (other children of the same parent).
+        /// Locate the <see cref="UnityEngine.Component" /> on any sibling <see cref="Transform" /> of the <see cref="Scope" /> (other children of the same parent).
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromScopeSiblings()
@@ -227,7 +229,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         #region ROOT LOCATOR METHODS
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromRootSelf()
@@ -239,7 +241,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />'s first direct child <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />'s first direct child <see cref="Transform" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromRootFirstChild()
@@ -251,7 +253,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />'s last direct child <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />'s last direct child <see cref="Transform" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromRootLastChild()
@@ -263,7 +265,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />'s direct child <see cref="Transform" /> with index.
+        /// Locate the <see cref="UnityEngine.Component" /> on the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />'s direct child <see cref="Transform" /> with index.
         /// </summary>
         /// <param name="index">The child index.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -277,7 +279,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any descendant <see cref="Transform" /> of the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on any descendant <see cref="Transform" /> of the <see cref="Scope" /> <see cref="Transform" /> <see cref="Transform.root" />.
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// </summary>
         /// <param name="includeSelf">Whether to include the root in the search.</param>
@@ -296,8 +298,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         #region INJECTION TARGET LOCATOR METHODS
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the injection target's own <see cref="Transform" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the injection target's own <see cref="Transform" />.
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromTargetSelf()
@@ -309,8 +311,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the injection target's direct <see cref="Transform.parent" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the injection target's direct <see cref="Transform.parent" />.
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromTargetParent()
@@ -322,9 +324,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any ancestor <see cref="Transform" /> of the injection target.
+        /// Locate the <see cref="UnityEngine.Component" /> on any ancestor <see cref="Transform" /> of the injection target.
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="includeSelf">Whether to include the target transform in the search.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -338,8 +340,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the injection target's first direct child <see cref="Transform" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the injection target's first direct child <see cref="Transform" />.
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromTargetFirstChild()
@@ -351,8 +353,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the injection target's last direct child <see cref="Transform" />.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the injection target's last direct child <see cref="Transform" />.
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromTargetLastChild()
@@ -364,8 +366,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the injection target's direct child <see cref="Transform" /> with index.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the injection target's direct child <see cref="Transform" /> with index.
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="index">The child index.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -379,9 +381,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any descendant <see cref="Transform" /> of the injection target.
+        /// Locate the <see cref="UnityEngine.Component" /> on any descendant <see cref="Transform" /> of the injection target.
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="includeSelf">Whether to include the target transform in the search.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -395,8 +397,8 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any sibling <see cref="Transform" /> of the injection target (other children of the same parent).
-        /// Injection target is the Transform of the <see cref="Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on any sibling <see cref="Transform" /> of the injection target (other children of the same parent).
+        /// Injection target is the Transform of the <see cref="UnityEngine.Component" /> of a field/property marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
         public ComponentFilterBuilder<TComponent> FromTargetSiblings()
@@ -412,7 +414,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         #region CUSTOM TRANSFORM LOCATOR METHODS
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the specified <see cref="Transform" />.
         /// </summary>
         /// <param name="transform">The transform to search on.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -426,7 +428,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the direct parent of the specified <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the direct parent of the specified <see cref="Transform" />.
         /// </summary>
         /// <param name="transform">The transform whose parent to search on.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -440,7 +442,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any ancestor <see cref="Transform" /> of the specified <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on any ancestor <see cref="Transform" /> of the specified <see cref="Transform" />.
         /// Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
         /// </summary>
         /// <param name="target">The transform whose ancestors to search.</param>
@@ -459,7 +461,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />'s first direct child <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the specified <see cref="Transform" />'s first direct child <see cref="Transform" />.
         /// </summary>
         /// <param name="transform">The transform whose first child to search on.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -473,7 +475,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />'s last direct child <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on the specified <see cref="Transform" />'s last direct child <see cref="Transform" />.
         /// </summary>
         /// <param name="transform">The transform whose last child to search on.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -487,7 +489,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on the specified <see cref="Transform" />'s direct child <see cref="Transform" /> with index.
+        /// Locate the <see cref="UnityEngine.Component" /> on the specified <see cref="Transform" />'s direct child <see cref="Transform" /> with index.
         /// </summary>
         /// <param name="transform">The transform whose child to search on.</param>
         /// <param name="index">The child index.</param>
@@ -505,7 +507,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any descendant <see cref="Transform" /> of the specified <see cref="Transform" />.
+        /// Locate the <see cref="UnityEngine.Component" /> on any descendant <see cref="Transform" /> of the specified <see cref="Transform" />.
         /// Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
         /// </summary>
         /// <param name="transform">The transform whose descendants to search.</param>
@@ -524,7 +526,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> on any sibling <see cref="Transform" /> of the specified <see cref="Transform" /> (other children of the same parent).
+        /// Locate the <see cref="UnityEngine.Component" /> on any sibling <see cref="Transform" /> of the specified <see cref="Transform" /> (other children of the same parent).
         /// </summary>
         /// <param name="transform">The transform whose siblings to search.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -542,7 +544,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         #region SPECIAL LOCATOR METHODS
 
         /// <summary>
-        /// Locate the <see cref="Component" /> anywhere in the scene using <see cref="UnityEngine.Object.FindObjectsByType(System.Type,UnityEngine.FindObjectsSortMode)" />
+        /// Locate the <see cref="UnityEngine.Component" /> anywhere in the scene using <see cref="UnityEngine.Object.FindObjectsByType(System.Type,UnityEngine.FindObjectsSortMode)" />
         /// - or within an isolated prefab asset using <see cref="UnityEngine.Component.GetComponentsInChildren(System.Type,bool)" /> from the prefab root.
         /// </summary>
         /// <param name="findObjectsInactive">Whether to include inactive objects in the search.</param>
@@ -561,7 +563,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Bind to the specified <see cref="Component" /> instance.
+        /// Bind to the specified <see cref="UnityEngine.Component" /> instance.
         /// </summary>
         /// <param name="instance">The component instance.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -574,7 +576,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate the <see cref="Component" /> using the provided method.
+        /// Locate the <see cref="UnityEngine.Component" /> using the provided method.
         /// </summary>
         /// <param name="method">The method to resolve the component.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
@@ -587,7 +589,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Locate multiple <see cref="Component" />s using the provided method.
+        /// Locate multiple <see cref="UnityEngine.Component" />s using the provided method.
         /// </summary>
         /// <param name="method">The method to resolve the components.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}"/> to further configure the binding.</returns>
