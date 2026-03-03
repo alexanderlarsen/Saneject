@@ -81,32 +81,32 @@ namespace Plugins.Saneject.Experimental.Editor.EditorWindows
             (
                 label: "Scene",
                 tooltip: "Show a confirmation dialog before injecting a whole scene.",
-                currentValue: UserSettings.AskBefore_Inject_Scene,
-                onChanged: newValue => UserSettings.AskBefore_Inject_Scene = newValue
+                currentValue: UserSettings.AskBeforeInjectScene,
+                onChanged: newValue => UserSettings.AskBeforeInjectScene = newValue
             );
 
             DrawToggle
             (
                 label: "Prefab Asset",
                 tooltip: "Show a confirmation dialog before injecting a prefab asset.",
-                currentValue: UserSettings.AskBefore_Inject_PrefabAsset,
-                onChanged: newValue => UserSettings.AskBefore_Inject_PrefabAsset = newValue
+                currentValue: UserSettings.AskBeforeInjectPrefabAsset,
+                onChanged: newValue => UserSettings.AskBeforeInjectPrefabAsset = newValue
             );
 
             DrawToggle
             (
                 label: "Selected Scene Hierarchies",
                 tooltip: "Show a confirmation dialog before injecting selected scene hierarchies.",
-                currentValue: UserSettings.AskBefore_Inject_SelectedSceneHierarchies,
-                onChanged: newValue => UserSettings.AskBefore_Inject_SelectedSceneHierarchies = newValue
+                currentValue: UserSettings.AskBeforeInjectSelectedSceneHierarchies,
+                onChanged: newValue => UserSettings.AskBeforeInjectSelectedSceneHierarchies = newValue
             );
 
             DrawToggle
             (
                 label: "Batch Injection",
                 tooltip: "Show a confirmation dialog before batch injecting scenes and prefab assets.",
-                currentValue: UserSettings.AskBefore_BatchInject,
-                onChanged: newValue => UserSettings.AskBefore_BatchInject = newValue
+                currentValue: UserSettings.AskBeforeBatchInject,
+                onChanged: newValue => UserSettings.AskBeforeBatchInject = newValue
             );
 
             EditorGUILayout.Space(8);

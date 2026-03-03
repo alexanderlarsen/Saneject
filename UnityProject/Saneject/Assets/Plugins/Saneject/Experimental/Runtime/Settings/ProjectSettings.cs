@@ -9,7 +9,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 {
     /// <summary>
     /// Provides access to project-wide settings shared across all users.
+    /// <remarks>
     /// Settings are stored in <c>ProjectSettings/Saneject/ProjectSettings.json</c>.
+    /// </remarks>
     /// </summary>
     public static class ProjectSettings
     {

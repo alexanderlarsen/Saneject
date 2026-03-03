@@ -10,7 +10,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
 {
     /// <summary>
     /// Provides access to user-specific settings stored locally for this user.
-    /// Settings are backed stored in <see cref="UnityEditor.EditorPrefs" />.
+    /// <remarks>
+    /// Settings are stored locally in <see cref="UnityEditor.EditorPrefs" />.
+    /// </remarks>
     /// </summary>
     public static class UserSettings
     {
@@ -21,7 +23,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         /// <summary>
         /// Show a confirmation dialog before injecting a whole scene.
         /// </summary>
-        public static bool AskBefore_Inject_Scene
+        public static bool AskBeforeInjectScene
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
@@ -30,7 +32,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         /// <summary>
         /// Show a confirmation dialog before injecting a prefab asset.
         /// </summary>
-        public static bool AskBefore_Inject_PrefabAsset
+        public static bool AskBeforeInjectPrefabAsset
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
@@ -39,7 +41,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         /// <summary>
         /// Show a confirmation dialog before injecting selected scene hierarchies.
         /// </summary>
-        public static bool AskBefore_Inject_SelectedSceneHierarchies
+        public static bool AskBeforeInjectSelectedSceneHierarchies
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
@@ -48,7 +50,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Settings
         /// <summary>
         /// Show a confirmation dialog before batch injecting scenes and prefab assets.
         /// </summary>
-        public static bool AskBefore_BatchInject
+        public static bool AskBeforeBatchInject
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);

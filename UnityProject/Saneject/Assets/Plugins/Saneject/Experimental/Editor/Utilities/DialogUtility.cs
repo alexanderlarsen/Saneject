@@ -30,7 +30,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 string sceneName,
                 ContextWalkFilter walkFilter)
             {
-                if (!UserSettings.AskBefore_Inject_Scene)
+                if (!UserSettings.AskBeforeInjectScene)
                     return true;
 
                 string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
@@ -55,7 +55,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 string prefabName,
                 ContextWalkFilter walkFilter)
             {
-                if (!UserSettings.AskBefore_Inject_PrefabAsset)
+                if (!UserSettings.AskBeforeInjectPrefabAsset)
                     return true;
 
                 string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
@@ -78,7 +78,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static bool Confirm_InjectSceneHierarchy(ContextWalkFilter walkFilter)
             {
-                if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
+                if (!UserSettings.AskBeforeInjectSelectedSceneHierarchies)
                     return true;
 
                 string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
@@ -101,7 +101,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
 
             public static bool Confirm_InjectSelectedSceneHierarchies(ContextWalkFilter walkFilter)
             {
-                if (!UserSettings.AskBefore_Inject_SelectedSceneHierarchies)
+                if (!UserSettings.AskBeforeInjectSelectedSceneHierarchies)
                     return true;
 
                 string walkFilterString = ObjectNames.NicifyVariableName(walkFilter.ToString());
@@ -144,7 +144,7 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
                 int prefabCount,
                 bool isBatchInjectorEditorWindow)
             {
-                if (!UserSettings.AskBefore_BatchInject)
+                if (!UserSettings.AskBeforeBatchInject)
                     return true;
 
                 StringBuilder sb = new();
