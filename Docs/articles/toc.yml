@@ -60,6 +60,5 @@
       href: reference/troubleshooting.md
     - name: Tested Unity versions
       href: reference/tested-unity-versions.md
-
-- name: MIT license
-  href: mit-license.md
+    - name: MIT license
+      href: mit-license.md
