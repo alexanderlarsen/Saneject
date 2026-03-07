@@ -1,11 +1,9 @@
-- name: Introduction
-  href: introduction.md
-
-- name: Key concepts
-  href: key-concepts.md
-
 - name: Getting started
   items:
+    - name: Introduction
+      href: getting-started/introduction.md
+    - name: Feature overview
+      href: getting-started/feature-overview.md
     - name: Quick start
       href: getting-started/quick-start.md
     - name: Sample game
@@ -19,30 +17,42 @@
       href: core-concepts/bindings.md
     - name: Contexts
       href: core-concepts/contexts.md
-    - name: Serialized interfaces
-      href: core-concepts/serialized-interfaces.md
+    - name: Field & property injection
+      href: core-concepts/field-and-property-injection.md
     - name: Method injection
       href: core-concepts/method-injection.md
-    - name: Proxies
-      href: core-concepts/proxies.md
-    - name: GlobalScope
+    - name: Serialized interfaces
+      href: core-concepts/serialized-interfaces.md
+    - name: Runtime proxies
+      href: core-concepts/runtime-proxies.md
+    - name: Global scope
       href: core-concepts/global-scope.md
 
 - name: Editor & tooling
   items:
-    - name: Batch injector window
-      href: editor-and-tooling/batch-injector-window.md
-    - name: Custom inspector
-      href: editor-and-tooling/custom-inspector.md
-    - name: Roslyn tools
-      href: editor-and-tooling/roslyn-tools.md
+    - name: Injection menus
+      href: editor-and-tooling/injection-menus.md
+    - name: Batch injection
+      href: editor-and-tooling/batch-injection.md
+    - name: Inspectors
+      items:
+        - name: Scope inspector
+          href: editor-and-tooling/inspectors/scope-inspector.md
+        - name: Runtime proxy inspector
+          href: editor-and-tooling/inspectors/runtime-proxy-inspector.md
+        - name: MonoBehaviour inspector
+          href: editor-and-tooling/inspectors/monobehaviour-inspector.md
+    - name: Validation
+      href: editor-and-tooling/validation.md
+    - name: Logging
+      href: editor-and-tooling/logging.md
     - name: Settings
       href: editor-and-tooling/settings.md
+    - name: Code analyzers
+      href: editor-and-tooling/code-analyzers.md
 
 - name: Architecture
-  items:
-    - name: Injection pipeline
-      href: architecture/injection-pipeline.md
+  href: architecture.md
 
 - name: Reference
   items:
@@ -50,5 +60,6 @@
       href: reference/troubleshooting.md
     - name: Tested Unity versions
       href: reference/tested-unity-versions.md
-    - name: MIT license
-      href: reference/mit-license.md
+
+- name: MIT license
+  href: mit-license.md
