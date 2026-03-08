@@ -1,8 +1,8 @@
 ---
-title: Scopes
+title: Scope
 ---
 
-# Scopes
+# Scope
 
 A scope is a `MonoBehaviour` that declares dependency bindings for a part of your hierarchy.
 
@@ -15,7 +15,7 @@ runtime proxy swapping.
 
 Scopes work on scene objects, prefab instances, and prefab assets. How they participate in injection and how their
 bindings resolve across scenes and prefabs depends on context filtering and context isolation settings.
-See [Context](contexts.md) for details.
+See [Context](context.md) for details.
 
 ## Declaring bindings in a scope
 
@@ -37,7 +37,7 @@ public class EnemyScope : Scope
 This declares a binding for `AIController` and tells Saneject where to look for the instance (`FromScopeSelf()` means
 the scope's own `Transform`).
 
-For more details and binding examples, see [Bindings](bindings.md).
+For more details and binding examples, see [Bindings](binding.md).
 
 ## Hierarchy, overrides, and fallback
 
@@ -158,7 +158,7 @@ At runtime, `Scope.Awake()` (execution order `-10000`) runs right after global r
 `SwapProxiesWithRealInstances()` on each registered swap target. That generated method replaces proxy references with
 the real instances using normal field assignment, with no reflection.
 
-The full proxy mechanism is documented in [Runtime proxies](runtime-proxies.md).
+The full proxy mechanism is documented in [Runtime proxies](runtime-proxy.md).
 
 Proxy swap flow:
 
@@ -198,15 +198,17 @@ public partial class CombatHud : MonoBehaviour
 }
 ```
 
-See [Runtime proxies](runtime-proxies.md) and [Serialized interfaces](serialized-interfaces.md) for details.
+See [Runtime proxies](runtime-proxy.md) and [Serialized interfaces](serialized-interface.md) for details.
 
 ## Related pages
 
-- [Bindings](bindings.md)
+- [Bindings](binding.md)
 - [Global scope](global-scope.md)
-- [Runtime proxies](runtime-proxies.md)
-- [Serialized interfaces](serialized-interfaces.md)
-- [Contexts](contexts.md)
+- [Runtime proxies](runtime-proxy.md)
+- [Serialized interfaces](serialized-interface.md)
+- [Contexts](context.md)
+
+
 
 
 

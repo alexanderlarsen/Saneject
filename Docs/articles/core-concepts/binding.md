@@ -1,7 +1,9 @@
 ---
-title: Contexts
+title: Binding
 ---
 
-# Contexts
+# Binding
 
 TODO: Draft this page.
+
+

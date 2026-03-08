@@ -11,20 +11,20 @@
 
 - name: Core concepts
   items:
-    - name: Scopes
-      href: core-concepts/scopes.md
-    - name: Bindings
-      href: core-concepts/bindings.md
-    - name: Contexts
-      href: core-concepts/contexts.md
+    - name: Scope
+      href: core-concepts/scope.md
+    - name: Binding
+      href: core-concepts/binding.md
+    - name: Context
+      href: core-concepts/context.md
     - name: Field & property injection
       href: core-concepts/field-and-property-injection.md
     - name: Method injection
       href: core-concepts/method-injection.md
-    - name: Serialized interfaces
-      href: core-concepts/serialized-interfaces.md
-    - name: Runtime proxies
-      href: core-concepts/runtime-proxies.md
+    - name: Serialized interface
+      href: core-concepts/serialized-interface.md
+    - name: Runtime proxy
+      href: core-concepts/runtime-proxy.md
     - name: Global scope
       href: core-concepts/global-scope.md
 
@@ -64,3 +64,4 @@
       href: reference/tested-unity-versions.md
     - name: MIT license
       href: mit-license.md
+
