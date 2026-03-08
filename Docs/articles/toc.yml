@@ -56,6 +56,8 @@
 
 - name: Reference
   items:
+    - name: Glossary
+      href: reference/glossary.md
     - name: Troubleshooting
       href: reference/troubleshooting.md
     - name: Tested Unity versions
