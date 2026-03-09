@@ -17,10 +17,8 @@
       href: core-concepts/binding.md
     - name: Context
       href: core-concepts/context.md
-    - name: Field & property injection
-      href: core-concepts/field-and-property-injection.md
-    - name: Method injection
-      href: core-concepts/method-injection.md
+    - name: Field, property & method injection
+      href: core-concepts/field-property-and-method-injection.md 
     - name: Serialized interface
       href: core-concepts/serialized-interface.md
     - name: Runtime proxy

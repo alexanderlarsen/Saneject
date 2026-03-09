@@ -8,8 +8,8 @@ Editor-time dependency injection for Unity.
 
 ## Get Started
 
-- [Introduction](articles/introduction.md)
-- [Getting Started](articles/getting-started/quick-start.md)
+- [Introduction](docs/getting-started/introduction.md)
+- [Getting Started](docs/getting-started/quick-start.md)
 
 ## Core Concepts
 
@@ -19,4 +19,4 @@ Editor-time dependency injection for Unity.
 
 ## API Reference
 
-- [API Reference](api/index.md)
+- [API Reference](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector)
