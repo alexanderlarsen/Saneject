@@ -4,6 +4,12 @@ title: Glossary
 
 # Glossary
 
+## A
+
+### Auto-property backing field
+
+Compiler-generated field that stores an auto-property value. Saneject can inject these fields with `[field: Inject]`.
+
 ## B
 
 ### Binding
@@ -48,6 +54,12 @@ Project setting (`UseContextIsolation`) that controls whether dependency resolut
 
 Filter enum used during graph walk to include specific context sets in a run (`AllContexts`, `SameContextsAsSelection`, `SceneObjects`, `PrefabAssetObjects`, `PrefabInstances`).
 
+## E
+
+### Editor-time injection
+
+Saneject workflow that resolves dependencies and writes them into serialized objects in the Unity Editor, before entering Play Mode.
+
 ## I
 
 ### Injection site
@@ -89,3 +101,7 @@ Non-prefab `GameObject` in a scene.
 ### Scope
 
 `MonoBehaviour` that declares bindings for a part of your hierarchy.
+
+### suppressMissingErrors
+
+`InjectAttribute` option that suppresses missing binding and missing dependency error logs for a specific injection site.
