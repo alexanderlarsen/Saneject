@@ -131,7 +131,7 @@ public class AudioBootstrap : MonoBehaviour
 }
 ```
 
-`GlobalScope` API overview:
+API overview ([Full API here](xref:Plugins.Saneject.Experimental.Runtime.Scopes.GlobalScope)):
 
 - `GlobalScope.GetComponent<T>()`
 - `GlobalScope.TryGetComponent<T>(out T component)`
