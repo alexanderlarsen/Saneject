@@ -22,8 +22,8 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
         
         #region Menu item methods
 
-        [MenuItem("Assets/Saneject/Batch Inject/Selected Assets", false, Priority_Item_Inject_SelectedAssets_BatchInjection),
-         MenuItem("Saneject/Batch Inject/Selected Assets", false, Priority_Item_Inject_SelectedAssets_BatchInjection)]
+        [MenuItem("Assets/Saneject/Batch Inject/Selected Assets (All Contexts)", false, Priority_Item_Inject_SelectedAssets_BatchInjection),
+         MenuItem("Saneject/Batch Inject/Selected Assets (All Contexts)", false, Priority_Item_Inject_SelectedAssets_BatchInjection)]
         private static void BatchInject_SelectedAssets(MenuCommand cmd)
         {
             InjectionUtility.BatchInjectSelectedAssets();
@@ -33,8 +33,8 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
 
         #region Validation methods
 
-        [MenuItem("Assets/Saneject/Batch Inject/Selected Assets", true),
-         MenuItem("Saneject/Batch Inject/Selected Assets", true)]
+        [MenuItem("Assets/Saneject/Batch Inject/Selected Assets (All Contexts)", true),
+         MenuItem("Saneject/Batch Inject/Selected Assets (All Contexts)", true)]
         private static bool Validate_BatchInject_SelectedAssets()
         {
             return Selection

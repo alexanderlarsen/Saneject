@@ -16,6 +16,14 @@ Compiler-generated field that stores an auto-property value. Saneject can inject
 
 ## B
 
+### Batch injection
+
+Running injection across multiple selected scene and prefab assets in one operation.
+
+### Batch Injector
+
+Editor window for preparing and running batch injection with per-asset enable state, status, and `ContextWalkFilter`.
+
 ### Binding
 
 Instruction declared in a `Scope` that tells Saneject what to resolve, how to inject it, and where to search.
@@ -79,6 +87,10 @@ Entry added to `GlobalScope` at runtime, keyed by the component's concrete type 
 Static runtime registry and service locator in Saneject for globally accessible `Component` instances.
 
 ## I
+
+### Injection menu
+
+Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` that starts an injection run with a selected target and `ContextWalkFilter`.
 
 ### Injection site
 
@@ -147,4 +159,3 @@ Non-prefab `GameObject` in a scene.
 ### suppressMissingErrors
 
 `InjectAttribute` option that suppresses missing binding and missing dependency error logs for a specific injection site.
-
