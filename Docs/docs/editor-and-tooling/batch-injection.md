@@ -167,6 +167,8 @@ Logging output is affected by user settings in `Saneject/Settings`, including:
 - `Log Injection Summary`
 - `Log Unused Bindings`
 
+For more information on logging, see [Logging](logging.md).
+
 ## Related pages
 
 - [Injection menus](injection-menus.md)
