@@ -92,6 +92,10 @@ Static runtime registry and service locator in Saneject for globally accessible 
 
 Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` that starts an injection run with a selected target and `ContextWalkFilter`.
 
+### Injection status
+
+Per-run result classification used by batch injection rows: Unknown, Success, Warning, or Error.
+
 ### Injection site
 
 Injected field, property or method.
