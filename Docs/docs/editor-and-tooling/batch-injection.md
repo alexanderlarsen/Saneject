@@ -8,18 +8,30 @@ Batch injection means running Saneject's normal editor injection pipeline across
 
 Instead of opening one scene or prefab at a time and injecting manually, you can process a larger set of scene and prefab assets in one run and review one consolidated console output.
 
-This is especially useful when your project grows and you need frequent dependency validation across multiple content areas.
+This is especially useful when your project grows and you need frequent dependency validation across multiple content areas. 
+
+> It is recommended to batch inject the project periodically or before builds to verify that all dependencies are correctly resolved and that there are no missing references.
 
 ## Ways to run batch injection
 
-### 1. Selected assets (focused runs)
+### 1. Batch Injector window
+
+The window is designed for repeatable, project-scale batch injection runs with persistent scene/prefab lists and settings.
+
+![Saneject Batch Injector window](../../images/batch-injector-window.webp)
+
+Menu path:
+
+- `Saneject/Batch Inject/Open Batch Injector Window`
+
+### 2. Selected assets
+
+Use this when you want a targeted pass for a folder or a specific Project window selection.
 
 Menu paths:
 
 - `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - `Saneject/Batch Inject/Selected Assets (All Contexts)`
-
-Use this when you want a targeted pass for a folder or a specific Project window selection.
 
 Behavior:
 
@@ -30,16 +42,6 @@ Behavior:
 5. It asks whether modified open scenes should be saved.
 6. It injects the selected scenes and prefabs.
 7. It logs per-asset output plus a final batch summary.
-
-### 2. Batch Injector window (repeatable and project-scale runs)
-
-Menu path:
-
-- `Saneject/Batch Inject/Open Batch Injector Window`
-
-![Saneject Batch Injector window](../../images/batch-injector-window.webp)
-
-The window is designed for repeatable runs where you maintain scene and prefab lists over time.
 
 ## Batch Injector window features
 
@@ -148,8 +150,6 @@ In the Batch Injector window, each row has a status icon with one of these meani
 
 ## Logging model for batch runs
 
-![Batch injection console logs](../../images/batch-injector-logs.webp)
-
 Batch logging is scoped in layers:
 
 1. A batch header for scenes and/or prefabs.
@@ -158,6 +158,8 @@ Batch logging is scoped in layers:
 4. A final batch summary section with aggregated scene and prefab summaries and elapsed times.
 
 If no `Scope` components are found in a run, Saneject logs that nothing was injected for that run.
+
+![Batch injection console logs](../../images/batch-injector-logs.webp)
 
 Logging output is affected by user settings in `Saneject/Settings`, including:
 
