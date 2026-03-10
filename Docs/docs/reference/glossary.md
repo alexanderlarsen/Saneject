@@ -86,6 +86,10 @@ Reusable prefab definition in the Project window.
 
 Instantiated prefab placed in a scene or nested inside another prefab.
 
+### Proxy swap target
+
+Component that implements `IRuntimeProxySwapTarget` and is asked at runtime startup to replace proxy references with resolved real instances.
+
 ## R
 
 ### Runtime proxy binding
@@ -102,6 +106,11 @@ Non-prefab `GameObject` in a scene.
 
 `MonoBehaviour` that declares bindings for a part of your hierarchy.
 
+### Serialized interface
+
+`SerializeInterface` member (`IService`, `IService[]`, or `List<IService>`) that Saneject persists through a generated hidden `Object` backing member.
+
 ### suppressMissingErrors
 
 `InjectAttribute` option that suppresses missing binding and missing dependency error logs for a specific injection site.
+
