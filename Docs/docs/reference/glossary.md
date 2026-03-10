@@ -6,6 +6,10 @@ title: Glossary
 
 ## A
 
+### Assembly proxy manifest
+
+Roslyn-generated, per-assembly list of concrete component types that require runtime proxy script stubs.
+
 ### Auto-property backing field
 
 Compiler-generated field that stores an auto-property value. Saneject can inject these fields with `[field: Inject]`.
@@ -92,9 +96,25 @@ Component that implements `IRuntimeProxySwapTarget` and is asked at runtime star
 
 ## R
 
+### Runtime proxy
+
+`ScriptableObject` placeholder asset (`RuntimeProxy<TComponent>`) injected into interface members at editor time and swapped to the real instance during scope startup.
+
 ### Runtime proxy binding
 
 Component binding configured with `FromRuntimeProxy()` that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.
+
+### Runtime proxy instance mode
+
+Lifetime policy for creation-based runtime proxy resolution: `Transient` creates per resolve, `Singleton` reuses one instance through `GlobalScope`.
+
+### Runtime proxy resolve method
+
+Strategy used by a runtime proxy to find or create its target instance at runtime, such as `FromGlobalScope` or `FromComponentOnPrefab`.
+
+### Runtime proxy script stub
+
+Auto-generated partial class that inherits `RuntimeProxy<TComponent>`, is marked with `[GenerateRuntimeProxy]`, and is extended by Roslyn-generated interface member stubs.
 
 ## S
 
