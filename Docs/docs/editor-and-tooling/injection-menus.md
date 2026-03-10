@@ -22,7 +22,7 @@ Saneject exposes the same injection commands in multiple Unity menus:
 - Project window context menu: `Assets/Saneject/Batch Inject/Selected Assets`
 - Main menu batch shortcut: `Saneject/Batch Inject/Selected Assets`
 
-There is also a dedicated batch window:
+There is also a dedicated batch injector window:
 
 - `Saneject/Batch Inject/Open Batch Injector Window`
 
