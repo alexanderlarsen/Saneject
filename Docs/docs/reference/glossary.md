@@ -64,6 +64,20 @@ Filter enum used during graph walk to include specific context sets in a run (`A
 
 Saneject workflow that resolves dependencies and writes them into serialized objects in the Unity Editor, before entering Play Mode.
 
+## G
+
+### Global component binding
+
+Binding declared with `BindGlobal<TComponent>()` that resolves a component in the editor and stores it on the declaring `Scope` for runtime registration.
+
+### Global registration
+
+Entry added to `GlobalScope` at runtime, keyed by the component's concrete type and owned by the caller that registered it.
+
+### GlobalScope
+
+Static runtime registry and service locator in Saneject for globally accessible `Component` instances.
+
 ## I
 
 ### Injection site
