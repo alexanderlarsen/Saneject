@@ -34,12 +34,12 @@
       href: editor-and-tooling/batch-injection.md
     - name: Inspectors
       items:
+        - name: MonoBehaviour inspector
+          href: editor-and-tooling/inspectors/monobehaviour-inspector.md
         - name: Scope inspector
           href: editor-and-tooling/inspectors/scope-inspector.md
         - name: Runtime proxy inspector
           href: editor-and-tooling/inspectors/runtime-proxy-inspector.md
-        - name: MonoBehaviour inspector
-          href: editor-and-tooling/inspectors/monobehaviour-inspector.md
     - name: Validation
       href: editor-and-tooling/validation.md
     - name: Logging

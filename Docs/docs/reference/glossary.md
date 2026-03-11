@@ -88,6 +88,10 @@ Static runtime registry and service locator in Saneject for globally accessible 
 
 ## I
 
+### Injection controls
+
+Foldout section in the `Scope` inspector that runs scene, hierarchy, or prefab injection with specific `ContextWalkFilter` options.
+
 ### Injection menu
 
 Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` that starts an injection run with a selected target and `ContextWalkFilter`.
@@ -155,6 +159,10 @@ Non-prefab `GameObject` in a scene.
 ### Scope
 
 `MonoBehaviour` that declares bindings for a part of your hierarchy.
+
+### Scope hierarchy
+
+Tree view in the `Scope` inspector that shows reachable scopes from the current hierarchy root and allows navigation to each scope `GameObject`.
 
 ### Serialized interface
 

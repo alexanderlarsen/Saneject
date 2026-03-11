@@ -86,6 +86,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Scopes
             if (component is not IRuntimeProxySwapTarget)
                 throw new ArgumentException($"Component {component.name} does not implement {nameof(IRuntimeProxySwapTarget)}");
 
+            if (proxySwapTargets.Contains(component))
+                return;
+
             proxySwapTargets.Add(component);
         }
 
