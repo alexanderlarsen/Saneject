@@ -1,4 +1,5 @@
-﻿using System.ComponentModel;
+﻿using System;
+using System.ComponentModel;
 using UnityEngine;
 
 namespace Plugins.Saneject.Experimental.Runtime.Proxy
@@ -14,6 +15,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
     [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class RuntimeProxyBase : ScriptableObject
     {
+        [NonSerialized]
+        protected UnityEngine.Object resolvedInstance;
+        
         /// <summary>
         /// Determines how the proxy locates or creates the target instance at runtime.
         /// </summary>

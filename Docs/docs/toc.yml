@@ -18,7 +18,7 @@
     - name: Context
       href: core-concepts/context.md
     - name: Field, property & method injection
-      href: core-concepts/field-property-and-method-injection.md 
+      href: core-concepts/field-property-and-method-injection.md
     - name: Serialized interface
       href: core-concepts/serialized-interface.md
     - name: Runtime proxy
@@ -35,7 +35,7 @@
     - name: Inspectors
       items:
         - name: MonoBehaviour inspector
-          href: editor-and-tooling/inspectors/monobehaviour-inspector.md  
+          href: editor-and-tooling/inspectors/monobehaviour-inspector.md
         - name: Scope inspector
           href: editor-and-tooling/inspectors/scope-inspector.md
         - name: Runtime proxy inspector
@@ -56,8 +56,6 @@
   items:
     - name: Glossary
       href: reference/glossary.md
-    - name: Troubleshooting
-      href: reference/troubleshooting.md
     - name: Tested Unity versions
       href: reference/tested-unity-versions.md
     - name: MIT license

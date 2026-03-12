@@ -142,6 +142,10 @@ Component that implements `IRuntimeProxySwapTarget` and is asked at runtime star
 
 Component binding configured with `FromRuntimeProxy()` that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.
 
+### Runtime proxy inspector
+
+Read-only custom inspector for runtime proxy assets (`RuntimeProxyBase`) that shows resolve configuration, implemented interfaces, and the resolved runtime instance during Play Mode.
+
 ### Runtime proxy instance mode
 
 Lifetime policy for creation-based runtime proxy resolution: `Transient` creates per resolve, `Singleton` reuses one instance through `GlobalScope`.

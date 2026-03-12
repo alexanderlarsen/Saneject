@@ -37,17 +37,25 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 Debug.LogWarning(
                     $"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. This is not allowed.");
 
+                resolvedInstance = null;
                 return null;
             }
 
             // Pure lookup-only
             if (resolveMethod == RuntimeProxyResolveMethod.FromGlobalScope)
-                return GlobalScope.GetComponent<TComponent>();
+            {
+                TComponent component = GlobalScope.GetComponent<TComponent>();
+                resolvedInstance = component;
+                return component;
+            }
 
             // Global get-or-create pre-check
             if (instanceMode == RuntimeProxyInstanceMode.Singleton &&
                 GlobalScope.TryGetComponent(out TComponent existing))
+            {
+                resolvedInstance = existing;
                 return existing;
+            }
 
             // Resolve via configured source
             TComponent resolved = resolveMethod switch
@@ -71,6 +79,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 Debug.LogError(
                     $"Saneject: '{typeof(TComponent)}' could not be resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
+                resolvedInstance = null;
                 return null;
             }
 
@@ -84,6 +93,7 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 Debug.Log(
                     $"Saneject: '{typeof(TComponent)}' resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
+            resolvedInstance = resolved;
             return resolved;
         }
 

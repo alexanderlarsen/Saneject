@@ -31,16 +31,29 @@ namespace Plugins.Saneject.Experimental.Editor.Inspectors
 
             serializedObject.Update();
 
-            if (Application.isPlaying)
-            {
-                Type memberInfo = target.GetType().BaseType;
+            Type memberInfo = target.GetType().BaseType;
 
-                if (memberInfo != null)
+            if (memberInfo != null)
+            {
+                Object value = null;
+
+                if (Application.isPlaying)
                 {
-                    FieldInfo field = memberInfo.GetField("instance", BindingFlags.NonPublic | BindingFlags.Instance);
-                    Object value = field?.GetValue(target) as Object;
-                    EditorGUILayout.ObjectField("Resolved Instance", value, typeof(Object), true);
+                    FieldInfo field = memberInfo.GetField("resolvedInstance", BindingFlags.NonPublic | BindingFlags.Instance);
+                    value = field?.GetValue(target) as Object;
                 }
+
+                EditorGUILayout.ObjectField
+                (
+                    new GUIContent
+                    (
+                        text: "Resolved Instance",
+                        tooltip: "The instance that is resolved at runtime. Always null in edit mode."
+                    ),
+                    value,
+                    objType: typeof(Object),
+                    allowSceneObjects: true
+                );
             }
 
             SerializedProperty resolveMethodProp = serializedObject.FindProperty("resolveMethod");
