@@ -46,6 +46,10 @@ Optional binding restriction declared with `ToID`, `ToTarget`, or `ToMember`.
 
 Binding declared as multiple (`BindComponents`/`BindAssets`/`BindMultiple...`) that resolves arrays or `List<>` injection sites.
 
+### Component path
+
+Full hierarchy path plus component type name, for example `Root/Player/HUD/HudController`. Used by Saneject log filtering and context menu actions.
+
 ### Context
 
 Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.
@@ -152,6 +156,10 @@ Auto-generated partial class that inherits `RuntimeProxy<TComponent>`, is marked
 
 ## S
 
+### Saneject inspector API
+
+Shared static inspector surface (`SanejectInspector`) that draws and validates serialized fields for Saneject-aware inspectors.
+
 ### Scene object
 
 Non-prefab `GameObject` in a scene.
@@ -171,3 +179,4 @@ Tree view in the `Scope` inspector that shows reachable scopes from the current 
 ### suppressMissingErrors
 
 `InjectAttribute` option that suppresses missing binding and missing dependency error logs for a specific injection site.
+

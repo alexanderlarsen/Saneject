@@ -35,7 +35,7 @@
     - name: Inspectors
       items:
         - name: MonoBehaviour inspector
-          href: editor-and-tooling/inspectors/monobehaviour-inspector.md
+          href: editor-and-tooling/inspectors/monobehaviour-inspector.md  
         - name: Scope inspector
           href: editor-and-tooling/inspectors/scope-inspector.md
         - name: Runtime proxy inspector

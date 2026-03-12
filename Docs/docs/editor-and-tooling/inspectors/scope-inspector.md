@@ -46,7 +46,7 @@ For details, see [Global scope](../../core-concepts/global-scope.md).
 ### Runtime Proxy Swap Targets
 
 `Runtime Proxy Swap Targets` is a read-only foldout listing components in this scope that have runtime proxy placeholders and will be asked to swap those proxies for resolved runtime instances during scope startup.
- 
+
 For full behavior, see [Runtime proxy](../../core-concepts/runtime-proxy.md).
 
 ### Scope Hierarchy
@@ -68,22 +68,22 @@ See [Scope](../../core-concepts/scope.md) and [Context](../../core-concepts/cont
 Scene object or prefab instance context:
 
 - `Inject Scene By Context`
-  - `All`: Injects the entire scene that this scope belongs to, including scene objects and prefab instances.
-  - `Scene Object`: Injects all scene objects in the scene that this scope belongs to, excluding prefab instances.
-  - `Prefab Instance`: Injects all prefab instances in the scene that this scope belongs to, excluding scene objects.
+    - `All`: Injects the entire scene that this scope belongs to, including scene objects and prefab instances.
+    - `Scene Object`: Injects all scene objects in the scene that this scope belongs to, excluding prefab instances.
+    - `Prefab Instance`: Injects all prefab instances in the scene that this scope belongs to, excluding scene objects.
 - `Inject Hierarchy By Context`
-  - `All`: Injects this entire scene hierarchy, including both scene objects and prefab instances.
-  - `This`: Injects all objects in this scene hierarchy that are the same context as this scope.
-  - `Scene Object`: Injects all scene objects in this scene hierarchy, excluding prefab instances.
-  - `Prefab Instance`: Injects all prefab instances in this scene hierarchy, excluding scene objects.
+    - `All`: Injects this entire scene hierarchy, including both scene objects and prefab instances.
+    - `This`: Injects all objects in this scene hierarchy that are the same context as this scope.
+    - `Scene Object`: Injects all scene objects in this scene hierarchy, excluding prefab instances.
+    - `Prefab Instance`: Injects all prefab instances in this scene hierarchy, excluding scene objects.
 
 Prefab asset context:
 
 - `Inject Prefab By Context`
-  - `All`: Injects this entire prefab hierarchy, including both prefab asset objects and prefab instances.
-  - `This`: Injects all objects in this prefab hierarchy that are the same context as this scope.
-  - `Prefab Asset`: Injects all prefab asset objects in this prefab hierarchy, excluding prefab instances.
-  - `Prefab Instance`: Injects all prefab instances in this prefab hierarchy, excluding prefab asset objects.
+    - `All`: Injects this entire prefab hierarchy, including both prefab asset objects and prefab instances.
+    - `This`: Injects all objects in this prefab hierarchy that are the same context as this scope.
+    - `Prefab Asset`: Injects all prefab asset objects in this prefab hierarchy, excluding prefab instances.
+    - `Prefab Instance`: Injects all prefab instances in this prefab hierarchy, excluding prefab asset objects.
 
 These options map to `ContextWalkFilter` values and use the same pipeline as the injection menus.
 See [Injection menus](../injection-menus.md) and [Context](../../core-concepts/context.md).
@@ -105,6 +105,15 @@ For injecting many hierarchies at once, use the workflows in [Injection menus](.
 
 During injection, Saneject resolves and serializes global binding outputs on the declaring scope and tracks proxy swap targets for runtime startup.
 
+## Log filtering context menus
+
+Saneject adds component context menu items that support logging workflows. Right click on component header:
+
+- `Saneject/Filter Logs By Scope Type`
+    - Sets the Console search text to filter by `Scope: <ScopeTypeName>`.
+- `Saneject/Filter Logs By Component Path`
+    - Sets the Console search text to filter by the selected Scope's path.
+ 
 ## Related pages
 
 - [Scope](../../core-concepts/scope.md)
