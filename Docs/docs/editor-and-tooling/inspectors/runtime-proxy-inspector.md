@@ -39,7 +39,8 @@ using UnityEngine;
 
 public class AudioScope : Scope
 {
-    [SerializeField] private GameObject audioPrefab;
+    [SerializeField] 
+    private GameObject audioPrefab;
 
     protected override void DeclareBindings()
     {
