@@ -136,6 +136,10 @@ Reusable prefab definition in the Project window.
 
 Instantiated prefab placed in a scene or nested inside another prefab.
 
+### Project settings (Saneject)
+
+Saneject settings shared at project scope, stored in `ProjectSettings/Saneject/ProjectSettings.json` and available from `Saneject/Settings -> Project Settings`.
+
 ### Proxy swap target
 
 Component that implements `IRuntimeProxySwapTarget` and is asked at runtime startup to replace proxy references with resolved real instances.
@@ -195,4 +199,11 @@ Tree view in the `Scope` inspector that shows reachable scopes from the current 
 ### Suppressed error
 
 Missing binding or missing dependency issue hidden from detailed logs by `suppressMissingErrors`, but still counted in summary output.
+
+## U
+
+### User settings (Saneject)
+
+Saneject settings scoped to one Unity user on one machine, stored in `EditorPrefs` and available from `Saneject/Settings -> User Settings`.
+
 
