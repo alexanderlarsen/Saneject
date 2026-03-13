@@ -4,7 +4,7 @@ title: Runtime proxy inspector
 
 # Runtime proxy inspector
 
-The runtime proxy inspector is the inspector for generated runtime proxy assets (`RuntimeProxyBase`). It is intentionally read-only. Use it to verify configuration created from your binding declaration, not to author configuration directly.
+The runtime proxy inspector is the inspector for generated runtime proxy assets (`RuntimeProxyBase`). It is intentionally read-only. Use it to verify configuration created from your binding declarations, not to author configuration directly.
 
 For full runtime behavior, see [Runtime proxy](../../core-concepts/runtime-proxy.md).
 
@@ -13,6 +13,7 @@ For full runtime behavior, see [Runtime proxy](../../core-concepts/runtime-proxy
 Use this inspector to verify:
 
 - Which resolve strategy the proxy will use at runtime.
+- What proxy instance is resolved at runtime.
 - Whether creation-based proxies are `Transient` or `Singleton`.
 - Whether `Dont Destroy On Load` is enabled for created objects.
 - Which interfaces the proxy type implements.
@@ -23,7 +24,7 @@ Use this inspector to verify:
 All fields in this inspector are disabled.
 That means you cannot edit `Resolved Instance`, `Resolve Method`, `Prefab`, `Instance Mode`, or `Dont Destroy On Load` here.
 
-The values come from runtime proxy bindings in `Scope.DeclareBindings()` and are assigned when Saneject creates or reuses proxy assets during injection.
+The configuration values come from runtime proxy bindings in `Scope.DeclareBindings()` and are assigned when Saneject creates or reuses proxy assets during injection.
 
 To change values:
 
@@ -56,7 +57,7 @@ public class AudioScope : Scope
 
 ### Resolved Instance (Play Mode only)
 
-Displays the runtime object that the proxy resolved to, if available and if the application is running.
+Displays the runtime object that the proxy resolved to, if any and if the application is running.
 
 ### Resolve Method
 
@@ -87,8 +88,7 @@ See [Runtime proxy](../../core-concepts/runtime-proxy.md) and [Global scope](../
 
 ### Prefab
 
-Shown only for `FromComponentOnPrefab`.
-This is the prefab that will be instantiated and searched for the target component.
+Shown only for `FromComponentOnPrefab`. This is the prefab that will be instantiated and searched for the target component.
 
 ### Dont Destroy On Load
 
@@ -103,8 +103,7 @@ If disabled for a creation-based method, the inspector shows a warning that the 
 
 ### Interfaces
 
-Lists the interface names implemented by the proxy type.
-This helps verify what the generated proxy can stand in for at injection sites.
+Lists the interface names implemented by the proxy type, mirrored from its target. This helps verify what the generated proxy can stand in for at injection sites.
 
 ## Related pages
 

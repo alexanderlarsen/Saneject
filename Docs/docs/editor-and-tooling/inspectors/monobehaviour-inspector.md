@@ -5,7 +5,7 @@ title: MonoBehaviour inspector
 # MonoBehaviour inspector
 
 The `MonoBehaviour` inspector is Saneject's default inspector for components.
-It keeps Unity's normal serialized editing workflow, and adds Saneject-specific behavior for injection and serialized interfaces.
+It keeps Unity's normal layout, behavior and serialized editing workflow, and adds Saneject-specific features such as serialize interface support.
 
 In practice, this system has two parts:
 
@@ -14,7 +14,7 @@ In practice, this system has two parts:
 
 The [SanejectInspector](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector) API is model-driven and uses [ComponentModel](xref:Plugins.Saneject.Experimental.Editor.Inspectors.Models.ComponentModel) and [PropertyModel](xref:Plugins.Saneject.Experimental.Editor.Inspectors.Models.PropertyModel).
 
-The default editor is multi-object aware (`CanEditMultipleObjects`), so standard Unity multi-selection editing still applies.
+The default editor is multi-object aware with (`[CanEditMultipleObjects]`), so standard Unity multi-selection editing still applies.
 
 ## What this inspector is for
 
@@ -29,9 +29,9 @@ Use this inspector when you want consistent field rendering across normal Unity 
 `[SerializeInterface]` uses Roslyn source generation to add interface backing fields as `UnityEngine.Object` members in a generated partial class.
 
 In Unity's default inspector order, fields declared in that generated partial class are rendered after fields from your authored class.
-That causes interface-backed fields to appear at the end of the inspector instead of where the interface members are declared among the rest of your fields.
+That causes interface-backed fields to always appear last in the inspector instead of where the interface members are declared among the rest of your fields.
 
-Saneject uses a custom inspector to restore logical declaration order, so interface-backed members are rendered where the corresponding interface members belong.
+Saneject uses a custom inspector to restore logical declaration order, so interface-backed members are rendered where the corresponding interface members belong, along with other UX improvements.
 
 ## Drawing behavior
 
@@ -41,12 +41,13 @@ For each inspected component, Saneject draws:
 - Serializable fields collected from base type to derived type.
 - Public fields, `[SerializeField]` fields, and `[SerializeInterface]` fields.
 - Excludes members that Unity should not draw in this workflow, such as `[NonSerialized]` and `[HideInInspector]`.
+- Nested serialized classes and their fields recursively.
 
 Default inspector attributes such as `[Tooltip]` continue to work for both normal fields and interface-backed fields.
 
-## Injection-aware behavior
+## Attribute-driven behavior
 
-Saneject applies two injection-aware rules while drawing:
+Saneject applies two inspector drawing rules based on attributes:
 
 - Fields with `[Inject]` are read-only in the inspector.
 - Fields with `[ReadOnly]` are also read-only, even when not injected.
@@ -59,23 +60,42 @@ This toggle affects both `[Inject]` fields and `[field: Inject]` auto-properties
 
 ## Nested serialized class support
 
-If a field is a nested serializable class, Saneject draws it as a foldout and recursively draws child members.
+If a field is a nested serializable class, Saneject draws it as a foldout and recursively draws child members. The same rules and drawing behavior still apply inside nested classes.
 
-The same rules still apply inside nested data:
+Basic example:
 
-- Injected children can be hidden by user setting.
-- Injected and read-only children are disabled.
-- Serialized interface children are drawn in the correct order and validated.
+```csharp
+using System;
+using UnityEngine;
+
+[Serializable]
+public class SpawnSettings
+{
+    [SerializeField] 
+    private float delay = 1f;
+    
+    [SerializeField]
+    private int count = 3;
+}
+
+public class EnemySpawner : MonoBehaviour
+{
+    [SerializeField] 
+    private SpawnSettings settings;    
+}
+```
 
 ## Serialized interface validation
 
-Roslyn-generated code already enforces the interface type for stored values, so this inspector validation mainly exists to handle drag-and-drop assignment in serialized interface fields.
+Roslyn-generated code already enforces the interface type for stored values, so inspector validation mainly exists to handle drag-and-drop assignment in serialized interface fields. 
+
+`[Inject]` fields are read-only and managed by Saneject, so interface drag-and-drop and inspector validation is only applicable when using `[SerializeInterface]` without `[Inject]`.
 
 Validation behavior:
 
 - Single interface member: validates the assigned object against the expected interface type.
 - Array or list interface member: validates each element.
-- If a dropped value is a `GameObject`, Saneject tries `TryGetComponent(expectedType, out component)` and stores that component instead.
+- If a dropped value is a `GameObject`, Saneject tries `TryGetComponent(expectedType, out component)` and stores that component instead, matching Unity's behavior when drag-and-dropping `GameObject`s into component slots.
 - If no matching component is found, or the assigned object still does not implement the expected interface type, Saneject logs an error and clears the reference to `null`.
 
 ## Models
