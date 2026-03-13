@@ -7,6 +7,30 @@ title: Logging & validation
 Saneject injection is designed to finish a full run and then report everything it found.
 Instead of stopping at the first failure, one run gives you a complete list of issues to fix: invalid bindings, missing bindings, missing dependencies, unused bindings, and summary totals.
 
+## Log examples by type
+
+### ❌ Error examples
+
+```text
+❌ Saneject: Invalid binding [Binding: BindAsset<PlayerController>() | Scope: GameplayScope] Asset binding type 'PlayerController' derives from Component.
+❌ Saneject: Missing binding. Expected something like [Binding: BindComponent<IHealthService>() | Nearest scope: GameplayScope] [Field: Root/Player/PlayerHud/PlayerHud.healthService]
+❌ Saneject: Method invocation exception (exception details in next log) [Method: Root/Player/PlayerBootstrap/PlayerBootstrap.Initialize]
+```
+
+### ⚠️ Warning examples
+
+```text
+⚠️ Saneject: Unused binding [Binding: BindComponent<AudioSource>().FromDescendants() | Scope: GameplayScope]. If you don't plan to use this binding, you can safely remove it.
+⚠️ 2 missing binding/dependency errors were suppressed due to [Inject(suppressMissingErrors: true)]. Remove the flag to view detailed logs.
+```
+
+### ℹ️ Info examples
+
+```text
+ℹ️ Saneject: Created proxy asset at 'Assets/SanejectGenerated/RuntimeProxies/EnemyServiceProxy.asset'.
+ℹ️ Saneject: Injection complete | 3 scopes processed | 6 globals registered | 1 proxy swap target registered | 24 fields injected | 3 properties injected | 2 methods injected | 0 missing dependencies | 0 missing bindings | 0 invalid bindings | 1 unused binding | Completed in 18 ms
+```
+
 ## Where validation and logging happen in the pipeline
 
 For each run, Saneject executes these stages in order:
@@ -73,32 +97,6 @@ Batch injection adds structure around normal per-asset logs:
 4. Final batch summary section with aggregated scene and prefab summaries.
 
 If the save-scenes prompt is cancelled before batch starts, Saneject logs `Injection cancelled by user.` and exits without injecting.
-
-## Log examples by type
-
-The emoji prefixes below are a reading legend for this documentation.
-
-### ❌ Error examples
-
-```text
-❌ Saneject: Invalid binding [Binding: BindAsset<PlayerController>() | Scope: GameplayScope] Asset binding type 'PlayerController' derives from Component.
-❌ Saneject: Missing binding. Expected something like [Binding: BindComponent<IHealthService>() | Nearest scope: GameplayScope] [Field: Root/Player/PlayerHud/PlayerHud.healthService]
-❌ Saneject: Method invocation exception (exception details in next log) [Method: Root/Player/PlayerBootstrap/PlayerBootstrap.Initialize]
-```
-
-### ⚠️ Warning examples
-
-```text
-⚠️ Saneject: Unused binding [Binding: BindComponent<AudioSource>().FromDescendants() | Scope: GameplayScope]. If you don't plan to use this binding, you can safely remove it.
-⚠️ 2 missing binding/dependency errors were suppressed due to [Inject(suppressMissingErrors: true)]. Remove the flag to view detailed logs.
-```
-
-### ℹ️ Info examples
-
-```text
-ℹ️ Saneject: Created proxy asset at 'Assets/SanejectGenerated/RuntimeProxies/EnemyServiceProxy.asset'.
-ℹ️ Saneject: Injection complete | 3 scopes processed | 6 globals registered | 1 proxy swap target registered | 24 fields injected | 3 properties injected | 2 methods injected | 0 missing dependencies | 0 missing bindings | 0 invalid bindings | 1 unused binding | Completed in 18 ms
-```
 
 ## Exceptions and flow continuity
 
