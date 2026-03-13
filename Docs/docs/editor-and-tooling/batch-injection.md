@@ -167,7 +167,7 @@ Logging output is affected by user settings in `Saneject/Settings`, including:
 - `Log Injection Summary`
 - `Log Unused Bindings`
 
-For more information on logging, see [Logging](logging.md).
+For more information on logging, see [Logging & validation](logging-and-validation.md).
 
 ## Related pages
 
@@ -175,5 +175,5 @@ For more information on logging, see [Logging](logging.md).
 - [Context](../core-concepts/context.md)
 - [Field, property & method injection](../core-concepts/field-property-and-method-injection.md)
 - [Settings](settings.md)
-- [Logging](logging.md)
+- [Logging & validation](logging-and-validation.md)
 - [Glossary](../reference/glossary.md)

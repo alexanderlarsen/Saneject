@@ -179,5 +179,5 @@ This workflow is useful when you want to validate scene-object wiring without al
 - [Field, property & method injection](../core-concepts/field-property-and-method-injection.md)
 - [Batch injection](batch-injection.md)
 - [Settings](settings.md)
-- [Logging](logging.md)
+- [Logging & validation](logging-and-validation.md)
 - [Glossary](../reference/glossary.md)

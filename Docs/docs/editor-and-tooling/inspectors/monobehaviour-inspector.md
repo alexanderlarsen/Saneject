@@ -155,5 +155,5 @@ Saneject adds component context menu items that support logging workflows. Right
 - [Scope inspector](scope-inspector.md)
 - [Injection menus](../injection-menus.md)
 - [Settings](../settings.md)
-- [Logging](../logging.md)
+- [Logging & validation](../logging-and-validation.md)
 - [Glossary](../../reference/glossary.md)

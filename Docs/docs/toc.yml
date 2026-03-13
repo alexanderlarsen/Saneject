@@ -40,10 +40,8 @@
           href: editor-and-tooling/inspectors/scope-inspector.md
         - name: Runtime proxy inspector
           href: editor-and-tooling/inspectors/runtime-proxy-inspector.md
-    - name: Validation
-      href: editor-and-tooling/validation.md
-    - name: Logging
-      href: editor-and-tooling/logging.md
+    - name: Logging & validation
+      href: editor-and-tooling/logging-and-validation.md
     - name: Settings
       href: editor-and-tooling/settings.md
     - name: Code analyzers

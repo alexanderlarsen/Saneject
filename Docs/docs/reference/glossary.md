@@ -104,6 +104,10 @@ Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` t
 
 Per-run result classification used by batch injection rows: Unknown, Success, Warning, or Error.
 
+### Injection summary
+
+End-of-run log line that reports processed scope count, injection counts, error/warning counts, and elapsed time.
+
 ### Injection site
 
 Injected field, property or method.
@@ -113,6 +117,10 @@ Injected field, property or method.
 `Component` with injected fields, properties or methods.
 
 ## L
+
+### Log context
+
+Unity object passed to a log call so clicking the log can highlight or ping the relevant object in the editor.
 
 ### Locator strategy
 
@@ -183,4 +191,8 @@ Tree view in the `Scope` inspector that shows reachable scopes from the current 
 ### suppressMissingErrors
 
 `InjectAttribute` option that suppresses missing binding and missing dependency error logs for a specific injection site.
+
+### Suppressed error
+
+Missing binding or missing dependency issue hidden from detailed logs by `suppressMissingErrors`, but still counted in summary output.
 
