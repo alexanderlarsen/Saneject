@@ -70,6 +70,12 @@ Project setting (`UseContextIsolation`) that controls whether dependency resolut
 
 Filter enum used during graph walk to include specific context sets in a run (`AllContexts`, `SameContextsAsSelection`, `SceneObjects`, `PrefabAssetObjects`, `PrefabInstances`).
 
+## D
+
+### Diagnostic ID
+
+Stable rule identifier emitted by a Roslyn analyzer, for example `INJ001` or `INJ002`.
+
 ## E
 
 ### Editor-time injection
@@ -118,6 +124,10 @@ Injected field, property or method.
 
 ## L
 
+### Linting
+
+Automated static analysis of C# source code in the editor and compiler pipeline. In Saneject docs, this refers to Roslyn analyzer diagnostics.
+
 ### Log context
 
 Unity object passed to a log call so clicking the log can highlight or ping the relevant object in the editor.
@@ -145,6 +155,14 @@ Saneject settings shared at project scope, stored in `ProjectSettings/Saneject/P
 Component that implements `IRuntimeProxySwapTarget` and is asked at runtime startup to replace proxy references with resolved real instances.
 
 ## R
+
+### Roslyn analyzer
+
+Compile-time code analysis component that inspects C# syntax and symbols and reports diagnostics in the IDE and during builds.
+
+### Roslyn code fix
+
+Quick action linked to a Roslyn analyzer diagnostic that can automatically apply a source-code fix.
 
 ### Runtime proxy
 
@@ -205,5 +223,3 @@ Missing binding or missing dependency issue hidden from detailed logs by `suppre
 ### User settings (Saneject)
 
 Saneject settings scoped to one Unity user on one machine, stored in `EditorPrefs` and available from `Saneject/Settings -> User Settings`.
-
-
