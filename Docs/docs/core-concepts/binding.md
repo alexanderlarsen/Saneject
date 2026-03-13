@@ -314,5 +314,5 @@ Validation runs before dependency resolution, so invalid bindings are never used
 - [Field & property injection](field-property-and-method-injection.md)
 - [Runtime proxy](runtime-proxy.md)
 - [Global scope](global-scope.md)
-- [Validation](../editor-and-tooling/validation.md)
+- [Logging & validation](../editor-and-tooling/logging-and-validation.md)
 - [Glossary](../reference/glossary.md)
