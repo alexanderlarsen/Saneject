@@ -52,10 +52,7 @@
 
 - name: Reference
   items:
-    - name: Glossary
-      href: reference/glossary.md
     - name: Tested Unity versions
       href: reference/tested-unity-versions.md
-    - name: MIT license
-      href: mit-license.md
-
+    - name: Glossary
+      href: reference/glossary.md
