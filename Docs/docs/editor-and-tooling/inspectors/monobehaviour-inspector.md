@@ -141,12 +141,12 @@ You can also use the API more granularly. See [SanejectInspector](xref:Plugins.S
 
 ## Log filtering context menus
 
-Saneject adds component context menu items that support logging workflows:
+Saneject adds component context menu items that support logging workflows. Right click on component header:
 
 - `Saneject/Filter Logs By Scope Type`
+    - Sets the Console search text to filter by `Scope: <ScopeTypeName>`.
 - `Saneject/Filter Logs By Component Path`
-
-These menu items set the Unity Console search text for faster filtering.
+    - Sets the Console search text to filter by the selected Scope's path.
 
 ## Related pages
 

@@ -113,7 +113,7 @@ Saneject adds component context menu items that support logging workflows. Right
     - Sets the Console search text to filter by `Scope: <ScopeTypeName>`.
 - `Saneject/Filter Logs By Component Path`
     - Sets the Console search text to filter by the selected Scope's path.
- 
+
 ## Related pages
 
 - [Scope](../../core-concepts/scope.md)
