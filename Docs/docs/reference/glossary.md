@@ -106,6 +106,10 @@ Foldout section in the `Scope` inspector that runs scene, hierarchy, or prefab i
 
 Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` that starts an injection run with a selected target and `ContextWalkFilter`.
 
+### Injection pipeline
+
+Ordered stages Saneject runs during injection, from graph build and context filtering through validation, resolution, assignment, and summary logging.
+
 ### Injection status
 
 Per-run result classification used by batch injection rows: Unknown, Success, Warning, or Error.
