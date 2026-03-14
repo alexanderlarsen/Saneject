@@ -98,9 +98,17 @@ Static runtime registry and service locator in Saneject for globally accessible 
 
 ## I
 
+### Injection context
+
+Per-run working set built after graph filtering. It contains the active transforms, injection targets, scopes, bindings, resolution maps, and accumulated results for one injection run.
+
 ### Injection controls
 
 Foldout section in the `Scope` inspector that runs scene, hierarchy, or prefab injection with specific `ContextWalkFilter` options.
+
+### Injection graph
+
+Hierarchy model built from selected root hierarchies. It contains transform, component, scope, binding, and injection-member information used by the edit-time pipeline.
 
 ### Injection menu
 
@@ -110,6 +118,10 @@ Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` t
 
 Ordered stages Saneject runs during injection, from graph build and context filtering through validation, resolution, assignment, and summary logging.
 
+### Injection site
+
+Injected field, property or method.
+
 ### Injection status
 
 Per-run result classification used by batch injection rows: Unknown, Success, Warning, or Error.
@@ -117,10 +129,6 @@ Per-run result classification used by batch injection rows: Unknown, Success, Wa
 ### Injection summary
 
 End-of-run log line that reports processed scope count, injection counts, error/warning counts, and elapsed time.
-
-### Injection site
-
-Injected field, property or method.
 
 ### Injection target
 

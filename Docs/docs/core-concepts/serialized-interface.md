@@ -85,9 +85,11 @@ public partial class GameManager : ISerializationCallbackReceiver, IRuntimeProxy
     public virtual void OnAfterDeserialize()
     {
         player = __player as IPlayer;
+        
         enemies = (__enemies ?? System.Array.Empty<Object>())
             .Select(x => x as IEnemy)
             .ToArray();
+        
         GameState = __GameState as IGameState;
     }
 

@@ -37,7 +37,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 Debug.LogWarning(
                     $"Saneject: '{GetType().Name}.{nameof(ResolveInstance)}()' called in editor. This is not allowed.");
 
+#if UNITY_EDITOR
                 resolvedInstance = null;
+#endif
                 return null;
             }
 
@@ -45,7 +47,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
             if (resolveMethod == RuntimeProxyResolveMethod.FromGlobalScope)
             {
                 TComponent component = GlobalScope.GetComponent<TComponent>();
+#if UNITY_EDITOR
                 resolvedInstance = component;
+#endif
                 return component;
             }
 
@@ -53,7 +57,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
             if (instanceMode == RuntimeProxyInstanceMode.Singleton &&
                 GlobalScope.TryGetComponent(out TComponent existing))
             {
+#if UNITY_EDITOR
                 resolvedInstance = existing;
+#endif
                 return existing;
             }
 
@@ -79,7 +85,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 Debug.LogError(
                     $"Saneject: '{typeof(TComponent)}' could not be resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
+#if UNITY_EDITOR
                 resolvedInstance = null;
+#endif
                 return null;
             }
 
@@ -93,7 +101,9 @@ namespace Plugins.Saneject.Experimental.Runtime.Proxy
                 Debug.Log(
                     $"Saneject: '{typeof(TComponent)}' resolved by '{GetType().Name}' using '{resolveMethod}'.");
 
+#if UNITY_EDITOR
             resolvedInstance = resolved;
+#endif
             return resolved;
         }
 

@@ -50,7 +50,15 @@
       href: editor-and-tooling/code-analyzers.md
 
 - name: Architecture
-  href: architecture.md
+  items:
+    - name: Architecture overview
+      href: architecture/architecture-overview.md
+    - name: Edit-time architecture
+      href: architecture/edit-time-architecture.md
+    - name: Runtime architecture
+      href: architecture/runtime-architecture.md
+    - name: Roslyn & generated code
+      href: architecture/roslyn-and-generated-code.md
 
 - name: Reference
   items:
