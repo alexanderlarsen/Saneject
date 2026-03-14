@@ -104,7 +104,6 @@ Key technical advantages:
 
 ## Related pages
 
-- [Introduction](introduction.md)
 - [Quick start](quick-start.md)
 - [Scope](../core-concepts/scope.md)
 - [Binding](../core-concepts/binding.md)

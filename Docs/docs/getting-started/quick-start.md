@@ -97,7 +97,6 @@ See [MonoBehaviour inspector](../editor-and-tooling/inspectors/monobehaviour-ins
 
 ## Related pages
 
-- [Introduction](introduction.md)
 - [Feature overview](feature-overview.md)
 - [Sample game](sample-game.md)
 - [Scope](../core-concepts/scope.md)

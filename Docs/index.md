@@ -1,22 +1,70 @@
 ---
-_layout: landing
+layout: _landing
+title: Saneject
 ---
 
-# Saneject
+<p>
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset="images/logo-light.webp">
+      <source media="(prefers-color-scheme: light)" srcset="images/logo-dark.webp">
+      <img src="images/logo-light.webp" alt="Saneject logo" width="300">
+    </picture>
+</p>
 
-Editor-time dependency injection for Unity.
+![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
+[![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
+[![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
 
-## Get Started
+Dependency injection the Unity way.
 
-- [Introduction](docs/getting-started/introduction.md)
-- [Getting Started](docs/getting-started/quick-start.md)
+Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the Inspector, including serialized interfaces and cross-scene or cross-prefab references. No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
 
-## Core Concepts
+## Main features
 
-- Binding API
-- Scopes
-- Proxies
+| Feature                              | Description                                                                                                                       |
+|--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
+| Editor-time injection                | Resolve dependencies before Play Mode and store them as normal serialized references.                                             |
+| Inspector-visible wiring             | Keep dependencies, including interfaces, visible and editable in the Inspector instead of hiding them behind a runtime container. |
+| Fluent binding API                   | Declare bindings in `Scope` components with familiar DI-style syntax.                                                             |
+| Serialized interfaces                | Use `[SerializeInterface]` for interface fields, arrays, and lists without wrapper classes.                                       |
+| Scene, prefab, and context awareness | Control what gets injected where and how cross-context resolution behaves.                                                        |
+| Runtime proxy bridging               | Handle references Unity cannot serialize directly across scene and prefab boundaries.                                             |
+| Low runtime overhead                 | No runtime container, no reflection-based startup pass, and no extra lifecycle layer.                                             |
+| Built-in tooling                     | Use injection menus, batch injection, logging, validation, settings, analyzers, and more directly in the Unity Editor.            |
 
-## API Reference
+For more features, see [Feature overview](docs/getting-started/feature-overview.md).
 
-- [API Reference](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector)
+## Mental model
+
+1. Mark fields, properties, or methods with `[Inject]` in your code.
+2. Declare bindings in `Scope` code.
+3. Run injection in the Unity Editor.
+4. Saneject injects dependencies into serialized fields.
+5. Start game and enjoy Unity's normal lifecycle.
+
+## Try Saneject now
+
+Add URL to Unity package manager:
+
+```text
+https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Assets/Plugins/Saneject
+```
+
+Then jump to [Quick start](docs/getting-started/quick-start.md) to learn the basics.
+
+**Tried Saneject? 👋**
+
+If you try Saneject and something works well, feels unclear, or seems broken, I would love to hear about it.
+
+- If you find a bug, please open an [Issue](https://github.com/alexanderlarsen/Saneject/issues).
+- If you want to share feedback, ideas, or first impressions, drop a note in [Discussions](https://github.com/alexanderlarsen/Saneject/discussions).
+- No need to be formal!
+
+## Links
+
+- [Docs](docs/core-concepts/scope.md)
+- [API](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector)
+- [GitHub repository](https://github.com/alexanderlarsen/Saneject)
+- [Releases](https://github.com/alexanderlarsen/Saneject/releases)
+- [MIT license](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)

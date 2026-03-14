@@ -1,7 +1,5 @@
 - name: Getting started
   items:
-    - name: Introduction
-      href: getting-started/introduction.md
     - name: Installation & requirements
       href: getting-started/installation-and-requirements.md
     - name: Quick start
