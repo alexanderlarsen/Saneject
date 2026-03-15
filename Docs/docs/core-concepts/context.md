@@ -42,7 +42,7 @@ Saneject addresses this with two controls:
 
 `Context isolation` is a project setting.
 
-- UI path: `Saneject > Settings > Project Settings > Use Context Isolation`
+- UI path: `Saneject/Settings/Project Settings/Use Context Isolation`
 - File path: `{ProjectRoot}/ProjectSettings/Saneject/ProjectSettings.json`
 
 Because it is in `ProjectSettings`, teams can version control and share the same behavior. It is important that the entire project uses the same isolation setting so injection stays deterministic for everyone.

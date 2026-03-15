@@ -76,7 +76,7 @@ A single run can emit:
 
 Summary behavior:
 
-- Controlled by `Saneject/Settings -> User Settings -> Log Injection Summary`.
+- Controlled by `Saneject/Settings/User Settings/Log Injection Summary`.
 - Severity is computed from unsuppressed counts:
   - `Error` if there are missing binding/dependency/invalid binding errors.
   - `Warning` if there are no such errors but there are unused bindings.
@@ -118,13 +118,13 @@ These filters work well because Saneject log signatures include scope names and 
 
 ## Settings that affect logging
 
-In `Saneject/Settings -> User Settings`:
+In `Saneject/Settings/User Settings`:
 
 - `Clear Logs On Injection`: clears the console before injection starts.
 - `Log Injection Summary`: enables/disables summary logging.
 - `Log Unused Bindings`: enables/disables unused binding warnings.
 
-In `Saneject/Settings -> Project Settings`:
+In `Saneject/Settings/Project Settings`:
 
 - `Use Context Isolation`: when enabled, cross-context candidates are rejected during resolution. This can surface missing dependency errors that include rejected candidate type details.
 

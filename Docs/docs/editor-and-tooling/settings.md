@@ -53,7 +53,7 @@ All of these default to `true`.
 
 | Setting                           | What it controls                                                          |
 |-----------------------------------|---------------------------------------------------------------------------|
-| `Show Injected Fields/Properties` | Shows members marked with `[Inject]` and `[field: Inject]` in inspectors. |
+| `Show Injected Fields & Properties` | Shows members marked with `[Inject]` and `[field: Inject]` in inspectors. |
 | `Show Help Boxes`                 | Shows explanatory Saneject help boxes in inspectors.                      |
 
 ### Play Mode Logging (Editor Only)
@@ -63,7 +63,7 @@ All of these default to `true`.
 | Setting                                | What it controls                                            |
 |----------------------------------------|-------------------------------------------------------------|
 | `Log On Proxy Instance Resolve`        | Logs when a runtime proxy resolves its runtime instance.    |
-| `Log Global Scope Register/Unregister` | Logs global registration lifecycle events in `GlobalScope`. |
+| `Log On Global Scope Register & Unregister` | Logs global registration lifecycle events in `GlobalScope`. |
 
 ### Editor Logging
 

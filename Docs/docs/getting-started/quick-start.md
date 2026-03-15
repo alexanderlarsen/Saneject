@@ -81,7 +81,7 @@ public class GameScope : Scope
 
 Run dependency injection with either method:
 
-- Scope inspector: Find the `GameScope` component, then `Injection Controls` → `Inject Scene By Context` → `All`.
+- Scope inspector: Find the `GameScope` component, then `Injection Controls/Inject Scene By Context/All`.
 - Main menu: `Saneject/Inject/Current Scene (All Contexts)`.
 - GameObject context menu: `GameObject/Saneject/Inject/Current Scene (All Contexts)`.
 

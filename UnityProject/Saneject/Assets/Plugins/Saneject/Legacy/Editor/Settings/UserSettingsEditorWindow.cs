@@ -163,7 +163,7 @@ namespace Plugins.Saneject.Legacy.Editor.Settings
             EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
 
             DrawToggle(
-                label: "Show Injected Fields/Properties",
+                label: "Show Injected Fields & Properties",
                 tooltip: "Show [Inject] fields and [field: Inject] auto-properties in the Inspector.",
                 currentValue: UserSettings.ShowInjectedFieldsProperties,
                 onChanged: newValue => UserSettings.ShowInjectedFieldsProperties = newValue,
@@ -197,7 +197,7 @@ namespace Plugins.Saneject.Legacy.Editor.Settings
             );
 
             DrawToggle(
-                label: "Log Global Scope Register/Unregister",
+                label: "Log On Global Scope Register & Unregister",
                 tooltip: "Log when objects are registered or unregistered with the global scope at runtime.",
                 currentValue: UserSettings.LogGlobalScopeRegistration,
                 onChanged: newValue => UserSettings.LogGlobalScopeRegistration = newValue

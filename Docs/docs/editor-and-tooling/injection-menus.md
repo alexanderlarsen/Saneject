@@ -140,7 +140,7 @@ All injection menu commands are editor-only:
 
 By default, menu commands show confirmation dialogs before injecting. You can toggle these prompts in:
 
-- `Saneject/Settings` → `User Settings` → `Ask Before Injection`
+- `Saneject/Settings/User Settings/Ask Before Injection`
 
 Relevant toggles:
 

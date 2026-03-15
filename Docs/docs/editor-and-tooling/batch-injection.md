@@ -97,8 +97,8 @@ Input shortcuts:
 Bottom buttons run injection for enabled rows:
 
 - `Inject All`
-- `Inject Scenes ({count})`
-- `Inject Prefabs ({count})`
+- `Inject Scenes`
+- `Inject Prefabs`
 
 `Inject Selected` from the row context menu injects the selected rows directly, even if some of those rows are disabled.
 

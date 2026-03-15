@@ -54,7 +54,7 @@ Saneject applies two inspector drawing rules based on attributes:
 
 You can hide injected members with:
 
-- `Saneject/Settings` -> `User Settings` -> `Show Injected Fields/Properties`
+- `Saneject/Settings/User Settings/Show Injected Fields & Properties`
 
 This toggle affects both `[Inject]` fields and `[field: Inject]` auto-properties.
 
