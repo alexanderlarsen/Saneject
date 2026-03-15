@@ -3,22 +3,18 @@ layout: _landing
 title: Saneject
 ---
 
-<p>
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset="images/logo-light.webp">
-      <source media="(prefers-color-scheme: light)" srcset="images/logo-dark.webp">
-      <img src="images/logo-light.webp" alt="Saneject logo" width="300">
-    </picture>
-</p>
+# Saneject
+
+**Dependency injection the Unity way**
 
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
 [![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
 
-Dependency injection the Unity way.
+Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the Inspector, including serialized interfaces and cross-scene or cross-prefab references. 
 
-Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the Inspector, including serialized interfaces and cross-scene or cross-prefab references. No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
+No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
 
 ## Main features
 
@@ -53,13 +49,12 @@ https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Asset
 
 Then jump to [Quick start](docs/getting-started/quick-start.md) to learn the basics.
 
-**Tried Saneject? 👋**
+## Feedback appreciated
 
 If you try Saneject and something works well, feels unclear, or seems broken, I would love to hear about it.
 
 - If you find a bug, please open an [Issue](https://github.com/alexanderlarsen/Saneject/issues).
 - If you want to share feedback, ideas, or first impressions, drop a note in [Discussions](https://github.com/alexanderlarsen/Saneject/discussions).
-- No need to be formal!
 
 ## Links
 

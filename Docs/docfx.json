@@ -37,7 +37,8 @@
     "output": "_site",
     "template": [
       "default",
-      "modern"
+      "modern",
+      "templates/custom"
     ],
     "globalMetadata": {
       "_appName": "Saneject",
@@ -45,7 +46,7 @@
       "_enableSearch": true,
       "_enableSearchInGeneratedFiles": true,
       "_disableContribution": "true",
-      "_appFooter": "<span>© 2026 <a href=\"https://alexanderlarsen.com\" target=\"_blank\" rel=\"noopener noreferrer\">Alexander Larsen</a> • <a href=\"https://github.com/alexanderlarsen/Saneject\" target=\"_blank\" rel=\"noopener noreferrer\">Saneject repo</a> • <a href=\"https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE\" target=\"_blank\" rel=\"noopener noreferrer\">MIT license</a></span>",
+      "_appFooter": "<span>© 2026 <a href=\"https://alexanderlarsen.com\" target=\"_blank\" rel=\"noopener noreferrer\">Alexander Larsen</a>. All rights reserved.</span>",
       "pdf": false
     }
   }
