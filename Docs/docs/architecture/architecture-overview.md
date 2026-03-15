@@ -79,7 +79,7 @@ Without context, edit-time injection in Unity would be far less predictable acro
 
 ### Edit-time pipeline
 
-The edit-time architecture is the main engine of the framework. It builds an [Injection graph](../reference/glossary.md#injection-graph), narrows it to the active set for the current run, validates bindings, resolves dependencies, writes values into objects, collects proxy swap targets, and emits a complete result summary.
+The edit-time architecture is the main engine of the framework. It builds an injection graph, narrows it to the active set for the current run, validates bindings, resolves dependencies, writes values into objects, collects proxy swap targets, and emits a complete result summary.
 
 That pipeline is described in detail in [Edit-time architecture](edit-time-architecture.md).
 
