@@ -5,12 +5,7 @@ title: Field, property & method injection
 # Field, property & method injection
 
 Field, property, and method injection is how Saneject writes resolved dependencies into components during an editor injection run.
-
-In this page:
-
-- `Injection site` means a field, an auto-property backing field, or a method marked for injection.
-- `Injection target` means the `Component` that owns those injection sites.
-
+ 
 For binding setup details, see [Binding](binding.md) and [Scope](scope.md).
 
 ## How it works

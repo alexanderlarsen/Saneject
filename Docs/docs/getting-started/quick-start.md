@@ -54,7 +54,7 @@ public partial class Player : MonoBehaviour
 
 Create `GameScope.cs`, attach it to `Root`, and declare bindings:
 
-You can create a scope manually generate a scope script from:
+You can create a scope manually or from:
 
 - Main menu: `Saneject/Create New Scope`
 - Project window context menu: `Assets/Saneject/Create New Scope`
@@ -66,9 +66,11 @@ public class GameScope : Scope
 {
     protected override void DeclareBindings()
     {
+        // Find first GameManager that implements IGameStateObservable anywhere in the scene
         BindComponent<IGameStateObservable, GameManager>()
             .FromAnywhere();
 
+        // Find first CharacterController on the injection target (Player) Transform 
         BindComponent<CharacterController>()
             .FromTargetSelf();
     }
