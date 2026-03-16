@@ -5,7 +5,7 @@ title: Logging & validation
 # Logging & validation
 
 Saneject injection is designed to finish a full run and then report everything it found.
-Instead of stopping at the first failure, one run gives you a complete list of issues to fix: invalid bindings, missing bindings, missing dependencies, unused bindings, and summary totals.
+Instead of stopping at the first failure, one run gives you a complete list of issues to fix: invalid [bindings](../reference/glossary.md#binding), missing [bindings](../reference/glossary.md#binding), missing dependencies, unused [bindings](../reference/glossary.md#binding), and summary totals.
 
 ## Log examples by type
 
@@ -35,32 +35,32 @@ Instead of stopping at the first failure, one run gives you a complete list of i
 
 For each run, Saneject executes these stages in order:
 
-1. Build the injection graph and apply `ContextWalkFilter`.
-2. Build an `InjectionContext` (active transforms, components, scopes, and bindings).
-3. Validate bindings.
+1. Build the [injection graph](../reference/glossary.md#injection-graph) and apply `ContextWalkFilter`.
+2. Build an `InjectionContext` (active transforms, components, [scopes](../reference/glossary.md#scope), and [bindings](../reference/glossary.md#binding)).
+3. Validate [bindings](../reference/glossary.md#binding).
 4. Resolve globals, fields/properties, and methods.
 5. Inject resolved values.
-6. Collect runtime proxy swap targets.
+6. Collect [proxy swap targets](../reference/glossary.md#proxy-swap-target).
 7. Log errors, warnings, and summary.
 
-Validation runs before resolution. Invalid bindings are reported and then excluded from resolution for that run.
+Validation runs before resolution. Invalid [bindings](../reference/glossary.md#binding) are reported and then excluded from resolution for that run.
 
 ## Binding validation
 
-Validation checks each active binding and records all failures without aborting the run.
+Validation checks each active [binding](../reference/glossary.md#binding) and records all failures without aborting the run.
 
 Saneject validates:
 
-- Duplicate binding declarations inside the same scope.
-- Duplicate global bindings for the same concrete type across scopes.
-- Runtime proxy binding requirements (`interface` and `concrete` type required, and single-value only).
-- Component binding concrete type must derive from `UnityEngine.Component`.
-- Asset binding concrete type must not derive from `UnityEngine.Component`.
+- Duplicate [binding](../reference/glossary.md#binding) declarations inside the same [scope](../reference/glossary.md#scope).
+- Duplicate global [bindings](../reference/glossary.md#binding) for the same concrete type across [scopes](../reference/glossary.md#scope).
+- [Runtime proxy binding](../reference/glossary.md#runtime-proxy-binding) requirements (`interface` and `concrete` type required, and single-value only).
+- [Component binding](../reference/glossary.md#component-binding) concrete type must derive from `UnityEngine.Component`.
+- [Asset binding](../reference/glossary.md#asset-binding) concrete type must not derive from `UnityEngine.Component`.
 - `InterfaceType` must be an interface.
 - Concrete type must implement the interface when both are specified.
-- A locator strategy must be specified (`From...`).
+- A [locator strategy](../reference/glossary.md#locator-strategy) must be specified (`From...`).
 
-If a binding fails validation:
+If a [binding](../reference/glossary.md#binding) fails validation:
 
 - It is logged as an `Invalid binding` error.
 - It is excluded from `ValidBindingNodes`.
@@ -70,26 +70,26 @@ If a binding fails validation:
 
 A single run can emit:
 
-- Error logs: invalid binding, missing binding, missing global object, missing dependency, binding filter exception, method invocation exception.
-- Warning logs: unused bindings.
-- Info logs: created runtime proxy assets and summary logs (if enabled).
+- Error logs: invalid [binding](../reference/glossary.md#binding), missing [binding](../reference/glossary.md#binding), missing global object, missing dependency, [binding filter](../reference/glossary.md#binding-filter) exception, method invocation exception.
+- Warning logs: unused [bindings](../reference/glossary.md#binding).
+- Info logs: created [runtime proxy](../reference/glossary.md#runtime-proxy) assets and summary logs (if enabled).
 
 Summary behavior:
 
 - Controlled by `Saneject/Settings/User Settings/Log Injection Summary`.
 - Severity is computed from unsuppressed counts:
-  - `Error` if there are missing binding/dependency/invalid binding errors.
-  - `Warning` if there are no such errors but there are unused bindings.
+  - `Error` if there are missing binding/dependency/invalid [binding](../reference/glossary.md#binding) errors.
+  - `Warning` if there are no such errors but there are unused [bindings](../reference/glossary.md#binding).
   - `Info` otherwise.
 - If `[Inject(suppressMissingErrors: true)]` suppresses missing binding/dependency errors, the summary appends a warning line with the suppressed count.
 
 No-scope behavior:
 
-- If zero scopes are processed, Saneject logs that no scopes were found and nothing was injected.
+- If zero [scopes](../reference/glossary.md#scope) are processed, Saneject logs that no [scopes](../reference/glossary.md#scope) were found and nothing was injected.
 
 ## What gets logged in batch runs
 
-Batch injection adds structure around normal per-asset logs:
+[Batch injection](../reference/glossary.md#batch-injection) adds structure around normal per-asset logs:
 
 1. Batch header for scenes and/or prefabs.
 2. Per-asset start/end markers.
@@ -101,20 +101,20 @@ If the save-scenes prompt is cancelled before batch starts, Saneject logs `Injec
 ## Exceptions and flow continuity
 
 Exceptions from user code inside `[Inject]` methods are caught and logged as `Method invocation exception`, followed by the exception details in a separate log entry.
-This keeps the injection run moving so later targets can still be processed.
+This keeps the [injection run](../reference/glossary.md#injection-run) moving so later targets can still be processed.
 
-Exceptions thrown by binding dependency filters are also caught and logged as `Binding filter exception`, so one faulty filter does not terminate the run.
+Exceptions thrown by [binding](../reference/glossary.md#binding) dependency filters are also caught and logged as `Binding filter exception`, so one faulty filter does not terminate the run.
 
 ## Filter logs from scopes and components
 
-Saneject adds context menu actions that set the Unity Console search query:
+Saneject adds [context](../reference/glossary.md#context) menu actions that set the Unity Console search query:
 
 - On `Scope`: `Saneject/Filter Logs By Scope Type`
   - Sets search to `Scope: <ScopeTypeName>`.
 - On `Scope` and `MonoBehaviour`: `Saneject/Filter Logs By Component Path`
-  - Sets search to the full component path, for example `Root/Player/Hud/PlayerHud`.
+  - Sets search to the full [component path](../reference/glossary.md#component-path), for example `Root/Player/Hud/PlayerHud`.
 
-These filters work well because Saneject log signatures include scope names and full member/component paths.
+These filters work well because Saneject log signatures include [scope](../reference/glossary.md#scope) names and full member/component paths.
 
 ## Settings that affect logging
 
@@ -122,7 +122,7 @@ In `Saneject/Settings/User Settings`:
 
 - `Clear Logs On Injection`: clears the console before injection starts.
 - `Log Injection Summary`: enables/disables summary logging.
-- `Log Unused Bindings`: enables/disables unused binding warnings.
+- `Log Unused Bindings`: enables/disables unused [binding](../reference/glossary.md#binding) warnings.
 
 In `Saneject/Settings/Project Settings`:
 

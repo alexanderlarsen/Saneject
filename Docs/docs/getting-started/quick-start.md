@@ -54,7 +54,7 @@ public partial class Player : MonoBehaviour
 
 Create `GameScope.cs`, attach it to `Root`, and declare [bindings](../reference/glossary.md#binding):
 
-You can create a scope manually or from:
+You can create a [scope](../reference/glossary.md#scope) manually or from:
 
 - Main menu: `Saneject/Create New Scope`
 - Project window context menu: `Assets/Saneject/Create New Scope`
@@ -77,13 +77,13 @@ public class GameScope : Scope
 }
 ```
 
-`Scope` is where bindings are declared. During injection, Saneject resolves each `[Inject]` site from the nearest `Scope`, with fallback to parent scopes.
+`Scope` is where [bindings](../reference/glossary.md#binding) are declared. During injection, Saneject resolves each `[Inject]` site from the nearest `Scope`, with fallback to parent [scopes](../reference/glossary.md#scope).
 
 ## 5. Run injection
 
 Run dependency injection with either method:
 
-- Scope inspector: Find the `GameScope` component, then `Injection Controls/Inject Scene By Context/All`.
+- [Scope](../reference/glossary.md#scope) inspector: Find the `GameScope` component, then `Injection Controls/Inject Scene By Context/All`.
 - Main menu: `Saneject/Inject/Current Scene (All Contexts)`.
 - GameObject context menu: `GameObject/Saneject/Inject/Current Scene (All Contexts)`.
 

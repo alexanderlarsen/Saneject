@@ -4,7 +4,7 @@ title: Runtime architecture
 
 # Runtime architecture
 
-Saneject's runtime layer is intentionally small. It does not run the injection pipeline again. It executes a short startup handoff on data prepared in the editor, then Unity's normal lifecycle continues.
+Saneject's runtime layer is intentionally small. It does not run the [injection pipeline](../reference/glossary.md#injection-pipeline) again. It executes a short startup handoff on data prepared in the editor, then Unity's normal lifecycle continues.
 
 ## Runtime flow
 
@@ -42,9 +42,9 @@ flowchart TD
 
 Runtime starts from serialized handoff data produced by edit-time injection. The runtime layer does not discover dependencies here. It consumes precomputed data and applies it in a deterministic startup order.
 
-The central runtime entry point is `Scope.Awake()`. `Scope` has `[DefaultExecutionOrder(-10000)]`, so this startup hook runs before regular `Awake()` methods. That timing is intentional. It ensures global registration and proxy swap complete before normal gameplay startup code begins reading dependencies.
+The central runtime entry point is `Scope.Awake()`. `Scope` has `[DefaultExecutionOrder(-10000)]`, so this startup hook runs before regular `Awake()` methods. That timing is intentional. It ensures [global registration](../reference/glossary.md#global-registration) and proxy swap complete before normal gameplay startup code begins reading dependencies.
 
-This applies not only at initial scene startup. Any `Scope` that becomes active later, such as from a spawned prefab instance, runs the same handoff sequence in its own `Awake()`.
+This applies not only at initial scene startup. Any `Scope` that becomes active later, such as from a spawned [prefab instance](../reference/glossary.md#prefab-instance), runs the same handoff sequence in its own `Awake()`.
 
 The key architectural boundary in this phase is:
 
@@ -53,22 +53,22 @@ The key architectural boundary in this phase is:
 
 ### 2. Global registration
 
-Each scope reads its serialized global component list and registers those instances into `GlobalScope` through `GlobalScope.RegisterComponent(...)`.
+Each [scope](../reference/glossary.md#scope) reads its serialized global component list and registers those instances into `GlobalScope` through `GlobalScope.RegisterComponent(...)`.
 
 From an architecture perspective, this is a state activation step. Edit-time determined which concrete objects should be globally available. Runtime makes those objects reachable through a shared lookup surface during startup.
 
 Why ordering matters:
 
-- Global registration must complete before proxy swap logic that may depend on global lookups.
-- Global registration ownership and lifetime are tied to the declaring scope (registered in `Scope.Awake()`, unregistered in `Scope.OnDestroy()`).
+- [Global registration](../reference/glossary.md#global-registration) must complete before proxy swap logic that may depend on global lookups.
+- [Global registration](../reference/glossary.md#global-registration) ownership and lifetime are tied to the declaring [scope](../reference/glossary.md#scope) (registered in `Scope.Awake()`, unregistered in `Scope.OnDestroy()`).
 
 For more details, see [Global scope](../core-concepts/global-scope.md).
 
 ### 3. Runtime proxy swap
 
-Each scope iterates serialized proxy swap targets and executes generated swap logic on those targets. In practice, `Scope.Awake()` calls `SwapProxiesWithRealInstances()` on components that implement `IRuntimeProxySwapTarget` and were registered with the `Scope` during edit-time injection.
+Each [scope](../reference/glossary.md#scope) iterates serialized [proxy swap targets](../reference/glossary.md#proxy-swap-target) and executes generated swap logic on those targets. In practice, `Scope.Awake()` calls `SwapProxiesWithRealInstances()` on components that implement `IRuntimeProxySwapTarget` and were registered with the `Scope` during edit-time injection.
 
-`IRuntimeProxySwapTarget.SwapProxiesWithRealInstances()` is Roslyn-generated for components using `SerializeInterface`. The generated method checks serialized interface backing members, detects `RuntimeProxyBase` placeholders, calls `RuntimeProxyBase.ResolveInstance()`, and writes the resolved real instance back to the member.
+`IRuntimeProxySwapTarget.SwapProxiesWithRealInstances()` is Roslyn-generated for components using `SerializeInterface`. The generated method checks [serialized interface](../reference/glossary.md#serialized-interface) backing members, detects `RuntimeProxyBase` placeholders, calls `RuntimeProxyBase.ResolveInstance()`, and writes the resolved real instance back to the member.
 
 This phase is intentionally narrow:
 
@@ -80,12 +80,12 @@ For more details, see [Runtime proxy](../core-concepts/runtime-proxy.md).
 
 ### 4. Normal Unity lifecycle
 
-After global registration and proxy swap complete, Saneject runtime handoff is effectively finished. Control returns to normal Unity component lifecycle behavior with runtime references stabilized.
+After [global registration](../reference/glossary.md#global-registration) and proxy swap complete, Saneject runtime handoff is effectively finished. Control returns to normal Unity component lifecycle behavior with runtime references stabilized.
 
 From this point, Saneject almost disappears from the runtime, with a few exceptions:
 
 - `Scope.Awake()` and `Scope.OnDestroy()` still exist and will register/unregister global components (if any) with `GlobalScope`.
-- Instantiated prefabs that contain a `Scope` run the same startup cycle for that instance: global registration, then proxy swap.
+- Instantiated prefabs that contain a `Scope` run the same startup cycle for that instance: [global registration](../reference/glossary.md#global-registration), then proxy swap.
 
 Other than that, there is no runtime element to Saneject. The runtime layer has one objective: activate precomputed state and finalize bridge-based references.
 
@@ -97,9 +97,9 @@ Other than that, there is no runtime element to Saneject. The runtime layer has 
 
 ## Notes
 
-- Runtime does not rebuild the injection graph, re-run validation, or repeat edit-time resolution.
+- Runtime does not rebuild the [injection graph](../reference/glossary.md#injection-graph), re-run validation, or repeat edit-time resolution.
 - Runtime behavior depends on serialized data produced by editor injection.
-- `Scope.OnDestroy()` unregisters owned global components when scopes are destroyed.
+- `Scope.OnDestroy()` unregisters owned global components when [scopes](../reference/glossary.md#scope) are destroyed.
 - For details on runtime registry and proxy mechanics, see [Global scope](../core-concepts/global-scope.md) and [Runtime proxy](../core-concepts/runtime-proxy.md).
 
 ## Related pages

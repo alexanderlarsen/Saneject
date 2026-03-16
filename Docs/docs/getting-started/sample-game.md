@@ -16,11 +16,11 @@ You control a green player character. Red enemies move around the map and try to
 
 The sample intentionally keeps gameplay simple so you can focus on dependency structure:
 
-- Multiple scope levels: scene-wide, object-local, and prefab-local bindings.
-- Interface-first wiring: most systems communicate through interfaces instead of hard references.
-- Cross-context dependencies: scene and prefab systems connect through runtime proxy bindings.
-- Global runtime registration: core gameplay services are registered through `BindGlobal<T>()` and consumed from other contexts.
-- UI integration: HUD and game-over flows subscribe to gameplay state through interfaces.
+- **Multiple [scope](../reference/glossary.md#scope) levels:** scene-wide, object-local, and prefab-local [bindings](../reference/glossary.md#binding).
+- **Interface-first wiring:** most systems communicate through interfaces instead of hard references.
+- **Cross-context dependencies:** scene and prefab systems connect through [runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding).
+- **Global runtime registration:** core gameplay services are registered through `BindGlobal<T>()` and consumed from other [contexts](../reference/glossary.md#context).
+- **UI integration:** HUD and game-over flows subscribe to gameplay state through interfaces.
 
 ## Where to find it
 
@@ -50,14 +50,14 @@ At startup, the sample loads `GameScene` and `UIScene`, then unloads `StartScene
 
 ## Scope layout and responsibilities
 
-The sample demonstrates scope composition at multiple levels:
+The sample demonstrates [scope](../reference/glossary.md#scope) composition at multiple levels:
 
-- `GameSceneScope`: declares scene-level gameplay bindings and global registrations.
-- `PlayerScope`: declares player-local bindings such as movement dependencies.
-- `EnemyScope`: declares per-enemy prefab bindings.
-- `UISceneScope`: declares UI-side bindings, including runtime proxy bindings to gameplay systems.
+- `GameSceneScope`: declares scene-level gameplay [bindings](../reference/glossary.md#binding) and [global registrations](../reference/glossary.md#global-registration).
+- `PlayerScope`: declares player-local [bindings](../reference/glossary.md#binding) such as movement dependencies.
+- `EnemyScope`: declares per-enemy prefab [bindings](../reference/glossary.md#binding).
+- `UISceneScope`: declares UI-side [bindings](../reference/glossary.md#binding), including [runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) to gameplay systems.
 
-This layout shows the core Saneject rule in practice: each `Scope` owns bindings for its local part of the hierarchy, while parent scopes provide fallback when local bindings do not match.
+This layout shows the core Saneject rule in practice: each `Scope` owns [bindings](../reference/glossary.md#binding) for its local part of the hierarchy, while parent [scopes](../reference/glossary.md#scope) provide fallback when local [bindings](../reference/glossary.md#binding) do not match.
 
 See [Scope](../core-concepts/scope.md) and [Binding](../core-concepts/binding.md).
 
@@ -65,7 +65,7 @@ See [Scope](../core-concepts/scope.md) and [Binding](../core-concepts/binding.md
 
 ### 1) Scene-level composition and globals
 
-`GameSceneScope` declares both normal bindings and global bindings.
+`GameSceneScope` declares both normal [bindings](../reference/glossary.md#binding) and global [bindings](../reference/glossary.md#binding).
 
 ```csharp
 using Plugins.Saneject.Experimental.Runtime.Scopes;
@@ -106,14 +106,14 @@ public class GameSceneScope : Scope
 
 Why this matters:
 
-- Gameplay systems in the scene can resolve dependencies directly with component and asset bindings.
-- UI and prefab contexts can resolve scene-owned services at runtime through proxy bindings that use `GlobalScope`.
+- Gameplay systems in the scene can resolve dependencies directly with component and [asset bindings](../reference/glossary.md#asset-binding).
+- UI and prefab [contexts](../reference/glossary.md#context) can resolve scene-owned services at runtime through proxy [bindings](../reference/glossary.md#binding) that use `GlobalScope`.
 
 See [Global scope](../core-concepts/global-scope.md).
 
 ### 2) Runtime proxy bridge for cross-context references
 
-UI systems and enemy prefab systems consume gameplay interfaces through runtime proxies:
+UI systems and enemy prefab systems consume gameplay interfaces through [runtime proxies](../reference/glossary.md#runtime-proxy):
 
 ```csharp
 using Plugins.Saneject.Experimental.Runtime.Scopes;
@@ -170,8 +170,8 @@ public partial class HUDController : MonoBehaviour
 This gives you:
 
 - Decoupled systems that are easier to replace and test.
-- Serialized interface references that persist in scenes and prefabs.
-- Automatic proxy swap support for single interface members when runtime proxy bindings are used.
+- [Serialized interface](../reference/glossary.md#serialized-interface) references that persist in scenes and prefabs.
+- Automatic proxy swap support for single interface members when [runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) are used.
 
 See [Field, property & method injection](../core-concepts/field-property-and-method-injection.md) and [Serialized interface](../core-concepts/serialized-interface.md).
 
@@ -186,18 +186,18 @@ The game loop is connected through interface events and injected collaborators:
 5. UI controllers subscribe to score, enemy count, and game-over events.
 6. Restart uses an injected scene-management interface.
 
-The important part is not the gameplay logic itself. The important part is that each step is wired through scoped bindings and interface contracts instead of direct scene object references.
+The important part is not the gameplay logic itself. The important part is that each step is wired through scoped [bindings](../reference/glossary.md#binding) and interface contracts instead of direct [scene object](../reference/glossary.md#scene-object) references.
 
 ## What to study first in the sample
 
 If you are new to Saneject, inspect these in order:
 
-1. Scene scopes: `GameSceneScope`, `UISceneScope`, `PlayerScope`, `EnemyScope`.
+1. Scene [scopes](../reference/glossary.md#scope): `GameSceneScope`, `UISceneScope`, `PlayerScope`, `EnemyScope`.
 2. Interface contracts: `IEnemyObservable`, `IScoreObservable`, `IGameStateObservable`, `ISceneManager`.
 3. UI controllers: `HUDController`, `GameOverController`.
 4. Gameplay managers: `EnemyManager`, `ScoreManager`, `GameStateManager`.
 
-This path gives you the fastest overview of how bindings, scopes, and runtime proxy features fit together.
+This path gives you the fastest overview of how [bindings](../reference/glossary.md#binding), [scopes](../reference/glossary.md#scope), and [runtime proxy](../reference/glossary.md#runtime-proxy) features fit together.
 
 ## Related pages
 

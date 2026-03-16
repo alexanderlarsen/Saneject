@@ -14,6 +14,10 @@ Roslyn-generated, per-assembly list of concrete component types that require run
 
 Compiler-generated field that stores an auto-property value. Saneject can inject these fields with `[field: Inject]`.
 
+### Asset binding
+
+Binding declared with `BindAsset...` or `BindAssets...` that resolves `UnityEngine.Object` assets from project content instead of scene or hierarchy components.
+
 ## B
 
 ### Batch injection
@@ -50,6 +54,10 @@ Binding declared as multiple (`BindComponents`/`BindAssets`/`BindMultiple...`) t
 
 Full hierarchy path plus component type name, for example `Root/Player/HUD/HudController`. Used by Saneject log filtering and context menu actions.
 
+### Component binding
+
+Binding declared with `BindComponent...` or `BindComponents...` that resolves `Component` instances from transforms, hierarchies, scenes, or explicit instances.
+
 ### Context
 
 Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.
@@ -66,16 +74,10 @@ Injection-run prefilter that decides which transforms and injection targets are 
 
 Project setting (`UseContextIsolation`) that controls whether dependency resolution can cross context boundaries.
 
-### ContextWalkFilter
+### Context walk filter
 
 Filter enum used during graph walk to include specific context sets in a run (`AllContexts`, `SameContextsAsSelection`, `SceneObjects`, `PrefabAssetObjects`, `PrefabInstances`).
-
-## D
-
-### Diagnostic ID
-
-Stable rule identifier emitted by a Roslyn analyzer, for example `INJ001` or `INJ002`.
-
+ 
 ## E
 
 ### Editor-time injection
@@ -92,7 +94,7 @@ Binding declared with `BindGlobal<TComponent>()` that resolves a component in th
 
 Entry added to `GlobalScope` at runtime, keyed by the component's concrete type and owned by the caller that registered it.
 
-### GlobalScope
+### Global scope
 
 Static runtime registry and service locator in Saneject for globally accessible `Component` instances.
 
@@ -117,6 +119,10 @@ Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` t
 ### Injection pipeline
 
 Ordered stages Saneject runs during injection, from graph build and context filtering through validation, resolution, assignment, and summary logging.
+
+### Injection run
+
+One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.
 
 ### Injection site
 
@@ -200,6 +206,10 @@ Strategy used by a runtime proxy to find or create its target instance at runtim
 
 Auto-generated partial class that inherits `RuntimeProxy<TComponent>`, is marked with `[GenerateRuntimeProxy]`, and is extended by Roslyn-generated interface member stubs.
 
+### Runtime startup
+
+Phase after entering Play Mode when scopes initialize, global registrations are populated, and runtime proxy references can be swapped to real instances.
+
 ## S
 
 ### Saneject inspector API
@@ -218,11 +228,15 @@ Non-prefab `GameObject` in a scene.
 
 Tree view in the `Scope` inspector that shows reachable scopes from the current hierarchy root and allows navigation to each scope `GameObject`.
 
+### Service locator
+
+Object or API that lets runtime code request dependencies on demand instead of receiving them through injection. In Saneject docs, this usually refers to `GlobalScope`.
+
 ### Serialized interface
 
 `SerializeInterface` member (`IService`, `IService[]`, or `List<IService>`) that Saneject persists through a generated hidden `Object` backing member.
 
-### suppressMissingErrors
+### Suppress missing errors
 
 `InjectAttribute` option that suppresses missing binding and missing dependency error logs for a specific injection site.
 

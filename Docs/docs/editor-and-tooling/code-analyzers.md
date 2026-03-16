@@ -4,12 +4,12 @@ title: Code analyzers
 
 # Code analyzers
 
-Saneject ships with Roslyn analyzers for common injection attribute mistakes.
-These checks run during C# analysis, so issues are reported in the editor and during compilation instead of appearing later during an injection run.
+Saneject ships with [Roslyn analyzers](../reference/glossary.md#roslyn-analyzer) for common injection attribute mistakes.
+These checks run during C# analysis, so issues are reported in the editor and during compilation instead of appearing later during an [injection run](../reference/glossary.md#injection-run).
 
 ## Why this exists
 
-Editor-time injection writes values into serialized members.
+[Editor-time injection](../reference/glossary.md#editor-time-injection) writes values into serialized members.
 If an injected member is not serializable in Unity, or if an interface serialization attribute is used on the wrong type, the injection result can be missing or misleading.
 
 The analyzer rules catch those mistakes early and report clear, fixable diagnostics.
@@ -72,7 +72,7 @@ public partial class EnemyHud : MonoBehaviour
 
 ## Code fixes
 
-Saneject also includes Roslyn code fixes for both diagnostics.
+Saneject also includes [Roslyn code fixes](../reference/glossary.md#roslyn-code-fix) for both diagnostics.
 When your IDE supports Roslyn quick actions, the fixes appear directly in the lightbulb menu.
 
 ### Fixes for `INJ001`

@@ -21,10 +21,10 @@ This opens the `Saneject Settings` editor window.
 
 ## User settings vs project settings
 
-| Type               | Scope                                 | Storage                                            | Shared with team                       |
-|--------------------|---------------------------------------|----------------------------------------------------|----------------------------------------|
-| `User Settings`    | Current Unity user on current machine | `EditorPrefs` keys with prefix `SanejectSettings_` | No                                     |
-| `Project Settings` | Entire Unity project                  | `ProjectSettings/Saneject/ProjectSettings.json`    | Yes, if the file is version controlled |
+| Type               | [Scope](../reference/glossary.md#scope) | Storage                                            | Shared with team                       |
+|--------------------|-----------------------------------------|----------------------------------------------------|----------------------------------------|
+| `User Settings`    | Current Unity user on current machine   | `EditorPrefs` keys with prefix `SanejectSettings_` | No                                     |
+| `Project Settings` | Entire Unity project                    | `ProjectSettings/Saneject/ProjectSettings.json`    | Yes, if the file is version controlled |
 
 Important behavior:
 
@@ -36,14 +36,14 @@ Important behavior:
 
 ### Ask Before Injection
 
-All of these default to `true`, which shows a confirmation dialog before injection runs.
+All of these default to `true`, which shows a confirmation dialog before [injection runs](../reference/glossary.md#injection-run).
 
-| Setting                      | What it controls                                 |
-|------------------------------|--------------------------------------------------|
-| `Scene`                      | Ask before injecting the current scene.          |
-| `Prefab Asset`               | Ask before injecting the current prefab asset.   |
-| `Selected Scene Hierarchies` | Ask before injecting selected scene hierarchies. |
-| `Batch Injection`            | Ask before batch injection runs.                 |
+| Setting                      | What it controls                                                                        |
+|------------------------------|-----------------------------------------------------------------------------------------|
+| `Scene`                      | Ask before injecting the current scene.                                                 |
+| `Prefab Asset`               | Ask before injecting the current [prefab asset](../reference/glossary.md#prefab-asset). |
+| `Selected Scene Hierarchies` | Ask before injecting selected scene hierarchies.                                        |
+| `Batch Injection`            | Ask before [batch injection](../reference/glossary.md#batch-injection) runs.            |
 
 These toggles affect injection commands and batch commands described in [Injection menus](injection-menus.md) and [Batch injection](batch-injection.md).
 
@@ -60,21 +60,21 @@ All of these default to `true`.
 
 All of these default to `true`.
 
-| Setting                                     | What it controls                                            |
-|---------------------------------------------|-------------------------------------------------------------|
-| `Log On Proxy Instance Resolve`             | Logs when a runtime proxy resolves its runtime instance.    |
-| `Log On Global Scope Register & Unregister` | Logs global registration lifecycle events in `GlobalScope`. |
+| Setting                                     | What it controls                                                                                            |
+|---------------------------------------------|-------------------------------------------------------------------------------------------------------------|
+| `Log On Proxy Instance Resolve`             | Logs when a [runtime proxy](../reference/glossary.md#runtime-proxy) resolves its runtime instance.          |
+| `Log On Global Scope Register & Unregister` | Logs [global registration](../reference/glossary.md#global-registration) lifecycle events in `GlobalScope`. |
 
 ### Editor Logging
 
 All of these default to `true`.
 
-| Setting                                       | What it controls                                                                                                             |
-|-----------------------------------------------|------------------------------------------------------------------------------------------------------------------------------|
-| `Clear Logs On Injection`                     | Clears the Unity Console before an injection run starts.                                                                     |
-| `Log Injection Summary`                       | Writes end-of-run summary logs.                                                                                              |
-| `Log Unused Bindings`                         | Warns when bindings were declared but not used in a run.                                                                     |
-| `Log Unused Runtime Proxies On Domain Reload` | On domain reload, scans for runtime proxy assets and scripts that are not referenced by any scope binding and logs findings. |
+| Setting                                       | What it controls                                                                                                                                                                                                                             |
+|-----------------------------------------------|----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Clear Logs On Injection`                     | Clears the Unity Console before an [injection run](../reference/glossary.md#injection-run) starts.                                                                                                                                           |
+| `Log Injection Summary`                       | Writes end-of-run summary logs.                                                                                                                                                                                                              |
+| `Log Unused Bindings`                         | Warns when [bindings](../reference/glossary.md#binding) were declared but not used in a run.                                                                                                                                                 |
+| `Log Unused Runtime Proxies On Domain Reload` | On domain reload, scans for [runtime proxy](../reference/glossary.md#runtime-proxy) assets and scripts that are not referenced by any [scope](../reference/glossary.md#scope) [binding](../reference/glossary.md#binding) and logs findings. |
 
 For logging semantics and output shape, see [Logging & validation](logging-and-validation.md).
 
@@ -82,24 +82,24 @@ For logging semantics and output shape, see [Logging & validation](logging-and-v
 
 ### Context Isolation
 
-| Setting                 | Default | What it controls                                                                                                                                                                           |
-|-------------------------|---------|--------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `Use Context Isolation` | `false` | Enables strict context boundaries during resolution. When enabled, scene and prefab-instance dependencies resolve only inside the same context. Prefab assets are always context-isolated. |
+| Setting                 | Default | What it controls                                                                                                                                                                                                                                                                                            |
+|-------------------------|---------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Use Context Isolation` | `false` | Enables strict [context](../reference/glossary.md#context) boundaries during resolution. When enabled, scene and prefab-instance dependencies resolve only inside the same [context](../reference/glossary.md#context). [Prefab assets](../reference/glossary.md#prefab-asset) are always context-isolated. |
 
-For details on context behavior, see [Context](../core-concepts/context.md).
+For details on [context](../reference/glossary.md#context) behavior, see [Context](../core-concepts/context.md).
 
 ### Scope File Generation
 
-| Setting                                | Default | What it controls                                                                                                                |
-|----------------------------------------|---------|---------------------------------------------------------------------------------------------------------------------------------|
-| `Generate Scope Namespace From Folder` | `true`  | When creating a new scope from `Assets/Saneject/Create New Scope`, generates a namespace based on the scope file's folder path. |
+| Setting                                | Default | What it controls                                                                                                                                                                                    |
+|----------------------------------------|---------|-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
+| `Generate Scope Namespace From Folder` | `true`  | When creating a new [scope](../reference/glossary.md#scope) from `Assets/Saneject/Create New Scope`, generates a namespace based on the [scope](../reference/glossary.md#scope) file's folder path. |
 
 ### Proxy Generation
 
-| Setting                                   | Default                                   | What it controls                                                              |
-|-------------------------------------------|-------------------------------------------|-------------------------------------------------------------------------------|
-| `Generate Proxy Scripts On Domain Reload` | `true`                                    | Automatically generates missing runtime proxy scripts on Unity domain reload. |
-| `Output Folder`                           | `Assets/SanejectGenerated/RuntimeProxies` | Target folder for auto-generated runtime proxy scripts and assets.            |
+| Setting                                   | Default                                   | What it controls                                                                                                        |
+|-------------------------------------------|-------------------------------------------|-------------------------------------------------------------------------------------------------------------------------|
+| `Generate Proxy Scripts On Domain Reload` | `true`                                    | Automatically generates missing [runtime proxy](../reference/glossary.md#runtime-proxy) scripts on Unity domain reload. |
+| `Output Folder`                           | `Assets/SanejectGenerated/RuntimeProxies` | Target folder for auto-generated [runtime proxy](../reference/glossary.md#runtime-proxy) scripts and assets.            |
 
 `Output Folder` notes:
 
@@ -107,16 +107,16 @@ For details on context behavior, see [Context](../core-concepts/context.md).
 - If the picker selects a folder outside `Assets`, Saneject logs a warning and keeps the current value.
 - Typed values are sanitized to forward slashes and invalid path characters are removed.
 
-For runtime proxy behavior, see [Runtime proxy](../core-concepts/runtime-proxy.md).
+For [runtime proxy](../reference/glossary.md#runtime-proxy) behavior, see [Runtime proxy](../core-concepts/runtime-proxy.md).
 
 ## Reset settings to defaults
 
 The Settings window includes two reset actions:
 
 - `Use Default User Settings`: clears Saneject user keys from `EditorPrefs`.
-- `Use Default Project Settings`: rewrites Saneject project settings to defaults in `ProjectSettings/Saneject/ProjectSettings.json`.
+- `Use Default Project Settings`: rewrites Saneject [project settings](../reference/glossary.md#project-settings) to defaults in `ProjectSettings/Saneject/ProjectSettings.json`.
 
-Use project reset carefully because it affects all contributors who use the project settings file.
+Use project reset carefully because it affects all contributors who use the [project settings](../reference/glossary.md#project-settings) file.
 
 ## Related pages
 

@@ -4,27 +4,27 @@ title: Field, property & method injection
 
 # Field, property & method injection
 
-Field, property, and method injection is how Saneject writes resolved dependencies into components during an editor injection run.
+Field, property, and method injection is how Saneject writes resolved dependencies into components during an editor [injection run](../reference/glossary.md#injection-run).
  
-For binding setup details, see [Binding](binding.md) and [Scope](scope.md).
+For [binding](../reference/glossary.md#binding) setup details, see [Binding](binding.md) and [Scope](scope.md).
 
 ## How it works
 
 At a high level, Saneject performs these steps:
 
-1. Scans active injection targets for `[Inject]` fields and `[Inject]` methods.
+1. Scans active [injection targets](../reference/glossary.md#injection-target) for `[Inject]` fields and `[Inject]` methods.
 2. Also scans nested `[Serializable]` class instances inside those components.
-3. For each injection site, finds a matching binding by walking from the nearest scope upward.
-4. Matches on requested type, collection shape (single vs array/list), and optional qualifiers (ID, target type, member name).
-5. Locates dependency objects from the selected binding and applies context isolation rules.
-6. Injects values in this order: global registrations, fields and auto-properties, then methods.
+3. For each [injection site](../reference/glossary.md#injection-site), finds a matching [binding](../reference/glossary.md#binding) by walking from the nearest [scope](../reference/glossary.md#scope) upward.
+4. Matches on requested type, collection shape (single vs array/list), and optional [binding qualifiers](../reference/glossary.md#binding-qualifier) (ID, target type, member name).
+5. Locates dependency objects from the selected [binding](../reference/glossary.md#binding) and applies [context isolation](../reference/glossary.md#context-isolation) rules.
+6. Injects values in this order: [global registrations](../reference/glossary.md#global-registration), fields and auto-properties, then methods.
 
 Important behavior:
 
 - For single-value sites, Saneject assigns the first located candidate.
 - For `T[]` and `List<T>`, Saneject assigns all located candidates.
-- If no match is found, Saneject records missing binding or missing dependency errors and injects `null`.
-- `suppressMissingErrors` only suppresses missing binding and missing dependency logs. It does not suppress method invocation exceptions.
+- If no match is found, Saneject records missing [binding](../reference/glossary.md#binding) or missing dependency errors and injects `null`.
+- `suppressMissingErrors` only suppresses missing [binding](../reference/glossary.md#binding) and missing dependency logs. It does not suppress method invocation exceptions.
 
 ## Inject attribute options
 
@@ -37,7 +37,7 @@ Important behavior:
 | `[Inject(suppressMissingErrors: true)]`       | Type matching, but suppress missing binding/dependency logs.         |
 | `[Inject("id", suppressMissingErrors: true)]` | Type + ID matching, with suppressed missing binding/dependency logs. |
 
-The `ID` value must match a binding qualifier declared with `ToID(...)`.
+The `ID` value must match a [binding qualifier](../reference/glossary.md#binding-qualifier) declared with `ToID(...)`.
 
 ## Field injection
 
@@ -47,7 +47,7 @@ In practice:
 
 - Concrete fields should be `public` or `[SerializeField] private`.
 - Interface fields should use `[SerializeInterface]`, so Unity can serialize and show them in the inspector. Access modifier does not matter for this case.
-- Arrays and `List<>` require collection bindings (`BindComponents`, `BindAssets`, or equivalent collection forms).
+- Arrays and `List<>` require [collection bindings](../reference/glossary.md#collection-binding) (`BindComponents`, `BindAssets`, or equivalent collection forms).
 
 ```csharp
 using System.Collections.Generic;
@@ -155,11 +155,11 @@ public partial class CombatHud : MonoBehaviour
 Notes:
 
 - This works for auto-properties because the compiler generates a backing field that Saneject can inject.
-- Binding qualifier `ToMember("MainCamera")` matches the logical property name, not the compiler-generated backing field name.
+- [Binding qualifier](../reference/glossary.md#binding-qualifier) `ToMember("MainCamera")` matches the logical property name, not the compiler-generated backing field name.
 
 ## Method injection
 
-Annotate a method with `[Inject]`. Saneject resolves each parameter from bindings and then invokes the method.
+Annotate a method with `[Inject]`. Saneject resolves each parameter from [bindings](../reference/glossary.md#binding) and then invokes the method.
 
 Because this invocation happens at editor-time, method injection is mostly useful for setup/configuration logic. Typical examples include configuring components whose source you cannot modify and add `[Inject]` to, applying values to built-in Unity components from injected config assets, validating setup, or running custom wiring logic inside your type.
 
@@ -170,7 +170,7 @@ Key rules:
 - Each parameter is resolved by its own requested type and shape.
 - Methods are invoked after field and property injection.
 - If dependencies are missing, parameters resolve to `null` and invocation is still attempted.
-- Method exceptions are caught and logged. They do not break the overall injection run.
+- Method exceptions are caught and logged. They do not break the overall [injection run](../reference/glossary.md#injection-run).
 
 ```csharp
 using System.Collections.Generic;
@@ -199,7 +199,7 @@ public class CombatController : MonoBehaviour
 }
 ```
 
-Example bindings for `Initialize`:
+Example [bindings](../reference/glossary.md#binding) for `Initialize`:
 
 ```csharp
 protected override void DeclareBindings()
@@ -228,14 +228,14 @@ protected override void DeclareBindings()
 
 ## Supported dependency types
 
-Saneject resolves dependencies from component bindings and asset bindings. That means injected objects are Unity objects, such as:
+Saneject resolves dependencies from [component bindings](../reference/glossary.md#component-binding) and [asset bindings](../reference/glossary.md#asset-binding). That means injected objects are Unity objects, such as:
 
 - `UnityEngine.Component` instances
 - `UnityEngine.Object` assets, e.g., `ScriptableObject`, `AudioClip`, `Texture2D`, etc.
 
 Plain C# object (POCO) services are not supported.
 
-For service-like patterns, use runtime proxies with component implementations. Runtime proxy bindings can resolve from global scope, loaded scenes, prefabs, or newly created `GameObject`s, with transient or singleton instance modes. See [Runtime proxy](runtime-proxy.md).
+For service-like patterns, use [runtime proxies](../reference/glossary.md#runtime-proxy) with component implementations. [Runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) can resolve from [global scope](../reference/glossary.md#global-scope), loaded scenes, prefabs, or newly created `GameObject`s, with transient or singleton instance modes. See [Runtime proxy](runtime-proxy.md).
 
 ## Interface injection notes
 

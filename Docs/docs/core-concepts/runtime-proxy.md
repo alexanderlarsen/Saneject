@@ -4,41 +4,41 @@ title: Runtime proxy
 
 # Runtime proxy
 
-Runtime proxy is one of the more advanced Saneject features. The API is small, but it helps to understand the runtime model before using it.
+[Runtime proxy](../reference/glossary.md#runtime-proxy) is one of the more advanced Saneject features. The API is small, but it helps to understand the runtime model before using it.
 
-At a high level, a runtime proxy is a bridge for references Unity cannot serialize directly, such as scene-to-scene, scene-to-prefab, and prefab-to-prefab component references.
+At a high level, a [runtime proxy](../reference/glossary.md#runtime-proxy) is a bridge for references Unity cannot serialize directly, such as scene-to-scene, scene-to-prefab, and prefab-to-prefab component references.
 
 ## Why runtime proxy exists
 
 Saneject is primarily editor-time DI. It resolves dependencies in the Editor and writes them into serialized members so they persist in scenes and prefabs.
 
-That works well when Unity can serialize the real dependency directly. It breaks down when the dependency is in another runtime context that is not directly serializable.
+That works well when Unity can serialize the real dependency directly. It breaks down when the dependency is in another runtime [context](../reference/glossary.md#context) that is not directly serializable.
 
-Runtime proxy solves this by injecting a serializable placeholder asset at editor time, then replacing that placeholder with the real instance during early runtime startup.
+[Runtime proxy](../reference/glossary.md#runtime-proxy) solves this by injecting a serializable placeholder asset at editor time, then replacing that placeholder with the real instance during early [runtime startup](../reference/glossary.md#runtime-startup).
 
 ## Mental model
 
-A runtime proxy is a serialized placeholder asset (`ScriptableObject`) that temporarily stands in for a real component dependency.
+A [runtime proxy](../reference/glossary.md#runtime-proxy) is a serialized placeholder asset (`ScriptableObject`) that temporarily stands in for a real component dependency.
 
 Think about it as a lifecycle, not just a type:
 
-1. At editor time, injection writes a proxy asset into an interface member.
-2. That proxy asset is serialized, so the reference can persist across scene/prefab boundaries that Unity cannot serialize directly.
-3. At runtime startup, `Scope.Awake()` (execution order `-10000`) automatically swaps the proxy with the real instance.
+1. At editor time, injection writes a [runtime proxy](../reference/glossary.md#runtime-proxy) asset into an interface member.
+2. That [runtime proxy](../reference/glossary.md#runtime-proxy) asset is serialized, so the reference can persist across scene/prefab boundaries that Unity cannot serialize directly.
+3. At [runtime startup](../reference/glossary.md#runtime-startup), `Scope.Awake()` (execution order `-10000`) automatically swaps the [runtime proxy](../reference/glossary.md#runtime-proxy) with the real instance.
 4. After swap, gameplay code uses the resolved instance through the same interface member.
 
-Type-wise, the proxy is based on `RuntimeProxy<TComponent>` and is generated in two parts:
+Type-wise, the [runtime proxy](../reference/glossary.md#runtime-proxy) is based on `RuntimeProxy<TComponent>` and is generated in two parts:
 
-1. A generated proxy script stub that inherits `RuntimeProxy<TComponent>` and is marked with `[GenerateRuntimeProxy]`.
-2. A Roslyn-generated partial implementation that makes the proxy type implement all public non-generic interfaces on `TComponent`.
+1. A generated [runtime proxy](../reference/glossary.md#runtime-proxy) script stub that inherits `RuntimeProxy<TComponent>` and is marked with `[GenerateRuntimeProxy]`.
+2. A Roslyn-generated partial implementation that makes the [runtime proxy](../reference/glossary.md#runtime-proxy) type implement all public non-generic interfaces on `TComponent`.
 
-If a proxy is accessed directly before swap, its generated interface members throw `InvalidOperationException`. That behavior is intentional, because proxies are placeholders and are expected to be swapped automatically during startup.
+If a [runtime proxy](../reference/glossary.md#runtime-proxy) is accessed directly before swap, its generated interface members throw `InvalidOperationException`. That behavior is intentional, because proxies are placeholders and are expected to be swapped automatically during startup.
 
 ## Binding a runtime proxy
 
-Runtime proxy bindings start from a component binding, but the global registration and proxy consumer are usually in different contexts.
+[Runtime [runtime proxy](../reference/glossary.md#runtime-proxy) bindings](../reference/glossary.md#runtime-proxy-binding) start from a [component binding](../reference/glossary.md#component-binding), but the [global registration](../reference/glossary.md#global-registration) and [runtime proxy](../reference/glossary.md#runtime-proxy) consumer are usually in different [contexts](../reference/glossary.md#context).
 
-Bootstrap context:
+Bootstrap [context](../reference/glossary.md#context):
 
 ```csharp
 using Plugins.Saneject.Experimental.Runtime.Scopes;
@@ -53,7 +53,7 @@ public class BootstrapScope : Scope
 }
 ```
 
-Consumer context (another scene or prefab context):
+Consumer [context](../reference/glossary.md#context) (another scene or prefab [context](../reference/glossary.md#context)):
 
 ```csharp
 using Plugins.Saneject.Experimental.Runtime.Scopes;
@@ -84,7 +84,7 @@ public partial class HudController : MonoBehaviour
 }
 ```
 
-Runtime proxies only work through interfaces. The generated proxy type stands in for interface members, not concrete component members, which is why runtime proxy bindings require `BindComponent<TInterface, TConcrete>()`.
+[Runtime proxies](../reference/glossary.md#runtime-proxy) only work through interfaces. The generated [runtime proxy](../reference/glossary.md#runtime-proxy) type stands in for interface members, not concrete component members, which is why [runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) require `BindComponent<TInterface, TConcrete>()`.
 
 `[SerializeInterface]` is the standard way to make interface members serializable and to generate the `SwapProxiesWithRealInstances()` hook used during runtime swapping. See [Serialized interface](serialized-interface.md).
 
@@ -96,14 +96,14 @@ API reference:
 
 ## Editor/runtime flow
 
-Runtime proxy flow has two phases. Editor-time prepares serialized placeholders and runtime finalizes them into real instances.
+[Runtime proxy](../reference/glossary.md#runtime-proxy) flow has two phases. Editor-time prepares serialized placeholders and runtime finalizes them into real instances.
 
 ### Editor phase
 
-1. You declare a binding with `BindComponent<TInterface, TConcrete>().FromRuntimeProxy(...)`.
-2. Roslyn and the Unity Editor generate the required proxy scripts (stub plus generated partial implementation).
-3. During injection, Saneject injects a proxy asset into the interface member instead of a concrete component reference.
-4. If that member contains a proxy and the owner implements `IRuntimeProxySwapTarget`, Saneject registers that component as a proxy swap target on the nearest upwards `Scope`.
+1. You declare a [binding](../reference/glossary.md#binding) with `BindComponent<TInterface, TConcrete>().FromRuntimeProxy(...)`.
+2. Roslyn and the Unity Editor generate the required [runtime proxy](../reference/glossary.md#runtime-proxy) scripts (stub plus generated partial implementation).
+3. During injection, Saneject injects a [runtime proxy](../reference/glossary.md#runtime-proxy) asset into the interface member instead of a concrete component reference.
+4. If that member contains a [runtime proxy](../reference/glossary.md#runtime-proxy) and the owner implements `IRuntimeProxySwapTarget`, Saneject registers that component as a [proxy swap target](../reference/glossary.md#proxy-swap-target) on the nearest upwards `Scope`.
 
 ```mermaid
 flowchart TD
@@ -119,11 +119,11 @@ flowchart TD
 ### Runtime phase
 
 1. Enter Play Mode
-2. Each `Scope` runs `Awake()` at execution order `-10000` and loops over its registered proxy swap targets.
+2. Each `Scope` runs `Awake()` at execution order `-10000` and loops over its registered [proxy swap targets](../reference/glossary.md#proxy-swap-target).
 3. For each target, the generated `SwapProxiesWithRealInstances()` method checks serialized single interface members and calls `ResolveInstance()` for any `RuntimeProxyBase` found.
 4. The resolved concrete instance is assigned back to the interface member, so normal gameplay code reads the real object for the rest of execution.
 
-If the binding resolves via `FromGlobalScope()`, the required global registration is already done in scope startup before proxy swapping runs.
+If the [binding](../reference/glossary.md#binding) resolves via `FromGlobalScope()`, the required [global registration](../reference/glossary.md#global-registration) is already done in [scope](../reference/glossary.md#scope) startup before [runtime proxy](../reference/glossary.md#runtime-proxy) swapping runs.
 
 This startup path is lightweight because swapping uses generated member assignments, not reflection.
 
@@ -140,7 +140,7 @@ flowchart TD
 
 ## Resolve methods
 
-`FromRuntimeProxy()` returns `RuntimeProxyBindingBuilder`, which configures how the proxy resolves the real instance:
+`FromRuntimeProxy()` returns `RuntimeProxyBindingBuilder`, which configures how the [runtime proxy](../reference/glossary.md#runtime-proxy) resolves the real instance:
 
 | Method                                               | Runtime behavior                                                                | Notes                                                                                                                      |
 |------------------------------------------------------|---------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------------------------------------|
@@ -186,40 +186,40 @@ Behavior:
 
 ## Proxy generation
 
-The runtime proxy system is almost fully automated. Scripts and assets are generated automatically when declaring bindings and when injecting. Runtime proxy generation has three stages.
+The [runtime proxy](../reference/glossary.md#runtime-proxy) system is almost fully automated. Scripts and assets are generated automatically when declaring [bindings](../reference/glossary.md#binding) and when injecting. [Runtime proxy](../reference/glossary.md#runtime-proxy) generation has three stages.
 
 ### Script generation
 
 **1) Proxy type discovery (Roslyn)**
 
-At compile time, Saneject scans `DeclareBindings()` methods in `Scope` subclasses. It finds chains that include `BindComponent<TInterface, TConcrete>()` with `.FromRuntimeProxy()`, then emits an assembly manifest of required concrete proxy targets.
+At compile time, Saneject scans `DeclareBindings()` methods in `Scope` subclasses. It finds chains that include `BindComponent<TInterface, TConcrete>()` with `.FromRuntimeProxy()`, then emits an assembly manifest of required concrete [runtime proxy](../reference/glossary.md#runtime-proxy) targets.
 
 **2) Proxy script generation (Unity Editor)**
 
-On domain reload, Saneject reads those manifests and generates missing proxy script stubs.
+On domain reload, Saneject reads those manifests and generates missing [runtime proxy](../reference/glossary.md#runtime-proxy) script stubs.
 
-- Controlled by project setting `GenerateProxyScriptsOnDomainReload`.
+- Controlled by [project setting](../reference/glossary.md#project-settings) `GenerateProxyScriptsOnDomainReload`.
 - If disabled, generate manually from `Saneject/Runtime Proxy/Generate Missing Proxy Scripts`.
 - Scripts are created under `ProjectSettings.ProxyAssetGenerationFolder` (default: `Assets/SanejectGenerated/RuntimeProxies`).
 
 **3) Proxy script partial generation (Roslyn)**
 
-During compilation, Roslyn generates a partial implementation for each proxy stub marked with `[GenerateRuntimeProxy]`. The generated partial makes the proxy implement the target component's public non-generic interfaces and emits stub members (events, properties, methods) that throw `InvalidOperationException` until the proxy is swapped.
+During compilation, Roslyn generates a partial implementation for each [runtime proxy](../reference/glossary.md#runtime-proxy) stub marked with `[GenerateRuntimeProxy]`. The generated partial makes the [runtime proxy](../reference/glossary.md#runtime-proxy) implement the target component's public non-generic interfaces and emits stub members (events, properties, methods) that throw `InvalidOperationException` until the [runtime proxy](../reference/glossary.md#runtime-proxy) is swapped.
 
-Unused proxy scripts and assets can be cleaned from:
+Unused [runtime proxy](../reference/glossary.md#runtime-proxy) scripts and assets can be cleaned from:
 
 - `Saneject/Runtime Proxy/Clean Up Unused Scripts And Assets`
 
 ### Proxy asset generation and reuse
 
-During injection, proxy assets are created automatically in the same configured output folder used for generated proxy scripts.
+During injection, [runtime proxy](../reference/glossary.md#runtime-proxy) assets are created automatically in the same configured output folder used for generated [runtime proxy](../reference/glossary.md#runtime-proxy) scripts.
 
-For each runtime proxy binding, Saneject checks whether an existing proxy asset already matches both:
+For each [runtime proxy binding](../reference/glossary.md#runtime-proxy-binding), Saneject checks whether an existing [runtime proxy](../reference/glossary.md#runtime-proxy) asset already matches both:
 
-- The proxy target type (`TConcrete`)
-- The proxy configuration (`RuntimeProxyConfig`, including resolve method, prefab, instance mode, and `dontDestroyOnLoad`)
+- The [runtime proxy](../reference/glossary.md#runtime-proxy) target type (`TConcrete`)
+- The [runtime proxy](../reference/glossary.md#runtime-proxy) configuration (`RuntimeProxyConfig`, including resolve method, prefab, instance mode, and `dontDestroyOnLoad`)
 
-If a match exists, it is reused. If not, a new asset is created. This keeps proxy asset count lower across scenes and prefabs while still producing the exact configuration each binding needs.
+If a match exists, it is reused. If not, a new asset is created. This keeps [runtime proxy](../reference/glossary.md#runtime-proxy) asset count lower across scenes and prefabs while still producing the exact configuration each [binding](../reference/glossary.md#binding) needs.
 
 ### Generated proxy anatomy
 
@@ -270,29 +270,29 @@ public partial class GameManagerProxyC5D11084 : IGameObservable, IGameStarter
 
 ## Rules and constraints
 
-Runtime proxy bindings must follow these constraints:
+[Runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) must follow these constraints:
 
-- Must be component bindings, not asset bindings.
+- Must be [component bindings](../reference/glossary.md#component-binding), not [asset bindings](../reference/glossary.md#asset-binding).
 - Must declare both interface and concrete type: `BindComponent<TInterface, TConcrete>()`.
-- Must be single-value bindings, not collections.
+- Must be single-value [bindings](../reference/glossary.md#binding), not collections.
 - `TConcrete` must derive from `UnityEngine.Component`.
-- Runtime proxy binding path does not expose filter methods (`Where...`).
+- [Runtime proxy binding](../reference/glossary.md#runtime-proxy-binding) path does not expose filter methods (`Where...`).
 
-`BindComponent<TConcrete>().FromRuntimeProxy()` can compile, but it is invalidated during injection because runtime proxy bindings require an interface type to stand in for.
+`BindComponent<TConcrete>().FromRuntimeProxy()` can compile, but it is invalidated during injection because [runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) require an interface type to stand in for.
 
-In practice, you usually let Saneject generate and manage proxy scripts and proxy assets. Hand-authoring proxy types is possible, but not the intended workflow.
+In practice, you usually let Saneject generate and manage [runtime proxy](../reference/glossary.md#runtime-proxy) scripts and [runtime proxy](../reference/glossary.md#runtime-proxy) assets. Hand-authoring [runtime proxy](../reference/glossary.md#runtime-proxy) types is possible, but not the intended workflow.
 
 ## Runtime lifecycle considerations
 
-Runtime proxy resolution can fail if runtime preconditions are not met. Typical examples:
+[Runtime proxy](../reference/glossary.md#runtime-proxy) resolution can fail if runtime preconditions are not met. Typical examples:
 
 - `FromGlobalScope()` with no registered instance in `GlobalScope`.
 - `FromAnywhereInLoadedScenes()` before the target scene/object is loaded.
 - `FromComponentOnPrefab()` when the prefab does not contain the target component.
-- Target component destroyed before proxy resolution, for example because its scene or owning prefab instance was unloaded.
+- Target component destroyed before [runtime proxy](../reference/glossary.md#runtime-proxy) resolution, for example because its scene or owning [prefab instance](../reference/glossary.md#prefab-instance) was unloaded.
 - Proxy used directly before swap, which throws `InvalidOperationException`.
 
-This is expected for runtime systems: load order and lifetime now matter. Most Saneject features run at editor time and avoid those concerns, but runtime proxy intentionally crosses into runtime lifecycle for dependencies that can't avoid it.
+This is expected for runtime systems: load order and lifetime now matter. Most Saneject features run at editor time and avoid those concerns, but [runtime proxy](../reference/glossary.md#runtime-proxy) intentionally crosses into runtime lifecycle for dependencies that can't avoid it.
 
 ## Related pages
 

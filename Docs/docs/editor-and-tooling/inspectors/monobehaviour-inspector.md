@@ -18,7 +18,7 @@ The default editor is multi-object aware with (`[CanEditMultipleObjects]`), so s
 
 ## What this inspector is for
 
-Use this inspector when you want consistent field rendering across normal Unity components and Saneject injection targets, especially when your components use:
+Use this inspector when you want consistent field rendering across normal Unity components and Saneject [injection targets](../../reference/glossary.md#injection-target), especially when your components use:
 
 - `[Inject]` fields or `[field: Inject]` auto-properties.
 - `[SerializeInterface]` members.
@@ -87,7 +87,7 @@ public class EnemySpawner : MonoBehaviour
 
 ## Serialized interface validation
 
-Roslyn-generated code already enforces the interface type for stored values, so inspector validation mainly exists to handle drag-and-drop assignment in serialized interface fields. 
+Roslyn-generated code already enforces the interface type for stored values, so inspector validation mainly exists to handle drag-and-drop assignment in [serialized interface](../../reference/glossary.md#serialized-interface) fields. 
 
 `[Inject]` fields are read-only and managed by Saneject, so interface drag-and-drop and inspector validation is only applicable when using `[SerializeInterface]` without `[Inject]`.
 
@@ -146,7 +146,7 @@ Saneject adds component context menu items that support logging workflows. Right
 - `Saneject/Filter Logs By Scope Type`
     - Sets the Console search text to filter by `Scope: <ScopeTypeName>`.
 - `Saneject/Filter Logs By Component Path`
-    - Sets the Console search text to filter by the selected Scope's path.
+    - Sets the Console search text to filter by the selected [Scope](../../reference/glossary.md#scope)'s path.
 
 ## Related pages
 

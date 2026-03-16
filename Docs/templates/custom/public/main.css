@@ -420,6 +420,13 @@ article dt
     vertical-align: baseline;
 }
 
+.glossary-term:hover,
+.glossary-term:focus,
+.glossary-term:focus-visible
+{
+    z-index: 40;
+}
+
 .glossary-term:focus
 {
     outline: none;
@@ -672,6 +679,13 @@ article .table-responsive
     overflow: hidden;
     font-size: 14px;
     margin-bottom: 1rem;
+}
+
+article .table-responsive:has(.glossary-term:hover),
+article .table-responsive:has(.glossary-term:focus),
+article .table-responsive:has(.glossary-term:focus-visible)
+{
+    overflow: visible;
 }
 
 article .table-responsive > .table
