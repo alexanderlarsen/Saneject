@@ -158,7 +158,7 @@ Reusable prefab definition in the Project window.
 
 Instantiated prefab placed in a scene or nested inside another prefab.
 
-### Project settings (Saneject)
+### Project settings
 
 Saneject settings shared at project scope, stored in `ProjectSettings/Saneject/ProjectSettings.json` and available from `Saneject/Settings -> Project Settings`.
 
@@ -232,6 +232,6 @@ Missing binding or missing dependency issue hidden from detailed logs by `suppre
 
 ## U
 
-### User settings (Saneject)
+### User settings
 
 Saneject settings scoped to one Unity user on one machine, stored in `EditorPrefs` and available from `Saneject/Settings -> User Settings`.

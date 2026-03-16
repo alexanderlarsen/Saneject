@@ -52,7 +52,7 @@ public partial class Player : MonoBehaviour
 
 ## 4. Create a scope and declare bindings
 
-Create `GameScope.cs`, attach it to `Root`, and declare bindings:
+Create `GameScope.cs`, attach it to `Root`, and declare [bindings](../reference/glossary.md#binding):
 
 You can create a scope manually or from:
 
