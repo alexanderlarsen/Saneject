@@ -73,7 +73,7 @@ Saneject also walks nested `[Serializable]` class instances inside a component, 
 [Context](../core-concepts/context.md) is the boundary system that keeps [scene objects](../reference/glossary.md#scene-object), [prefab instances](../reference/glossary.md#prefab-instance), and [prefab assets](../reference/glossary.md#prefab-asset) from being treated as one undifferentiated search space. It influences architecture in two places:
 
 - Graph filtering decides which parts of a hierarchy participate in a run
-- [Context isolation](../reference/glossary.md#context-isolation) decides which [scopes](../reference/glossary.md#scope) and dependency candidates are allowed to cross boundaries during resolution
+- [Context isolation](../reference/glossary.md#context-isolation) decides which [scopes](../reference/glossary.md#scope) and [dependency candidates](../reference/glossary.md#dependency-candidate) are allowed to cross boundaries during resolution
 
 Without [context](../reference/glossary.md#context), edit-time injection in Unity would be far less predictable across scenes and prefabs.
 

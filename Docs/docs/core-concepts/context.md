@@ -9,7 +9,7 @@ A [context](../reference/glossary.md#context) is Saneject's way of saying "this 
 Saneject uses [context](../reference/glossary.md#context) during editor injection to answer two questions:
 
 - Which transforms participate in the injection walk?
-- Which potential dependency candidates can be injected in this component?
+- Which potential [dependency candidates](../reference/glossary.md#dependency-candidate) can be injected in this component?
 
 ## Context types
 
@@ -29,7 +29,7 @@ Example:
 
 ## Why contexts exist
 
-Unity already enforces some serialization boundaries. For example, [scene objects](../reference/glossary.md#scene-object) cannot serialize direct references to [prefab asset](../reference/glossary.md#prefab-asset) objects, and vice versa.
+Unity already enforces some [serialization boundaries](../reference/glossary.md#serialization-boundary). For example, [scene objects](../reference/glossary.md#scene-object) cannot serialize direct references to [prefab asset](../reference/glossary.md#prefab-asset) objects, and vice versa.
 
 However, edit-time injection can still create dependencies across boundaries where Unity technically allows references, like between a [scene object](../reference/glossary.md#scene-object) and [prefab instance](../reference/glossary.md#prefab-instance) within the same scene. That can make a prefab depend on the scene where it was authored, making it less modular and portable to other [contexts](../reference/glossary.md#context).
 
@@ -52,17 +52,17 @@ Because it is in `ProjectSettings`, teams can version control and share the same
 When Saneject resolves an `[Inject]` member, there are two relevant steps:
 
 1. Find a matching [binding](../reference/glossary.md#binding) by walking [scopes](../reference/glossary.md#scope) upward.
-2. Locate dependency candidates from the chosen [binding](../reference/glossary.md#binding).
+2. Locate [dependency candidates](../reference/glossary.md#dependency-candidate) from the chosen [binding](../reference/glossary.md#binding).
 
 With isolation enabled:
 
 - Step 1 only considers [scopes](../reference/glossary.md#scope) in the same [context](../reference/glossary.md#context) as the [injection target](../reference/glossary.md#injection-target) component.
-- Step 2 rejects dependency candidates from other [contexts](../reference/glossary.md#context).
+- Step 2 rejects [dependency candidates](../reference/glossary.md#dependency-candidate) from other [contexts](../reference/glossary.md#context).
 
 With isolation disabled:
 
 - Step 1 can walk across [scene object](../reference/glossary.md#scene-object) and [prefab instance](../reference/glossary.md#prefab-instance) boundaries in the active hierarchy.
-- Step 2 can also accept dependency candidates across those boundaries.
+- Step 2 can also accept [dependency candidates](../reference/glossary.md#dependency-candidate) across those boundaries.
 
 ### Practical effect
 
@@ -76,7 +76,7 @@ With isolation disabled:
 Saneject builds the [injection graph](../reference/glossary.md#injection-graph) first, then applies the selected `ContextWalkFilter`.
 Only the filtered transforms become active, and only components under those transforms are processed.
 
-What filtering does not do: it does not change [context isolation](../reference/glossary.md#context-isolation) rules, and it does not directly filter dependency candidates returned by an active [binding](../reference/glossary.md#binding).
+What filtering does not do: it does not change [context isolation](../reference/glossary.md#context-isolation) rules, and it does not directly filter [dependency candidates](../reference/glossary.md#dependency-candidate) returned by an active [binding](../reference/glossary.md#binding).
 
 So if an active [binding](../reference/glossary.md#binding) searches into another [context](../reference/glossary.md#context), those candidates can still be found. Whether they are accepted is still decided by `UseContextIsolation`.
 
@@ -128,7 +128,7 @@ At a high level, Saneject applies [context](../reference/glossary.md#context) ru
 1. Build the [injection graph](../reference/glossary.md#injection-graph) from the selected start roots.
 2. Apply `ContextWalkFilter` to select active transforms.
 3. Build active components, [scopes](../reference/glossary.md#scope), and [bindings](../reference/glossary.md#binding) from those transforms.
-4. Resolve [bindings](../reference/glossary.md#binding) and dependency candidates.
+4. Resolve [bindings](../reference/glossary.md#binding) and [dependency candidates](../reference/glossary.md#dependency-candidate).
 5. Apply [context isolation](../reference/glossary.md#context-isolation) rules while resolving.
 
 ## Cross-context dependencies

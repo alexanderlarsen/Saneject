@@ -78,6 +78,12 @@ Project setting (`UseContextIsolation`) that controls whether dependency resolut
 
 Filter enum used during graph walk to include specific context sets in a run (`AllContexts`, `SameContextsAsSelection`, `SceneObjects`, `PrefabAssetObjects`, `PrefabInstances`).
  
+## D
+
+### Dependency candidate
+
+Object considered during resolution before qualifiers, filters, and assignment determine whether it becomes the final injected dependency.
+ 
 ## E
 
 ### Editor-time injection
@@ -219,6 +225,10 @@ Shared static inspector surface (`SanejectInspector`) that draws and validates s
 ### Scene object
 
 Non-prefab `GameObject` in a scene.
+
+### Serialization boundary
+
+Boundary that determines which objects belong to the same serialized context for resolution and injection.
 
 ### Scope
 

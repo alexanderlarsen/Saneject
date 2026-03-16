@@ -24,7 +24,7 @@ Unity serialization cannot serialize direct references between certain boundarie
 
 This keeps the common workflow explicit:
 
-1. Resolve dependency candidates in the editor through [bindings](../reference/glossary.md#binding).
+1. Resolve [dependency candidates](../reference/glossary.md#dependency-candidate) in the editor through [bindings](../reference/glossary.md#binding).
 2. Persist global candidates on the declaring `Scope`.
 3. Register those components into `GlobalScope` at [runtime startup](../reference/glossary.md#runtime-startup).
 
