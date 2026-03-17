@@ -1,5 +1,4 @@
-@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono:wght@700&display=swap");
-
+@import url("https://fonts.googleapis.com/css2?family=Manrope:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Mono:wght@400;700&display=swap");
 /* Theme tokens: light */
 :root
 {
@@ -128,24 +127,20 @@ body > header
     {
         height: auto !important;
     }
-
     body > header .container-xxl.flex-nowrap
     {
         flex-wrap: wrap !important;
         align-items: flex-start;
     }
-
     body > header .navbar-collapse
     {
         flex-basis: 100%;
         width: 100%;
     }
-
     body > header #navbar
     {
         width: 100%;
     }
-
     body > header .navbar-nav
     {
         width: 100%;
@@ -166,9 +161,9 @@ body > footer.border-top
 .navbar-brand
 {
     color: var(--site-heading);
-    font-family: "Space Mono", var(--bs-body-font-family);
+    font-family: "Space Mono", monospace;
     font-weight: 700;
-    font-size: 1.5rem!important; 
+    font-size: 1.5rem !important;
 }
 
 .navbar-brand:hover,
@@ -197,12 +192,10 @@ body > footer.border-top
     {
         margin-right: 1.9rem;
     }
-
     .navbar .navbar-nav
     {
         column-gap: 0.9rem;
     }
-
     .navbar #navbar form.search
     {
         margin-left: 0.6rem;
@@ -354,7 +347,7 @@ article h6
 
 article h1
 {
-    font-size: clamp(2rem, 5vw, 3.4rem);
+    font-size: clamp(2.25rem, 5vw, 3.4rem);
     font-weight: 800;
     letter-spacing: -0.06em;
 }
@@ -362,9 +355,19 @@ article h1
 body[data-layout="landing"] article h1,
 body[data-layout="_landing"] article h1
 {
-    font-family: "Space Mono", var(--bs-body-font-family);
-    font-size: clamp(2.25rem, 5.25vw, 3.65rem);    
+    font-family: "Space Mono", monospace;
+    font-size: clamp(3rem, 5.25vw, 3.65rem);
     font-weight: 700;
+    margin-bottom: 0.1rem;
+}
+
+body[data-layout="landing"] article h1 + p,
+body[data-layout="_landing"] article h1 + p
+{
+    font-family: "Space Mono", monospace;
+    font-weight: 400;
+    font-size: clamp(1rem, 1.75vw, 1.2166rem);
+    letter-spacing: 0.02em;
 }
 
 article h2,
@@ -372,7 +375,7 @@ body[data-yaml-mime="ManagedReference"] article h2.section,
 body[data-yaml-mime="ApiPage"] article h2.section
 {
     margin: 2.5rem 0 0.75rem 0;
-    font-size: clamp(1.5rem, 2.6vw, 2rem);
+    font-size: clamp(1.7rem, 2.6vw, 2rem);
     font-weight: 760;
 }
 
@@ -381,7 +384,7 @@ body[data-yaml-mime="ManagedReference"] article h3[data-uid],
 body[data-yaml-mime="ApiPage"] article h3[data-uid]
 {
     margin: 1.75rem 0 0.75rem 0;
-    font-size: clamp(1.18rem, 2vw, 1.45rem);
+    font-size: clamp(1.33rem, 2vw, 1.45rem);
     font-weight: 720;
 }
 
@@ -390,7 +393,7 @@ body[data-yaml-mime="ManagedReference"] article h4.section,
 body[data-yaml-mime="ApiPage"] article h4.section
 {
     margin-top: 1.25rem;
-    font-size: clamp(1.12rem, 1.7vw, 1.24rem);
+    font-size: clamp(1.18rem, 1.7vw, 1.24rem);
     font-weight: 700;
 }
 
