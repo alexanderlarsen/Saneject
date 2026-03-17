@@ -30,7 +30,8 @@
     "resource": [
       {
         "files": [
-          "images/**"
+          "images/**",
+          "favicon.ico"
         ]
       }
     ],
@@ -42,7 +43,8 @@
     ],
     "globalMetadata": {
       "_appName": "Saneject",
-      "_appTitle": "Saneject documentation",
+      "_appTitle": "Saneject: Dependency injection the Unity way",
+      "_appFaviconPath": "favicon.ico",
       "_enableSearch": true,
       "_enableSearchInGeneratedFiles": true,
       "_disableContribution": "true",
