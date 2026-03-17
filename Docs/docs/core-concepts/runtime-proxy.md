@@ -86,7 +86,7 @@ public partial class HudController : MonoBehaviour
 
 [Runtime proxies](../reference/glossary.md#runtime-proxy) only work through interfaces. The generated [runtime proxy](../reference/glossary.md#runtime-proxy) type stands in for interface members, not concrete component members, which is why [runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) require `BindComponent<TInterface, TConcrete>()`.
 
-`[SerializeInterface]` is the standard way to make interface members serializable and to generate the `SwapProxiesWithRealInstances()` hook used during runtime swapping. See [Serialized interface](serialized-interface.md).
+`[SerializeInterface]` is the standard way to make interface members serializable and to generate the `SwapProxiesWithRealInstances()` hook used during runtime swapping. See [Serialized interface](serialized-interface.md) for more details.
 
 API reference:
 

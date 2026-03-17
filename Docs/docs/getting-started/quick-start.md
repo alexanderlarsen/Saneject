@@ -91,7 +91,7 @@ After injection, `Player` has serialized values for `gameStateObservable` and `c
 
 ## Inspector integration note
 
-Saneject includes a custom MonoBehaviour inspector that keeps injected and serialized-interface fields ordered and preserves Saneject's intended inspector UX.
+Saneject includes a custom `MonoBehaviour` inspector that keeps injected and [serialized interface](../reference/glossary.md#serialized-interface) fields ordered and preserves Saneject's intended inspector UX.
 If the inspector looks wrong or incomplete, another custom inspector or plugin is likely overriding Saneject.
 In that case, either disable the conflicting inspector or integrate Saneject's inspector API in your custom inspector to restore the Saneject inspector UX.
 

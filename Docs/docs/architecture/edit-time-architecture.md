@@ -4,7 +4,9 @@ title: Edit-time architecture
 
 # Edit-time architecture
 
-This page explains the editor-side system that prepares injected scenes and prefabs. It is about architecture and lifecycle, not the fluent [binding](../reference/glossary.md#binding) API. For the individual concepts, see [Scope](../core-concepts/scope.md), [Binding](../core-concepts/binding.md), [Context](../core-concepts/context.md), and [Field, property & method injection](../core-concepts/field-property-and-method-injection.md).
+This page explains the editor-side system that prepares injected scenes and prefabs. It is about architecture and lifecycle, not the fluent [binding](../reference/glossary.md#binding) API. 
+
+For the individual concepts, see [Scope](../core-concepts/scope.md), [Binding](../core-concepts/binding.md), [Context](../core-concepts/context.md), and [Field, property & method injection](../core-concepts/field-property-and-method-injection.md).
 
 ## Responsibilities of the edit-time system
 
@@ -96,7 +98,7 @@ The first real architectural step is building an `InjectionGraph`. The graph bui
 Each `TransformNode` records the information the later stages depend on:
 
 - The real `Transform`
-- The node's [Context](../core-concepts/context.md) identity
+- The node's [context](../reference/glossary.md#context) identity
 - The [scope](../reference/glossary.md#scope) declared directly on that transform, if any
 - The nearest reachable [scope](../reference/glossary.md#scope) above it
 - The child transforms below it
@@ -119,7 +121,7 @@ That deep traversal is important for architecture because it means the pipeline 
 
 After the full graph exists, Saneject applies `ContextWalkFilter` through `GraphFilter`. This produces the active transform set for the current run.
 
-The filter options are the ones documented on [Context](../core-concepts/context.md):
+`ContextWalkFilter` options:
 
 - `AllContexts`
 - `SameContextsAsSelection`

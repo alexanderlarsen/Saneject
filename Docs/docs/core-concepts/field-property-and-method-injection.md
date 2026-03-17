@@ -235,7 +235,7 @@ Saneject resolves dependencies from [component bindings](../reference/glossary.m
 
 Plain C# object (POCO) services are not supported.
 
-For service-like patterns, use [runtime proxies](../reference/glossary.md#runtime-proxy) with component implementations. [Runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) can resolve from [global scope](../reference/glossary.md#global-scope), loaded scenes, prefabs, or newly created `GameObject`s, with transient or singleton instance modes. See [Runtime proxy](runtime-proxy.md).
+For service-like patterns, use [runtime proxies](../reference/glossary.md#runtime-proxy) with component implementations. [Runtime proxy bindings](../reference/glossary.md#runtime-proxy-binding) can resolve from [global scope](../reference/glossary.md#global-scope), loaded scenes, prefabs, or newly created `GameObject`s, with transient or singleton instance modes. See [Runtime proxy](runtime-proxy.md) for details.
 
 ## Interface injection notes
 

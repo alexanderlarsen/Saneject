@@ -27,8 +27,10 @@ A [binding](../reference/glossary.md#binding) is a rule declared in a `Scope` th
     - Single [bindings](../reference/glossary.md#binding) (`BindComponent`, `BindAsset`) resolve single fields/properties, parameters.
     - [Collection bindings](../reference/glossary.md#collection-binding) (`BindComponents`/`BindAssets`/`BindMultiple...`) resolve arrays and `List<>`.
 4. [Bindings](../reference/glossary.md#binding) are local to the declaring [scope](../reference/glossary.md#scope). If the nearest [scope](../reference/glossary.md#scope) to an [injection site](../reference/glossary.md#injection-site) has no matching [binding](../reference/glossary.md#binding),
-   Saneject walks up parent [scopes](../reference/glossary.md#scope) until it finds one. See [Scope](scope.md) for more information.
+   Saneject walks up parent [scopes](../reference/glossary.md#scope) until it finds one.
 5. Invalid [bindings](../reference/glossary.md#binding) are excluded from valid resolution and logged.
+
+See [Scope](scope.md) for more information
 
 ## Fluent binding flow
 

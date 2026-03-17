@@ -131,7 +131,7 @@ public class AudioBootstrap : MonoBehaviour
 }
 ```
 
-API overview ([Full API here](xref:Plugins.Saneject.Experimental.Runtime.Scopes.GlobalScope)):
+API overview:
 
 - `GlobalScope.GetComponent<T>()`
 - `GlobalScope.TryGetComponent<T>(out T component)`
@@ -139,6 +139,8 @@ API overview ([Full API here](xref:Plugins.Saneject.Experimental.Runtime.Scopes.
 - `GlobalScope.RegisterComponent(Component instance, Object caller)`
 - `GlobalScope.UnregisterComponent(Component instance, Object caller)`
 - `GlobalScope.Clear()`
+
+[Full API here](xref:Plugins.Saneject.Experimental.Runtime.Scopes.GlobalScope)
 
 Use manual `RegisterComponent` and `UnregisterComponent` carefully. Most projects should let `Scope` manage lifecycle through `BindGlobal<T>()`.
 

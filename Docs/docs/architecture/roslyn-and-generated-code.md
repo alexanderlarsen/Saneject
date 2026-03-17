@@ -47,7 +47,7 @@ Architectural effect:
 - Edit-time injection can write stable serialized data for interface members.
 - [Runtime startup](../reference/glossary.md#runtime-startup) can swap proxy placeholders to real instances without reflection-heavy graph traversal logic.
 
-See [Serialized interface](../core-concepts/serialized-interface.md) for member-level behavior.
+See [Serialized interface](../core-concepts/serialized-interface.md) for details.
 
 ## Runtime proxy generation
 
@@ -59,7 +59,7 @@ See [Serialized interface](../core-concepts/serialized-interface.md) for member-
 
 At injection time, the pipeline uses those generated proxy types to resolve/reuse/create proxy assets. At runtime, generated swap code and proxy code finalize references during startup.
 
-See [Runtime proxy](../core-concepts/runtime-proxy.md) for runtime resolve behavior.
+See [Runtime proxy](../core-concepts/runtime-proxy.md) for details.
 
 ## Roslyn analyzers
 
@@ -75,7 +75,7 @@ Architectural effect:
 - Some validation shifts from injection-time logs to compile-time diagnostics.
 - Developers get earlier feedback, reducing failed injection passes caused by static code issues.
 
-See [Code analyzers](../editor-and-tooling/code-analyzers.md) for diagnostic-level details.
+See [Code analyzers](../editor-and-tooling/code-analyzers.md) for details.
 
 ## Edit-time and runtime touchpoints
 

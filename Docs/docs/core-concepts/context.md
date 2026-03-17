@@ -136,7 +136,7 @@ At a high level, Saneject applies [context](../reference/glossary.md#context) ru
 If a dependency must cross a hard boundary (for example scene to [prefab asset](../reference/glossary.md#prefab-asset)), use a [runtime proxy](../reference/glossary.md#runtime-proxy).
 That is the intended pattern for cross-context wiring.
 
-See [Runtime proxy](runtime-proxy.md).
+See [Runtime proxy](runtime-proxy.md) for details.
 
 ## Visual examples
 

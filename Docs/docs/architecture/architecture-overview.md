@@ -48,7 +48,7 @@ flowchart TD
 
 ### Scope & bindings
 
-[Scope](../core-concepts/scope.md) is the unit that declares resolution rules for part of a hierarchy. Inside `DeclareBindings()`, a [scope](../reference/glossary.md#scope) creates [Binding](../core-concepts/binding.md) objects that describe:
+[Scope](../reference/glossary.md#scope) is the unit that declares resolution rules for part of a hierarchy. Inside `DeclareBindings()`, a [scope](../reference/glossary.md#scope) creates [Binding](../reference/glossary.md#binding) objects that describe:
 
 - What type is being requested
 - Whether the [binding](../reference/glossary.md#binding) is single-value or collection-based
@@ -57,6 +57,8 @@ flowchart TD
 - Which filters are applied after candidate location
 
 At injection time, Saneject starts at the nearest reachable [scope](../reference/glossary.md#scope) and walks upward until it finds the first matching [binding](../reference/glossary.md#binding).
+
+See [Scope](../core-concepts/scope.md) and [Binding](../core-concepts/binding.md) for more details.
 
 ### Injection targets
 
@@ -70,12 +72,14 @@ Saneject also walks nested `[Serializable]` class instances inside a component, 
 
 ### Context system
 
-[Context](../core-concepts/context.md) is the boundary system that keeps [scene objects](../reference/glossary.md#scene-object), [prefab instances](../reference/glossary.md#prefab-instance), and [prefab assets](../reference/glossary.md#prefab-asset) from being treated as one undifferentiated search space. It influences architecture in two places:
+[Context](../reference/glossary.md#context) is the boundary system that keeps [scene objects](../reference/glossary.md#scene-object), [prefab instances](../reference/glossary.md#prefab-instance), and [prefab assets](../reference/glossary.md#prefab-asset) from being treated as one undifferentiated search space. It influences architecture in two places:
 
 - Graph filtering decides which parts of a hierarchy participate in a run
 - [Context isolation](../reference/glossary.md#context-isolation) decides which [scopes](../reference/glossary.md#scope) and [dependency candidates](../reference/glossary.md#dependency-candidate) are allowed to cross boundaries during resolution
 
 Without [context](../reference/glossary.md#context), edit-time injection in Unity would be far less predictable across scenes and prefabs.
+
+See [Context](../core-concepts/context.md) for more details.
 
 ### Edit-time pipeline
 
@@ -87,31 +91,35 @@ That pipeline is described in detail in [Edit-time architecture](edit-time-archi
 
 Saneject uses Roslyn to fill in the parts Unity does not provide by default:
 
-- [SerializeInterface](../core-concepts/serialized-interface.md) generates hidden serialized backing members and synchronization methods for interface-typed members.
+- `[SerializeInterface]` generates hidden serialized backing members and synchronization methods for interface-typed members.
 - [Runtime proxy](../reference/glossary.md#runtime-proxy) generation creates proxy script stubs and proxy interface implementations so interface members can temporarily hold placeholder assets.
-- [Roslyn analyzers](../reference/glossary.md#roslyn-analyzer) catch some invalid injection patterns before an [injection run](../reference/glossary.md#injection-run) even starts. See [Code analyzers](../editor-and-tooling/code-analyzers.md).
+- [Roslyn analyzers](../reference/glossary.md#roslyn-analyzer) catch some invalid injection patterns before an [injection run](../reference/glossary.md#injection-run) even starts.
 
 Generated code is not a side feature. It is part of how Saneject makes interface-based edit-time injection practical inside Unity's serialization model.
 
+See [Serialized interface](../core-concepts/serialized-interface.md), [Runtime proxy](../core-concepts/runtime-proxy.md) and [Code analyzers](../editor-and-tooling/code-analyzers.md)
+
 ### Runtime handoff layer
 
-The runtime layer is intentionally small. It centers on [Scope](../core-concepts/scope.md), [GlobalScope](../core-concepts/global-scope.md), and [Runtime proxy](../core-concepts/runtime-proxy.md).
+The runtime layer is intentionally small. It centers on [scopes](../reference/glossary.md#scope), [global scopes](../reference/glossary.md#global-scope), and [runtime proxies](../reference/glossary.md#runtime-proxy).
 
 At runtime, `Scope.Awake()` performs early startup work using data that was prepared during editor injection:
 
 - Hidden global component lists are registered into `GlobalScope`
 - Components that were marked as [proxy swap targets](../reference/glossary.md#proxy-swap-target) are asked to replace proxies with real instances
 
-That runtime handoff is described in detail in [Runtime architecture](runtime-architecture.md).
+The runtime handoff is described in detail in [Runtime architecture](runtime-architecture.md).
+
+See [Scope](../core-concepts/scope.md), [GlobalScope](../core-concepts/global-scope.md), and [Runtime proxy](../core-concepts/runtime-proxy.md) for more details.
 
 ## Edit-time and runtime relationship
 
-| Case                                           | What the editor does                                                                                         | What runtime does                                                                |
-|------------------------------------------------|--------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------|
-| Direct component or asset dependency           | Writes the real object reference into the member.                                                            | Nothing extra.                                                                   |
-| Interface dependency with `SerializeInterface` | Writes the real object into the generated hidden backing member and keeps the interface member synchronized. | Nothing extra unless the value is a [runtime proxy](../reference/glossary.md#runtime-proxy).                               |
-| `BindGlobal<T>()`                              | Resolves the component and stores it in the declaring [scope](../reference/glossary.md#scope)'s hidden global list.                            | Registers that component into `GlobalScope` during `Scope.Awake()`.              |
-| `FromRuntimeProxy()` [binding](../reference/glossary.md#binding)                   | Resolves or creates a proxy asset and serializes that placeholder into the interface member.                 | Resolves the real runtime instance and swaps the placeholder out during startup. |
+| Case                                                             | What the editor does                                                                                                | What runtime does                                                                            |
+|------------------------------------------------------------------|---------------------------------------------------------------------------------------------------------------------|----------------------------------------------------------------------------------------------|
+| Direct component or asset dependency                             | Writes the real object reference into the member.                                                                   | Nothing extra.                                                                               |
+| Interface dependency with `SerializeInterface`                   | Writes the real object into the generated hidden backing member and keeps the interface member synchronized.        | Nothing extra unless the value is a [runtime proxy](../reference/glossary.md#runtime-proxy). |
+| `BindGlobal<T>()`                                                | Resolves the component and stores it in the declaring [scope](../reference/glossary.md#scope)'s hidden global list. | Registers that component into `GlobalScope` during `Scope.Awake()`.                          |
+| `FromRuntimeProxy()` [binding](../reference/glossary.md#binding) | Resolves or creates a proxy asset and serializes that placeholder into the interface member.                        | Resolves the real runtime instance and swaps the placeholder out during startup.             |
 
 ## What is serialized and what is deferred
 
