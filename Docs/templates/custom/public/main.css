@@ -186,6 +186,11 @@ body > footer.border-top
     text-decoration: none;
 }
 
+.navbar .navbar-nav .nav-link.active
+{
+    font-weight: 700;
+}
+
 @media (min-width: 768px)
 {
     .navbar-brand
