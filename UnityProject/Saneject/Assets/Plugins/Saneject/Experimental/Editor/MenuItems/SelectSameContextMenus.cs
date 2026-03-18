@@ -17,9 +17,9 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
     {
         #region Priority constants
 
-        private const int Priority_Base = MenuPriority.Root + MenuPriority.Section * 3;
+        private const int Priority_Base = MenuPriority.Root + 200;
 
-        private const int Priority_Group_Default = Priority_Base + MenuPriority.Group * 0;
+        private const int Priority_Group_Default = Priority_Base + 0;
         private const int Priority_Item_SelectSameContextInScene = Priority_Group_Default + 1;
         private const int Priority_Item_SelectSameContextInHierarchy = Priority_Group_Default + 2;
 

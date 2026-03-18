@@ -7,7 +7,6 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
     {
         public const int Root = -10000;
         public const int ComponentRoot = -10000;
-        public const int Section = 100;
         public const int Group = 20;
     }
 }
