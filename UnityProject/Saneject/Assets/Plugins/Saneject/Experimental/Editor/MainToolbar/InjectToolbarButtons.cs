@@ -27,6 +27,7 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
         private static ToolbarButton injectSceneButton;
         private static ToolbarButton injectSelectionButton;
         private static ToolbarButton injectPrefabButton;
+        private static ToolbarButton batchInjectSelectedAssetsButton;
 
         static InjectMainToolbarButton()
         {
@@ -120,9 +121,17 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
                 onClicked: () => InjectionUtility.InjectCurrentPrefabAsset(ContextWalkFilter.AllContexts)
             );
 
+            batchInjectSelectedAssetsButton = CreateButton
+            (
+                text: "Batch Inject Selected Assets",
+                tooltip: "Batch injects the selected folders, scene assets, and prefab assets.",
+                onClicked: InjectionUtility.BatchInjectSelectedAssets
+            );
+
             root.Add(injectSceneButton);
             root.Add(injectSelectionButton);
             root.Add(injectPrefabButton);
+            root.Add(batchInjectSelectedAssetsButton);
 
             return root;
         }
@@ -154,7 +163,11 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
                 .gameObjects
                 .Count(gameObject => gameObject.scene.IsValid());
 
-            return new ToolbarState(mode, sceneObjectSelectionCount);
+            bool hasBatchInjectAssetSelection = Selection
+                .GetFiltered<Object>(SelectionMode.DeepAssets)
+                .Any(selectedObject => selectedObject is GameObject or SceneAsset);
+
+            return new ToolbarState(mode, sceneObjectSelectionCount, hasBatchInjectAssetSelection);
         }
 
         private static void ApplyToolbarState(ToolbarState toolbarState)
@@ -162,7 +175,11 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
             if (container == null)
                 return;
 
-            SetDisplay(container, toolbarState.Mode == ToolbarMode.None ? DisplayStyle.None : DisplayStyle.Flex);
+            bool hasVisibleControls =
+                toolbarState.Mode != ToolbarMode.None ||
+                toolbarState.HasBatchInjectAssetSelection;
+
+            SetDisplay(container, hasVisibleControls ? DisplayStyle.Flex : DisplayStyle.None);
             SetDisplay(injectSceneButton, toolbarState.Mode == ToolbarMode.Scene ? DisplayStyle.Flex : DisplayStyle.None);
 
             SetDisplay
@@ -173,9 +190,17 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
                     : DisplayStyle.None
             );
 
-            SetDisplay(injectPrefabButton, toolbarState.Mode == ToolbarMode.Prefab ? DisplayStyle.Flex : DisplayStyle.None); 
+            SetDisplay(injectPrefabButton, toolbarState.Mode == ToolbarMode.Prefab ? DisplayStyle.Flex : DisplayStyle.None);
+
+            SetDisplay
+            (
+                batchInjectSelectedAssetsButton,
+                toolbarState.HasBatchInjectAssetSelection
+                    ? DisplayStyle.Flex
+                    : DisplayStyle.None
+            );
         }
- 
+
         private static void SetDisplay(
             VisualElement element,
             DisplayStyle displayStyle)
@@ -188,14 +213,17 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
         {
             public ToolbarState(
                 ToolbarMode mode,
-                int sceneObjectSelectionCount)
+                int sceneObjectSelectionCount,
+                bool hasBatchInjectAssetSelection)
             {
                 Mode = mode;
                 SceneObjectSelectionCount = sceneObjectSelectionCount;
+                HasBatchInjectAssetSelection = hasBatchInjectAssetSelection;
             }
 
             public ToolbarMode Mode { get; }
             public int SceneObjectSelectionCount { get; }
+            public bool HasBatchInjectAssetSelection { get; }
         }
     }
 }
