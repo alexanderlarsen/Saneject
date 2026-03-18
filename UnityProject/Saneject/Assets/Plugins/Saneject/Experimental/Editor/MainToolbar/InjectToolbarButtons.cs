@@ -23,11 +23,14 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
         private static readonly Type ToolbarType = typeof(UnityEditor.Editor).Assembly.GetType("UnityEditor.Toolbar");
         private static readonly FieldInfo RootField = ToolbarType?.GetField("m_Root", BindingFlags.Instance | BindingFlags.NonPublic);
 
-        private static ToolbarState currentState;
+        private static VisualElement container;
+        private static ToolbarButton injectSceneButton;
+        private static ToolbarButton injectSelectionButton;
+        private static ToolbarButton injectPrefabButton;
 
         static InjectMainToolbarButton()
         {
-            EditorApplication.update += TryAttachToToolbar;
+            EditorApplication.update += UpdateToolbar;
         }
 
         private enum ToolbarMode
@@ -37,45 +40,106 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
             Prefab
         }
 
-        private static void TryAttachToToolbar()
+        private static void UpdateToolbar()
         {
             if (ToolbarType == null || RootField == null)
                 return;
 
+            if (!TryGetToolbarZone(out VisualElement toolbarZone))
+                return;
+
+            EnsureAttached(toolbarZone);
+            ApplyToolbarState(GetToolbarState());
+        }
+
+        private static bool TryGetToolbarZone(out VisualElement toolbarZone)
+        {
+            toolbarZone = null;
             ScriptableObject toolbar = GetToolbarInstance();
 
             if (toolbar == null)
-                return;
+                return false;
 
             VisualElement toolbarRoot = RootField.GetValue(toolbar) as VisualElement;
-            VisualElement toolbarZone = toolbarRoot?.Q(ToolbarZoneName);
+            toolbarZone = toolbarRoot?.Q(ToolbarZoneName);
+            return toolbarZone != null;
+        }
 
-            if (toolbarZone == null)
-                return;
+        private static ScriptableObject GetToolbarInstance()
+        {
+            Object[] toolbars = Resources.FindObjectsOfTypeAll(ToolbarType);
+            return toolbars.Length > 0 ? toolbars[0] as ScriptableObject : null;
+        }
 
-            ToolbarState desiredState = GetToolbarState();
+        private static void EnsureAttached(VisualElement toolbarZone)
+        {
             VisualElement existingContainer = toolbarZone.Q(ContainerName);
 
-            if (desiredState.Mode == ToolbarMode.None)
+            if (existingContainer != null && !ReferenceEquals(existingContainer, container))
+                existingContainer.RemoveFromHierarchy();
+
+            container ??= CreateButtonContainer();
+
+            if (container.parent != toolbarZone)
             {
-                existingContainer?.RemoveFromHierarchy();
-                currentState = desiredState;
-                return;
+                container.RemoveFromHierarchy();
+                toolbarZone.Add(container);
             }
+        }
 
-            if (existingContainer == null)
+        private static VisualElement CreateButtonContainer()
+        {
+            VisualElement root = new()
             {
-                toolbarZone.Add(CreateButtonContainer(desiredState));
-                currentState = desiredState;
-                return;
-            }
+                name = ContainerName
+            };
 
-            if (currentState.Equals(desiredState))
-                return;
+            root.style.flexDirection = FlexDirection.Row;
+            root.style.alignItems = Align.Center;
+            root.style.flexShrink = 0;
+            root.style.marginRight = 4;
 
-            existingContainer.RemoveFromHierarchy();
-            toolbarZone.Add(CreateButtonContainer(desiredState));
-            currentState = desiredState;
+            injectSceneButton = CreateButton
+            (
+                text: "Inject Scene",
+                tooltip: "Injects everything in the current scene.",
+                onClicked: () => InjectionUtility.InjectCurrentScene(ContextWalkFilter.AllContexts)
+            );
+
+            injectSelectionButton = CreateButton
+            (
+                text: "Inject Selected Hierarchy",
+                tooltip: "Inject everything in the selected scene hierarchy.",
+                onClicked: () => InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.AllContexts)
+            );
+
+            injectPrefabButton = CreateButton
+            (
+                text: "Inject Prefab Asset",
+                tooltip: "Injects everything in the current prefab asset.",
+                onClicked: () => InjectionUtility.InjectCurrentPrefabAsset(ContextWalkFilter.AllContexts)
+            );
+
+            root.Add(injectSceneButton);
+            root.Add(injectSelectionButton);
+            root.Add(injectPrefabButton);
+
+            return root;
+        }
+
+        private static ToolbarButton CreateButton(
+            string text,
+            string tooltip,
+            Action onClicked)
+        {
+            ToolbarButton button = new()
+            {
+                text = text,
+                tooltip = tooltip
+            };
+
+            button.clicked += onClicked;
+            return button;
         }
 
         private static ToolbarState GetToolbarState()
@@ -86,83 +150,54 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
                     ? ToolbarMode.Scene
                     : ToolbarMode.None;
 
-            return new ToolbarState
+            int sceneObjectSelectionCount = Selection
+                .gameObjects
+                .Count(gameObject => gameObject.scene.IsValid());
+
+            return new ToolbarState(mode, sceneObjectSelectionCount);
+        }
+
+        private static void ApplyToolbarState(ToolbarState toolbarState)
+        {
+            if (container == null)
+                return;
+
+            SetDisplay(container, toolbarState.Mode == ToolbarMode.None ? DisplayStyle.None : DisplayStyle.Flex);
+            SetDisplay(injectSceneButton, toolbarState.Mode == ToolbarMode.Scene ? DisplayStyle.Flex : DisplayStyle.None);
+
+            SetDisplay
             (
-                mode: mode,
-                sceneObjectSelectionCount: Selection.gameObjects.Count(go => go.scene.IsValid())
+                injectSelectionButton,
+                toolbarState is { Mode: ToolbarMode.Scene, SceneObjectSelectionCount: > 0 }
+                    ? DisplayStyle.Flex
+                    : DisplayStyle.None
             );
+
+            SetDisplay(injectPrefabButton, toolbarState.Mode == ToolbarMode.Prefab ? DisplayStyle.Flex : DisplayStyle.None);
+
+            UpdateSelectionButtonContent(toolbarState.SceneObjectSelectionCount);
         }
 
-        private static ScriptableObject GetToolbarInstance()
+        private static void UpdateSelectionButtonContent(int selectionCount)
         {
-            Object[] toolbars = Resources.FindObjectsOfTypeAll(ToolbarType);
-            return toolbars.Length > 0 ? toolbars[0] as ScriptableObject : null;
+            if (injectSelectionButton == null)
+                return;
+
+            bool isSingleSelection = selectionCount == 1;
+
+            injectSelectionButton.text = $"Inject Selected {(isSingleSelection ? "Hierarchy" : "Hierarchies")}";
+            injectSelectionButton.tooltip = $"Inject everything in the selected scene hierarch{(isSingleSelection ? "y" : "ies")}.";
         }
 
-        private static VisualElement CreateButtonContainer(ToolbarState toolbarState)
+        private static void SetDisplay(
+            VisualElement element,
+            DisplayStyle displayStyle)
         {
-            VisualElement container = new()
-            {
-                name = ContainerName
-            };
-
-            container.style.flexDirection = FlexDirection.Row;
-            container.style.alignItems = Align.Center;
-            container.style.flexShrink = 0;
-            container.style.marginRight = 4;
-
-            if (toolbarState.Mode == ToolbarMode.Scene)
-            {
-                container.Add(CreateInjectSceneDropdown());
-
-                if (toolbarState.SceneObjectSelectionCount > 0)
-                    container.Add(CreateInjectSelectionDropdown(toolbarState.SceneObjectSelectionCount));
-            }
-            else if (toolbarState.Mode == ToolbarMode.Prefab)
-            {
-                container.Add(CreateInjectPrefabDropdown());
-            }
-
-            return container;
+            if (element != null)
+                element.style.display = displayStyle;
         }
 
-        private static ToolbarButton CreateInjectSceneDropdown()
-        {
-            ToolbarButton button = new()
-            {
-                text = "Inject Scene",
-                tooltip = "Injects everything in the current scene."
-            };
-
-            button.clicked += () => InjectionUtility.InjectCurrentScene(ContextWalkFilter.AllContexts);
-            return button;
-        }
-
-        private static ToolbarButton CreateInjectSelectionDropdown(int selectionCount)
-        {
-            ToolbarButton button = new()
-            {
-                text = $"Inject Scene {(selectionCount == 1 ? "Hierarchy" : "Hierarchies")}",
-                tooltip = $"Inject everything in the selected scene hierarch{(selectionCount == 1 ? "y" : "ies")}."
-            };
-
-            button.clicked += () => InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.AllContexts);
-            return button;
-        }
-
-        private static ToolbarButton CreateInjectPrefabDropdown()
-        {
-            ToolbarButton button = new()
-            {
-                text = "Inject Prefab Asset",
-                tooltip = "Injects everything in the current prefab asset."
-            };
-
-            button.clicked += () => InjectionUtility.InjectCurrentPrefabAsset(ContextWalkFilter.AllContexts);
-            return button;
-        }
-
-        private readonly struct ToolbarState : IEquatable<ToolbarState>
+        private readonly struct ToolbarState
         {
             public ToolbarState(
                 ToolbarMode mode,
@@ -174,12 +209,6 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
 
             public ToolbarMode Mode { get; }
             public int SceneObjectSelectionCount { get; }
-
-            public bool Equals(ToolbarState other)
-            {
-                return Mode == other.Mode &&
-                       SceneObjectSelectionCount == other.SceneObjectSelectionCount;
-            }
         }
     }
 }
