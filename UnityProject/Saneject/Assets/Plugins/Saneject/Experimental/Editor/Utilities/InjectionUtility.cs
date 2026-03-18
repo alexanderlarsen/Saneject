@@ -9,6 +9,7 @@ using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+
 // ReSharper disable LoopCanBeConvertedToQuery
 
 namespace Plugins.Saneject.Experimental.Editor.Utilities
@@ -16,98 +17,6 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectionUtility
     {
-        #region Scene injection
-
-        public static void InjectCurrentScene(ContextWalkFilter walkFilter)
-        {
-            Scene activeScene = SceneManager.GetActiveScene();
-
-            if (!DialogUtility.InjectionMenus.Confirm_InjectCurrentScene(activeScene.name, walkFilter))
-                return;
-
-            InjectionRunner.Run
-            (
-                activeScene.GetRootGameObjects(),
-                walkFilter
-            );
-        }
-
-        public static void InjectSceneHierarchy(
-            GameObject startObject,
-            ContextWalkFilter walkFilter)
-        {
-            if (!DialogUtility.InjectionMenus.Confirm_InjectSceneHierarchy(walkFilter))
-                return;
-
-            InjectionRunner.Run
-            (
-                startObject.AsEnumerable(),
-                walkFilter
-            );
-        }
-
-        public static void InjectSelectedSceneHierarchies(ContextWalkFilter walkFilter)
-        {
-            if (!DialogUtility.InjectionMenus.Confirm_InjectSelectedSceneHierarchies(walkFilter))
-                return;
-
-            InjectionRunner.Run
-            (
-                Selection.gameObjects,
-                walkFilter
-            );
-        }
-
-        #endregion
-
-        #region Prefab asset injection
-
-        public static void InjectCurrentPrefabAsset(ContextWalkFilter walkFilter)
-        {
-            GameObject prefab = PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
-
-            if (!DialogUtility.InjectionMenus.Confirm_InjectCurrentPrefabAsset(prefab.name, walkFilter))
-                return;
-
-            InjectionRunner.Run
-            (
-                prefab.AsEnumerable(),
-                walkFilter
-            );
-        }
-
-        public static void InjectPrefabAssetHierarchy(
-            GameObject startObject,
-            ContextWalkFilter walkFilter)
-        {
-            GameObject prefab = startObject.transform.root.gameObject;
-
-            if (!DialogUtility.InjectionMenus.Confirm_InjectCurrentPrefabAsset(prefab.name, walkFilter))
-                return;
-
-            InjectionRunner.Run
-            (
-                startObject.AsEnumerable(),
-                walkFilter
-            );
-        }
-
-        public static void InjectPrefabAssetSelection(ContextWalkFilter walkFilter)
-        {
-            GameObject prefab = Selection.gameObjects[0].transform.root.gameObject;
-
-            if (!DialogUtility.InjectionMenus.Confirm_InjectCurrentPrefabAsset(prefab.name, walkFilter))
-                return;
-
-            InjectionRunner.Run
-            (
-                Selection.gameObjects,
-                walkFilter
-            );
-        }
-
-        #endregion
-
         #region Batch injection
 
         public static void BatchInjectSelectedAssets()
@@ -142,6 +51,68 @@ namespace Plugins.Saneject.Experimental.Editor.Utilities
             InjectionRunner.RunBatch
             (
                 batchItems
+            );
+        }
+
+        #endregion
+
+        #region Scene injection
+
+        public static void InjectCurrentScene(ContextWalkFilter walkFilter)
+        {
+            Scene activeScene = SceneManager.GetActiveScene();
+
+            if (!DialogUtility.InjectionMenus.Confirm_InjectCurrentScene(activeScene.name, walkFilter))
+                return;
+
+            InjectionRunner.Run
+            (
+                activeScene.GetRootGameObjects(),
+                walkFilter
+            );
+        }
+
+        public static void InjectSelectedSceneHierarchies(ContextWalkFilter walkFilter)
+        {
+            if (!DialogUtility.InjectionMenus.Confirm_InjectSelectedSceneHierarchies(walkFilter))
+                return;
+
+            InjectionRunner.Run
+            (
+                Selection.gameObjects.Where(go => go.scene.IsValid()),
+                walkFilter
+            );
+        }
+
+        #endregion
+
+        #region Prefab asset injection
+
+        public static void InjectCurrentPrefabAsset(ContextWalkFilter walkFilter)
+        {
+            GameObject prefab = PrefabStageUtility.GetCurrentPrefabStage().prefabContentsRoot;
+
+            if (!DialogUtility.InjectionMenus.Confirm_InjectCurrentPrefabAsset(prefab.name, walkFilter))
+                return;
+
+            InjectionRunner.Run
+            (
+                prefab.AsEnumerable(),
+                walkFilter
+            );
+        }
+
+        public static void InjectPrefabAssetSelection(ContextWalkFilter walkFilter)
+        {
+            GameObject prefab = Selection.gameObjects[0].transform.root.gameObject;
+
+            if (!DialogUtility.InjectionMenus.Confirm_InjectCurrentPrefabAsset(prefab.name, walkFilter))
+                return;
+
+            InjectionRunner.Run
+            (
+                Selection.gameObjects,
+                walkFilter
             );
         }
 
