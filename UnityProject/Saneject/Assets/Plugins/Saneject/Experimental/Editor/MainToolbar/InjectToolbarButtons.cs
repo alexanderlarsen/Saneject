@@ -108,7 +108,7 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
 
             injectSelectionButton = CreateButton
             (
-                text: "Inject Selected",
+                text: "Inject Selected Scene Hierarchies",
                 tooltip: "Inject everything in the selected scene hierarchies.",
                 onClicked: () => InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.AllContexts)
             );
