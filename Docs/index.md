@@ -29,7 +29,7 @@ No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-
 | Low runtime overhead                 | No runtime container, no reflection-based startup pass, and no extra lifecycle layer.                                             |
 | Built-in tooling                     | Use injection menus, batch injection, logging, validation, settings, analyzers, and more directly in the Unity Editor.            |
 
-For more features, see [Feature overview](docs/getting-started/feature-overview.md).
+For more features, see [Feature overview](docs/getting-started/introduction.md#feature-overview).
 
 ## Mental model
 
@@ -58,7 +58,7 @@ If you try Saneject and something works well, feels unclear, or seems broken, I 
 
 ## Links
 
-- [Docs](docs/core-concepts/scope.md)
+- [Docs](docs/getting-started/introduction.md)
 - [API](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector)
 - [GitHub repository](https://github.com/alexanderlarsen/Saneject)
 - [Releases](https://github.com/alexanderlarsen/Saneject/releases)

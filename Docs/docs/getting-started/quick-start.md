@@ -99,7 +99,7 @@ See [MonoBehaviour inspector](../editor-and-tooling/inspectors/monobehaviour-ins
 
 ## Related pages
 
-- [Feature overview](feature-overview.md)
+- [Introduction](introduction.md)
 - [Sample game](sample-game.md)
 - [Scope](../core-concepts/scope.md)
 - [Binding](../core-concepts/binding.md)

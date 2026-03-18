@@ -1,11 +1,11 @@
 - name: Getting started
   items:
+    - name: Introduction
+      href: getting-started/introduction.md
     - name: Installation & requirements
       href: getting-started/installation-and-requirements.md
     - name: Quick start
       href: getting-started/quick-start.md
-    - name: Feature overview
-      href: getting-started/feature-overview.md
     - name: Sample game
       href: getting-started/sample-game.md
 
