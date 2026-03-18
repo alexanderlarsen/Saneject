@@ -108,8 +108,8 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
 
             injectSelectionButton = CreateButton
             (
-                text: "Inject Selected Hierarchy",
-                tooltip: "Inject everything in the selected scene hierarchy.",
+                text: "Inject Selected",
+                tooltip: "Inject everything in the selected scene hierarchies.",
                 onClicked: () => InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.AllContexts)
             );
 
@@ -173,22 +173,9 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
                     : DisplayStyle.None
             );
 
-            SetDisplay(injectPrefabButton, toolbarState.Mode == ToolbarMode.Prefab ? DisplayStyle.Flex : DisplayStyle.None);
-
-            UpdateSelectionButtonContent(toolbarState.SceneObjectSelectionCount);
+            SetDisplay(injectPrefabButton, toolbarState.Mode == ToolbarMode.Prefab ? DisplayStyle.Flex : DisplayStyle.None); 
         }
-
-        private static void UpdateSelectionButtonContent(int selectionCount)
-        {
-            if (injectSelectionButton == null)
-                return;
-
-            bool isSingleSelection = selectionCount == 1;
-
-            injectSelectionButton.text = $"Inject Selected {(isSingleSelection ? "Hierarchy" : "Hierarchies")}";
-            injectSelectionButton.tooltip = $"Inject everything in the selected scene hierarch{(isSingleSelection ? "y" : "ies")}.";
-        }
-
+ 
         private static void SetDisplay(
             VisualElement element,
             DisplayStyle displayStyle)
