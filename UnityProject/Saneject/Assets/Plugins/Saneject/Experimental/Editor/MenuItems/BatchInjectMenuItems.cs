@@ -1,8 +1,6 @@
 ﻿using System.ComponentModel;
-using System.Linq;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
-using UnityEngine;
 
 // ReSharper disable InconsistentNaming
 
@@ -37,9 +35,7 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Batch Inject/Selected Assets (All Contexts)", true)]
         private static bool Validate_BatchInject_SelectedAssets()
         {
-            return Selection
-                .GetFiltered<Object>(SelectionMode.DeepAssets)
-                .Any(x => x is GameObject or SceneAsset);
+            return MenuValidator.HasValidBatchSelection();
         }
 
         #endregion

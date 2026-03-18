@@ -2,8 +2,6 @@
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
-using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
 
 // ReSharper disable InconsistentNaming
 
@@ -160,49 +158,53 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject Scene/All Contexts", true)]
         private static bool Validate_Inject_CurrentScene_All()
         {
-            return IsScene();
+            return MenuValidator.IsScene();
         }
 
         [MenuItem("GameObject/Saneject/Inject Scene/Scene Objects", true),
          MenuItem("Saneject/Inject Scene/Scene Objects", true)]
         private static bool Validate_Inject_CurrentScene_SceneObjects()
         {
-            return IsScene();
+            return MenuValidator.IsScene();
         }
 
         [MenuItem("GameObject/Saneject/Inject Scene/Prefab Instances", true),
          MenuItem("Saneject/Inject Scene/Prefab Instances", true)]
         private static bool Validate_Inject_CurrentScene_PrefabInstances()
         {
-            return IsScene();
+            return MenuValidator.IsScene();
         }
 
         [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/All Contexts", true),
          MenuItem("Saneject/Inject Selected Scene Hierarchies/All Contexts", true)]
         private static bool Validate_Inject_SelectedSceneHierarchy_AllContexts()
         {
-            return IsScene() && HasSelectedGameObjects();
+            return MenuValidator.IsScene() &&
+                   MenuValidator.HasSceneObjectSelection();
         }
 
         [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Scene Objects", true),
          MenuItem("Saneject/Inject Selected Scene Hierarchies/Scene Objects", true)]
         private static bool Validate_Inject_SelectedSceneHierarchy_SceneObjects(MenuCommand cmd)
         {
-            return IsScene() && HasSelectedGameObjects();
+            return MenuValidator.IsScene() &&
+                   MenuValidator.HasSceneObjectSelection();
         }
 
         [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Prefab Instances", true),
          MenuItem("Saneject/Inject Selected Scene Hierarchies/Prefab Instances", true)]
         private static bool Validate_Inject_SelectedSceneHierarchy_PrefabInstances(MenuCommand cmd)
         {
-            return IsScene() && HasSelectedGameObjects();
+            return MenuValidator.IsScene() &&
+                   MenuValidator.HasSceneObjectSelection();
         }
 
         [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection", true),
          MenuItem("Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection", true)]
         private static bool Validate_Inject_SelectedSceneHierarchies_SameAsSelection()
         {
-            return IsScene() && HasSelectedGameObjects();
+            return MenuValidator.IsScene() &&
+                   MenuValidator.HasSceneObjectSelection();
         }
 
         #endregion
@@ -213,48 +215,29 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
          MenuItem("Saneject/Inject Prefab Asset/All Contexts", true)]
         private static bool Validate_Inject_CurrentPrefab_All(MenuCommand cmd)
         {
-            return IsPrefabStage();
+            return MenuValidator.IsPrefabStage();
         }
 
         [MenuItem("GameObject/Saneject/Inject Prefab Asset/Prefab Asset Objects", true),
          MenuItem("Saneject/Inject Prefab Asset/Prefab Asset Objects", true)]
         private static bool Validate_Inject_CurrentPrefab_PrefabAssetObjects()
         {
-            return IsPrefabStage();
+            return MenuValidator.IsPrefabStage();
         }
 
         [MenuItem("GameObject/Saneject/Inject Prefab Asset/Prefab Instances", true),
          MenuItem("Saneject/Inject Prefab Asset/Prefab Instances", true)]
         private static bool Validate_Inject_CurrentPrefab_PrefabInstances()
         {
-            return IsPrefabStage();
+            return MenuValidator.IsPrefabStage();
         }
 
         [MenuItem("GameObject/Saneject/Inject Prefab Asset/Same Contexts As Selection", true),
          MenuItem("Saneject/Inject Prefab Asset/Same Contexts As Selection", true)]
         private static bool Validate_Inject_CurrentPrefab_SameAsSelection()
         {
-            return IsPrefabStage() && HasSelectedGameObjects();
-        }
-
-        #endregion
-
-        #region Validation helpers
-
-        private static bool IsScene()
-        {
-            return SceneManager.sceneCount > 0 &&
-                   PrefabStageUtility.GetCurrentPrefabStage() == null;
-        }
-
-        private static bool IsPrefabStage()
-        {
-            return PrefabStageUtility.GetCurrentPrefabStage() != null;
-        }
-
-        private static bool HasSelectedGameObjects()
-        {
-            return Selection.gameObjects.Length > 0;
+            return MenuValidator.IsPrefabStage() &&
+                   MenuValidator.HasSceneObjectSelection();
         }
 
         #endregion

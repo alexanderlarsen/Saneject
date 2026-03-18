@@ -1,18 +1,15 @@
 using System;
 using System.ComponentModel;
-using System.Linq;
 using System.Reflection;
 using Plugins.Saneject.Experimental.Editor.Data.Context;
 using Plugins.Saneject.Experimental.Editor.Utilities;
 using UnityEditor;
-using UnityEditor.SceneManagement;
 using UnityEditor.UIElements;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Experimental.Editor.MainToolbar
+namespace Plugins.Saneject.Experimental.Editor.MenuItems
 {
     [EditorBrowsable(EditorBrowsableState.Never), InitializeOnLoad]
     public static class InjectMainToolbarButton
@@ -153,19 +150,15 @@ namespace Plugins.Saneject.Experimental.Editor.MainToolbar
 
         private static ToolbarState GetToolbarState()
         {
-            ToolbarMode mode = PrefabStageUtility.GetCurrentPrefabStage() != null
-                ? ToolbarMode.Prefab
-                : SceneManager.sceneCount > 0
-                    ? ToolbarMode.Scene
-                    : ToolbarMode.None;
+            ToolbarMode mode =
+                MenuValidator.IsPrefabStage()
+                    ? ToolbarMode.Prefab
+                    : MenuValidator.IsScene()
+                        ? ToolbarMode.Scene
+                        : ToolbarMode.None;
 
-            int sceneObjectSelectionCount = Selection
-                .gameObjects
-                .Count(gameObject => gameObject.scene.IsValid());
-
-            bool hasBatchInjectAssetSelection = Selection
-                .GetFiltered<Object>(SelectionMode.DeepAssets)
-                .Any(selectedObject => selectedObject is GameObject or SceneAsset);
+            int sceneObjectSelectionCount = MenuValidator.GetSceneObjectSelectionCount();
+            bool hasBatchInjectAssetSelection = MenuValidator.HasValidBatchSelection();
 
             return new ToolbarState(mode, sceneObjectSelectionCount, hasBatchInjectAssetSelection);
         }
