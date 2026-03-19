@@ -9,8 +9,6 @@ It combines [context](../../reference/glossary.md#context) visibility, runtime p
 
 For injection workflows, use the contextual main toolbar buttons, [injection menus](../../reference/glossary.md#injection-menu), or [batch injection](../../reference/glossary.md#batch-injection).
 
-## Screenshot
-
 ![Scope inspector placeholder](../../../images/scope-inspector.webp)
 
 ## What this inspector is for
@@ -59,6 +57,8 @@ For full behavior, see [Runtime proxy](../../core-concepts/runtime-proxy.md).
 - If [context isolation](../../reference/glossary.md#context-isolation) is enabled, [scopes](../../reference/glossary.md#scope) in a different [context](../../reference/glossary.md#context) than the inspected [scope](../../reference/glossary.md#scope) are grayed out.
 - Hovering a [scope](../../reference/glossary.md#scope) node shows a tooltip with extra details, including `GameObject`, [scope](../../reference/glossary.md#scope) type, and [context](../../reference/glossary.md#context) identity.
 
+![Scope inspector hierarchy tooltip](../../../images/scope-inspector-hierarchy-tooltip.webp)
+
 This is useful for understanding where local [bindings](../../reference/glossary.md#binding) are declared and how parent fallback will behave.
 See [Scope](../../core-concepts/scope.md) and [Context](../../core-concepts/context.md) for details.
 
@@ -87,6 +87,8 @@ Saneject adds component [context](../../reference/glossary.md#context) menu item
     - Sets the Console search text to filter by `Scope: <ScopeTypeName>`.
 - `Saneject/Filter Logs By Component Path`
     - Sets the Console search text to filter by the selected [Scope](../../reference/glossary.md#scope)'s path.
+
+![Scope inspector filter logs context menu](../../../images/scope-inspector-log-filtering.webp)
 
 ## Related pages
 

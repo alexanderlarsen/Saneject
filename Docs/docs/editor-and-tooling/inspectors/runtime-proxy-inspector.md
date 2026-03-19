@@ -6,6 +6,8 @@ title: Runtime proxy inspector
 
 The [runtime proxy inspector](../../reference/glossary.md#runtime-proxy-inspector) is the inspector for generated [runtime proxy](../../reference/glossary.md#runtime-proxy) assets (`RuntimeProxyBase`). It is intentionally read-only. Use it to verify configuration created from your [binding](../../reference/glossary.md#binding) declarations, not to author configuration directly.
 
+![Runtime proxy inspector](../../../images/runtime-proxy-inspector.webp)
+
 For full runtime behavior, see [Runtime proxy](../../core-concepts/runtime-proxy.md).
 
 ## What this inspector is for

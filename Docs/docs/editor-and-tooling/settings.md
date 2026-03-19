@@ -32,7 +32,9 @@ Important behavior:
 - Outside the Unity Editor, settings access falls back to default values.
 - Reset actions show a confirmation dialog before applying changes.
 
-## User settings reference
+## User settings
+
+![User settings](../../images/user-settings.webp)
 
 ### Ask Before Injection
 
@@ -78,7 +80,9 @@ All of these default to `true`.
 
 For logging semantics and output shape, see [Logging & validation](logging-and-validation.md).
 
-## Project settings reference
+## Project settings
+
+![Project settings](../../images/project-settings.webp)
 
 ### Context Isolation
 
