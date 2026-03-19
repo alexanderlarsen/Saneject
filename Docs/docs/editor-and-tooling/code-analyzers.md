@@ -38,13 +38,13 @@ using UnityEngine;
 public partial class PlayerHud : MonoBehaviour
 {
     [Inject]
-    private Camera mainCamera; // INJ001
+    private Camera mainCamera; // INJ001 ❌
 
     [Inject, SerializeField]
-    private Camera minimapCamera; // OK
+    private Camera minimapCamera; // OK ✅
 
     [Inject, SerializeInterface]
-    private IHealthService healthService; // OK
+    private IHealthService healthService; // OK ✅
 }
 ```
 
@@ -60,13 +60,13 @@ using UnityEngine;
 public partial class EnemyHud : MonoBehaviour
 {
     [SerializeInterface]
-    private IEnemyService enemyService; // OK
+    private Camera worldCamera; // INJ002 ❌
+    
+    [SerializeInterface]
+    private IEnemyService enemyService; // OK ✅
 
     [SerializeInterface]
-    private List<IEnemyService> allEnemyServices; // OK
-
-    [SerializeInterface]
-    private Camera worldCamera; // INJ002
+    private List<IEnemyService> allEnemyServices; // OK ✅
 }
 ```
 
@@ -86,7 +86,31 @@ When your IDE supports Roslyn quick actions, the fixes appear directly in the li
 - `Remove [SerializeInterface]`
 - `Replace [SerializeInterface] with [SerializeField]`
 
-> [screenshot containing Rider or Visual Studio showing an `INJ001` error on an `[Inject]` field and a quick-fix menu with `Add [SerializeField]`, `Add [SerializeInterface]`, and `Make field public`]
+## IDE support
+
+Roslyn analyzers are supported by most modern IDEs such as JetBrains Rider and Visual Studio.
+
+`INJ001` reported inside JetBrains Rider:
+
+![Screenshot containing Rider showing an `INJ001` error on an `[Inject]` field](../../images/code-analyzers-inj001-tooltip.webp)
+
+`INJ002` reported inside JetBrains Rider:
+
+![Screenshot containing Rider showing an `INJ002` error on a `[SerializeInterface]` field](../../images/code-analyzers-inj002-tooltip.webp)
+
+`INJ001` code fixes in JetBrains Rider:
+
+![Screenshot containing Rider showing `INJ001` code fixes](../../images/code-analyzers-inj001-fixes.webp)
+
+`INJ002` code fixes in JetBrains Rider:
+
+![Screenshot containing Rider showing `INJ002` code fixes](../../images/code-analyzers-inj002-fixes.webp)
+
+## Unity console output
+
+`INJ001` and `INJ002` errors are reported to the Unity console as well:
+
+![Screenshot containing Unity console output showing `INJ001` and `INJ002` errors](../../images/code-analyzers-inj001-inj001-unity-console.webp)
 
 ## Where the analyzer is loaded from
 
