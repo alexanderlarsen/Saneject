@@ -11,12 +11,15 @@ For prerequisites and installation methods, see [Installation & requirements](in
 ## 1. Create the scene hierarchy
 
 1. Create a `GameObject` named `Root`.
-2. Create a child `GameObject` named `Player` under `Root`.
-3. Add `CharacterController` to `Player`.
+2. Create a child `GameObject` named `GameManager` under `Root`
+3. Create a child `GameObject` named `Player` under `Root`.
+4. Add `CharacterController` to `Player`.
+
+![Scene hierarchy](../../images/quick-start-1.webp)
 
 ## 2. Create a component to inject
 
-Create `GameManager.cs` and place it on any `GameObject` in the scene.
+Create `GameManager.cs` and place it on `GameManager`.
 
 ```csharp
 using UnityEngine;
@@ -29,6 +32,8 @@ public class GameManager : MonoBehaviour, IGameStateObservable
 {
 }
 ```
+
+![GameManager component in Inspector](../../images/quick-start-2.webp)
 
 ## 3. Create an injection target
 
@@ -47,6 +52,8 @@ public partial class Player : MonoBehaviour
     private CharacterController controller;
 }
 ```
+
+![Player component in Inspector](../../images/quick-start-3.webp)
 
 `Player` is `partial` because `[SerializeInterface]` uses generated code to serialize interface references.
 
@@ -77,17 +84,19 @@ public class GameScope : Scope
 }
 ```
 
+![GameScope component in Inspector](../../images/quick-start-4.webp)
+
 `Scope` is where [bindings](../reference/glossary.md#binding) are declared. During injection, Saneject resolves each `[Inject]` site from the nearest `Scope`, with fallback to parent [scopes](../reference/glossary.md#scope).
 
 ## 5. Run injection
 
-Run dependency injection with one of these methods:
+Run dependency injection via the main toolbar button `Inject Scene`.
 
-- Main toolbar: `Inject Scene`.
-- Main menu: `Saneject/Inject Scene/All Contexts`.
-- GameObject context menu: `GameObject/Saneject/Inject Scene/All Contexts`.
+![Inject Scene button](../../images/quick-start-5.webp)
 
 After injection, `Player` has serialized values for `gameStateObservable` and `controller`. Enter Play Mode and the scene runs without a runtime container.
+
+![Injected result in Player component Inspector](../../images/quick-start-6.webp)
 
 ## Inspector integration note
 

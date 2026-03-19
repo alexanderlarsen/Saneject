@@ -31,8 +31,13 @@ Use this when you want a targeted pass for a folder or a specific Project window
 Entry points:
 
 - Main toolbar: `Batch Inject Selected Assets`
+
+![Saneject Batch Inject Main Toolbar](../../images/batch-injection-main-toolbar.webp)
+
 - `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - `Saneject/Batch Inject/Selected Assets (All Contexts)`
+
+![Saneject Batch Inject Selected Assets](../../images/batch-injection-context-menu.webp)
 
 `Batch Inject Selected Assets` appears when the current Project selection includes at least one scene asset, [prefab asset](../reference/glossary.md#prefab-asset), or folder that contains them.
 This workflow always uses `ContextWalkFilter.AllContexts`.
@@ -77,11 +82,15 @@ You can organize lists by:
 - Manual reorder (switches sort mode to `Custom`).
 - Sort menu options: `Name A-Z`, `Name Z-A`, `Path A-Z`, `Path Z-A`, `Enabled-Disabled`, `Disabled-Enabled`, `Success-Error`, `Error-Success`.
 
+![Saneject Batch Injector window sorting options](../../images/batch-injector-window-sorting.webp)
+
 List and window state are persisted to:
 
 - `ProjectSettings/Saneject/BatchInjectorData.json`
 
 ### Multi-select and context menu actions
+
+![Saneject Batch Injector window context menus](../../images/batch-injector-window-context-menus.webp)
 
 Both lists support multi-selection and a [context](../reference/glossary.md#context) menu with:
 
@@ -105,6 +114,38 @@ Bottom buttons run injection for enabled rows:
 - `Inject Prefabs`
 
 `Inject Selected` from the row [context](../reference/glossary.md#context) menu injects the selected rows directly, even if some of those rows are disabled.
+
+## Injection status meanings
+
+In the [Batch Injector](../reference/glossary.md#batch-injector) window, each row has a status icon with one of these meanings:
+
+| Icon | Status    | Meaning                                                                                               |
+|------|-----------|-------------------------------------------------------------------------------------------------------|
+| ❔    | `Unknown` | No run has set status yet, or status was cleared.                                                     |
+| ✅    | `Success` | No unsuppressed errors and no unused [bindings](../reference/glossary.md#binding) for that asset run. |
+| ⚠️   | `Warning` | No unsuppressed errors, but one or more [bindings](../reference/glossary.md#binding) were unused.     |
+| ❌    | `Error`   | One or more unsuppressed errors were logged.                                                          |
+
+## Logging model for batch runs
+
+Batch logging is scoped in layers:
+
+1. A batch header for scenes and/or prefabs.
+2. Per-asset start/end markers so each asset run is visually separated in the console.
+3. Normal injection logs inside each asset section, including errors and a per-asset summary line.
+4. A final batch summary section with aggregated scene and prefab summaries and elapsed times.
+
+If no `Scope` components are found in a run, Saneject logs that nothing was injected for that run.
+
+![Batch injection console logs](../../images/batch-injector-logs.webp)
+
+Logging output is affected by [user settings](../reference/glossary.md#user-settings) in `Saneject/Settings`, including:
+
+- `Clear Logs On Injection`
+- `Log Injection Summary`
+- `Log Unused Bindings`
+
+For more information on logging, see [Logging & validation](logging-and-validation.md).
 
 ## Context filter rules in batch injection
 
@@ -140,38 +181,6 @@ Batch-specific orchestration:
 - Prefab batch loads each [prefab asset](../reference/glossary.md#prefab-asset) root, injects from that root, and saves assets when prefab processing completes.
 
 If a saved active scene existed when the batch started, Saneject re-opens that scene at the end.
-
-## Injection status meanings
-
-In the [Batch Injector](../reference/glossary.md#batch-injector) window, each row has a status icon with one of these meanings:
-
-| Icon | Status    | Meaning                                                                                               |
-|------|-----------|-------------------------------------------------------------------------------------------------------|
-| ❔    | `Unknown` | No run has set status yet, or status was cleared.                                                     |
-| ✅    | `Success` | No unsuppressed errors and no unused [bindings](../reference/glossary.md#binding) for that asset run. |
-| ⚠️   | `Warning` | No unsuppressed errors, but one or more [bindings](../reference/glossary.md#binding) were unused.     |
-| ❌    | `Error`   | One or more unsuppressed errors were logged.                                                          |
-
-## Logging model for batch runs
-
-Batch logging is scoped in layers:
-
-1. A batch header for scenes and/or prefabs.
-2. Per-asset start/end markers so each asset run is visually separated in the console.
-3. Normal injection logs inside each asset section, including errors and a per-asset summary line.
-4. A final batch summary section with aggregated scene and prefab summaries and elapsed times.
-
-If no `Scope` components are found in a run, Saneject logs that nothing was injected for that run.
-
-![Batch injection console logs](../../images/batch-injector-logs.webp)
-
-Logging output is affected by [user settings](../reference/glossary.md#user-settings) in `Saneject/Settings`, including:
-
-- `Clear Logs On Injection`
-- `Log Injection Summary`
-- `Log Unused Bindings`
-
-For more information on logging, see [Logging & validation](logging-and-validation.md).
 
 ## Related pages
 

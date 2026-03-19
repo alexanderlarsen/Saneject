@@ -19,6 +19,8 @@ If you are new to [contexts](../reference/glossary.md#context) and filters, read
 
 ## Toolbar buttons
 
+![Saneject injection toolbar buttons](../../images/injection-main-toolbar.webp)
+
 The contextual main toolbar buttons cover the most common `AllContexts` runs:
 
 - `Inject Scene`: shown while editing a scene.
@@ -28,7 +30,9 @@ The contextual main toolbar buttons cover the most common `AllContexts` runs:
 
 For more focused runs, use the [injection menus](../reference/glossary.md#injection-menu) described below.
 
-## Menu locations
+## Context menus
+
+![Saneject injection context menus](../../images/injection-context-menus.webp)
 
 Saneject exposes the same grouped injection commands in multiple Unity menus:
 
@@ -128,6 +132,8 @@ See [Context](../core-concepts/context.md).
 
 ## Batch inject from selected assets
 
+![Saneject batch injection context menu](../../images/batch-injection-context-menu.webp)
+
 Entry points:
 
 - Main toolbar: `Batch Inject Selected Assets`
@@ -152,6 +158,8 @@ Behavior:
 If an injected asset has no `Scope` components, the run logs that nothing was injected for that asset or run.
 
 ## Confirmation dialogs and Play Mode behavior
+
+![Saneject inject confirmation dialog](../../images/injection-confirmation.webp)
 
 All [injection menu](../reference/glossary.md#injection-menu) commands and contextual toolbar buttons are editor-only:
 
