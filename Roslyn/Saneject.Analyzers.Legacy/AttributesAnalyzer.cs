@@ -8,7 +8,7 @@ namespace Saneject.Analyzers.Legacy;
 [DiagnosticAnalyzer(LanguageNames.CSharp)]
 public class AttributesAnalyzer : DiagnosticAnalyzer
 {
-    private const string AttributeNamespaceRoot = "Plugins.Saneject.Legacy.Runtime.Attributes";
+    private const string AttributeNamespaceRoot = "Plugins.SanejectLegacy.Runtime.Attributes";
 
     private static readonly DiagnosticDescriptor Rule = new(
         "INJ001",

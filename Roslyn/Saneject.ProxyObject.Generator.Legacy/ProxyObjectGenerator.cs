@@ -10,7 +10,7 @@ namespace Saneject.ProxyObject.Generator.Legacy;
 [Generator]
 public class ProxyObjectGenerator : ISourceGenerator
 {
-    private const string NamespaceRoot = "Plugins.Saneject.Legacy.Runtime";
+    private const string NamespaceRoot = "Plugins.SanejectLegacy.Runtime";
     
     public void Initialize(GeneratorInitializationContext context)
     {

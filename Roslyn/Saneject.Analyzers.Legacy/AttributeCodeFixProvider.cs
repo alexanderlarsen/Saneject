@@ -14,7 +14,7 @@ namespace Saneject.Analyzers.Legacy;
 public class AttributeCodeFixProvider : CodeFixProvider
 {
     private const string RuntimeAttributeRoot =
-        "Plugins.Saneject.Legacy.Runtime.Attributes";
+        "Plugins.SanejectLegacy.Runtime.Attributes";
 
     private const string SerializeInterfaceFullName =
         RuntimeAttributeRoot + ".SerializeInterface";

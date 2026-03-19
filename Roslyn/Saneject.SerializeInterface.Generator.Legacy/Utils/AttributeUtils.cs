@@ -9,7 +9,7 @@ namespace Saneject.SerializeInterface.Generator.Legacy.Utils;
 
 public static class AttributeUtils
 {
-    private const string AttributeNamespaceRoot = "Plugins.Saneject.Legacy.Runtime.Attributes";
+    private const string AttributeNamespaceRoot = "Plugins.SanejectLegacy.Runtime.Attributes";
 
     public static string GetAttributes(
         ISymbol symbol,
@@ -18,7 +18,7 @@ public static class AttributeUtils
         List<string> attributes =
         [
             "UnityEngine.SerializeField",
-            $"Plugins.Saneject.Legacy.Runtime.Attributes.InterfaceBackingFieldAttribute(typeof({typeSymbol.ToDisplayString()}))",
+            $"Plugins.SanejectLegacy.Runtime.Attributes.InterfaceBackingFieldAttribute(typeof({typeSymbol.ToDisplayString()}))",
             "System.ComponentModel.EditorBrowsable(System.ComponentModel.EditorBrowsableState.Never)"
         ];
 

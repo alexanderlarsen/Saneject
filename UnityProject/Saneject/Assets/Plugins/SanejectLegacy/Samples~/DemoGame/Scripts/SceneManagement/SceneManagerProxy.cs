@@ -1,0 +1,34 @@
+using Plugins.SanejectLegacy.Runtime.Attributes;
+using Plugins.SanejectLegacy.Runtime.Proxy;
+
+namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.SceneManagement
+{
+    /// <summary>
+    /// Proxy ScriptableObject for <see cref="SceneManager" />.
+    /// Enables cross-scene or cross-prefab serialization of <see cref="ISceneManager" /> references.
+    /// The Roslyn generator generates a <c>partial class</c> implementing the interfaces and forwards all calls/events to the resolved <see cref="SceneManager" /> instance at runtime.
+    /// </summary>
+    [GenerateProxyObject]
+    public partial class SceneManagerProxy : ProxyObject<SceneManager>
+    {
+    }
+
+    /*
+    Roslyn generated partial:
+
+    public partial class SceneManagerProxy : ISceneManager
+    {
+       public void StartGame()
+       {
+           if (!instance) { instance = ResolveInstance(); }
+           instance.StartGame();
+       }
+
+       public void RestartGame()
+       {
+           if (!instance) { instance = ResolveInstance(); }
+           instance.RestartGame();
+       }
+    }
+    */
+}
