@@ -19,8 +19,6 @@ If you are new to [contexts](../reference/glossary.md#context) and filters, read
 
 ## Toolbar buttons
 
-![Saneject injection toolbar buttons](../../images/injection-main-toolbar.webp)
-
 The contextual main toolbar buttons cover the most common `AllContexts` runs:
 
 - `Inject Scene`: shown while editing a scene.
@@ -28,11 +26,11 @@ The contextual main toolbar buttons cover the most common `AllContexts` runs:
 - `Inject Prefab Asset`: shown in Prefab Mode.
 - `Batch Inject Selected Assets`: shown when the Project selection contains one or more scene assets, [prefab assets](../reference/glossary.md#prefab-asset), or folders that contain them.
 
+![Saneject injection toolbar buttons](../../images/injection-main-toolbar.webp)
+
 For more focused runs, use the [injection menus](../reference/glossary.md#injection-menu) described below.
 
 ## Context menus
-
-![Saneject injection context menus](../../images/injection-context-menus.webp)
 
 Saneject exposes the same grouped injection commands in multiple Unity menus:
 
@@ -40,6 +38,8 @@ Saneject exposes the same grouped injection commands in multiple Unity menus:
 - Hierarchy [context](../reference/glossary.md#context) menu: `GameObject/Saneject/Inject Scene/...`, `GameObject/Saneject/Inject Selected Scene Hierarchies/...`, `GameObject/Saneject/Inject Prefab Asset/...`
 - Project window [context](../reference/glossary.md#context) menu: `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - Main menu batch shortcut: `Saneject/Batch Inject/Selected Assets (All Contexts)`
+
+![Saneject injection context menus](../../images/injection-context-menus.webp)
 
 There is also a dedicated [batch injector](../reference/glossary.md#batch-injector) window:
 
@@ -132,13 +132,16 @@ See [Context](../core-concepts/context.md).
 
 ## Batch inject from selected assets
 
-![Saneject batch injection context menu](../../images/batch-injection-context-menu.webp)
-
 Entry points:
 
 - Main toolbar: `Batch Inject Selected Assets`
+
+![Saneject batch injection main toolbar](../../images/batch-injection-main-toolbar.webp)
+
 - `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - `Saneject/Batch Inject/Selected Assets (All Contexts)`
+
+![Saneject batch injection context menu](../../images/batch-injection-context-menu.webp)
 
 Availability:
 
@@ -159,8 +162,6 @@ If an injected asset has no `Scope` components, the run logs that nothing was in
 
 ## Confirmation dialogs and Play Mode behavior
 
-![Saneject inject confirmation dialog](../../images/injection-confirmation.webp)
-
 All [injection menu](../reference/glossary.md#injection-menu) commands and contextual toolbar buttons are editor-only:
 
 - If triggered in Play Mode, Saneject shows a dialog telling you to exit Play Mode.
@@ -168,6 +169,8 @@ All [injection menu](../reference/glossary.md#injection-menu) commands and conte
 By default, these commands show confirmation dialogs before injecting. You can toggle these prompts in:
 
 - `Saneject/Settings/User Settings/Ask Before Injection`
+
+![Saneject inject confirmation dialog](../../images/injection-confirmation.webp)
 
 Relevant toggles:
 
