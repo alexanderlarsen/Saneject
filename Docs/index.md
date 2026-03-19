@@ -12,7 +12,7 @@ Dependency injection the Unity way
 [![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
 
-Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the Inspector, including serialized interfaces and cross-scene or cross-prefab references. 
+Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the Inspector, including serialized interfaces and cross-scene or cross-prefab references.
 
 No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
 
@@ -41,13 +41,15 @@ For more features, see [Feature overview](docs/getting-started/feature-overview.
 
 ## Try Saneject now
 
-Add URL to Unity package manager:
+Add this URL to Unity Package Manager (Unity 2022.3.12 or newer):
 
 ```text
 https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Assets/Plugins/Saneject
 ```
 
-Then jump to [Quick start](docs/getting-started/quick-start.md) to learn the basics.
+Or download the [latest release](https://github.com/alexanderlarsen/Saneject/releases) and import the `Saneject` folder into your Unity project.
+
+Then jump to [Quick start](https://docs.saneject.dev/getting-started/quick-start).
 
 ## Feedback appreciated
 
@@ -60,6 +62,7 @@ If you try Saneject and something works well, feels unclear, or seems broken, I 
 
 - [Docs](docs/getting-started/introduction.md)
 - [API](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector)
-- [GitHub repository](https://github.com/alexanderlarsen/Saneject)
+- [GitHub repo](https://github.com/alexanderlarsen/Saneject)
 - [Releases](https://github.com/alexanderlarsen/Saneject/releases)
 - [MIT license](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
+ 
