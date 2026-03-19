@@ -2,7 +2,7 @@
 using Plugins.Saneject.Runtime.Bindings.Component;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.ComponentFilterExtensions.Scripts
+namespace Plugins.Saneject.Samples.ComponentFilterExtensions.Scripts
 {
     /// <summary>
     /// Small, opt-in sample of “sugar” extensions built on top of the core

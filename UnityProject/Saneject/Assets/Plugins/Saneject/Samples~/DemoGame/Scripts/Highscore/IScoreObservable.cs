@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Highscore
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Highscore
 {
     /// <summary>
     /// Exposes read-only score state for systems that display points.

@@ -1,7 +1,7 @@
 ﻿using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Scopes
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {
     /// <summary>
     /// Prefab-local scope for the player character.

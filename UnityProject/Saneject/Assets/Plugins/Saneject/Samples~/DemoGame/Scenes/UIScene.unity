@@ -1391,10 +1391,10 @@ MonoBehaviour:
     enemiesLeftText: {fileID: 1886484449}
     scoreText: {fileID: 163977813}
     restartButton: {fileID: 1084788498}
-  __gameStateObservable: {fileID: 11400000, guid: f1be1d184fa82b7458aada61acb83599, type: 2}
-  __scoreObservable: {fileID: 11400000, guid: 67e35f9e42fb1ea45b24ccf6dccb7697, type: 2}
-  __enemyObservable: {fileID: 11400000, guid: 18a8fd9b6c913564292fa168daaefdad, type: 2}
-  __sceneManager: {fileID: 11400000, guid: d082f2175cd6fb3438d3385bee4a2186, type: 2}
+  __gameStateObservable: {fileID: 11400000, guid: babb3733487338f488848f9052cdd531, type: 2}
+  __scoreObservable: {fileID: 11400000, guid: 70848ceab7bdcb540a198a71111bd04c, type: 2}
+  __enemyObservable: {fileID: 11400000, guid: 32411652e43c2c14ab51ce82664e0a6e, type: 2}
+  __sceneManager: {fileID: 11400000, guid: 150e36c50bb5ee54f98058aa14f8ed7d, type: 2}
 --- !u!1 &2130916102
 GameObject:
   m_ObjectHideFlags: 0
@@ -1450,9 +1450,9 @@ MonoBehaviour:
     gameObject: {fileID: 2130916102}
     enemiesLeftText: {fileID: 1958942919}
     scoreText: {fileID: 1373578029}
-  __gameStateObservable: {fileID: 11400000, guid: f1be1d184fa82b7458aada61acb83599, type: 2}
-  __scoreObservable: {fileID: 11400000, guid: 67e35f9e42fb1ea45b24ccf6dccb7697, type: 2}
-  __enemyObservable: {fileID: 11400000, guid: 18a8fd9b6c913564292fa168daaefdad, type: 2}
+  __gameStateObservable: {fileID: 11400000, guid: babb3733487338f488848f9052cdd531, type: 2}
+  __scoreObservable: {fileID: 11400000, guid: 70848ceab7bdcb540a198a71111bd04c, type: 2}
+  __enemyObservable: {fileID: 11400000, guid: 32411652e43c2c14ab51ce82664e0a6e, type: 2}
 --- !u!114 &2130916106
 MonoBehaviour:
   m_ObjectHideFlags: 0

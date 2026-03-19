@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Camera
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
 {
     /// <summary>
     /// Exposes the camera functionality that other gameplay and UI systems depend on.

@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Highscore;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
     /// <summary>
     /// Scene-level gameplay service that spawns enemies, tracks the active set, and awards score
@@ -27,7 +27,7 @@ namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies
         private int numStartingEnemies = 10;
 
         public event Action<int> OnEnemiesLeftChanged;
-        
+
         public int EnemiesLeft => activeEnemies.Count;
         public int TotalEnemies { get; private set; }
 

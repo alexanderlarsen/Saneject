@@ -1,11 +1,11 @@
 ﻿using Plugins.Saneject.Runtime.Attributes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.GameState;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Highscore;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.SceneManagement;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.MVC;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
+using Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.MVC;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.GameOver
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver
 {
     /// <summary>
     /// Controller for the game-over UI.

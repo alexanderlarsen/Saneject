@@ -2,7 +2,7 @@
 using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.PlayerSystems
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems
 {
     /// <summary>
     /// Serializable helper that handles player input and movement.

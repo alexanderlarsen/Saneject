@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
     /// <summary>
     /// Provides the world-space position that enemies should steer away from.

@@ -1,9 +1,9 @@
 ﻿using Plugins.Saneject.Runtime.Attributes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Camera;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.Enemy
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.Enemy
 {
     /// <summary>
     /// HUD marker that points toward an enemy when it moves off-screen.

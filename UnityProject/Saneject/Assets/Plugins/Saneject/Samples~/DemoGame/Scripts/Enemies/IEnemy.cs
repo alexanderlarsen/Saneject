@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
     /// <summary>
     /// Represents a spawned enemy instance that can be tracked by gameplay and UI systems.

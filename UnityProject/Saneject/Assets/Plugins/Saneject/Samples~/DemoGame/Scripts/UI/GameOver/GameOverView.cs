@@ -1,11 +1,11 @@
 ﻿using System;
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.MVC;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.MVC;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.UI;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.GameOver
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver
 {
     /// <summary>
     /// Serializable view backing the game-over panel.

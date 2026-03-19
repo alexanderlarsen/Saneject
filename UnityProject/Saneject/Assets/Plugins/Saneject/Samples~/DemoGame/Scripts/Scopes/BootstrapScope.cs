@@ -1,5 +1,5 @@
 using Plugins.Saneject.Runtime.Scopes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.SceneManagement;
+using Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {

@@ -1,14 +1,12 @@
 ﻿using Plugins.Saneject.Runtime.Scopes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.GameState;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Highscore;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.SceneManagement;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.GameOver;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
+using Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver;
 using UnityEngine.UI;
-using EnemyManager = Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies.EnemyManager;
-using GameStateManager = Plugins.SanejectLegacy.Samples.DemoGame.Scripts.GameState.GameStateManager;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Scopes
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {
     /// <summary>
     /// Scene-level scope for the UI scene.

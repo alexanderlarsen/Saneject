@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.GameState
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.GameState
 {
     /// <summary>
     /// Exposes the game-state events that UI systems react to.

@@ -1,4 +1,4 @@
-﻿namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.SceneManagement
+﻿namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
 {
     /// <summary>
     /// Coordinates the sample game's scene transitions.

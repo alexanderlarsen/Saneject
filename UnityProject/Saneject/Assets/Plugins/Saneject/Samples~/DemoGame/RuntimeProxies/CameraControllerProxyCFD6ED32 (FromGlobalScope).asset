@@ -9,9 +9,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 09f75ca40dcd0e0449476f8c296f1d0b, type: 3}
-  m_Name: EnemyManagerProxy
+  m_Script: {fileID: 11500000, guid: 6a0055497d0b1084998ff4d4b286c43d, type: 3}
+  m_Name: CameraControllerProxyCFD6ED32 (FromGlobalScope)
   m_EditorClassIdentifier: 
   resolveMethod: 0
   prefab: {fileID: 0}
-  dontDestroyOnLoad: 1
+  dontDestroyOnLoad: 0
+  instanceMode: 1

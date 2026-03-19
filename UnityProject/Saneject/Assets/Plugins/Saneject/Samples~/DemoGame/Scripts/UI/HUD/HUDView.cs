@@ -1,10 +1,10 @@
 ﻿using System;
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.MVC;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.MVC;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.HUD
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.HUD
 {
     /// <summary>
     /// Serializable view backing the in-game HUD.

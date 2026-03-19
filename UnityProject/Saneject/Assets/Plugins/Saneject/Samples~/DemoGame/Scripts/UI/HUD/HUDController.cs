@@ -1,10 +1,10 @@
 ﻿using Plugins.Saneject.Runtime.Attributes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.GameState;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Highscore;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.MVC;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.MVC;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.HUD
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.HUD
 {
     /// <summary>
     /// Controller for the in-game HUD.

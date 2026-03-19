@@ -1,4 +1,4 @@
-﻿namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Highscore
+﻿namespace Plugins.Saneject.Samples.DemoGame.Scripts.Highscore
 {
     /// <summary>
     /// Mutates the score tracked by the demo game's score system.

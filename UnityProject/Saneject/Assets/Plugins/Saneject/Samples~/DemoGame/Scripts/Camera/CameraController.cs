@@ -1,7 +1,7 @@
 ﻿using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Camera
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
 {
     /// <summary>
     /// Scene camera component that follows an injected <see cref="ICameraFollowTarget" />

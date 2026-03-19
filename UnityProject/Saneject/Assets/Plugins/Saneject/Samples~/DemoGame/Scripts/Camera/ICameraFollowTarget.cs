@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Camera
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
 {
     /// <summary>
     /// Provides the world-space position that the demo game's camera should follow.

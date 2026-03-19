@@ -1,6 +1,6 @@
 using System;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
     /// <summary>
     /// Exposes enemy-count state for systems that react to round progress.

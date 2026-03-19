@@ -1,8 +1,8 @@
-﻿using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Camera;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies;
+﻿using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.PlayerSystems
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems
 {
     /// <summary>
     /// Player character component for the demo game.

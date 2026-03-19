@@ -2,7 +2,7 @@
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.SceneManagement
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
 {
     /// <summary>
     /// Runtime scene-flow coordinator for the sample game's additive scene setup.

@@ -1,13 +1,12 @@
 ﻿using Plugins.Saneject.Runtime.Scopes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Camera;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.PlayerSystems;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.Enemy;
 using UnityEngine;
 using UnityEngine.UI;
-using CameraController = Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Camera.CameraController;
-using EnemyMarker = Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.Enemy.EnemyMarker;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Scopes
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {
     /// <summary>
     /// Prefab-local scope for each enemy instance.

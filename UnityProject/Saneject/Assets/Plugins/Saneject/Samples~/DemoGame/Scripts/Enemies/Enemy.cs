@@ -3,7 +3,7 @@ using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 using Random = UnityEngine.Random;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
     /// <summary>
     /// Enemy behaviour for the demo game's enemy prefab.

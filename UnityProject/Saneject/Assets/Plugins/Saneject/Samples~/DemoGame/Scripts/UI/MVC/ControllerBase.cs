@@ -1,6 +1,6 @@
 ﻿using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.UI.MVC
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.MVC
 {
     /// <summary>
     /// Base class for the sample's UI controllers.

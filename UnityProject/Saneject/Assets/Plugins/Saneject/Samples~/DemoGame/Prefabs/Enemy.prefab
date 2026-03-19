@@ -53,7 +53,7 @@ MonoBehaviour:
   markerTarget: {fileID: 9153909654693612790}
   markerImage: {fileID: 8796291780960885798}
   padding: 20
-  __mainCamera: {fileID: 11400000, guid: de82a84e40847b24da752a45166bc4ff, type: 2}
+  __mainCamera: {fileID: 11400000, guid: 7978de8b86aa00c45bfc0e66017c6669, type: 2}
 --- !u!222 &8919195443713171182
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -163,7 +163,7 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 5
   evadeDistance: 3
-  __evadeTarget: {fileID: 11400000, guid: 7de53b6dfcb3a8644935486a47e7e5e9, type: 2}
+  __evadeTarget: {fileID: 11400000, guid: 11f2dbb6280a5c64fad4b2b2654f3645, type: 2}
 --- !u!33 &8924227375775184379
 MeshFilter:
   m_ObjectHideFlags: 0

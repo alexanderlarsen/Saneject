@@ -1,9 +1,9 @@
 ﻿using System;
 using Plugins.Saneject.Runtime.Attributes;
-using Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.GameState
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.GameState
 {
     /// <summary>
     /// Monitors the enemy count and raises the game-over signal once all enemies have been caught.

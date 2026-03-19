@@ -1,7 +1,7 @@
 ﻿using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.SceneManagement
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
 {
     /// <summary>
     /// Start-scene entry point that kicks off the sample's additive scene flow.

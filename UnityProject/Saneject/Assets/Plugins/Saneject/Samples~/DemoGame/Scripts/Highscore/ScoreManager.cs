@@ -1,7 +1,7 @@
 ﻿using System;
 using UnityEngine;
 
-namespace Plugins.SanejectLegacy.Samples.DemoGame.Scripts.Highscore
+namespace Plugins.Saneject.Samples.DemoGame.Scripts.Highscore
 {
     /// <summary>
     /// Scene-level score service that exposes read and write interfaces for the current score.
