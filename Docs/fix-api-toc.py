@@ -1,7 +1,7 @@
 #!/usr/bin/env python3
 """
 fix-api-toc.py
-Strips the 'Plugins.Saneject.Experimental.' prefix from namespace names
+Strips the 'Plugins.Saneject.' prefix from namespace names
 in api/toc.yml and nests namespaces hierarchically by dot-segment.
 
 Run after `docfx metadata` (or after a full `docfx` build):
@@ -9,7 +9,7 @@ Run after `docfx metadata` (or after a full `docfx` build):
 """
 import re, os
 
-PREFIX = "Plugins.Saneject.Experimental."
+PREFIX = "Plugins.Saneject."
 TOC_PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), "api", "toc.yml")
 
 # ── Parse ─────────────────────────────────────────────────────────────────────

@@ -36,7 +36,7 @@ Supported member shapes:
 ### User code example
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class GameManager : MonoBehaviour
@@ -57,7 +57,7 @@ public partial class GameManager : MonoBehaviour
 ```csharp
 using System.ComponentModel;
 using System.Linq;
-using Plugins.Saneject.Experimental.Runtime.Proxy;
+using Plugins.Saneject.Runtime.Proxy;
 using UnityEngine;
 
 public partial class GameManager : ISerializationCallbackReceiver, IRuntimeProxySwapTarget

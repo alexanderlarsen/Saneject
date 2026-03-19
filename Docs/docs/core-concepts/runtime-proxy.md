@@ -41,7 +41,7 @@ If a [runtime proxy](../reference/glossary.md#runtime-proxy) is accessed directl
 Bootstrap [context](../reference/glossary.md#context):
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class BootstrapScope : Scope
 {
@@ -56,7 +56,7 @@ public class BootstrapScope : Scope
 Consumer [context](../reference/glossary.md#context) (another scene or prefab [context](../reference/glossary.md#context)):
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class HudScope : Scope
 {
@@ -74,7 +74,7 @@ If you stop at `FromRuntimeProxy()` and do not call a resolve method, the defaul
 Consumer component:
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class HudController : MonoBehaviour
@@ -90,9 +90,9 @@ public partial class HudController : MonoBehaviour
 
 API reference:
 
-- [Scope binding entry points](xref:Plugins.Saneject.Experimental.Runtime.Scopes.Scope)
-- [Runtime proxy binding builder](xref:Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder)
-- [Runtime proxy instance mode builder](xref:Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder)
+- [Scope binding entry points](xref:Plugins.Saneject.Runtime.Scopes.Scope)
+- [Runtime proxy binding builder](xref:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder)
+- [Runtime proxy instance mode builder](xref:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder)
 
 ## Editor/runtime flow
 
@@ -152,7 +152,7 @@ flowchart TD
 Example with prefab creation:
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
 public class AudioScope : Scope
@@ -226,8 +226,8 @@ If a match exists, it is reused. If not, a new asset is created. This keeps [run
 Auto-generated stub script:
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Proxy;
-using Plugins.Saneject.Experimental.Runtime.Attributes; 
+using Plugins.Saneject.Runtime.Proxy;
+using Plugins.Saneject.Runtime.Attributes; 
 
 [GenerateRuntimeProxy]
 // GameManager implements IGameObservable, IGameStarter

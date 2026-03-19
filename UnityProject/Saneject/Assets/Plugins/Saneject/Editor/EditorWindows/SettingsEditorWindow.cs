@@ -1,0 +1,350 @@
+﻿using System;
+using System.Collections.Generic;
+using System.ComponentModel;
+using System.Linq;
+using Plugins.Saneject.Editor.Utilities;
+using Plugins.Saneject.Runtime.Settings;
+using UnityEditor;
+using UnityEngine;
+
+namespace Plugins.Saneject.Editor.EditorWindows
+{
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public class SettingsEditorWindow : EditorWindow
+    {
+        private Vector2 userSettingsScrollPos;
+        private Vector2 projectSettingsScrollPos;
+        private GUIStyle paddingStyle;
+
+        private void OnEnable()
+        {
+            paddingStyle = new GUIStyle
+            {
+                padding = new RectOffset(4, 4, 4, 4)
+            };
+        }
+
+        private void OnGUI()
+        {
+            EditorGUILayout.BeginVertical(paddingStyle);
+            DrawToolbar(out int selectedTabIndex);
+            EditorGUILayout.Space(8);
+
+            switch (selectedTabIndex)
+            {
+                case 0:
+                {
+                    DrawUserSettings();
+                    break;
+                }
+                case 1:
+                {
+                    DrawProjectSettings();
+                    break;
+                }
+            }
+
+            EditorGUILayout.EndVertical();
+        }
+
+        #region Draw methods
+
+        private void DrawToolbar(out int selectedTabIndex)
+        {
+            const string key = "Saneject.SettingsEditorWindow.SelectedTab";
+
+            selectedTabIndex = GUILayout.Toolbar
+            (
+                selected: EditorPrefs.GetInt(key, defaultValue: 0),
+                texts: new[]
+                {
+                    "User Settings",
+                    "Project Settings"
+                }
+            );
+
+            EditorPrefs.SetInt
+            (
+                key,
+                selectedTabIndex
+            );
+        }
+
+        private void DrawUserSettings()
+        {
+            GUILayout.Label("Personal editor settings stored locally for this user", EditorStyles.miniLabel);
+            EditorGUILayout.Space(8);
+            userSettingsScrollPos = EditorGUILayout.BeginScrollView(userSettingsScrollPos);
+            EditorGUILayout.LabelField("Ask Before Injection", EditorStyles.boldLabel);
+
+            DrawToggle
+            (
+                label: "Scene",
+                tooltip: "Show a confirmation dialog before injecting a whole scene.",
+                currentValue: UserSettings.AskBeforeInjectScene,
+                onChanged: newValue => UserSettings.AskBeforeInjectScene = newValue
+            );
+
+            DrawToggle
+            (
+                label: "Prefab Asset",
+                tooltip: "Show a confirmation dialog before injecting a prefab asset.",
+                currentValue: UserSettings.AskBeforeInjectPrefabAsset,
+                onChanged: newValue => UserSettings.AskBeforeInjectPrefabAsset = newValue
+            );
+
+            DrawToggle
+            (
+                label: "Selected Scene Hierarchies",
+                tooltip: "Show a confirmation dialog before injecting selected scene hierarchies.",
+                currentValue: UserSettings.AskBeforeInjectSelectedSceneHierarchies,
+                onChanged: newValue => UserSettings.AskBeforeInjectSelectedSceneHierarchies = newValue
+            );
+
+            DrawToggle
+            (
+                label: "Batch Injection",
+                tooltip: "Show a confirmation dialog before batch injecting scenes and prefab assets.",
+                currentValue: UserSettings.AskBeforeBatchInject,
+                onChanged: newValue => UserSettings.AskBeforeBatchInject = newValue
+            );
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Inspector", EditorStyles.boldLabel);
+
+            DrawToggle
+            (
+                label: "Show Injected Fields & Properties",
+                tooltip: "Show [Inject] fields and [field: Inject] auto-properties in the Inspector.",
+                currentValue: UserSettings.ShowInjectedFieldsProperties,
+                onChanged: newValue => UserSettings.ShowInjectedFieldsProperties = newValue,
+                repaintInspectors: true
+            );
+
+            DrawToggle
+            (
+                label: "Show Help Boxes",
+                tooltip: "Show help boxes in the Inspector.",
+                currentValue: UserSettings.ShowHelpBoxes,
+                onChanged: newValue => UserSettings.ShowHelpBoxes = newValue,
+                repaintInspectors: true
+            );
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Play Mode Logging (Editor Only)", EditorStyles.boldLabel);
+
+            DrawToggle
+            (
+                label: "Log On Proxy Instance Resolve",
+                tooltip: "Log when a proxy instance is resolved at runtime.",
+                currentValue: UserSettings.LogProxyResolve,
+                onChanged: newValue => UserSettings.LogProxyResolve = newValue
+            );
+
+            DrawToggle
+            (
+                label: "Log On Global Scope Register & Unregister",
+                tooltip: "Log when objects are registered or unregistered with the global scope at runtime.",
+                currentValue: UserSettings.LogGlobalScopeRegistration,
+                onChanged: newValue => UserSettings.LogGlobalScopeRegistration = newValue
+            );
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Editor Logging", EditorStyles.boldLabel);
+
+            DrawToggle
+            (
+                label: "Clear Logs On Injection",
+                tooltip: "Clear console logs before injection starts. Useful for only seeing logs related to the latest injection run.",
+                currentValue: UserSettings.ClearLogsOnInjection,
+                onChanged: newValue => UserSettings.ClearLogsOnInjection = newValue
+            );
+
+            DrawToggle
+            (
+                label: "Log Injection Summary",
+                tooltip: "Log a summary on injection complete.",
+                currentValue: UserSettings.LogInjectionSummary,
+                onChanged: newValue => UserSettings.LogInjectionSummary = newValue
+            );
+
+            DrawToggle
+            (
+                label: "Log Unused Bindings",
+                tooltip: "Log a message when a binding is unused during injection. This can happen when a binding is registered in a scope but never used in the scene or prefab.",
+                currentValue: UserSettings.LogUnusedBindings,
+                onChanged: newValue => UserSettings.LogUnusedBindings = newValue
+            );
+
+            DrawToggle
+            (
+                label: "Log Unused Runtime Proxies On Domain Reload",
+                tooltip: "If enabled, Saneject will scan and report unused runtime proxy scripts and assets during domain reload. They are considered unused, if no Scope binding is referencing them. This can help you keep your project clean and organized.",
+                currentValue: UserSettings.LogUnusedRuntimeProxiesOnDomainReload,
+                onChanged: newValue => UserSettings.LogUnusedRuntimeProxiesOnDomainReload = newValue
+            );
+
+            EditorGUILayout.EndScrollView();
+
+            EditorGUILayout.Space(8);
+
+            if (GUILayout.Button("Use Default User Settings") &&
+                DialogUtility.Settings.Confirm_UseDefaultUserSettings())
+            {
+                UserSettings.UseDefaultSettings();
+                RepaintAllInspectors();
+            }
+        }
+
+        private void DrawProjectSettings()
+        {
+            GUILayout.Label("Settings stored in the project and shared across all users", EditorStyles.miniLabel);
+            EditorGUILayout.Space(8);
+            projectSettingsScrollPos = EditorGUILayout.BeginScrollView(projectSettingsScrollPos);
+            EditorGUILayout.LabelField("Context Isolation", EditorStyles.boldLabel);
+
+            DrawToggle
+            (
+                label: "Use Context Isolation",
+                tooltip:
+                "Controls dependency resolution boundaries between scenes and prefab instances.\n\n" +
+                "When enabled, scenes and prefab instances are treated as separate contexts with a hard boundary; dependencies can only resolve within the same context.\n\n" +
+                "When disabled, scene and prefab instances can fetch dependencies from each other.\n\n" +
+                "Prefab assets are always context isolated, regardless of this setting.",
+                currentValue: ProjectSettings.UseContextIsolation,
+                onChanged: newValue => ProjectSettings.UseContextIsolation = newValue,
+                repaintInspectors: true
+            );
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Scope File Generation", EditorStyles.boldLabel);
+
+            DrawToggle
+            (
+                label: "Generate Scope Namespace From Folder",
+                tooltip:
+                "When enabled, a new Scope created via 'Assets/Saneject/Create New Scope' gets a namespace matching its folder path.\n\n" +
+                "When disabled, the Scope is created without a namespace.",
+                currentValue: ProjectSettings.GenerateScopeNamespaceFromFolder,
+                onChanged: newValue => ProjectSettings.GenerateScopeNamespaceFromFolder = newValue
+            );
+
+            EditorGUILayout.Space(8);
+            EditorGUILayout.LabelField("Proxy Generation", EditorStyles.boldLabel);
+
+            DrawToggle
+            (
+                label: "Generate Proxy Scripts On Domain Reload",
+                tooltip: 
+                "When enabled, all proxy scripts are generated from declared bindings on domain reload.\n\n" +
+                "When disabled, they must be generated manually from the Saneject menu.",
+                currentValue: ProjectSettings.GenerateProxyScriptsOnDomainReload,
+                onChanged: newValue => ProjectSettings.GenerateProxyScriptsOnDomainReload = newValue
+            );
+
+            DrawPathPicker
+            (
+                label: "Output Folder",
+                tooltip: "Folder to save proxy scripts and assets auto-generated by Saneject.",
+                currentPath: ProjectSettings.ProxyAssetGenerationFolder,
+                onChanged: path => ProjectSettings.ProxyAssetGenerationFolder = path
+            );
+
+            EditorGUILayout.EndScrollView();
+
+            EditorGUILayout.Space(8);
+
+            if (GUILayout.Button("Use Default Project Settings") &&
+                DialogUtility.Settings.Confirm_UseDefaultProjectSettings())
+            {
+                ProjectSettings.UseDefaultSettings();
+                RepaintAllInspectors();
+            }
+        }
+
+        #endregion
+
+        #region Utility methods
+
+        private static void DrawToggle(
+            string label,
+            string tooltip,
+            bool currentValue,
+            Action<bool> onChanged,
+            bool repaintInspectors = false)
+        {
+            bool newValue = EditorGUILayout.ToggleLeft
+            (
+                label: new GUIContent(label, tooltip),
+                value: currentValue
+            );
+
+            if (newValue != currentValue)
+            {
+                onChanged(newValue);
+
+                if (repaintInspectors)
+                    RepaintAllInspectors();
+            }
+        }
+
+        private static void DrawPathPicker(
+            string label,
+            string tooltip,
+            string currentPath,
+            Action<string> onChanged,
+            bool repaintInspectors = false)
+        {
+            EditorGUILayout.BeginHorizontal();
+
+            GUILayout.Label
+            (
+                content: new GUIContent(label, tooltip),
+                options: GUILayout.ExpandWidth(false)
+            );
+
+            string newPath = EditorGUILayout.TextField
+            (
+                text: string.IsNullOrEmpty(currentPath) ? "<none>" : currentPath,
+                style: EditorStyles.textField,
+                options: GUILayout.Height(EditorGUIUtility.singleLineHeight)
+            );
+
+            if (GUILayout.Button("...", GUILayout.Width(30)))
+            {
+                string absProjectPath = Application.dataPath; // full path to Assets/
+                string selected = EditorUtility.OpenFolderPanel("Select Folder", absProjectPath, "");
+
+                if (!string.IsNullOrEmpty(selected))
+                {
+                    if (!selected.StartsWith(absProjectPath))
+                        Debug.LogWarning("Saneject: Selected folder is not inside this project's Assets folder.");
+                    else
+                        newPath = "Assets" + selected[absProjectPath.Length..];
+                }
+            }
+
+            EditorGUILayout.EndHorizontal();
+
+            if (currentPath != newPath)
+            {
+                onChanged(PathUtility.SanitizeFolderPath(newPath));
+
+                if (repaintInspectors)
+                    RepaintAllInspectors();
+            }
+        }
+
+        private static void RepaintAllInspectors()
+        {
+            IEnumerable<EditorWindow> inspectorWindows = Resources
+                .FindObjectsOfTypeAll<EditorWindow>()
+                .Where(window => window.GetType().Name == "InspectorWindow");
+
+            foreach (EditorWindow window in inspectorWindows)
+                window.Repaint();
+        }
+
+        #endregion
+    }
+}

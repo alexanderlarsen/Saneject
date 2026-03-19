@@ -74,10 +74,10 @@ protected override void DeclareBindings()
 
 Full component API:
 
-- [Scope binding entry points](xref:Plugins.Saneject.Experimental.Runtime.Scopes.Scope)
-- [Component locator methods](xref:Plugins.Saneject.Experimental.Runtime.Bindings.Component.BaseComponentBindingBuilder`1)
-- [Component qualifiers](xref:Plugins.Saneject.Experimental.Runtime.Bindings.Component.ComponentBindingBuilder`1)
-- [Component filters](xref:Plugins.Saneject.Experimental.Runtime.Bindings.Component.ComponentFilterBuilder`1)
+- [Scope binding entry points](xref:Plugins.Saneject.Runtime.Scopes.Scope)
+- [Component locator methods](xref:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1)
+- [Component qualifiers](xref:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1)
+- [Component filters](xref:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1)
 
 ### Global component bindings
 
@@ -97,8 +97,8 @@ Global [bindings](../reference/glossary.md#binding) support locator and filter m
 
 Full global [binding](../reference/glossary.md#binding) API:
 
-- [Scope binding entry points](xref:Plugins.Saneject.Experimental.Runtime.Scopes.Scope)
-- [Global component binding builder](xref:Plugins.Saneject.Experimental.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1)
+- [Scope binding entry points](xref:Plugins.Saneject.Runtime.Scopes.Scope)
+- [Global component binding builder](xref:Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1)
 
 ### Asset bindings
 
@@ -120,9 +120,9 @@ protected override void DeclareBindings()
 
 Full asset API:
 
-- [Scope binding entry points](xref:Plugins.Saneject.Experimental.Runtime.Scopes.Scope)
-- [Asset binding builder](xref:Plugins.Saneject.Experimental.Runtime.Bindings.Asset.AssetBindingBuilder`1)
-- [Asset filters](xref:Plugins.Saneject.Experimental.Runtime.Bindings.Asset.AssetFilterBuilder`1)
+- [Scope binding entry points](xref:Plugins.Saneject.Runtime.Scopes.Scope)
+- [Asset binding builder](xref:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1)
+- [Asset filters](xref:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1)
 
 ### Runtime proxy bindings
 
@@ -158,9 +158,9 @@ protected override void DeclareBindings()
 
 Full [runtime proxy](../reference/glossary.md#runtime-proxy) API:
 
-- [Scope binding entry points](xref:Plugins.Saneject.Experimental.Runtime.Scopes.Scope)
-- [Runtime proxy binding builder](xref:Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder)
-- [Runtime proxy instance mode builder](xref:Plugins.Saneject.Experimental.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder)
+- [Scope binding entry points](xref:Plugins.Saneject.Runtime.Scopes.Scope)
+- [Runtime proxy binding builder](xref:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder)
+- [Runtime proxy instance mode builder](xref:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder)
 
 ## Binding qualifiers
 

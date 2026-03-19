@@ -6,8 +6,8 @@
         {
           "src": "../UnityProject/Saneject",
           "files": [
-            "**/Saneject.Experimental.Runtime.csproj",
-            "**/Saneject.Experimental.Editor.csproj"
+            "**/Saneject.Runtime.csproj",
+            "**/Saneject.Editor.csproj"
           ]
         }
       ],

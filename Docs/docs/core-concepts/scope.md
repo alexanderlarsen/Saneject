@@ -22,7 +22,7 @@ See [Context](context.md) for details.
 [Bindings](../reference/glossary.md#binding) are declared directly inside `DeclareBindings()`:
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class EnemyScope : Scope
 {
@@ -63,7 +63,7 @@ flowchart TD
 ```
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class RootScope : Scope
 {
@@ -77,7 +77,7 @@ public class RootScope : Scope
 ```
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class EnemyScope : Scope
 {
@@ -91,7 +91,7 @@ public class EnemyScope : Scope
 ```
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class Enemy : MonoBehaviour
@@ -117,7 +117,7 @@ dependencies between [contexts](../reference/glossary.md#context) that Unity can
 [Scopes](../reference/glossary.md#scope) can declare globally/statically available components with `BindGlobal<T>()`:
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class BootstrapScope : Scope
 {
@@ -188,7 +188,7 @@ public class CombatScope : Scope
 Typical consumer:
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class CombatHud : MonoBehaviour

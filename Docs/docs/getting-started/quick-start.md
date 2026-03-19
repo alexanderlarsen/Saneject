@@ -40,7 +40,7 @@ public class GameManager : MonoBehaviour, IGameStateObservable
 Create `Player.cs` and attach it to `Player`.
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class Player : MonoBehaviour
@@ -67,7 +67,7 @@ You can create a [scope](../reference/glossary.md#scope) manually or from:
 - Project window context menu: `Assets/Saneject/Create New Scope`
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class GameScope : Scope
 {
@@ -104,7 +104,7 @@ Saneject includes a custom `MonoBehaviour` inspector that keeps injected and [se
 If the inspector looks wrong or incomplete, another custom inspector or plugin is likely overriding Saneject.
 In that case, either disable the conflicting inspector or integrate Saneject's inspector API in your custom inspector to restore the Saneject inspector UX.
 
-See [MonoBehaviour inspector](../editor-and-tooling/inspectors/monobehaviour-inspector.md) and [Saneject inspector API](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector) for details.
+See [MonoBehaviour inspector](../editor-and-tooling/inspectors/monobehaviour-inspector.md) and [Saneject inspector API](xref:Plugins.Saneject.Editor.Inspectors.SanejectInspector) for details.
 
 ## Related pages
 

@@ -37,7 +37,7 @@ To change values:
 Example [binding](../../reference/glossary.md#binding):
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
 public class AudioScope : Scope

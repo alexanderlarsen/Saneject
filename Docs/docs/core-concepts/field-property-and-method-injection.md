@@ -51,7 +51,7 @@ In practice:
 
 ```csharp
 using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -87,7 +87,7 @@ public partial class HUDView : MonoBehaviour
 ```
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class HUDScope : Scope
 {
@@ -130,7 +130,7 @@ For properties, use auto-properties with a field target:
 
 ```csharp
 using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class CombatHud : MonoBehaviour
@@ -174,7 +174,7 @@ Key rules:
 
 ```csharp
 using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 using UnityEngine.UI;
 

@@ -9,7 +9,7 @@
 
   # Include everything else in the Experimental namespace
   - include:
-      uidRegex: ^Plugins\.Saneject\.Experimental(\..*)?$
+      uidRegex: ^Plugins\.Saneject(\..*)?$
 
   # Exclude everything else
   - exclude:

@@ -1,0 +1,39 @@
+﻿using System;
+using System.ComponentModel;
+using System.Reflection;
+using Plugins.Saneject.Editor.Extensions;
+using Plugins.Saneject.Editor.Utilities;
+using Plugins.Saneject.Runtime.Attributes;
+
+namespace Plugins.Saneject.Editor.Data.Graph.Nodes
+{
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public abstract class MemberNode
+    {
+        protected MemberNode(
+            object owner,
+            MemberInfo memberInfo,
+            ComponentNode componentNode,
+            string pathFromComponent,
+            InjectAttribute injectAttribute)
+        {
+            Owner = owner;
+            ComponentNode = componentNode;
+            DeclaringType = memberInfo.DeclaringType;
+            QualifyingName = NameUtility.GetLogicalName(memberInfo.Name);
+            InjectId = injectAttribute.ID;
+            SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
+            DisplayPath = this.GetDisplayPath(pathFromComponent);
+            ShortPath = $"{owner.GetType().Name}.{memberInfo.Name.StripPropertyBackingFieldSyntax()}";
+        }
+
+        public object Owner { get; }
+        public ComponentNode ComponentNode { get; }
+        public Type DeclaringType { get; }
+        public string QualifyingName { get; }
+        public string InjectId { get; }
+        public bool SuppressMissingErrors { get; }
+        public string DisplayPath { get; }
+        public string ShortPath { get; }
+    }
+}

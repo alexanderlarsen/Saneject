@@ -1,0 +1,37 @@
+﻿using System;
+using System.ComponentModel;
+using Plugins.Saneject.Editor.EditorWindows.BatchInjector.Enums;
+using UnityEngine;
+
+namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector.Data
+{
+    [EditorBrowsable(EditorBrowsableState.Never), Serializable]
+    public class BatchInjectorData
+    {
+        [SerializeField]
+        private AssetList sceneList = new();
+
+        [SerializeField]
+        private AssetList prefabList = new();
+
+        [SerializeField]
+        private WindowTab windowTab = WindowTab.Scenes;
+
+        private bool isDirty;
+
+        public AssetList SceneList => sceneList;
+        public AssetList PrefabList => prefabList;
+
+        public WindowTab WindowTab
+        {
+            get => windowTab;
+            set => windowTab = value;
+        }
+
+        public bool IsDirty
+        {
+            get => isDirty;
+            set => isDirty = value;
+        }
+    }
+}

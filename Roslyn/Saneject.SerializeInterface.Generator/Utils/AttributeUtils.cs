@@ -10,7 +10,7 @@ namespace Saneject.SerializeInterface.Generator.Utils;
 public static class AttributeUtils
 {
     private const string AttributeNamespaceRoot =
-        "Plugins.Saneject.Experimental.Runtime.Attributes";
+        "Plugins.Saneject.Runtime.Attributes";
 
     public static string GetAttributes(ISymbol symbol)
     {

@@ -68,7 +68,7 @@ See [Scope](../core-concepts/scope.md) and [Binding](../core-concepts/binding.md
 `GameSceneScope` declares both normal [bindings](../reference/glossary.md#binding) and global [bindings](../reference/glossary.md#binding).
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
 public class GameSceneScope : Scope
@@ -116,7 +116,7 @@ See [Global scope](../core-concepts/global-scope.md).
 UI systems and enemy prefab systems consume gameplay interfaces through [runtime proxies](../reference/glossary.md#runtime-proxy):
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine.UI;
 
 public class UISceneScope : Scope
@@ -151,7 +151,7 @@ See [Runtime proxy](../core-concepts/runtime-proxy.md) and [Context](../core-con
 Most sample systems depend on interfaces, not concrete classes. That is why interface fields use `[SerializeInterface]`.
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class HUDController : MonoBehaviour

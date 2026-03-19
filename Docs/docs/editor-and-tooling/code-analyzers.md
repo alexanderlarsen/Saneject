@@ -32,7 +32,7 @@ This rule reports when a field has `[Inject]` but is neither:
 - marked with Saneject's `[SerializeInterface]`
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class PlayerHud : MonoBehaviour
@@ -54,7 +54,7 @@ This rule reports when `[SerializeInterface]` is placed on a non-interface shape
 
 ```csharp
 using System.Collections.Generic;
-using Plugins.Saneject.Experimental.Runtime.Attributes;
+using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
 public partial class EnemyHud : MonoBehaviour

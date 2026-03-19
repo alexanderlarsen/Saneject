@@ -10,7 +10,7 @@ namespace Saneject.RuntimeProxy.Generator;
 [Generator]
 public class RuntimeProxyGenerator : ISourceGenerator
 {
-    private const string NamespaceRoot = "Plugins.Saneject.Experimental.Runtime";
+    private const string NamespaceRoot = "Plugins.Saneject.Runtime";
 
     public void Initialize(GeneratorInitializationContext context)
     {
@@ -52,7 +52,7 @@ public class RuntimeProxyGenerator : ISourceGenerator
             List<ISymbol> allInterfaces = concreteType.AllInterfaces
                 .Where(i => i.DeclaredAccessibility == Accessibility.Public && !i.IsGenericType)
                 .Where(i => i.ToDisplayString() != "UnityEngine.ISerializationCallbackReceiver")
-                .Where(i => i.ToDisplayString() != "Plugins.Saneject.Experimental.Runtime.Proxy.IRuntimeProxySwapTarget")
+                .Where(i => i.ToDisplayString() != "Plugins.Saneject.Runtime.Proxy.IRuntimeProxySwapTarget")
                 .Distinct(SymbolEqualityComparer.Default)
                 .ToList();
 

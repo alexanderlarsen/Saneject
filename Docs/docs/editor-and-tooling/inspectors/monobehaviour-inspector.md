@@ -12,7 +12,7 @@ In practice, this system has two parts:
 - `MonoBehaviourInspector`: the Unity custom `Editor` entry point for `MonoBehaviour`.
 - `SanejectInspector`: the shared static drawing and validation API that does the real work.
 
-The [SanejectInspector](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector) API is model-driven and uses [ComponentModel](xref:Plugins.Saneject.Experimental.Editor.Inspectors.Models.ComponentModel) and [PropertyModel](xref:Plugins.Saneject.Experimental.Editor.Inspectors.Models.PropertyModel).
+The [SanejectInspector](xref:Plugins.Saneject.Editor.Inspectors.SanejectInspector) API is model-driven and uses [ComponentModel](xref:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel) and [PropertyModel](xref:Plugins.Saneject.Editor.Inspectors.Models.PropertyModel).
 
 The default editor is multi-object aware with (`[CanEditMultipleObjects]`), so standard Unity multi-selection editing still applies.
 
@@ -105,18 +105,18 @@ The inspector uses a small model layer to keep drawing code predictable:
 - `ComponentModel` captures the inspected target, its `SerializedObject`, and top-level drawable properties.
 - `PropertyModel` captures display name, serialized property path, read-only state, interface metadata, collection metadata, and child properties.
 
-See [ComponentModel](xref:Plugins.Saneject.Experimental.Editor.Inspectors.Models.ComponentModel) and [PropertyModel](xref:Plugins.Saneject.Experimental.Editor.Inspectors.Models.PropertyModel) for the full API reference.
+See [ComponentModel](xref:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel) and [PropertyModel](xref:Plugins.Saneject.Editor.Inspectors.Models.PropertyModel) for the full API reference.
 
 ## Using the Saneject inspector API in custom inspectors
 
-`MonoBehaviourInspector` is intentionally thin and delegates to [SanejectInspector](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector).
+`MonoBehaviourInspector` is intentionally thin and delegates to [SanejectInspector](xref:Plugins.Saneject.Editor.Inspectors.SanejectInspector).
 If you create a custom inspector for a specific component type and still want Saneject behavior, call the API from your custom editor flow.
 
 Basic example:
 
 ```csharp
-using Plugins.Saneject.Experimental.Editor.Inspectors;
-using Plugins.Saneject.Experimental.Editor.Inspectors.Models;
+using Plugins.Saneject.Editor.Inspectors;
+using Plugins.Saneject.Editor.Inspectors.Models;
 using UnityEditor;
 
 [CustomEditor(typeof(MyComponent))]
@@ -137,7 +137,7 @@ public class MyComponentInspector : Editor
 }
 ```
 
-You can also use the API more granularly. See [SanejectInspector](xref:Plugins.Saneject.Experimental.Editor.Inspectors.SanejectInspector) for details.
+You can also use the API more granularly. See [SanejectInspector](xref:Plugins.Saneject.Editor.Inspectors.SanejectInspector) for details.
 
 ## Log filtering context menus
 

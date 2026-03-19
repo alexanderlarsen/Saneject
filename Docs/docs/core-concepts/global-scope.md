@@ -33,7 +33,7 @@ This keeps the common workflow explicit:
 Use `BindGlobal<TConcrete>()` inside `DeclareBindings()`:
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class BootstrapScope : Scope
 {
@@ -83,7 +83,7 @@ A common pattern is:
 - In another [scope](../reference/glossary.md#scope) or [context](../reference/glossary.md#context), bind an interface through `FromRuntimeProxy().FromGlobalScope()`.
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class BootstrapScope : Scope
 {
@@ -96,7 +96,7 @@ public class BootstrapScope : Scope
 ```
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 
 public class HudScope : Scope
 {
@@ -118,7 +118,7 @@ For full proxy behavior, see [Runtime proxy](runtime-proxy.md).
 If you want to avoid [runtime proxies](../reference/glossary.md#runtime-proxy), direct usage is available when you need fast runtime lookup outside the [injection pipeline](../reference/glossary.md#injection-pipeline):
 
 ```csharp
-using Plugins.Saneject.Experimental.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 
 public class AudioBootstrap : MonoBehaviour
@@ -140,7 +140,7 @@ API overview:
 - `GlobalScope.UnregisterComponent(Component instance, Object caller)`
 - `GlobalScope.Clear()`
 
-[Full API here](xref:Plugins.Saneject.Experimental.Runtime.Scopes.GlobalScope)
+[Full API here](xref:Plugins.Saneject.Runtime.Scopes.GlobalScope)
 
 Use manual `RegisterComponent` and `UnregisterComponent` carefully. Most projects should let `Scope` manage lifecycle through `BindGlobal<T>()`.
 
