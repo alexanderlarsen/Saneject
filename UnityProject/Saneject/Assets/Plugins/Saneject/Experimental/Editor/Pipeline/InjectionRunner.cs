@@ -267,7 +267,6 @@ namespace Plugins.Saneject.Experimental.Editor.Pipeline
                 stopwatch.ElapsedMilliseconds
             );
 
-            /*InjectionContextJsonProjector.SaveToDisk(context, injectionGraph);*/ // TODO: Make batch friendly
             return results;
         }
     }
