@@ -1,26 +1,41 @@
 ---
-title: Injection menus
+title: Injection toolbar & context menus
 ---
 
-# Injection menus
+# Injection toolbar & context menus
 
 Saneject [injection menus](../reference/glossary.md#injection-menu) are editor commands that run dependency injection on scenes, [prefab assets](../reference/glossary.md#prefab-asset), or batches of assets.
 
-The menu label tells you two things:
+For common full-run workflows, Saneject also exposes contextual main toolbar buttons:
 
-- What area you are injecting, for example current scene, selected scene hierarchies, or current [prefab asset](../reference/glossary.md#prefab-asset).
-- Which `ContextWalkFilter` is applied to that run, for example `AllContexts` or `SceneObjects`.
+- `Inject Scene`
+- `Inject Selected Scene Hierarchies`
+- `Inject Prefab Asset`
+- `Batch Inject Selected Assets`
+
+Those toolbar buttons appear only when they apply to the current selection or editor stage, and they always run with `ContextWalkFilter.AllContexts`.
 
 If you are new to [contexts](../reference/glossary.md#context) and filters, read [Context](../core-concepts/context.md) first.
 
+## Toolbar buttons
+
+The contextual main toolbar buttons cover the most common `AllContexts` runs:
+
+- `Inject Scene`: shown while editing a scene.
+- `Inject Selected Scene Hierarchies`: shown while editing a scene and one or more scene objects are selected.
+- `Inject Prefab Asset`: shown in Prefab Mode.
+- `Batch Inject Selected Assets`: shown when the Project selection contains one or more scene assets, [prefab assets](../reference/glossary.md#prefab-asset), or folders that contain them.
+
+For more focused runs, use the [injection menus](../reference/glossary.md#injection-menu) described below.
+
 ## Menu locations
 
-Saneject exposes the same injection commands in multiple Unity menus:
+Saneject exposes the same grouped injection commands in multiple Unity menus:
 
-- Main menu: `Saneject/Inject/...`
-- Hierarchy [context](../reference/glossary.md#context) menu: `GameObject/Saneject/Inject/...`
-- Project window [context](../reference/glossary.md#context) menu: `Assets/Saneject/Batch Inject/Selected Assets`
-- Main menu batch shortcut: `Saneject/Batch Inject/Selected Assets`
+- Main menu: `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`
+- Hierarchy [context](../reference/glossary.md#context) menu: `GameObject/Saneject/Inject Scene/...`, `GameObject/Saneject/Inject Selected Scene Hierarchies/...`, `GameObject/Saneject/Inject Prefab Asset/...`
+- Project window [context](../reference/glossary.md#context) menu: `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
+- Main menu batch shortcut: `Saneject/Batch Inject/Selected Assets (All Contexts)`
 
 There is also a dedicated [batch injector](../reference/glossary.md#batch-injector) window:
 
@@ -30,18 +45,19 @@ That window is covered in [Batch injection](batch-injection.md).
 
 ## Scene and prefab injection commands
 
-All commands in `Saneject/Inject/...` and `GameObject/Saneject/Inject/...` use the same [injection pipeline](../reference/glossary.md#injection-pipeline). The only differences are:
+All commands in `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`, and the matching `GameObject/Saneject/...` paths use the same [injection pipeline](../reference/glossary.md#injection-pipeline). The only differences are:
 
 - Start objects for the run.
 - `ContextWalkFilter` selected by that menu item.
 
-### Current Scene group
+### Inject Scene group
 
 Menu paths:
 
-- `Saneject/Inject/Current Scene (All Contexts)`
-- `Saneject/Inject/Current Scene (Scene Objects)`
-- `Saneject/Inject/Current Scene (Prefab Instances)`
+- `Saneject/Inject Scene/All Contexts`
+- `Saneject/Inject Scene/Scene Objects`
+- `Saneject/Inject Scene/Prefab Instances`
+- `GameObject/Saneject/Inject Scene/...`
 
 Availability:
 
@@ -53,14 +69,15 @@ Behavior:
 - Uses the active scene's root `GameObject` objects as start objects.
 - Runs injection for that scene using the selected filter.
 
-### Selected Scene Hierarchies group
+### Inject Selected Scene Hierarchies group
 
 Menu paths:
 
-- `Saneject/Inject/Selected Scene Hierarchies (All Contexts)`
-- `Saneject/Inject/Selected Scene Hierarchies (Scene Objects)`
-- `Saneject/Inject/Selected Scene Hierarchies (Prefab Instances)`
-- `Saneject/Inject/Selected Scene Hierarchies (Same Contexts As Selection)`
+- `Saneject/Inject Selected Scene Hierarchies/All Contexts`
+- `Saneject/Inject Selected Scene Hierarchies/Scene Objects`
+- `Saneject/Inject Selected Scene Hierarchies/Prefab Instances`
+- `Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection`
+- `GameObject/Saneject/Inject Selected Scene Hierarchies/...`
 
 Availability:
 
@@ -73,14 +90,15 @@ Behavior:
 - The graph is built from each selected object's root transform, then filtered by the selected `ContextWalkFilter`.
 - This means a selected child can still cause its full root hierarchy to be part of the run.
 
-### Current Prefab Asset group
+### Inject Prefab Asset group
 
 Menu paths:
 
-- `Saneject/Inject/Current Prefab Asset (All Contexts)`
-- `Saneject/Inject/Current Prefab Asset (Prefab Asset Objects)`
-- `Saneject/Inject/Current Prefab Asset (Prefab Instances)`
-- `Saneject/Inject/Current Prefab Asset (Same Contexts As Selection)`
+- `Saneject/Inject Prefab Asset/All Contexts`
+- `Saneject/Inject Prefab Asset/Prefab Asset Objects`
+- `Saneject/Inject Prefab Asset/Prefab Instances`
+- `Saneject/Inject Prefab Asset/Same Contexts As Selection`
+- `GameObject/Saneject/Inject Prefab Asset/...`
 
 Availability:
 
@@ -110,8 +128,9 @@ See [Context](../core-concepts/context.md).
 
 ## Batch inject from selected assets
 
-Command paths:
+Entry points:
 
+- Main toolbar: `Batch Inject Selected Assets`
 - `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - `Saneject/Batch Inject/Selected Assets (All Contexts)`
 
@@ -134,11 +153,11 @@ If an injected asset has no `Scope` components, the run logs that nothing was in
 
 ## Confirmation dialogs and Play Mode behavior
 
-All [injection menu](../reference/glossary.md#injection-menu) commands are editor-only:
+All [injection menu](../reference/glossary.md#injection-menu) commands and contextual toolbar buttons are editor-only:
 
 - If triggered in Play Mode, Saneject shows a dialog telling you to exit Play Mode.
 
-By default, menu commands show confirmation dialogs before injecting. You can toggle these prompts in:
+By default, these commands show confirmation dialogs before injecting. You can toggle these prompts in:
 
 - `Saneject/Settings/User Settings/Ask Before Injection`
 
@@ -151,23 +170,10 @@ Relevant toggles:
 
 ## Example: running a focused scene injection
 
-Component:
-
-```csharp
-using Plugins.Saneject.Experimental.Runtime.Attributes;
-using UnityEngine;
-
-public partial class PlayerHud : MonoBehaviour
-{
-    [Inject, SerializeField]
-    private HealthService healthService;
-}
-```
-
 Run steps:
 
 1. Select one or more [scene objects](../reference/glossary.md#scene-object) in the hierarchy.
-2. Run `Saneject/Inject/Selected Scene Hierarchies (Scene Objects)`.
+2. Run `Saneject/Inject Selected Scene Hierarchies/Scene Objects`.
 3. Check the Console for Saneject summary logs and any missing [binding](../reference/glossary.md#binding) or dependency errors.
 
 This workflow is useful when you want to validate scene-object wiring without also processing [prefab instances](../reference/glossary.md#prefab-instance) in the same run.

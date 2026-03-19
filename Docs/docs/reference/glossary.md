@@ -110,17 +110,13 @@ Static runtime registry and service locator in Saneject for globally accessible 
 
 Per-run working set built after graph filtering. It contains the active transforms, injection targets, scopes, bindings, resolution maps, and accumulated results for one injection run.
 
-### Injection controls
-
-Foldout section in the `Scope` inspector that runs scene, hierarchy, or prefab injection with specific `ContextWalkFilter` options.
-
 ### Injection graph
 
 Hierarchy model built from selected root hierarchies. It contains transform, component, scope, binding, and injection-member information used by the edit-time pipeline.
 
 ### Injection menu
 
-Editor command under `Saneject/Inject/...` or `GameObject/Saneject/Inject/...` that starts an injection run with a selected target and `ContextWalkFilter`.
+Editor command under `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`, or the matching `GameObject/Saneject/...` paths that start an injection run with a selected target and `ContextWalkFilter`.
 
 ### Injection pipeline
 

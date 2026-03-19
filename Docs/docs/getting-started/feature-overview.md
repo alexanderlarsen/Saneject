@@ -45,7 +45,7 @@ title: Feature overview
 
 ## Tooling & validation
 
-- **[Injection menus](../reference/glossary.md#injection-menu) and inspector controls:** [Injection menus](../reference/glossary.md#injection-menu) for scene, hierarchy, and prefab runs, plus `Scope` inspector [injection controls](../reference/glossary.md#injection-controls) with context-specific options, make focused workflows easy.
+- **Contextual toolbar buttons and [injection menus](../reference/glossary.md#injection-menu):** The main toolbar exposes `Inject Scene`, `Inject Selected Scene Hierarchies`, `Inject Prefab Asset`, and `Batch Inject Selected Assets` when they apply, while [injection menus](../reference/glossary.md#injection-menu) let you run more focused scene, hierarchy, and prefab passes with specific [context walk filter](../reference/glossary.md#context-walk-filter) values.
 - **[Batch injection](../reference/glossary.md#batch-injection):** [Batch Injector](../reference/glossary.md#batch-injector) can inject all (or selected) scenes and prefabs in a project in one click.
 - **Structured logging and validation:** Structured logging and validation with per-run and batch summaries help make dependency validation repeatable and easier to audit.
 - **Configurable settings:** Settings cover injection prompts, logging, [context](../reference/glossary.md#context) behavior, and proxy generation.

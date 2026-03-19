@@ -81,11 +81,11 @@ public class GameScope : Scope
 
 ## 5. Run injection
 
-Run dependency injection with either method:
+Run dependency injection with one of these methods:
 
-- [Scope](../reference/glossary.md#scope) inspector: Find the `GameScope` component, then `Injection Controls/Inject Scene By Context/All`.
-- Main menu: `Saneject/Inject/Current Scene (All Contexts)`.
-- GameObject context menu: `GameObject/Saneject/Inject/Current Scene (All Contexts)`.
+- Main toolbar: `Inject Scene`.
+- Main menu: `Saneject/Inject Scene/All Contexts`.
+- GameObject context menu: `GameObject/Saneject/Inject Scene/All Contexts`.
 
 After injection, `Player` has serialized values for `gameStateObservable` and `controller`. Enter Play Mode and the scene runs without a runtime container.
 

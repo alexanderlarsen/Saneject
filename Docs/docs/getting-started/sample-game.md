@@ -63,7 +63,7 @@ See [Scope](../core-concepts/scope.md) and [Binding](../core-concepts/binding.md
 
 ## Binding patterns shown by the sample
 
-### 1) Scene-level composition and globals
+### 1. Scene-level composition and globals
 
 `GameSceneScope` declares both normal [bindings](../reference/glossary.md#binding) and global [bindings](../reference/glossary.md#binding).
 
@@ -111,7 +111,7 @@ Why this matters:
 
 See [Global scope](../core-concepts/global-scope.md).
 
-### 2) Runtime proxy bridge for cross-context references
+### 2. Runtime proxy bridge for cross-context references
 
 UI systems and enemy prefab systems consume gameplay interfaces through [runtime proxies](../reference/glossary.md#runtime-proxy):
 
@@ -146,7 +146,7 @@ This keeps scene and prefab boundaries valid in serialized data, while still all
 
 See [Runtime proxy](../core-concepts/runtime-proxy.md) and [Context](../core-concepts/context.md).
 
-### 3) Interface injection in gameplay and UI
+### 3. Interface injection in gameplay and UI
 
 Most sample systems depend on interfaces, not concrete classes. That is why interface fields use `[SerializeInterface]`.
 

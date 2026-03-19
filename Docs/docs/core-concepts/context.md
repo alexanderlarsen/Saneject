@@ -106,10 +106,10 @@ A common workflow is:
 
 ### Where filters are used
 
-You can pick these filters from:
+You can pick run filters from:
 
 - [Injection menu](../reference/glossary.md#injection-menu) items.
-- [Injection controls](../reference/glossary.md#injection-controls) in the `Scope` inspector.
+- The `ContextWalkFilter` dropdown in the [Batch Injector](../reference/glossary.md#batch-injector) window for supported scene and [prefab asset](../reference/glossary.md#prefab-asset) runs.
 
 ## Isolation vs filtering
 

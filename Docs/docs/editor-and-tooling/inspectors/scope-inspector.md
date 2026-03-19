@@ -5,7 +5,9 @@ title: Scope inspector
 # Scope inspector
 
 The `Scope` inspector is the main inspector surface for working with one [scope](../../reference/glossary.md#scope) at a time.
-It combines [context](../../reference/glossary.md#context) visibility, runtime preparation details, [scope](../../reference/glossary.md#scope) navigation, and injection actions in one place.
+It combines [context](../../reference/glossary.md#context) visibility, runtime preparation details, and [scope](../../reference/glossary.md#scope) navigation in one place.
+
+For injection workflows, use the contextual main toolbar buttons, [injection menus](../../reference/glossary.md#injection-menu), or [batch injection](../../reference/glossary.md#batch-injection).
 
 ## Screenshot
 
@@ -19,7 +21,6 @@ Use the `Scope` inspector when you want to:
 - See what the [scope](../../reference/glossary.md#scope) has prepared for runtime [global registration](../../reference/glossary.md#global-registration).
 - See which components are registered as [runtime proxy](../../reference/glossary.md#runtime-proxy) swap targets.
 - Navigate to related [scopes](../../reference/glossary.md#scope) in the same hierarchy.
-- Run injection directly from the selected [scope](../../reference/glossary.md#scope).
 
 For the underlying concepts, see [Scope](../../core-concepts/scope.md) and [Context](../../core-concepts/context.md).
 
@@ -61,33 +62,6 @@ For full behavior, see [Runtime proxy](../../core-concepts/runtime-proxy.md).
 This is useful for understanding where local [bindings](../../reference/glossary.md#binding) are declared and how parent fallback will behave.
 See [Scope](../../core-concepts/scope.md) and [Context](../../core-concepts/context.md) for details.
 
-### Injection Controls
-
-`Injection Controls` provides one-click injection actions. Available groups depend on whether the inspected [scope](../../reference/glossary.md#scope) belongs to scene/prefab-instance [context](../../reference/glossary.md#context) or prefab-asset [context](../../reference/glossary.md#context).
-
-[Scene object](../../reference/glossary.md#scene-object) or [prefab instance](../../reference/glossary.md#prefab-instance) [context](../../reference/glossary.md#context):
-
-- `Inject Scene By Context`
-    - `All`: Injects the entire scene that this [scope](../../reference/glossary.md#scope) belongs to, including [scene objects](../../reference/glossary.md#scene-object) and [prefab instances](../../reference/glossary.md#prefab-instance).
-    - `Scene Object`: Injects all [scene objects](../../reference/glossary.md#scene-object) in the scene that this [scope](../../reference/glossary.md#scope) belongs to, excluding [prefab instances](../../reference/glossary.md#prefab-instance).
-    - `Prefab Instance`: Injects all [prefab instances](../../reference/glossary.md#prefab-instance) in the scene that this [scope](../../reference/glossary.md#scope) belongs to, excluding [scene objects](../../reference/glossary.md#scene-object).
-- `Inject Hierarchy By Context`
-    - `All`: Injects this entire scene hierarchy, including both [scene objects](../../reference/glossary.md#scene-object) and [prefab instances](../../reference/glossary.md#prefab-instance).
-    - `This`: Injects all objects in this scene hierarchy that are the same [context](../../reference/glossary.md#context) as this [scope](../../reference/glossary.md#scope).
-    - `Scene Object`: Injects all [scene objects](../../reference/glossary.md#scene-object) in this scene hierarchy, excluding [prefab instances](../../reference/glossary.md#prefab-instance).
-    - `Prefab Instance`: Injects all [prefab instances](../../reference/glossary.md#prefab-instance) in this scene hierarchy, excluding [scene objects](../../reference/glossary.md#scene-object).
-
-[Prefab asset](../../reference/glossary.md#prefab-asset) [context](../../reference/glossary.md#context):
-
-- `Inject Prefab By Context`
-    - `All`: Injects this entire prefab hierarchy, including both [prefab asset](../../reference/glossary.md#prefab-asset) objects and [prefab instances](../../reference/glossary.md#prefab-instance).
-    - `This`: Injects all objects in this prefab hierarchy that are the same [context](../../reference/glossary.md#context) as this [scope](../../reference/glossary.md#scope).
-    - `Prefab Asset`: Injects all [prefab asset](../../reference/glossary.md#prefab-asset) objects in this prefab hierarchy, excluding [prefab instances](../../reference/glossary.md#prefab-instance).
-    - `Prefab Instance`: Injects all [prefab instances](../../reference/glossary.md#prefab-instance) in this prefab hierarchy, excluding [prefab asset](../../reference/glossary.md#prefab-asset) objects.
-
-These options map to `ContextWalkFilter` values and use the same pipeline as the [injection menus](../../reference/glossary.md#injection-menu).
-See [Injection menus](../injection-menus.md) and [Context](../../core-concepts/context.md).
-
 ### Scope serialized fields
 
 After the Saneject sections, the inspector draws serialized fields on your concrete [scope](../../reference/glossary.md#scope) component.
@@ -101,7 +75,7 @@ When multiple [scopes](../../reference/glossary.md#scope) are selected:
 - The inspector shows a [scope](../../reference/glossary.md#scope) selection count.
 - A help message explains that single-scope selection is required for detailed [scope](../../reference/glossary.md#scope) inspection.
 
-For injecting many hierarchies at once, use the workflows in [Injection menus](../injection-menus.md) and [Batch injection](../batch-injection.md).
+For injecting many hierarchies at once, use [injection menus](../../reference/glossary.md#injection-menu) and [batch injection](../../reference/glossary.md#batch-injection).
 
 During injection, Saneject resolves and serializes global [binding](../../reference/glossary.md#binding) outputs on the declaring [scope](../../reference/glossary.md#scope) and tracks [proxy swap targets](../../reference/glossary.md#proxy-swap-target) for [runtime startup](../../reference/glossary.md#runtime-startup).
 

@@ -8,7 +8,7 @@ title: Batch injection
 
 Instead of opening one scene or prefab at a time and injecting manually, you can process a larger set of scene and [prefab assets](../reference/glossary.md#prefab-asset) in one run and review one consolidated console output.
 
-This is especially useful when your project grows and you need frequent dependency validation across multiple content areas. 
+This is especially useful when your project grows and you need frequent dependency validation across multiple content areas.
 
 > It is recommended to batch inject the project periodically or before builds to verify that all dependencies are correctly resolved and that there are no missing references.
 
@@ -24,14 +24,18 @@ Menu path:
 
 - `Saneject/Batch Inject/Open Batch Injector Window`
 
-### 2. Selected assets
+### 2. Selected assets from menus or toolbar
 
 Use this when you want a targeted pass for a folder or a specific Project window selection.
 
-Menu paths:
+Entry points:
 
+- Main toolbar: `Batch Inject Selected Assets`
 - `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - `Saneject/Batch Inject/Selected Assets (All Contexts)`
+
+`Batch Inject Selected Assets` appears when the current Project selection includes at least one scene asset, [prefab asset](../reference/glossary.md#prefab-asset), or folder that contains them.
+This workflow always uses `ContextWalkFilter.AllContexts`.
 
 Behavior:
 
@@ -108,9 +112,9 @@ Bottom buttons run injection for enabled rows:
 
 Allowed values depend on asset type:
 
-| Asset type   | Allowed `ContextWalkFilter` values                     |
-|--------------|--------------------------------------------------------|
-| Scene asset  | `AllContexts`, `SceneObjects`, `PrefabInstances`       |
+| Asset type                                            | Allowed `ContextWalkFilter` values                     |
+|-------------------------------------------------------|--------------------------------------------------------|
+| Scene asset                                           | `AllContexts`, `SceneObjects`, `PrefabInstances`       |
 | [Prefab asset](../reference/glossary.md#prefab-asset) | `AllContexts`, `PrefabAssetObjects`, `PrefabInstances` |
 
 For details on filter semantics, see [Context](../core-concepts/context.md).
@@ -141,12 +145,12 @@ If a saved active scene existed when the batch started, Saneject re-opens that s
 
 In the [Batch Injector](../reference/glossary.md#batch-injector) window, each row has a status icon with one of these meanings:
 
-| Icon | Status    | Meaning                                                           |
-|------|-----------|-------------------------------------------------------------------|
-| ❔    | `Unknown` | No run has set status yet, or status was cleared.                 |
+| Icon | Status    | Meaning                                                                                               |
+|------|-----------|-------------------------------------------------------------------------------------------------------|
+| ❔    | `Unknown` | No run has set status yet, or status was cleared.                                                     |
 | ✅    | `Success` | No unsuppressed errors and no unused [bindings](../reference/glossary.md#binding) for that asset run. |
 | ⚠️   | `Warning` | No unsuppressed errors, but one or more [bindings](../reference/glossary.md#binding) were unused.     |
-| ❌    | `Error`   | One or more unsuppressed errors were logged.                      |
+| ❌    | `Error`   | One or more unsuppressed errors were logged.                                                          |
 
 ## Logging model for batch runs
 
