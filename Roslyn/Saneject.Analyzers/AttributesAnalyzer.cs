@@ -92,7 +92,8 @@ public class AttributesAnalyzer : DiagnosticAnalyzer
         if (attrClass == null)
             return false;
 
-        if (attrClass.Name != attributeName)
+        if (attrClass.Name != attributeName &&
+            attrClass.Name != attributeName + "Attribute")
             return false;
 
         string attributeNamespace = attrClass.ContainingNamespace?.ToDisplayString();
