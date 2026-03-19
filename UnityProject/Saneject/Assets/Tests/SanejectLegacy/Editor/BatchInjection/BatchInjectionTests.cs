@@ -18,11 +18,11 @@ namespace Tests.SanejectLegacy.Editor.BatchInjection
         {
             AssetData[] sceneData =
             {
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 1.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 2.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 3.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 4.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 5.unity"))
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 1.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 2.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 3.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 4.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 5.unity"))
             };
 
             ResetScenes(sceneData);
@@ -35,11 +35,11 @@ namespace Tests.SanejectLegacy.Editor.BatchInjection
         {
             AssetData[] prefabData =
             {
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 1.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 2.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 3.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 4.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 5.prefab"))
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 1.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 2.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 3.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 4.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 5.prefab"))
             };
 
             ResetPrefabs(prefabData);
@@ -52,20 +52,20 @@ namespace Tests.SanejectLegacy.Editor.BatchInjection
         {
             AssetData[] sceneData =
             {
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 1.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 2.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 3.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 4.unity")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/TestScene 5.unity"))
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 1.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 2.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 3.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 4.unity")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/TestScene 5.unity"))
             };
 
             AssetData[] prefabData =
             {
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 1.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 2.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 3.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 4.prefab")),
-                new(AssetDatabase.AssetPathToGUID("Assets/Tests/Legacy/Runtime/BatchInjection/Prefab 5.prefab"))
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 1.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 2.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 3.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 4.prefab")),
+                new(AssetDatabase.AssetPathToGUID("Assets/Tests/SanejectLegacy/Runtime/BatchInjection/Prefab 5.prefab"))
             };
 
             ResetScenes(sceneData);

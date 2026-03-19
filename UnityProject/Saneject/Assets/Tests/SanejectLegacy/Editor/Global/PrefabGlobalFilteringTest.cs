@@ -42,7 +42,7 @@ namespace Tests.SanejectLegacy.Editor.Global
             ComponentRequester requester = root.AddComponent<ComponentRequester>();
 
             GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(
-                "Assets/Tests/Legacy/Runtime/Resources/Test/Prefab 1.prefab");
+                "Assets/Tests/SanejectLegacy/Runtime/Resources/Test/Prefab 1.prefab");
 
             GameObject prefabInstance = PrefabUtility.InstantiatePrefab(prefabAsset) as GameObject;
             InjectableComponent injectable = prefabInstance.AddComponent<InjectableComponent>();
@@ -94,7 +94,7 @@ namespace Tests.SanejectLegacy.Editor.Global
             TestScope scope = root.AddComponent<TestScope>();
 
             GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(
-                "Assets/Tests/Legacy/Runtime/Resources/Test/Prefab 1.prefab");
+                "Assets/Tests/SanejectLegacy/Runtime/Resources/Test/Prefab 1.prefab");
 
             GameObject prefabInstance = PrefabUtility.InstantiatePrefab(prefabAsset) as GameObject;
             InjectableComponent injectable = prefabInstance.AddComponent<InjectableComponent>();
