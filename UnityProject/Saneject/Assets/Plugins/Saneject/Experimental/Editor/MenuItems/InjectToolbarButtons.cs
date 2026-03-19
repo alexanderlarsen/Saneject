@@ -172,8 +172,21 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                 toolbarState.Mode != ToolbarMode.None ||
                 toolbarState.HasBatchInjectAssetSelection;
 
-            SetDisplay(container, hasVisibleControls ? DisplayStyle.Flex : DisplayStyle.None);
-            SetDisplay(injectSceneButton, toolbarState.Mode == ToolbarMode.Scene ? DisplayStyle.Flex : DisplayStyle.None);
+            SetDisplay
+            (
+                container,
+                hasVisibleControls
+                    ? DisplayStyle.Flex
+                    : DisplayStyle.None
+            );
+
+            SetDisplay
+            (
+                injectSceneButton,
+                toolbarState.Mode == ToolbarMode.Scene
+                    ? DisplayStyle.Flex
+                    : DisplayStyle.None
+            );
 
             SetDisplay
             (
@@ -183,7 +196,13 @@ namespace Plugins.Saneject.Experimental.Editor.MenuItems
                     : DisplayStyle.None
             );
 
-            SetDisplay(injectPrefabButton, toolbarState.Mode == ToolbarMode.Prefab ? DisplayStyle.Flex : DisplayStyle.None);
+            SetDisplay
+            (
+                injectPrefabButton,
+                toolbarState.Mode == ToolbarMode.Prefab
+                    ? DisplayStyle.Flex
+                    : DisplayStyle.None
+            );
 
             SetDisplay
             (
