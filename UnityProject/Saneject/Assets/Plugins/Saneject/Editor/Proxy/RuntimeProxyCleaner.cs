@@ -21,32 +21,51 @@ namespace Plugins.Saneject.Editor.Proxy
                 return;
 
             HashSet<Type> unusedTypes = GetUnusedTypes();
+            HashSet<string> unusedAssetPaths = GetUnusedAssetPaths(unusedTypes);
 
-            if (unusedTypes.Count == 0)
+            if (unusedTypes.Count == 0 && unusedAssetPaths.Count == 0)
                 return;
 
-            int count = unusedTypes.Count;
+            string unusedTypeList = unusedTypes.Count == 0
+                ? "None"
+                : string.Join(", ", unusedTypes.Select(t => t.Name));
+
+            string unusedAssetSummary = unusedAssetPaths.Count == 0
+                ? "None"
+                : string.Join
+                (
+                    ", ",
+                    unusedAssetPaths
+                        .Select(AssetDatabase.LoadAssetAtPath<RuntimeProxyBase>)
+                        .Where(asset => asset != null)
+                        .GroupBy(asset => asset.GetType().Name)
+                        .OrderBy(group => group.Key)
+                        .Select(group => $"{group.Key} ({group.Count()} unused)")
+                );
 
             Debug.LogWarning
             (
-                $"Saneject: Found {count} unused runtime proxy {(count == 1 ? "type" : "types")}:\n" +
-                $"{string.Join(", ", unusedTypes.Select(t => t.Name))}\n\n" +
-                "These scripts and their assets can be cleaned up with one click at: <i>Saneject → Runtime Proxy → Cleanup Unused Scripts And Assets</i>.\n" +
-                "This warning can be disabled at: <i>Saneject → Settings → User Settings → Log Unused Proxies On Domain Reload</i>.\n"
+                $"Saneject: Found {unusedTypes.Count} unused runtime proxy {(unusedTypes.Count == 1 ? "type" : "types")} and " +
+                $"{unusedAssetPaths.Count} unused runtime proxy {(unusedAssetPaths.Count == 1 ? "asset" : "assets")}:\n\n" +
+                $"Types: {unusedTypeList}\n" +
+                $"Assets: {unusedAssetSummary}\n\n" +
+                "These scripts and their assets can be cleaned up with one click at: 'Saneject/Runtime Proxy/Cleanup Unused Scripts And Assets'.\n" +
+                "This warning can be disabled at: 'Saneject/Settings/User Settings/Log Unused Proxies On Domain Reload'.\n"
             );
         }
-
+ 
         public static void CleanUnusedScriptsAndAssets()
         {
             HashSet<Type> unusedTypes = GetUnusedTypes();
+            HashSet<string> unusedAssetPaths = GetUnusedAssetPaths(unusedTypes);
 
-            if (unusedTypes.Count == 0)
+            if (unusedTypes.Count == 0 && unusedAssetPaths.Count == 0)
             {
                 DialogUtility.ProxyCleaner.Display_NoUnusedProxies();
                 return;
             }
 
-            FindAndDeleteAssets(unusedTypes);
+            FindAndDeleteAssets(unusedAssetPaths);
             FindAndDeleteScripts(unusedTypes);
         }
 
@@ -65,17 +84,39 @@ namespace Plugins.Saneject.Editor.Proxy
             return unusedTypes;
         }
 
-        private static void FindAndDeleteAssets(HashSet<Type> unusedTypes)
+        private static HashSet<string> GetUnusedAssetPaths(HashSet<Type> unusedTypes)
         {
-            HashSet<string> pathsToDelete = unusedTypes
-                .SelectMany(t => AssetDatabase.FindAssets($"t:{t.Name}"))
-                .Select(AssetDatabase.GUIDToAssetPath)
+            HashSet<string> proxyAssetPaths = GetAllProxyAssetPaths();
+
+            if (proxyAssetPaths.Count == 0)
+                return proxyAssetPaths;
+
+            HashSet<string> unreferencedProxyAssetPaths = proxyAssetPaths
+                .Except(GetReferencedProxyAssetPaths(proxyAssetPaths))
                 .ToHashSet();
 
+            HashSet<string> unusedTypeAssetPaths = unusedTypes
+                .SelectMany(t => AssetDatabase.FindAssets($"t:{t.Name}"))
+                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(proxyAssetPaths.Contains)
+                .ToHashSet();
+
+            unreferencedProxyAssetPaths.UnionWith(unusedTypeAssetPaths);
+            return unreferencedProxyAssetPaths;
+        }
+
+        private static void FindAndDeleteAssets(HashSet<string> pathsToDelete)
+        {
             if (pathsToDelete.Count == 0)
                 return;
 
-            if (!DialogUtility.ProxyCleaner.Confirm_DeleteAssets(pathsToDelete.Count, unusedTypes.Select(t => t.Name)))
+            HashSet<string> proxyTypeNames = pathsToDelete
+                .Select(AssetDatabase.LoadAssetAtPath<RuntimeProxyBase>)
+                .Where(asset => asset != null)
+                .Select(asset => asset.GetType().Name)
+                .ToHashSet();
+
+            if (!DialogUtility.ProxyCleaner.Confirm_DeleteAssets(pathsToDelete.Count, proxyTypeNames))
                 return;
 
             foreach (string path in pathsToDelete)
@@ -83,6 +124,41 @@ namespace Plugins.Saneject.Editor.Proxy
 
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
+        }
+
+        private static HashSet<string> GetAllProxyAssetPaths()
+        {
+            HashSet<string> proxyAssetPaths = new();
+
+            foreach (Type proxyType in TypeCache.GetTypesDerivedFrom<RuntimeProxyBase>().Where(t => !t.IsAbstract))
+                foreach (string guid in AssetDatabase.FindAssets($"t:{proxyType.Name}"))
+                {
+                    string path = AssetDatabase.GUIDToAssetPath(guid);
+
+                    if (string.IsNullOrWhiteSpace(path))
+                        continue;
+
+                    if (AssetDatabase.LoadAssetAtPath(path, proxyType) is RuntimeProxyBase)
+                        proxyAssetPaths.Add(path);
+                }
+
+            return proxyAssetPaths;
+        }
+
+        private static HashSet<string> GetReferencedProxyAssetPaths(HashSet<string> proxyAssetPaths)
+        {
+            string[] projectAssetPaths = AssetDatabase
+                .GetAllAssetPaths()
+                .Where(path => path.StartsWith("Assets/", StringComparison.Ordinal))
+                .Where(path => !path.EndsWith(".meta", StringComparison.OrdinalIgnoreCase))
+                .Where(path => !AssetDatabase.IsValidFolder(path))
+                .Where(path => !proxyAssetPaths.Contains(path))
+                .ToArray();
+
+            return AssetDatabase
+                .GetDependencies(projectAssetPaths, true)
+                .Where(proxyAssetPaths.Contains)
+                .ToHashSet();
         }
 
         private static void FindAndDeleteScripts(HashSet<Type> unusedTypes)

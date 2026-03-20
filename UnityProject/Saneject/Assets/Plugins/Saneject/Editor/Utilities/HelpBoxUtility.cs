@@ -15,7 +15,7 @@ namespace Plugins.Saneject.Editor.Utilities
             if (!UserSettings.ShowHelpBoxes)
                 return;
 
-            message += "\n\n💡 These help boxes can be disabled at: Saneject → Settings → User Settings → Show Help Boxes";
+            message += "\n\n💡 These help boxes can be disabled at: 'Saneject/Settings/User Settings/Show Help Boxes'";
             
             EditorGUILayout.HelpBox
             (

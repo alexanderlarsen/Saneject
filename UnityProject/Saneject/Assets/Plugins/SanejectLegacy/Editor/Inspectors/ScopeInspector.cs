@@ -162,7 +162,7 @@ namespace Plugins.SanejectLegacy.Editor.Inspectors
                     node.LabelText,
                     sameContext
                         ? string.Empty
-                        : $"'{node.LabelText}' is in a different context than the selected Scope and will not participate in injection from this Scope.\n\nContext isolation can be toggled in Saneject → User Settings → Use Context Isolation, but it's recommended to keep it on."
+                        : $"'{node.LabelText}' is in a different context than the selected Scope and will not participate in injection from this Scope.\n\nContext isolation can be toggled in 'Saneject/User Settings/Use Context Isolation', but it's recommended to keep it on."
                 );
 
                 EditorGUILayout.BeginHorizontal();
