@@ -36,14 +36,28 @@ Saneject exposes the same grouped injection commands in multiple Unity menus.
 
 ![Saneject injection context menus](../../images/injection-context-menus.webp)
 
-- Main menu: `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`
-- Hierarchy [context](../reference/glossary.md#context) menu: `GameObject/Saneject/Inject Scene/...`, `GameObject/Saneject/Inject Selected Scene Hierarchies/...`, `GameObject/Saneject/Inject Prefab Asset/...`
-- Project window [context](../reference/glossary.md#context) menu: `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
-- Main menu batch shortcut: `Saneject/Batch Inject/Selected Assets (All Contexts)`
+- Main menu:
+    - `Saneject/Inject Scene/...`
+    - `Saneject/Inject Selected Scene Hierarchies/...`
+    - `Saneject/Inject Prefab Asset/...`
+- Hierarchy context menu:
+    - `GameObject/Saneject/Inject Scene/...`
+    - `GameObject/Saneject/Inject Selected Scene Hierarchies/...`
+    - `GameObject/Saneject/Inject Prefab Asset/...`
+- Project window context menu:
+    - `Assets/Saneject/Batch Inject Selected Assets/All Contexts`
+    - `Assets/Saneject/Batch Inject Selected Assets/Scene Objects`
+    - `Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects`
+    - `Assets/Saneject/Batch Inject Selected Assets/Prefab Instances`
+- Main menu batch shortcuts:
+    - `Saneject/Batch Inject Selected Assets/All Contexts`
+    - `Saneject/Batch Inject Selected Assets/Scene Objects`
+    - `Saneject/Batch Inject Selected Assets/Prefab Asset Objects`
+    - `Saneject/Batch Inject Selected Assets/Prefab Instances`
 
 There is also a dedicated [batch injector](../reference/glossary.md#batch-injector) window:
 
-- `Saneject/Batch Inject/Open Batch Injector Window`
+- `Saneject/Open Batch Injector Window`
 
 That window is covered in [Batch injection](batch-injection.md).
 
@@ -116,7 +130,7 @@ Behavior:
 
 ## Filter labels used in menu names
 
-Menu labels map directly to `ContextWalkFilter` values:
+Menu labels in these command groups, including `Batch Inject Selected Assets/...`, map directly to `ContextWalkFilter` values:
 
 | Menu label suffix            | Context walk filter       | Included contexts                                                                                                                                                                   |
 |------------------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
@@ -124,7 +138,7 @@ Menu labels map directly to `ContextWalkFilter` values:
 | `Scene Objects`              | `SceneObjects`            | [Scene object](../reference/glossary.md#scene-object) [contexts](../reference/glossary.md#context) only                                                                             |
 | `Prefab Instances`           | `PrefabInstances`         | [Prefab instance](../reference/glossary.md#prefab-instance) [contexts](../reference/glossary.md#context) only                                                                       |
 | `Prefab Asset Objects`       | `PrefabAssetObjects`      | [Prefab asset](../reference/glossary.md#prefab-asset) [contexts](../reference/glossary.md#context) only                                                                             |
-| `Same Contexts As Selection` | `SameContextsAsSelection` | [Contexts](../reference/glossary.md#context) matching selected start object [contexts](../reference/glossary.md#context)                                                            |
+| `Same Contexts As Selection` | `SameContextsAsSelection` | [Contexts](../reference/glossary.md#context) matching selected start object contexts only                                                                                           |
 
 `ContextWalkFilter` controls what enters the run. It does not override [context isolation](../reference/glossary.md#context-isolation).
 [Context isolation](../reference/glossary.md#context-isolation) is configured in [project settings](../reference/glossary.md#project-settings) and still applies during resolution.
@@ -134,13 +148,22 @@ See [Context](../core-concepts/context.md).
 
 Entry points:
 
-- Main toolbar: `Batch Inject Selected Assets`
-- `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
-- `Saneject/Batch Inject/Selected Assets (All Contexts)`
+- Main toolbar: `Batch Inject Selected Assets` (`ContextWalkFilter.AllContexts`)
+- `Assets/Saneject/Batch Inject Selected Assets/All Contexts`
+- `Assets/Saneject/Batch Inject Selected Assets/Scene Objects`
+- `Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects`
+- `Assets/Saneject/Batch Inject Selected Assets/Prefab Instances`
+- `Saneject/Batch Inject Selected Assets/All Contexts`
+- `Saneject/Batch Inject Selected Assets/Scene Objects`
+- `Saneject/Batch Inject Selected Assets/Prefab Asset Objects`
+- `Saneject/Batch Inject Selected Assets/Prefab Instances`
 
 ![Saneject batch injection main toolbar](../../images/batch-injection-main-toolbar.webp)
 
 ![Saneject batch injection context menu](../../images/batch-injection-context-menu.webp)
+
+> Note: The screenshot above predates the menu rename and only shows the older `Selected Assets (All Contexts)` path.
+> Use the `Assets/Saneject/Batch Inject Selected Assets/...` and `Saneject/Batch Inject Selected Assets/...` paths listed above in current versions.
 
 Availability:
 
@@ -150,7 +173,7 @@ Availability:
 Behavior:
 
 1. Collect selected scene and [prefab assets](../reference/glossary.md#prefab-asset).
-2. Assign `AllContexts` filter to each collected asset.
+2. Apply the `ContextWalkFilter` chosen by the toolbar button or menu item to each collected asset.
 3. Show batch confirmation dialog with scene and prefab counts.
 4. Ask to save currently modified open scenes before running.
 5. Inject each selected scene and [prefab asset](../reference/glossary.md#prefab-asset).
@@ -158,6 +181,9 @@ Behavior:
 7. Log per-asset sections and final batch summary.
 
 If an injected asset has no `Scope` components, the run logs that nothing was injected for that asset or run.
+
+The toolbar button stays on `AllContexts`; the menu variants give you focused batch runs for `SceneObjects`, `PrefabAssetObjects`, or `PrefabInstances`.
+The chosen filter is forwarded as-is to every collected asset, so mixed scene/prefab selections only process matching [contexts](../reference/glossary.md#context) inside each asset.
 
 ## Confirmation dialogs
 

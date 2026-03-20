@@ -22,7 +22,7 @@ The window is designed for repeatable, project-scale [batch injection](../refere
 
 Menu path:
 
-- `Saneject/Batch Inject/Open Batch Injector Window`
+- `Saneject/Open Batch Injector Window`
 
 ### 2. Selected assets from menus or toolbar
 
@@ -30,26 +30,37 @@ Use this when you want a targeted pass for a folder or a specific Project window
 
 Entry points:
 
-- Main toolbar: `Batch Inject Selected Assets`
-- `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
-- `Saneject/Batch Inject/Selected Assets (All Contexts)`
+- Main toolbar: `Batch Inject Selected Assets` (`ContextWalkFilter.AllContexts`)
+- Project window context menu: `Assets/Saneject/Batch Inject Selected Assets/All Contexts`
+- Project window context menu: `Assets/Saneject/Batch Inject Selected Assets/Scene Objects`
+- Project window context menu: `Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects`
+- Project window context menu: `Assets/Saneject/Batch Inject Selected Assets/Prefab Instances`
+- Main menu: `Saneject/Batch Inject Selected Assets/All Contexts`
+- Main menu: `Saneject/Batch Inject Selected Assets/Scene Objects`
+- Main menu: `Saneject/Batch Inject Selected Assets/Prefab Asset Objects`
+- Main menu: `Saneject/Batch Inject Selected Assets/Prefab Instances`
 
 ![Saneject Batch Inject Main Toolbar](../../images/batch-injection-main-toolbar.webp)
 
 ![Saneject Batch Inject Selected Assets](../../images/batch-injection-context-menu.webp)
-
+ 
 `Batch Inject Selected Assets` appears when the current Project selection includes at least one scene asset, [prefab asset](../reference/glossary.md#prefab-asset), or folder that contains them.
-This workflow always uses `ContextWalkFilter.AllContexts`.
+
+The toolbar button is the quick `AllContexts` version.
+The menu variants let you batch inject the same selection with `SceneObjects`, `PrefabAssetObjects`, or `PrefabInstances`.
 
 Behavior:
 
 1. Saneject scans the current Project selection using deep asset selection.
 2. It keeps scene assets and [prefab assets](../reference/glossary.md#prefab-asset).
-3. It assigns `ContextWalkFilter.AllContexts` to every collected asset.
+3. It applies the `ContextWalkFilter` selected by the toolbar button or menu item to every collected asset.
 4. It optionally shows a confirmation dialog (controlled by `Ask Before Batch Inject` in `Saneject/Settings`).
 5. It asks whether modified open scenes should be saved.
 6. It injects the selected scenes and prefabs.
 7. It logs per-asset output plus a final batch summary.
+
+The selected-assets menu variants do not remap filters per asset type.
+The chosen filter is forwarded as-is to every collected scene and [prefab asset](../reference/glossary.md#prefab-asset), so a mixed selection only processes the [contexts](../reference/glossary.md#context) that match that filter inside each asset.
 
 ## Batch Injector window features
 
@@ -89,7 +100,7 @@ List and window state are persisted to:
 
 ### Multi-select and context menu actions
 
-Both lists support multi-selection and a [context](../reference/glossary.md#context) menu with:
+Both lists support multi-selection and a context menu with:
 
 - `Inject Selected`: Runs [batch injection](../reference/glossary.md#batch-injection) only for the currently selected rows.
 - `Enable` / `Disable`: Toggles whether rows are included when using the bottom `Inject All` and `Inject Scenes/Prefabs` buttons.
@@ -112,7 +123,7 @@ Bottom buttons run injection for enabled rows:
 - `Inject Scenes`
 - `Inject Prefabs`
 
-`Inject Selected` from the row [context](../reference/glossary.md#context) menu injects the selected rows directly, even if some of those rows are disabled.
+`Inject Selected` from the row context menu injects the selected rows directly, even if some of those rows are disabled.
 
 ## Injection status meanings
 
@@ -148,7 +159,19 @@ For more information on logging, see [Logging & validation](logging-and-validati
 
 ## Context filter rules in batch injection
 
-`ContextWalkFilter` is configured per asset in the [Batch Injector](../reference/glossary.md#batch-injector) window.
+`ContextWalkFilter` can be chosen in two places:
+
+- Per run from the `Batch Inject Selected Assets/...` menu variants.
+- Per asset in the [Batch Injector](../reference/glossary.md#batch-injector) window.
+
+Selected-assets batch menu variants use these labels:
+
+- `All Contexts`
+- `Scene Objects`
+- `Prefab Asset Objects`
+- `Prefab Instances`
+
+Those commands apply the chosen filter to every collected asset in that run.
 
 Allowed values depend on asset type:
 
