@@ -39,10 +39,13 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
             public const int SameContextsAsSelection = Base + 4;
         }
 
-        public static class BatchInject
+        public static class BatchInjectSelectedAssets
         {
             public const int Base = Root + 115;
-            public const int SelectedAssetsAllContexts = Base + 1;
+            public const int AllContexts = Base + 1;
+            public const int SceneObjects = Base + 2;
+            public const int PrefabAssetObjects = Base + 3;
+            public const int PrefabInstances = Base + 4;
         }
 
         public static class SelectSameContextObjects
@@ -59,10 +62,11 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
             public const int CleanUpUnusedScriptsAndAssets = Base + 2;
         }
 
-        public static class Settings
+        public static class EditorWindows
         {
             public const int Base = Root + 400;
-            public const int Show = Base + 1;
+            public const int ShowBatchInjectorWindow = Base + 1;
+            public const int ShowSettingsWindow = Base + 2;
         }
     }
 }

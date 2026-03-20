@@ -44,7 +44,6 @@ namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector
             Storage.SaveIfDirty(batchInjectorData);
         }
 
-        [MenuItem("Saneject/Batch Inject/Open Batch Injector Window")]
         public static void ShowWindow()
         {
             BatchInjectorEditorWindow window = GetWindow<BatchInjectorEditorWindow>("Saneject Batch Injector");

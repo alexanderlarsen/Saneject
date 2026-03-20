@@ -19,7 +19,7 @@ namespace Plugins.Saneject.Editor.Utilities
     {
         #region Batch injection
 
-        public static void BatchInjectSelectedAssets()
+        public static void BatchInjectSelectedAssets(ContextWalkFilter walkFilter)
         {
             Object[] assets = Selection.GetFiltered<Object>(SelectionMode.DeepAssets);
             List<BatchItem> batchItems = new();
@@ -33,8 +33,8 @@ namespace Plugins.Saneject.Editor.Utilities
 
                 BatchItem batchItem = AssetDatabase.LoadAssetAtPath<Object>(path) switch
                 {
-                    SceneAsset => new SceneBatchItem(path, ContextWalkFilter.AllContexts),
-                    GameObject => new PrefabBatchItem(path, ContextWalkFilter.AllContexts),
+                    SceneAsset => new SceneBatchItem(path, walkFilter),
+                    GameObject => new PrefabBatchItem(path, walkFilter),
                     _ => null
                 };
 

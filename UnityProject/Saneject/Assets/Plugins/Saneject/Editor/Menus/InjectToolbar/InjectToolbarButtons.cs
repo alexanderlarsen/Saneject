@@ -122,7 +122,7 @@ namespace Plugins.Saneject.Editor.Menus.InjectToolbar
             (
                 text: "Batch Inject Selected Assets",
                 tooltip: "Batch injects the selected folders, scene assets, and prefab assets.",
-                onClicked: InjectionUtility.BatchInjectSelectedAssets
+                onClicked: () => InjectionUtility.BatchInjectSelectedAssets(ContextWalkFilter.AllContexts)
             );
 
             root.Add(injectSceneButton);

@@ -1,5 +1,6 @@
 ﻿using System.ComponentModel;
 using Plugins.Saneject.Editor.EditorWindows;
+using Plugins.Saneject.Editor.EditorWindows.BatchInjector;
 using UnityEditor;
 using UnityEngine;
 
@@ -8,11 +9,17 @@ using UnityEngine;
 namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
-    public class SettingsMenuItems
+    public class EditorWindowMenuItems
     {
         #region Menu item methods
 
-        [MenuItem("Saneject/Settings", false, SanejectMenuPriority.Settings.Show)]
+        [MenuItem("Saneject/Open Batch Injector Window", false, SanejectMenuPriority.EditorWindows.ShowBatchInjectorWindow)]
+        private static void OpenBatchInjectorWindow()
+        {
+            BatchInjectorEditorWindow.ShowWindow();
+        }
+
+        [MenuItem("Saneject/Settings", false, SanejectMenuPriority.EditorWindows.ShowSettingsWindow)]
         private static void ShowSettings()
         {
             SettingsEditorWindow editorWindow = EditorWindow.GetWindow<SettingsEditorWindow>();

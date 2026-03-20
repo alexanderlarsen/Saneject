@@ -128,6 +128,38 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
 
         #endregion
 
+        #region Batch inject selected assets methods
+
+        [MenuItem("Assets/Saneject/Batch Inject Selected Assets/All Contexts", false, SanejectMenuPriority.BatchInjectSelectedAssets.AllContexts),
+         MenuItem("Saneject/Batch Inject Selected Assets/All Contexts", false, SanejectMenuPriority.BatchInjectSelectedAssets.AllContexts)]
+        private static void BatchInject_SelectedAssets_AllContexts(MenuCommand cmd)
+        {
+            InjectionUtility.BatchInjectSelectedAssets(ContextWalkFilter.AllContexts);
+        }
+
+        [MenuItem("Assets/Saneject/Batch Inject Selected Assets/Scene Objects", false, SanejectMenuPriority.BatchInjectSelectedAssets.SceneObjects),
+         MenuItem("Saneject/Batch Inject Selected Assets/Scene Objects", false, SanejectMenuPriority.BatchInjectSelectedAssets.SceneObjects)]
+        private static void BatchInject_SelectedAssets_SceneObjects(MenuCommand cmd)
+        {
+            InjectionUtility.BatchInjectSelectedAssets(ContextWalkFilter.SceneObjects);
+        }
+
+        [MenuItem("Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects", false, SanejectMenuPriority.BatchInjectSelectedAssets.PrefabAssetObjects),
+         MenuItem("Saneject/Batch Inject Selected Assets/Prefab Asset Objects", false, SanejectMenuPriority.BatchInjectSelectedAssets.PrefabAssetObjects)]
+        private static void BatchInject_SelectedAssets_PrefabAssetObjects(MenuCommand cmd)
+        {
+            InjectionUtility.BatchInjectSelectedAssets(ContextWalkFilter.PrefabAssetObjects);
+        }
+
+        [MenuItem("Assets/Saneject/Batch Inject Selected Assets/Prefab Instances", false, SanejectMenuPriority.BatchInjectSelectedAssets.PrefabInstances),
+         MenuItem("Saneject/Batch Inject Selected Assets/Prefab Instances", false, SanejectMenuPriority.BatchInjectSelectedAssets.PrefabInstances)]
+        private static void BatchInject_SelectedAssets_PrefabInstances(MenuCommand cmd)
+        {
+            InjectionUtility.BatchInjectSelectedAssets(ContextWalkFilter.PrefabInstances);
+        }
+
+        #endregion
+
         #region Scene menu items validation
 
         [MenuItem("GameObject/Saneject/Inject Scene/All Contexts", true),
@@ -214,6 +246,23 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
         {
             return MenuValidator.IsPrefabStage() &&
                    MenuValidator.HasSceneObjectSelection();
+        }
+
+        #endregion
+
+        #region Batch inject selected assets validation methods
+
+        [MenuItem("Assets/Saneject/Batch Inject Selected Assets/All Contexts", true),
+         MenuItem("Saneject/Batch Inject Selected Assets/All Contexts", true),
+         MenuItem("Assets/Saneject/Batch Inject Selected Assets/Scene Objects", true),
+         MenuItem("Saneject/Batch Inject Selected Assets/Scene Objects", true),
+         MenuItem("Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects", true),
+         MenuItem("Saneject/Batch Inject Selected Assets/Prefab Asset Objects", true),
+         MenuItem("Assets/Saneject/Batch Inject Selected Assets/Prefab Instances", true),
+         MenuItem("Saneject/Batch Inject Selected Assets/Prefab Instances", true)]
+        private static bool Validate_BatchInject_SelectedAssets()
+        {
+            return MenuValidator.HasValidBatchSelection();
         }
 
         #endregion
