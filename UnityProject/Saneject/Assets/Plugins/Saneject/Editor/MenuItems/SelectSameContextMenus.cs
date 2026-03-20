@@ -15,21 +15,11 @@ namespace Plugins.Saneject.Editor.MenuItems
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SelectSameContextMenus
     {
-        #region Priority constants
-
-        private const int Priority_Base = MenuPriority.Root + 200;
-
-        private const int Priority_Group_Default = Priority_Base + 0;
-        private const int Priority_Item_SelectSameContextInScene = Priority_Group_Default + 1;
-        private const int Priority_Item_SelectSameContextInHierarchy = Priority_Group_Default + 2;
-
-        #endregion
-
         #region Menu item methods
 
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Scene", false,
-             Priority_Item_SelectSameContextInScene),
-         MenuItem("Saneject/Select Same Context Objects/In Scene", false, Priority_Item_SelectSameContextInScene)]
+             MenuPriority.SanejectMenu.SelectSameContextObjects.InScene),
+         MenuItem("Saneject/Select Same Context Objects/In Scene", false, MenuPriority.SanejectMenu.SelectSameContextObjects.InScene)]
         private static void SelectSameContextInScene(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -60,9 +50,9 @@ namespace Plugins.Saneject.Editor.MenuItems
         }
 
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Hierarchy", false,
-             Priority_Item_SelectSameContextInHierarchy),
+             MenuPriority.SanejectMenu.SelectSameContextObjects.InHierarchy),
          MenuItem("Saneject/Select Same Context Objects/In Hierarchy", false,
-             Priority_Item_SelectSameContextInHierarchy)]
+             MenuPriority.SanejectMenu.SelectSameContextObjects.InHierarchy)]
         private static void SelectSameContextInHierarchy(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -106,8 +96,8 @@ namespace Plugins.Saneject.Editor.MenuItems
         #region Validation methods
 
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Scene", true,
-             Priority_Item_SelectSameContextInScene),
-         MenuItem("Saneject/Select Same Context Objects/In Scene", true, Priority_Item_SelectSameContextInScene)]
+             MenuPriority.SanejectMenu.SelectSameContextObjects.InScene),
+         MenuItem("Saneject/Select Same Context Objects/In Scene", true, MenuPriority.SanejectMenu.SelectSameContextObjects.InScene)]
         private static bool Validate_SelectSameContextInScene()
         {
             return Selection
@@ -118,9 +108,9 @@ namespace Plugins.Saneject.Editor.MenuItems
         }
 
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Hierarchy", true,
-             Priority_Item_SelectSameContextInHierarchy),
+             MenuPriority.SanejectMenu.SelectSameContextObjects.InHierarchy),
          MenuItem("Saneject/Select Same Context Objects/In Hierarchy", true,
-             Priority_Item_SelectSameContextInHierarchy)]
+             MenuPriority.SanejectMenu.SelectSameContextObjects.InHierarchy)]
         private static bool Validate_SelectSameContextInHierarchy()
         {
             return Selection

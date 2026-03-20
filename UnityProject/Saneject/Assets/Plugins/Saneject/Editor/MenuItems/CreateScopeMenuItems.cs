@@ -12,19 +12,10 @@ namespace Plugins.Saneject.Editor.MenuItems
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class CreateScopeMenuItems
     {
-        #region Priority constants
-        
-        private const int Priority_Base = MenuPriority.Root + 0;
-        
-                private const int Priority_Group_Current = Priority_Base + MenuPriority.Group * 0;
-                private const int Priority_Item_CreateNewScope = Priority_Group_Current + 1;
-        
-                #endregion
-        
         #region Menu item methods
 
-        [MenuItem("Saneject/Create New Scope", false, Priority_Item_CreateNewScope),
-         MenuItem("Assets/Saneject/Create New Scope", false, Priority_Item_CreateNewScope)]
+        [MenuItem("Saneject/Create New Scope", false, MenuPriority.SanejectMenu.CreateNewScope.Item),
+         MenuItem("Assets/Saneject/Create New Scope", false, MenuPriority.SanejectMenu.CreateNewScope.Item)]
         private static void CreateNewScope()
         {
             string folderPath = GetSelectedFolder();
