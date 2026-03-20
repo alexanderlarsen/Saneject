@@ -5,15 +5,15 @@ using UnityEditor;
 
 // ReSharper disable InconsistentNaming
 
-namespace Plugins.Saneject.Editor.MenuItems
+namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectMenuItems
     {
         #region Scene menu items
 
-        [MenuItem("GameObject/Saneject/Inject Scene/All Contexts", false, MenuPriority.SanejectMenu.InjectScene.AllContexts),
-         MenuItem("Saneject/Inject Scene/All Contexts", false, MenuPriority.SanejectMenu.InjectScene.AllContexts)]
+        [MenuItem("GameObject/Saneject/Inject Scene/All Contexts", false, SanejectMenuPriority.InjectScene.AllContexts),
+         MenuItem("Saneject/Inject Scene/All Contexts", false, SanejectMenuPriority.InjectScene.AllContexts)]
         private static void Inject_CurrentScene_All(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -22,8 +22,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectCurrentScene(ContextWalkFilter.AllContexts);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Scene/Scene Objects", false, MenuPriority.SanejectMenu.InjectScene.SceneObjects),
-         MenuItem("Saneject/Inject Scene/Scene Objects", false, MenuPriority.SanejectMenu.InjectScene.SceneObjects)]
+        [MenuItem("GameObject/Saneject/Inject Scene/Scene Objects", false, SanejectMenuPriority.InjectScene.SceneObjects),
+         MenuItem("Saneject/Inject Scene/Scene Objects", false, SanejectMenuPriority.InjectScene.SceneObjects)]
         private static void Inject_CurrentScene_SceneObjects(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -32,8 +32,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectCurrentScene(ContextWalkFilter.SceneObjects);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Scene/Prefab Instances", false, MenuPriority.SanejectMenu.InjectScene.PrefabInstances),
-         MenuItem("Saneject/Inject Scene/Prefab Instances", false, MenuPriority.SanejectMenu.InjectScene.PrefabInstances)]
+        [MenuItem("GameObject/Saneject/Inject Scene/Prefab Instances", false, SanejectMenuPriority.InjectScene.PrefabInstances),
+         MenuItem("Saneject/Inject Scene/Prefab Instances", false, SanejectMenuPriority.InjectScene.PrefabInstances)]
         private static void Inject_CurrentScene_PrefabInstances(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -42,8 +42,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectCurrentScene(ContextWalkFilter.PrefabInstances);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/All Contexts", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.AllContexts),
-         MenuItem("Saneject/Inject Selected Scene Hierarchies/All Contexts", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.AllContexts)]
+        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/All Contexts", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.AllContexts),
+         MenuItem("Saneject/Inject Selected Scene Hierarchies/All Contexts", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.AllContexts)]
         private static void Inject_SelectedSceneHierarchy_AllContexts(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -52,8 +52,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.AllContexts);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Scene Objects", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.SceneObjects),
-         MenuItem("Saneject/Inject Selected Scene Hierarchies/Scene Objects", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.SceneObjects)]
+        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Scene Objects", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.SceneObjects),
+         MenuItem("Saneject/Inject Selected Scene Hierarchies/Scene Objects", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.SceneObjects)]
         private static void Inject_SelectedSceneHierarchy_SceneObjects(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -62,8 +62,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.SceneObjects);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Prefab Instances", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.PrefabInstances),
-         MenuItem("Saneject/Inject Selected Scene Hierarchies/Prefab Instances", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.PrefabInstances)]
+        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Prefab Instances", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.PrefabInstances),
+         MenuItem("Saneject/Inject Selected Scene Hierarchies/Prefab Instances", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.PrefabInstances)]
         private static void Inject_SelectedSceneHierarchy_PrefabInstances(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -72,8 +72,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.PrefabInstances);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.SameContextsAsSelection),
-         MenuItem("Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection", false, MenuPriority.SanejectMenu.InjectSelectedSceneHierarchies.SameContextsAsSelection)]
+        [MenuItem("GameObject/Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.SameContextsAsSelection),
+         MenuItem("Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection", false, SanejectMenuPriority.InjectSelectedSceneHierarchies.SameContextsAsSelection)]
         private static void Inject_SelectedSceneHierarchies_SameAsSelection(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -86,8 +86,8 @@ namespace Plugins.Saneject.Editor.MenuItems
 
         #region Prefab asset menu items
 
-        [MenuItem("GameObject/Saneject/Inject Prefab Asset/All Contexts", false, MenuPriority.SanejectMenu.InjectPrefabAsset.AllContexts),
-         MenuItem("Saneject/Inject Prefab Asset/All Contexts", false, MenuPriority.SanejectMenu.InjectPrefabAsset.AllContexts)]
+        [MenuItem("GameObject/Saneject/Inject Prefab Asset/All Contexts", false, SanejectMenuPriority.InjectPrefabAsset.AllContexts),
+         MenuItem("Saneject/Inject Prefab Asset/All Contexts", false, SanejectMenuPriority.InjectPrefabAsset.AllContexts)]
         private static void Inject_CurrentPrefab_All(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -96,8 +96,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectCurrentPrefabAsset(ContextWalkFilter.AllContexts);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Prefab Asset/Prefab Asset Objects", false, MenuPriority.SanejectMenu.InjectPrefabAsset.PrefabAssetObjects),
-         MenuItem("Saneject/Inject Prefab Asset/Prefab Asset Objects", false, MenuPriority.SanejectMenu.InjectPrefabAsset.PrefabAssetObjects)]
+        [MenuItem("GameObject/Saneject/Inject Prefab Asset/Prefab Asset Objects", false, SanejectMenuPriority.InjectPrefabAsset.PrefabAssetObjects),
+         MenuItem("Saneject/Inject Prefab Asset/Prefab Asset Objects", false, SanejectMenuPriority.InjectPrefabAsset.PrefabAssetObjects)]
         private static void Inject_CurrentPrefab_PrefabAssetObjects(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -106,8 +106,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectCurrentPrefabAsset(ContextWalkFilter.PrefabAssetObjects);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Prefab Asset/Prefab Instances", false, MenuPriority.SanejectMenu.InjectPrefabAsset.PrefabInstances),
-         MenuItem("Saneject/Inject Prefab Asset/Prefab Instances", false, MenuPriority.SanejectMenu.InjectPrefabAsset.PrefabInstances)]
+        [MenuItem("GameObject/Saneject/Inject Prefab Asset/Prefab Instances", false, SanejectMenuPriority.InjectPrefabAsset.PrefabInstances),
+         MenuItem("Saneject/Inject Prefab Asset/Prefab Instances", false, SanejectMenuPriority.InjectPrefabAsset.PrefabInstances)]
         private static void Inject_CurrentPrefab_PrefabInstances(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
@@ -116,8 +116,8 @@ namespace Plugins.Saneject.Editor.MenuItems
             InjectionUtility.InjectCurrentPrefabAsset(ContextWalkFilter.PrefabInstances);
         }
 
-        [MenuItem("GameObject/Saneject/Inject Prefab Asset/Same Contexts As Selection", false, MenuPriority.SanejectMenu.InjectPrefabAsset.SameContextsAsSelection),
-         MenuItem("Saneject/Inject Prefab Asset/Same Contexts As Selection", false, MenuPriority.SanejectMenu.InjectPrefabAsset.SameContextsAsSelection)]
+        [MenuItem("GameObject/Saneject/Inject Prefab Asset/Same Contexts As Selection", false, SanejectMenuPriority.InjectPrefabAsset.SameContextsAsSelection),
+         MenuItem("Saneject/Inject Prefab Asset/Same Contexts As Selection", false, SanejectMenuPriority.InjectPrefabAsset.SameContextsAsSelection)]
         private static void Inject_CurrentPrefab_SameAsSelection(MenuCommand cmd)
         {
             if (!MenuCommandUtility.IsFirstInvocation(cmd))

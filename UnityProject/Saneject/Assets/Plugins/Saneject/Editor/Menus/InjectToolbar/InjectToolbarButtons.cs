@@ -9,7 +9,7 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.MenuItems
+namespace Plugins.Saneject.Editor.Menus.InjectToolbar
 {
     [EditorBrowsable(EditorBrowsableState.Never), InitializeOnLoad]
     public static class InjectMainToolbarButton

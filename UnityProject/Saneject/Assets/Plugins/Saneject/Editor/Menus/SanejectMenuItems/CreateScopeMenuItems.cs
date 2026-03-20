@@ -7,15 +7,15 @@ using UnityEngine;
 
 // ReSharper disable InconsistentNaming
 
-namespace Plugins.Saneject.Editor.MenuItems
+namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class CreateScopeMenuItems
     {
         #region Menu item methods
 
-        [MenuItem("Saneject/Create New Scope", false, MenuPriority.SanejectMenu.CreateNewScope.Item),
-         MenuItem("Assets/Saneject/Create New Scope", false, MenuPriority.SanejectMenu.CreateNewScope.Item)]
+        [MenuItem("Saneject/Create New Scope", false, SanejectMenuPriority.CreateNewScope.Item),
+         MenuItem("Assets/Saneject/Create New Scope", false, SanejectMenuPriority.CreateNewScope.Item)]
         private static void CreateNewScope()
         {
             string folderPath = GetSelectedFolder();

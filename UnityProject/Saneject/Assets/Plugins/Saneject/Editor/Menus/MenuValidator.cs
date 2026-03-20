@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.SceneManagement;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.MenuItems
+namespace Plugins.Saneject.Editor.Menus
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     internal static class MenuValidator
