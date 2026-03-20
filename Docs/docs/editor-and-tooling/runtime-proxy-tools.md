@@ -4,6 +4,10 @@ title: Runtime proxy tools
 
 # Runtime proxy tools
 
+Saneject has a few tools to help you manage runtime proxy assets and scripts.
+
+![Runtime proxy tools](../../images/runtime-proxy-tools.webp)
+
 ## What do they do?
 
 ### Runtime proxy script generator
