@@ -139,21 +139,27 @@ public class MyComponentInspector : Editor
 
 You can also use the API more granularly. See [SanejectInspector](xref:Plugins.Saneject.Editor.Inspectors.SanejectInspector) for details.
 
-## Log filtering context menus
+## Console filtering context menus
 
-Saneject adds component context menu items that support logging workflows. Right click on component header:
-
-- `Saneject/Filter Logs By Scope Type`
-    - Sets the Console search text to filter by `Scope: <ScopeTypeName>`.
+Saneject adds component context menu items to quickly filter logs.
+ 
 - `Saneject/Filter Logs By Component Path`
     - Sets the Console search text to filter by the selected [Scope](../../reference/glossary.md#scope)'s path.
+
+Right click on component header and `Saneject/Filter Logs By Component Path`:
+
+![Component inspector filter logs context menu](../../../images/component-console-filter-01.webp)
+
+This adds the `Scope` type to the Console search text:
+
+![Unity console with logs filtered by component path](../../../images/component-console-filter-02.webp)
 
 ## Related pages
 
 - [Field, property & method injection](../../core-concepts/field-property-and-method-injection.md)
 - [Serialized interface](../../core-concepts/serialized-interface.md)
 - [Scope inspector](scope-inspector.md)
-- [Injection menus](../injection-menus.md)
+- [Injection toolbar & context menus](../injection-toolbar-and-context-menus.md)
 - [Settings](../settings.md)
 - [Logging & validation](../logging-and-validation.md)
 - [Glossary](../../reference/glossary.md)

@@ -130,7 +130,7 @@ In `Saneject/Settings/Project Settings`:
 
 ## Related pages
 
-- [Injection menus](injection-menus.md)
+- [Injection toolbar & context menus](injection-toolbar-and-context-menus.md)
 - [Batch injection](batch-injection.md)
 - [Context](../core-concepts/context.md)
 - [Field, property & method injection](../core-concepts/field-property-and-method-injection.md)

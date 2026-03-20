@@ -7,7 +7,7 @@ title: Scope inspector
 The `Scope` inspector is the main inspector surface for working with one [scope](../../reference/glossary.md#scope) at a time.
 It combines [context](../../reference/glossary.md#context) visibility, runtime preparation details, and [scope](../../reference/glossary.md#scope) navigation in one place.
 
-For injection workflows, use the contextual main toolbar buttons, [injection menus](../../reference/glossary.md#injection-menu), or [batch injection](../../reference/glossary.md#batch-injection).
+For injection workflows, use the contextual main toolbar buttons, [injection context menu](../../reference/glossary.md#injection-context-menu), or [batch injection](../../reference/glossary.md#batch-injection).
 
 ![Scope inspector placeholder](../../../images/scope-inspector.webp)
 
@@ -52,12 +52,12 @@ For full behavior, see [Runtime proxy](../../core-concepts/runtime-proxy.md).
 
 `Scope Hierarchy` shows a tree of [scopes](../../reference/glossary.md#scope) under the current hierarchy root.
 
+![Scope inspector hierarchy tooltip](../../../images/scope-inspector-hierarchy-tooltip.webp)
+
 - The currently inspected [scope](../../reference/glossary.md#scope) is shown in bold.
 - Each [scope](../../reference/glossary.md#scope) node in the tree is clickable and navigates to that [scope](../../reference/glossary.md#scope)'s `GameObject`.
 - If [context isolation](../../reference/glossary.md#context-isolation) is enabled, [scopes](../../reference/glossary.md#scope) in a different [context](../../reference/glossary.md#context) than the inspected [scope](../../reference/glossary.md#scope) are grayed out.
 - Hovering a [scope](../../reference/glossary.md#scope) node shows a tooltip with extra details, including `GameObject`, [scope](../../reference/glossary.md#scope) type, and [context](../../reference/glossary.md#context) identity.
-
-![Scope inspector hierarchy tooltip](../../../images/scope-inspector-hierarchy-tooltip.webp)
 
 This is useful for understanding where local [bindings](../../reference/glossary.md#binding) are declared and how parent fallback will behave.
 See [Scope](../../core-concepts/scope.md) and [Context](../../core-concepts/context.md) for details.
@@ -66,29 +66,21 @@ See [Scope](../../core-concepts/scope.md) and [Context](../../core-concepts/cont
 
 After the Saneject sections, the inspector draws serialized fields on your concrete [scope](../../reference/glossary.md#scope) component.
 This keeps [binding](../../reference/glossary.md#binding) authoring fields and [scope](../../reference/glossary.md#scope) operations in one view.
+ 
+## Console filtering context menus
 
-## Multi-selection behavior
-
-When multiple [scopes](../../reference/glossary.md#scope) are selected:
-
-- The detailed per-scope sections are hidden.
-- The inspector shows a [scope](../../reference/glossary.md#scope) selection count.
-- A help message explains that single-scope selection is required for detailed [scope](../../reference/glossary.md#scope) inspection.
-
-For injecting many hierarchies at once, use [injection menus](../../reference/glossary.md#injection-menu) and [batch injection](../../reference/glossary.md#batch-injection).
-
-During injection, Saneject resolves and serializes global [binding](../../reference/glossary.md#binding) outputs on the declaring [scope](../../reference/glossary.md#scope) and tracks [proxy swap targets](../../reference/glossary.md#proxy-swap-target) for [runtime startup](../../reference/glossary.md#runtime-startup).
-
-## Log filtering context menus
-
-Saneject adds component [context](../../reference/glossary.md#context) menu items that support logging workflows. Right click on component header:
+Saneject adds component context menu items to quickly filter logs.
 
 - `Saneject/Filter Logs By Scope Type`
-    - Sets the Console search text to filter by `Scope: <ScopeTypeName>`.
-- `Saneject/Filter Logs By Component Path`
-    - Sets the Console search text to filter by the selected [Scope](../../reference/glossary.md#scope)'s path.
+    - Sets the Console search text to filter by `Scope: <ScopeTypeName>`. 
 
-![Scope inspector filter logs context menu](../../../images/scope-inspector-log-filtering.webp)
+Right click on component header and `Saneject/Filter Logs By Scope Type`:
+
+![Scope inspector filter logs context menu](../../../images/scope-console-filter-01.webp)
+
+This adds the `Scope` type to the Console search text:
+
+![Unity console with logs filtered by Scope type](../../../images/scope-console-filter-02.webp)
 
 ## Related pages
 
@@ -97,7 +89,7 @@ Saneject adds component [context](../../reference/glossary.md#context) menu item
 - [Context](../../core-concepts/context.md)
 - [Global scope](../../core-concepts/global-scope.md)
 - [Runtime proxy](../../core-concepts/runtime-proxy.md)
-- [Injection menus](../injection-menus.md)
+- [Injection toolbar & context menus](../injection-toolbar-and-context-menus.md)
 - [Batch injection](../batch-injection.md)
 - [Glossary](../../reference/glossary.md)
 

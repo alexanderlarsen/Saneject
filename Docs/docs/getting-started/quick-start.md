@@ -19,7 +19,7 @@ For prerequisites and installation methods, see [Installation & requirements](in
 
 ## 2. Create a component to inject
 
-Create `GameManager.cs` and place it on `GameManager`.
+Create `GameManager.cs`.
 
 ```csharp
 using UnityEngine;
@@ -33,11 +33,13 @@ public class GameManager : MonoBehaviour, IGameStateObservable
 }
 ```
 
+Attach it to `GameManager`.
+
 ![GameManager component in Inspector](../../images/quick-start-2.webp)
 
 ## 3. Create an injection target
 
-Create `Player.cs` and attach it to `Player`.
+Create `Player.cs`. `Player` is `partial` because `[SerializeInterface]` uses generated code to serialize interface references.
 
 ```csharp
 using Plugins.Saneject.Runtime.Attributes;
@@ -53,13 +55,13 @@ public partial class Player : MonoBehaviour
 }
 ```
 
-![Player component in Inspector](../../images/quick-start-3.webp)
+Attach it to `Player`.
 
-`Player` is `partial` because `[SerializeInterface]` uses generated code to serialize interface references.
+![Player component in Inspector](../../images/quick-start-3.webp)
 
 ## 4. Create a scope and declare bindings
 
-Create `GameScope.cs`, attach it to `Root`, and declare [bindings](../reference/glossary.md#binding):
+Create `GameScope.cs` and declare [bindings](../reference/glossary.md#binding):
 
 You can create a [scope](../reference/glossary.md#scope) manually or from:
 
@@ -83,6 +85,8 @@ public class GameScope : Scope
     }
 }
 ```
+
+Attach it to `Root`.
 
 ![GameScope component in Inspector](../../images/quick-start-4.webp)
 

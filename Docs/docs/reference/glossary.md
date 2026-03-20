@@ -114,7 +114,7 @@ Per-run working set built after graph filtering. It contains the active transfor
 
 Hierarchy model built from selected root hierarchies. It contains transform, component, scope, binding, and injection-member information used by the edit-time pipeline.
 
-### Injection menu
+### Injection context menu
 
 Editor command under `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`, or the matching `GameObject/Saneject/...` paths that start an injection run with a selected target and `ContextWalkFilter`.
 

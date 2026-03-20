@@ -124,7 +124,7 @@ It is imported with the `RoslynAnalyzer` asset label, so Unity treats it as anal
 
 - [Field, property & method injection](../core-concepts/field-property-and-method-injection.md)
 - [Serialized interface](../core-concepts/serialized-interface.md)
-- [Injection menus](injection-menus.md)
+- [Injection toolbar & context menus](injection-toolbar-and-context-menus.md)
 - [Logging & validation](logging-and-validation.md)
 - [Settings](settings.md)
 - [Glossary](../reference/glossary.md)

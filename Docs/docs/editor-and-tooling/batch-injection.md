@@ -31,11 +31,10 @@ Use this when you want a targeted pass for a folder or a specific Project window
 Entry points:
 
 - Main toolbar: `Batch Inject Selected Assets`
-
-![Saneject Batch Inject Main Toolbar](../../images/batch-injection-main-toolbar.webp)
-
 - `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - `Saneject/Batch Inject/Selected Assets (All Contexts)`
+
+![Saneject Batch Inject Main Toolbar](../../images/batch-injection-main-toolbar.webp)
 
 ![Saneject Batch Inject Selected Assets](../../images/batch-injection-context-menu.webp)
 
@@ -90,8 +89,6 @@ List and window state are persisted to:
 
 ### Multi-select and context menu actions
 
-![Saneject Batch Injector window context menus](../../images/batch-injector-window-context-menus.webp)
-
 Both lists support multi-selection and a [context](../reference/glossary.md#context) menu with:
 
 - `Inject Selected`: Runs [batch injection](../reference/glossary.md#batch-injection) only for the currently selected rows.
@@ -99,6 +96,8 @@ Both lists support multi-selection and a [context](../reference/glossary.md#cont
 - `Clear Injection Status`: Resets selected rows to `Unknown` without changing their enable state or filter.
 - `Remove`: Deletes selected rows from the list (does not delete assets from the project).
 - `Set Context Walk Filter/...`: Applies the chosen `ContextWalkFilter` to all selected rows.
+
+![Saneject Batch Injector window context menus](../../images/batch-injector-window-context-menus.webp)
 
 Input shortcuts:
 
@@ -184,7 +183,7 @@ If a saved active scene existed when the batch started, Saneject re-opens that s
 
 ## Related pages
 
-- [Injection menus](injection-menus.md)
+- [Injection toolbar & context menus](injection-toolbar-and-context-menus.md)
 - [Context](../core-concepts/context.md)
 - [Field, property & method injection](../core-concepts/field-property-and-method-injection.md)
 - [Settings](settings.md)

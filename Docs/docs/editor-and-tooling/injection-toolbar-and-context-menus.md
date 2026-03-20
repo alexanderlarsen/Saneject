@@ -4,7 +4,7 @@ title: Injection toolbar & context menus
 
 # Injection toolbar & context menus
 
-Saneject [injection menus](../reference/glossary.md#injection-menu) are editor commands that run dependency injection on scenes, [prefab assets](../reference/glossary.md#prefab-asset), or batches of assets.
+Saneject [injection context menus](../reference/glossary.md#injection-context-menu) are editor commands that run dependency injection on scenes, [prefab assets](../reference/glossary.md#prefab-asset), or batches of assets.
 
 For common full-run workflows, Saneject also exposes contextual main toolbar buttons:
 
@@ -19,27 +19,27 @@ If you are new to [contexts](../reference/glossary.md#context) and filters, read
 
 ## Toolbar buttons
 
-The contextual main toolbar buttons cover the most common `AllContexts` runs:
+The contextual main toolbar buttons cover the most common `AllContexts` runs.
+
+![Saneject injection toolbar buttons](../../images/injection-main-toolbar.webp)
 
 - `Inject Scene`: shown while editing a scene.
 - `Inject Selected Scene Hierarchies`: shown while editing a scene and one or more scene objects are selected.
 - `Inject Prefab Asset`: shown in Prefab Mode.
 - `Batch Inject Selected Assets`: shown when the Project selection contains one or more scene assets, [prefab assets](../reference/glossary.md#prefab-asset), or folders that contain them.
 
-![Saneject injection toolbar buttons](../../images/injection-main-toolbar.webp)
-
-For more focused runs, use the [injection menus](../reference/glossary.md#injection-menu) described below.
+For more focused runs, use the [injection context menus](../reference/glossary.md#injection-context-menu) described below.
 
 ## Context menus
 
-Saneject exposes the same grouped injection commands in multiple Unity menus:
+Saneject exposes the same grouped injection commands in multiple Unity menus.
+
+![Saneject injection context menus](../../images/injection-context-menus.webp)
 
 - Main menu: `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`
 - Hierarchy [context](../reference/glossary.md#context) menu: `GameObject/Saneject/Inject Scene/...`, `GameObject/Saneject/Inject Selected Scene Hierarchies/...`, `GameObject/Saneject/Inject Prefab Asset/...`
 - Project window [context](../reference/glossary.md#context) menu: `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - Main menu batch shortcut: `Saneject/Batch Inject/Selected Assets (All Contexts)`
-
-![Saneject injection context menus](../../images/injection-context-menus.webp)
 
 There is also a dedicated [batch injector](../reference/glossary.md#batch-injector) window:
 
@@ -135,11 +135,10 @@ See [Context](../core-concepts/context.md).
 Entry points:
 
 - Main toolbar: `Batch Inject Selected Assets`
-
-![Saneject batch injection main toolbar](../../images/batch-injection-main-toolbar.webp)
-
 - `Assets/Saneject/Batch Inject/Selected Assets (All Contexts)`
 - `Saneject/Batch Inject/Selected Assets (All Contexts)`
+
+![Saneject batch injection main toolbar](../../images/batch-injection-main-toolbar.webp)
 
 ![Saneject batch injection context menu](../../images/batch-injection-context-menu.webp)
 
@@ -160,17 +159,15 @@ Behavior:
 
 If an injected asset has no `Scope` components, the run logs that nothing was injected for that asset or run.
 
-## Confirmation dialogs and Play Mode behavior
+## Confirmation dialogs
 
-All [injection menu](../reference/glossary.md#injection-menu) commands and contextual toolbar buttons are editor-only:
-
-- If triggered in Play Mode, Saneject shows a dialog telling you to exit Play Mode.
-
-By default, these commands show confirmation dialogs before injecting. You can toggle these prompts in:
-
-- `Saneject/Settings/User Settings/Ask Before Injection`
+By default, [injection context menu](../reference/glossary.md#injection-context-menu) commands and contextual toolbar buttons show a confirmation dialog before running injection.
 
 ![Saneject inject confirmation dialog](../../images/injection-confirmation.webp)
+
+You can toggle these prompts in:
+
+- `Saneject/Settings/User Settings/Ask Before Injection`
 
 Relevant toggles:
 

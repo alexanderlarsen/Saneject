@@ -30,8 +30,8 @@
 
 - name: Editor & tooling
   items:
-    - name: Injection menus
-      href: editor-and-tooling/injection-menus.md
+    - name: Injection toolbar & context menus
+      href: editor-and-tooling/injection-toolbar-and-context-menus.md
     - name: Batch injection
       href: editor-and-tooling/batch-injection.md
     - name: Inspectors

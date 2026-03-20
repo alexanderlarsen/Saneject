@@ -34,6 +34,8 @@ Important behavior:
 
 ## User settings
 
+User settings are stored locally on your machine using `EditorPrefs`.
+
 ![User settings](../../images/user-settings.webp)
 
 ### Ask Before Injection
@@ -47,7 +49,7 @@ All of these default to `true`, which shows a confirmation dialog before [inject
 | `Selected Scene Hierarchies` | Ask before injecting selected scene hierarchies.                                        |
 | `Batch Injection`            | Ask before [batch injection](../reference/glossary.md#batch-injection) runs.            |
 
-These toggles affect injection commands and batch commands described in [Injection menus](injection-menus.md) and [Batch injection](batch-injection.md).
+These toggles affect injection commands and batch commands described in [Injection toolbar & context menus](injection-toolbar-and-context-menus.md) and [Batch injection](batch-injection.md).
 
 ### Inspector
 
@@ -81,6 +83,8 @@ All of these default to `true`.
 For logging semantics and output shape, see [Logging & validation](logging-and-validation.md).
 
 ## Project settings
+
+Project settings are stored in the Unity project at `ProjectSettings/Saneject/ProjectSettings.json` and are version controlled if the project is under source control, which means that these settings are shared with team members.
 
 ![Project settings](../../images/project-settings.webp)
 
@@ -124,7 +128,7 @@ Use project reset carefully because it affects all contributors who use the [pro
 
 ## Related pages
 
-- [Injection menus](injection-menus.md)
+- [Injection toolbar & context menus](injection-toolbar-and-context-menus.md)
 - [Batch injection](batch-injection.md)
 - [Logging & validation](logging-and-validation.md)
 - [Context](../core-concepts/context.md)

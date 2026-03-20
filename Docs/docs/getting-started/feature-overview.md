@@ -45,7 +45,7 @@ title: Feature overview
 
 ## Tooling & validation
 
-- **Contextual toolbar buttons and [injection menus](../reference/glossary.md#injection-menu):** The main toolbar exposes `Inject Scene`, `Inject Selected Scene Hierarchies`, `Inject Prefab Asset`, and `Batch Inject Selected Assets` when they apply, while [injection menus](../reference/glossary.md#injection-menu) let you run more focused scene, hierarchy, and prefab passes with specific [context walk filter](../reference/glossary.md#context-walk-filter) values.
+- **Contextual toolbar buttons and [injection context menus](../reference/glossary.md#injection-context-menu):** The main toolbar exposes `Inject Scene`, `Inject Selected Scene Hierarchies`, `Inject Prefab Asset`, and `Batch Inject Selected Assets` when they apply, while [injection context menus](../reference/glossary.md#injection-context-menu) let you run more focused scene, hierarchy, and prefab passes with specific [context walk filter](../reference/glossary.md#context-walk-filter) values.
 - **[Batch injection](../reference/glossary.md#batch-injection):** [Batch Injector](../reference/glossary.md#batch-injector) can inject all (or selected) scenes and prefabs in a project in one click.
 - **Structured logging and validation:** Structured logging and validation with per-run and batch summaries help make dependency validation repeatable and easier to audit.
 - **Configurable settings:** Settings cover injection prompts, logging, [context](../reference/glossary.md#context) behavior, and proxy generation.
@@ -67,7 +67,7 @@ title: Feature overview
 - [Serialized interface](../core-concepts/serialized-interface.md)
 - [Runtime proxy](../core-concepts/runtime-proxy.md)
 - [Global scope](../core-concepts/global-scope.md)
-- [Injection menus](../editor-and-tooling/injection-menus.md)
+- [Injection toolbar & context menus](../editor-and-tooling/injection-toolbar-and-context-menus.md)
 - [Batch injection](../editor-and-tooling/batch-injection.md)
 - [Logging & validation](../editor-and-tooling/logging-and-validation.md)
 - [Settings](../editor-and-tooling/settings.md)
