@@ -20,7 +20,7 @@ namespace Plugins.SanejectLegacy.Editor.BatchInjection.EditorWindows
         private bool clickedAnyListItem;
         private GUIStyle titleStyle;
 
-        [MenuItem("Saneject/Legacy/Batch Injector")]
+        // [MenuItem("Saneject/Legacy/Batch Injector")]
         public static void ShowWindow()
         {
             BatchInjectorEditorWindow window = GetWindow<BatchInjectorEditorWindow>("Saneject Batch Injector (Legacy)");

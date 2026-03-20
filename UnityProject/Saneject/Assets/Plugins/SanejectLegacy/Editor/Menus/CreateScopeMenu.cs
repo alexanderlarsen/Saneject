@@ -8,8 +8,8 @@ namespace Plugins.SanejectLegacy.Editor.Menus
 {
     public static class CreateScopeMenu
     {
-        [MenuItem("Saneject/Legacy/Create New Scope", false, -10),
-         MenuItem("Assets/Create/Saneject/Legacy/Create New Scope", false, -10)]
+        // [MenuItem("Saneject/Legacy/Create New Scope", false, -10),
+         // MenuItem("Assets/Create/Saneject/Legacy/Create New Scope", false, -10)]
         private static void CreateScope()
         {
             string folderPath = GetSelectedFolder();

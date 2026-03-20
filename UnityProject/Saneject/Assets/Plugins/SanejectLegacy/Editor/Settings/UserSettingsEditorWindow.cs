@@ -13,7 +13,7 @@ namespace Plugins.SanejectLegacy.Editor.Settings
     {
         private Vector2 scrollPos;
 
-        [MenuItem("Saneject/Legacy/User Settings")]
+        // [MenuItem("Saneject/Legacy/User Settings")]
         public static void ShowWindow()
         {
             UserSettingsEditorWindow editorWindow = GetWindow<UserSettingsEditorWindow>();

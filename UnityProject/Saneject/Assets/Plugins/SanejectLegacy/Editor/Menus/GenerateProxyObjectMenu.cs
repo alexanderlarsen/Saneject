@@ -15,7 +15,7 @@ namespace Plugins.SanejectLegacy.Editor.Menus
     {
         private const string ProxyTypeNameKey = "Saneject.ProxyDialogFlow.ProxyTypeName";
 
-        [MenuItem("Assets/Saneject/Legacy/Generate Proxy Object", true)]
+        // [MenuItem("Assets/Saneject/Legacy/Generate Proxy Object", true)]
         private static bool GenerateProxyObject_Validate()
         {
             return Selection.activeObject is MonoScript ms
@@ -23,7 +23,7 @@ namespace Plugins.SanejectLegacy.Editor.Menus
                    && typeof(MonoBehaviour).IsAssignableFrom(t);
         }
 
-        [MenuItem("Assets/Saneject/Legacy/Generate Proxy Object", false)]
+        // [MenuItem("Assets/Saneject/Legacy/Generate Proxy Object", false)]
         private static void GenerateProxyObject()
         {
             if (Selection.activeObject is not MonoScript script) return;
