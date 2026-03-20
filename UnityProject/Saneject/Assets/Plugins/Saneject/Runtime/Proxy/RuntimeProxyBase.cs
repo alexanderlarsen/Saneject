@@ -6,19 +6,18 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Runtime.Proxy
 {
     /// <summary>
-    /// Non-generic base class for all <see cref="RuntimeProxy{TConcrete}"/> proxies.
+    /// Non-generic base class for all runtime proxy assets.
     /// </summary>
     /// <remarks>
-    /// This base class is required so that the Saneject editor and runtime systems can work with proxy assets
-    /// without needing to know the specific generic type. All <see cref="RuntimeProxy{TConcrete}"/> instances inherit
-    /// from this base and can be accessed as <see cref="RuntimeProxyBase"/>.
+    /// Saneject's editor and runtime systems use this type to work with generated
+    /// <see cref="RuntimeProxy{TComponent}"/> assets without needing to know their concrete generic type.
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class RuntimeProxyBase : ScriptableObject
     {
 #if UNITY_EDITOR
         /// <summary>
-        /// Only for showing resolved instance in RuntimeProxyBase inspector.
+        /// Play Mode-only resolved instance shown by the runtime proxy inspector.
         /// </summary>
         [NonSerialized, EditorBrowsable(EditorBrowsableState.Never)]
         protected Object resolvedInstance;
@@ -28,30 +27,34 @@ namespace Plugins.Saneject.Runtime.Proxy
         /// Determines how the proxy locates or creates the target instance at runtime.
         /// </summary>
         [SerializeField, Tooltip(
-             "Determines how the proxy locates or creates the target instance at runtime.\n\n" +
-             "FromGlobalScope: Uses GlobalScopeRegistry. Instance must be registered using RegisterGlobalComponent or RegisterGlobalObject in a scope.\n\n" +
-             "FindInLoadedScenes: Finds the first matching component in any loaded scene using FindFirstObjectByType<TConcrete>(FindObjectsInactive.Include).\n\n" +
-             "FromComponentOnPrefab: Instantiates a prefab and finds the target component.\n\n" +
-             "FromNewComponentOnNewGameObject: Creates a new GameObject and adds the component.")
+             "How this runtime proxy finds or creates its target at runtime.\n\n" +
+             "FromGlobalScope: Looks up a component already registered in GlobalScope.\n\n" +
+             "FromAnywhereInLoadedScenes: Finds the first matching component in loaded scenes, including inactive objects.\n\n" +
+             "FromComponentOnPrefab: Instantiates the configured prefab and resolves the target component on that instance.\n\n" +
+             "FromNewComponentOnNewGameObject: Creates a new GameObject and adds the target component.")
         ]
         protected RuntimeProxyResolveMethod resolveMethod;
 
         /// <summary>
-        /// The prefab which to instantiate and get the target component from (used by <see cref="RuntimeProxyResolveMethod.FromComponentOnPrefab"/>).
+        /// The prefab instantiated by <see cref="RuntimeProxyResolveMethod.FromComponentOnPrefab"/>, then searched for the target component.
         /// </summary>
-        [SerializeField, Tooltip("The prefab which to instantiate and get the target component from.")]
+        [SerializeField, Tooltip("Prefab used by FromComponentOnPrefab. The instantiated object is searched for the target component.")]
         protected GameObject prefab;
 
         /// <summary>
-        /// If <c>true</c>, the resolved instance will not be destroyed when loading a new scene.
+        /// Whether a creation-based runtime proxy keeps its created object alive across scene loads.
         /// </summary>
-        [SerializeField, Tooltip("Do not destroy the target Object when loading a new Scene.")]
+        [SerializeField, Tooltip("For creation-based methods, keeps the created object alive across scene loads.")]
         protected bool dontDestroyOnLoad = true;
 
         /// <summary>
-        /// Determines whether the proxy creates a new instance each time or caches a singleton instance.
+        /// Determines whether a creation-based runtime proxy creates a new instance each time or reuses one created instance.
         /// </summary>
-        [SerializeField]
+        [SerializeField, Tooltip(
+             "Used only by creation-based runtime proxy methods.\n\n" +
+             "Transient: Creates a new instance each time the proxy resolves.\n\n" +
+             "Singleton: Reuses one created instance and caches it in GlobalScope.")
+        ]
         protected RuntimeProxyInstanceMode instanceMode;
 
         /// <summary>

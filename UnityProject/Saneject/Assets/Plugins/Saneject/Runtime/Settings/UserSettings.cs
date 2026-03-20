@@ -9,12 +9,11 @@ using UnityEngine;
 namespace Plugins.Saneject.Runtime.Settings
 {
     /// <summary>
-    /// Provides access to user-specific settings stored locally for this user.
-    /// <remarks>
-    /// Settings are stored locally in <see cref="UnityEditor.EditorPrefs" />.
-    /// Properties are only editable in the editor outside Play Mode and will return default values when accessed outside the editor.
-    /// </remarks>
+    /// Provides access to user-scoped Saneject settings stored locally in <see cref="EditorPrefs"/>.
     /// </summary>
+    /// <remarks>
+    /// These settings are personal to the current Unity user on the current machine. They can be changed only in Edit Mode and fall back to default values outside the Unity Editor.
+    /// </remarks>
     public static class UserSettings
     {
         private const string SettingsPrefix = "SanejectSettings_";
@@ -71,7 +70,7 @@ namespace Plugins.Saneject.Runtime.Settings
         }
 
         /// <summary>
-        /// Show help boxes in the Inspector.
+        /// Shows explanatory Saneject help boxes in inspectors.
         /// </summary>
         public static bool ShowHelpBoxes
         {
@@ -84,7 +83,7 @@ namespace Plugins.Saneject.Runtime.Settings
         #region Play Mode Logging
 
         /// <summary>
-        /// Log when a proxy instance is resolved at runtime.
+        /// Logs when a runtime proxy resolves its runtime instance.
         /// </summary>
         public static bool LogProxyResolve
         {
@@ -93,7 +92,7 @@ namespace Plugins.Saneject.Runtime.Settings
         }
 
         /// <summary>
-        /// Log when objects are registered or unregistered with the global scope at runtime.
+        /// Logs global registration lifecycle events in <see cref="Scopes.GlobalScope"/> at runtime.
         /// </summary>
         public static bool LogGlobalScopeRegistration
         {
@@ -116,7 +115,7 @@ namespace Plugins.Saneject.Runtime.Settings
         }
 
         /// <summary>
-        /// Log a summary on injection complete.
+        /// Logs the end-of-run injection summary.
         /// </summary>
         public static bool LogInjectionSummary
         {
@@ -134,8 +133,7 @@ namespace Plugins.Saneject.Runtime.Settings
         }
         
         /// <summary>
-        /// If enabled, Saneject will scan and report unused runtime proxy scripts and assets during domain reload.
-        /// They are considered unused, if no Scope binding is referencing them. This can help you keep your project clean and organized.
+        /// On domain reload, scans for runtime proxy assets and scripts not referenced by any scope binding and logs the findings.
         /// </summary>
         public static bool LogUnusedRuntimeProxiesOnDomainReload
         {

@@ -43,8 +43,8 @@ namespace Plugins.Saneject.Editor.Inspectors
                 if (UserSettings.ShowHelpBoxes)
                     EditorGUILayout.HelpBox
                     (
-                        "Select one scope to view its inspector.\n" +
-                        "If you want to inject multiple hierarchies in one click, use the injection menus.",
+                        "Select one scope to view its scope-specific inspector sections.\n" +
+                        "To inject multiple scene hierarchies, use the injection menus or batch injection.",
                         MessageType.Info
                     );
 
@@ -66,11 +66,9 @@ namespace Plugins.Saneject.Editor.Inspectors
         {
             HelpBoxUtility.DrawHelpBox
             (
-                "A Scope is where you declare bindings. When a component needs a dependency, it is resolved from the nearest Scope above it in the hierarchy, with fallback to parent Scopes if no local binding is found.\n\n" +
-                "Bindings are only used for objects that belong to the same context as the Scope. A context is a serialization boundary: Scene Object, Prefab Instance, Prefab Asset, or Global (assets like ScriptableObjects, textures, audio clips, etc.).\n\n" +
-                "Context isolation can be enabled to enforce stricter separation between scenes and prefabs. When enabled, scopes do not cross contexts. Scene objects and prefab instances are resolved separately, even if they live in the same hierarchy. Scopes from other contexts are shown but grayed out because they will not be used.\n\n" +
-                "Unity already prevents prefab assets from referencing scene objects, but prefab instances can reference scene objects. Since injection happens at edit time, this can make a prefab depend on the scene it was authored in and break when moved to another scene.\n\n" +
-                "If a dependency needs to survive across scenes or prefabs, use a proxy. Context isolation turns these situations into errors, but even with isolation disabled they are a sign that a proxy is the correct solution."
+                "A Scope declares bindings for part of the hierarchy. During injection, Saneject resolves each injection site from the nearest Scope at the same transform or above, then falls back to parent Scopes when needed.\n\n" +
+                "A context is a serialization boundary for GameObject hierarchies: scene object, prefab instance, or prefab asset. Context filtering decides which transforms enter a run. Context isolation decides whether resolution may cross scene-object and prefab-instance boundaries inside that run.\n\n" +
+                "With context isolation enabled, only same-context Scopes and candidates are used. With it disabled, scene objects and prefab instances in the active hierarchy can resolve across those boundaries. If a dependency must cross a boundary Unity cannot serialize directly, bind it through a runtime proxy."
             );
         }
 
@@ -90,7 +88,7 @@ namespace Plugins.Saneject.Editor.Inspectors
             bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: $"Global Components ({property.arraySize})",
-                tooltip: "This scope declares global components. These are automatically added to GlobalScope on Scope.Awake (DefaultExecutionOrder: -10000), removed on Scope.OnDestroy, and can be fetched from the GlobalScope by proxies or manually.",
+                tooltip: "Serialized components this scope will register in GlobalScope during Scope.Awake(). Runtime proxies using FromGlobalScope() can resolve them there, and runtime code can also query GlobalScope directly.",
                 defaultFoldoutState: true,
                 prefsKey: "Saneject.ScopeInspector.Foldouts.GlobalComponents"
             );
@@ -121,7 +119,7 @@ namespace Plugins.Saneject.Editor.Inspectors
             bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: $"Runtime Proxy Swap Targets ({property.arraySize})",
-                tooltip: "Components, in this Scope, with fields that contain runtime proxies. At runtime, the Scope swaps each proxy with its resolved instance before any Awake() methods execute.",
+                tooltip: "Components in this scope whose single-value serialized interface members currently hold runtime proxy placeholders. During scope startup, Saneject asks them to swap those proxies for resolved runtime instances before normal Awake() methods run.",
                 defaultFoldoutState: true,
                 prefsKey: "Saneject.ScopeInspector.Foldouts.RuntimeProxySwapTargets"
             );
@@ -150,7 +148,7 @@ namespace Plugins.Saneject.Editor.Inspectors
             bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
             (
                 text: "Scope Hierarchy",
-                tooltip: "Click on a hierarchy item to navigate to its GameObject. Different context scopes are grayed out.",
+                tooltip: "Click a scope to navigate to its GameObject. When context isolation is enabled, scopes in different contexts are grayed out because they are outside the inspected scope's resolution boundary.",
                 defaultFoldoutState: true,
                 prefsKey: "Saneject.ScopeInspector.Foldouts.ScopeHierarchy"
             );

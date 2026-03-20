@@ -13,13 +13,13 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Runtime.Scopes
 {
     /// <summary>
-    /// Base class for declaring dependency bindings within a <see cref="GameObject" /> hierarchy.
-    /// A <c>Scope</c> locates dependencies for components below itself with bindings declared in <see cref="DeclareBindings" />.
-    /// Saneject resolves dependencies by searching this scope and walking up the parent scope hierarchy until a match is found, allowing lower-level scopes to override bindings from higher-level scopes.
-    /// <remarks>
-    /// Although primarily used for editor-time DI, a <c>Scope</c> also manages runtime initialization by registering global components in <see cref="GlobalScope"/> and swapping <see cref="RuntimeProxy{TComponent}"/> placeholders with their real instances.
-    /// </remarks>
+    /// Base class for scopes that declare bindings for a portion of a <see cref="GameObject"/> hierarchy.
+    /// During injection, Saneject resolves each injection site from the nearest scope at the same transform or above, then falls back to parent scopes when needed.
     /// </summary>
+    /// <remarks>
+    /// At runtime, a <c>Scope</c> registers its serialized global components in <see cref="GlobalScope"/> and swaps
+    /// <see cref="RuntimeProxy{TComponent}"/> placeholders on registered proxy swap targets during early startup.
+    /// </remarks>
     [DisallowMultipleComponent, DefaultExecutionOrder(-10000)]
     public abstract class Scope : MonoBehaviour
     {
@@ -32,7 +32,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         private List<Component> proxySwapTargets = new();
 
         /// <summary>
-        /// Called by Unity on initialization. Registers global components in GlobalScope and swaps all proxy references with real instances.
+        /// Called by Unity during scope startup. Registers serialized global components in <see cref="GlobalScope"/>, then swaps runtime proxy placeholders with real instances.
         /// </summary>
         [EditorBrowsable(EditorBrowsableState.Never)]
         private void Awake()
@@ -55,7 +55,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         }
 
         /// <summary>
-        /// Updates the collection of components to register in GlobalScope when this Scope initializes.
+        /// Updates the serialized collection of components this scope will register in <see cref="GlobalScope"/> during startup.
         /// Called by the editor injection system.
         /// </summary>
         /// <param name="globalObjects">The components to register globally.</param>
@@ -76,7 +76,7 @@ namespace Plugins.Saneject.Runtime.Scopes
         }
 
         /// <summary>
-        /// Registers a component to have its proxy references swapped with real instances on Awake.
+        /// Registers a component to participate in runtime proxy swapping during scope startup.
         /// </summary>
         /// <param name="component">The component implementing <see cref="IRuntimeProxySwapTarget"/>.</param>
         /// <exception cref="ArgumentException">Thrown if the component does not implement <see cref="IRuntimeProxySwapTarget"/>.</exception>
@@ -350,13 +350,12 @@ namespace Plugins.Saneject.Runtime.Scopes
         #region Global methods
 
         /// <summary>
-        /// Registers a scene component globally, enabling efficient cross-scene and prefab resolution through <see cref="GlobalScope"/>.
+        /// Registers a component for runtime global registration through <see cref="GlobalScope"/>.
         /// </summary>
         /// <remarks>
-        /// During editor-time injection, this binding stores a reference to the target <typeparamref name="TConcrete"/> in this scope. 
-        /// At runtime, before any Awake methods run and before proxies are resolved, the target is added to the <see cref="GlobalScope"/>
-        /// This allows <see cref="RuntimeProxy{TComponent}"/> to resolve the component via fast dictionary lookup.
-        /// Only works for components that exist in the scene or prefab at edit time.
+        /// During editor-time injection, Saneject resolves the target <typeparamref name="TConcrete"/> and serializes it on the declaring scope.
+        /// During <see cref="Awake"/>, the scope registers that component in <see cref="GlobalScope"/> before runtime proxy swapping runs.
+        /// This is commonly used so <see cref="RuntimeProxy{TComponent}"/> can resolve the component through <see cref="RuntimeProxyResolveMethod.FromGlobalScope"/>.
         /// </remarks>
         /// <typeparam name="TConcrete">The <see cref="Component" /> type to bind globally.</typeparam>
         /// <returns>A fluent builder for configuring the global component binding.</returns>

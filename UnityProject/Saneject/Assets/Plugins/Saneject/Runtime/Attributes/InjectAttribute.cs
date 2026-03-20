@@ -8,9 +8,9 @@ namespace Plugins.Saneject.Runtime.Attributes
     /// Marks a field or method for dependency injection by Saneject.
     /// </summary>
     /// <remarks>
-    /// Apply this attribute to a field or method to declare that it should receive a dependency from the nearest upwards scope.
-    /// During injection, Saneject resolves matching bindings from the scope hierarchy and automatically assigns or invokes the member.
-    /// Injected fields are displayed as read-only in the inspector.
+    /// Apply this attribute to a field, an auto-property backing field via <c>[field: Inject]</c>, or a method to declare an injection site.
+    /// During injection, Saneject resolves matching bindings starting from the nearest scope at the same transform or above and falling back to parent scopes.
+    /// Injected fields are displayed as read-only in Saneject-aware inspectors.
     /// </remarks>
     [AttributeUsage(AttributeTargets.Field | AttributeTargets.Method), UsedImplicitly(ImplicitUseTargetFlags.WithMembers)]
     public sealed class InjectAttribute : PropertyAttribute
@@ -35,7 +35,7 @@ namespace Plugins.Saneject.Runtime.Attributes
         }
 
         /// <summary>
-        /// Marks the field or method as an optional injection target.
+        /// Marks the field or method for injection while optionally suppressing missing binding and missing dependency logs for the field.
         /// </summary>
         /// <param name="suppressMissingErrors">
         /// If <c>true</c>, suppresses error logs when no binding or dependency is found.
@@ -47,7 +47,7 @@ namespace Plugins.Saneject.Runtime.Attributes
         }
 
         /// <summary>
-        /// Marks the field or method for injection with an ID and optional error suppression.
+        /// Marks the field or method for injection with an ID while optionally suppressing missing binding and missing dependency logs for the field.
         /// </summary>
         /// <param name="id">The binding ID to match against.</param>
         /// <param name="suppressMissingErrors">

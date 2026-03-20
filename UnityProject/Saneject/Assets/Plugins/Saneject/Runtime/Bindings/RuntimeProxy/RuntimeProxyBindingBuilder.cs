@@ -22,8 +22,8 @@ namespace Plugins.Saneject.Runtime.Bindings.RuntimeProxy
         }
 
         /// <summary>
-        /// Resolves the target <see cref="Component"/> from the <see cref="GlobalScope"/>.
-        /// Requires the target <see cref="Component"/> to be registered to the <see cref="GlobalScope"/> via a global component binding.
+        /// Resolves the target <see cref="Component"/> from <see cref="GlobalScope"/>.
+        /// The target must already be registered there, usually via a global component binding.
         /// </summary>
         public void FromGlobalScope()
         {

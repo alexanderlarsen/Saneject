@@ -7,9 +7,8 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Runtime.Scopes
 {
     /// <summary>
-    /// Static global registry and service locator for <see cref="UnityEngine.Object" /> singletons.
-    /// Allows systems to register, query, and remove global instances by type at runtime.
-    /// Intended for play mode usage only; not available in Edit Mode.
+    /// Static runtime registry and service locator for globally accessible <see cref="Component"/> instances.
+    /// Stores one registration per concrete component type and is intended for Play Mode usage.
     /// </summary>
     public static class GlobalScope
     {

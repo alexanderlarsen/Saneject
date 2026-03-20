@@ -35,7 +35,7 @@ namespace Plugins.Saneject.Runtime.Bindings.RuntimeProxy
         }
 
         /// <summary>
-        /// Sets the proxy instance mode to singleton, which caches the target instance <see cref="Component"/> in the <see cref="GlobalScope"/> and reuses it for all resolutions.
+        /// Sets the proxy instance mode to singleton, which reuses one created <see cref="Component"/> instance, caches it in <see cref="GlobalScope"/>, and forces <c>dontDestroyOnLoad</c> to <c>true</c>.
         /// </summary>
         public void AsSingleton()
         {

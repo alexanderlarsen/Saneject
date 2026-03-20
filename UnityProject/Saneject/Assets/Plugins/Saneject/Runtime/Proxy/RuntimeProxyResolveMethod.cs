@@ -9,9 +9,9 @@ namespace Plugins.Saneject.Runtime.Proxy
     public enum RuntimeProxyResolveMethod
     {
         /// <summary>
-        /// Looks up the instance in the <see cref="Scopes.GlobalScope"/> registry.
-        /// The target must be registered via <see cref="Scopes.Scope.BindGlobal{TConcrete}"/>.
-        /// This method provides zero-cost dictionary lookup and is the recommended approach.
+        /// Looks up the instance in <see cref="Scopes.GlobalScope"/>.
+        /// The target must already be registered there, usually via <see cref="Scopes.Scope.BindGlobal{TConcrete}"/>.
+        /// This is the fastest lookup-based resolve method.
         /// </summary>
         FromGlobalScope,
 

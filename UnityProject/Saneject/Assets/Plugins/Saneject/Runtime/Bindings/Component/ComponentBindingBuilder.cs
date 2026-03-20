@@ -24,12 +24,12 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
 
         /// <summary>
         /// Configures this binding to use a <see cref="RuntimeProxy{TComponent}"/> intermediary.
-        /// <remarks>
-        /// Runtime proxies act as serializable asset placeholders for real component instances, allowing references across scene or prefab boundaries. The proxy asset is automatically generated or reused during injection.
-        /// The proxy is automatically swapped with the real instance at runtime during initialization according to the resolution strategy specified by this method chain.
-        /// The default resolution strategy is <see cref="RuntimeProxyResolveMethod.FromGlobalScope"/>, if not otherwise specified.
-        /// </remarks>
         /// </summary>
+        /// <remarks>
+        /// Runtime proxies act as serialized placeholder assets for interface references Unity cannot serialize directly across runtime boundaries.
+        /// During injection, Saneject creates or reuses the required proxy asset. During scope startup, registered components swap that placeholder for the real instance.
+        /// If you do not specify a resolve method after calling this, the default is <see cref="RuntimeProxyResolveMethod.FromGlobalScope"/>.
+        /// </remarks>
         /// <returns>A <see cref="RuntimeProxyBindingBuilder"/> to configure the runtime proxy resolution strategy.</returns>
         public RuntimeProxyBindingBuilder FromRuntimeProxy()
         {

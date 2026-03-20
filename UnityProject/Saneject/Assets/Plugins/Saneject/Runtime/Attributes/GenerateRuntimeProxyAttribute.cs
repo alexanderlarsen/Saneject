@@ -5,13 +5,11 @@ using Plugins.Saneject.Runtime.Proxy;
 namespace Plugins.Saneject.Runtime.Attributes
 {
     /// <summary>
-    /// Instructs the Roslyn code generator to generate stub implementations of all interface members for a <see cref="RuntimeProxy{TComponent}"/> class.
+    /// Marks a <see cref="RuntimeProxy{TComponent}"/> stub for Roslyn-generated interface implementations.
     /// </summary>
     /// <remarks>
-    /// This attribute is automatically applied by Saneject during code generation and is intended for internal use.
-    /// The generator creates stub implementations (that throw exceptions until swapped) for all methods, properties, and events
-    /// declared by the target type's interfaces. These stubs allow the proxy to act as a serializable placeholder at editor-time.
-    /// At runtime, the Scope system replaces proxies with real instances via <see cref="IRuntimeProxySwapTarget"/>.
+    /// Saneject typically places this attribute on generated runtime proxy script stubs. The Roslyn generator then emits stub members for the
+    /// target component's public non-generic interfaces. Those generated members throw until the proxy is swapped to a real instance during scope startup.
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never), AttributeUsage(AttributeTargets.Class)]
     public sealed class GenerateRuntimeProxyAttribute : Attribute

@@ -6,15 +6,14 @@ namespace Plugins.Saneject.Runtime.Proxy
     /// Implemented by components that hold runtime proxy references and need to swap them with real instances at startup.
     /// </summary>
     /// <remarks>
-    /// Saneject calls <see cref="SwapProxiesWithRealInstances"/> on Awake for all components registered via <see cref="Scopes.Scope.AddProxySwapTarget"/>.
-    /// This allows the component to resolve its proxy references to real instances using the proxy's resolution strategy,
-    /// and then replace the serialized proxies with the resolved real instances.
+    /// During scope startup, Saneject calls <see cref="SwapProxiesWithRealInstances"/> for all components registered via <see cref="Scopes.Scope.AddProxySwapTarget"/>.
+    /// This allows the component to resolve serialized runtime proxy placeholders and replace them with real runtime instances.
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public interface IRuntimeProxySwapTarget
     {
         /// <summary>
-        /// Called by the Scope on Awake to replace any serialized proxy references with resolved real instances.
+        /// Called during scope startup to replace serialized proxy references with resolved real instances.
         /// </summary>
         void SwapProxiesWithRealInstances();
     }

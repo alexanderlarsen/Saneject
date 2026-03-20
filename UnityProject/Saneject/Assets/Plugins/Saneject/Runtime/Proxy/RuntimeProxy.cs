@@ -8,14 +8,13 @@ using Component = UnityEngine.Component;
 namespace Plugins.Saneject.Runtime.Proxy
 {
     /// <summary>
-    /// A generic base class for serializable proxy assets that resolve to real component instances at runtime.
+    /// Generic base class for runtime proxy placeholder assets that stand in for <see cref="Component"/> dependencies at editor time.
     /// </summary>
     /// <remarks>
-    /// A <see cref="RuntimeProxy{TConcrete}" /> is a <see cref="ScriptableObject" /> that serves as an editor-time placeholder for a <see cref="UnityEngine.Component" />.
-    /// It implements all interfaces of the target type with stub implementations (which throw exceptions). At runtime, a Scope resolves the proxy
-    /// to the real instance using the configured <see cref="RuntimeProxyResolveMethod" /> and replaces all proxy references via <see cref="IRuntimeProxySwapTarget.SwapProxiesWithRealInstances" />.
-    /// This design allows you to serialize interface references between scenes and prefabs, solving the problem that Unity cannot serialize
-    /// direct cross-scene, scene-to-prefab and prefab-to-prefab references.
+    /// A <see cref="RuntimeProxy{TComponent}"/> is a <see cref="ScriptableObject"/> placeholder injected into interface members when Unity cannot serialize the real
+    /// reference directly. Generated proxy types implement the target component's public non-generic interfaces with members that throw until the proxy is swapped.
+    /// During scope startup, registered <see cref="IRuntimeProxySwapTarget"/> components resolve the proxy with the configured
+    /// <see cref="RuntimeProxyResolveMethod"/> and replace the placeholder with the real runtime instance.
     /// </remarks>
     [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class RuntimeProxy<TComponent> : RuntimeProxyBase
@@ -25,9 +24,9 @@ namespace Plugins.Saneject.Runtime.Proxy
         /// Resolves and returns the real instance for this proxy using the configured resolution strategy.
         /// </summary>
         /// <remarks>
-        /// This method uses the <see cref="RuntimeProxyResolveMethod" /> configured on this proxy to locate or create the target instance.
-        /// If a <see cref="RuntimeProxyInstanceMode.Singleton" /> instance is requested, the instance is resolved from the <see cref="GlobalScope" />.
-        /// Cannot be called in the editor; logs a warning and returns null if attempted outside play mode.
+        /// Lookup-based methods return existing runtime instances. Creation-based methods create or reuse an instance according to
+        /// <see cref="RuntimeProxyInstanceMode"/>, using <see cref="GlobalScope"/> to cache singleton instances.
+        /// If called outside Play Mode, Saneject logs a warning and returns <c>null</c>.
         /// </remarks>
         /// <returns>The resolved component instance, or null if resolution fails.</returns>
         public override object ResolveInstance()

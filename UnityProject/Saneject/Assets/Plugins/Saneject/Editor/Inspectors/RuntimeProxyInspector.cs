@@ -10,8 +10,8 @@ using Object = UnityEngine.Object;
 namespace Plugins.Saneject.Editor.Inspectors
 {
     /// <summary>
-    /// Custom inspector for <see cref="RuntimeProxyBase" />.
-    /// Displays configuration and runtime info for RuntimeProxy ScriptableObjects.
+    /// Read-only custom inspector for <see cref="RuntimeProxyBase"/> assets.
+    /// Displays runtime proxy configuration derived from bindings and the resolved Play Mode instance.
     /// </summary>
     [EditorBrowsable(EditorBrowsableState.Never), CustomEditor(typeof(RuntimeProxyBase), true)]
     public class RuntimeProxyInspector : UnityEditor.Editor
@@ -20,11 +20,11 @@ namespace Plugins.Saneject.Editor.Inspectors
         {
             HelpBoxUtility.DrawHelpBox
             (
-                "• Allows serialization of interface-based references across scenes and prefabs.\n" +
-                "• Resolves or instantiates the actual object using the selected method at runtime.\n" +
-                "• A source generator (ProxyObjectGenerator.dll) implements all interfaces and forwards calls to the real instance.\n" +
-                "• Use the proxy like the real object - just through its interfaces.\n" +
-                "• To make the proxy as inexpensive as possible, it only tries to resolve the instance once at runtime, the first time you access it."
+                "• Runtime proxies are serialized placeholder assets for interface references Unity cannot serialize directly across runtime boundaries.\n" +
+                "• This inspector is read-only and reflects configuration created from FromRuntimeProxy() bindings.\n" +
+                "• During scope startup, registered components swap these placeholders for resolved runtime instances.\n" +
+                "• Accessing a proxy directly before swap throws InvalidOperationException.\n" +
+                "• In Play Mode, Resolved Instance shows the concrete object this proxy resolved to."
             );
 
             EditorGUI.BeginDisabledGroup(true);
@@ -48,7 +48,7 @@ namespace Plugins.Saneject.Editor.Inspectors
                     new GUIContent
                     (
                         text: "Resolved Instance",
-                        tooltip: "The instance that is resolved at runtime. Always null in edit mode."
+                        tooltip: "Play Mode only. Shows the concrete object this runtime proxy resolved to. Null in Edit Mode and until resolution succeeds."
                     ),
                     value,
                     objType: typeof(Object),
@@ -81,7 +81,7 @@ namespace Plugins.Saneject.Editor.Inspectors
             if (selected is "From Component On Prefab" or "From New Component On New Game Object" && !dontDestroyProp.boolValue)
                 EditorGUILayout.HelpBox
                 (
-                    "This object will be destroyed on scene load. Unless you expect to re-resolve it, consider enabling 'Dont Destroy On Load'.",
+                    "This creation-based runtime proxy will create an object that is destroyed on scene load because 'Dont Destroy On Load' is disabled.",
                     MessageType.Warning
                 );
 
