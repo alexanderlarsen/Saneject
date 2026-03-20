@@ -162,9 +162,6 @@ Entry points:
 
 ![Saneject batch injection context menu](../../images/batch-injection-context-menu.webp)
 
-> Note: The screenshot above predates the menu rename and only shows the older `Selected Assets (All Contexts)` path.
-> Use the `Assets/Saneject/Batch Inject Selected Assets/...` and `Saneject/Batch Inject Selected Assets/...` paths listed above in current versions.
-
 Availability:
 
 - Enabled only when the current Project selection includes at least one scene asset or [prefab asset](../reference/glossary.md#prefab-asset).

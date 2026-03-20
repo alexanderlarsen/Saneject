@@ -100,28 +100,28 @@ namespace Plugins.Saneject.Editor.Menus.InjectToolbar
             injectSceneButton = CreateButton
             (
                 text: "Inject Scene",
-                tooltip: "Injects everything in the current scene.",
+                tooltip: "Injects everything in the current scene, including scene objects and prefab instances.",
                 onClicked: () => InjectionUtility.InjectCurrentScene(ContextWalkFilter.AllContexts)
             );
 
             injectSelectionButton = CreateButton
             (
                 text: "Inject Selected Scene Hierarchies",
-                tooltip: "Inject everything in the selected scene hierarchies.",
+                tooltip: "Inject everything in the selected scene hierarchies, including scene objects and prefab instances.",
                 onClicked: () => InjectionUtility.InjectSelectedSceneHierarchies(ContextWalkFilter.AllContexts)
             );
 
             injectPrefabButton = CreateButton
             (
                 text: "Inject Prefab Asset",
-                tooltip: "Injects everything in the current prefab asset.",
+                tooltip: "Injects everything in the current prefab asset, including prefab asset objects and prefab instances.",
                 onClicked: () => InjectionUtility.InjectCurrentPrefabAsset(ContextWalkFilter.AllContexts)
             );
 
             batchInjectSelectedAssetsButton = CreateButton
             (
                 text: "Batch Inject Selected Assets",
-                tooltip: "Batch injects the selected folders, scene assets, and prefab assets.",
+                tooltip: "Batch injects the selected folders, scene assets, and prefab assets, including scene objects, prefab asset objects, and prefab instances.",
                 onClicked: () => InjectionUtility.BatchInjectSelectedAssets(ContextWalkFilter.AllContexts)
             );
 
