@@ -79,7 +79,7 @@ namespace Plugins.Saneject.Editor.Inspectors
             }
 
             if (selected is "From Component On Prefab" or "From New Component On New Game Object" && !dontDestroyProp.boolValue)
-                EditorGUILayout.HelpBox
+                HelpBoxUtility.DrawHelpBox
                 (
                     "This creation-based runtime proxy will create an object that is destroyed on scene load because 'Dont Destroy On Load' is disabled.",
                     MessageType.Warning

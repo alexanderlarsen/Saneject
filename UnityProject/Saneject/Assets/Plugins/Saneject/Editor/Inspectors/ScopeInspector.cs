@@ -40,13 +40,12 @@ namespace Plugins.Saneject.Editor.Inspectors
 
             if (targets.Length > 1)
             {
-                if (UserSettings.ShowHelpBoxes)
-                    EditorGUILayout.HelpBox
-                    (
-                        "Select one scope to view its scope-specific inspector sections.\n" +
-                        "To inject multiple scene hierarchies, use the injection menus or batch injection.",
-                        MessageType.Info
-                    );
+                HelpBoxUtility.DrawHelpBox
+                (
+                    "Select one scope to view its scope-specific inspector sections.\n" +
+                    "To inject multiple scene hierarchies, use the injection menus or batch injection.",
+                    MessageType.Info
+                );
 
                 GUILayout.Label($"{targets.Length} scopes selected");
             }
