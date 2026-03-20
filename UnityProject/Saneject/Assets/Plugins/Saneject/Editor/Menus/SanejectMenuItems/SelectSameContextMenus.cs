@@ -33,7 +33,7 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
             {
                 Selection.objects = validGameObjects.ToArray<Object>();
                 SceneHierarchyUtility.Expand(Selection.objects);
-                Debug.Log("Saneject: Context isolation is disabled in user settings. Selecting all GameObjects in the current scene.");
+                Debug.Log("Saneject: Context isolation is disabled in project settings. Selecting all GameObjects in the current scene.");
                 return;
             }
 
@@ -74,7 +74,7 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
                     .ToArray<Object>();
 
                 SceneHierarchyUtility.Expand(Selection.objects);
-                Debug.Log("Saneject: Context isolation is disabled in user settings. Selecting all GameObjects in the selected hierarchy.");
+                Debug.Log("Saneject: Context isolation is disabled in project settings. Selecting all GameObjects in the selected hierarchy.");
                 return;
             }
 
