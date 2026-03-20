@@ -66,6 +66,21 @@
     --bs-code-color: var(--site-code);
 }
 
+/* Reserve scrollbar space so short pages do not shift the layout. */
+html
+{
+    overflow-y: scroll;
+}
+
+@supports (scrollbar-gutter: stable)
+{
+    html
+    {
+        overflow-y: auto;
+        scrollbar-gutter: stable both-edges;
+    }
+}
+
 /* Base */
 *
 {
