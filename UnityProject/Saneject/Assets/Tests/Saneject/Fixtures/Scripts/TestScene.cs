@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-using Tests.Saneject.Fixtures.Scripts;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-namespace Tests.Saneject.Editor.Utilities
+namespace Tests.Saneject.Fixtures.Scripts
 {
     public sealed class TestScene
     {

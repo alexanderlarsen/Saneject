@@ -1,7 +1,6 @@
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Pipeline;
-using Tests.Saneject.Editor.Utilities;
 using Tests.Saneject.Fixtures.Scripts;
 using UnityEngine;
 
