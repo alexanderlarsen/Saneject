@@ -2,7 +2,6 @@ using System;
 using System.Collections.Generic;
 using UnityEditor.SceneManagement;
 using UnityEngine;
-using UnityEngine.SceneManagement;
 
 namespace Tests.Saneject.Fixtures.Scripts
 {
@@ -26,7 +25,6 @@ namespace Tests.Saneject.Fixtures.Scripts
         }
 
         public IReadOnlyList<GameObject> Roots => roots;
-        public Scene UnityScene { get; private set; }
 
         public static TestScene Create(
             int roots,
@@ -107,7 +105,7 @@ namespace Tests.Saneject.Fixtures.Scripts
 
         private void CreateHierarchy()
         {
-            UnityScene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
 
             for (int rootIndex = 1; rootIndex <= rootCount; rootIndex++)
             {
