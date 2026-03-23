@@ -2,7 +2,7 @@
 
 namespace Tests.Saneject.Fixtures.Scripts
 {
-    public class Dependency : MonoBehaviour, IDependency
+    public class ComponentDependency : MonoBehaviour, IDependency
     {
     }
 }

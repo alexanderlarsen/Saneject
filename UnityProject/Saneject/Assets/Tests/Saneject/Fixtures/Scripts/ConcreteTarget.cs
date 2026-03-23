@@ -6,6 +6,6 @@ namespace Tests.Saneject.Fixtures.Scripts
     public class ConcreteTarget : MonoBehaviour
     {
         [Inject]
-        public Dependency dependency;
+        public ComponentDependency dependency;
     }
 }

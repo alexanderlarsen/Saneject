@@ -140,15 +140,15 @@ namespace Tests.Saneject.Fixtures.Scripts
             string path,
             GameObject gameObject)
         {
-            if (componentCache.ContainsKey((path, typeof(Dependency))))
+            if (componentCache.ContainsKey((path, typeof(ComponentDependency))))
                 return;
 
-            Dependency dependency = gameObject.GetComponent<Dependency>();
+            ComponentDependency dependency = gameObject.GetComponent<ComponentDependency>();
 
             if (!dependency)
-                dependency = gameObject.AddComponent<Dependency>();
+                dependency = gameObject.AddComponent<ComponentDependency>();
 
-            componentCache[(path, typeof(Dependency))] = dependency;
+            componentCache[(path, typeof(ComponentDependency))] = dependency;
         }
     }
 }

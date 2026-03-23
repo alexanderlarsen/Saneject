@@ -17,9 +17,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 3/Child 3");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 3/Child 3");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 3/Child 3");
 
-            scope.BindComponent<Dependency>().From(transform);
+            scope.BindComponent<ComponentDependency>().From(transform);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -34,9 +34,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 3/Child 3");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 3");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 3");
 
-            scope.BindComponent<Dependency>().FromParentOf(transform);
+            scope.BindComponent<ComponentDependency>().FromParentOf(transform);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -52,9 +52,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 1/Child 1");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2");
 
-            scope.BindComponent<Dependency>().FromAncestorsOf(transform, includeSelf: false);
+            scope.BindComponent<ComponentDependency>().FromAncestorsOf(transform, includeSelf: false);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -70,9 +70,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 1/Child 1");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 1/Child 1");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 1/Child 1");
 
-            scope.BindComponent<Dependency>().FromAncestorsOf(transform, includeSelf: true);
+            scope.BindComponent<ComponentDependency>().FromAncestorsOf(transform, includeSelf: true);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -87,9 +87,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 1");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 1");
 
-            scope.BindComponent<Dependency>().FromFirstChildOf(transform);
+            scope.BindComponent<ComponentDependency>().FromFirstChildOf(transform);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -104,9 +104,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 3");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 3");
 
-            scope.BindComponent<Dependency>().FromLastChildOf(transform);
+            scope.BindComponent<ComponentDependency>().FromLastChildOf(transform);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -121,9 +121,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 2");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 2");
 
-            scope.BindComponent<Dependency>().FromChildWithIndexOf(transform, 1);
+            scope.BindComponent<ComponentDependency>().FromChildWithIndexOf(transform, 1);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -139,9 +139,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 1/Child 1");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 1/Child 1");
 
-            scope.BindComponent<Dependency>().FromDescendantsOf(transform, includeSelf: false);
+            scope.BindComponent<ComponentDependency>().FromDescendantsOf(transform, includeSelf: false);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -157,9 +157,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2");
 
-            scope.BindComponent<Dependency>().FromDescendantsOf(transform, includeSelf: true);
+            scope.BindComponent<ComponentDependency>().FromDescendantsOf(transform, includeSelf: true);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
@@ -174,9 +174,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             TestScope scope = scene.AddComponent<TestScope>("Root 1");
             ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2/Child 2/Child 3");
-            Dependency expected = scene.GetComponent<Dependency>("Root 2/Child 2/Child 1");
+            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 2/Child 2/Child 1");
 
-            scope.BindComponent<Dependency>().FromSiblingsOf(transform);
+            scope.BindComponent<ComponentDependency>().FromSiblingsOf(transform);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
             Assert.AreEqual(expected, target.dependency);
