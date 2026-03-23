@@ -6,7 +6,7 @@ using Tests.Saneject.Runtime.Fixtures;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
-namespace Tests.Saneject.Editor.Bindings.ComponentBindings.Locators
+namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
 {
     public class FromScopeTests
     {
