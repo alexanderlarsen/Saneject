@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tests.Saneject.Runtime.Fixtures
 {
-    public class ConcreteRequester : MonoBehaviour
+    public class ConcreteTarget : MonoBehaviour
     {
         [Inject]
         public Dependency dependency;

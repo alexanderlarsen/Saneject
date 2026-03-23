@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Tests.Saneject.Runtime.Fixtures
 {
-    public partial class InterfaceRequester : MonoBehaviour
+    public partial class InterfaceTarget : MonoBehaviour
     {
         [Inject, SerializeInterface]
         public IDependency dependency;
