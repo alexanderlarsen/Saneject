@@ -4,7 +4,7 @@ using Plugins.Saneject.Runtime.Scopes;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Tests.Saneject.Runtime.Fixtures
+namespace Tests.Saneject.Fixtures.Scripts
 {
     public class TestScope : Scope
     {

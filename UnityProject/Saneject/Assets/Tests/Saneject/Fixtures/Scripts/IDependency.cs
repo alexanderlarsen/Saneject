@@ -1,4 +1,4 @@
-﻿namespace Tests.Saneject.Runtime.Fixtures
+﻿namespace Tests.Saneject.Fixtures.Scripts
 {
     public interface IDependency
     {

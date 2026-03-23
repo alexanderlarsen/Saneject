@@ -1,7 +1,7 @@
 ﻿using Plugins.Saneject.Runtime.Attributes;
 using UnityEngine;
 
-namespace Tests.Saneject.Runtime.Fixtures
+namespace Tests.Saneject.Fixtures.Scripts
 {
     public class ConcreteTarget : MonoBehaviour
     {

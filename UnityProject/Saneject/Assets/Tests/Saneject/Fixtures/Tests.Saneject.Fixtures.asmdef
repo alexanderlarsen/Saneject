@@ -1,5 +1,5 @@
 {
-    "name": "Tests.Saneject.Runtime",
+    "name": "Tests.Saneject.Fixtures",
     "rootNamespace": "",
     "references": [
         "GUID:9d4efcdc038880a47bec379313b2bed9",

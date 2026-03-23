@@ -1,193 +1,175 @@
-﻿using NUnit.Framework;
+using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Pipeline;
-using Tests.Saneject.Editor.Extensions;
-using Tests.Saneject.Runtime.Fixtures;
-using UnityEditor.SceneManagement;
-using UnityEngine.SceneManagement;
+using Tests.Saneject.Editor.Utilities;
+using Tests.Saneject.Fixtures.Scripts;
 
 namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
 {
     public class FromTargetTests
     {
-        private const string LocatorScenePath = "Assets/Tests/Saneject/Runtime/Fixtures/LocatorScene.unity";
-
-        private Scene scene;
-
-        [SetUp]
-        public void SetUp()
-        {
-            scene = EditorSceneManager.OpenScene(LocatorScenePath, OpenSceneMode.Single);
-        }
-
         [Test]
         public void FromTarget_InjectsFromSelf()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2";
-            const string expectedDependencyPath = "Root 1/Child 2";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 2);
+            scene.AddDependenciesToAllTransforms();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetSelf();
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 2");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetSelf();
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetParent_InjectsFromParent()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2/GrandChild 1";
-            const string expectedDependencyPath = "Root 1/Child 2";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddDependenciesToAllTransforms();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetParent();
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 2");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetParent();
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestAncestor()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2/GrandChild 1";
-            const string expectedDependencyPath = "Root 1/Child 2/";
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
+            scene.AddDependenciesToRoots();
+            scene.AddDependenciesToLeafs();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetAncestors(includeSelf: false);
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 1/Child 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetAncestors(includeSelf: false);
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2/GrandChild 1";
-            const string expectedDependencyPath = "Root 1/Child 2/GrandChild 1";
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
+            scene.AddDependenciesToRoots();
+            scene.AddDependenciesToLeafs();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetAncestors(includeSelf: true);
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 1/Child 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 1/Child 1");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetAncestors(includeSelf: true);
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetFirstChild_InjectsFromFirstChild()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2";
-            const string expectedDependencyPath = "Root 1/Child 2/GrandChild 1";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddDependenciesToAllTransforms();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetFirstChild();
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 1");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetFirstChild();
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetLastChild_InjectsFromLastChild()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2";
-            const string expectedDependencyPath = "Root 1/Child 2/GrandChild 3";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddDependenciesToAllTransforms();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetLastChild();
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 3");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetLastChild();
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetChildWithIndex_InjectsFromChildWithIndex()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2";
-            const string expectedDependencyPath = "Root 1/Child 2/GrandChild 2";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddDependenciesToAllTransforms();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetChildWithIndex(1);
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 2");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetChildWithIndex(1);
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetDescendants_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestDescendant()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1";
-            const string expectedDependencyPath = "Root 1/Child 1";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddDependenciesToRoots();
+            scene.AddDependenciesToLeafs();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetDescendants(includeSelf: false);
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 1/Child 1");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetDescendants(includeSelf: false);
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetDescendants_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1";
-            const string expectedDependencyPath = "Root 1";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddDependenciesToRoots();
+            scene.AddDependenciesToLeafs();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetDescendants(includeSelf: true);
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetDescendants(includeSelf: true);
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
 
         [Test]
         public void FromTargetSiblings_InjectsFromFirstSibling()
         {
-            const string scopePath = "Root 1";
-            const string targetPath = "Root 1/Child 2/GrandChild 3";
-            const string expectedDependencyPath = "Root 1/Child 2/GrandChild 1";
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddDependenciesToAllTransforms();
 
-            scene.AddComponentAtPath<TestScope>(scopePath)
-                .BindComponent<Dependency>()
-                .FromTargetSiblings();
+            TestScope scope = scene.AddComponent<TestScope>("Root 1");
+            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 3");
+            Dependency expected = scene.GetComponent<Dependency>("Root 1/Child 2/Child 1");
 
-            ConcreteTarget target = scene.AddComponentAtPath<ConcreteTarget>(targetPath);
-            Dependency expectedDependency = scene.GetComponentAtPath<Dependency>(expectedDependencyPath);
-            InjectionRunner.Run(scene.GetRootGameObjects(), ContextWalkFilter.SceneObjects);
-            Assert.AreEqual(expectedDependency, target.dependency);
+            scope.BindComponent<Dependency>().FromTargetSiblings();
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            Assert.AreEqual(expected, target.dependency);
         }
     }
 }
