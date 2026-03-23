@@ -195,7 +195,7 @@ namespace Plugins.Saneject.Editor.Utilities
                     .Append(bindAsset);
 
             sb.Append(" | Nearest scope: ")
-                .Append(scopeNode.ScopeType.Name)
+                .Append(scopeNode?.ScopeType?.Name ?? "null")
                 .Append(']');
 
             return sb.ToString();
