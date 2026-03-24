@@ -24,7 +24,7 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteAssetTarget concreteTarget = scene.Add<SingleConcreteAssetTarget>("Root 1");
             SingleInterfaceTarget interfaceTarget = scene.Add<SingleInterfaceTarget>("Root 1");
-        
+
             // Find dependency
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
@@ -89,7 +89,7 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteAssetTarget concreteTarget = scene.Add<SingleConcreteAssetTarget>("Root 1");
             SingleInterfaceTarget interfaceTarget = scene.Add<SingleInterfaceTarget>("Root 1");
-            
+
             // Find dependency
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
@@ -106,26 +106,7 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
             Assert.That(interfaceTarget.dependency, Is.EqualTo(dependency));
             Assert.That(concreteTarget.dependency, Is.Null);
         }
-        
-        // TODO: Move to invalid bindings test
-        [Test]
-        public void BindAsset_TConcreteTConcrete_IsInvalid()
-        {
-            // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
 
-            // Set up scene
-            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
-            TestScope scope = scene.Add<TestScope>("Root 1");
-
-            // Bind
-            scope.BindAsset<AssetDependency, AssetDependency>().FromAssetLoad("Assets/Tests/Saneject/Fixtures/Resources/AssetDependency 1.asset");
-
-            // Inject
-            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-        }
-        
         [Test]
         public void BindMultipleAssets_TInterfaceTConcrete_InjectsInterfaceCollection_NotConcreteCollection()
         {
@@ -160,25 +141,6 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
 
             Assert.That(concreteTarget.array, Is.Null);
             Assert.That(concreteTarget.list, Is.Null);
-        }
-        
-        // TODO: Move to invalid bindings test
-        [Test]
-        public void BindMultipleAssets_TConcreteTConcrete_IsInvalid()
-        {
-            // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
-
-            // Set up scene
-            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 5);
-            TestScope scope = scene.Add<TestScope>("Root 1");
-
-            // Bind
-            scope.BindAssets<AssetDependency, AssetDependency>().FromFolder("Assets/Tests/Saneject/Fixtures/Resources");
-
-            // Inject
-            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
         }
     }
 }

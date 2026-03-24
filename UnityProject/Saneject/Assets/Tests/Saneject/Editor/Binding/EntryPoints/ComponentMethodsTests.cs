@@ -24,7 +24,7 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteComponentTarget concreteTarget = scene.Add<SingleConcreteComponentTarget>("Root 1");
             SingleInterfaceTarget interfaceTarget = scene.Add<SingleInterfaceTarget>("Root 1");
-      
+
             // Find dependency
             ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
 
@@ -53,7 +53,7 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteComponentTarget concreteTarget = scene.Add<SingleConcreteComponentTarget>("Root 1");
             SingleInterfaceTarget interfaceTarget = scene.Add<SingleInterfaceTarget>("Root 1");
-       
+
             // Find dependency
             ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
 
@@ -154,7 +154,7 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteComponentTarget concreteTarget = scene.Add<SingleConcreteComponentTarget>("Root 1");
             SingleInterfaceTarget interfaceTarget = scene.Add<SingleInterfaceTarget>("Root 1");
-         
+
             // Find dependency
             ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
 
@@ -170,25 +170,6 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
             Assert.That(interfaceTarget.dependency, Is.InstanceOf<ComponentDependency>());
             Assert.That(interfaceTarget.dependency, Is.EqualTo(dependency));
             Assert.That(concreteTarget.dependency, Is.Null);
-        }
-
-        // TODO: Move to invalid bindings test
-        [Test]
-        public void BindComponent_TConcreteTConcrete_IsInvalid()
-        {
-            // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
-
-            // Set up scene
-            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
-            TestScope scope = scene.Add<TestScope>("Root 1");
-
-            // Bind
-            scope.BindComponent<ComponentDependency, ComponentDependency>().FromSelf();
-
-            // Inject
-            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
         }
 
         [Test]
@@ -225,25 +206,6 @@ namespace Tests.Saneject.Editor.Binding.EntryPoints
 
             Assert.That(concreteTarget.array, Is.Null);
             Assert.That(concreteTarget.list, Is.Null);
-        }
-
-        // TODO: Move to invalid bindings test
-        [Test]
-        public void BindMultipleComponents_TConcreteTConcrete_IsInvalid()
-        {
-            // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
-
-            // Set up scene
-            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 5);
-            TestScope scope = scene.Add<TestScope>("Root 1");
-
-            // Bind
-            scope.BindComponents<ComponentDependency, ComponentDependency>().FromDescendants(includeSelf: true);
-
-            // Inject
-            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
         }
     }
 }
