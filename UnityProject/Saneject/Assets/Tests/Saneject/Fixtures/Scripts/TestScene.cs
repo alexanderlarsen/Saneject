@@ -45,40 +45,7 @@ namespace Tests.Saneject.Fixtures.Scripts
             return scene;
         }
 
-        public void AddDependenciesToAllTransforms()
-        {
-            foreach ((string path, Transform transform) in transformCache)
-                AddDependencyIfMissing(path, transform.gameObject);
-        }
-
-        public void AddDependenciesToRoots()
-        {
-            foreach (GameObject root in roots)
-                AddDependencyIfMissing(root.name, root);
-        }
-
-        public void AddDependenciesToLeafs()
-        {
-            foreach ((string path, Transform transform) in transformCache)
-                if (transform.childCount == 0)
-                    AddDependencyIfMissing(path, transform.gameObject);
-        }
-
-        public void AddDependencyAt(string path)
-        {
-            Transform transform = GetTransform(path);
-            AddDependencyIfMissing(path, transform.gameObject);
-        }
-
-        public T AddComponent<T>(string path) where T : Component
-        {
-            Transform transform = GetTransform(path);
-            T component = transform.gameObject.AddComponent<T>();
-            componentCache[(path, typeof(T))] = component;
-            return component;
-        }
-
-        public T GetComponent<T>(string path) where T : Component
+        public T Get<T>(string path) where T : Component
         {
             (string path, Type type) key = (path, typeof(T));
 
@@ -97,10 +64,36 @@ namespace Tests.Saneject.Fixtures.Scripts
 
         public Transform GetTransform(string path)
         {
-            if (!transformCache.TryGetValue(path, out Transform transform))
-                throw new InvalidOperationException($"Transform not found at path: {path}");
+            return transformCache.TryGetValue(path, out Transform transform)
+                ? transform
+                : throw new InvalidOperationException($"Transform not found at path: {path}");
+        }
 
-            return transform;
+        public T Add<T>(string path) where T : Component
+        {
+            Transform transform = GetTransform(path);
+            T component = transform.gameObject.AddComponent<T>();
+            componentCache[(path, typeof(T))] = component;
+            return component;
+        }
+
+        public void AddToAllTransforms<T>() where T : Component
+        {
+            foreach ((string path, Transform _) in transformCache)
+                Add<T>(path);
+        }
+
+        public void AddToRoots<T>() where T : Component
+        {
+            foreach (GameObject root in roots)
+                Add<T>(root.name);
+        }
+
+        public void AddToLeafs<T>() where T : Component
+        {
+            foreach ((string path, Transform transform) in transformCache)
+                if (transform.childCount == 0)
+                    Add<T>(path);
         }
 
         private void CreateHierarchy()
@@ -131,24 +124,8 @@ namespace Tests.Saneject.Fixtures.Scripts
                 GameObject child = new($"Child {childIndex}");
                 child.transform.SetParent(parent, false);
                 transformCache[childPath] = child.transform;
-
                 CreateChildren(child.transform, childPath, currentDepth + 1);
             }
-        }
-
-        private void AddDependencyIfMissing(
-            string path,
-            GameObject gameObject)
-        {
-            if (componentCache.ContainsKey((path, typeof(ComponentDependency))))
-                return;
-
-            ComponentDependency dependency = gameObject.GetComponent<ComponentDependency>();
-
-            if (!dependency)
-                dependency = gameObject.AddComponent<ComponentDependency>();
-
-            componentCache[(path, typeof(ComponentDependency))] = dependency;
         }
     }
 }

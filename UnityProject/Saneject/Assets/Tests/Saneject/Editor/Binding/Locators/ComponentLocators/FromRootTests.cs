@@ -11,11 +11,11 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         public void FromRootSelf_InjectsFromSelf()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
-            scene.AddDependenciesToAllTransforms();
+            scene.AddToAllTransforms<ComponentDependency>();
 
-            TestScope scope = scene.AddComponent<TestScope>("Root 1/Child 2/Child 3");
-            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 3");
-            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 1");
+            TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
+            ConcreteTarget target = scene.Add<ConcreteTarget>("Root 1/Child 2/Child 3");
+            ComponentDependency expected = scene.Get<ComponentDependency>("Root 1");
 
             scope.BindComponent<ComponentDependency>().FromRootSelf();
 
@@ -27,11 +27,11 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         public void FromRootFirstChild_InjectsFromFirstChild()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
-            scene.AddDependenciesToAllTransforms();
+            scene.AddToAllTransforms<ComponentDependency>();
 
-            TestScope scope = scene.AddComponent<TestScope>("Root 1/Child 2/Child 3");
-            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 3");
-            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 1/Child 1");
+            TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
+            ConcreteTarget target = scene.Add<ConcreteTarget>("Root 1/Child 2/Child 3");
+            ComponentDependency expected = scene.Get<ComponentDependency>("Root 1/Child 1");
 
             scope.BindComponent<ComponentDependency>().FromRootFirstChild();
 
@@ -43,11 +43,11 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         public void FromRootLastChild_InjectsFromLastChild()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
-            scene.AddDependenciesToAllTransforms();
+            scene.AddToAllTransforms<ComponentDependency>();
 
-            TestScope scope = scene.AddComponent<TestScope>("Root 1/Child 2/Child 3");
-            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 3");
-            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 1/Child 3");
+            TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
+            ConcreteTarget target = scene.Add<ConcreteTarget>("Root 1/Child 2/Child 3");
+            ComponentDependency expected = scene.Get<ComponentDependency>("Root 1/Child 3");
 
             scope.BindComponent<ComponentDependency>().FromRootLastChild();
 
@@ -59,11 +59,11 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         public void FromRootChildWithIndex_InjectsFromChildWithIndex()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
-            scene.AddDependenciesToAllTransforms();
+            scene.AddToAllTransforms<ComponentDependency>();
 
-            TestScope scope = scene.AddComponent<TestScope>("Root 1/Child 2/Child 3");
-            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 3");
-            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 1/Child 2");
+            TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
+            ConcreteTarget target = scene.Add<ConcreteTarget>("Root 1/Child 2/Child 3");
+            ComponentDependency expected = scene.Get<ComponentDependency>("Root 1/Child 2");
 
             scope.BindComponent<ComponentDependency>().FromRootChildWithIndex(1);
 
@@ -75,12 +75,12 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         public void FromRootDescendants_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestDescendant()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
-            scene.AddDependenciesToRoots();
-            scene.AddDependenciesToLeafs();
+            scene.AddToRoots<ComponentDependency>();
+            scene.AddToLeafs<ComponentDependency>();
 
-            TestScope scope = scene.AddComponent<TestScope>("Root 1/Child 2/Child 3");
-            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 3");
-            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 1/Child 1/Child 1");
+            TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
+            ConcreteTarget target = scene.Add<ConcreteTarget>("Root 1/Child 2/Child 3");
+            ComponentDependency expected = scene.Get<ComponentDependency>("Root 1/Child 1/Child 1");
 
             scope.BindComponent<ComponentDependency>().FromRootDescendants(includeSelf: false);
 
@@ -92,12 +92,12 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         public void FromRootDescendants_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
-            scene.AddDependenciesToRoots();
-            scene.AddDependenciesToLeafs();
+            scene.AddToRoots<ComponentDependency>();
+            scene.AddToLeafs<ComponentDependency>();
 
-            TestScope scope = scene.AddComponent<TestScope>("Root 1/Child 2/Child 3");
-            ConcreteTarget target = scene.AddComponent<ConcreteTarget>("Root 1/Child 2/Child 3");
-            ComponentDependency expected = scene.GetComponent<ComponentDependency>("Root 1");
+            TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
+            ConcreteTarget target = scene.Add<ConcreteTarget>("Root 1/Child 2/Child 3");
+            ComponentDependency expected = scene.Get<ComponentDependency>("Root 1");
 
             scope.BindComponent<ComponentDependency>().FromRootDescendants(includeSelf: true);
 
