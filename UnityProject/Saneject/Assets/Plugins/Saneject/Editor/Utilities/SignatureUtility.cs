@@ -132,7 +132,6 @@ namespace Plugins.Saneject.Editor.Utilities
                         AssetLoadType.Resources => $".FromResources(\"{assetBinding.Path}\")",
                         AssetLoadType.ResourcesAll => $".FromResourcesAll(\"{assetBinding.Path}\")",
                         AssetLoadType.AssetLoad => $".FromAssetLoad(\"{assetBinding.Path}\")",
-                        AssetLoadType.AssetLoadAll => $".FromAssetLoadAll(\"{assetBinding.Path}\")",
                         AssetLoadType.Folder => $".FromFolder(\"{assetBinding.Path}\")",
                         AssetLoadType.Instance => $".FromInstance(instance: {assetBinding.ResolveFromInstances.FirstOrDefault()?.GetType().Name ?? "null"})",
                         _ => throw new ArgumentOutOfRangeException()

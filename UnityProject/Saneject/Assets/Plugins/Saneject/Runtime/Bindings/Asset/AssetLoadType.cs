@@ -13,9 +13,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         /// <summary> Load all assets from a Resources folder path. </summary>
         ResourcesAll,
         /// <summary> Load a single asset from a specific path. </summary>
-        AssetLoad,
-        /// <summary> Load all assets from a specific path. </summary>
-        AssetLoadAll,
+        AssetLoad, 
         /// <summary> Load all assets within a specific folder. </summary>
         Folder,
         /// <summary> Use a direct object instance. </summary>

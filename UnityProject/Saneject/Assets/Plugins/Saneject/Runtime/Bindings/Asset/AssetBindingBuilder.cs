@@ -125,20 +125,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
             binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
-
-        /// <summary>
-        /// Locate all sub-assets of type <see cref="Object" /> in a single asset file
-        /// at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAllAssetsAtPath(string)" />.
-        /// </summary>
-        /// <param name="assetPath">The asset path.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
-        public AssetFilterBuilder<TAsset> FromAssetLoadAll(string assetPath)
-        {
-            binding.AssetPath = assetPath;
-            binding.AssetLoadType = AssetLoadType.AssetLoadAll;
-            binding.LocatorStrategySpecified = true;
-            return new AssetFilterBuilder<TAsset>(binding);
-        }
+ 
 
         #endregion
 

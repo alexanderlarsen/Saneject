@@ -157,25 +157,20 @@ namespace Plugins.Saneject.Editor.Pipeline
             InjectionContext context,
             AssetBindingNode bindingNode)
         {
-            Type targetType = bindingNode.InterfaceType ?? bindingNode.ConcreteType;
             string path = bindingNode.Path;
 
             IEnumerable<Object> candidates = bindingNode.AssetLoadType switch
             {
                 AssetLoadType.Resources =>
-                    Resources.Load(path, targetType)
+                    Resources.Load(path, bindingNode.ConcreteType)
                         .ToEnumerable(),
 
                 AssetLoadType.ResourcesAll =>
-                    Resources.LoadAll(path, targetType),
+                    Resources.LoadAll(path, bindingNode.ConcreteType),
 
                 AssetLoadType.AssetLoad =>
-                    AssetDatabase.LoadAssetAtPath(path, targetType)
+                    AssetDatabase.LoadAssetAtPath(path, bindingNode.ConcreteType)
                         .ToEnumerable(),
-
-                AssetLoadType.AssetLoadAll =>
-                    AssetDatabase.LoadAllAssetsAtPath(path)
-                        .Where(asset => asset.GetType() == targetType),
 
                 AssetLoadType.Folder =>
                     AssetDatabase.FindAssets($"t:{bindingNode.ConcreteType.Name}", new[]
@@ -183,13 +178,16 @@ namespace Plugins.Saneject.Editor.Pipeline
                             path
                         })
                         .Select(AssetDatabase.GUIDToAssetPath)
-                        .Select(assetPath => AssetDatabase.LoadAssetAtPath(assetPath, targetType))
+                        .Select(assetPath => AssetDatabase.LoadAssetAtPath(assetPath, bindingNode.ConcreteType))
                         .Where(obj => obj != null),
 
                 AssetLoadType.Instance => bindingNode.ResolveFromInstances,
 
                 _ => throw new ArgumentOutOfRangeException()
             };
+
+            if (bindingNode.InterfaceType != null)
+                candidates = candidates.Where(asset => bindingNode.InterfaceType.IsAssignableFrom(asset.GetType()));
 
             if (candidates != null && bindingNode.DependencyFilters.Count > 0)
                 try
