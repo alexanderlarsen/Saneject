@@ -15,15 +15,15 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
 
             TestScope scope = scene.Add<TestScope>("Root 1");
             ConcreteAssetTarget target = scene.Add<ConcreteAssetTarget>("Root 1");
-            AssetDependency expected = Resources.Load<AssetDependency>("AssetDependency 1");
+            AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
-            scope.BindAsset<AssetDependency>().FromInstance(expected);
+            scope.BindAsset<AssetDependency>().FromInstance(dependency);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
-            Assert.NotNull(expected);
+            Assert.NotNull(dependency);
             Assert.NotNull(target.dependency);
-            Assert.AreEqual(expected, target.dependency);
+            Assert.AreEqual(dependency, target.dependency);
         }
 
         [Test]
@@ -33,15 +33,15 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
 
             TestScope scope = scene.Add<TestScope>("Root 1");
             ConcreteAssetTarget target = scene.Add<ConcreteAssetTarget>("Root 1");
-            AssetDependency expected = Resources.Load<AssetDependency>("AssetDependency 1");
+            AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
-            scope.BindAsset<AssetDependency>().FromMethod(() => expected);
+            scope.BindAsset<AssetDependency>().FromMethod(() => dependency);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
-            Assert.NotNull(expected);
+            Assert.NotNull(dependency);
             Assert.NotNull(target.dependency);
-            Assert.AreEqual(expected, target.dependency);
+            Assert.AreEqual(dependency, target.dependency);
         }
 
         [Test]
@@ -51,18 +51,18 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
 
             TestScope scope = scene.Add<TestScope>("Root 1");
             ConcreteAssetTarget target = scene.Add<ConcreteAssetTarget>("Root 1");
-            AssetDependency expected = Resources.Load<AssetDependency>("AssetDependency 1");
+            AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
             scope.BindAsset<AssetDependency>().FromMethod(() => new[]
             {
-                expected
+                dependency
             });
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
-            Assert.NotNull(expected);
+            Assert.NotNull(dependency);
             Assert.NotNull(target.dependency);
-            Assert.AreEqual(expected, target.dependency);
+            Assert.AreEqual(dependency, target.dependency);
         }
     }
 }

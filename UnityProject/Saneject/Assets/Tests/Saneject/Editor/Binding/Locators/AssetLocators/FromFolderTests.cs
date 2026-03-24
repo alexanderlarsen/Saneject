@@ -15,15 +15,15 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
 
             TestScope scope = scene.Add<TestScope>("Root 1");
             ConcreteAssetTarget target = scene.Add<ConcreteAssetTarget>("Root 1");
-            AssetDependency expected = Resources.Load<AssetDependency>("AssetDependency 1");
+            AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
             scope.BindAsset<AssetDependency>().FromFolder("Assets/Tests/Saneject/Fixtures/Resources");
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
-            Assert.NotNull(expected);
+            Assert.NotNull(dependency);
             Assert.NotNull(target.dependency);
-            Assert.AreEqual(expected, target.dependency);
+            Assert.AreEqual(dependency, target.dependency);
         }
     }
 }
