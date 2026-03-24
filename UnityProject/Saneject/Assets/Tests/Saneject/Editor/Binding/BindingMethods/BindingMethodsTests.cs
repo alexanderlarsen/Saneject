@@ -7,7 +7,6 @@ using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEngine;
 using UnityEngine.TestTools;
-using InterfaceTarget = Tests.Saneject.Fixtures.Scripts.InjectionTargets.InterfaceTarget;
 
 namespace Tests.Saneject.Editor.Binding.BindingMethods
 {
@@ -23,8 +22,8 @@ namespace Tests.Saneject.Editor.Binding.BindingMethods
             scene.AddToAllTransforms<ComponentDependency>();
             
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget concreteTarget = scene.Add<ConcreteComponentTarget>("Root 1");
-            InterfaceTarget interfaceTarget = scene.Add<InterfaceTarget>("Root 1");
+            SingleConcreteComponentTarget concreteTarget = scene.Add<SingleConcreteComponentTarget>("Root 1");
+            SingleInterfaceTarget interfaceTarget = scene.Add<SingleInterfaceTarget>("Root 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
 
             scope.BindComponent<ComponentDependency>().FromSelf();
@@ -47,8 +46,8 @@ namespace Tests.Saneject.Editor.Binding.BindingMethods
             scene.AddToAllTransforms<ComponentDependency>();
             
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget concreteTarget = scene.Add<ConcreteComponentTarget>("Root 1");
-            InterfaceTarget interfaceTarget = scene.Add<InterfaceTarget>("Root 1");
+            SingleConcreteComponentTarget concreteTarget = scene.Add<SingleConcreteComponentTarget>("Root 1");
+            SingleInterfaceTarget interfaceTarget = scene.Add<SingleInterfaceTarget>("Root 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
 
             scope.BindComponent<IDependency>().FromSelf();

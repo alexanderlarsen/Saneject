@@ -4,9 +4,9 @@ using UnityEngine;
 
 namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
 {
-    public class ConcreteComponentTarget : MonoBehaviour
+    public class SingleConcreteAssetTarget : MonoBehaviour
     {
         [Inject]
-        public ComponentDependency dependency;
+        public AssetDependency dependency;
     }
 }

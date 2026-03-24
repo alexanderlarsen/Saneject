@@ -16,7 +16,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteAssetTarget target = scene.Add<ConcreteAssetTarget>("Root 1");
+            SingleConcreteAssetTarget target = scene.Add<SingleConcreteAssetTarget>("Root 1");
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
             scope.BindAsset<AssetDependency>().FromFolder("Assets/Tests/Saneject/Fixtures/Resources");

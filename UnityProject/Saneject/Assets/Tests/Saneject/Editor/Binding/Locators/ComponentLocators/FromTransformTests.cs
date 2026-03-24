@@ -17,7 +17,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToAllTransforms<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 3/Child 3");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
 
@@ -34,7 +34,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToAllTransforms<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 3/Child 3");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3");
 
@@ -52,7 +52,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToLeafs<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2");
 
@@ -70,7 +70,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToLeafs<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             Transform transform = scene.GetTransform("Root 2/Child 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 1/Child 1");
 
@@ -87,7 +87,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToAllTransforms<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 1");
 
@@ -104,7 +104,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToAllTransforms<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3");
 
@@ -121,7 +121,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToAllTransforms<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 2");
 
@@ -142,7 +142,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToLeafs<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 1/Child 1");
 
@@ -163,7 +163,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToLeafs<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2");
 
@@ -183,7 +183,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.AddToAllTransforms<ComponentDependency>();
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             Transform transform = scene.GetTransform("Root 2/Child 2/Child 3");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 2/Child 1");
 

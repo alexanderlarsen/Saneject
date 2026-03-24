@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
 {
-    public partial class InterfaceTarget : MonoBehaviour
+    public partial class SingleInterfaceTarget : MonoBehaviour
     {
         [Inject, SerializeInterface]
         public IDependency dependency;

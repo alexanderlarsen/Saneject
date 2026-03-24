@@ -16,7 +16,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
 
             scope.BindComponent<ComponentDependency>().FromAnywhere();
@@ -35,7 +35,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
 
             scope.BindComponent<ComponentDependency>().FromInstance(dependency);
@@ -54,7 +54,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
 
             scope.BindComponent<ComponentDependency>().FromMethod(() => scene.Get<ComponentDependency>("Root 2/Child 3/Child 3"));
@@ -73,7 +73,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
 
             TestScope scope = scene.Add<TestScope>("Root 1");
-            ConcreteComponentTarget target = scene.Add<ConcreteComponentTarget>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
 
             scope.BindComponent<ComponentDependency>().FromMethod(() => new[]
