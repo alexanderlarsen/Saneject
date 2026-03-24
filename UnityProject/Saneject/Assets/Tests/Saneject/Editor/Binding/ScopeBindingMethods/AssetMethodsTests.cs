@@ -114,7 +114,7 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
             MultiInterfaceTarget interfaceTarget = scene.Add<MultiInterfaceTarget>("Root 1");
             AssetDependency[] dependencies = Resources.LoadAll<AssetDependency>("");
 
-            scope.BindAssets<AssetDependency>().FromFolder("Assets/Tests/Saneject/Fixtures/Resources");
+            scope.BindAssets<IDependency, AssetDependency>().FromFolder("Assets/Tests/Saneject/Fixtures/Resources");
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 

@@ -119,7 +119,6 @@ namespace Plugins.Saneject.Editor.Pipeline
                 context: context,
                 declaringType: fieldNode.DeclaringType,
                 requestedType: fieldNode.RequestedType,
-                isInterface: fieldNode.IsInterface,
                 isCollection: fieldNode.IsCollection,
                 qualifyingMemberName: fieldNode.QualifyingName,
                 injectId: fieldNode.InjectId
@@ -178,7 +177,6 @@ namespace Plugins.Saneject.Editor.Pipeline
                     context: context,
                     declaringType: methodNode.DeclaringType,
                     requestedType: parameterNode.RequestedType,
-                    isInterface: parameterNode.IsInterface,
                     isCollection: parameterNode.IsCollection,
                     qualifyingMemberName: methodNode.QualifyingName,
                     injectId: methodNode.InjectId
@@ -230,7 +228,6 @@ namespace Plugins.Saneject.Editor.Pipeline
             InjectionContext context,
             Type declaringType,
             Type requestedType,
-            bool isInterface,
             bool isCollection,
             string qualifyingMemberName,
             string injectId)
@@ -256,9 +253,10 @@ namespace Plugins.Saneject.Editor.Pipeline
 
             bool MatchesRequestedType(BindingNode bindingNode)
             {
-                return isInterface
-                    ? bindingNode.InterfaceType == requestedType
-                    : bindingNode.ConcreteType == requestedType;
+                if (bindingNode.InterfaceType != null)
+                    return bindingNode.InterfaceType == requestedType;
+                
+                return bindingNode.ConcreteType == requestedType;
             }
 
             bool MatchesIsCollection(BindingNode bindingNode)

@@ -178,7 +178,7 @@ namespace Plugins.Saneject.Editor.Pipeline
                         .Where(asset => asset.GetType() == targetType),
 
                 AssetLoadType.Folder =>
-                    AssetDatabase.FindAssets($"t:{targetType.Name}", new[]
+                    AssetDatabase.FindAssets($"t:{bindingNode.ConcreteType.Name}", new[]
                         {
                             path
                         })
