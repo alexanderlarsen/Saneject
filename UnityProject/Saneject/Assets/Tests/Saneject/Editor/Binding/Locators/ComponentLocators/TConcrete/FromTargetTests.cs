@@ -10,7 +10,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
     public class FromTargetTests
     {
         [Test]
-        public void FromTarget_InjectsFromSelf()
+        public void FromTargetSelf_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 2);
             scene.AddToAllTransforms<ComponentDependency>();
@@ -27,7 +27,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetParent_InjectsFromParent()
+        public void FromTargetParent_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
@@ -44,7 +44,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestAncestor()
+        public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
             scene.AddToRoots<ComponentDependency>();
@@ -62,7 +62,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
+        public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
             scene.AddToRoots<ComponentDependency>();
@@ -80,7 +80,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetFirstChild_InjectsFromFirstChild()
+        public void FromTargetFirstChild_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
@@ -97,7 +97,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetLastChild_InjectsFromLastChild()
+        public void FromTargetLastChild_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
@@ -114,7 +114,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetChildWithIndex_InjectsFromChildWithIndex()
+        public void FromTargetChildWithIndex_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
@@ -131,7 +131,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetDescendants_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestDescendant()
+        public void FromTargetDescendants_WHEN_IncludeSelfIsFalse_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToRoots<ComponentDependency>();
@@ -149,7 +149,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetDescendants_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
+        public void FromTargetDescendants_WHEN_IncludeSelfIsTrue_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToRoots<ComponentDependency>();
@@ -167,7 +167,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
         }
 
         [Test]
-        public void FromTargetSiblings_InjectsFromFirstSibling()
+        public void FromTargetSiblings_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();

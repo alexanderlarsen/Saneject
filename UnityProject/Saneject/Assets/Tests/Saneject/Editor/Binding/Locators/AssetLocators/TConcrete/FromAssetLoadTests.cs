@@ -13,15 +13,21 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators.TConcrete
         [Test]
         public void FromAssetLoad_TConcrete_InjectsToConcreteField()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteAssetTarget target = scene.Add<SingleConcreteAssetTarget>("Root 1");
+            
+            // Find dependency 
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
-
+            
+            // Bind
             scope.BindAsset<AssetDependency>().FromAssetLoad("Assets/Tests/Saneject/Fixtures/Resources/AssetDependency 1.asset");
-
+            
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
+            
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }

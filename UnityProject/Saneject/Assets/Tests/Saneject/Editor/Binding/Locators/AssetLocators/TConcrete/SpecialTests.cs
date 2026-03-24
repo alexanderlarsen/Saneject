@@ -17,11 +17,8 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators.TConcrete
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteAssetTarget target = scene.Add<SingleConcreteAssetTarget>("Root 1");
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
-
             scope.BindAsset<AssetDependency>().FromInstance(dependency);
-
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
@@ -33,11 +30,8 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators.TConcrete
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteAssetTarget target = scene.Add<SingleConcreteAssetTarget>("Root 1");
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
-
             scope.BindAsset<AssetDependency>().FromMethod(() => dependency);
-
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
@@ -49,14 +43,8 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators.TConcrete
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteAssetTarget target = scene.Add<SingleConcreteAssetTarget>("Root 1");
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
-
-            scope.BindAsset<AssetDependency>().FromMethod(() => new[]
-            {
-                dependency
-            });
-
+            scope.BindAsset<AssetDependency>().FromMethod(() => new[] { dependency });
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }

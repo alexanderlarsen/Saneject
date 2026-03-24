@@ -5,77 +5,62 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
-namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
+namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TInterface
 {
     public class SpecialTests
     {
         [Test]
-        public void FromAnywhere_TConcrete_InjectsToConcreteField()
+        public void FromAnywhere_TInterface_InjectsToInterfaceField()
         {
             TestScene scene = TestScene.Create(roots: 2, width: 3, depth: 3);
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
             TestScope scope = scene.Add<TestScope>("Root 1");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
+            SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
-
-            scope.BindComponent<ComponentDependency>().FromAnywhere();
-
+            scope.BindComponent<IDependency>().FromAnywhere();
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
-        public void FromInstance_TConcrete_InjectsToConcreteField()
+        public void FromInstance_TInterface_InjectsToInterfaceField()
         {
             TestScene scene = TestScene.Create(roots: 2, width: 3, depth: 3);
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
             TestScope scope = scene.Add<TestScope>("Root 1");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
+            SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
-
-            scope.BindComponent<ComponentDependency>().FromInstance(dependency);
-
+            scope.BindComponent<IDependency>().FromInstance(dependency);
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
-        public void FromMethod_TConcrete_InjectsToConcreteField()
+        public void FromMethod_TInterface_InjectsToInterfaceField()
         {
             TestScene scene = TestScene.Create(roots: 2, width: 3, depth: 3);
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
             TestScope scope = scene.Add<TestScope>("Root 1");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
+            SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
-
-            scope.BindComponent<ComponentDependency>().FromMethod(() => scene.Get<ComponentDependency>("Root 2/Child 3/Child 3"));
-
+            scope.BindComponent<IDependency>().FromMethod(() => scene.Get<ComponentDependency>("Root 2/Child 3/Child 3"));
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
-        public void FromMethodEnumerable_TConcrete_InjectsToConcreteField()
+        public void FromMethodEnumerable_TInterface_InjectsToInterfaceField()
         {
             TestScene scene = TestScene.Create(roots: 2, width: 3, depth: 3);
             scene.Add<ComponentDependency>("Root 2/Child 3/Child 3");
             TestScope scope = scene.Add<TestScope>("Root 1");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
+            SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 2/Child 3/Child 3");
-
-            scope.BindComponent<ComponentDependency>().FromMethod(() => new[]
-            {
-                scene.Get<ComponentDependency>("Root 2/Child 3/Child 3")
-            });
-
+            scope.BindComponent<IDependency>().FromMethod(() => new[] { scene.Get<ComponentDependency>("Root 2/Child 3/Child 3") });
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
