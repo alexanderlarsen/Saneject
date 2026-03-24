@@ -7,7 +7,7 @@ using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
 namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromScope
 {
-    public class FromScopeParentTConcreteTests
+    public class FromScopeParentTests
     {
         [Test]
         public void FromScopeParent_TConcrete_InjectsToConcreteField()
@@ -31,10 +31,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromScope
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromScopeParentTInterfaceTests
-    {
         [Test]
         public void FromScopeParent_TInterface_InjectsToInterfaceField()
         {
@@ -57,12 +54,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromScope
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromScopeParentTInterfaceTConcreteTests
-    {
         [Test]
-        public void FromScopeParent_TInterface_InjectsToInterfaceField()
+        public void FromScopeParent_TInterfaceTConcrete_InjectsToInterfaceField()
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);

@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTransform
 {
-    public class FromTConcreteTests
+    public class FromTests
     {
         [Test]
         public void From_TConcrete_InjectsToConcreteField()
@@ -33,10 +33,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTransform
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromTInterfaceTests
-    {
         [Test]
         public void From_TInterface_InjectsToInterfaceField()
         {
@@ -60,12 +57,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTransform
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromTInterfaceTConcreteTests
-    {
         [Test]
-        public void From_TInterface_InjectsToInterfaceField()
+        public void From_TInterfaceTConcrete_InjectsToInterfaceField()
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 2, width: 3, depth: 3);

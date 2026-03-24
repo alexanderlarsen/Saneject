@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators.FromResources
 {
-    public class FromResourcesAllTConcreteTests
+    public class FromResourcesAllTests
     {
         [Test]
         public void FromResourcesAll_TConcrete_InjectsToConcreteField()
@@ -31,10 +31,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators.FromResources
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromResourcesAllTInterfaceTConcreteTests
-    {
         [Test]
         public void FromResourcesAll_TInterface_InjectsToInterfaceField()
         {

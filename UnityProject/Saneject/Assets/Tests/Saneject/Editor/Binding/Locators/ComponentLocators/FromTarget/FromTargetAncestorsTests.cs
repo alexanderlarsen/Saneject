@@ -7,7 +7,7 @@ using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
 namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTarget
 {
-    public class FromTargetAncestorsWhenIncludeSelfIsFalseTConcreteTests
+    public class FromTargetAncestorsTests
     {
         [Test]
         public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_TConcrete_InjectsToConcreteField()
@@ -32,10 +32,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTarget
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromTargetAncestorsWhenIncludeSelfIsFalseTInterfaceTests
-    {
         [Test]
         public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_TInterface_InjectsToInterfaceField()
         {
@@ -59,12 +56,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTarget
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromTargetAncestorsWhenIncludeSelfIsFalseTInterfaceTConcreteTests
-    {
         [Test]
-        public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_TInterface_InjectsToInterfaceField()
+        public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_TInterfaceTConcrete_InjectsToInterfaceField()
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
@@ -86,10 +80,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTarget
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromTargetAncestorsWhenIncludeSelfIsTrueTConcreteTests
-    {
         [Test]
         public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_TConcrete_InjectsToConcreteField()
         {
@@ -113,10 +104,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTarget
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromTargetAncestorsWhenIncludeSelfIsTrueTInterfaceTests
-    {
         [Test]
         public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_TInterface_InjectsToInterfaceField()
         {
@@ -140,12 +128,9 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromTarget
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
-    }
 
-    public class FromTargetAncestorsWhenIncludeSelfIsTrueTInterfaceTConcreteTests
-    {
         [Test]
-        public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_TInterface_InjectsToInterfaceField()
+        public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_TInterfaceTConcrete_InjectsToInterfaceField()
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
