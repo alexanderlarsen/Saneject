@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 
@@ -77,23 +78,29 @@ namespace Tests.Saneject.Fixtures.Scripts
             return component;
         }
 
-        public void AddToAllTransforms<T>() where T : Component
+        public T[] AddToAllTransforms<T>() where T : Component
         {
+            List<T> components = new();
+            
             foreach ((string path, Transform _) in transformCache)
-                Add<T>(path);
+                components.Add(Add<T>(path));
+            
+            return components.ToArray();
         }
 
-        public void AddToRoots<T>() where T : Component
+        public T[] AddToRoots<T>() where T : Component
         {
-            foreach (GameObject root in roots)
-                Add<T>(root.name);
+            return roots
+                .Select(root => Add<T>(root.name))
+                .ToArray();
         }
 
-        public void AddToLeafs<T>() where T : Component
+        public T[] AddToLeafs<T>() where T : Component
         {
-            foreach ((string path, Transform transform) in transformCache)
-                if (transform.childCount == 0)
-                    Add<T>(path);
+            return transformCache
+                .Where(pair => pair.Value.childCount == 0)
+                .Select(pair => Add<T>(pair.Key))
+                .ToArray();
         }
 
         private void CreateHierarchy()
