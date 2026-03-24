@@ -10,8 +10,10 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
 {
     public class FromResourcesTests
     {
+        #region Concrete
+
         [Test]
-        public void FromResources_InjectsAsset()
+        public void FromResources_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope scope = scene.Add<TestScope>("Root 1");
@@ -27,7 +29,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
         }
 
         [Test]
-        public void FromResourcesAll_InjectsAsset()
+        public void FromResourcesAll_TConcrete_InjectsToConcreteField()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope scope = scene.Add<TestScope>("Root 1");
@@ -41,5 +43,43 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
+
+        #endregion
+
+        #region Interface
+
+        [Test]
+        public void FromResources_TInterface_InjectsToInterfaceField()
+        {
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1");
+            AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
+
+            scope.BindAsset<IDependency, AssetDependency>().FromResources("AssetDependency 1");
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.dependency, Is.EqualTo(dependency));
+        }
+
+        [Test]
+        public void FromResourcesAll_TInterface_InjectsToInterfaceField()
+        {
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1");
+            AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
+
+            scope.BindAsset<IDependency, AssetDependency>().FromResourcesAll("");
+            
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.dependency, Is.EqualTo(dependency));
+        }
+
+        #endregion
     }
 }

@@ -10,6 +10,8 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
 {
     public class FromAssetLoadTests
     {
+        #region Concrete
+
         [Test]
         public void FromAssetLoad_TConcrete_InjectsToConcreteField()
         {
@@ -26,6 +28,10 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
+        #endregion
+
+        #region Interface
+
         [Test]
         public void FromAssetLoad_TInterfaceTConcrete_InjectsToInterfaceField()
         {
@@ -41,5 +47,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
+
+        #endregion
     }
 }
