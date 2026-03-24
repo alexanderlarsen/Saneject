@@ -77,5 +77,31 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.FromScope
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
+
+        [Test]
+        public void FromScopeParent_TConcrete_InjectsToConcreteCollection()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1/Child 1");
+            MultiConcreteComponentTarget target = scene.Add<MultiConcreteComponentTarget>("Root 1/Child 1");
+
+            // Find dependencies
+            ComponentDependency[] dependencies =
+            {
+                scene.Add<ComponentDependency>("Root 1"),
+                scene.Add<ComponentDependency>("Root 1")
+            };
+
+            // Bind
+            scope.BindComponents<ComponentDependency>().FromParent();
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            CollectionAssert.AreEquivalent(dependencies, target.array);
+            CollectionAssert.AreEquivalent(dependencies, target.list);
+        }
     }
 }

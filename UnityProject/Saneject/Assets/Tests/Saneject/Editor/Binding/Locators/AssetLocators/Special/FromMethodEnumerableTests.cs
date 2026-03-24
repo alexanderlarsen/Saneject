@@ -53,5 +53,28 @@ namespace Tests.Saneject.Editor.Binding.Locators.AssetLocators.Special
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
+
+        [Test]
+        public void FromMethodEnumerable_TConcrete_InjectsToConcreteCollection()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            MultiConcreteAssetTarget target = scene.Add<MultiConcreteAssetTarget>("Root 1");
+
+            // Find dependencies
+            AssetDependency[] dependencies = Resources.LoadAll<AssetDependency>("");
+
+            // Bind
+            scope.BindAssets<AssetDependency>().FromMethod(() => dependencies);
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            CollectionAssert.IsNotEmpty(dependencies);
+            CollectionAssert.AreEquivalent(dependencies, target.array);
+            CollectionAssert.AreEquivalent(dependencies, target.list);
+        }
     }
 }
