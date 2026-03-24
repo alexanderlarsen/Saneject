@@ -5,20 +5,20 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
-namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
+namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
 {
-    public class FromScopeTests
+    public class FromTargetTests
     {
         [Test]
-        public void FromScopeSelf_InjectsFromSelf()
+        public void FromTarget_InjectsFromSelf()
         {
-            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 2);
             scene.AddToAllTransforms<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
-            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 2");
+            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 2");
 
-            scope.BindComponent<ComponentDependency>().FromSelf();
+            scope.BindComponent<ComponentDependency>().FromTargetSelf();
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -27,15 +27,15 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeParent_InjectsFromParent()
+        public void FromTargetParent_InjectsFromParent()
         {
-            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
-            TestScope scope = scene.Add<TestScope>("Root 1/Child 1");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
-            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 2/Child 1");
+            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 2");
 
-            scope.BindComponent<ComponentDependency>().FromParent();
+            scope.BindComponent<ComponentDependency>().FromTargetParent();
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -44,16 +44,16 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeAncestors_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestAncestor()
+        public void FromTargetAncestors_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestAncestor()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
             scene.AddToRoots<ComponentDependency>();
             scene.AddToLeafs<ComponentDependency>();
-            TestScope scope = scene.Add<TestScope>("Root 1/Child 1/Child 1");
+            TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
 
-            scope.BindComponent<ComponentDependency>().FromAncestors(includeSelf: false);
+            scope.BindComponent<ComponentDependency>().FromTargetAncestors(includeSelf: false);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -62,16 +62,16 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeAncestors_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
+        public void FromTargetAncestors_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
             scene.AddToRoots<ComponentDependency>();
             scene.AddToLeafs<ComponentDependency>();
-            TestScope scope = scene.Add<TestScope>("Root 1/Child 1/Child 1");
+            TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1/Child 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 1/Child 1");
 
-            scope.BindComponent<ComponentDependency>().FromAncestors(includeSelf: true);
+            scope.BindComponent<ComponentDependency>().FromTargetAncestors(includeSelf: true);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -80,15 +80,15 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeFirstChild_InjectsFromFirstChild()
+        public void FromTargetFirstChild_InjectsFromFirstChild()
         {
-            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 1");
 
-            scope.BindComponent<ComponentDependency>().FromFirstChild();
+            scope.BindComponent<ComponentDependency>().FromTargetFirstChild();
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -97,7 +97,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeLastChild_InjectsFromLastChild()
+        public void FromTargetLastChild_InjectsFromLastChild()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
@@ -105,7 +105,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 3");
 
-            scope.BindComponent<ComponentDependency>().FromLastChild();
+            scope.BindComponent<ComponentDependency>().FromTargetLastChild();
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -114,7 +114,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeChildWithIndex_InjectsFromChildWithIndex()
+        public void FromTargetChildWithIndex_InjectsFromChildWithIndex()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
@@ -122,7 +122,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 2");
 
-            scope.BindComponent<ComponentDependency>().FromChildWithIndex(1);
+            scope.BindComponent<ComponentDependency>().FromTargetChildWithIndex(1);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -131,32 +131,34 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeDescendants_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestDescendant()
-        {
-            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
-            scene.AddToLeafs<ComponentDependency>();
-            TestScope scope = scene.Add<TestScope>("Root 1");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
-            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 1/Child 1");
-
-            scope.BindComponent<ComponentDependency>().FromDescendants(includeSelf: false);
-
-            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
-
-            Assert.That(dependency, Is.Not.Null);
-            Assert.That(target.dependency, Is.EqualTo(dependency));
-        }
-
-        [Test]
-        public void FromScopeDescendants_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
+        public void FromTargetDescendants_WHEN_IncludeSelfIsFalse_THEN_InjectsFromNearestDescendant()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToRoots<ComponentDependency>();
+            scene.AddToLeafs<ComponentDependency>();
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
+            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 1/Child 1");
+
+            scope.BindComponent<ComponentDependency>().FromTargetDescendants(includeSelf: false);
+
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.dependency, Is.EqualTo(dependency));
+        }
+
+        [Test]
+        public void FromTargetDescendants_WHEN_IncludeSelfIsTrue_THEN_InjectsFromSelf()
+        {
+            TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
+            scene.AddToRoots<ComponentDependency>();
+            scene.AddToLeafs<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1");
             SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
 
-            scope.BindComponent<ComponentDependency>().FromDescendants(includeSelf: true);
+            scope.BindComponent<ComponentDependency>().FromTargetDescendants(includeSelf: true);
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
@@ -165,15 +167,15 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
         }
 
         [Test]
-        public void FromScopeSiblings_InjectsFromFirstSibling()
+        public void FromTargetSiblings_InjectsFromFirstSibling()
         {
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
-            TestScope scope = scene.Add<TestScope>("Root 1/Child 2");
-            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 2");
-            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 1");
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 2/Child 3");
+            ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 2/Child 1");
 
-            scope.BindComponent<ComponentDependency>().FromSiblings();
+            scope.BindComponent<ComponentDependency>().FromTargetSiblings();
 
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 

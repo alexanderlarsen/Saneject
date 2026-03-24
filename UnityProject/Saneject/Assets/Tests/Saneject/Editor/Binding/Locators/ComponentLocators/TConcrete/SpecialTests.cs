@@ -5,7 +5,7 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
-namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
+namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TConcrete
 {
     public class SpecialTests
     {
