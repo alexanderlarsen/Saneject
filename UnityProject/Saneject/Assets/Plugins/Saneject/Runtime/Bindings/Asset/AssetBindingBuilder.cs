@@ -80,7 +80,8 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
 
         #endregion
 
-        #region PROJECT FOLDER METHODS
+
+        #region RESOURCES METHODS
 
         /// <summary>
         /// Locate the <see cref="Object" /> in a <see cref="Resources" /> folder at the specified path using <see cref="Resources.Load(string)" />.
@@ -107,6 +108,10 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
             binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
+
+        #endregion
+
+        #region ASSET LOAD METHODS
 
         /// <summary>
         /// Locate the <see cref="Object" /> asset at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAssetAtPath(string, System.Type)" />.
@@ -135,6 +140,10 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
             return new AssetFilterBuilder<TAsset>(binding);
         }
 
+        #endregion
+
+        #region FOLDER METHODS
+
         /// <summary>
         /// Locate all <see cref="Object" />s of type <typeparamref name="TAsset" /> in the specified folder
         /// using <see cref="UnityEditor.AssetDatabase.FindAssets(string, string[])" />.
@@ -150,6 +159,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         }
 
         #endregion
+
 
         #region SPECIAL METHODS
 
