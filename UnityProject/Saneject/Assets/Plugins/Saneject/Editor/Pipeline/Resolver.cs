@@ -253,10 +253,9 @@ namespace Plugins.Saneject.Editor.Pipeline
 
             bool MatchesRequestedType(BindingNode bindingNode)
             {
-                if (bindingNode.InterfaceType != null)
-                    return bindingNode.InterfaceType == requestedType;
-                
-                return bindingNode.ConcreteType == requestedType;
+                return bindingNode.InterfaceType != null
+                    ? bindingNode.InterfaceType == requestedType
+                    : bindingNode.ConcreteType == requestedType;
             }
 
             bool MatchesIsCollection(BindingNode bindingNode)
