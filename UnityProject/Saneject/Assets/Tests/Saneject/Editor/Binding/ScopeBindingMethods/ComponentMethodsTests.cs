@@ -57,7 +57,7 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
         }
 
         [Test]
-        public void BindComponents_TConcrete_InjectsConcreteCollection_NotInterfaceCollection()
+        public void BindMultipleComponents_TConcrete_InjectsConcreteCollection_NotInterfaceCollection()
         {
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding")); // Interface target array
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding")); // Interface target list
@@ -86,7 +86,7 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
         }
 
         [Test]
-        public void BindComponents_TInterface_InjectsInterfaceCollection_NotConcreteCollection()
+        public void BindMultipleComponents_TInterface_InjectsInterfaceCollection_NotConcreteCollection()
         {
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding")); // Concrete target array
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding")); // Concrete target list
@@ -153,7 +153,7 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
         }
 
         [Test]
-        public void BindComponents_TInterfaceTConcrete_InjectsInterfaceCollection_NotConcreteCollection()
+        public void BindMultipleComponents_TInterfaceTConcrete_InjectsInterfaceCollection_NotConcreteCollection()
         {
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding")); // Concrete target array
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding")); // Concrete target list
@@ -183,7 +183,7 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
 
         // TODO: Move to invalid bindings test
         [Test]
-        public void BindComponents_TConcreteTConcrete_IsInvalid()
+        public void BindMultipleComponents_TConcreteTConcrete_IsInvalid()
         {
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
