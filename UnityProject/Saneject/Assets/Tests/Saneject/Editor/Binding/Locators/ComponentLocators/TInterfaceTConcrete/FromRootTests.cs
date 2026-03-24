@@ -12,13 +12,22 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TInterfaceTCo
         [Test]
         public void FromRootSelf_TInterface_InjectsToInterfaceField()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
             SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 2/Child 3");
+     
+            // Find dependency
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
+
+            // Bind
             scope.BindComponent<IDependency, ComponentDependency>().FromRootSelf();
+
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
@@ -26,13 +35,22 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TInterfaceTCo
         [Test]
         public void FromRootFirstChild_TInterface_InjectsToInterfaceField()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
             SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 2/Child 3");
+         
+            // Find dependency
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 1");
+
+            // Bind
             scope.BindComponent<IDependency, ComponentDependency>().FromRootFirstChild();
+
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
@@ -40,13 +58,22 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TInterfaceTCo
         [Test]
         public void FromRootLastChild_TInterface_InjectsToInterfaceField()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
             SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 2/Child 3");
+         
+            // Find dependency
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 3");
+
+            // Bind
             scope.BindComponent<IDependency, ComponentDependency>().FromRootLastChild();
+
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
@@ -54,13 +81,22 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TInterfaceTCo
         [Test]
         public void FromRootChildWithIndex_TInterface_InjectsToInterfaceField()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToAllTransforms<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
             SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 2/Child 3");
+        
+            // Find dependency
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 2");
+
+            // Bind
             scope.BindComponent<IDependency, ComponentDependency>().FromRootChildWithIndex(1);
+
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
@@ -68,14 +104,23 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TInterfaceTCo
         [Test]
         public void FromRootDescendants_WHEN_IncludeSelfIsFalse_TInterface_InjectsToInterfaceField()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToRoots<ComponentDependency>();
             scene.AddToLeafs<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
             SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 2/Child 3");
+        
+            // Find dependency
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1/Child 1/Child 1");
+
+            // Bind
             scope.BindComponent<IDependency, ComponentDependency>().FromRootDescendants(includeSelf: false);
+
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }
@@ -83,14 +128,23 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators.TInterfaceTCo
         [Test]
         public void FromRootDescendants_WHEN_IncludeSelfIsTrue_TInterface_InjectsToInterfaceField()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 3, depth: 3);
             scene.AddToRoots<ComponentDependency>();
             scene.AddToLeafs<ComponentDependency>();
             TestScope scope = scene.Add<TestScope>("Root 1/Child 2/Child 3");
             SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 2/Child 3");
+        
+            // Find dependency
             ComponentDependency dependency = scene.Get<ComponentDependency>("Root 1");
+
+            // Bind
             scope.BindComponent<IDependency, ComponentDependency>().FromRootDescendants(includeSelf: true);
+
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             Assert.That(target.dependency, Is.EqualTo(dependency));
         }

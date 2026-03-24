@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.Reflection;
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
@@ -15,15 +15,19 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
         [Test]
         public void BindGlobal_TConcrete_AddsTConcreteToScopeGlobalComponents()
         {
+            // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope scope = scene.Add<TestScope>("Root 1");
             ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
             List<Component> globalComponentsList = GetScopeGlobalComponentsList(scope);
 
+            // Bind
             scope.BindGlobal<ComponentDependency>().FromSelf();
 
+            // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
+            // Assert
             Assert.That(dependency, Is.Not.Null);
             CollectionAssert.Contains(globalComponentsList, dependency);
         }
