@@ -8,7 +8,7 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using UnityEngine;
 
-namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
+namespace Tests.Saneject.Editor.Binding.EntryPoints
 {
     public class GlobalMethodTests
     {

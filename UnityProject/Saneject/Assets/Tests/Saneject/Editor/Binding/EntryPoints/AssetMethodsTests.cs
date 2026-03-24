@@ -8,7 +8,7 @@ using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
+namespace Tests.Saneject.Editor.Binding.EntryPoints
 {
     public class AssetMethodsTests
     {
