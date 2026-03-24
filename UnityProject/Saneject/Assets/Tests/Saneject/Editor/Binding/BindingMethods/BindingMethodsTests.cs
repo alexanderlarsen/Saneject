@@ -3,8 +3,11 @@ using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Pipeline;
 using Tests.Saneject.Fixtures.Scripts;
+using Tests.Saneject.Fixtures.Scripts.Dependencies;
+using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEngine;
 using UnityEngine.TestTools;
+using InterfaceTarget = Tests.Saneject.Fixtures.Scripts.InjectionTargets.InterfaceTarget;
 
 namespace Tests.Saneject.Editor.Binding.BindingMethods
 {
@@ -59,7 +62,7 @@ namespace Tests.Saneject.Editor.Binding.BindingMethods
         }
 
         [Test]
-        public void BindComponents_TInterface_InjectsConcreteCollection_NotInterfaceCollection()
+        public void BindComponents_TConcrete_InjectsConcreteCollection_NotInterfaceCollection()
         {
             
         }
