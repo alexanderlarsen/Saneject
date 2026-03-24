@@ -5,12 +5,12 @@ using UnityEngine;
 
 namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
 {
-    public class MultipleConcreteComponentsTarget : MonoBehaviour
+    public class MultiInterfaceTarget : MonoBehaviour
     {
         [Inject]
-        public ComponentDependency[] array;
+        public IDependency[] array;
 
         [Inject]
-        public List<ComponentDependency> list;
+        public List<IDependency> list;
     }
 }
