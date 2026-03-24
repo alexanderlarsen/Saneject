@@ -30,8 +30,8 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
 
             Assert.That(dependency, Is.Not.Null);
             Assert.That(concreteTarget.dependency, Is.Not.Null);
+            Assert.That(concreteTarget.dependency, Is.EqualTo(dependency));
             Assert.That(interfaceTarget.dependency, Is.Null);
-            Assert.That(dependency, Is.EqualTo(concreteTarget.dependency));
         }
 
         [Test]
@@ -52,8 +52,8 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
 
             Assert.That(dependency, Is.Not.Null);
             Assert.That(interfaceTarget.dependency, Is.Not.Null);
+            Assert.That(interfaceTarget.dependency, Is.EqualTo(dependency));
             Assert.That(concreteTarget.dependency, Is.Null);
-            Assert.That(dependency, Is.EqualTo(interfaceTarget.dependency));
         }
 
         [Test]
@@ -133,8 +133,8 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
             Assert.That(dependency, Is.Not.Null);
             Assert.That(interfaceTarget.dependency, Is.Not.Null);
             Assert.That(interfaceTarget.dependency, Is.InstanceOf<ComponentDependency>());
+            Assert.That(interfaceTarget.dependency, Is.EqualTo(dependency));
             Assert.That(concreteTarget.dependency, Is.Null);
-            Assert.That(dependency, Is.EqualTo(interfaceTarget.dependency));
         }
 
         // TODO: Move to invalid bindings test
@@ -181,6 +181,7 @@ namespace Tests.Saneject.Editor.Binding.ScopeBindingMethods
             Assert.That(concreteTarget.list, Is.Null);
         }
 
+        // TODO: Move to invalid bindings test
         [Test]
         public void BindComponents_TConcreteTConcrete_IsInvalid()
         {

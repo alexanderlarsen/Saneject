@@ -23,7 +23,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -40,7 +40,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -58,7 +58,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -76,7 +76,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -93,7 +93,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -110,7 +110,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -127,7 +127,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -144,7 +144,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -161,7 +161,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
 
         [Test]
@@ -178,7 +178,7 @@ namespace Tests.Saneject.Editor.Binding.Locators.ComponentLocators
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
 
             Assert.That(dependency, Is.Not.Null);
-            Assert.That(dependency, Is.EqualTo(target.dependency));
+            Assert.That(target.dependency, Is.EqualTo(dependency));
         }
     }
 }
