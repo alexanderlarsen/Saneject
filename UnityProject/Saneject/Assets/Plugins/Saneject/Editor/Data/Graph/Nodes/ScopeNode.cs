@@ -38,6 +38,6 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
         public TransformNode TransformNode { get; }
         public ScopeNode ParentScopeNode { get; }
         public Type ScopeType { get; }
-        public IReadOnlyCollection<BindingNode> BindingNodes { get; }
+        public IReadOnlyList<BindingNode> BindingNodes { get; }
     }
 }

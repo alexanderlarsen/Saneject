@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+// ReSharper disable ForeachCanBeConvertedToQueryUsingAnotherGetEnumerator
 
 namespace Plugins.Saneject.Editor.Extensions
 {
@@ -27,8 +28,8 @@ namespace Plugins.Saneject.Editor.Extensions
             this IEnumerable<string> a,
             IEnumerable<string> b)
         {
-            HashSet<string> aSet = new(a.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
-            HashSet<string> bSet = new(b.Where(s => !string.IsNullOrWhiteSpace(s)) ?? Enumerable.Empty<string>(), StringComparer.Ordinal);
+            HashSet<string> aSet = new(a.Where(s => !string.IsNullOrWhiteSpace(s)), StringComparer.Ordinal);
+            HashSet<string> bSet = new(b.Where(s => !string.IsNullOrWhiteSpace(s)), StringComparer.Ordinal);
 
             foreach (string id in aSet)
                 if (bSet.Contains(id))
