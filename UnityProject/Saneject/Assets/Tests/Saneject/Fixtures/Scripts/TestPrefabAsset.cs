@@ -4,35 +4,58 @@ using System.Linq;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using Object = UnityEngine.Object;
 
 namespace Tests.Saneject.Fixtures.Scripts
 {
-    public sealed class TestPrefab
+    public sealed class TestPrefabAsset
     {
         private readonly string rootPath;
+        private readonly int width;
+        private readonly int depth;
         private readonly Dictionary<string, Transform> transformCache = new();
         private readonly Dictionary<(string path, Type type), Component> componentCache = new();
-        private readonly GameObject root;
-        private readonly string assetPath;
 
-        private TestPrefab(string rootPath)
+        private TestPrefabAsset(
+            string rootPath,
+            int width,
+            int depth)
         {
             this.rootPath = rootPath;
-            root = new(rootPath);
-            assetPath = AssetDatabase.GenerateUniqueAssetPath($"Assets/Tests/Saneject/Fixtures/{rootPath}.prefab");
-            transformCache[rootPath] = root.transform;
+            this.width = width;
+            this.depth = depth;
+            Root = new GameObject(rootPath);
+            AssetPath = AssetDatabase.GenerateUniqueAssetPath($"Assets/Tests/Saneject/Fixtures/{rootPath}.prefab");
+            transformCache[rootPath] = Root.transform;
         }
 
-        public GameObject Root => root;
+        public GameObject Root { get; }
 
-        public string AssetPath => assetPath;
+        public string AssetPath { get; }
 
-        public static TestPrefab Create(string rootName)
+        public static TestPrefabAsset Create(
+            string rootName,
+            int width,
+            int depth)
         {
             if (string.IsNullOrWhiteSpace(rootName))
                 throw new ArgumentException("Root name must not be null or whitespace.", nameof(rootName));
 
-            return new TestPrefab(rootName);
+            if (width < 1)
+                throw new ArgumentOutOfRangeException(nameof(width), "Width must be at least 1.");
+
+            if (depth < 1)
+                throw new ArgumentOutOfRangeException(nameof(depth), "Depth must be at least 1.");
+
+            TestPrefabAsset prefab = new(rootName, width, depth);
+            prefab.CreateHierarchy();
+            return prefab;
+        }
+
+        public static void CloseStage()
+        {
+            if (PrefabStageUtility.GetCurrentPrefabStage() != null)
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
         }
 
         public T Get<T>(string path) where T : Component
@@ -52,44 +75,9 @@ namespace Tests.Saneject.Fixtures.Scripts
             return component;
         }
 
-        public T Get<T>(
-            Transform rootTransform,
-            string path) where T : Component
-        {
-            Transform transform = GetTransform(rootTransform, path);
-            T component = transform.GetComponent<T>();
-
-            if (!component)
-                throw new InvalidOperationException($"Component '{typeof(T).Name}' not found at path: {path}");
-
-            return component;
-        }
-
         public Transform GetTransform(string path)
         {
             return transformCache.TryGetValue(path, out Transform transform)
-                ? transform
-                : throw new InvalidOperationException($"Transform not found at path: {path}");
-        }
-
-        public Transform GetTransform(
-            Transform rootTransform,
-            string path)
-        {
-            if (!rootTransform)
-                throw new ArgumentNullException(nameof(rootTransform));
-
-            if (!transformCache.ContainsKey(path))
-                throw new InvalidOperationException($"Transform not found at path: {path}");
-
-            string relativePath = GetRelativePath(path);
-
-            if (string.IsNullOrEmpty(relativePath))
-                return rootTransform;
-
-            Transform transform = rootTransform.Find(relativePath);
-
-            return transform
                 ? transform
                 : throw new InvalidOperationException($"Transform not found at path: {path}");
         }
@@ -131,6 +119,11 @@ namespace Tests.Saneject.Fixtures.Scripts
             return components.ToArray();
         }
 
+        public T[] AddToRoots<T>() where T : Component
+        {
+            return new[] { Add<T>(rootPath) };
+        }
+
         public T[] AddToLeafs<T>() where T : Component
         {
             return transformCache
@@ -139,7 +132,7 @@ namespace Tests.Saneject.Fixtures.Scripts
                 .ToArray();
         }
 
-        public GameObject Instantiate(
+        public TestPrefabInstance Instantiate(
             Transform parent,
             string name)
         {
@@ -147,7 +140,7 @@ namespace Tests.Saneject.Fixtures.Scripts
             GameObject prefabInstanceRoot = PrefabUtility.InstantiatePrefab(prefabAsset) as GameObject;
 
             if (!prefabInstanceRoot)
-                throw new InvalidOperationException($"Failed to instantiate prefab asset: {assetPath}");
+                throw new InvalidOperationException($"Failed to instantiate prefab asset: {AssetPath}");
 
             if (parent)
                 prefabInstanceRoot.transform.SetParent(parent, false);
@@ -155,61 +148,65 @@ namespace Tests.Saneject.Fixtures.Scripts
             if (!string.IsNullOrEmpty(name))
                 prefabInstanceRoot.name = name;
 
-            return prefabInstanceRoot;
+            return new TestPrefabInstance(rootPath, AssetPath, prefabInstanceRoot);
         }
 
-        public PrefabStage OpenStage()
+        public TestPrefabInstance OpenStage()
         {
             Save();
-            PrefabStage prefabStage = PrefabStageUtility.OpenPrefab(assetPath);
+            PrefabStage prefabStage = PrefabStageUtility.OpenPrefab(AssetPath);
 
             if (prefabStage == null)
-                throw new InvalidOperationException($"Failed to open prefab stage for asset: {assetPath}");
+                throw new InvalidOperationException($"Failed to open prefab stage for asset: {AssetPath}");
 
             if (!prefabStage.prefabContentsRoot)
-                throw new InvalidOperationException($"Prefab stage did not contain a root object for asset: {assetPath}");
+                throw new InvalidOperationException($"Prefab stage did not contain a root object for asset: {AssetPath}");
 
-            return prefabStage;
+            return new TestPrefabInstance(rootPath, AssetPath, prefabStage.prefabContentsRoot);
         }
 
         public void Destroy()
         {
-            if (root)
-                UnityEngine.Object.DestroyImmediate(root);
+            if (Root)
+                Object.DestroyImmediate(Root);
         }
 
         public bool DeleteAsset()
         {
-            return AssetDatabase.DeleteAsset(assetPath);
-        }
-
-        public static void CloseStage()
-        {
-            if (PrefabStageUtility.GetCurrentPrefabStage() != null)
-                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            return AssetDatabase.DeleteAsset(AssetPath);
         }
 
         private GameObject Save()
         {
-            PrefabUtility.SaveAsPrefabAsset(root, assetPath);
-            GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
+            PrefabUtility.SaveAsPrefabAsset(Root, AssetPath);
+            GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(AssetPath);
 
             return prefabAsset
                 ? prefabAsset
-                : throw new InvalidOperationException($"Failed to save prefab asset: {assetPath}");
+                : throw new InvalidOperationException($"Failed to save prefab asset: {AssetPath}");
         }
 
-        private string GetRelativePath(string path)
+        private void CreateHierarchy()
         {
-            if (path == rootPath)
-                return string.Empty;
+            CreateChildren(Root.transform, rootPath, currentDepth: 1);
+        }
 
-            string prefix = $"{rootPath}/";
+        private void CreateChildren(
+            Transform parent,
+            string parentPath,
+            int currentDepth)
+        {
+            if (currentDepth >= depth)
+                return;
 
-            if (!path.StartsWith(prefix, StringComparison.Ordinal))
-                throw new InvalidOperationException($"Transform path is not part of prefab root '{rootPath}': {path}");
-
-            return path[prefix.Length..];
+            for (int childIndex = 1; childIndex <= width; childIndex++)
+            {
+                string childPath = $"{parentPath}/Child {childIndex}";
+                GameObject child = new($"Child {childIndex}");
+                child.transform.SetParent(parent, false);
+                transformCache[childPath] = child.transform;
+                CreateChildren(child.transform, childPath, currentDepth + 1);
+            }
         }
     }
 }
