@@ -6,7 +6,7 @@ using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEngine;
 
-namespace Tests.Saneject.Editor.Binding.Components.Locators.FromTransform
+namespace Tests.Saneject.Editor.Binding.Component.Locators.FromTransform
 {
     public class FromSiblingsOfTests
     {

@@ -7,7 +7,7 @@ using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests.Saneject.Editor.Binding.Components.Validation
+namespace Tests.Saneject.Editor.Binding.Component.Validation
 {
     public class ComponentBindingValidationTests
     {

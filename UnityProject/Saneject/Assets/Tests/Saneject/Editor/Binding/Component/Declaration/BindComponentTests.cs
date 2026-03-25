@@ -8,7 +8,7 @@ using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests.Saneject.Editor.Binding.Components.Declaration
+namespace Tests.Saneject.Editor.Binding.Component.Declaration
 {
     public class ComponentBindingDeclarationTests
     {

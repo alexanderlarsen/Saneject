@@ -5,7 +5,7 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
-namespace Tests.Saneject.Editor.Binding.Components.Locators.FromTarget
+namespace Tests.Saneject.Editor.Binding.Component.Locators.FromTarget
 {
     public class FromTargetFirstChildTests
     {

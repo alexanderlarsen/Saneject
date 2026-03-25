@@ -5,7 +5,7 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
-namespace Tests.Saneject.Editor.Binding.Components.Filters
+namespace Tests.Saneject.Editor.Binding.Component.Filters
 {
     public class WhereLastChildTests
     {
