@@ -9,7 +9,6 @@ using Plugins.Saneject.Editor.Pipeline;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
-using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
 using Object = UnityEngine.Object;
@@ -23,9 +22,9 @@ namespace Tests.Saneject.Editor.Graph
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
-            string prefabAssetPath = CreateScopeBoundaryPrefabAsset();
-            GameObject prefabInstanceRoot = InstantiatePrefab(prefabAssetPath, scene.GetTransform("Root 1"), "Prefab Instance");
-            Transform prefabInstanceChild = GetChildTransform(prefabInstanceRoot.transform, "Scoped Child");
+            TestPrefab prefab = CreateContextBoundaryPrefab();
+            GameObject prefabInstanceRoot = prefab.Instantiate(scene.GetTransform("Root 1"), "Prefab Instance");
+            Transform prefabInstanceChild = prefab.GetTransform(prefabInstanceRoot.transform, "Prefab Root/Scoped Child");
             AssetDependency assetDependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
             try
@@ -34,7 +33,7 @@ namespace Tests.Saneject.Editor.Graph
                 ContextIdentity sceneIdentity = new(scene.GetTransform("Root 1"));
                 ContextIdentity prefabInstanceRootIdentity = new(prefabInstanceRoot.transform);
                 ContextIdentity prefabInstanceChildIdentity = new(prefabInstanceChild);
-                PrefabStage prefabStage = OpenPrefabStage(prefabAssetPath);
+                PrefabStage prefabStage = prefab.OpenStage();
                 ContextIdentity prefabAssetIdentity = new(prefabStage.prefabContentsRoot.transform);
                 ContextIdentity assetIdentity = new(assetDependency);
 
@@ -57,12 +56,13 @@ namespace Tests.Saneject.Editor.Graph
             }
             finally
             {
-                ClosePrefabStage();
+                TestPrefab.CloseStage();
 
                 if (prefabInstanceRoot)
                     Object.DestroyImmediate(prefabInstanceRoot);
 
-                AssetDatabase.DeleteAsset(prefabAssetPath);
+                prefab.Destroy();
+                prefab.DeleteAsset();
             }
         }
 
@@ -71,14 +71,14 @@ namespace Tests.Saneject.Editor.Graph
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
-            string prefabAssetPath = CreateScopeBoundaryPrefabAsset();
-            GameObject prefabInstanceOne = InstantiatePrefab(prefabAssetPath, scene.GetTransform("Root 1"), "Prefab Instance 1");
-            GameObject prefabInstanceTwo = InstantiatePrefab(prefabAssetPath, scene.GetTransform("Root 1"), "Prefab Instance 2");
+            TestPrefab prefab = CreateContextBoundaryPrefab();
+            GameObject prefabInstanceOne = prefab.Instantiate(scene.GetTransform("Root 1"), "Prefab Instance 1");
+            GameObject prefabInstanceTwo = prefab.Instantiate(scene.GetTransform("Root 1"), "Prefab Instance 2");
 
             Transform[] startTransforms =
             {
                 scene.GetTransform("Root 1/Child 1"),
-                GetChildTransform(prefabInstanceOne.transform, "Scoped Child")
+                prefab.GetTransform(prefabInstanceOne.transform, "Prefab Root/Scoped Child")
             };
 
             try
@@ -122,7 +122,8 @@ namespace Tests.Saneject.Editor.Graph
                 if (prefabInstanceTwo)
                     Object.DestroyImmediate(prefabInstanceTwo);
 
-                AssetDatabase.DeleteAsset(prefabAssetPath);
+                prefab.Destroy();
+                prefab.DeleteAsset();
             }
         }
 
@@ -130,13 +131,13 @@ namespace Tests.Saneject.Editor.Graph
         public void GraphFilter_GivenPrefabAssetHierarchy_ReturnsOnlyPrefabAssetTransformsForPrefabAssetFilter()
         {
             // Set up prefab asset
-            string prefabAssetPath = CreateScopeBoundaryPrefabAsset();
-            PrefabStage prefabStage = OpenPrefabStage(prefabAssetPath);
+            TestPrefab prefab = CreateContextBoundaryPrefab();
+            PrefabStage prefabStage = prefab.OpenStage();
 
             Transform[] startTransforms =
             {
                 prefabStage.prefabContentsRoot.transform,
-                GetChildTransform(prefabStage.prefabContentsRoot.transform, "Scoped Child")
+                prefab.GetTransform(prefabStage.prefabContentsRoot.transform, "Prefab Root/Scoped Child")
             };
 
             try
@@ -164,8 +165,9 @@ namespace Tests.Saneject.Editor.Graph
             }
             finally
             {
-                ClosePrefabStage();
-                AssetDatabase.DeleteAsset(prefabAssetPath);
+                TestPrefab.CloseStage();
+                prefab.Destroy();
+                prefab.DeleteAsset();
             }
         }
 
@@ -278,14 +280,6 @@ namespace Tests.Saneject.Editor.Graph
             return transforms.ToArray();
         }
 
-        private static PrefabStage OpenPrefabStage(string assetPath)
-        {
-            PrefabStage prefabStage = PrefabStageUtility.OpenPrefab(assetPath);
-            Assert.That(prefabStage, Is.Not.Null);
-            Assert.That(prefabStage.prefabContentsRoot, Is.Not.Null);
-            return prefabStage;
-        }
-
         private static InjectionContext CreateInjectionContext(IReadOnlyCollection<TransformNode> activeTransformNodes)
         {
             InjectionProgressTracker progressTracker = new(totalSegments: 1);
@@ -300,12 +294,6 @@ namespace Tests.Saneject.Editor.Graph
             }
         }
 
-        private static void ClosePrefabStage()
-        {
-            if (PrefabStageUtility.GetCurrentPrefabStage() != null)
-                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
-        }
-
         private static void CollectTransforms(
             Transform current,
             ICollection<Transform> transforms)
@@ -316,53 +304,15 @@ namespace Tests.Saneject.Editor.Graph
                 CollectTransforms(child, transforms);
         }
 
-        private static string CreateScopeBoundaryPrefabAsset()
+        private static TestPrefab CreateContextBoundaryPrefab()
         {
-            GameObject prefabRoot = new("Prefab Root");
-            prefabRoot.AddComponent<GraphMetadataTarget>();
-
-            GameObject unscopedChild = new("Unscoped Child");
-            unscopedChild.transform.SetParent(prefabRoot.transform, false);
-
-            GameObject scopedChild = new("Scoped Child");
-            scopedChild.transform.SetParent(prefabRoot.transform, false);
-            scopedChild.AddComponent<TestScope>();
-
-            GameObject scopedGrandchild = new("Scoped Grandchild");
-            scopedGrandchild.transform.SetParent(scopedChild.transform, false);
-
-            string assetPath = AssetDatabase.GenerateUniqueAssetPath("Assets/Tests/Saneject/Fixtures/Graph Context Boundary.prefab");
-            PrefabUtility.SaveAsPrefabAsset(prefabRoot, assetPath);
-            Object.DestroyImmediate(prefabRoot);
-            return assetPath;
-        }
-
-        private static GameObject InstantiatePrefab(
-            string assetPath,
-            Transform parent,
-            string name)
-        {
-            GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
-            GameObject prefabInstanceRoot = PrefabUtility.InstantiatePrefab(prefabAsset) as GameObject;
-
-            Assert.That(prefabAsset, Is.Not.Null);
-            Assert.That(prefabInstanceRoot, Is.Not.Null);
-
-            prefabInstanceRoot.name = name;
-            prefabInstanceRoot.transform.SetParent(parent, false);
-            return prefabInstanceRoot;
-        }
-
-        private static Transform GetChildTransform(
-            Transform parent,
-            string name)
-        {
-            Transform transform = parent
-                .Cast<Transform>()
-                .SingleOrDefault(child => child.name == name);
-
-            Assert.That(transform, Is.Not.Null);
-            return transform;
+            TestPrefab prefab = TestPrefab.Create("Prefab Root");
+            prefab.Add<GraphMetadataTarget>("Prefab Root");
+            prefab.AddTransform("Prefab Root/Unscoped Child");
+            prefab.AddTransform("Prefab Root/Scoped Child");
+            prefab.Add<TestScope>("Prefab Root/Scoped Child");
+            prefab.AddTransform("Prefab Root/Scoped Child/Scoped Grandchild");
+            return prefab;
         }
     }
 }

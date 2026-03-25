@@ -8,7 +8,6 @@ using Plugins.Saneject.Runtime.Settings;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
-using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
@@ -227,8 +226,8 @@ namespace Tests.Saneject.Editor.Graph
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope sceneScope = scene.Add<TestScope>("Root 1");
-            string prefabAssetPath = CreateScopeBoundaryPrefabAsset();
-            GameObject prefabInstanceRoot = InstantiatePrefab(prefabAssetPath, scene.GetTransform("Root 1"), "Prefab Instance");
+            TestPrefab prefab = CreateScopeBoundaryPrefab();
+            GameObject prefabInstanceRoot = prefab.Instantiate(scene.GetTransform("Root 1"), "Prefab Instance");
             bool originalUseContextIsolation = ProjectSettings.UseContextIsolation;
 
             try
@@ -237,9 +236,9 @@ namespace Tests.Saneject.Editor.Graph
                 ProjectSettings.UseContextIsolation = false;
                 InjectionGraph graph = CreateGraph(scene.GetTransform("Root 1"));
                 ScopeNode sceneScopeNode = GetTransformNode(graph, scene.GetTransform("Root 1")).DeclaredScopeNode;
-                Transform unscopedChild = GetChildTransform(prefabInstanceRoot.transform, "Unscoped Child");
-                Transform scopedChild = GetChildTransform(prefabInstanceRoot.transform, "Scoped Child");
-                Transform scopedGrandchild = GetChildTransform(scopedChild, "Scoped Grandchild");
+                Transform unscopedChild = prefab.GetTransform(prefabInstanceRoot.transform, "Prefab Root/Unscoped Child");
+                Transform scopedChild = prefab.GetTransform(prefabInstanceRoot.transform, "Prefab Root/Scoped Child");
+                Transform scopedGrandchild = prefab.GetTransform(prefabInstanceRoot.transform, "Prefab Root/Scoped Child/Scoped Grandchild");
                 TransformNode unscopedChildNode = GetTransformNode(graph, unscopedChild);
                 TransformNode scopedChildNode = GetTransformNode(graph, scopedChild);
                 TransformNode scopedGrandchildNode = GetTransformNode(graph, scopedGrandchild);
@@ -260,7 +259,8 @@ namespace Tests.Saneject.Editor.Graph
                 if (prefabInstanceRoot)
                     Object.DestroyImmediate(prefabInstanceRoot);
 
-                AssetDatabase.DeleteAsset(prefabAssetPath);
+                prefab.Destroy();
+                prefab.DeleteAsset();
             }
         }
 
@@ -270,8 +270,8 @@ namespace Tests.Saneject.Editor.Graph
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope sceneScope = scene.Add<TestScope>("Root 1");
-            string prefabAssetPath = CreateScopeBoundaryPrefabAsset();
-            GameObject prefabInstanceRoot = InstantiatePrefab(prefabAssetPath, scene.GetTransform("Root 1"), "Prefab Instance");
+            TestPrefab prefab = CreateScopeBoundaryPrefab();
+            GameObject prefabInstanceRoot = prefab.Instantiate(scene.GetTransform("Root 1"), "Prefab Instance");
             bool originalUseContextIsolation = ProjectSettings.UseContextIsolation;
 
             try
@@ -280,9 +280,9 @@ namespace Tests.Saneject.Editor.Graph
                 ProjectSettings.UseContextIsolation = true;
                 InjectionGraph graph = CreateGraph(scene.GetTransform("Root 1"));
                 ScopeNode sceneScopeNode = GetTransformNode(graph, scene.GetTransform("Root 1")).DeclaredScopeNode;
-                Transform unscopedChild = GetChildTransform(prefabInstanceRoot.transform, "Unscoped Child");
-                Transform scopedChild = GetChildTransform(prefabInstanceRoot.transform, "Scoped Child");
-                Transform scopedGrandchild = GetChildTransform(scopedChild, "Scoped Grandchild");
+                Transform unscopedChild = prefab.GetTransform(prefabInstanceRoot.transform, "Prefab Root/Unscoped Child");
+                Transform scopedChild = prefab.GetTransform(prefabInstanceRoot.transform, "Prefab Root/Scoped Child");
+                Transform scopedGrandchild = prefab.GetTransform(prefabInstanceRoot.transform, "Prefab Root/Scoped Child/Scoped Grandchild");
                 TransformNode unscopedChildNode = GetTransformNode(graph, unscopedChild);
                 TransformNode scopedChildNode = GetTransformNode(graph, scopedChild);
                 TransformNode scopedGrandchildNode = GetTransformNode(graph, scopedGrandchild);
@@ -303,7 +303,8 @@ namespace Tests.Saneject.Editor.Graph
                 if (prefabInstanceRoot)
                     Object.DestroyImmediate(prefabInstanceRoot);
 
-                AssetDatabase.DeleteAsset(prefabAssetPath);
+                prefab.Destroy();
+                prefab.DeleteAsset();
             }
         }
 
@@ -324,52 +325,14 @@ namespace Tests.Saneject.Editor.Graph
             return transformNode;
         }
 
-        private static string CreateScopeBoundaryPrefabAsset()
+        private static TestPrefab CreateScopeBoundaryPrefab()
         {
-            GameObject prefabRoot = new("Prefab Root");
-
-            GameObject unscopedChild = new("Unscoped Child");
-            unscopedChild.transform.SetParent(prefabRoot.transform, false);
-
-            GameObject scopedChild = new("Scoped Child");
-            scopedChild.transform.SetParent(prefabRoot.transform, false);
-            scopedChild.AddComponent<TestScope>();
-
-            GameObject scopedGrandchild = new("Scoped Grandchild");
-            scopedGrandchild.transform.SetParent(scopedChild.transform, false);
-
-            string assetPath = AssetDatabase.GenerateUniqueAssetPath("Assets/Tests/Saneject/Fixtures/Graph Scope Boundary.prefab");
-            PrefabUtility.SaveAsPrefabAsset(prefabRoot, assetPath);
-            Object.DestroyImmediate(prefabRoot);
-            return assetPath;
-        }
-
-        private static GameObject InstantiatePrefab(
-            string assetPath,
-            Transform parent,
-            string name)
-        {
-            GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(assetPath);
-            GameObject prefabInstanceRoot = PrefabUtility.InstantiatePrefab(prefabAsset) as GameObject;
-
-            Assert.That(prefabAsset, Is.Not.Null);
-            Assert.That(prefabInstanceRoot, Is.Not.Null);
-
-            prefabInstanceRoot.name = name;
-            prefabInstanceRoot.transform.SetParent(parent, false);
-            return prefabInstanceRoot;
-        }
-
-        private static Transform GetChildTransform(
-            Transform parent,
-            string name)
-        {
-            Transform transform = parent
-                .Cast<Transform>()
-                .SingleOrDefault(child => child.name == name);
-
-            Assert.That(transform, Is.Not.Null);
-            return transform;
+            TestPrefab prefab = TestPrefab.Create("Prefab Root");
+            prefab.AddTransform("Prefab Root/Unscoped Child");
+            prefab.AddTransform("Prefab Root/Scoped Child");
+            prefab.Add<TestScope>("Prefab Root/Scoped Child");
+            prefab.AddTransform("Prefab Root/Scoped Child/Scoped Grandchild");
+            return prefab;
         }
     }
 }
