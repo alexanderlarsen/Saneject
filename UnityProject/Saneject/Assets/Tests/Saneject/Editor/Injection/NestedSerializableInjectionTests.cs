@@ -6,7 +6,7 @@ using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEngine;
 
-namespace Tests.Saneject.Editor.Injection.NestedSerializableInjection
+namespace Tests.Saneject.Editor.Injection
 {
     public class NestedSerializableInjectionTests
     {

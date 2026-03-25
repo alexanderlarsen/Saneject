@@ -5,7 +5,7 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 
-namespace Tests.Saneject.Editor.Injection.InjectionSites
+namespace Tests.Saneject.Editor.Injection
 {
     public class FieldInjectionTests
     {
