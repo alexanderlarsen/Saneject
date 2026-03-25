@@ -19,7 +19,7 @@ namespace Tests.Saneject.Editor.Binding.Global.Declaration
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope scope = scene.Add<TestScope>("Root 1");
             ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
-            List<Component> globalComponentsList = GetScopeGlobalComponentsList(scope);
+            List<UnityEngine.Component> globalComponentsList = GetScopeGlobalComponentsList(scope);
 
             // Bind
             scope.BindGlobal<ComponentDependency>().FromSelf();
@@ -32,11 +32,11 @@ namespace Tests.Saneject.Editor.Binding.Global.Declaration
             CollectionAssert.Contains(globalComponentsList, dependency);
         }
 
-        private static List<Component> GetScopeGlobalComponentsList(Scope scope)
+        private static List<UnityEngine.Component> GetScopeGlobalComponentsList(Scope scope)
         {
             FieldInfo fieldInfo = typeof(Scope).GetField("globalComponents", BindingFlags.NonPublic | BindingFlags.Instance);
             Assert.That(fieldInfo, Is.Not.Null);
-            return fieldInfo.GetValue(scope) as List<Component>;
+            return fieldInfo.GetValue(scope) as List<UnityEngine.Component>;
         }
     }
 }
