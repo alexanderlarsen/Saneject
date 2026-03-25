@@ -16,7 +16,7 @@ namespace Tests.Saneject.Editor.Injection
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
             TestScope scope = scene.Add<TestScope>("Root 1");
-            GraphMetadataTarget target = scene.Add<GraphMetadataTarget>("Root 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1");
 
             // Find dependencies
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
@@ -58,7 +58,7 @@ namespace Tests.Saneject.Editor.Injection
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
             TestScope scope = scene.Add<TestScope>("Root 1");
-            GraphMetadataTarget target = scene.Add<GraphMetadataTarget>("Root 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1");
 
             // Find dependencies
             AssetDependency dependency = Resources.Load<AssetDependency>("AssetDependency 1");
@@ -98,7 +98,7 @@ namespace Tests.Saneject.Editor.Injection
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
             TestScope scope = scene.Add<TestScope>("Root 1");
-            GraphMetadataTarget target = scene.Add<GraphMetadataTarget>("Root 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1");
 
             // Find dependencies
             AssetDependency assetDependency = Resources.Load<AssetDependency>("AssetDependency 1");

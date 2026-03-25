@@ -261,18 +261,18 @@ namespace Tests.Saneject.Editor.Graph
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
-            GraphMetadataTarget target = scene.Add<GraphMetadataTarget>("Root 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1");
 
             // Build graph and fetch component node
             TransformNode rootNode = new(scene.GetTransform("Root 1"));
-            ComponentNode componentNode = GetComponentNode<GraphMetadataTarget>(rootNode);
-            FieldNode topLevelFieldNode = GetFieldNode(componentNode, "GraphMetadataTarget.fieldDependency");
-            FieldNode topLevelPropertyNode = GetFieldNode(componentNode, "GraphMetadataTarget.PropertyDependencies");
-            FieldNode nestedFieldNode = GetFieldNode(componentNode, "GraphMetadataNested.nestedFieldDependency");
-            FieldNode nestedPropertyNode = GetFieldNode(componentNode, "GraphMetadataNested.NestedPropertyDependency");
-            FieldNode deepFieldNode = GetFieldNode(componentNode, "GraphMetadataNestedChild.deepFieldDependency");
-            MethodNode topLevelMethodNode = GetMethodNode(componentNode, "GraphMetadataTarget.InjectTopLevel");
-            MethodNode nestedMethodNode = GetMethodNode(componentNode, "GraphMetadataNested.InjectNested");
+            ComponentNode componentNode = GetComponentNode<NestedRootTarget>(rootNode);
+            FieldNode topLevelFieldNode = GetFieldNode(componentNode, "NestedRootTarget.fieldDependency");
+            FieldNode topLevelPropertyNode = GetFieldNode(componentNode, "NestedRootTarget.PropertyDependencies");
+            FieldNode nestedFieldNode = GetFieldNode(componentNode, "NestedChildTarget.nestedFieldDependency");
+            FieldNode nestedPropertyNode = GetFieldNode(componentNode, "NestedChildTarget.NestedPropertyDependency");
+            FieldNode deepFieldNode = GetFieldNode(componentNode, "NestedDeepTarget.deepFieldDependency");
+            MethodNode topLevelMethodNode = GetMethodNode(componentNode, "NestedRootTarget.InjectTopLevel");
+            MethodNode nestedMethodNode = GetMethodNode(componentNode, "NestedChildTarget.InjectNested");
 
             // Assert
             Assert.That(target, Is.Not.Null);
@@ -282,52 +282,52 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(componentNode.MethodNodes.Count, Is.EqualTo(2));
 
             Assert.That(topLevelFieldNode.Owner, Is.EqualTo(target));
-            Assert.That(topLevelFieldNode.DeclaringType, Is.EqualTo(typeof(GraphMetadataTarget)));
+            Assert.That(topLevelFieldNode.DeclaringType, Is.EqualTo(typeof(NestedRootTarget)));
             Assert.That(topLevelFieldNode.InjectId, Is.EqualTo("field-id"));
             Assert.That(topLevelFieldNode.SuppressMissingErrors, Is.True);
-            Assert.That(topLevelFieldNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/fieldDependency"));
-            Assert.That(topLevelFieldNode.ShortPath, Is.EqualTo("GraphMetadataTarget.fieldDependency"));
+            Assert.That(topLevelFieldNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/fieldDependency"));
+            Assert.That(topLevelFieldNode.ShortPath, Is.EqualTo("NestedRootTarget.fieldDependency"));
 
             Assert.That(topLevelPropertyNode.Owner, Is.EqualTo(target));
-            Assert.That(topLevelPropertyNode.DeclaringType, Is.EqualTo(typeof(GraphMetadataTarget)));
+            Assert.That(topLevelPropertyNode.DeclaringType, Is.EqualTo(typeof(NestedRootTarget)));
             Assert.That(topLevelPropertyNode.InjectId, Is.EqualTo("property-id"));
             Assert.That(topLevelPropertyNode.SuppressMissingErrors, Is.True);
             Assert.That(topLevelPropertyNode.TypeShape, Is.EqualTo(TypeShape.List));
             Assert.That(topLevelPropertyNode.IsCollection, Is.True);
             Assert.That(topLevelPropertyNode.IsPropertyBackingField, Is.True);
-            Assert.That(topLevelPropertyNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/PropertyDependencies"));
-            Assert.That(topLevelPropertyNode.ShortPath, Is.EqualTo("GraphMetadataTarget.PropertyDependencies"));
+            Assert.That(topLevelPropertyNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/PropertyDependencies"));
+            Assert.That(topLevelPropertyNode.ShortPath, Is.EqualTo("NestedRootTarget.PropertyDependencies"));
 
             Assert.That(nestedFieldNode.Owner, Is.EqualTo(target.nested));
             Assert.That(nestedFieldNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedFieldNode.InjectId, Is.Null);
             Assert.That(nestedFieldNode.SuppressMissingErrors, Is.False);
-            Assert.That(nestedFieldNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/nested.nestedFieldDependency"));
-            Assert.That(nestedFieldNode.ShortPath, Is.EqualTo("GraphMetadataNested.nestedFieldDependency"));
+            Assert.That(nestedFieldNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/nested.nestedFieldDependency"));
+            Assert.That(nestedFieldNode.ShortPath, Is.EqualTo("NestedChildTarget.nestedFieldDependency"));
 
             Assert.That(nestedPropertyNode.Owner, Is.EqualTo(target.nested));
             Assert.That(nestedPropertyNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedPropertyNode.InjectId, Is.EqualTo("nested-property-id"));
             Assert.That(nestedPropertyNode.SuppressMissingErrors, Is.True);
             Assert.That(nestedPropertyNode.IsPropertyBackingField, Is.True);
-            Assert.That(nestedPropertyNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/nested.NestedPropertyDependency"));
-            Assert.That(nestedPropertyNode.ShortPath, Is.EqualTo("GraphMetadataNested.NestedPropertyDependency"));
+            Assert.That(nestedPropertyNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/nested.NestedPropertyDependency"));
+            Assert.That(nestedPropertyNode.ShortPath, Is.EqualTo("NestedChildTarget.NestedPropertyDependency"));
 
             Assert.That(deepFieldNode.Owner, Is.EqualTo(target.nested.deepNested));
-            Assert.That(deepFieldNode.DeclaringType, Is.EqualTo(typeof(GraphMetadataNestedChild)));
+            Assert.That(deepFieldNode.DeclaringType, Is.EqualTo(typeof(NestedDeepTarget)));
             Assert.That(deepFieldNode.InjectId, Is.EqualTo("deep-field-id"));
             Assert.That(deepFieldNode.SuppressMissingErrors, Is.True);
-            Assert.That(deepFieldNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/nested.deepNested.deepFieldDependency"));
-            Assert.That(deepFieldNode.ShortPath, Is.EqualTo("GraphMetadataNestedChild.deepFieldDependency"));
+            Assert.That(deepFieldNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/nested.deepNested.deepFieldDependency"));
+            Assert.That(deepFieldNode.ShortPath, Is.EqualTo("NestedDeepTarget.deepFieldDependency"));
 
             CollectionAssert.IsEmpty(componentNode.FieldNodes.Where(node => node.DisplayPath.Contains("nullNested")).ToArray());
 
             Assert.That(topLevelMethodNode.Owner, Is.EqualTo(target));
-            Assert.That(topLevelMethodNode.DeclaringType, Is.EqualTo(typeof(GraphMetadataTarget)));
+            Assert.That(topLevelMethodNode.DeclaringType, Is.EqualTo(typeof(NestedRootTarget)));
             Assert.That(topLevelMethodNode.InjectId, Is.EqualTo("method-id"));
             Assert.That(topLevelMethodNode.SuppressMissingErrors, Is.True);
-            Assert.That(topLevelMethodNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/InjectTopLevel"));
-            Assert.That(topLevelMethodNode.ShortPath, Is.EqualTo("GraphMetadataTarget.InjectTopLevel"));
+            Assert.That(topLevelMethodNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/InjectTopLevel"));
+            Assert.That(topLevelMethodNode.ShortPath, Is.EqualTo("NestedRootTarget.InjectTopLevel"));
 
             CollectionAssert.AreEqual
             (
@@ -345,8 +345,8 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(nestedMethodNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedMethodNode.InjectId, Is.EqualTo("nested-method-id"));
             Assert.That(nestedMethodNode.SuppressMissingErrors, Is.False);
-            Assert.That(nestedMethodNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/nested.InjectNested"));
-            Assert.That(nestedMethodNode.ShortPath, Is.EqualTo("GraphMetadataNested.InjectNested"));
+            Assert.That(nestedMethodNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/nested.InjectNested"));
+            Assert.That(nestedMethodNode.ShortPath, Is.EqualTo("NestedChildTarget.InjectNested"));
 
             CollectionAssert.AreEqual
             (
@@ -480,12 +480,12 @@ namespace Tests.Saneject.Editor.Graph
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
-            scene.Add<GraphMetadataTarget>("Root 1");
+            scene.Add<NestedRootTarget>("Root 1");
 
             // Build graph and fetch method node
             TransformNode rootNode = new(scene.GetTransform("Root 1"));
-            ComponentNode componentNode = GetComponentNode<GraphMetadataTarget>(rootNode);
-            MethodNode nestedMethodNode = GetMethodNode(componentNode, "GraphMetadataNested.InjectNested");
+            ComponentNode componentNode = GetComponentNode<NestedRootTarget>(rootNode);
+            MethodNode nestedMethodNode = GetMethodNode(componentNode, "NestedChildTarget.InjectNested");
 
             // Assert
             MethodParameterNode nestedAssetParameterNode = nestedMethodNode.ParameterNodes.ElementAt(0);

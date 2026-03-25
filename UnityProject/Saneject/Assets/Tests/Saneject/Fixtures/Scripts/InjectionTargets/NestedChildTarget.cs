@@ -15,13 +15,13 @@ namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
         [field: Inject("nested-property-id", true), SerializeField]
         public AssetDependency NestedPropertyDependency { get; private set; }
 
-        public GraphMetadataNestedChild deepNested = new();
+        public NestedDeepTarget deepNested = new();
         public AssetDependency NestedMethodAssetDependency { get; private set; }
         public List<ComponentDependency> NestedMethodComponentDependencies { get; private set; }
         public IDependency NestedMethodInterfaceDependency { get; private set; }
 
         [Inject("nested-method-id")]
-        private void InjectNested(
+        public void InjectNested(
             AssetDependency nestedAssetDependency,
             List<ComponentDependency> nestedComponentDependencies,
             IDependency nestedInterfaceDependency)

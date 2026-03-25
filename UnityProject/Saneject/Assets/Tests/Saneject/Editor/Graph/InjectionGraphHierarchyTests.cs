@@ -49,7 +49,7 @@ namespace Tests.Saneject.Editor.Graph
             TestScene scene = TestScene.Create(roots: 1, width: 2, depth: 3);
             TestScope scope = scene.Add<TestScope>("Root 1");
             ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1/Child 1");
-            GraphMetadataTarget target = scene.Add<GraphMetadataTarget>("Root 1/Child 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1/Child 1");
 
             // Build graph
             InjectionGraph graph = CreateGraph(scene.GetTransform("Root 1"));
@@ -98,7 +98,7 @@ namespace Tests.Saneject.Editor.Graph
 
             CollectionAssert.AreEquivalent
             (
-                new[] { typeof(GraphMetadataTarget) },
+                new[] { typeof(NestedRootTarget) },
                 childNode.ComponentNodes.Select(node => node.Component.GetType()).ToArray()
             );
         }
@@ -158,7 +158,7 @@ namespace Tests.Saneject.Editor.Graph
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 2, depth: 2);
             TestScope rootScope = scene.Add<TestScope>("Root 1");
-            GraphMetadataTarget target = scene.Add<GraphMetadataTarget>("Root 1/Child 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1/Child 1");
             TestScope childScope = scene.Add<TestScope>("Root 1/Child 2");
 
             // Bind
@@ -184,7 +184,7 @@ namespace Tests.Saneject.Editor.Graph
 
             CollectionAssert.AreEquivalent
             (
-                new[] { typeof(GraphMetadataTarget) },
+                new[] { typeof(NestedRootTarget) },
                 graph.EnumerateAllTransformNodes()
                     .EnumerateAllComponentNodes()
                     .Select(node => node.Component.GetType())

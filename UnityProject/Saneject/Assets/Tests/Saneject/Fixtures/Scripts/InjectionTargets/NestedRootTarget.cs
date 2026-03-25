@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
 {
-    public class GraphMetadataTarget : MonoBehaviour
+    public class NestedRootTarget : MonoBehaviour
     {
         [Inject("field-id", true)]
         public ComponentDependency fieldDependency;
@@ -17,7 +17,7 @@ namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
         public NestedChildTarget nullNested;
 
         [Inject("method-id", true)]
-        private void InjectTopLevel(
+        public void InjectTopLevel(
             ComponentDependency singleDependency,
             IDependency interfaceDependency,
             ComponentDependency[] arrayDependencies,

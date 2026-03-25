@@ -5,7 +5,7 @@ using Tests.Saneject.Fixtures.Scripts.Dependencies;
 namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
 {
     [Serializable]
-    public class GraphMetadataNestedChild
+    public class NestedDeepTarget
     {
         [Inject("deep-field-id", true)]
         public AssetDependency deepFieldDependency;

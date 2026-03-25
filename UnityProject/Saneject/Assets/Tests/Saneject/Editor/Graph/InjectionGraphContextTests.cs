@@ -189,7 +189,7 @@ namespace Tests.Saneject.Editor.Graph
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 2, depth: 2);
             TestScope rootScope = scene.Add<TestScope>("Root 1");
-            GraphMetadataTarget target = scene.Add<GraphMetadataTarget>("Root 1/Child 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1/Child 1");
             TestScope childScope = scene.Add<TestScope>("Root 1/Child 2");
 
             // Bind
@@ -224,7 +224,7 @@ namespace Tests.Saneject.Editor.Graph
 
             CollectionAssert.AreEquivalent
             (
-                new[] { typeof(GraphMetadataTarget) },
+                new[] { typeof(NestedRootTarget) },
                 injectionContext.ActiveComponentNodes.Select(node => node.Component.GetType()).ToArray()
             );
 
@@ -300,7 +300,7 @@ namespace Tests.Saneject.Editor.Graph
         private static TestPrefabAsset CreateContextBoundaryPrefab()
         {
             TestPrefabAsset prefab = TestPrefabAsset.Create("Root 1", width: 2, depth: 3);
-            prefab.Add<GraphMetadataTarget>("Root 1");
+            prefab.Add<NestedRootTarget>("Root 1");
             prefab.Add<TestScope>("Root 1/Child 2");
             return prefab;
         }
