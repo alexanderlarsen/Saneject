@@ -13,8 +13,8 @@ namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
         [field: Inject("property-id", true), SerializeField]
         public List<ComponentDependency> PropertyDependencies { get; private set; }
 
-        public GraphMetadataNested nested = new();
-        public GraphMetadataNested nullNested;
+        public NestedChildTarget nested = new();
+        public NestedChildTarget nullNested;
 
         [Inject("method-id", true)]
         private void InjectTopLevel(

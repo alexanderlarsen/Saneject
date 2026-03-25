@@ -299,14 +299,14 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(topLevelPropertyNode.ShortPath, Is.EqualTo("GraphMetadataTarget.PropertyDependencies"));
 
             Assert.That(nestedFieldNode.Owner, Is.EqualTo(target.nested));
-            Assert.That(nestedFieldNode.DeclaringType, Is.EqualTo(typeof(GraphMetadataNested)));
+            Assert.That(nestedFieldNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedFieldNode.InjectId, Is.Null);
             Assert.That(nestedFieldNode.SuppressMissingErrors, Is.False);
             Assert.That(nestedFieldNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/nested.nestedFieldDependency"));
             Assert.That(nestedFieldNode.ShortPath, Is.EqualTo("GraphMetadataNested.nestedFieldDependency"));
 
             Assert.That(nestedPropertyNode.Owner, Is.EqualTo(target.nested));
-            Assert.That(nestedPropertyNode.DeclaringType, Is.EqualTo(typeof(GraphMetadataNested)));
+            Assert.That(nestedPropertyNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedPropertyNode.InjectId, Is.EqualTo("nested-property-id"));
             Assert.That(nestedPropertyNode.SuppressMissingErrors, Is.True);
             Assert.That(nestedPropertyNode.IsPropertyBackingField, Is.True);
@@ -342,7 +342,7 @@ namespace Tests.Saneject.Editor.Graph
             );
 
             Assert.That(nestedMethodNode.Owner, Is.EqualTo(target.nested));
-            Assert.That(nestedMethodNode.DeclaringType, Is.EqualTo(typeof(GraphMetadataNested)));
+            Assert.That(nestedMethodNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedMethodNode.InjectId, Is.EqualTo("nested-method-id"));
             Assert.That(nestedMethodNode.SuppressMissingErrors, Is.False);
             Assert.That(nestedMethodNode.DisplayPath, Is.EqualTo("Root 1/GraphMetadataTarget/nested.InjectNested"));

@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
 {
     [Serializable]
-    public class GraphMetadataNested
+    public class NestedChildTarget
     {
         [Inject]
         public AssetDependency nestedFieldDependency;
@@ -16,6 +16,9 @@ namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
         public AssetDependency NestedPropertyDependency { get; private set; }
 
         public GraphMetadataNestedChild deepNested = new();
+        public AssetDependency NestedMethodAssetDependency { get; private set; }
+        public List<ComponentDependency> NestedMethodComponentDependencies { get; private set; }
+        public IDependency NestedMethodInterfaceDependency { get; private set; }
 
         [Inject("nested-method-id")]
         private void InjectNested(
@@ -23,6 +26,9 @@ namespace Tests.Saneject.Fixtures.Scripts.InjectionTargets
             List<ComponentDependency> nestedComponentDependencies,
             IDependency nestedInterfaceDependency)
         {
+            this.NestedMethodAssetDependency = nestedAssetDependency;
+            this.NestedMethodComponentDependencies = nestedComponentDependencies;
+            this.NestedMethodInterfaceDependency = nestedInterfaceDependency;
         }
     }
 }
