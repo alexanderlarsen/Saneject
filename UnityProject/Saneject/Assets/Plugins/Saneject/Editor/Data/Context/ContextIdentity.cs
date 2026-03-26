@@ -18,11 +18,15 @@ namespace Plugins.Saneject.Editor.Data.Context
             ContextData data = GetContextData(obj);
             Type = data.Type;
             Id = data.Key;
+            ContainerType = data.ContainerType;
+            ContainerId = data.ContainerKey;
             IsPrefab = data.Type is ContextType.PrefabAsset or ContextType.PrefabInstance;
         }
 
         public ContextType Type { get; }
         public int Id { get; }
+        public ContextType ContainerType { get; }
+        public int ContainerId { get; }
         public bool IsPrefab { get; }
 
         public override string ToString()
@@ -52,31 +56,77 @@ namespace Plugins.Saneject.Editor.Data.Context
             };
 
             if (!gameObject)
-                return new ContextData(ContextType.Global, 0); // Non-GameObjects (ScriptableObjects, etc.)
+                return new ContextData
+                (
+                    type: ContextType.Global,
+                    key: 0,
+                    containerType: ContextType.Global,
+                    containerKey: 0
+                ); // Non-GameObjects (ScriptableObjects, etc.)
 
+            PrefabStage currentPrefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            bool isInCurrentPrefabStage = currentPrefabStage && gameObject.scene == currentPrefabStage.scene;
+            bool isPrefabAssetObject = PrefabUtility.IsPartOfPrefabAsset(gameObject) || isInCurrentPrefabStage;
             GameObject prefabInstanceRoot = PrefabUtility.GetNearestPrefabInstanceRoot(gameObject);
 
+            GameObject prefabAssetRoot = isInCurrentPrefabStage
+                ? currentPrefabStage.prefabContentsRoot
+                : isPrefabAssetObject
+                    ? gameObject.transform.root.gameObject
+                    : null;
+
             if (prefabInstanceRoot)
-                return new ContextData(ContextType.PrefabInstance, prefabInstanceRoot.GetInstanceID()); // Prefab instance
+                return isPrefabAssetObject
+                    ? new ContextData
+                    (
+                        type: ContextType.PrefabInstance,
+                        key: prefabInstanceRoot.GetInstanceID(),
+                        containerType: ContextType.PrefabAsset,
+                        containerKey: prefabAssetRoot.GetInstanceID()
+                    ) // Prefab instance inside prefab asset
+                    : new ContextData
+                    (
+                        type: ContextType.PrefabInstance,
+                        key: prefabInstanceRoot.GetInstanceID(),
+                        containerType: ContextType.SceneObject,
+                        containerKey: gameObject.scene.handle
+                    ); // Prefab instance inside scene
 
-            if (PrefabUtility.IsPartOfPrefabAsset(gameObject) || PrefabStageUtility.GetCurrentPrefabStage())
-                return new ContextData(ContextType.PrefabAsset, gameObject.transform.root.gameObject.GetInstanceID()); // Prefab asset
+            if (isPrefabAssetObject)
+                return new ContextData
+                (
+                    type: ContextType.PrefabAsset,
+                    key: prefabAssetRoot.GetInstanceID(),
+                    containerType: ContextType.PrefabAsset,
+                    containerKey: prefabAssetRoot.GetInstanceID()
+                ); // Prefab asset
 
-            return new ContextData(ContextType.SceneObject, gameObject.scene.handle); // Scene object
+            return new ContextData(
+                type: ContextType.SceneObject,
+                key: gameObject.scene.handle,
+                containerType: ContextType.SceneObject,
+                containerKey: gameObject.scene.handle
+            ); // Scene object
         }
 
         private class ContextData
         {
             public ContextData(
                 ContextType type,
-                int key)
+                int key,
+                ContextType containerType,
+                int containerKey)
             {
                 Type = type;
                 Key = key;
+                ContainerType = containerType;
+                ContainerKey = containerKey;
             }
 
             public ContextType Type { get; }
             public int Key { get; }
+            public ContextType ContainerType { get; }
+            public int ContainerKey { get; }
         }
 
         #region Equality logic
@@ -89,8 +139,7 @@ namespace Plugins.Saneject.Editor.Data.Context
             if (other is null)
                 return false;
 
-            return Type == other.Type &&
-                   Id == other.Id;
+            return Type == other.Type && Id == other.Id;
         }
 
         public override bool Equals(object obj)

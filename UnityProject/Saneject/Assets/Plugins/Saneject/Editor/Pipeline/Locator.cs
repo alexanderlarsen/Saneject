@@ -41,14 +41,29 @@ namespace Plugins.Saneject.Editor.Pipeline
             foreach (Object candidate in allCandidates)
             {
                 ContextIdentity candidateContext = new(candidate);
+                ContextIdentity scopeContext = bindingNode.ScopeNode.TransformNode.ContextIdentity;
 
-                if (!ProjectSettings.UseContextIsolation || candidateContext.Type == ContextType.Global || candidateContext.Equals(bindingNode.ScopeNode.TransformNode.ContextIdentity))
+                if (CanResolveAcrossContexts(candidateContext, scopeContext))
                     validCandidates.Add(candidate);
                 else
                     rejectedTypes.Add(candidate.GetType());
             }
 
             candidates = validCandidates.ToArray();
+        }
+
+        private static bool CanResolveAcrossContexts(
+            ContextIdentity candidateContext,
+            ContextIdentity scopeContext)
+        {
+            if (candidateContext.Type == ContextType.Global || scopeContext.Type == ContextType.Global)
+                return true;
+
+            if (ProjectSettings.UseContextIsolation)
+                return candidateContext.Equals(scopeContext);
+
+            return candidateContext.ContainerType == scopeContext.ContainerType &&
+                   candidateContext.ContainerId == scopeContext.ContainerId;
         }
 
         private static IEnumerable<Object> LocateComponentCandidates(
@@ -66,10 +81,7 @@ namespace Plugins.Saneject.Editor.Pipeline
                 );
 
                 return proxyAsset != null
-                    ? new[]
-                    {
-                        proxyAsset
-                    }
+                    ? new[] { proxyAsset }
                     : Enumerable.Empty<Object>();
             }
 
@@ -173,10 +185,7 @@ namespace Plugins.Saneject.Editor.Pipeline
                         .ToEnumerable(),
 
                 AssetLoadType.Folder =>
-                    AssetDatabase.FindAssets($"t:{bindingNode.ConcreteType.Name}", new[]
-                        {
-                            path
-                        })
+                    AssetDatabase.FindAssets($"t:{bindingNode.ConcreteType.Name}", new[] { path })
                         .Select(AssetDatabase.GUIDToAssetPath)
                         .Select(assetPath => AssetDatabase.LoadAssetAtPath(assetPath, bindingNode.ConcreteType))
                         .Where(obj => obj != null),
@@ -205,10 +214,7 @@ namespace Plugins.Saneject.Editor.Pipeline
         private static IEnumerable<T> ToEnumerable<T>(this T item)
         {
             return item != null
-                ? new[]
-                {
-                    item
-                }
+                ? new[] { item }
                 : Enumerable.Empty<T>();
         }
     }

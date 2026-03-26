@@ -27,6 +27,14 @@ Example:
 - [Prefab instances](../reference/glossary.md#prefab-instance) of the same [prefab asset](../reference/glossary.md#prefab-asset) are different [contexts](../reference/glossary.md#context).
 - Each [prefab asset](../reference/glossary.md#prefab-asset) is its own [context](../reference/glossary.md#context).
 
+Each [context](../reference/glossary.md#context) also belongs to a containing serialized boundary:
+
+- [Scene objects](../reference/glossary.md#scene-object) and [prefab instances](../reference/glossary.md#prefab-instance) placed in a scene belong to that scene.
+- [Prefab asset](../reference/glossary.md#prefab-asset) objects and nested [prefab instances](../reference/glossary.md#prefab-instance) inside a [prefab asset](../reference/glossary.md#prefab-asset) belong to that [prefab asset](../reference/glossary.md#prefab-asset).
+
+This matters because with [context isolation](../reference/glossary.md#context-isolation) disabled, Saneject still does not treat every [context](../reference/glossary.md#context) as compatible with every other one.
+It only relaxes boundaries inside the same containing scene or [prefab asset](../reference/glossary.md#prefab-asset).
+
 ## Why contexts exist
 
 Unity already enforces some [serialization boundaries](../reference/glossary.md#serialization-boundary). For example, [scene objects](../reference/glossary.md#scene-object) cannot serialize direct references to [prefab asset](../reference/glossary.md#prefab-asset) objects, and vice versa.
@@ -61,13 +69,13 @@ With isolation enabled:
 
 With isolation disabled:
 
-- Step 1 can walk across [scene object](../reference/glossary.md#scene-object) and [prefab instance](../reference/glossary.md#prefab-instance) boundaries in the active hierarchy.
+- Step 1 can walk across [scene object](../reference/glossary.md#scene-object) and [prefab instance](../reference/glossary.md#prefab-instance) boundaries inside the same containing scene or [prefab asset](../reference/glossary.md#prefab-asset).
 - Step 2 can also accept [dependency candidates](../reference/glossary.md#dependency-candidate) across those boundaries.
 
 ### Practical effect
 
 - `UseContextIsolation = true`: Strict boundaries. A component can only get injected into other components from its own [context](../reference/glossary.md#context), e.g., a component on a [prefab instance](../reference/glossary.md#prefab-instance) cannot be injected into a component on a [scene object](../reference/glossary.md#scene-object).
-- `UseContextIsolation = false`: Relaxed boundaries. Components can be injected across [contexts](../reference/glossary.md#context), e.g., a component on a [prefab instance](../reference/glossary.md#prefab-instance) can be injected into a component on a [scene object](../reference/glossary.md#scene-object).
+- `UseContextIsolation = false`: Relaxed boundaries inside the same containing scene or [prefab asset](../reference/glossary.md#prefab-asset). Components can be injected across [contexts](../reference/glossary.md#context) within that boundary, e.g., a component on a [prefab instance](../reference/glossary.md#prefab-instance) can be injected into a component on a [scene object](../reference/glossary.md#scene-object) in the same scene.
 
 ## Context filtering
 
