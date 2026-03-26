@@ -1,8 +1,10 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Tests.Saneject.Fixtures.Scripts
 {
@@ -14,6 +16,7 @@ namespace Tests.Saneject.Fixtures.Scripts
         private readonly Dictionary<string, Transform> transformCache = new();
         private readonly Dictionary<(string path, Type type), Component> componentCache = new();
         private readonly List<GameObject> roots = new();
+        private string scenePath;
 
         private TestScene(
             int rootCount,
@@ -26,11 +29,14 @@ namespace Tests.Saneject.Fixtures.Scripts
         }
 
         public IReadOnlyList<GameObject> Roots => roots;
+        public Scene Scene { get; private set; }
+        public string ScenePath => scenePath;
 
         public static TestScene Create(
             int roots,
             int width,
-            int depth)
+            int depth,
+            NewSceneMode newSceneMode = NewSceneMode.Single)
         {
             if (roots < 1)
                 throw new ArgumentOutOfRangeException(nameof(roots), "Root count must be at least 1.");
@@ -42,7 +48,7 @@ namespace Tests.Saneject.Fixtures.Scripts
                 throw new ArgumentOutOfRangeException(nameof(depth), "Depth must be at least 1.");
 
             TestScene scene = new(roots, width, depth);
-            scene.CreateHierarchy();
+            scene.CreateHierarchy(newSceneMode);
             return scene;
         }
 
@@ -103,9 +109,22 @@ namespace Tests.Saneject.Fixtures.Scripts
                 .ToArray();
         }
 
-        private void CreateHierarchy()
+        public string SaveToDisk()
         {
-            EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+            scenePath ??= AssetDatabase.GenerateUniqueAssetPath("Assets/Tests/Saneject/Fixtures/TestScene.unity");
+            EditorSceneManager.SaveScene(Scene, scenePath);
+            return scenePath;
+        }
+
+        public bool DeleteFromDisk()
+        {
+            return !string.IsNullOrEmpty(scenePath) &&
+                   AssetDatabase.DeleteAsset(scenePath);
+        }
+
+        private void CreateHierarchy(NewSceneMode newSceneMode)
+        {
+            Scene = EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, newSceneMode);
 
             for (int rootIndex = 1; rootIndex <= rootCount; rootIndex++)
             {
