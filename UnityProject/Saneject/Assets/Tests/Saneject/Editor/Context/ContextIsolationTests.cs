@@ -7,6 +7,7 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEditor;
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.TestTools;
 
@@ -40,6 +41,46 @@ namespace Tests.Saneject.Editor.Context
             finally
             {
                 ProjectSettings.UseContextIsolation = originalUseContextIsolation;
+            }
+        }
+        
+        [Test]
+        public void Scene_OtherScene_DoesNotInject_WHEN_ContextIsolationIsTrue()
+        {
+            // Expect error logs for missing dependencies
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+            
+            // Set up scenes
+            TestScene sceneA = TestScene.Create(roots: 1, width: 1, depth: 2);
+            sceneA.SaveToDisk();
+            TestScene sceneB = TestScene.Create(roots: 1, width: 1, depth: 2, newSceneMode: NewSceneMode.Additive);
+            sceneB.SaveToDisk();
+            TestScope scope = sceneA.Add<TestScope>("Root 1");
+            SingleConcreteComponentTarget target = sceneA.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
+            ComponentDependency dependency = sceneB.Add<ComponentDependency>("Root 1");
+            bool originalUseContextIsolation = ProjectSettings.UseContextIsolation;
+
+            try
+            {
+                // Bind
+                scope.BindComponent<ComponentDependency>().FromInstance(dependency);
+
+                // Inject
+                ProjectSettings.UseContextIsolation = true;
+                InjectionRunner.Run(new[] { sceneA.Roots[0], sceneB.Roots[0] }, ContextWalkFilter.AllContexts);
+
+                // Assert
+                Assert.That(dependency, Is.Not.Null);
+                Assert.That(target.dependency, Is.Null);
+            }
+            finally
+            {
+                ProjectSettings.UseContextIsolation = originalUseContextIsolation;
+
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+                sceneA.DeleteFromDisk();
+                sceneB.DeleteFromDisk();
             }
         }
 
@@ -325,6 +366,54 @@ namespace Tests.Saneject.Editor.Context
                 prefab.DeleteAsset();
             }
         }
+        
+        [Test]
+        public void PrefabAsset_OtherPrefabAsset_DoesNotInject_WHEN_ContextIsolationIsTrue()
+        {
+            // Expect error logs for missing dependencies
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+            
+            // Set up prefab assets
+            TestPrefabAsset prefabOne = TestPrefabAsset.Create("Prefab Root A", width: 1, depth: 2);
+            prefabOne.Add<TestScope>("Prefab Root A");
+            prefabOne.Add<SingleConcreteComponentTarget>("Prefab Root A/Child 1");
+            TestPrefabAsset prefabTwo = TestPrefabAsset.Create("Prefab Root B", width: 1, depth: 2);
+            prefabTwo.Add<ComponentDependency>("Prefab Root B");
+            PrefabUtility.SaveAsPrefabAsset(prefabOne.Root, prefabOne.AssetPath);
+            PrefabUtility.SaveAsPrefabAsset(prefabTwo.Root, prefabTwo.AssetPath);
+            GameObject prefabAssetOne = AssetDatabase.LoadAssetAtPath<GameObject>(prefabOne.AssetPath);
+            GameObject prefabAssetTwo = AssetDatabase.LoadAssetAtPath<GameObject>(prefabTwo.AssetPath);
+            TestScope scope = prefabAssetOne.GetComponent<TestScope>();
+            SingleConcreteComponentTarget target = prefabAssetOne.transform.Find("Child 1").GetComponent<SingleConcreteComponentTarget>();
+            ComponentDependency dependency = prefabAssetTwo.GetComponent<ComponentDependency>();
+            bool originalUseContextIsolation = ProjectSettings.UseContextIsolation;
+
+            try
+            {
+                // Bind
+                scope.BindComponent<ComponentDependency>().FromInstance(dependency);
+
+                // Inject
+                ProjectSettings.UseContextIsolation = true;
+                InjectionRunner.Run(new[] { prefabAssetOne.transform, prefabAssetTwo.transform }, ContextWalkFilter.AllContexts);
+
+                // Assert
+                Assert.That(dependency, Is.Not.Null);
+                Assert.That(target, Is.Not.Null);
+                Assert.That(target.dependency, Is.Null);
+            }
+            finally
+            {
+                ProjectSettings.UseContextIsolation = originalUseContextIsolation;
+
+                prefabOne.Destroy();
+                prefabOne.DeleteAsset();
+
+                prefabTwo.Destroy();
+                prefabTwo.DeleteAsset();
+            }
+        }
 
         [Test]
         public void PrefabAsset_Scene_DoesNotInject_WHEN_ContextIsolationIsTrue()
@@ -444,6 +533,46 @@ namespace Tests.Saneject.Editor.Context
             finally
             {
                 ProjectSettings.UseContextIsolation = originalUseContextIsolation;
+            }
+        }
+        
+        [Test]
+        public void Scene_OtherScene_DoesNotInject_WHEN_ContextIsolationIsFalse()
+        {
+            // Expect error logs for missing dependencies
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+            
+            // Set up scenes
+            TestScene sceneA = TestScene.Create(roots: 1, width: 1, depth: 2);
+            sceneA.SaveToDisk();
+            TestScene sceneB = TestScene.Create(roots: 1, width: 1, depth: 2, newSceneMode: NewSceneMode.Additive);
+            sceneB.SaveToDisk();
+            TestScope scope = sceneA.Add<TestScope>("Root 1");
+            SingleConcreteComponentTarget target = sceneA.Add<SingleConcreteComponentTarget>("Root 1/Child 1");
+            ComponentDependency dependency = sceneB.Add<ComponentDependency>("Root 1");
+            bool originalUseContextIsolation = ProjectSettings.UseContextIsolation;
+
+            try
+            {
+                // Bind
+                scope.BindComponent<ComponentDependency>().FromInstance(dependency);
+
+                // Inject
+                ProjectSettings.UseContextIsolation = false;
+                InjectionRunner.Run(new[] { sceneA.Roots[0], sceneB.Roots[0] }, ContextWalkFilter.AllContexts);
+
+                // Assert
+                Assert.That(dependency, Is.Not.Null);
+                Assert.That(target.dependency, Is.Null);
+            }
+            finally
+            {
+                ProjectSettings.UseContextIsolation = originalUseContextIsolation;
+
+                EditorSceneManager.NewScene(NewSceneSetup.EmptyScene, NewSceneMode.Single);
+                sceneA.DeleteFromDisk();
+                sceneB.DeleteFromDisk();
             }
         }
 
@@ -711,6 +840,54 @@ namespace Tests.Saneject.Editor.Context
 
                 prefab.Destroy();
                 prefab.DeleteAsset();
+            }
+        }
+        
+        [Test]
+        public void PrefabAsset_OtherPrefabAsset_DoesNotInject_WHEN_ContextIsolationIsFalse()
+        {
+            // Expect error logs for missing dependencies
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+            
+            // Set up prefab assets
+            TestPrefabAsset prefabOne = TestPrefabAsset.Create("Prefab Root A", width: 1, depth: 2);
+            prefabOne.Add<TestScope>("Prefab Root A");
+            prefabOne.Add<SingleConcreteComponentTarget>("Prefab Root A/Child 1");
+            TestPrefabAsset prefabTwo = TestPrefabAsset.Create("Prefab Root B", width: 1, depth: 2);
+            prefabTwo.Add<ComponentDependency>("Prefab Root B");
+            PrefabUtility.SaveAsPrefabAsset(prefabOne.Root, prefabOne.AssetPath);
+            PrefabUtility.SaveAsPrefabAsset(prefabTwo.Root, prefabTwo.AssetPath);
+            GameObject prefabAssetOne = AssetDatabase.LoadAssetAtPath<GameObject>(prefabOne.AssetPath);
+            GameObject prefabAssetTwo = AssetDatabase.LoadAssetAtPath<GameObject>(prefabTwo.AssetPath);
+            TestScope scope = prefabAssetOne.GetComponent<TestScope>();
+            SingleConcreteComponentTarget target = prefabAssetOne.transform.Find("Child 1").GetComponent<SingleConcreteComponentTarget>();
+            ComponentDependency dependency = prefabAssetTwo.GetComponent<ComponentDependency>();
+            bool originalUseContextIsolation = ProjectSettings.UseContextIsolation;
+
+            try
+            {
+                // Bind
+                scope.BindComponent<ComponentDependency>().FromInstance(dependency);
+
+                // Inject
+                ProjectSettings.UseContextIsolation = false;
+                InjectionRunner.Run(new[] { prefabAssetOne.transform, prefabAssetTwo.transform }, ContextWalkFilter.AllContexts);
+
+                // Assert
+                Assert.That(dependency, Is.Not.Null);
+                Assert.That(target, Is.Not.Null);
+                Assert.That(target.dependency, Is.Null);
+            }
+            finally
+            {
+                ProjectSettings.UseContextIsolation = originalUseContextIsolation;
+
+                prefabOne.Destroy();
+                prefabOne.DeleteAsset();
+
+                prefabTwo.Destroy();
+                prefabTwo.DeleteAsset();
             }
         }
 
