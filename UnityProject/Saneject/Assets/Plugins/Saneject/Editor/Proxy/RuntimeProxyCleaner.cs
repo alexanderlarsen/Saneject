@@ -2,7 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using System.Reflection;
 using Plugins.Saneject.Editor.Utilities;
+using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
@@ -53,7 +55,7 @@ namespace Plugins.Saneject.Editor.Proxy
                 "This warning can be disabled at: 'Saneject/Settings/User Settings/Log Unused Proxies On Domain Reload'.\n"
             );
         }
- 
+
         public static void CleanUnusedScriptsAndAssets()
         {
             HashSet<Type> unusedTypes = GetUnusedTypes();
@@ -79,6 +81,7 @@ namespace Plugins.Saneject.Editor.Proxy
             HashSet<Type> unusedTypes = allTypes
                 .Where(t => t.BaseType is { IsGenericType: true })
                 .Where(t => RuntimeProxyManifestUtility.EnumerateManifestTypes().All(mt => t.BaseType.GenericTypeArguments[0] != mt))
+                .Where(t => t.GetCustomAttribute<MuteUnusedRuntimeProxyWarningAttribute>() == null)
                 .ToHashSet();
 
             return unusedTypes;
