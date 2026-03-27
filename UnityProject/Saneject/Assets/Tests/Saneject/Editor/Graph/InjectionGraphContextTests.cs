@@ -38,17 +38,27 @@ namespace Tests.Saneject.Editor.Graph
                 // Assert
                 Assert.That(assetDependency, Is.Not.Null);
                 Assert.That(sceneIdentity.Type, Is.EqualTo(ContextType.SceneObject));
+                Assert.That(sceneIdentity.ContainerType, Is.EqualTo(ContextType.SceneObject));
                 Assert.That(sceneIdentity.IsPrefab, Is.False);
+                Assert.That(sceneIdentity.ContainerId, Is.EqualTo(sceneIdentity.Id));
                 Assert.That(prefabInstanceRootIdentity.Type, Is.EqualTo(ContextType.PrefabInstance));
+                Assert.That(prefabInstanceRootIdentity.ContainerType, Is.EqualTo(ContextType.SceneObject));
                 Assert.That(prefabInstanceRootIdentity.IsPrefab, Is.True);
+                Assert.That(prefabInstanceRootIdentity.ContainerId, Is.EqualTo(sceneIdentity.Id));
                 Assert.That(prefabInstanceChildIdentity.Type, Is.EqualTo(ContextType.PrefabInstance));
+                Assert.That(prefabInstanceChildIdentity.ContainerType, Is.EqualTo(ContextType.SceneObject));
                 Assert.That(prefabInstanceChildIdentity.IsPrefab, Is.True);
                 Assert.That(prefabInstanceChildIdentity.Id, Is.EqualTo(prefabInstanceRootIdentity.Id));
+                Assert.That(prefabInstanceChildIdentity.ContainerId, Is.EqualTo(prefabInstanceRootIdentity.ContainerId));
                 Assert.That(prefabInstanceChildIdentity, Is.EqualTo(prefabInstanceRootIdentity));
                 Assert.That(prefabAssetIdentity.Type, Is.EqualTo(ContextType.PrefabAsset));
+                Assert.That(prefabAssetIdentity.ContainerType, Is.EqualTo(ContextType.PrefabAsset));
                 Assert.That(prefabAssetIdentity.IsPrefab, Is.True);
+                Assert.That(prefabAssetIdentity.ContainerId, Is.EqualTo(prefabAssetIdentity.Id));
                 Assert.That(assetIdentity.Type, Is.EqualTo(ContextType.Global));
+                Assert.That(assetIdentity.ContainerType, Is.EqualTo(ContextType.Global));
                 Assert.That(assetIdentity.IsPrefab, Is.False);
+                Assert.That(assetIdentity.ContainerId, Is.EqualTo(assetIdentity.Id));
                 Assert.That(sceneIdentity, Is.Not.EqualTo(prefabInstanceRootIdentity));
                 Assert.That(prefabAssetIdentity, Is.Not.EqualTo(prefabInstanceRootIdentity));
             }
@@ -177,10 +187,14 @@ namespace Tests.Saneject.Editor.Graph
             // Assert
             Assert.That(rootIdentity.Type, Is.EqualTo(ContextType.SceneObject));
             Assert.That(childIdentity.Type, Is.EqualTo(ContextType.SceneObject));
+            Assert.That(rootIdentity.ContainerType, Is.EqualTo(ContextType.SceneObject));
+            Assert.That(childIdentity.ContainerType, Is.EqualTo(ContextType.SceneObject));
             Assert.That(rootIdentity.IsPrefab, Is.False);
             Assert.That(childIdentity.IsPrefab, Is.False);
             Assert.That(childIdentity, Is.EqualTo(rootIdentity));
             Assert.That(childIdentity.Id, Is.EqualTo(rootIdentity.Id));
+            Assert.That(childIdentity.ContainerId, Is.EqualTo(rootIdentity.ContainerId));
+            Assert.That(childIdentity.ContainerId, Is.EqualTo(rootIdentity.Id));
         }
 
         [Test]
