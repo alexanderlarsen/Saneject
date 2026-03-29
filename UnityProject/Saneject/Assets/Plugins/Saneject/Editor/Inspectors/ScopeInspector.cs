@@ -14,7 +14,6 @@ namespace Plugins.Saneject.Editor.Inspectors
     public class ScopeInspector : UnityEditor.Editor
     {
         private Scope scope;
-        private ContextIdentity rootContextIdentity;
         private ContextIdentity contextIdentity;
         private ScopeHierarchyModel scopeHierarchyModel;
         private ComponentModel componentModel;
@@ -22,7 +21,7 @@ namespace Plugins.Saneject.Editor.Inspectors
         private void OnEnable()
         {
             scope = (Scope)target;
-            rootContextIdentity = new ContextIdentity(scope.transform.root);
+            new ContextIdentity(scope.transform.root);
             contextIdentity = new ContextIdentity(scope);
             componentModel = new ComponentModel(target, serializedObject);
             BuildScopeHierarchy();
