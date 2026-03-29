@@ -12,9 +12,9 @@ Dependency injection the Unity way
 [![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
 
-Resolve everything in the Editor with familiar DI syntax while keeping dependencies visible in the Inspector, including serialized interfaces and cross-scene or cross-prefab references.
+Resolve dependencies in the Unity Editor, not Play Mode, and write them directly into serialized fields so everything stays visible in the Inspector, including interfaces.
 
-No runtime container, no startup cost, no extra lifecycles. Just clean, easy-to-use, deterministic DI that feels native to Unity.
+No runtime container, no startup cost, no hidden wiring. Just simple, deterministic DI that works with Unity instead of around it.
 
 ## Main features
 
