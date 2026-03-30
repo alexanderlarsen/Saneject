@@ -102,40 +102,57 @@ namespace Plugins.Saneject.Editor.Pipeline
             IEnumerable<Component> candidates = bindingNode.SearchDirection switch
             {
                 SearchDirection.Self =>
-                    origin?
-                        .GetComponents(targetType),
+                    origin
+                        ? origin.GetComponents(targetType)
+                        : null,
 
                 SearchDirection.Parent =>
-                    origin?
-                        .parent?
-                        .GetComponents(targetType),
+                    origin &&
+                    origin.parent
+                        ? origin
+                            .parent
+                            .GetComponents(targetType)
+                        : null,
 
                 SearchDirection.Ancestors =>
-                    origin?
-                        .GetComponentsInAncestors(targetType, bindingNode.IncludeSelfInSearch),
+                    origin
+                        ? origin.GetComponentsInAncestors(targetType, bindingNode.IncludeSelfInSearch)
+                        : null,
 
                 SearchDirection.FirstChild =>
-                    origin?
-                        .GetChild(0)?
-                        .GetComponents(targetType),
+                    origin &&
+                    origin.childCount > 0
+                        ? origin
+                            .GetChild(0)
+                            .GetComponents(targetType)
+                        : null,
 
                 SearchDirection.LastChild =>
-                    origin?
-                        .GetChild(origin.childCount - 1)?
-                        .GetComponents(targetType),
+                    origin &&
+                    origin.childCount > 0
+                        ? origin
+                            .GetChild(origin.childCount - 1)
+                            .GetComponents(targetType)
+                        : null,
 
                 SearchDirection.ChildAtIndex =>
-                    origin?
-                        .GetChild(bindingNode.ChildIndexForSearch)?
-                        .GetComponents(targetType),
+                    origin &&
+                    bindingNode.ChildIndexForSearch >= 0 &&
+                    bindingNode.ChildIndexForSearch < origin.childCount
+                        ? origin
+                            .GetChild(bindingNode.ChildIndexForSearch)
+                            .GetComponents(targetType)
+                        : null,
 
                 SearchDirection.Descendants =>
-                    origin?
-                        .GetComponentsInDescendants(targetType, bindingNode.IncludeSelfInSearch),
+                    origin
+                        ? origin.GetComponentsInDescendants(targetType, bindingNode.IncludeSelfInSearch)
+                        : null,
 
                 SearchDirection.Siblings =>
-                    origin?
-                        .GetComponentsInSiblings(targetType),
+                    origin
+                        ? origin.GetComponentsInSiblings(targetType)
+                        : null,
 
                 SearchDirection.Anywhere =>
                     injectionTargetNode.ContextIdentity.Type == ContextType.PrefabAsset
@@ -175,18 +192,21 @@ namespace Plugins.Saneject.Editor.Pipeline
             IEnumerable<Object> candidates = bindingNode.AssetLoadType switch
             {
                 AssetLoadType.Resources =>
-                    Resources.Load(path, bindingNode.ConcreteType)
+                    Resources
+                        .Load(path, bindingNode.ConcreteType)
                         .ToEnumerable(),
 
                 AssetLoadType.ResourcesAll =>
                     Resources.LoadAll(path, bindingNode.ConcreteType),
 
                 AssetLoadType.AssetLoad =>
-                    AssetDatabase.LoadAssetAtPath(path, bindingNode.ConcreteType)
+                    AssetDatabase
+                        .LoadAssetAtPath(path, bindingNode.ConcreteType)
                         .ToEnumerable(),
 
                 AssetLoadType.Folder =>
-                    AssetDatabase.FindAssets($"t:{bindingNode.ConcreteType.Name}", new[] { path })
+                    AssetDatabase
+                        .FindAssets($"t:{bindingNode.ConcreteType.Name}", new[] { path })
                         .Select(AssetDatabase.GUIDToAssetPath)
                         .Select(assetPath => AssetDatabase.LoadAssetAtPath(assetPath, bindingNode.ConcreteType))
                         .Where(obj => obj != null),
