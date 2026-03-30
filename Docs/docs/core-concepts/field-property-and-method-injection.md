@@ -169,7 +169,7 @@ Key rules:
 - Method-level `ID` and `suppressMissingErrors` settings apply to all parameters in that method.
 - Each parameter is resolved by its own requested type and shape.
 - Methods are invoked after field and property injection.
-- If dependencies are missing, parameters resolve to `null` and invocation is still attempted.
+- If any parameter is not resolved (`null`), the method is not invoked.
 - Method exceptions are caught and logged. They do not break the overall [injection run](../reference/glossary.md#injection-run).
 
 ```csharp

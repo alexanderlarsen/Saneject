@@ -88,11 +88,14 @@ namespace Plugins.Saneject.Editor.Pipeline
 
                 try
                 {
-                    methodNode.MethodInfo.Invoke
-                    (
-                        methodNode.Owner,
-                        context.MethodNodeResolutionMap[methodNode].ToArray()
-                    );
+                    object[] dependencies = context.MethodNodeResolutionMap[methodNode].ToArray();
+
+                    if (dependencies.All(d => d != null))
+                        methodNode.MethodInfo.Invoke
+                        (
+                            methodNode.Owner,
+                            dependencies
+                        );
                 }
                 catch (Exception e)
                 {
