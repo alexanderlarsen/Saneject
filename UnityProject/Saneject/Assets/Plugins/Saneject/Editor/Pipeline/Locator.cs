@@ -159,6 +159,7 @@ namespace Plugins.Saneject.Editor.Pipeline
                 }
                 catch (Exception e)
                 {
+                    candidates = null;
                     context.RegisterError(Error.CreateBindingFilterException(bindingNode, e));
                 }
 
@@ -201,10 +202,11 @@ namespace Plugins.Saneject.Editor.Pipeline
             if (candidates != null && bindingNode.DependencyFilters.Count > 0)
                 try
                 {
-                    candidates = candidates.Where(asset => bindingNode.DependencyFilters.All(f => f.Filter(asset)));
+                    candidates = candidates.Where(asset => bindingNode.DependencyFilters.All(f => f.Filter(asset))).ToArray();
                 }
                 catch (Exception e)
                 {
+                    candidates = null;
                     context.RegisterError(Error.CreateBindingFilterException(bindingNode, e));
                 }
 
