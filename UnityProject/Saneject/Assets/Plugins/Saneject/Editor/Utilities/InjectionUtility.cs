@@ -1,10 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.BatchInjection;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Extensions;
-using Plugins.Saneject.Editor.Pipeline;
 using UnityEditor;
 using UnityEditor.SceneManagement;
 using UnityEngine;

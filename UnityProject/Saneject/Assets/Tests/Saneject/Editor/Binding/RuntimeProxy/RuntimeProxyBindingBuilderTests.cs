@@ -1,6 +1,6 @@
 using NUnit.Framework;
+using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.Context;
-using Plugins.Saneject.Editor.Pipeline;
 using Plugins.Saneject.Runtime.Proxy;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;

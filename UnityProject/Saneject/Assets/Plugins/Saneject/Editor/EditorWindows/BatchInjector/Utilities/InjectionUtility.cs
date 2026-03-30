@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.BatchInjection;
 using Plugins.Saneject.Editor.EditorWindows.BatchInjector.Data;
-using Plugins.Saneject.Editor.Pipeline;
 using Plugins.Saneject.Editor.Utilities;
 
 namespace Plugins.Saneject.Editor.EditorWindows.BatchInjector.Utilities

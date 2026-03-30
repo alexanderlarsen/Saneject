@@ -9,7 +9,7 @@ using Plugins.Saneject.Editor.Data.Injection;
 using Plugins.Saneject.Editor.Extensions;
 using UnityEngine;
 
-namespace Plugins.Saneject.Editor.Pipeline
+namespace Plugins.Saneject.Editor.Core
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class GraphFilter

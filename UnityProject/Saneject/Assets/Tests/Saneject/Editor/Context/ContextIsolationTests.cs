@@ -1,7 +1,7 @@
 using System.Text.RegularExpressions;
 using NUnit.Framework;
+using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.Context;
-using Plugins.Saneject.Editor.Pipeline;
 using Plugins.Saneject.Runtime.Settings;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;

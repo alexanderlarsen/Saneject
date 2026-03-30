@@ -8,7 +8,7 @@ using Plugins.Saneject.Editor.Data.Logging;
 using UnityEditor;
 using Component = UnityEngine.Component;
 
-namespace Plugins.Saneject.Editor.Pipeline
+namespace Plugins.Saneject.Editor.Core
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class Injector

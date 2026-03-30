@@ -10,7 +10,7 @@ using UnityEditor;
 using UnityEngine;
 using Object = UnityEngine.Object;
 
-namespace Plugins.Saneject.Editor.Pipeline
+namespace Plugins.Saneject.Editor.Core
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ProxyAssetResolver

@@ -7,7 +7,7 @@ using Plugins.Saneject.Editor.Data.Logging;
 using Plugins.Saneject.Editor.Utilities;
 using Component = UnityEngine.Component;
 
-namespace Plugins.Saneject.Editor.Pipeline
+namespace Plugins.Saneject.Editor.Core
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class BindingValidator

@@ -1,7 +1,7 @@
 using NUnit.Framework;
+using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.BatchInjection;
 using Plugins.Saneject.Editor.Data.Context;
-using Plugins.Saneject.Editor.Pipeline;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;

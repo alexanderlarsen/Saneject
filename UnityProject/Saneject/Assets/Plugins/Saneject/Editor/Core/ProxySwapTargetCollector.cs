@@ -7,7 +7,7 @@ using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Scopes;
 using Component = UnityEngine.Component;
 
-namespace Plugins.Saneject.Editor.Pipeline
+namespace Plugins.Saneject.Editor.Core
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ProxySwapTargetCollector

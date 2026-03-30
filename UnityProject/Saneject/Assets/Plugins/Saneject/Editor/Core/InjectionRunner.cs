@@ -18,7 +18,7 @@ using Object = UnityEngine.Object;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery
 
-namespace Plugins.Saneject.Editor.Pipeline
+namespace Plugins.Saneject.Editor.Core
 {
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectionRunner
