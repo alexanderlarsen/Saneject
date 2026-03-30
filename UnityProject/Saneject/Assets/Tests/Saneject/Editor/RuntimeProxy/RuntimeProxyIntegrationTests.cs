@@ -221,6 +221,76 @@ namespace Tests.Saneject.Editor.RuntimeProxy
         }
 
         [Test]
+        public void FromRuntimeProxy_GivenSerializedProxyTargetOutsideScope_DoesNotThrowAndDoesNotRegisterSwapTarget()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 2, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SuppressedSingleInterfaceTarget target = scene.Add<SuppressedSingleInterfaceTarget>("Root 2");
+            TestRuntimeProxy proxy = ScriptableObject.CreateInstance<TestRuntimeProxy>();
+            FieldInfo proxySwapTargetsField = typeof(Scope).GetField("proxySwapTargets", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Assert.That(proxySwapTargetsField, Is.Not.Null);
+
+            try
+            {
+                target.dependency = proxy;
+
+                // Inject
+                Assert.That(() => InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects), Throws.Nothing);
+
+                // Find registered targets
+                List<Component> proxySwapTargets = proxySwapTargetsField.GetValue(scope) as List<Component>;
+
+                // Assert
+                Assert.That(proxy, Is.Not.Null);
+                Assert.That(target.dependency, Is.SameAs(proxy));
+                Assert.That(proxySwapTargets, Is.Not.Null);
+                Assert.That(proxySwapTargets, Is.Empty);
+            }
+            finally
+            {
+                Object.DestroyImmediate(proxy);
+            }
+        }
+
+        [Test]
+        public void FromRuntimeProxy_GivenPreviouslyRegisteredSwapTargetThatNoLongerHasProxy_ClearsStaleSwapTarget()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SuppressedSingleInterfaceTarget target = scene.Add<SuppressedSingleInterfaceTarget>("Root 1/Child 1");
+            TestRuntimeProxy proxy = ScriptableObject.CreateInstance<TestRuntimeProxy>();
+            FieldInfo proxySwapTargetsField = typeof(Scope).GetField("proxySwapTargets", BindingFlags.NonPublic | BindingFlags.Instance);
+
+            Assert.That(proxySwapTargetsField, Is.Not.Null);
+
+            try
+            {
+                target.dependency = proxy;
+                scope.AddProxySwapTarget(target);
+                target.dependency = null;
+
+                // Inject
+                Assert.That(() => InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects), Throws.Nothing);
+
+                // Find registered targets
+                List<Component> proxySwapTargets = proxySwapTargetsField.GetValue(scope) as List<Component>;
+
+                // Assert
+                Assert.That(proxy, Is.Not.Null);
+                Assert.That(target.dependency, Is.Null);
+                Assert.That(proxySwapTargets, Is.Not.Null);
+                Assert.That(proxySwapTargets, Is.Empty);
+            }
+            finally
+            {
+                Object.DestroyImmediate(proxy);
+            }
+        }
+
+        [Test]
         public void AddProxySwapTarget_GivenDuplicateTarget_AddsTargetOnce()
         {
             // Set up components

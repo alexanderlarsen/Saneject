@@ -1,9 +1,12 @@
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Pipeline;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
+using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.Saneject.Editor.Binding.LocatorMethods.ComponentLocatorMethods.FromRoot
 {
@@ -102,6 +105,30 @@ namespace Tests.Saneject.Editor.Binding.LocatorMethods.ComponentLocatorMethods.F
             // Assert
             CollectionAssert.AreEquivalent(dependencies, target.array);
             CollectionAssert.AreEquivalent(dependencies, target.list);
+        }
+
+        [Test]
+        public void FromRootFirstChild_WHEN_RootHasNoChildren_DoesNotThrowAndLogsMissingDependency()
+        {
+            // Expect logs
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1");
+            scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>().FromRootFirstChild();
+
+            // Inject
+            Assert.That(() => InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects), Throws.Nothing);
+
+            // Assert
+            Assert.That(target.dependency, Is.Null);
+            LogAssert.NoUnexpectedReceived();
         }
     }
 }
