@@ -5,7 +5,6 @@ using Plugins.Saneject.Editor.EditorWindows;
 using Plugins.Saneject.Editor.EditorWindows.BatchInjector;
 using Plugins.Saneject.Editor.Menus.SanejectMenuItems;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Tests.Saneject.Editor.Editor.Menus
 {
