@@ -232,29 +232,32 @@ namespace Plugins.Saneject.Editor.Pipeline
                 progressTracker
             );
 
-            BindingValidator.ValidateBindings
-            (
-                context,
-                progressTracker
-            );
+            if (context.ActiveScopeNodes.Count > 0)
+            {
+                BindingValidator.ValidateBindings
+                (
+                    context,
+                    progressTracker
+                );
 
-            Resolver.Resolve
-            (
-                context,
-                progressTracker
-            );
+                Resolver.Resolve
+                (
+                    context,
+                    progressTracker
+                );
 
-            Injector.InjectDependencies
-            (
-                context,
-                progressTracker
-            );
+                Injector.InjectDependencies
+                (
+                    context,
+                    progressTracker
+                );
 
-            ProxySwapTargetCollector.CollectSwapTargets
-            (
-                context,
-                progressTracker
-            );
+                ProxySwapTargetCollector.CollectSwapTargets
+                (
+                    context,
+                    progressTracker
+                );
+            }
 
             InjectionResults results = context.GetResults();
             stopwatch.Stop();
