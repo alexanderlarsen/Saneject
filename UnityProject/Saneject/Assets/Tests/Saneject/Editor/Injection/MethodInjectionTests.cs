@@ -1,9 +1,12 @@
+using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Pipeline;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
+using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.Saneject.Editor.Injection
 {
@@ -187,6 +190,136 @@ namespace Tests.Saneject.Editor.Injection
             Assert.That(target.mixedConcreteDependency, Is.EqualTo(singleDependency));
             CollectionAssert.AreEquivalent(dependencies, target.mixedConcreteList);
             Assert.That(target.mixedInterfaceDependency, Is.EqualTo(singleDependency));
+        }
+
+        [Test]
+        public void Inject_MultipleInjectMethods_InvokesAll()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            MultipleMethodTarget target = scene.Add<MultipleMethodTarget>("Root 1");
+
+            // Find dependency
+            ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>().FromSelf();
+            scope.BindComponent<IDependency>().FromSelf();
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.firstMethodCalled, Is.True);
+            Assert.That(target.secondMethodCalled, Is.True);
+            Assert.That(target.firstDependency, Is.EqualTo(dependency));
+            Assert.That(target.secondDependency, Is.EqualTo(dependency));
+        }
+
+        [Test]
+        public void Inject_PrivateAndProtectedMethods_InvokesAll()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            NonPublicMethodTarget target = scene.Add<NonPublicMethodTarget>("Root 1");
+
+            // Find dependency
+            ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>().FromSelf();
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.protectedMethodCalled, Is.True);
+            Assert.That(target.privateMethodCalled, Is.True);
+        }
+
+        [Test]
+        public void Inject_FieldAndMethodMembers_InjectsBoth()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            FieldAndMethodTarget target = scene.Add<FieldAndMethodTarget>("Root 1");
+
+            // Find dependency
+            ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>().FromSelf();
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.fieldDependency, Is.EqualTo(dependency));
+            Assert.That(target.methodDependency, Is.EqualTo(dependency));
+        }
+
+        [Test]
+        public void Inject_WHEN_OneMethodHasMissingParameters_InvokesOnlyResolvableMethods()
+        {
+            // Expect logs
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            MixedResolutionMethodTarget target = scene.Add<MixedResolutionMethodTarget>("Root 1");
+
+            // Find dependency
+            ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>().FromSelf();
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.concreteMethodCalled, Is.True);
+            Assert.That(target.concreteDependency, Is.EqualTo(dependency));
+            Assert.That(target.mixedMethodCalled, Is.False);
+            Assert.That(target.mixedConcreteDependency, Is.Null);
+            Assert.That(target.mixedInterfaceDependency, Is.Null);
+        }
+
+        [Test]
+        public void Inject_WHEN_AnyParameterIsMissing_DoesNotInvokeMethod()
+        {
+            // Expect logs
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Missing binding"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            PartialMethodTarget target = scene.Add<PartialMethodTarget>("Root 1");
+
+            // Find dependency
+            ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>().FromSelf();
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.methodCalled, Is.False);
+            Assert.That(target.dependency, Is.Null);
+            Assert.That(target.interfaceDependency, Is.Null);
         }
     }
 }

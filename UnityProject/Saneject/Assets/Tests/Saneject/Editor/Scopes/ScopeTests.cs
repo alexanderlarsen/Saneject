@@ -46,6 +46,83 @@ namespace Tests.Saneject.Editor.Scopes
         }
 
         [Test]
+        public void Scope_FallsBackToParent_WhenNearestScopeHasNoMatchingBinding()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
+            TestScope rootScope = scene.Add<TestScope>("Root 1");
+            scene.Add<TestScope>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1/Child 1");
+
+            // Find dependency
+            ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            rootScope.BindComponent<ComponentDependency>().FromInstance(dependency);
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(target.dependency, Is.EqualTo(dependency));
+        }
+
+        [Test]
+        public void Scope_ChildOverridesParent_WhenBothBindSameConcreteRequestedType()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
+            TestScope rootScope = scene.Add<TestScope>("Root 1");
+            TestScope childScope = scene.Add<TestScope>("Root 1/Child 1");
+            SingleConcreteComponentTarget target = scene.Add<SingleConcreteComponentTarget>("Root 1/Child 1/Child 1");
+
+            // Find dependencies
+            ComponentDependency rootDependency = scene.Add<ComponentDependency>("Root 1");
+            ComponentDependency childDependency = scene.Add<ComponentDependency>("Root 1/Child 1");
+
+            // Bind
+            rootScope.BindComponent<ComponentDependency>().FromInstance(rootDependency);
+            childScope.BindComponent<ComponentDependency>().FromInstance(childDependency);
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(rootDependency, Is.Not.Null);
+            Assert.That(childDependency, Is.Not.Null);
+            Assert.That(target.dependency, Is.EqualTo(childDependency));
+            Assert.That(target.dependency, Is.Not.EqualTo(rootDependency));
+        }
+
+        [Test]
+        public void Scope_ChildOverridesParent_WhenBothBindSameInterfaceRequestedType()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 3);
+            TestScope rootScope = scene.Add<TestScope>("Root 1");
+            TestScope childScope = scene.Add<TestScope>("Root 1/Child 1");
+            SingleInterfaceTarget target = scene.Add<SingleInterfaceTarget>("Root 1/Child 1/Child 1");
+
+            // Find dependencies
+            ComponentDependency rootDependency = scene.Add<ComponentDependency>("Root 1");
+            ComponentDependency childDependency = scene.Add<ComponentDependency>("Root 1/Child 1");
+
+            // Bind
+            rootScope.BindComponent<IDependency>().FromInstance(rootDependency);
+            childScope.BindComponent<IDependency>().FromInstance(childDependency);
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(rootDependency, Is.Not.Null);
+            Assert.That(childDependency, Is.Not.Null);
+            Assert.That(target.dependency, Is.EqualTo(childDependency));
+            Assert.That(target.dependency, Is.Not.EqualTo(rootDependency));
+        }
+
+        [Test]
         public void Scope_AwakeAndOnDestroy_RegistersAndUnregistersGlobalComponents()
         {
             // Set up components
