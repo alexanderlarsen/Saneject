@@ -9,6 +9,7 @@ using Plugins.Saneject.Editor.Data.Logging;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Runtime.Bindings.Asset;
 using Plugins.Saneject.Runtime.Bindings.Component;
+using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -40,8 +41,7 @@ namespace Plugins.Saneject.Editor.Core
 
             foreach (Object candidate in allCandidates)
             {
-                // Injected assets are global and can be injected into any context.
-                if (bindingNode is AssetBindingNode)
+                if (CanSkipContextChecks(bindingNode, candidate))
                 {
                     validCandidates.Add(candidate);
                     continue;
@@ -50,15 +50,33 @@ namespace Plugins.Saneject.Editor.Core
                 ContextIdentity candidateContext = new(candidate);
                 ContextIdentity scopeContext = bindingNode.ScopeNode.TransformNode.ContextIdentity;
 
-                if ((ProjectSettings.UseContextIsolation && candidateContext.Equals(scopeContext)) ||
-                    (candidateContext.ContainerType == scopeContext.ContainerType &&
-                     candidateContext.ContainerId == scopeContext.ContainerId))
+                bool isContextMatch =
+                    ProjectSettings.UseContextIsolation
+                        ? candidateContext.Equals(scopeContext)
+                        : candidateContext.ContainerType == scopeContext.ContainerType &&
+                          candidateContext.ContainerId == scopeContext.ContainerId;
+
+                if (isContextMatch)
                     validCandidates.Add(candidate);
                 else
                     rejectedTypes.Add(candidate.GetType());
             }
 
             candidates = validCandidates.ToArray();
+        }
+
+        private static bool CanSkipContextChecks(
+            BindingNode bindingNode,
+            Object candidate)
+        {
+            // Persistent assets resolved through asset bindings bypass context checks because they are treated as contextless injected assets. Runtime proxies do too, even though they come from component bindings.
+            if (!EditorUtility.IsPersistent(candidate))
+                return false;
+
+            if (bindingNode is AssetBindingNode)
+                return true;
+
+            return bindingNode is ComponentBindingNode && candidate is RuntimeProxyBase;
         }
 
         private static IEnumerable<Object> LocateComponentCandidates(
@@ -74,6 +92,9 @@ namespace Plugins.Saneject.Editor.Core
                     bindingNode.RuntimeProxyConfig,
                     context
                 );
+
+                if (!EditorUtility.IsPersistent(proxyAsset))
+                    return Enumerable.Empty<Object>();
 
                 return proxyAsset != null
                     ? new[] { proxyAsset }
@@ -224,6 +245,13 @@ namespace Plugins.Saneject.Editor.Core
                     candidates = null;
                     context.RegisterError(Error.CreateBindingFilterException(bindingNode, e));
                 }
+
+            if (candidates != null && candidates.Any(c => !EditorUtility.IsPersistent(c)))
+            {
+                context.RegisterError(Error.CreateInvalidBindingError("Asset binding resolved one or more non-asset objects. BindAsset<T>() only supports actual assets.", bindingNode));
+
+                candidates = null;
+            }
 
             return candidates ?? Enumerable.Empty<Object>();
         }
