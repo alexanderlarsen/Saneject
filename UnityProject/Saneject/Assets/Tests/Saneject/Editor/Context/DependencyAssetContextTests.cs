@@ -44,10 +44,6 @@ namespace Tests.Saneject.Editor.Context
         [Test]
         public void Scene_PrefabAsset_Injects_WHEN_ContextIsolationIsTrue_And_UsedAsDependencyAsset()
         {
-            // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
-
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope scope = scene.Add<TestScope>("Root 1");
@@ -84,10 +80,6 @@ namespace Tests.Saneject.Editor.Context
         [Test]
         public void Scene_PrefabAsset_Injects_WHEN_ContextIsolationIsFalse_And_UsedAsDependencyAsset()
         {
-            // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
-
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
             TestScope scope = scene.Add<TestScope>("Root 1");
