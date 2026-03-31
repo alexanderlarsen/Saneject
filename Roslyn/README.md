@@ -31,25 +31,10 @@ dotnet build -c Release
 
 After a successful build, the DLLs are built to flat these folders at the repo root:
 
-**Experimental (current generators/analyzers):**
+**Generators/analyzers:**
 ```
-<repo root>/Build/Roslyn.Experimental/
+<repo root>/Build/Roslyn.Default/
 ```
-
-Contains:
-- `Saneject.SerializeInterface.Generator.dll`
-- `Saneject.ProxyObject.Generator.dll`
-- `Saneject.Analyzers.dll`
-
-**Legacy (backward-compatibility versions):**
-```
-<repo root>/Build/Roslyn.Legacy/
-```
-
-Contains:
-- `Saneject.SerializeInterface.Generator.Legacy.dll`
-- `Saneject.ProxyObject.Generator.Legacy.dll`
-- `Saneject.Analyzers.Legacy.dll`
 
 ### 3. Copy DLLs into the Unity project
 
@@ -58,8 +43,6 @@ Copy the desired DLLs into the Unity plugin folder:
 ```
 UnityProject/Saneject/Assets/Plugins/Saneject/RoslynLibs/
 ```
-
-(Choose either Experimental or Legacy DLLs depending on what you want Unity to load.)
 
 Unity will reimport the DLLs automatically the next time it gains focus.
 

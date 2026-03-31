@@ -24,7 +24,7 @@ At a high level:
 
 ## Assemblies and loading model
 
-Saneject ships Roslyn assemblies in `Assets/Plugins/Saneject/Experimental/Roslyn`:
+Saneject ships Roslyn assemblies in `Assets/Plugins/Saneject/Roslyn`:
 
 - `Saneject.SerializeInterface.Generator.dll`
 - `Saneject.RuntimeProxy.Generator.dll`

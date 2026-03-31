@@ -87,7 +87,6 @@ public class AssemblyProxyManifestGenerator : ISourceGenerator
     {
         while (type != null)
         {
-            // TODO: Remove Experimental namespace when stable
             if (type.ToDisplayString() == "Plugins.Saneject.Runtime.Scopes.Scope")
                 return true;
 

@@ -116,7 +116,7 @@ Roslyn analyzers are supported by most modern IDEs such as JetBrains Rider and V
 
 In the Unity project, Saneject's analyzer assembly is included at:
 
-- `Assets/Plugins/Saneject/Experimental/Roslyn/Saneject.Analyzers.dll`
+- `Assets/Plugins/Saneject/Roslyn/Saneject.Analyzers.dll`
 
 It is imported with the `RoslynAnalyzer` asset label, so Unity treats it as analyzer tooling instead of runtime gameplay code.
 

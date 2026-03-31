@@ -7,7 +7,7 @@
         ctorArguments:
           - System.ComponentModel.EditorBrowsableState.Never
 
-  # Include everything else in the Experimental namespace
+  # Include everything else in the Saneject namespace
   - include:
       uidRegex: ^Plugins\.Saneject(\..*)?$
 
