@@ -14,6 +14,7 @@ using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using Component = UnityEngine.Component;
+using Debug = UnityEngine.Debug;
 using Object = UnityEngine.Object;
 
 // ReSharper disable LoopCanBePartlyConvertedToQuery
@@ -33,18 +34,30 @@ namespace Plugins.Saneject.Editor.Core
                 return;
             }
 
-            Logger.TryClearLog();
-            InjectionProgressTracker progressTracker = new(totalSegments: 10);
-            progressTracker.SetTitle("Injecting");
+            InjectionProgressTracker progressTracker = null;
 
-            RunContext
-            (
-                startObjects,
-                contextWalkFilter,
-                progressTracker
-            );
+            try
+            {
+                Logger.TryClearLog();
+                progressTracker = new InjectionProgressTracker(totalSegments: 10);
+                progressTracker.SetTitle("Injecting");
 
-            progressTracker.ClearProgressBar();
+                RunContext
+                (
+                    startObjects,
+                    contextWalkFilter,
+                    progressTracker
+                );
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Saneject: Unexpected exception during injection. The operation was aborted. Exception details in next log.");
+                Debug.LogException(e);
+            }
+            finally
+            {
+                progressTracker?.ClearProgressBar();
+            }
         }
 
         public static void RunBatch(IReadOnlyCollection<BatchItem> batchItems)
@@ -63,44 +76,56 @@ namespace Plugins.Saneject.Editor.Core
                 .OfType<PrefabBatchItem>()
                 .ToHashSet();
 
-            Logger.TryClearLog();
-
             if (!EditorSceneManager.SaveCurrentModifiedScenesIfUserWantsTo())
             {
                 Logger.LogInjectionCancelledByUser();
                 return;
             }
 
-            InjectionProgressTracker progressTracker = new(totalSegments: (sceneBatchItems.Count + prefabBatchItems.Count) * 10);
-            Stopwatch sceneStopwatch = Stopwatch.StartNew();
+            InjectionProgressTracker progressTracker = null;
 
-            InjectionResults sceneResults = RunSceneBatch
-            (
-                sceneBatchItems,
-                progressTracker
-            );
+            try
+            {
+                Logger.TryClearLog();
+                progressTracker = new InjectionProgressTracker(totalSegments: (sceneBatchItems.Count + prefabBatchItems.Count) * 10);
+                Stopwatch sceneStopwatch = Stopwatch.StartNew();
 
-            sceneStopwatch.Stop();
-            Stopwatch prefabStopwatch = Stopwatch.StartNew();
+                InjectionResults sceneResults = RunSceneBatch
+                (
+                    sceneBatchItems,
+                    progressTracker
+                );
 
-            InjectionResults prefabResults = RunPrefabBatch
-            (
-                prefabBatchItems,
-                progressTracker
-            );
+                sceneStopwatch.Stop();
+                Stopwatch prefabStopwatch = Stopwatch.StartNew();
 
-            prefabStopwatch.Stop();
-            progressTracker.ClearProgressBar();
+                InjectionResults prefabResults = RunPrefabBatch
+                (
+                    prefabBatchItems,
+                    progressTracker
+                );
 
-            Logger.LogBatchSummary
-            (
-                sceneBatchItems.Count,
-                prefabBatchItems.Count,
-                sceneResults,
-                prefabResults,
-                sceneStopwatch.ElapsedMilliseconds,
-                prefabStopwatch.ElapsedMilliseconds
-            );
+                prefabStopwatch.Stop();
+
+                Logger.LogBatchSummary
+                (
+                    sceneBatchItems.Count,
+                    prefabBatchItems.Count,
+                    sceneResults,
+                    prefabResults,
+                    sceneStopwatch.ElapsedMilliseconds,
+                    prefabStopwatch.ElapsedMilliseconds
+                );
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Saneject: Unexpected exception during injection. The operation was aborted. Exception details in next log.");
+                Debug.LogException(e);
+            }
+            finally
+            {
+                progressTracker?.ClearProgressBar();
+            }
         }
 
         private static InjectionResults RunSceneBatch(
@@ -173,10 +198,7 @@ namespace Plugins.Saneject.Editor.Core
 
                 progressTracker.SetTitle($"Batch injecting prefab: {prefabRoot.name}");
 
-                Transform[] startObjects =
-                {
-                    prefabRoot
-                };
+                Transform[] startObjects = { prefabRoot };
 
                 using (new Logger.BatchInjectionScope(item))
                 {

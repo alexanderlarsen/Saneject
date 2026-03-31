@@ -158,7 +158,7 @@ namespace Plugins.Saneject.Editor.Core
             foreach (Error error in errors)
                 if (error.Exception != null)
                 {
-                    Debug.LogError($"Saneject: {ErrorTypeToDisplayString(error.ErrorType)} (exception details in next log) {error.ErrorMessage}", error.LogContext);
+                    Debug.LogError($"Saneject: {ErrorTypeToDisplayString(error.ErrorType)}. Exception details in next log. {error.ErrorMessage}", error.LogContext);
                     Debug.LogException(error.Exception, error.LogContext);
                 }
                 else
