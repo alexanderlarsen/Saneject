@@ -105,7 +105,7 @@ namespace Tests.Saneject.Editor.Editor.Menus
 
             // Assert
             Assert.That(getCodeStringMethod, Is.Not.Null);
-            Assert.That(codeString?.Replace("\r\n", "\n"), Is.EqualTo(
+            Assert.That(NormalizeLineEndings(codeString), Is.EqualTo(NormalizeLineEndings(
 $@"using Plugins.Saneject.Runtime.Scopes;
 
 public class MyScope : Scope
@@ -113,7 +113,7 @@ public class MyScope : Scope
     protected override void DeclareBindings()
     {{
     }}
-}}"));
+}}")));
         }
 
         [Test]
@@ -131,7 +131,7 @@ public class MyScope : Scope
 
             // Assert
             Assert.That(getCodeStringMethod, Is.Not.Null);
-            Assert.That(codeString?.Replace("\r\n", "\n"), Is.EqualTo(
+            Assert.That(NormalizeLineEndings(codeString), Is.EqualTo(NormalizeLineEndings(
 $@"using Plugins.Saneject.Runtime.Scopes;
 
 namespace Tests.Generated
@@ -142,7 +142,12 @@ namespace Tests.Generated
         {{
         }}
     }}
-}}"));
+}}")));
+        }
+
+        private static string NormalizeLineEndings(string input)
+        {
+            return input.Replace("\r\n", "\n");
         }
     }
 }
