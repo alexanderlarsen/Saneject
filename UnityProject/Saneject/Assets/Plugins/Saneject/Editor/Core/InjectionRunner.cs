@@ -51,7 +51,7 @@ namespace Plugins.Saneject.Editor.Core
             }
             catch (Exception e)
             {
-                Debug.LogError("Saneject: Unexpected exception during injection. The operation was aborted. Exception details in next log.");
+                Debug.LogError("Saneject: Unexpected exception during injection. The operation was aborted. Exception details in next log. If this persists, please report it on GitHub.");
                 Debug.LogException(e);
             }
             finally
@@ -119,7 +119,7 @@ namespace Plugins.Saneject.Editor.Core
             }
             catch (Exception e)
             {
-                Debug.LogError("Saneject: Unexpected exception during injection. The operation was aborted. Exception details in next log.");
+                Debug.LogError("Saneject: Unexpected exception during injection. The operation was aborted. Exception details in next log. If this persists, please report it on GitHub.");
                 Debug.LogException(e);
             }
             finally
