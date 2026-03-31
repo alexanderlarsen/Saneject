@@ -109,9 +109,27 @@ namespace Tests.Saneject.Fixtures.Scripts
                 .ToArray();
         }
 
-        public string SaveToDisk()
+        public string SaveToDisk(string folderPath = null)
         {
-            scenePath ??= AssetDatabase.GenerateUniqueAssetPath("Assets/Tests/Saneject/Fixtures/TestScene.unity");
+            string targetFolderPath = folderPath ?? "Assets/Tests/Saneject/Fixtures";
+
+            if (!AssetDatabase.IsValidFolder(targetFolderPath))
+            {
+                string[] folders = targetFolderPath.Split('/');
+                string currentPath = folders[0];
+
+                for (int i = 1; i < folders.Length; i++)
+                {
+                    string nextPath = $"{currentPath}/{folders[i]}";
+
+                    if (!AssetDatabase.IsValidFolder(nextPath))
+                        AssetDatabase.CreateFolder(currentPath, folders[i]);
+
+                    currentPath = nextPath;
+                }
+            }
+
+            scenePath ??= AssetDatabase.GenerateUniqueAssetPath($"{targetFolderPath}/TestScene.unity");
             EditorSceneManager.SaveScene(Scene, scenePath);
             return scenePath;
         }

@@ -1,5 +1,5 @@
 {
-    "name": "Tests.Saneject.Editor",
+    "name": "Tests.Saneject.Runtime",
     "rootNamespace": "",
     "references": [
         "GUID:82700f7d29b0f5944a5264876055ce1b",
