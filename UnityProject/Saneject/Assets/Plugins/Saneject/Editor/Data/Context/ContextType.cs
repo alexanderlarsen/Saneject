@@ -5,9 +5,8 @@ namespace Plugins.Saneject.Editor.Data.Context
     [EditorBrowsable(EditorBrowsableState.Never)]
     public enum ContextType
     {
-        Global,
+        SceneObject,
         PrefabAsset,
-        PrefabInstance,
-        SceneObject
+        PrefabInstance
     }
 }

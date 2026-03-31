@@ -72,6 +72,8 @@ With isolation disabled:
 - Step 1 can walk across [scene object](../reference/glossary.md#scene-object) and [prefab instance](../reference/glossary.md#prefab-instance) boundaries inside the same containing scene or [prefab asset](../reference/glossary.md#prefab-asset).
 - Step 2 can also accept [dependency candidates](../reference/glossary.md#dependency-candidate) across those boundaries.
 
+Values resolved through [asset bindings](../reference/glossary.md#asset-binding) are a separate case. They are treated as contextless for resolution purposes, so they are not filtered by scene or prefab [context](../reference/glossary.md#context) boundaries in the same way hierarchy-bound candidates are.
+
 ### Practical effect
 
 - `UseContextIsolation = true`: Strict boundaries. A component can only get injected into other components from its own [context](../reference/glossary.md#context), e.g., a component on a [prefab instance](../reference/glossary.md#prefab-instance) cannot be injected into a component on a [scene object](../reference/glossary.md#scene-object).

@@ -1,4 +1,3 @@
-using System.Text.RegularExpressions;
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.Context;
@@ -7,40 +6,11 @@ using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.TestTools;
 
 namespace Tests.Saneject.Editor.Context
 {
     public class DependencyAssetContextTests
     {
-        [Test]
-        public void PrefabAssetRoot_LoadedFromAssetDatabase_SetsGlobalContextIdentity()
-        {
-            // Set up prefab asset
-            TestPrefabAsset prefab = TestPrefabAsset.Create("Prefab Root", width: 1, depth: 2);
-            PrefabUtility.SaveAsPrefabAsset(prefab.Root, prefab.AssetPath);
-
-            try
-            {
-                // Capture context identity
-                GameObject prefabAsset = AssetDatabase.LoadAssetAtPath<GameObject>(prefab.AssetPath);
-                ContextIdentity identity = new(prefabAsset);
-
-                // Assert
-                Assert.That(prefabAsset, Is.Not.Null);
-                Assert.That(identity.Type, Is.EqualTo(ContextType.Global));
-                Assert.That(identity.Id, Is.EqualTo(0));
-                Assert.That(identity.ContainerType, Is.EqualTo(ContextType.Global));
-                Assert.That(identity.ContainerId, Is.EqualTo(0));
-                Assert.That(identity.IsPrefab, Is.False);
-            }
-            finally
-            {
-                prefab.Destroy();
-                prefab.DeleteAsset();
-            }
-        }
-
         [Test]
         public void Scene_PrefabAsset_Injects_WHEN_ContextIsolationIsTrue_And_UsedAsDependencyAsset()
         {
@@ -76,7 +46,7 @@ namespace Tests.Saneject.Editor.Context
                 prefab.DeleteAsset();
             }
         }
-        
+
         [Test]
         public void Scene_PrefabAsset_Injects_WHEN_ContextIsolationIsFalse_And_UsedAsDependencyAsset()
         {

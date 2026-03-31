@@ -56,13 +56,9 @@ namespace Plugins.Saneject.Editor.Data.Context
             };
 
             if (!gameObject)
-                return new ContextData
-                (
-                    type: ContextType.Global,
-                    key: 0,
-                    containerType: ContextType.Global,
-                    containerKey: 0
-                ); // Non-GameObjects (ScriptableObjects, etc.)
+                throw new ArgumentException(
+                    $"ContextIdentity requires a GameObject or Component, got {obj?.GetType().Name ?? "null"}",
+                    nameof(obj));
 
             PrefabStage currentPrefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             bool isInCurrentPrefabStage = currentPrefabStage && gameObject.scene == currentPrefabStage.scene;

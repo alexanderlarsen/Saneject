@@ -40,30 +40,25 @@ namespace Plugins.Saneject.Editor.Core
 
             foreach (Object candidate in allCandidates)
             {
+                // Injected assets are global and can be injected into any context.
+                if (bindingNode is AssetBindingNode)
+                {
+                    validCandidates.Add(candidate);
+                    continue;
+                }
+
                 ContextIdentity candidateContext = new(candidate);
                 ContextIdentity scopeContext = bindingNode.ScopeNode.TransformNode.ContextIdentity;
 
-                if (CanResolveAcrossContexts(candidateContext, scopeContext))
+                if ((ProjectSettings.UseContextIsolation && candidateContext.Equals(scopeContext)) ||
+                    (candidateContext.ContainerType == scopeContext.ContainerType &&
+                     candidateContext.ContainerId == scopeContext.ContainerId))
                     validCandidates.Add(candidate);
                 else
                     rejectedTypes.Add(candidate.GetType());
             }
 
             candidates = validCandidates.ToArray();
-        }
-
-        private static bool CanResolveAcrossContexts(
-            ContextIdentity candidateContext,
-            ContextIdentity scopeContext)
-        {
-            if (candidateContext.Type == ContextType.Global || scopeContext.Type == ContextType.Global)
-                return true;
-
-            if (ProjectSettings.UseContextIsolation)
-                return candidateContext.Equals(scopeContext);
-
-            return candidateContext.ContainerType == scopeContext.ContainerType &&
-                   candidateContext.ContainerId == scopeContext.ContainerId;
         }
 
         private static IEnumerable<Object> LocateComponentCandidates(

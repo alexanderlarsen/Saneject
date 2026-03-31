@@ -204,7 +204,7 @@ With `UseContextIsolation` disabled:
 - Nearest-scope lookup can walk across [scene object](../reference/glossary.md#scene-object) and [prefab instance](../reference/glossary.md#prefab-instance) boundaries in the active hierarchy
 - Candidate objects are accepted across [contexts](../reference/glossary.md#context) only when they belong to the same containing scene or [prefab asset](../reference/glossary.md#prefab-asset)
 
-One subtle but important detail is that non-`GameObject` objects such as assets and proxy assets have `ContextType.Global`, so they are not rejected by [context isolation](../reference/glossary.md#context-isolation). This is what makes asset injection and proxy placeholder injection compatible with strict [context](../reference/glossary.md#context) boundaries.
+One subtle but important detail is that [context isolation](../reference/glossary.md#context-isolation) applies to hierarchy-bound candidates, not to values resolved through [asset bindings](../reference/glossary.md#asset-binding). Any object injected through an [asset binding](../reference/glossary.md#asset-binding) is treated as contextless for resolution purposes, regardless of its concrete Unity type. This is what makes asset injection compatible with strict [context](../reference/glossary.md#context) boundaries, including cases where a prefab asset is injected as a dependency asset rather than traversed as part of a prefab hierarchy.
 
 #### Result shaping
 

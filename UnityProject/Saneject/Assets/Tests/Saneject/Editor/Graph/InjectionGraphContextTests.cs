@@ -23,7 +23,6 @@ namespace Tests.Saneject.Editor.Graph
             TestPrefabAsset prefab = CreateContextBoundaryPrefab();
             TestPrefabInstance prefabInstance = prefab.Instantiate(scene.GetTransform("Root 1"), "Prefab Instance");
             Transform prefabInstanceChild = prefabInstance.GetTransform("Root 1/Child 2");
-            AssetDependency assetDependency = Resources.Load<AssetDependency>("AssetDependency 1");
 
             try
             {
@@ -33,10 +32,8 @@ namespace Tests.Saneject.Editor.Graph
                 ContextIdentity prefabInstanceChildIdentity = new(prefabInstanceChild);
                 TestPrefabInstance prefabStage = prefab.OpenStage();
                 ContextIdentity prefabAssetIdentity = new(prefabStage.Root.transform);
-                ContextIdentity assetIdentity = new(assetDependency);
 
                 // Assert
-                Assert.That(assetDependency, Is.Not.Null);
                 Assert.That(sceneIdentity.Type, Is.EqualTo(ContextType.SceneObject));
                 Assert.That(sceneIdentity.ContainerType, Is.EqualTo(ContextType.SceneObject));
                 Assert.That(sceneIdentity.IsPrefab, Is.False);
@@ -55,10 +52,6 @@ namespace Tests.Saneject.Editor.Graph
                 Assert.That(prefabAssetIdentity.ContainerType, Is.EqualTo(ContextType.PrefabAsset));
                 Assert.That(prefabAssetIdentity.IsPrefab, Is.True);
                 Assert.That(prefabAssetIdentity.ContainerId, Is.EqualTo(prefabAssetIdentity.Id));
-                Assert.That(assetIdentity.Type, Is.EqualTo(ContextType.Global));
-                Assert.That(assetIdentity.ContainerType, Is.EqualTo(ContextType.Global));
-                Assert.That(assetIdentity.IsPrefab, Is.False);
-                Assert.That(assetIdentity.ContainerId, Is.EqualTo(assetIdentity.Id));
                 Assert.That(sceneIdentity, Is.Not.EqualTo(prefabInstanceRootIdentity));
                 Assert.That(prefabAssetIdentity, Is.Not.EqualTo(prefabInstanceRootIdentity));
             }

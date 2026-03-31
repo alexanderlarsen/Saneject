@@ -1,10 +1,8 @@
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
 using Tests.Saneject.Fixtures.Scripts;
-using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Tests.Saneject.Editor.Context
 {
@@ -147,31 +145,6 @@ namespace Tests.Saneject.Editor.Context
                 hostPrefab.DeleteAsset();
                 nestedPrefab.Destroy();
                 nestedPrefab.DeleteAsset();
-            }
-        }
-
-        [Test]
-        public void NonGameObject_SetsExpectedContextIdentity()
-        {
-            // Set up object
-            AssetDependency dependency = ScriptableObject.CreateInstance<AssetDependency>();
-
-            try
-            {
-                // Capture context identity
-                ContextIdentity identity = new(dependency);
-
-                // Assert
-                Assert.That(dependency, Is.Not.Null);
-                Assert.That(identity.Type, Is.EqualTo(ContextType.Global));
-                Assert.That(identity.Id, Is.EqualTo(0));
-                Assert.That(identity.ContainerType, Is.EqualTo(ContextType.Global));
-                Assert.That(identity.ContainerId, Is.EqualTo(0));
-                Assert.That(identity.IsPrefab, Is.False);
-            }
-            finally
-            {
-                Object.DestroyImmediate(dependency);
             }
         }
     }
