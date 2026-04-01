@@ -52,6 +52,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
         {
             timer += Time.deltaTime;
             Vector3 toEvade = transform.position - evadeTarget.Position;
+            toEvade.y = 0f;
 
             float moveSpeed = walkSpeed;
 
@@ -65,7 +66,9 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
                 PickNewTarget();
             }
 
-            Vector3 direction = (currentTarget - transform.position).normalized;
+            Vector3 direction = currentTarget - transform.position;
+            direction.y = 0f;
+            direction.Normalize();
             characterController.Move(direction * (moveSpeed * Time.deltaTime));
         }
 

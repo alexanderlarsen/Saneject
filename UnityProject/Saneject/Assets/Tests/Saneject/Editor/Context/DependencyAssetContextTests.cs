@@ -88,7 +88,6 @@ namespace Tests.Saneject.Editor.Context
         {
             // Expect error logs for missing dependencies
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
 
             // Set up scene
@@ -129,7 +128,6 @@ namespace Tests.Saneject.Editor.Context
         {
             // Expect error logs for missing dependencies
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
-            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Could not locate dependency"));
             LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
 
             // Set up scene

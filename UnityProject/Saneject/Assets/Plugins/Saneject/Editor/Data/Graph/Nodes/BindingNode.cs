@@ -25,6 +25,7 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
             IdQualifiers = binding.IdQualifiers.ToList();
             MemberNameQualifiers = binding.MemberNameQualifiers.ToList();
             TargetTypeQualifiers = binding.TargetTypeQualifiers.ToList();
+            FromMethodException = binding.FromMethodException;
         }
 
         public ScopeNode ScopeNode { get; }
@@ -38,6 +39,8 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
         public IReadOnlyCollection<string> IdQualifiers { get; }
         public IReadOnlyCollection<string> MemberNameQualifiers { get; }
         public IReadOnlyCollection<Type> TargetTypeQualifiers { get; }
+
+        public Exception FromMethodException { get; }
 
         public bool Equals(BindingNode other)
         {

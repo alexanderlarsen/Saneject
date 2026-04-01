@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Data.Injection;
-using Plugins.Saneject.Editor.Data.Logging;
 using UnityEditor;
 using Component = UnityEngine.Component;
 
@@ -99,7 +99,7 @@ namespace Plugins.Saneject.Editor.Core
                 }
                 catch (Exception e)
                 {
-                    context.RegisterError(Error.CreateMethodInvocationException(methodNode, e));
+                    context.RegisterError(new InjectMethodInvocationError(methodNode, e));
                 }
 
                 progressTracker.NextStep();

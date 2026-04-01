@@ -583,7 +583,16 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> FromMethod(Func<TComponent> method)
         {
             binding.SearchOrigin = SearchOrigin.Instance;
-            binding.ResolveFromInstances.Add(method?.Invoke() as Object); // TODO: Silent fail if not UnityEngine.Object?
+
+            try
+            {
+                binding.ResolveFromInstances.Add(method?.Invoke() as Object); // TODO: Silent fail if not UnityEngine.Object?
+            }
+            catch (Exception e)
+            {
+                binding.FromMethodException = e;
+            }
+
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }
@@ -596,7 +605,16 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
         public ComponentFilterBuilder<TComponent> FromMethod(Func<IEnumerable<TComponent>> method)
         {
             binding.SearchOrigin = SearchOrigin.Instance;
-            binding.ResolveFromInstances.AddRange(method?.Invoke().OfType<Object>() ?? Enumerable.Empty<Object>()); // TODO: Silent fail if not UnityEngine.Object?
+
+            try
+            {
+                binding.ResolveFromInstances.AddRange(method?.Invoke().OfType<Object>() ?? Enumerable.Empty<Object>()); // TODO: Silent fail if not UnityEngine.Object?
+            }
+            catch (Exception e)
+            {
+                binding.FromMethodException = e;
+            }
+
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }

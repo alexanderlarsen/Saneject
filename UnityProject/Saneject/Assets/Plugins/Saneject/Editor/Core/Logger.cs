@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Text;
 using Plugins.Saneject.Editor.Data.BatchInjection;
+using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Data.Injection;
 using Plugins.Saneject.Editor.Data.Logging;
@@ -150,51 +151,106 @@ namespace Plugins.Saneject.Editor.Core
 
         private static void LogErrors(InjectionResults results)
         {
-            IEnumerable<Error> errors = results
+            IEnumerable<InjectionError> errors = results
                 .Errors
-                .OrderBy(e => ErrorPriority(e.ErrorType))
-                .Where(error => !error.SuppressError);
+                .OrderBy(ErrorPriority)
+                .Where(error => !error.SuppressError)
+                .ToArray();
 
-            foreach (Error error in errors)
+            foreach (InjectionError error in errors)
+            {
+                StringBuilder errorStringBuilder = new();
+
+                switch (error)
+                {
+                    case InvalidBindingError invalidBindingError:
+                    {
+                        errorStringBuilder.Append("Invalid binding. ");
+                        errorStringBuilder.Append(invalidBindingError.Reason);
+                        errorStringBuilder.Append(" ");
+                        errorStringBuilder.Append(invalidBindingError.BindingSignature);
+                        break;
+                    }
+                    case MissingBindingError missingBindingError:
+                    {
+                        errorStringBuilder.Append("Missing binding. Expected something like ");
+                        errorStringBuilder.Append(missingBindingError.ExpectedBindingSignature);
+                        errorStringBuilder.Append(" ");
+                        errorStringBuilder.Append(missingBindingError.SiteSignature);
+                        break;
+                    }
+
+                    case MissingGlobalDependencyError missingGlobalDependencyError:
+                    {
+                        errorStringBuilder.Append("Could not locate global object. ");
+                        errorStringBuilder.Append(missingGlobalDependencyError.BindingSignature);
+
+                        if (missingGlobalDependencyError.RejectedTypes is { Count: > 0 })
+                        {
+                            string typeList = string.Join(", ", missingGlobalDependencyError.RejectedTypes.Select(t => t.Name));
+                            errorStringBuilder.AppendLine();
+                            errorStringBuilder.AppendLine($"Candidates rejected due to scene/prefab or prefab/prefab context mismatch: {typeList}.");
+                            errorStringBuilder.AppendLine("Use RuntimeProxy for cross-context references or disable Context Isolation in Settings.");
+                        }
+
+                        break;
+                    }
+
+                    case MissingDependencyError missingDependencyError:
+                    {
+                        errorStringBuilder.Append($"Could not locate {(missingDependencyError.IsCollection ? "dependencies" : "dependency")}. ");
+                        errorStringBuilder.Append(missingDependencyError.BindingSignature);
+                        errorStringBuilder.Append(" ");
+                        errorStringBuilder.Append(missingDependencyError.SiteSignature);
+
+                        if (missingDependencyError.RejectedTypes is { Count: > 0 })
+                        {
+                            string typeList = string.Join(", ", missingDependencyError.RejectedTypes.Select(t => t.Name));
+                            errorStringBuilder.AppendLine();
+                            errorStringBuilder.AppendLine($"Candidates rejected due to scene/prefab or prefab/prefab context mismatch: {typeList}.");
+                            errorStringBuilder.AppendLine("Use RuntimeProxy for cross-context references or disable Context Isolation in Settings.");
+                        }
+
+                        break;
+                    }
+
+                    case FilterCandidatesError filterCandidatesError:
+                    {
+                        errorStringBuilder.Append("Filter candidates error ");
+                        errorStringBuilder.Append(filterCandidatesError.BindingSignature);
+                        break;
+                    }
+
+                    case InjectMethodInvocationError injectMethodInvocationError:
+                    {
+                        errorStringBuilder.Append("Inject method invocation error ");
+                        errorStringBuilder.Append(injectMethodInvocationError.SiteSignature);
+                        break;
+                    }
+                }
+
                 if (error.Exception != null)
-                {
-                    Debug.LogError($"Saneject: {ErrorTypeToDisplayString(error.ErrorType)}. Exception details in next log. {error.ErrorMessage}", error.LogContext);
+                    errorStringBuilder.Append(" | Exception details in next log:");
+
+                Debug.LogError($"Saneject: {errorStringBuilder}", error.LogContext);
+
+                if (error.Exception != null)
                     Debug.LogException(error.Exception, error.LogContext);
-                }
-                else
-                {
-                    Debug.LogError($"Saneject: {ErrorTypeToDisplayString(error.ErrorType)} {error.ErrorMessage}", error.LogContext);
-                }
+            }
 
             return;
 
-            static int ErrorPriority(ErrorType errorType)
+            static int ErrorPriority(InjectionError error)
             {
-                return errorType switch
+                return error switch
                 {
-                    ErrorType.InvalidBinding => 0,
-                    ErrorType.MissingBinding => 1,
-                    ErrorType.MissingGlobalObject => 2,
-                    ErrorType.MissingDependency => 3,
-                    ErrorType.MissingDependencies => 4,
-                    ErrorType.BindingFilterException => 5,
-                    ErrorType.MethodInvocationException => 6,
+                    InvalidBindingError => 0,
+                    MissingBindingError => 1,
+                    MissingGlobalDependencyError => 2,
+                    MissingDependencyError => 3,
+                    FilterCandidatesError => 4,
+                    InjectMethodInvocationError => 5,
                     _ => int.MaxValue
-                };
-            }
-
-            static string ErrorTypeToDisplayString(ErrorType type)
-            {
-                return type switch
-                {
-                    ErrorType.InvalidBinding => "Invalid binding",
-                    ErrorType.MissingBinding => "Missing binding. Expected something like",
-                    ErrorType.MissingGlobalObject => "Could not locate global object",
-                    ErrorType.MissingDependency => "Could not locate dependency",
-                    ErrorType.MissingDependencies => "Could not locate dependencies",
-                    ErrorType.BindingFilterException => "Binding filter exception",
-                    ErrorType.MethodInvocationException => "Method invocation exception",
-                    _ => "Unknown error"
                 };
             }
         }
@@ -203,7 +259,7 @@ namespace Plugins.Saneject.Editor.Core
         {
             if (!UserSettings.LogUnusedBindings)
                 return;
-            
+
             foreach (BindingNode binding in results.UnusedBindingNodes)
                 Debug.LogWarning($"Saneject: Unused binding {SignatureUtility.GetBindingSignature(binding)}. If you don't plan to use this binding, you can safely remove it.", binding.ScopeNode.TransformNode.Transform);
         }

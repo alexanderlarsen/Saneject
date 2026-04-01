@@ -55,5 +55,10 @@ namespace Plugins.Saneject.Runtime.Bindings
         /// A list of <see cref="DependencyFilter"/> used to further refine the selection of dependencies.
         /// </summary>
         public List<DependencyFilter> DependencyFilters { get; } = new();
+        
+        /// <summary>
+        /// If an exception occurs during .FromMethod() materialization, this exception will be stored here.
+        /// </summary>
+        public Exception FromMethodException { get; set; }
     }
 }

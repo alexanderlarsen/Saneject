@@ -1,5 +1,7 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Logging;
 
 namespace Plugins.Saneject.Editor.Data.Injection
@@ -14,26 +16,26 @@ namespace Plugins.Saneject.Editor.Data.Injection
             InjectedFieldCount = results.InjectedFieldCount;
             InjectedPropertyCount = results.InjectedPropertyCount;
             InjectedMethodCount = results.InjectedMethodCount;
+            Errors = results.Errors;
 
-            MissingBindingCount = results
-                .Errors
-                .Count(error => error.ErrorType == ErrorType.MissingBinding && !error.SuppressError);
+            MissingBindingCount = Errors
+                .OfType<MissingBindingError>()
+                .Count(error => !error.SuppressError);
+
+            InvalidBindingCount = Errors
+                .OfType<InvalidBindingError>()
+                .Count(error => !error.SuppressError);
+
+            MissingDependencyCount = Errors
+                .OfType<MissingDependencyError>()
+                .Count(error => !error.SuppressError);
+
+            SuppressedErrorCount = Errors
+                .Count(error => error.SuppressError);
 
             UnusedBindingCount = results
                 .UnusedBindingNodes
                 .Count;
-
-            InvalidBindingCount = results
-                .Errors
-                .Count(error => error.ErrorType == ErrorType.InvalidBinding && !error.SuppressError);
-
-            MissingDependencyCount = results
-                .Errors
-                .Count(error => error.ErrorType is ErrorType.MissingDependency or ErrorType.MissingDependencies && !error.SuppressError);
-
-            SuppressedErrorCount = results
-                .Errors
-                .Count(error => error.SuppressError);
 
             ScopesProcessedCount = results.ScopesProcessedCount;
         }
@@ -50,11 +52,11 @@ namespace Plugins.Saneject.Editor.Data.Injection
         public int UnusedBindingCount { get; }
         public int SuppressedErrorCount { get; }
 
+        private IReadOnlyCollection<InjectionError> Errors { get; }
+
         public LogSeverity GetLogSeverity()
         {
-            int totalErrors = MissingBindingCount + InvalidBindingCount + MissingDependencyCount;
-
-            if (totalErrors > 0)
+            if (Errors.Count(e => !e.SuppressError) > 0)
                 return LogSeverity.Error;
 
             return UnusedBindingCount > 0 ? LogSeverity.Warning : LogSeverity.Info;

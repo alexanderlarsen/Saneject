@@ -67,6 +67,25 @@ namespace Tests.Saneject.Editor.Binding.Validation
         }
 
         [Test]
+        public void BindAsset_TConcrete_WithNonPersistentInstance_IsInvalid()
+        {
+            // Expect logs
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Invalid binding"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            AssetDependency dependency = ScriptableObject.CreateInstance<AssetDependency>();
+
+            // Bind
+            scope.BindAsset<AssetDependency>().FromInstance(dependency);
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+        }
+
+        [Test]
         public void BindMultipleAssets_TConcreteTConcrete_IsInvalid()
         {
             // Expect logs

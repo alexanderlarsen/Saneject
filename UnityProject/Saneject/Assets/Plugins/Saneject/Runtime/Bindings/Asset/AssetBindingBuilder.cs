@@ -17,13 +17,48 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         private readonly AssetBinding binding;
 
         /// <summary>
-        /// Initializes a new instance of the <see cref="AssetBindingBuilder{TAsset}"/> class.
+        /// Initializes a new instance of the <see cref="AssetBindingBuilder{TAsset}" /> class.
         /// </summary>
-        /// <param name="binding">The <see cref="AssetBinding"/> to configure.</param>
+        /// <param name="binding">The <see cref="AssetBinding" /> to configure.</param>
         public AssetBindingBuilder(AssetBinding binding)
         {
             this.binding = binding;
         }
+
+        #region ASSET LOAD METHODS
+
+        /// <summary>
+        /// Locate the <see cref="Object" /> asset at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAssetAtPath(string, System.Type)" />.
+        /// </summary>
+        /// <param name="assetPath">The asset path.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
+        public AssetFilterBuilder<TAsset> FromAssetLoad(string assetPath)
+        {
+            binding.AssetPath = assetPath;
+            binding.AssetLoadType = AssetLoadType.AssetLoad;
+            binding.LocatorStrategySpecified = true;
+            return new AssetFilterBuilder<TAsset>(binding);
+        }
+
+        #endregion
+
+        #region FOLDER METHODS
+
+        /// <summary>
+        /// Locate all <see cref="Object" />s of type <typeparamref name="TAsset" /> in the specified folder
+        /// using <see cref="UnityEditor.AssetDatabase.FindAssets(string, string[])" />.
+        /// </summary>
+        /// <param name="folderPath">The folder path.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
+        public AssetFilterBuilder<TAsset> FromFolder(string folderPath)
+        {
+            binding.AssetPath = folderPath;
+            binding.AssetLoadType = AssetLoadType.Folder;
+            binding.LocatorStrategySpecified = true;
+            return new AssetFilterBuilder<TAsset>(binding);
+        }
+
+        #endregion
 
         #region QUALIFIER METHODS
 
@@ -80,14 +115,13 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
 
         #endregion
 
-
         #region RESOURCES METHODS
 
         /// <summary>
         /// Locate the <see cref="Object" /> in a <see cref="Resources" /> folder at the specified path using <see cref="Resources.Load(string)" />.
         /// </summary>
         /// <param name="path">The resource path.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromResources(string path)
         {
             binding.AssetPath = path;
@@ -100,7 +134,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         /// Locate all <see cref="Object" />s in a <see cref="Resources" /> folder at the specified path using <see cref="Resources.LoadAll(string, System.Type)" />.
         /// </summary>
         /// <param name="path">The resource path.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromResourcesAll(string path)
         {
             binding.AssetPath = path;
@@ -111,50 +145,13 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
 
         #endregion
 
-        #region ASSET LOAD METHODS
-
-        /// <summary>
-        /// Locate the <see cref="Object" /> asset at the specified path using <see cref="UnityEditor.AssetDatabase.LoadAssetAtPath(string, System.Type)" />.
-        /// </summary>
-        /// <param name="assetPath">The asset path.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
-        public AssetFilterBuilder<TAsset> FromAssetLoad(string assetPath)
-        {
-            binding.AssetPath = assetPath;
-            binding.AssetLoadType = AssetLoadType.AssetLoad;
-            binding.LocatorStrategySpecified = true;
-            return new AssetFilterBuilder<TAsset>(binding);
-        }
- 
-
-        #endregion
-
-        #region FOLDER METHODS
-
-        /// <summary>
-        /// Locate all <see cref="Object" />s of type <typeparamref name="TAsset" /> in the specified folder
-        /// using <see cref="UnityEditor.AssetDatabase.FindAssets(string, string[])" />.
-        /// </summary>
-        /// <param name="folderPath">The folder path.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
-        public AssetFilterBuilder<TAsset> FromFolder(string folderPath)
-        {
-            binding.AssetPath = folderPath;
-            binding.AssetLoadType = AssetLoadType.Folder;
-            binding.LocatorStrategySpecified = true;
-            return new AssetFilterBuilder<TAsset>(binding);
-        }
-
-        #endregion
-
-
         #region SPECIAL METHODS
 
         /// <summary>
         /// Bind to the specified <see cref="Object" /> instance.
         /// </summary>
         /// <param name="instance">The asset instance.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromInstance(TAsset instance)
         {
             binding.AssetLoadType = AssetLoadType.Instance;
@@ -167,11 +164,20 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         /// Locate the <see cref="Object" /> using the provided method.
         /// </summary>
         /// <param name="method">The method to resolve the asset.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromMethod(Func<TAsset> method)
         {
             binding.AssetLoadType = AssetLoadType.Instance;
-            binding.ResolveFromInstances.Add(method?.Invoke());
+
+            try
+            {
+                binding.ResolveFromInstances.Add(method?.Invoke());
+            }
+            catch (Exception e)
+            {
+                binding.FromMethodException = e;
+            }
+
             binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
@@ -180,11 +186,20 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         /// Locate multiple <see cref="Object" />s using the provided method.
         /// </summary>
         /// <param name="method">The method to resolve the assets.</param>
-        /// <returns>A <see cref="AssetFilterBuilder{TAsset}"/> to further configure the binding.</returns>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
         public AssetFilterBuilder<TAsset> FromMethod(Func<IEnumerable<TAsset>> method)
         {
             binding.AssetLoadType = AssetLoadType.Instance;
-            binding.ResolveFromInstances.AddRange(method?.Invoke() ?? Enumerable.Empty<TAsset>());
+
+            try
+            {
+                binding.ResolveFromInstances.AddRange(method?.Invoke() ?? Enumerable.Empty<TAsset>());
+            }
+            catch (Exception e)
+            {
+                binding.FromMethodException = e;
+            }
+
             binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }

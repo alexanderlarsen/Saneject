@@ -3,9 +3,9 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Editor.Data.Context;
+using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Data.Injection;
-using Plugins.Saneject.Editor.Data.Logging;
 using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Runtime.Bindings.Asset;
 using Plugins.Saneject.Runtime.Bindings.Component;
@@ -193,7 +193,7 @@ namespace Plugins.Saneject.Editor.Core
                 catch (Exception e)
                 {
                     candidates = null;
-                    context.RegisterError(Error.CreateBindingFilterException(bindingNode, e));
+                    context.RegisterError(new FilterCandidatesError(bindingNode, e));
                 }
 
             return candidates ?? Enumerable.Empty<Component>();
@@ -243,15 +243,8 @@ namespace Plugins.Saneject.Editor.Core
                 catch (Exception e)
                 {
                     candidates = null;
-                    context.RegisterError(Error.CreateBindingFilterException(bindingNode, e));
+                    context.RegisterError(new FilterCandidatesError(bindingNode, e));
                 }
-
-            if (candidates != null && candidates.Any(c => !EditorUtility.IsPersistent(c)))
-            {
-                context.RegisterError(Error.CreateInvalidBindingError("Asset binding resolved one or more non-asset objects. BindAsset<T>() only supports actual assets.", bindingNode));
-
-                candidates = null;
-            }
 
             return candidates ?? Enumerable.Empty<Object>();
         }

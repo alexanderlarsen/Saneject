@@ -38,7 +38,7 @@ namespace Tests.Saneject.Editor.Binding.Filtering
         public void BindComponent_WHEN_FilterThrows_LogsBindingFilterException_ContinuesRunAndLeavesFieldUnset()
         {
             // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex(@"^Saneject: Binding filter exception\. Exception details in next log\."));
+            LogAssert.Expect(LogType.Error, new Regex(@"^Saneject: Filter candidates error \[Binding: .* \| Scope: TestScope\] \| Exception details in next log:$"));
             LogAssert.Expect(LogType.Exception, new Regex("Filter exception"));
 
             // Set up scene
@@ -74,7 +74,7 @@ namespace Tests.Saneject.Editor.Binding.Filtering
         public void BindAsset_WHEN_FilterThrows_LogsBindingFilterException_ContinuesRunAndLeavesFieldUnset()
         {
             // Expect logs
-            LogAssert.Expect(LogType.Error, new Regex(@"^Saneject: Binding filter exception\. Exception details in next log\."));
+            LogAssert.Expect(LogType.Error, new Regex(@"^Saneject: Filter candidates error \[Binding: .* \| Scope: TestScope\] \| Exception details in next log:$"));
             LogAssert.Expect(LogType.Exception, new Regex("Filter exception"));
 
             // Set up scene

@@ -321,5 +321,38 @@ namespace Tests.Saneject.Editor.Injection
             Assert.That(target.dependency, Is.Null);
             Assert.That(target.interfaceDependency, Is.Null);
         }
+
+        [Test]
+        public void Inject_WHEN_MethodThrows_LogsInjectMethodInvocationError_ContinuesRunAndInjectsOtherMembers()
+        {
+            // Expect logs
+            LogAssert.Expect(
+                LogType.Error,
+                new Regex(@"^Saneject: Inject method invocation error \[Method: Root 1/ThrowingMethodTarget/Inject\] \| Exception details in next log:$"));
+            LogAssert.Expect(LogType.Exception, new Regex("Inject method exception"));
+            LogAssert.Expect(LogType.Error, new Regex("^Saneject: Injection complete"));
+
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            ThrowingMethodTarget throwingTarget = scene.Add<ThrowingMethodTarget>("Root 1");
+            SingleConcreteComponentTarget injectedTarget = scene.Add<SingleConcreteComponentTarget>("Root 1");
+
+            // Find dependency
+            ComponentDependency dependency = scene.Add<ComponentDependency>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>().FromSelf();
+
+            // Inject
+            Assert.That(() => InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects), Throws.Nothing);
+
+            // Assert
+            Assert.That(dependency, Is.Not.Null);
+            Assert.That(throwingTarget.methodCalled, Is.True);
+            Assert.That(throwingTarget.dependency, Is.EqualTo(dependency));
+            Assert.That(injectedTarget.dependency, Is.EqualTo(dependency));
+            LogAssert.NoUnexpectedReceived();
+        }
     }
 }

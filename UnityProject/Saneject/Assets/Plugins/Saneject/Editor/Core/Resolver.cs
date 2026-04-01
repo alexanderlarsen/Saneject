@@ -3,10 +3,10 @@ using System.Collections;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Graph;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Data.Injection;
-using Plugins.Saneject.Editor.Data.Logging;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Editor.Core
@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Editor.Core
                 );
 
                 if (candidates is not { Length: > 0 })
-                    context.RegisterError(Error.CreateMissingGlobalDependencyError
+                    context.RegisterError(new MissingGlobalDependencyError
                     (
                         binding,
                         rejectedTypes
@@ -121,14 +121,16 @@ namespace Plugins.Saneject.Editor.Core
                 requestedType: fieldNode.RequestedType,
                 isCollection: fieldNode.IsCollection,
                 qualifyingMemberName: fieldNode.QualifyingName,
-                injectId: fieldNode.InjectId
+                injectId: fieldNode.InjectId,
+                out bool foundInvalidMatch
             );
 
             object resolved = null;
 
             if (bindingNode == null)
             {
-                context.RegisterError(Error.CreateMissingBindingError(fieldNode));
+                if (!foundInvalidMatch)
+                    context.RegisterError(new MissingBindingError(fieldNode));
             }
             else
             {
@@ -142,7 +144,7 @@ namespace Plugins.Saneject.Editor.Core
                 );
 
                 if (candidates is not { Length: > 0 })
-                    context.RegisterError(Error.CreateMissingDependencyError
+                    context.RegisterError(new MissingDependencyError
                     (
                         bindingNode,
                         fieldNode,
@@ -179,14 +181,16 @@ namespace Plugins.Saneject.Editor.Core
                     requestedType: parameterNode.RequestedType,
                     isCollection: parameterNode.IsCollection,
                     qualifyingMemberName: methodNode.QualifyingName,
-                    injectId: methodNode.InjectId
+                    injectId: methodNode.InjectId,
+                    out bool foundInvalidMatch
                 );
 
                 object resolved = null;
 
                 if (bindingNode == null)
                 {
-                    context.RegisterError(Error.CreateMissingBindingError(parameterNode));
+                    if (!foundInvalidMatch)
+                        context.RegisterError(new MissingBindingError(parameterNode));
                 }
                 else
                 {
@@ -200,7 +204,7 @@ namespace Plugins.Saneject.Editor.Core
                     );
 
                     if (candidates is not { Length: > 0 })
-                        context.RegisterError(Error.CreateMissingDependencyError
+                        context.RegisterError(new MissingDependencyError
                         (
                             bindingNode,
                             parameterNode,
@@ -230,21 +234,28 @@ namespace Plugins.Saneject.Editor.Core
             Type requestedType,
             bool isCollection,
             string qualifyingMemberName,
-            string injectId)
+            string injectId,
+            out bool foundInvalidMatch)
         {
+            foundInvalidMatch = false;
+
             while (currentScope != null)
             {
-                BindingNode binding = currentScope.BindingNodes
+                IEnumerable<BindingNode> bindings = currentScope.BindingNodes
                     .Where(b => b is not GlobalComponentBindingNode)
                     .Where(MatchesRequestedType)
                     .Where(MatchesIsCollection)
                     .Where(MatchesTargetTypeQualifiers)
                     .Where(MatchesMemberNameQualifiers)
-                    .Where(MatchesIdQualifiers)
-                    .FirstOrDefault(context.ValidBindingNodes.Contains);
+                    .Where(MatchesIdQualifiers);
 
-                if (binding != null)
-                    return binding;
+                foreach (BindingNode bindingNode in bindings)
+                {
+                    if (context.ValidBindingNodes.Contains(bindingNode))
+                        return bindingNode;
+
+                    foundInvalidMatch = true;
+                }
 
                 currentScope = currentScope.ParentScopeNode;
             }

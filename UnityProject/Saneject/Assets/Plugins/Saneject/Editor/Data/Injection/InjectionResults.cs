@@ -2,8 +2,10 @@
 using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Editor.Data.BatchInjection;
+using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Data.Logging;
+using UnityEditor.PackageManager;
 using UnityEngine;
 
 namespace Plugins.Saneject.Editor.Data.Injection
@@ -11,7 +13,7 @@ namespace Plugins.Saneject.Editor.Data.Injection
     [EditorBrowsable(EditorBrowsableState.Never)]
     public class InjectionResults
     {
-        private readonly List<Error> errors = new();
+        private readonly List<InjectionError> errors = new();
         private readonly List<BindingNode> unusedBindingNodes = new();
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
 
@@ -20,7 +22,7 @@ namespace Plugins.Saneject.Editor.Data.Injection
         }
 
         public InjectionResults(
-            IReadOnlyCollection<Error> errors,
+            IReadOnlyCollection<InjectionError> errors,
             IReadOnlyCollection<BindingNode> unusedBindingNodes,
             IReadOnlyCollection<(string path, Object instance)> createdProxyAssets,
             int globalRegistrationCount,
@@ -41,7 +43,7 @@ namespace Plugins.Saneject.Editor.Data.Injection
             ScopesProcessedCount = scopesProcessedCount;
         }
 
-        public IReadOnlyCollection<Error> Errors => errors;
+        public IReadOnlyCollection<InjectionError> Errors => errors;
         public IReadOnlyCollection<BindingNode> UnusedBindingNodes => unusedBindingNodes;
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
 

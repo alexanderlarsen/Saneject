@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
+using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Data.Logging;
 using Plugins.Saneject.Editor.Extensions;
@@ -20,7 +21,7 @@ namespace Plugins.Saneject.Editor.Data.Injection
         private readonly Dictionary<MethodNode, IReadOnlyList<object>> methodNodeResolutionMap = new();
         private readonly Dictionary<ScopeNode, IReadOnlyList<object>> scopeNodeGlobalResolutionMap = new();
         private readonly List<(string path, Object instance)> createdProxyAssets = new();
-        private readonly List<Error> errors = new();
+        private readonly List<InjectionError> errors = new();
         private readonly List<ComponentNode> proxySwapTargetNodes = new();
 
         public InjectionContext(
@@ -66,7 +67,7 @@ namespace Plugins.Saneject.Editor.Data.Injection
         public IReadOnlyDictionary<FieldNode, object> FieldNodeResolutionMap => fieldNodeResolutionMap;
         public IReadOnlyDictionary<MethodNode, IReadOnlyList<object>> MethodNodeResolutionMap => methodNodeResolutionMap;
         public IReadOnlyDictionary<ScopeNode, IReadOnlyList<object>> ScopeNodeGlobalResolutionMap => scopeNodeGlobalResolutionMap;
-        public IReadOnlyCollection<Error> Errors => errors;
+        public IReadOnlyCollection<InjectionError> Errors => errors;
         public IReadOnlyCollection<(string path, Object instance)> CreatedProxyAssets => createdProxyAssets;
 
         public void RegisterValidBinding(BindingNode bindingNode)
@@ -79,12 +80,12 @@ namespace Plugins.Saneject.Editor.Data.Injection
             usedBindings.Add(bindingNode);
         }
 
-        public void RegisterError(Error error)
+        public void RegisterError(InjectionError error)
         {
             errors.Add(error);
         }
 
-        public void RegisterErrors(IEnumerable<Error> errors)
+        public void RegisterErrors(IEnumerable<InjectionError> errors)
         {
             this.errors.AddRange(errors);
         }
