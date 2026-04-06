@@ -30,7 +30,7 @@ No runtime container, no startup cost, no hidden wiring. Just simple, determinis
 | Low runtime overhead                 | No runtime container, no reflection-based startup pass, and no extra lifecycle layer.                                             |
 | Built-in tooling                     | Use injection menus, batch injection, logging, validation, settings, analyzers, and more directly in the Unity Editor.            |
 
-For more features, see [Feature overview](https://docs.saneject.dev/getting-started/feature-overview).
+For more features, see [Feature overview](https://alexanderlarsen.github.io/Saneject/getting-started/feature-overview).
 
 ## Mental model
 
@@ -50,7 +50,7 @@ https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Asset
 
 Or download the [latest release](https://github.com/alexanderlarsen/Saneject/releases) and import the `Saneject` folder into your Unity project.
 
-Then jump to [Quick start](https://docs.saneject.dev/getting-started/quick-start).
+Then jump to [Quick start](https://alexanderlarsen.github.io/Saneject/getting-started/quick-start).
 
 ## Feedback appreciated
 
@@ -61,7 +61,7 @@ If you try Saneject and something works well, feels unclear, or seems broken, I 
 
 ## Links
 
-- [Docs](https://docs.saneject.dev)
-- [API](https://docs.saneject.dev)
+- [Docs](https://alexanderlarsen.github.io/Saneject/docs)
+- [API](https://alexanderlarsen.github.io/Saneject/api)
 - [Releases](https://github.com/alexanderlarsen/Saneject/releases)
 - [MIT license](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
