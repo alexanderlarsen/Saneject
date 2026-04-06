@@ -13,6 +13,8 @@ python fix-api-toc.py
 
 `fix-api-toc.py` must run after `docfx metadata` because `docfx metadata` generates `Docs/api`, including the raw `Docs/api/toc.yml` file that the script rewrites into the structure used by the site.
 
+`build-glossary-tooltips.py` rewrites glossary links in generated HTML into focusable inline tooltip markup. Tooltip positioning and viewport clamping are handled by `templates/custom/public/main.css` and `templates/custom/public/main.js`.
+
 ## Full local build and serve
 
 ```powershell

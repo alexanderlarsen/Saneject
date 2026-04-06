@@ -452,6 +452,9 @@ article dt
 /* Glossary terms */
 .glossary-term
 {
+    --glossary-tooltip-left: 0px;
+    --glossary-tooltip-top: calc(100% + 0.6rem);
+    --glossary-tooltip-width: min(30rem, calc(100vw - 2rem));
     position: relative;
     display: inline-flex;
     align-items: center;
@@ -492,11 +495,14 @@ article dt
 .glossary-term__tooltip
 {
     position: absolute;
-    left: 0;
-    top: calc(100% + 0.6rem);
+    left: var(--glossary-tooltip-left);
+    top: var(--glossary-tooltip-top);
     z-index: 30;
     display: block;
-    width: min(30rem, calc(100vw - 2rem));
+    box-sizing: border-box;
+    width: var(--glossary-tooltip-width);
+    max-width: calc(100vw - 2rem);
+    height: auto;
     padding: 0.85rem 0.95rem;
     border: 1px solid var(--site-border);
     border-radius: calc(var(--bs-border-radius) * 2);
@@ -508,6 +514,7 @@ article dt
     transform: translateY(0.2rem);
     transition: opacity 140ms ease, transform 140ms ease;
     white-space: normal;
+    overflow-wrap: anywhere;
 }
 
 [data-bs-theme="dark"] .glossary-term__tooltip
@@ -535,6 +542,11 @@ article dt
 .glossary-term__body p
 {
     margin: 0;
+}
+
+.glossary-term__tooltip code
+{
+    overflow-wrap: anywhere;
 }
 
 .glossary-term:hover .glossary-term__tooltip,

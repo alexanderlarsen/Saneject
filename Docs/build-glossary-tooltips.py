@@ -2,7 +2,7 @@
 """
 build-glossary-tooltips.py
 
-Rewrites generated glossary links in DocFX HTML into inline, no-JS tooltip terms.
+Rewrites generated glossary links in DocFX HTML into inline tooltip terms.
 
 Authoring convention:
     Write normal markdown links to glossary anchors, for example:
@@ -14,7 +14,8 @@ Build flow:
 
 The script reads the generated glossary page at `_site/docs/reference/glossary.html`,
 extracts glossary entries, then replaces matching glossary links across generated HTML
-with a focusable tooltip span.
+with focusable tooltip markup. Styling lives in `templates/custom/public/main.css`
+and runtime viewport clamping lives in `templates/custom/public/main.js`.
 """
 
 from __future__ import annotations
