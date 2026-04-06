@@ -185,6 +185,9 @@ namespace Tests.Saneject.Editor.Editor.Menus
         [Test]
         public void SelectSameContextInHierarchy_GivenContextIsolationOff_SelectsAllObjectsInSelectedHierarchy()
         {
+            if (Application.isBatchMode)
+                Assert.Ignore("Requires scene hierarchy UI.");
+
             // Expect log
             LogAssert.Expect(LogType.Log, new Regex("^Saneject: Context isolation is disabled in project settings\\. Selecting all GameObjects in the selected hierarchy\\.$"));
 

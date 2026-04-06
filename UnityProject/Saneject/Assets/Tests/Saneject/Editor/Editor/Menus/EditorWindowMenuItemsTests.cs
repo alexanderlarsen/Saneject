@@ -13,6 +13,9 @@ namespace Tests.Saneject.Editor.Editor.Menus
         [SetUp]
         public void SetUp()
         {
+            if (Application.isBatchMode)
+                return;
+
             foreach (BatchInjectorEditorWindow window in Resources.FindObjectsOfTypeAll<BatchInjectorEditorWindow>())
                 window.Close();
 
@@ -23,6 +26,9 @@ namespace Tests.Saneject.Editor.Editor.Menus
         [TearDown]
         public void TearDown()
         {
+            if (Application.isBatchMode)
+                return;
+
             foreach (BatchInjectorEditorWindow window in Resources.FindObjectsOfTypeAll<BatchInjectorEditorWindow>())
                 window.Close();
 
@@ -33,6 +39,9 @@ namespace Tests.Saneject.Editor.Editor.Menus
         [Test]
         public void OpenBatchInjectorWindow_OpensBatchInjectorWindow()
         {
+            if (Application.isBatchMode)
+                Assert.Ignore("Requires a graphics device.");
+
             // Find menu method
             MethodInfo openBatchInjectorWindowMethod = typeof(EditorWindowMenuItems).GetMethod
             (
@@ -55,6 +64,9 @@ namespace Tests.Saneject.Editor.Editor.Menus
         [Test]
         public void ShowSettings_OpensSettingsWindow()
         {
+            if (Application.isBatchMode)
+                Assert.Ignore("Requires a graphics device.");
+
             // Find menu method
             MethodInfo showSettingsMethod = typeof(EditorWindowMenuItems).GetMethod
             (

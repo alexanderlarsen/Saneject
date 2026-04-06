@@ -1,3 +1,4 @@
+using System;
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
 using Tests.Saneject.Fixtures.Scripts;
@@ -19,9 +20,9 @@ namespace Tests.Saneject.Editor.Context
             // Assert
             Assert.That(sceneObject, Is.Not.Null);
             Assert.That(identity.Type, Is.EqualTo(ContextType.SceneObject));
-            Assert.That(identity.Id, Is.EqualTo(sceneObject.gameObject.scene.handle));
+            Assert.That(identity.Id, Is.EqualTo(Convert.ToInt32(sceneObject.gameObject.scene.handle)));
             Assert.That(identity.ContainerType, Is.EqualTo(ContextType.SceneObject));
-            Assert.That(identity.ContainerId, Is.EqualTo(sceneObject.gameObject.scene.handle));
+            Assert.That(identity.ContainerId, Is.EqualTo(Convert.ToInt32(sceneObject.gameObject.scene.handle)));
             Assert.That(identity.IsPrefab, Is.False);
         }
 
@@ -44,7 +45,7 @@ namespace Tests.Saneject.Editor.Context
                 Assert.That(identity.Type, Is.EqualTo(ContextType.PrefabInstance));
                 Assert.That(identity.Id, Is.EqualTo(prefabInstance.Root.GetInstanceID()));
                 Assert.That(identity.ContainerType, Is.EqualTo(ContextType.SceneObject));
-                Assert.That(identity.ContainerId, Is.EqualTo(prefabObject.gameObject.scene.handle));
+                Assert.That(identity.ContainerId, Is.EqualTo(Convert.ToInt32(prefabObject.gameObject.scene.handle)));
                 Assert.That(identity.IsPrefab, Is.True);
             }
             finally
