@@ -1,9 +1,11 @@
-﻿using Plugins.Saneject.Editor.Data.Graph.Nodes;
+﻿using System.ComponentModel;
+using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Utilities;
 
 namespace Plugins.Saneject.Editor.Data.Errors
 {
-    public sealed  class MissingBindingError : InjectionError
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public sealed class MissingBindingError : InjectionError
     {
         public MissingBindingError(FieldNode fieldNode)
             : base

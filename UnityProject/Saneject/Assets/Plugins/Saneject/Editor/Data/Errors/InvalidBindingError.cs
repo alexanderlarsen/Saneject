@@ -1,10 +1,12 @@
 ﻿using System;
+using System.ComponentModel;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Utilities;
 
 namespace Plugins.Saneject.Editor.Data.Errors
 {
-    public sealed  class InvalidBindingError : InjectionError
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public sealed class InvalidBindingError : InjectionError
     {
         public InvalidBindingError(
             BindingNode bindingNode,

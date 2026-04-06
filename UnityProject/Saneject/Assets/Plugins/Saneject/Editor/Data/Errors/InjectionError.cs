@@ -1,8 +1,10 @@
 ﻿using System;
+using System.ComponentModel;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Editor.Data.Errors
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public abstract class InjectionError
     {
         protected InjectionError(

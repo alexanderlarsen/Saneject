@@ -1,11 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Utilities;
 
 namespace Plugins.Saneject.Editor.Data.Errors
 {
-    public sealed  class MissingGlobalDependencyError : InjectionError
+    [EditorBrowsable(EditorBrowsableState.Never)]
+    public sealed class MissingGlobalDependencyError : InjectionError
     {
         public MissingGlobalDependencyError(
             BindingNode bindingNode,

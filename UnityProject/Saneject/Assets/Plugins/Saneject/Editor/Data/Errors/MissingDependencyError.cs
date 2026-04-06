@@ -1,10 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Utilities;
 
 namespace Plugins.Saneject.Editor.Data.Errors
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public sealed class MissingDependencyError : InjectionError
     {
         public MissingDependencyError(
