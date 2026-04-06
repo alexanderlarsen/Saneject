@@ -40,10 +40,6 @@ jobs:
         working-directory: Docs
         run: docfx build
 
-      - name: Build glossary tooltips
-        working-directory: Docs
-        run: python build-glossary-tooltips.py
-
       - name: Rewrite logo link
         working-directory: Docs
         run: python rewrite-logo-link.py

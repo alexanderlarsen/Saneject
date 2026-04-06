@@ -4,7 +4,7 @@ title: Injection toolbar & context menus
 
 # Injection toolbar & context menus
 
-Saneject [injection context menus](../reference/glossary.md#injection-context-menu) are editor commands that run dependency injection on scenes, [prefab assets](../reference/glossary.md#prefab-asset), or batches of assets.
+Saneject injection context menus are editor commands that run dependency injection on scenes, prefab assets, or batches of assets.
 
 For common full-run workflows, Saneject also exposes contextual main toolbar buttons:
 
@@ -15,7 +15,7 @@ For common full-run workflows, Saneject also exposes contextual main toolbar but
 
 Those toolbar buttons appear only when they apply to the current selection or editor stage, and they always run with `ContextWalkFilter.AllContexts`.
 
-If you are new to [contexts](../reference/glossary.md#context) and filters, read [Context](../core-concepts/context.md) first.
+If you are new to contexts and filters, read [Context](../core-concepts/context.md) first.
 
 ## Toolbar buttons
 
@@ -26,9 +26,9 @@ The contextual main toolbar buttons cover the most common `AllContexts` runs.
 - `Inject Scene`: shown while editing a scene.
 - `Inject Selected Scene Hierarchies`: shown while editing a scene and one or more scene objects are selected.
 - `Inject Prefab Asset`: shown in Prefab Mode.
-- `Batch Inject Selected Assets`: shown when the Project selection contains one or more scene assets, [prefab assets](../reference/glossary.md#prefab-asset), or folders that contain them.
+- `Batch Inject Selected Assets`: shown when the Project selection contains one or more scene assets, prefab assets, or folders that contain them.
 
-For more focused runs, use the [injection context menus](../reference/glossary.md#injection-context-menu) described below.
+For more focused runs, use the injection context menus described below.
 
 ## Context menus
 
@@ -55,7 +55,7 @@ Saneject exposes the same grouped injection commands in multiple Unity menus.
     - `Saneject/Batch Inject Selected Assets/Prefab Asset Objects`
     - `Saneject/Batch Inject Selected Assets/Prefab Instances`
 
-There is also a dedicated [batch injector](../reference/glossary.md#batch-injector) window:
+There is also a dedicated batch injector window:
 
 - `Saneject/Open Batch Injector Window`
 
@@ -63,7 +63,7 @@ That window is covered in [Batch injection](batch-injection.md).
 
 ## Scene and prefab injection commands
 
-All commands in `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`, and the matching `GameObject/Saneject/...` paths use the same [injection pipeline](../reference/glossary.md#injection-pipeline). The only differences are:
+All commands in `Saneject/Inject Scene/...`, `Saneject/Inject Selected Scene Hierarchies/...`, `Saneject/Inject Prefab Asset/...`, and the matching `GameObject/Saneject/...` paths use the same injection pipeline. The only differences are:
 
 - Start objects for the run.
 - `ContextWalkFilter` selected by that menu item.
@@ -125,7 +125,7 @@ Availability:
 
 Behavior:
 
-- For `All Contexts`, `Prefab Asset Objects`, and `Prefab Instances`, Saneject starts from the current [prefab asset](../reference/glossary.md#prefab-asset) root.
+- For `All Contexts`, `Prefab Asset Objects`, and `Prefab Instances`, Saneject starts from the current prefab asset root.
 - For `Same Contexts As Selection`, Saneject starts from the current selection.
 
 ## Filter labels used in menu names
@@ -134,14 +134,14 @@ Menu labels in these command groups, including `Batch Inject Selected Assets/...
 
 | Menu label suffix            | Context walk filter       | Included contexts                                                                                                                                                                   |
 |------------------------------|---------------------------|-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------|
-| `All Contexts`               | `AllContexts`             | [Scene objects](../reference/glossary.md#scene-object), [prefab instances](../reference/glossary.md#prefab-instance), [prefab asset](../reference/glossary.md#prefab-asset) objects |
-| `Scene Objects`              | `SceneObjects`            | [Scene object](../reference/glossary.md#scene-object) [contexts](../reference/glossary.md#context) only                                                                             |
-| `Prefab Instances`           | `PrefabInstances`         | [Prefab instance](../reference/glossary.md#prefab-instance) [contexts](../reference/glossary.md#context) only                                                                       |
-| `Prefab Asset Objects`       | `PrefabAssetObjects`      | [Prefab asset](../reference/glossary.md#prefab-asset) [contexts](../reference/glossary.md#context) only                                                                             |
-| `Same Contexts As Selection` | `SameContextsAsSelection` | [Contexts](../reference/glossary.md#context) matching selected start object contexts only                                                                                           |
+| `All Contexts`               | `AllContexts`             | Scene objects, prefab instances, prefab asset objects |
+| `Scene Objects`              | `SceneObjects`            | Scene object contexts only                                                                             |
+| `Prefab Instances`           | `PrefabInstances`         | Prefab instance contexts only                                                                       |
+| `Prefab Asset Objects`       | `PrefabAssetObjects`      | Prefab asset contexts only                                                                             |
+| `Same Contexts As Selection` | `SameContextsAsSelection` | Contexts matching selected start object contexts only                                                                                           |
 
-`ContextWalkFilter` controls what enters the run. It does not override [context isolation](../reference/glossary.md#context-isolation).
-[Context isolation](../reference/glossary.md#context-isolation) is configured in [project settings](../reference/glossary.md#project-settings) and still applies during resolution.
+`ContextWalkFilter` controls what enters the run. It does not override context isolation.
+Context isolation is configured in project settings and still applies during resolution.
 See [Context](../core-concepts/context.md).
 
 ## Batch inject from selected assets
@@ -164,27 +164,27 @@ Entry points:
 
 Availability:
 
-- Enabled only when the current Project selection includes at least one scene asset or [prefab asset](../reference/glossary.md#prefab-asset).
+- Enabled only when the current Project selection includes at least one scene asset or prefab asset.
 - Folder selection works because Saneject scans deep selected assets.
 
 Behavior:
 
-1. Collect selected scene and [prefab assets](../reference/glossary.md#prefab-asset).
+1. Collect selected scene and prefab assets.
 2. Apply the `ContextWalkFilter` chosen by the toolbar button or menu item to each collected asset.
 3. Show batch confirmation dialog with scene and prefab counts.
 4. Ask to save currently modified open scenes before running.
-5. Inject each selected scene and [prefab asset](../reference/glossary.md#prefab-asset).
+5. Inject each selected scene and prefab asset.
 6. Save scene and asset changes.
 7. Log per-asset sections and final batch summary.
 
 If an injected asset has no `Scope` components, the run logs that nothing was injected for that asset or run.
 
 The toolbar button stays on `AllContexts`; the menu variants give you focused batch runs for `SceneObjects`, `PrefabAssetObjects`, or `PrefabInstances`.
-The chosen filter is forwarded as-is to every collected asset, so mixed scene/prefab selections only process matching [contexts](../reference/glossary.md#context) inside each asset.
+The chosen filter is forwarded as-is to every collected asset, so mixed scene/prefab selections only process matching contexts inside each asset.
 
 ## Confirmation dialogs
 
-By default, [injection context menu](../reference/glossary.md#injection-context-menu) commands and contextual toolbar buttons show a confirmation dialog before running injection.
+By default, injection context menu commands and contextual toolbar buttons show a confirmation dialog before running injection.
 
 ![Saneject inject confirmation dialog](../../images/injection-confirmation.webp)
 
@@ -203,11 +203,11 @@ Relevant toggles:
 
 Run steps:
 
-1. Select one or more [scene objects](../reference/glossary.md#scene-object) in the hierarchy.
+1. Select one or more scene objects in the hierarchy.
 2. Run `Saneject/Inject Selected Scene Hierarchies/Scene Objects`.
-3. Check the Console for Saneject summary logs and any missing [binding](../reference/glossary.md#binding) or dependency errors.
+3. Check the Console for Saneject summary logs and any missing binding or dependency errors.
 
-This workflow is useful when you want to validate scene-object wiring without also processing [prefab instances](../reference/glossary.md#prefab-instance) in the same run.
+This workflow is useful when you want to validate scene-object wiring without also processing prefab instances in the same run.
 
 ## Related pages
 

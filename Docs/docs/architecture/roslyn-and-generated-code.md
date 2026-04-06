@@ -4,23 +4,23 @@ title: Roslyn & generated code
 
 # Roslyn & generated code
 
-This page describes the Roslyn/code-generation layer in Saneject. It is a cross-cutting architecture layer that supports both edit-time injection and [runtime startup](../reference/glossary.md#runtime-startup) behavior.
+This page describes the Roslyn/code-generation layer in Saneject. It is a cross-cutting architecture layer that supports both edit-time injection and runtime startup behavior.
 
 Saneject uses this layer to close three gaps:
 
 - Unity cannot serialize interface-typed members directly.
-- [Runtime proxy](../reference/glossary.md#runtime-proxy) types and stubs must be generated from [binding](../reference/glossary.md#binding) usage.
-- Some injection misuse should be rejected during compile/IDE analysis, before [injection runs](../reference/glossary.md#injection-run).
+- Runtime proxy types and stubs must be generated from binding usage.
+- Some injection misuse should be rejected during compile/IDE analysis, before injection runs.
 
 ## Layer boundaries
 
-The Roslyn/code-generation layer is not the [injection pipeline](../reference/glossary.md#injection-pipeline) itself and not a runtime container. It provides generated types and generated members that the editor pipeline and [runtime startup](../reference/glossary.md#runtime-startup) consume.
+The Roslyn/code-generation layer is not the injection pipeline itself and not a runtime container. It provides generated types and generated members that the editor pipeline and runtime startup consume.
 
 At a high level:
 
 1. Roslyn analyzes source and emits generated outputs.
 2. Unity imports and compiles those outputs.
-3. Editor pipeline and [runtime startup](../reference/glossary.md#runtime-startup) operate on the generated artifacts.
+3. Editor pipeline and runtime startup operate on the generated artifacts.
 
 ## Assemblies and loading model
 
@@ -30,7 +30,7 @@ Saneject ships Roslyn assemblies in `Assets/Plugins/Saneject/Roslyn`:
 - `Saneject.RuntimeProxy.Generator.dll`
 - `Saneject.Analyzers.dll`
 
-These assemblies are imported as [Roslyn analyzers](../reference/glossary.md#roslyn-analyzer), so they run in the C# compilation/analyzer pipeline instead of gameplay runtime code paths.
+These assemblies are imported as Roslyn analyzers, so they run in the C# compilation/analyzer pipeline instead of gameplay runtime code paths.
 
 ## SerializeInterface generation
 
@@ -45,15 +45,15 @@ Generated output includes:
 Architectural effect:
 
 - Edit-time injection can write stable serialized data for interface members.
-- [Runtime startup](../reference/glossary.md#runtime-startup) can swap proxy placeholders to real instances without reflection-heavy graph traversal logic.
+- Runtime startup can swap proxy placeholders to real instances without reflection-heavy graph traversal logic.
 
 See [Serialized interface](../core-concepts/serialized-interface.md) for details.
 
 ## Runtime proxy generation
 
-[Runtime proxy](../reference/glossary.md#runtime-proxy) generation is a multi-stage pipeline across Roslyn and Unity Editor:
+Runtime proxy generation is a multi-stage pipeline across Roslyn and Unity Editor:
 
-1. Roslyn inspects [bindings](../reference/glossary.md#binding) and emits an assembly-level manifest of concrete proxy target types.
+1. Roslyn inspects bindings and emits an assembly-level manifest of concrete proxy target types.
 2. On domain reload, editor utilities read that manifest and generate missing proxy script stubs.
 3. Roslyn generates partial implementations so each proxy type implements the target component's public non-generic interfaces.
 
@@ -65,7 +65,7 @@ See [Runtime proxy](../core-concepts/runtime-proxy.md) for details.
 
 Analyzers run in IDE/compile analysis and report invalid patterns before injection starts.
 
-Current analyzer [scope](../reference/glossary.md#scope) focuses on injection/serialization correctness, including:
+Current analyzer scope focuses on injection/serialization correctness, including:
 
 - `[Inject]` fields that Unity will not serialize correctly
 - Invalid `[SerializeInterface]` usage on non-interface shapes
@@ -87,7 +87,7 @@ Edit-time architecture depends on generated outputs for:
 
 Runtime architecture depends on generated outputs for:
 
-- [Proxy swap target](../reference/glossary.md#proxy-swap-target) methods (`SwapProxiesWithRealInstances()`)
+- Proxy swap target methods (`SwapProxiesWithRealInstances()`)
 - Generated proxy interface implementations used during startup resolution
  
 ## Related pages

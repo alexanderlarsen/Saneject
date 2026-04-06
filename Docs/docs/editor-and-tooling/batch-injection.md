@@ -4,9 +4,9 @@ title: Batch injection
 
 # Batch injection
 
-[Batch injection](../reference/glossary.md#batch-injection) means running Saneject's normal editor [injection pipeline](../reference/glossary.md#injection-pipeline) across many assets in one operation.
+Batch injection means running Saneject's normal editor injection pipeline across many assets in one operation.
 
-Instead of opening one scene or prefab at a time and injecting manually, you can process a larger set of scene and [prefab assets](../reference/glossary.md#prefab-asset) in one run and review one consolidated console output.
+Instead of opening one scene or prefab at a time and injecting manually, you can process a larger set of scene and prefab assets in one run and review one consolidated console output.
 
 This is especially useful when your project grows and you need frequent dependency validation across multiple content areas.
 
@@ -16,7 +16,7 @@ This is especially useful when your project grows and you need frequent dependen
 
 ### 1. Batch Injector window
 
-The window is designed for repeatable, project-scale [batch injection](../reference/glossary.md#batch-injection) runs with persistent scene/prefab lists and settings.
+The window is designed for repeatable, project-scale batch injection runs with persistent scene/prefab lists and settings.
 
 ![Saneject Batch Injector window](../../images/batch-injector-window.webp)
 
@@ -44,7 +44,7 @@ Entry points:
 
 ![Saneject Batch Inject Selected Assets](../../images/batch-injection-context-menu.webp)
  
-`Batch Inject Selected Assets` appears when the current Project selection includes at least one scene asset, [prefab asset](../reference/glossary.md#prefab-asset), or folder that contains them.
+`Batch Inject Selected Assets` appears when the current Project selection includes at least one scene asset, prefab asset, or folder that contains them.
 
 The toolbar button is the quick `AllContexts` version.
 The menu variants let you batch inject the same selection with `SceneObjects`, `PrefabAssetObjects`, or `PrefabInstances`.
@@ -52,7 +52,7 @@ The menu variants let you batch inject the same selection with `SceneObjects`, `
 Behavior:
 
 1. Saneject scans the current Project selection using deep asset selection.
-2. It keeps scene assets and [prefab assets](../reference/glossary.md#prefab-asset).
+2. It keeps scene assets and prefab assets.
 3. It applies the `ContextWalkFilter` selected by the toolbar button or menu item to every collected asset.
 4. It optionally shows a confirmation dialog (controlled by `Ask Before Batch Inject` in `Saneject/Settings`).
 5. It asks whether modified open scenes should be saved.
@@ -60,7 +60,7 @@ Behavior:
 7. It logs per-asset output plus a final batch summary.
 
 The selected-assets menu variants do not remap filters per asset type.
-The chosen filter is forwarded as-is to every collected scene and [prefab asset](../reference/glossary.md#prefab-asset), so a mixed selection only processes the [contexts](../reference/glossary.md#context) that match that filter inside each asset.
+The chosen filter is forwarded as-is to every collected scene and prefab asset, so a mixed selection only processes the contexts that match that filter inside each asset.
 
 ## Batch Injector window features
 
@@ -75,7 +75,7 @@ Each tab shows a persistent reorderable list with these per-row controls:
 - Asset object field
 - Asset path (shows `Deleted` if the asset no longer exists)
 - `ContextWalkFilter` dropdown (restricted by asset type)
-- [Injection status](../reference/glossary.md#injection-status) icon
+- Injection status icon
 
 ### Add, remove, and organize assets
 
@@ -102,7 +102,7 @@ List and window state are persisted to:
 
 Both lists support multi-selection and a context menu with:
 
-- `Inject Selected`: Runs [batch injection](../reference/glossary.md#batch-injection) only for the currently selected rows.
+- `Inject Selected`: Runs batch injection only for the currently selected rows.
 - `Enable` / `Disable`: Toggles whether rows are included when using the bottom `Inject All` and `Inject Scenes/Prefabs` buttons.
 - `Clear Injection Status`: Resets selected rows to `Unknown` without changing their enable state or filter.
 - `Remove`: Deletes selected rows from the list (does not delete assets from the project).
@@ -127,13 +127,13 @@ Bottom buttons run injection for enabled rows:
 
 ## Injection status meanings
 
-In the [Batch Injector](../reference/glossary.md#batch-injector) window, each row has a status icon with one of these meanings:
+In the Batch Injector window, each row has a status icon with one of these meanings:
 
 | Icon | Status    | Meaning                                                                                               |
 |------|-----------|-------------------------------------------------------------------------------------------------------|
 | ❔    | `Unknown` | No run has set status yet, or status was cleared.                                                     |
-| ✅    | `Success` | No unsuppressed errors and no unused [bindings](../reference/glossary.md#binding) for that asset run. |
-| ⚠️   | `Warning` | No unsuppressed errors, but one or more [bindings](../reference/glossary.md#binding) were unused.     |
+| ✅    | `Success` | No unsuppressed errors and no unused bindings for that asset run. |
+| ⚠️   | `Warning` | No unsuppressed errors, but one or more bindings were unused.     |
 | ❌    | `Error`   | One or more unsuppressed errors were logged.                                                          |
 
 ## Logging model for batch runs
@@ -149,7 +149,7 @@ If no `Scope` components are found in a run, Saneject logs that nothing was inje
 
 ![Batch injection console logs](../../images/batch-injector-logs.webp)
 
-Logging output is affected by [user settings](../reference/glossary.md#user-settings) in `Saneject/Settings`, including:
+Logging output is affected by user settings in `Saneject/Settings`, including:
 
 - `Clear Logs On Injection`
 - `Log Injection Summary`
@@ -162,7 +162,7 @@ For more information on logging, see [Logging & validation](logging-and-validati
 `ContextWalkFilter` can be chosen in two places:
 
 - Per run from the `Batch Inject Selected Assets/...` menu variants.
-- Per asset in the [Batch Injector](../reference/glossary.md#batch-injector) window.
+- Per asset in the Batch Injector window.
 
 Selected-assets batch menu variants use these labels:
 
@@ -178,29 +178,29 @@ Allowed values depend on asset type:
 | Asset type                                            | Allowed `ContextWalkFilter` values                     |
 |-------------------------------------------------------|--------------------------------------------------------|
 | Scene asset                                           | `AllContexts`, `SceneObjects`, `PrefabInstances`       |
-| [Prefab asset](../reference/glossary.md#prefab-asset) | `AllContexts`, `PrefabAssetObjects`, `PrefabInstances` |
+| Prefab asset | `AllContexts`, `PrefabAssetObjects`, `PrefabInstances` |
 
 For details on filter semantics, see [Context](../core-concepts/context.md).
 
 ## Batch injection pipeline overview
 
-[Batch injection](../reference/glossary.md#batch-injection) uses the same core pipeline as regular injection.
+Batch injection uses the same core pipeline as regular injection.
 
 For each asset, Saneject:
 
-1. Builds an [injection graph](../reference/glossary.md#injection-graph) from start transforms.
+1. Builds an injection graph from start transforms.
 2. Applies the selected `ContextWalkFilter`.
-3. Builds an `InjectionContext` from active transforms, components, [scopes](../reference/glossary.md#scope), and [bindings](../reference/glossary.md#binding).
-4. Validates [bindings](../reference/glossary.md#binding).
+3. Builds an `InjectionContext` from active transforms, components, scopes, and bindings.
+4. Validates bindings.
 5. Resolves globals, fields/properties, and methods.
 6. Injects values and marks modified objects dirty.
-7. Collects [runtime proxy](../reference/glossary.md#runtime-proxy) swap targets.
+7. Collects runtime proxy swap targets.
 8. Logs errors, warnings, and summary counts.
 
 Batch-specific orchestration:
 
 - Scene batch opens each scene in `OpenSceneMode.Single`, injects from scene root objects, and saves each processed scene.
-- Prefab batch loads each [prefab asset](../reference/glossary.md#prefab-asset) root, injects from that root, and saves assets when prefab processing completes.
+- Prefab batch loads each prefab asset root, injects from that root, and saves assets when prefab processing completes.
 
 If a saved active scene existed when the batch started, Saneject re-opens that scene at the end.
 

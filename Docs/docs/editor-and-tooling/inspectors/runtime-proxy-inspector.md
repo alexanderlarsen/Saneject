@@ -4,7 +4,7 @@ title: Runtime proxy inspector
 
 # Runtime proxy inspector
 
-The [runtime proxy inspector](../../reference/glossary.md#runtime-proxy-inspector) is the inspector for generated [runtime proxy](../../reference/glossary.md#runtime-proxy) assets (`RuntimeProxyBase`). It is intentionally read-only. Use it to verify configuration created from your [binding](../../reference/glossary.md#binding) declarations, not to author configuration directly.
+The runtime proxy inspector is the inspector for generated runtime proxy assets (`RuntimeProxyBase`). It is intentionally read-only. Use it to verify configuration created from your binding declarations, not to author configuration directly.
 
 ![Runtime proxy inspector](../../../images/runtime-proxy-inspector.webp)
 
@@ -14,11 +14,11 @@ For full runtime behavior, see [Runtime proxy](../../core-concepts/runtime-proxy
 
 Use this inspector to verify:
 
-- Which resolve strategy the [runtime proxy](../../reference/glossary.md#runtime-proxy) will use at runtime.
-- What [runtime proxy](../../reference/glossary.md#runtime-proxy) instance is resolved at runtime.
+- Which resolve strategy the runtime proxy will use at runtime.
+- What runtime proxy instance is resolved at runtime.
 - Whether creation-based proxies are `Transient` or `Singleton`.
 - Whether `Dont Destroy On Load` is enabled for created objects.
-- Which interfaces the [runtime proxy](../../reference/glossary.md#runtime-proxy) type implements.
+- Which interfaces the runtime proxy type implements.
 - In Play Mode, which concrete object instance was resolved.
 
 ## Read-only behavior
@@ -26,15 +26,15 @@ Use this inspector to verify:
 All fields in this inspector are disabled.
 That means you cannot edit `Resolved Instance`, `Resolve Method`, `Prefab`, `Instance Mode`, or `Dont Destroy On Load` here.
 
-The configuration values come from [runtime proxy bindings](../../reference/glossary.md#runtime-proxy-binding) in `Scope.DeclareBindings()` and are assigned when Saneject creates or reuses [runtime proxy](../../reference/glossary.md#runtime-proxy) assets during injection.
+The configuration values come from runtime proxy bindings in `Scope.DeclareBindings()` and are assigned when Saneject creates or reuses runtime proxy assets during injection.
 
 To change values:
 
-1. Update the [binding](../../reference/glossary.md#binding) chain in your [scope](../../reference/glossary.md#scope).
+1. Update the binding chain in your scope.
 2. Run injection again.
-3. Find the new generated [runtime proxy](../../reference/glossary.md#runtime-proxy) asset to confirm the changes.
+3. Find the new generated runtime proxy asset to confirm the changes.
 
-Example [binding](../../reference/glossary.md#binding):
+Example binding:
 
 ```csharp
 using Plugins.Saneject.Runtime.Scopes;
@@ -59,11 +59,11 @@ public class AudioScope : Scope
 
 ### Resolved Instance (Play Mode only)
 
-Displays the runtime object that the [runtime proxy](../../reference/glossary.md#runtime-proxy) resolved to, if any and if the application is running.
+Displays the runtime object that the runtime proxy resolved to, if any and if the application is running.
 
 ### Resolve Method
 
-Matches `RuntimeProxyResolveMethod` and defines how the [runtime proxy](../../reference/glossary.md#runtime-proxy) finds or creates its target at runtime.
+Matches `RuntimeProxyResolveMethod` and defines how the runtime proxy finds or creates its target at runtime.
 
 Available values:
 
@@ -83,7 +83,7 @@ Shown only for creation-based methods:
 
 Matches `RuntimeProxyInstanceMode`:
 
-- `Transient`: Creates a new instance each time the [runtime proxy](../../reference/glossary.md#runtime-proxy) resolves (creation-based methods only).
+- `Transient`: Creates a new instance each time the runtime proxy resolves (creation-based methods only).
 - `Singleton`: Reuses one created instance and registers it in `GlobalScope`.
 
 See [Runtime proxy](../../core-concepts/runtime-proxy.md) and [Global scope](../../core-concepts/global-scope.md) for more details.
@@ -105,7 +105,7 @@ If disabled for a creation-based method, the inspector shows a warning that the 
 
 ### Interfaces
 
-Lists the interface names implemented by the [runtime proxy](../../reference/glossary.md#runtime-proxy) type, mirrored from its target. This helps verify what the generated [runtime proxy](../../reference/glossary.md#runtime-proxy) can stand in for at [injection sites](../../reference/glossary.md#injection-site).
+Lists the interface names implemented by the runtime proxy type, mirrored from its target. This helps verify what the generated runtime proxy can stand in for at injection sites.
 
 ## Related pages
 

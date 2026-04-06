@@ -10,23 +10,23 @@ Saneject is mostly editor-time DI, but some runtime scenarios still need lookup 
 
 - `BindGlobal<TComponent>()` stores resolved components in a `Scope` at editor-time and registers them at runtime.
 - `RuntimeProxy` can resolve through `FromGlobalScope()` for fast lookup.
-- You can also call `GlobalScope` directly as a [service locator](../reference/glossary.md#service-locator) when needed.
+- You can also call `GlobalScope` directly as a service locator when needed.
 
 ## What problem it solves
 
 Unity serialization cannot serialize direct references between certain boundaries: 
 
 - Scene ↔ other scene
-- Scene ↔ [prefab asset](../reference/glossary.md#prefab-asset)
-- [Prefab asset](../reference/glossary.md#prefab-asset) ↔ other [prefab asset](../reference/glossary.md#prefab-asset)
+- Scene ↔ prefab asset
+- Prefab asset ↔ other prefab asset
 
 `GlobalScope` gives you a shared runtime lookup point for registered components. You declare those components in a normal `Scope`, then Saneject registers them `GlobalScope` before regular `Awake()` methods run.
 
 This keeps the common workflow explicit:
 
-1. Resolve [dependency candidates](../reference/glossary.md#dependency-candidate) in the editor through [bindings](../reference/glossary.md#binding).
+1. Resolve dependency candidates in the editor through bindings.
 2. Persist global candidates on the declaring `Scope`.
-3. Register those components into `GlobalScope` at [runtime startup](../reference/glossary.md#runtime-startup).
+3. Register those components into `GlobalScope` at runtime startup.
 
 ## Declaring global components with bindings
 
@@ -50,7 +50,7 @@ public class BootstrapScope : Scope
 - Only accepts `Component` types.
 - Supports normal `From...` locator methods and `Where...` filters.
 - Does not support qualifiers (`ToID`, `ToTarget`, `ToMember`).
-- Does not support [runtime proxy binding](../reference/glossary.md#runtime-proxy-binding) methods.
+- Does not support runtime proxy binding methods.
 
 See [Binding](binding.md) and [Scope](scope.md) for more information.
 
@@ -60,18 +60,18 @@ When you declare `BindGlobal<T>()`, Saneject handles it in two phases.
 
 Editor phase:
 
-1. During injection, Saneject resolves the [binding](../reference/glossary.md#binding) like any other component locator.
+1. During injection, Saneject resolves the binding like any other component locator.
 2. If multiple candidates are found, the first candidate is selected.
 3. The selected component is serialized into the declaring `Scope`'s global components list.
 
 Runtime phase:
 
 1. `Scope.Awake()` runs at execution order `-10000`.
-2. The [scope](../reference/glossary.md#scope) registers serialized global components into `GlobalScope`.
-3. The same `Awake()` then swaps [runtime proxies](../reference/glossary.md#runtime-proxy) to real instances.
-4. `Scope.OnDestroy()` unregisters the components that this [scope](../reference/glossary.md#scope) owns.
+2. The scope registers serialized global components into `GlobalScope`.
+3. The same `Awake()` then swaps runtime proxies to real instances.
+4. `Scope.OnDestroy()` unregisters the components that this scope owns.
 
-That order matters: [global registration](../reference/glossary.md#global-registration) runs before proxy swapping, so [runtime proxies](../reference/glossary.md#runtime-proxy) configured to resolve from `GlobalScope` can do that during startup.
+That order matters: global registration runs before proxy swapping, so runtime proxies configured to resolve from `GlobalScope` can do that during startup.
 
 For full proxy behavior, see [Runtime proxy](runtime-proxy.md).
 
@@ -79,8 +79,8 @@ For full proxy behavior, see [Runtime proxy](runtime-proxy.md).
 
 A common pattern is:
 
-- In one [scope](../reference/glossary.md#scope), declare a global component with `BindGlobal<TConcrete>()`.
-- In another [scope](../reference/glossary.md#scope) or [context](../reference/glossary.md#context), bind an interface through `FromRuntimeProxy().FromGlobalScope()`.
+- In one scope, declare a global component with `BindGlobal<TConcrete>()`.
+- In another scope or context, bind an interface through `FromRuntimeProxy().FromGlobalScope()`.
 
 ```csharp
 using Plugins.Saneject.Runtime.Scopes;
@@ -109,13 +109,13 @@ public class HudScope : Scope
 }
 ```
 
-This is usually the intended use of `GlobalScope`: fast runtime lookup for proxy resolution, not a replacement for normal [editor-time injection](../reference/glossary.md#editor-time-injection).
+This is usually the intended use of `GlobalScope`: fast runtime lookup for proxy resolution, not a replacement for normal editor-time injection.
 
 For full proxy behavior, see [Runtime proxy](runtime-proxy.md).
 
 ## Using global scope directly as a service locator
 
-If you want to avoid [runtime proxies](../reference/glossary.md#runtime-proxy), direct usage is available when you need fast runtime lookup outside the [injection pipeline](../reference/glossary.md#injection-pipeline):
+If you want to avoid runtime proxies, direct usage is available when you need fast runtime lookup outside the injection pipeline:
 
 ```csharp
 using Plugins.Saneject.Runtime.Scopes;
@@ -150,9 +150,9 @@ Use manual `RegisterComponent` and `UnregisterComponent` carefully. Most project
 - Only one registration per concrete component type is allowed at a time.
 - Lookup is exact-type by key. If `AudioManager` is registered, `GetComponent<MonoBehaviour>()` does not return it.
 - Generic lookup methods require `T : Component`, so interface lookups are not supported.
-- Global [bindings](../reference/glossary.md#binding) are validated for unique type ownership. Duplicate `BindGlobal<SameType>()` [bindings](../reference/glossary.md#binding) are invalid.
-- Global [binding](../reference/glossary.md#binding) candidate selection still obeys [context isolation](../reference/glossary.md#context-isolation) rules during editor resolution.
-- Global [bindings](../reference/glossary.md#binding) are not used to resolve `[Inject]` fields or methods directly. They feed runtime registration, not normal [binding](../reference/glossary.md#binding) resolution.
+- Global bindings are validated for unique type ownership. Duplicate `BindGlobal<SameType>()` bindings are invalid.
+- Global binding candidate selection still obeys context isolation rules during editor resolution.
+- Global bindings are not used to resolve `[Inject]` fields or methods directly. They feed runtime registration, not normal binding resolution.
 - Modifying `GlobalScope` (`Register`, `Unregister`, `Clear`) is runtime-only. Calls outside Play Mode are rejected.
 - Unregister requires ownership: only the same caller object that registered a type can unregister that type.
 
