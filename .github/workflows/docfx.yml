@@ -44,6 +44,9 @@ jobs:
         working-directory: Docs
         run: python build-glossary-tooltips.py
 
+      - name: Add custom domain
+        run: echo "saneject.dev" > Docs/_site/CNAME
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
