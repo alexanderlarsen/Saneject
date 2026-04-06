@@ -18,6 +18,7 @@
 /UnityProject/Saneject/*.pdb
 /UnityProject/Saneject/*.mdb
 /UnityProject/Saneject/*.VC.db
+/UnityProject/Saneject/ProjectSettings/ShaderGraphSettings.asset
 
 # Dev
 /UnityProject/Saneject/Assets/Dev/*
@@ -59,4 +60,5 @@
 crashlytics-build.properties
 /UnityProject/Saneject/Saneject.sln.DotSettings
 
-/UnityProject/Saneject/ProjectSettings/ShaderGraphSettings.asset
+# Docs
+/Docs/_site/
