@@ -49,7 +49,7 @@ https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Asset
 
 Or download the [latest release](https://github.com/alexanderlarsen/Saneject/releases) and import the `Saneject` folder into your Unity project.
 
-Then jump to [Quick start](https://docs.saneject.dev/getting-started/quick-start).
+Then jump to [Quick start](docs/getting-started/quick-start.md).
 
 ## Feedback appreciated
 
