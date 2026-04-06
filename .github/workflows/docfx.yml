@@ -44,8 +44,9 @@ jobs:
         working-directory: Docs
         run: python build-glossary-tooltips.py
 
-      - name: Add custom domain
-        run: echo "saneject.dev" > Docs/_site/CNAME
+      - name: Rewrite logo link
+        working-directory: Docs
+        run: python rewrite-logo-link.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
