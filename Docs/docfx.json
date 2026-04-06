@@ -23,7 +23,8 @@
         ],
         "exclude": [
           "_site/**",
-          "filter.yml"
+          "filter.yml",
+          "README.md"
         ]
       }
     ],
