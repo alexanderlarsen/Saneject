@@ -4,6 +4,7 @@ using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Settings;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
@@ -19,9 +20,16 @@ namespace Tests.Saneject.Runtime
     {
         private const string TestAssetFolder = "Assets/Tests/Saneject/Fixtures/RuntimeProxyPlayModeAssets";
 
+        private string originalProxyAssetGenerationFolder;
+
         [SetUp]
         public void SetUp()
         {
+            originalProxyAssetGenerationFolder = ProjectSettings.ProxyAssetGenerationFolder;
+            ProjectSettings.ProxyAssetGenerationFolder = TestAssetFolder;
+
+            AssetDatabase.DeleteAsset(TestAssetFolder);
+
             if (!AssetDatabase.IsValidFolder(TestAssetFolder))
                 AssetDatabase.CreateFolder("Assets/Tests/Saneject/Fixtures", "RuntimeProxyPlayModeAssets");
         }
@@ -116,13 +124,14 @@ namespace Tests.Saneject.Runtime
 
             // Save scene in edit mode
             scene.SaveToDisk(TestAssetFolder);
+            RestoreProjectSettings();
 
             // Enter play mode
             yield return new EnterPlayMode();
             Assert.That(Application.isPlaying, Is.True);
 
             // Wait one frame in play mode
-            yield return new WaitForEndOfFrame();
+            yield return null;
 
             // Find dependencies in play mode
             GameObject runtimeGlobalRoot = GameObject.Find("Root 1");
@@ -205,13 +214,14 @@ namespace Tests.Saneject.Runtime
 
             // Save scene in edit mode
             scene.SaveToDisk(TestAssetFolder);
+            RestoreProjectSettings();
 
             // Enter play mode
             yield return new EnterPlayMode();
             Assert.That(Application.isPlaying, Is.True);
 
             // Wait one frame in play mode
-            yield return new WaitForEndOfFrame();
+            yield return null;
 
             // Find dependencies in play mode
             GameObject runtimeTransientRoot = GameObject.Find("Root 1");
@@ -252,6 +262,11 @@ namespace Tests.Saneject.Runtime
 
             // Clear global scope in play mode
             GlobalScope.Clear();
+        }
+
+        private void RestoreProjectSettings()
+        {
+            ProjectSettings.ProxyAssetGenerationFolder = originalProxyAssetGenerationFolder;
         }
     }
 }

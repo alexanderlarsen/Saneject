@@ -4,6 +4,7 @@ using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Runtime.Proxy;
 using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Runtime.Settings;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
@@ -18,6 +19,20 @@ namespace Tests.Saneject.Runtime
     public class ScopePlayModeTests
     {
         private const string TestAssetFolder = "Assets/Tests/Saneject/Fixtures/ScopePlayModeAssets";
+
+        private string originalProxyAssetGenerationFolder;
+
+        [SetUp]
+        public void SetUp()
+        {
+            originalProxyAssetGenerationFolder = ProjectSettings.ProxyAssetGenerationFolder;
+            ProjectSettings.ProxyAssetGenerationFolder = TestAssetFolder;
+
+            AssetDatabase.DeleteAsset(TestAssetFolder);
+
+            if (!AssetDatabase.IsValidFolder(TestAssetFolder))
+                AssetDatabase.CreateFolder("Assets/Tests/Saneject/Fixtures", "ScopePlayModeAssets");
+        }
 
         [UnityTearDown]
         public IEnumerator TearDown()
@@ -66,13 +81,14 @@ namespace Tests.Saneject.Runtime
 
             // Save scene in edit mode
             scene.SaveToDisk(TestAssetFolder);
+            RestoreProjectSettings();
 
             // Enter play mode
             yield return new EnterPlayMode();
             Assert.That(Application.isPlaying, Is.True);
 
             // Wait one frame in play mode
-            yield return new WaitForEndOfFrame();
+            yield return null;
 
             // Find dependencies in play mode
             TestScope runtimeScope = Object.FindFirstObjectByType<TestScope>();
@@ -95,7 +111,7 @@ namespace Tests.Saneject.Runtime
             // Destroy scope in play mode and wait for Unity to catch up
             Object.DestroyImmediate(runtimeScope.gameObject);
 
-            yield return new WaitForEndOfFrame();
+            yield return null;
 
             // Assert in play mode
             Assert.That(GlobalScope.IsRegistered<ComponentDependency>(), Is.False);
@@ -103,6 +119,11 @@ namespace Tests.Saneject.Runtime
 
             // Clear global scope in play mode
             GlobalScope.Clear();
+        }
+
+        private void RestoreProjectSettings()
+        {
+            ProjectSettings.ProxyAssetGenerationFolder = originalProxyAssetGenerationFolder;
         }
     }
 }
