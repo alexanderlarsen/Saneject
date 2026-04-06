@@ -11,7 +11,7 @@ docfx metadata
 python fix-api-toc.py
 ```
 
-`fix-api-toc.py` must run after `docfx metadata` because it rewrites the generated API TOC into the structure used by the site.
+`fix-api-toc.py` must run after `docfx metadata` because `docfx metadata` generates `Docs/api`, including the raw `Docs/api/toc.yml` file that the script rewrites into the structure used by the site.
 
 ## Full local build and serve
 
