@@ -40,14 +40,6 @@ jobs:
         working-directory: Docs
         run: docfx build
 
-      - name: Fix API TOC
-        working-directory: Docs
-        run: python fix-api-toc.py
-
-      - name: Rebuild DocFX site
-        working-directory: Docs
-        run: docfx build
-
       - name: Build glossary tooltips
         working-directory: Docs
         run: python build-glossary-tooltips.py
