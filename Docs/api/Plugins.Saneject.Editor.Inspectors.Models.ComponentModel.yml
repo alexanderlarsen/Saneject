@@ -1,0 +1,397 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  commentId: T:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  id: ComponentModel
+  parent: Plugins.Saneject.Editor.Inspectors.Models
+  children:
+  - Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.#ctor(UnityEngine.Object,UnityEditor.SerializedObject)
+  - Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties
+  - Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+  - Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target
+  langs:
+  - csharp
+  - vb
+  name: ComponentModel
+  nameWithType: ComponentModel
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ComponentModel
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+    startLine: 13
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors.Models
+  summary: >-
+    Encapsulates a target component and its inspectable properties for drawing in the custom Saneject inspector.
+
+    This model reflects on the target object's type to collect all drawable fields and constructs
+
+    PropertyModel instances for each field, handling serialized interfaces, nested types, and
+
+    injection-aware properties.
+  example: []
+  syntax:
+    content: public sealed class ComponentModel
+    content.vb: Public NotInheritable Class ComponentModel
+  inheritance:
+  - System.Object
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.#ctor(UnityEngine.Object,UnityEditor.SerializedObject)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.#ctor(UnityEngine.Object,UnityEditor.SerializedObject)
+  id: '#ctor(UnityEngine.Object,UnityEditor.SerializedObject)'
+  parent: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  langs:
+  - csharp
+  - vb
+  name: ComponentModel(Object, SerializedObject)
+  nameWithType: ComponentModel.ComponentModel(Object, SerializedObject)
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.ComponentModel(UnityEngine.Object, UnityEditor.SerializedObject)
+  type: Constructor
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: .ctor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+    startLine: 20
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors.Models
+  summary: Initializes a new instance of the <xref href="Plugins.Saneject.Editor.Inspectors.Models.ComponentModel" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public ComponentModel(Object target, SerializedObject serializedObject)
+    parameters:
+    - id: target
+      type: UnityEngine.Object
+      description: The target object being inspected. Used for type reflection.
+    - id: serializedObject
+      type: UnityEditor.SerializedObject
+      description: The <xref href="Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject" data-throw-if-not-resolved="false"></xref> representing the target for property access.
+    content.vb: Public Sub New(target As [Object], serializedObject As SerializedObject)
+  overload: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.#ctor*
+  nameWithType.vb: ComponentModel.New(Object, SerializedObject)
+  fullName.vb: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.New(UnityEngine.Object, UnityEditor.SerializedObject)
+  name.vb: New(Object, SerializedObject)
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target
+  commentId: P:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target
+  id: Target
+  parent: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  langs:
+  - csharp
+  - vb
+  name: Target
+  nameWithType: ComponentModel.Target
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: Target
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+    startLine: 38
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors.Models
+  summary: Gets the target object being inspected.
+  example: []
+  syntax:
+    content: public Object Target { get; }
+    parameters: []
+    return:
+      type: UnityEngine.Object
+    content.vb: Public ReadOnly Property Target As [Object]
+  overload: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target*
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+  commentId: P:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+  id: SerializedObject
+  parent: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  langs:
+  - csharp
+  - vb
+  name: SerializedObject
+  nameWithType: ComponentModel.SerializedObject
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: SerializedObject
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+    startLine: 43
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors.Models
+  summary: Gets the serialized representation of the target object.
+  example: []
+  syntax:
+    content: public SerializedObject SerializedObject { get; }
+    parameters: []
+    return:
+      type: UnityEditor.SerializedObject
+    content.vb: Public ReadOnly Property SerializedObject As SerializedObject
+  overload: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject*
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties
+  commentId: P:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties
+  id: Properties
+  parent: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  langs:
+  - csharp
+  - vb
+  name: Properties
+  nameWithType: ComponentModel.Properties
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: Properties
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
+    startLine: 48
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors.Models
+  summary: Gets the read-only collection of inspectable properties of the target.
+  example: []
+  syntax:
+    content: public IReadOnlyList<PropertyModel> Properties { get; }
+    parameters: []
+    return:
+      type: System.Collections.Generic.IReadOnlyList{Plugins.Saneject.Editor.Inspectors.Models.PropertyModel}
+    content.vb: Public ReadOnly Property Properties As IReadOnlyList(Of PropertyModel)
+  overload: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties*
+references:
+- uid: Plugins.Saneject.Editor.Inspectors.Models
+  commentId: N:Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.html
+  name: Plugins.Saneject.Editor.Inspectors.Models
+  nameWithType: Plugins.Saneject.Editor.Inspectors.Models
+  fullName: Plugins.Saneject.Editor.Inspectors.Models
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors.Models
+    name: Models
+    href: Plugins.Saneject.Editor.Inspectors.Models.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors.Models
+    name: Models
+    href: Plugins.Saneject.Editor.Inspectors.Models.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  commentId: T:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  parent: Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html
+  name: ComponentModel
+  nameWithType: ComponentModel
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+  commentId: P:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html#Plugins_Saneject_Editor_Inspectors_Models_ComponentModel_SerializedObject
+  name: SerializedObject
+  nameWithType: ComponentModel.SerializedObject
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.#ctor*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.#ctor
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html#Plugins_Saneject_Editor_Inspectors_Models_ComponentModel__ctor_UnityEngine_Object_UnityEditor_SerializedObject_
+  name: ComponentModel
+  nameWithType: ComponentModel.ComponentModel
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.ComponentModel
+  nameWithType.vb: ComponentModel.New
+  fullName.vb: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.New
+  name.vb: New
+- uid: UnityEngine.Object
+  commentId: T:UnityEngine.Object
+  parent: UnityEngine
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: UnityEngine.Object
+- uid: UnityEditor.SerializedObject
+  commentId: T:UnityEditor.SerializedObject
+  parent: UnityEditor
+  isExternal: true
+  name: SerializedObject
+  nameWithType: SerializedObject
+  fullName: UnityEditor.SerializedObject
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: UnityEditor
+  commentId: N:UnityEditor
+  isExternal: true
+  name: UnityEditor
+  nameWithType: UnityEditor
+  fullName: UnityEditor
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html#Plugins_Saneject_Editor_Inspectors_Models_ComponentModel_Target
+  name: Target
+  nameWithType: ComponentModel.Target
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Target
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html#Plugins_Saneject_Editor_Inspectors_Models_ComponentModel_SerializedObject
+  name: SerializedObject
+  nameWithType: ComponentModel.SerializedObject
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.SerializedObject
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html#Plugins_Saneject_Editor_Inspectors_Models_ComponentModel_Properties
+  name: Properties
+  nameWithType: ComponentModel.Properties
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.Properties
+- uid: System.Collections.Generic.IReadOnlyList{Plugins.Saneject.Editor.Inspectors.Models.PropertyModel}
+  commentId: T:System.Collections.Generic.IReadOnlyList{Plugins.Saneject.Editor.Inspectors.Models.PropertyModel}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IReadOnlyList`1
+  href: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html
+  name: IReadOnlyList<PropertyModel>
+  nameWithType: IReadOnlyList<PropertyModel>
+  fullName: System.Collections.Generic.IReadOnlyList<Plugins.Saneject.Editor.Inspectors.Models.PropertyModel>
+  nameWithType.vb: IReadOnlyList(Of PropertyModel)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  name.vb: IReadOnlyList(Of PropertyModel)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+  - name: <
+  - uid: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+    name: PropertyModel
+    href: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+    name: PropertyModel
+    href: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html
+  - name: )
+- uid: System.Collections.Generic.IReadOnlyList`1
+  commentId: T:System.Collections.Generic.IReadOnlyList`1
+  isExternal: true
+  name: IReadOnlyList<T>
+  nameWithType: IReadOnlyList<T>
+  fullName: System.Collections.Generic.IReadOnlyList<T>
+  nameWithType.vb: IReadOnlyList(Of T)
+  fullName.vb: System.Collections.Generic.IReadOnlyList(Of T)
+  name.vb: IReadOnlyList(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IReadOnlyList`1
+    name: IReadOnlyList
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic

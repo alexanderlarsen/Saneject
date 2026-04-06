@@ -1,0 +1,275 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Scope | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Scope | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/core-concepts/scope.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="scope">Scope</h1>
+
+<p>A <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> is a <code>MonoBehaviour</code> that declares dependency <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> for a part of your hierarchy.</p>
+<p>In Saneject, you create a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> by inheriting from <code>Scope</code> and implementing <code>DeclareBindings()</code>. Every <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> you
+declare in that method tells Saneject how to resolve a dependency type.</p>
+<p>At injection time, Saneject uses <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-6"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-6" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> to resolve <code>[Inject]</code> fields, properties and methods for components
+below that <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-7"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-7" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>'s <code>Transform</code>. At runtime, the same <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-8"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-8" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> also performs early setup for <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-9"><span class="glossary-term__label">global registrations</span><span class="glossary-term__tooltip" id="glossary-tooltip-9" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span> and
+<span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-10"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-10" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> swapping.</p>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-11"><span class="glossary-term__label">Scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-11" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> work on <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-12"><span class="glossary-term__label">scene objects</span><span class="glossary-term__tooltip" id="glossary-tooltip-12" role="tooltip"><span class="glossary-term__title">Scene object</span><span class="glossary-term__body">Non-prefab <code>GameObject</code> in a scene.</span></span></span>, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-13"><span class="glossary-term__label">prefab instances</span><span class="glossary-term__tooltip" id="glossary-tooltip-13" role="tooltip"><span class="glossary-term__title">Prefab instance</span><span class="glossary-term__body">Instantiated prefab placed in a scene or nested inside another prefab.</span></span></span>, and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-14"><span class="glossary-term__label">prefab assets</span><span class="glossary-term__tooltip" id="glossary-tooltip-14" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>. How they participate in injection and how their
+<span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-15"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-15" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> resolve across scenes and prefabs depends on <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-16"><span class="glossary-term__label">context filtering</span><span class="glossary-term__tooltip" id="glossary-tooltip-16" role="tooltip"><span class="glossary-term__title">Context filtering</span><span class="glossary-term__body">Injection-run prefilter that decides which transforms and injection targets are active for a run.</span></span></span> and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-17"><span class="glossary-term__label">context isolation</span><span class="glossary-term__tooltip" id="glossary-tooltip-17" role="tooltip"><span class="glossary-term__title">Context isolation</span><span class="glossary-term__body">Project setting (<code>UseContextIsolation</code>) that controls whether dependency resolution can cross context boundaries.</span></span></span> settings.
+See <a href="context.html">Context</a> for details.</p>
+<h2 id="declaring-bindings-in-a-scope">Declaring bindings in a scope</h2>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-18"><span class="glossary-term__label">Bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-18" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are declared directly inside <code>DeclareBindings()</code>:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class EnemyScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindComponent&lt;AIController&gt;()
+            .FromScopeSelf();
+    }
+}
+</code></pre>
+<p>This declares a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-19"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-19" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> for <code>AIController</code> and tells Saneject where to look for the instance (<code>FromScopeSelf()</code> means
+the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-20"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-20" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>'s own <code>Transform</code>).</p>
+<p>For more details and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-21"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-21" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> examples, see <a href="binding.html">Bindings</a>.</p>
+<h2 id="hierarchy-overrides-and-fallback">Hierarchy, overrides, and fallback</h2>
+<p>Saneject tries to resolve each <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-22"><span class="glossary-term__label">injection target</span><span class="glossary-term__tooltip" id="glossary-tooltip-22" role="tooltip"><span class="glossary-term__title">Injection target</span><span class="glossary-term__body"><code>Component</code> with injected fields, properties or methods.</span></span></span> (<code>Component</code> with injected fields, properties, methods) from the nearest
+<span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-23"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-23" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> at the same transform or above it first, then walks up parent <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-24"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-24" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> until a matching <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-25"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-25" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> is found. That means
+child <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-26"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-26" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> naturally override parent <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-27"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-27" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> for the same requested type.</p>
+<p><strong>Example:</strong></p>
+<pre><code class="lang-mermaid">flowchart TD
+  subgraph Editor
+    DI[&quot;Scene injection pass&quot;]
+  end
+
+  subgraph Scene
+    DI --&gt;|Inject| EnemyAudioService[&quot;Enemy.audioService (IAudioService)&quot;]
+    DI --&gt;|Inject| EnemyAIController[&quot;Enemy.aiController (AIController)&quot;]
+    EnemyAudioService --&gt;|&quot;Try resolve IAudioService -&gt; Binding not found&quot;| EnemyScope
+    EnemyAIController --&gt;|&quot;Try resolve AIController -&gt; Binding found&quot;| EnemyScope
+    EnemyScope --&gt;|&quot;Try resolve IAudioService -&gt; Binding found&quot;| RootScope
+  end
+</code></pre>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class RootScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        // AudioServiceAsset is a Unity asset type that implements IAudioService.
+        BindAsset&lt;IAudioService, AudioServiceAsset&gt;()
+            .FromResources(&quot;Audio/Service&quot;);
+    }
+}
+</code></pre>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class EnemyScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        // Enemy-local AIController only. No IAudioService binding here.
+        BindComponent&lt;AIController&gt;()
+            .FromScopeSelf();
+    }
+}
+</code></pre>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+
+public partial class Enemy : MonoBehaviour
+{
+    [Inject, SerializeInterface]
+    private IAudioService audioService; // Resolved from RootScope (fallback)
+
+    [Inject]
+    private AIController aiController; // Resolved from EnemyScope
+}
+</code></pre>
+<p><code>IAudioService</code> is not bound in <code>EnemyScope</code>, so Saneject walks up to <code>RootScope</code> and resolves it there. <code>AIController</code>
+is bound in <code>EnemyScope</code>, so it resolves locally without fallback.</p>
+<h2 id="runtime-behavior">Runtime behavior</h2>
+<p>Almost everything in Saneject happens at edit-time. However, a few things need to happen at runtime to facilitate
+dependencies between <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-28"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-28" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> that Unity cannot serialize (scene ↔ other scene, scene ↔ <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-29"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-29" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>).</p>
+<h3 id="global-components-in-scopes">Global components in scopes</h3>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-30"><span class="glossary-term__label">Scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-30" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> can declare globally/statically available components with <code>BindGlobal&lt;T&gt;()</code>:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class BootstrapScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindGlobal&lt;AudioManager&gt;()
+            .FromScopeSelf();
+    }
+}
+</code></pre>
+<p>How it works:</p>
+<ul>
+<li>During editor injection, Saneject resolves the global component and serializes it in the same <code>Scope</code> that declares
+the global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-31"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-31" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>.</li>
+<li>At runtime, <code>Scope.Awake()</code> registers those serialized components into <code>GlobalScope</code> (a static <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-32"><span class="glossary-term__label">service locator</span><span class="glossary-term__tooltip" id="glossary-tooltip-32" role="tooltip"><span class="glossary-term__title">Service locator</span><span class="glossary-term__body">Object or API that lets runtime code request dependencies on demand instead of receiving them through injection. In Saneject docs, this usually refers to <code>GlobalScope</code>.</span></span></span>).</li>
+<li>This is usually used as a cheap lookup mechanism for <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-33"><span class="glossary-term__label">runtime proxies</span><span class="glossary-term__tooltip" id="glossary-tooltip-33" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> that resolve with <code>FromGlobalScope()</code>.</li>
+<li>In <code>Scope.OnDestroy()</code>, the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-34"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-34" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> unregisters what it registered from <code>GlobalScope</code>, meaning that global components
+per local <code>Scope</code> have the same lifetime as the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-35"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-35" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>.</li>
+<li><code>Scope</code> has default execution order <code>-10000</code>, so <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-36"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-36" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> runtime operations run before normal component <code>Awake</code> to avoid
+startup race conditions/null access issues.</li>
+</ul>
+<p>Only one <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-37"><span class="glossary-term__label">global registration</span><span class="glossary-term__tooltip" id="glossary-tooltip-37" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span> per concrete component type is allowed. Duplicate global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-38"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-38" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> for the same type are
+reported as invalid.</p>
+<p>See <a href="global-scope.html">Global scope</a> for details.</p>
+<h3 id="runtime-proxy-swap-targets">Runtime proxy swap targets</h3>
+<p>A <code>RuntimeProxy</code> is an auto-generated <code>ScriptableObject</code> used as an editor-time stand-in for a real interface dependency
+when that real reference cannot be serialized directly in the current <code>Scope</code> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-39"><span class="glossary-term__label">context</span><span class="glossary-term__tooltip" id="glossary-tooltip-39" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> (for example, prefab to scene
+references).</p>
+<p>During editor injection, when Saneject injects a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-40"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-40" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> into an interface field, it registers the owning
+component as a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-41"><span class="glossary-term__label">proxy swap target</span><span class="glossary-term__tooltip" id="glossary-tooltip-41" role="tooltip"><span class="glossary-term__title">Proxy swap target</span><span class="glossary-term__body">Component that implements <code>IRuntimeProxySwapTarget</code> and is asked at runtime startup to replace proxy references with resolved real instances.</span></span></span> in the nearest <code>Scope</code>.</p>
+<p>At runtime, <code>Scope.Awake()</code> (execution order <code>-10000</code>) runs right after <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-42"><span class="glossary-term__label">global registration</span><span class="glossary-term__tooltip" id="glossary-tooltip-42" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span> and calls Roslyn-generated
+<code>SwapProxiesWithRealInstances()</code> on each registered swap target. That generated method replaces proxy references with
+the real instances using normal field assignment, with no reflection.</p>
+<p>The full proxy mechanism is documented in <a href="runtime-proxy.html">Runtime proxies</a>.</p>
+<p>Proxy swap flow:</p>
+<ol>
+<li>A <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-43"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-43" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> uses <code>FromRuntimeProxy()</code> for an interface dependency.</li>
+<li>Injection writes a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-44"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-44" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> into the interface field and registers the owner as a swap target in the nearest
+<code>Scope</code>.</li>
+<li>In <code>Scope.Awake()</code>, the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-45"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-45" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> calls <code>SwapProxiesWithRealInstances()</code>, and the field is reassigned to the real
+instance.</li>
+</ol>
+<p>Typical proxy <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-46"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-46" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> setup:</p>
+<pre><code class="lang-csharp">public class CombatScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindComponent&lt;ICombatService, CombatService&gt;()
+            .FromRuntimeProxy()
+            .FromGlobalScope();
+
+        BindGlobal&lt;CombatService&gt;()
+            .FromScopeSelf();
+    }
+}
+</code></pre>
+<p>Typical consumer:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+
+public partial class CombatHud : MonoBehaviour
+{
+    [Inject, SerializeInterface]
+    private ICombatService combatService;
+}
+</code></pre>
+<p>See <a href="runtime-proxy.html">Runtime proxies</a> and <a href="serialized-interface.html">Serialized interfaces</a> for details.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="binding.html">Bindings</a></li>
+<li><a href="global-scope.html">Global scope</a></li>
+<li><a href="runtime-proxy.html">Runtime proxies</a></li>
+<li><a href="serialized-interface.html">Serialized interfaces</a></li>
+<li><a href="context.html">Contexts</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

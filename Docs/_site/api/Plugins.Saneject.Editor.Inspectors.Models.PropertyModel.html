@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class PropertyModel | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class PropertyModel | Saneject: Dependency injection the Unity way ">
+      
+      <meta name="description" content="Encapsulates metadata and state for a serializable property in the custom Saneject inspector. This model combines reflection information about a field with its serialized property representation, handling special cases like  fields, nested serializable types, injected fields, and read-only properties. It supports hierarchical property structures for nested types and collections.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/new/wip/experimental-architecture-rewrite/apiSpec/new?filename=Plugins_Saneject_Editor_Inspectors_Models_PropertyModel.md&amp;value=---%0Auid%3A%20Plugins.Saneject.Editor.Inspectors.Models.PropertyModel%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel">
+
+
+
+  <h1 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel" class="text-break">
+Class PropertyModel  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L18"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Plugins.html">Plugins</a>.<a class="xref" href="Plugins.Saneject.html">Saneject</a>.<a class="xref" href="Plugins.Saneject.Editor.html">Editor</a>.<a class="xref" href="Plugins.Saneject.Editor.Inspectors.html">Inspectors</a>.<a class="xref" href="Plugins.Saneject.Editor.Inspectors.Models.html">Models</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Saneject.Editor.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Encapsulates metadata and state for a serializable property in the custom Saneject inspector.
+This model combines reflection information about a field with its serialized property representation,
+handling special cases like <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a> fields, nested serializable types, injected fields,
+and read-only properties. It supports hierarchical property structures for nested types and collections.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public sealed class PropertyModel</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">PropertyModel</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel__ctor_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.#ctor*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel__ctor_UnityEditor_SerializedObject_System_Reflection_FieldInfo_UnityEditor_SerializedProperty_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.#ctor(UnityEditor.SerializedObject,System.Reflection.FieldInfo,UnityEditor.SerializedProperty)">
+  PropertyModel(SerializedObject, FieldInfo, SerializedProperty)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L29"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html">PropertyModel</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public PropertyModel(SerializedObject root, FieldInfo field, SerializedProperty parent = null)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>root</code> <span class="xref">SerializedObject</span></dt>
+    <dd><p>The root <span class="xref">UnityEditor.SerializedObject</span> used to find top-level properties.</p>
+</dd>
+    <dt><code>field</code> <span class="xref">FieldInfo</span></dt>
+    <dd><p>The FieldInfo representing the property.</p>
+</dd>
+    <dt><code>parent</code> <span class="xref">SerializedProperty</span></dt>
+    <dd><p>The parent <a class="xref" href="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html#Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_SerializedProperty">SerializedProperty</a> if this property is nested within another serializable type.
+If null, the property is resolved from the root <span class="xref">UnityEditor.SerializedObject</span>.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="properties">Properties
+</h2>
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_Children_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.Children*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_Children" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.Children">
+  Children
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the read-only collection of child PropertyModel instances for nested serializable types.
+Empty if this property is not a nested serializable type or if no children are found.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public IReadOnlyList&lt;PropertyModel&gt; Children { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IReadOnlyList</span>&lt;<a class="xref" href="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html">PropertyModel</a>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_DisplayName_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.DisplayName*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_DisplayName" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.DisplayName">
+  DisplayName
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L75"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the display name for this property in the inspector, nicified and with type information
+for <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a> fields.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public string DisplayName { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">string</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_ExpectedType_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.ExpectedType*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_ExpectedType" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.ExpectedType">
+  ExpectedType
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L93"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the expected element type for this property.
+For <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a> fields, this is the interface type.
+For non-interface properties, this is the field type itself.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public Type ExpectedType { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">Type</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_HasInjectAttribute_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.HasInjectAttribute*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_HasInjectAttribute" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.HasInjectAttribute">
+  HasInjectAttribute
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L98"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this property is marked with the <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a> attribute.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool HasInjectAttribute { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_IsCollection_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.IsCollection*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_IsCollection" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.IsCollection">
+  IsCollection
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L103"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this property is an array or list type.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsCollection { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_IsReadOnly_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.IsReadOnly*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_IsReadOnly" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.IsReadOnly">
+  IsReadOnly
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this property should be drawn as read-only in the inspector.
+This is true if the field is marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>  or <a class="xref" href="Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute.html">ReadOnlyAttribute</a> .</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsReadOnly { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_IsSerializedInterface_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.IsSerializedInterface*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_IsSerializedInterface" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.IsSerializedInterface">
+  IsSerializedInterface
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L86"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets a value indicating whether this property is marked with the <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a> attribute.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public bool IsSerializedInterface { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_SerializedProperty_" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.SerializedProperty*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_SerializedProperty" data-uid="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.SerializedProperty">
+  SerializedProperty
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs/#L69"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Gets the serialized property representation of this field.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public SerializedProperty SerializedProperty { get; }</code></pre>
+  </div>
+
+
+
+
+
+  <h4 class="section">Property Value</h4>
+  <dl class="parameters">
+    <dt><span class="xref">SerializedProperty</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

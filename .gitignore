@@ -59,8 +59,4 @@
 crashlytics-build.properties
 /UnityProject/Saneject/Saneject.sln.DotSettings
 
-# Docs
-/Docs/_site/
-/Docs/_site_pdf/
-/Docs/api/
 /UnityProject/Saneject/ProjectSettings/ShaderGraphSettings.asset

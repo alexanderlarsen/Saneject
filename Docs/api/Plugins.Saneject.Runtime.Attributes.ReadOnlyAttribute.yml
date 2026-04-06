@@ -1,0 +1,132 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  id: ReadOnlyAttribute
+  parent: Plugins.Saneject.Runtime.Attributes
+  children: []
+  langs:
+  - csharp
+  - vb
+  name: ReadOnlyAttribute
+  nameWithType: ReadOnlyAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/ReadOnlyAttribute.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ReadOnlyAttribute
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/ReadOnlyAttribute.cs
+    startLine: 12
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Attributes
+  summary: Marks a field as read-only in the Unity inspector.
+  remarks: >-
+    When applied to a serialized field, this attribute causes the field to appear grayed out and disabled in the inspector.
+
+    Saneject automatically draws <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref> fields as read-only, but you can use this attribute independently on non-injected fields.
+  example: []
+  syntax:
+    content: >-
+      [AttributeUsage(AttributeTargets.Field)]
+
+      public class ReadOnlyAttribute : PropertyAttribute
+    content.vb: >-
+      <AttributeUsage(AttributeTargets.Field)>
+
+      Public Class ReadOnlyAttribute Inherits PropertyAttribute
+  inheritance:
+  - System.Object
+  - System.Attribute
+  - UnityEngine.PropertyAttribute
+  attributes:
+  - type: System.AttributeUsageAttribute
+    ctor: System.AttributeUsageAttribute.#ctor(System.AttributeTargets)
+    arguments:
+    - type: System.AttributeTargets
+      value: 256
+references:
+- uid: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  href: Plugins.Saneject.Runtime.Attributes.InjectAttribute.html
+  name: InjectAttribute
+  nameWithType: InjectAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+- uid: Plugins.Saneject.Runtime.Attributes
+  commentId: N:Plugins.Saneject.Runtime.Attributes
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Attributes
+  nameWithType: Plugins.Saneject.Runtime.Attributes
+  fullName: Plugins.Saneject.Runtime.Attributes
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Attributes
+    name: Attributes
+    href: Plugins.Saneject.Runtime.Attributes.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Attributes
+    name: Attributes
+    href: Plugins.Saneject.Runtime.Attributes.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Attribute
+  commentId: T:System.Attribute
+  parent: System
+  isExternal: true
+  name: Attribute
+  nameWithType: Attribute
+  fullName: System.Attribute
+- uid: UnityEngine.PropertyAttribute
+  commentId: T:UnityEngine.PropertyAttribute
+  parent: UnityEngine
+  isExternal: true
+  name: PropertyAttribute
+  nameWithType: PropertyAttribute
+  fullName: UnityEngine.PropertyAttribute
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine

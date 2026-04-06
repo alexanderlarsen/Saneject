@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>MonoBehaviour inspector | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="MonoBehaviour inspector | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../../favicon.ico">
+      <link rel="stylesheet" href="../../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../../public/main.css">
+      <meta name="docfx:navrel" content="../../../toc.html">
+      <meta name="docfx:tocrel" content="../../toc.html">
+      
+      <meta name="docfx:rel" content="../../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/editor-and-tooling/inspectors/monobehaviour-inspector.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../../index.html">
+            <img id="logo" class="svg" src="../../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="monobehaviour-inspector">MonoBehaviour inspector</h1>
+
+<p>The <code>MonoBehaviour</code> inspector is Saneject's default inspector for components.
+It keeps Unity's normal layout, behavior and serialized editing workflow, and adds Saneject-specific features such as serialize interface support.</p>
+<p>In practice, this system has two parts:</p>
+<ul>
+<li><code>MonoBehaviourInspector</code>: the Unity custom <code>Editor</code> entry point for <code>MonoBehaviour</code>.</li>
+<li><code>SanejectInspector</code>: the shared static drawing and validation API that does the real work.</li>
+</ul>
+<p>The <a class="xref" href="../../../api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html">SanejectInspector</a> API is model-driven and uses <a class="xref" href="../../../api/Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html">ComponentModel</a> and <a class="xref" href="../../../api/Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html">PropertyModel</a>.</p>
+<p>The default editor is multi-object aware with (<code>[CanEditMultipleObjects]</code>), so standard Unity multi-selection editing still applies.</p>
+<h2 id="what-this-inspector-is-for">What this inspector is for</h2>
+<p>Use this inspector when you want consistent field rendering across normal Unity components and Saneject <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">injection targets</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Injection target</span><span class="glossary-term__body"><code>Component</code> with injected fields, properties or methods.</span></span></span>, especially when your components use:</p>
+<ul>
+<li><code>[Inject]</code> fields or <code>[field: Inject]</code> auto-properties.</li>
+<li><code>[SerializeInterface]</code> members.</li>
+<li>Nested <code>[Serializable]</code> classes that contain injected data.</li>
+</ul>
+<h2 id="why-saneject-uses-a-custom-inspector">Why Saneject uses a custom inspector</h2>
+<p><code>[SerializeInterface]</code> uses Roslyn source generation to add interface backing fields as <code>UnityEngine.Object</code> members in a generated partial class.</p>
+<p>In Unity's default inspector order, fields declared in that generated partial class are rendered after fields from your authored class.
+That causes interface-backed fields to always appear last in the inspector instead of where the interface members are declared among the rest of your fields.</p>
+<p>Saneject uses a custom inspector to restore logical declaration order, so interface-backed members are rendered where the corresponding interface members belong, along with other UX improvements.</p>
+<h2 id="drawing-behavior">Drawing behavior</h2>
+<p>For each inspected component, Saneject draws:</p>
+<ul>
+<li>A disabled <code>Script</code> field at the top, matching Unity's standard inspector header behavior.</li>
+<li>Serializable fields collected from base type to derived type.</li>
+<li>Public fields, <code>[SerializeField]</code> fields, and <code>[SerializeInterface]</code> fields.</li>
+<li>Excludes members that Unity should not draw in this workflow, such as <code>[NonSerialized]</code> and <code>[HideInInspector]</code>.</li>
+<li>Nested serialized classes and their fields recursively.</li>
+</ul>
+<p>Default inspector attributes such as <code>[Tooltip]</code> continue to work for both normal fields and interface-backed fields.</p>
+<h2 id="attribute-driven-behavior">Attribute-driven behavior</h2>
+<p>Saneject applies two inspector drawing rules based on attributes:</p>
+<ul>
+<li>Fields with <code>[Inject]</code> are read-only in the inspector.</li>
+<li>Fields with <code>[ReadOnly]</code> are also read-only, even when not injected.</li>
+</ul>
+<p>You can hide injected members with:</p>
+<ul>
+<li><code>Saneject/Settings/User Settings/Show Injected Fields &amp; Properties</code></li>
+</ul>
+<p>This toggle affects both <code>[Inject]</code> fields and <code>[field: Inject]</code> auto-properties.</p>
+<h2 id="nested-serialized-class-support">Nested serialized class support</h2>
+<p>If a field is a nested serializable class, Saneject draws it as a foldout and recursively draws child members. The same rules and drawing behavior still apply inside nested classes.</p>
+<p>Basic example:</p>
+<pre><code class="lang-csharp">using System;
+using UnityEngine;
+
+[Serializable]
+public class SpawnSettings
+{
+    [SerializeField] 
+    private float delay = 1f;
+    
+    [SerializeField]
+    private int count = 3;
+}
+
+public class EnemySpawner : MonoBehaviour
+{
+    [SerializeField] 
+    private SpawnSettings settings;    
+}
+</code></pre>
+<h2 id="serialized-interface-validation">Serialized interface validation</h2>
+<p>Roslyn-generated code already enforces the interface type for stored values, so inspector validation mainly exists to handle drag-and-drop assignment in <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">serialized interface</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Serialized interface</span><span class="glossary-term__body"><code>SerializeInterface</code> member (<code>IService</code>, <code>IService[]</code>, or <code>List&lt;IService&gt;</code>) that Saneject persists through a generated hidden <code>Object</code> backing member.</span></span></span> fields.</p>
+<p><code>[Inject]</code> fields are read-only and managed by Saneject, so interface drag-and-drop and inspector validation is only applicable when using <code>[SerializeInterface]</code> without <code>[Inject]</code>.</p>
+<p>Validation behavior:</p>
+<ul>
+<li>Single interface member: validates the assigned object against the expected interface type.</li>
+<li>Array or list interface member: validates each element.</li>
+<li>If a dropped value is a <code>GameObject</code>, Saneject tries <code>TryGetComponent(expectedType, out component)</code> and stores that component instead, matching Unity's behavior when drag-and-dropping <code>GameObject</code>s into component slots.</li>
+<li>If no matching component is found, or the assigned object still does not implement the expected interface type, Saneject logs an error and clears the reference to <code>null</code>.</li>
+</ul>
+<h2 id="models">Models</h2>
+<p>The inspector uses a small model layer to keep drawing code predictable:</p>
+<ul>
+<li><code>ComponentModel</code> captures the inspected target, its <code>SerializedObject</code>, and top-level drawable properties.</li>
+<li><code>PropertyModel</code> captures display name, serialized property path, read-only state, interface metadata, collection metadata, and child properties.</li>
+</ul>
+<p>See <a class="xref" href="../../../api/Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html">ComponentModel</a> and <a class="xref" href="../../../api/Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html">PropertyModel</a> for the full API reference.</p>
+<h2 id="using-the-saneject-inspector-api-in-custom-inspectors">Using the Saneject inspector API in custom inspectors</h2>
+<p><code>MonoBehaviourInspector</code> is intentionally thin and delegates to <a class="xref" href="../../../api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html">SanejectInspector</a>.
+If you create a custom inspector for a specific component type and still want Saneject behavior, call the API from your custom editor flow.</p>
+<p>Basic example:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Editor.Inspectors;
+using Plugins.Saneject.Editor.Inspectors.Models;
+using UnityEditor;
+
+[CustomEditor(typeof(MyComponent))]
+public class MyComponentInspector : Editor
+{
+    private ComponentModel componentModel;
+
+    private void OnEnable()
+    {
+        componentModel = new ComponentModel(target, serializedObject);
+    }
+
+    public override void OnInspectorGUI()
+    {
+        EditorGUILayout.HelpBox(&quot;Custom section above Saneject fields&quot;, MessageType.Info);
+        SanejectInspector.OnInspectorGUI(componentModel);
+    }
+}
+</code></pre>
+<p>You can also use the API more granularly. See <a class="xref" href="../../../api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html">SanejectInspector</a> for details.</p>
+<h2 id="console-filtering-context-menus">Console filtering context menus</h2>
+<p>Saneject adds component context menu items to quickly filter logs.</p>
+<ul>
+<li><code>Saneject/Filter Logs By Component Path</code>
+<ul>
+<li>Sets the Console search text to filter by the selected <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">Scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>'s path.</li>
+</ul>
+</li>
+</ul>
+<p>Right click on component header and <code>Saneject/Filter Logs By Component Path</code>:</p>
+<p><img src="../../../images/component-console-filter-01.webp" alt="Component inspector filter logs context menu"></p>
+<p>This adds the <code>Scope</code> type to the Console search text:</p>
+<p><img src="../../../images/component-console-filter-02.webp" alt="Unity console with logs filtered by component path"></p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="../../core-concepts/field-property-and-method-injection.html">Field, property &amp; method injection</a></li>
+<li><a href="../../core-concepts/serialized-interface.html">Serialized interface</a></li>
+<li><a href="scope-inspector.html">Scope inspector</a></li>
+<li><a href="../injection-toolbar-and-context-menus.html">Injection toolbar &amp; context menus</a></li>
+<li><a href="../settings.html">Settings</a></li>
+<li><a href="../logging-and-validation.html">Logging &amp; validation</a></li>
+<li><a href="../../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

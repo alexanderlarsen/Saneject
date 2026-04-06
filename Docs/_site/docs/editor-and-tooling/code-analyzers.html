@@ -1,0 +1,227 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Code analyzers | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Code analyzers | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/editor-and-tooling/code-analyzers.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="code-analyzers">Code analyzers</h1>
+
+<p>Saneject ships with <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">Roslyn analyzers</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Roslyn analyzer</span><span class="glossary-term__body">Compile-time code analysis component that inspects C# syntax and symbols and reports diagnostics in the IDE and during builds.</span></span></span> for common injection attribute mistakes.
+These checks run during C# analysis, so issues are reported in the editor and during compilation instead of appearing later during an <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">injection run</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Injection run</span><span class="glossary-term__body">One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.</span></span></span>.</p>
+<h2 id="why-this-exists">Why this exists</h2>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">Editor-time injection</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Editor-time injection</span><span class="glossary-term__body">Saneject workflow that resolves dependencies and writes them into serialized objects in the Unity Editor, before entering Play Mode.</span></span></span> writes values into serialized members.
+If an injected member is not serializable in Unity, or if an interface serialization attribute is used on the wrong type, the injection result can be missing or misleading.</p>
+<p>The analyzer rules catch those mistakes early and report clear, fixable diagnostics.</p>
+<h2 id="analyzer-rules">Analyzer rules</h2>
+<table>
+<thead>
+<tr>
+<th>Diagnostic ID</th>
+<th>Rule</th>
+<th>Severity</th>
+<th>Category</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>INJ001</code></td>
+<td><code>[Inject]</code> fields must have either <code>[SerializeField]</code>, <code>[SerializeInterface]</code>, or be <code>public</code>.</td>
+<td>Error</td>
+<td><code>Injection</code></td>
+</tr>
+<tr>
+<td><code>INJ002</code></td>
+<td><code>[SerializeInterface]</code> fields must be interface-typed members. Supported shapes are interface, interface array, and one-parameter generic collections of an interface type (for example <code>List&lt;IService&gt;</code>).</td>
+<td>Error</td>
+<td><code>Injection</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="rule-details">Rule details</h2>
+<h3 id="inj001-inject-must-be-serializable-or-public"><code>INJ001</code>: <code>[Inject]</code> must be serializable or public</h3>
+<p>This rule reports when a field has <code>[Inject]</code> but is neither:</p>
+<ul>
+<li><code>public</code></li>
+<li>marked with Unity's <code>[SerializeField]</code></li>
+<li>marked with Saneject's <code>[SerializeInterface]</code></li>
+</ul>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+
+public partial class PlayerHud : MonoBehaviour
+{
+    [Inject]
+    private Camera mainCamera; // INJ001 ❌
+
+    [Inject, SerializeField]
+    private Camera minimapCamera; // OK ✅
+
+    [Inject, SerializeInterface]
+    private IHealthService healthService; // OK ✅
+}
+</code></pre>
+<h3 id="inj002-serializeinterface-requires-interface-types"><code>INJ002</code>: <code>[SerializeInterface]</code> requires interface types</h3>
+<p>This rule reports when <code>[SerializeInterface]</code> is placed on a non-interface shape.</p>
+<pre><code class="lang-csharp">using System.Collections.Generic;
+using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+
+public partial class EnemyHud : MonoBehaviour
+{
+    [SerializeInterface]
+    private Camera worldCamera; // INJ002 ❌
+    
+    [SerializeInterface]
+    private IEnemyService enemyService; // OK ✅
+
+    [SerializeInterface]
+    private List&lt;IEnemyService&gt; allEnemyServices; // OK ✅
+}
+</code></pre>
+<h2 id="code-fixes">Code fixes</h2>
+<p>Saneject also includes <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">Roslyn code fixes</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Roslyn code fix</span><span class="glossary-term__body">Quick action linked to a Roslyn analyzer diagnostic that can automatically apply a source-code fix.</span></span></span> for both diagnostics.
+When your IDE supports Roslyn quick actions, the fixes appear directly in the lightbulb menu.</p>
+<h3 id="fixes-for-inj001">Fixes for <code>INJ001</code></h3>
+<ul>
+<li><code>Add [SerializeField]</code></li>
+<li><code>Add [SerializeInterface]</code> (offered when the field type is an interface)</li>
+<li><code>Make field public</code></li>
+</ul>
+<h3 id="fixes-for-inj002">Fixes for <code>INJ002</code></h3>
+<ul>
+<li><code>Remove [SerializeInterface]</code></li>
+<li><code>Replace [SerializeInterface] with [SerializeField]</code></li>
+</ul>
+<h2 id="ide-support">IDE support</h2>
+<p>Roslyn analyzers are supported by most modern IDEs such as JetBrains Rider and Visual Studio.</p>
+<p><code>INJ001</code> reported inside JetBrains Rider:</p>
+<p><img src="../../images/code-analyzers-inj001-tooltip.webp" alt="Screenshot containing Rider showing an INJ001 error on an [Inject] field"></p>
+<p><code>INJ002</code> reported inside JetBrains Rider:</p>
+<p><img src="../../images/code-analyzers-inj002-tooltip.webp" alt="Screenshot containing Rider showing an INJ002 error on a [SerializeInterface] field"></p>
+<p><code>INJ001</code> code fixes in JetBrains Rider:</p>
+<p><img src="../../images/code-analyzers-inj001-fixes.webp" alt="Screenshot containing Rider showing INJ001 code fixes"></p>
+<p><code>INJ002</code> code fixes in JetBrains Rider:</p>
+<p><img src="../../images/code-analyzers-inj002-fixes.webp" alt="Screenshot containing Rider showing INJ002 code fixes"></p>
+<h2 id="unity-console-output">Unity console output</h2>
+<p><code>INJ001</code> and <code>INJ002</code> errors are reported to the Unity console as well:</p>
+<p><img src="../../images/code-analyzers-inj001-inj001-unity-console.webp" alt="Screenshot containing Unity console output showing INJ001 and INJ002 errors"></p>
+<h2 id="where-the-analyzer-is-loaded-from">Where the analyzer is loaded from</h2>
+<p>In the Unity project, Saneject's analyzer assembly is included at:</p>
+<ul>
+<li><code>Assets/Plugins/Saneject/Roslyn/Saneject.Analyzers.dll</code></li>
+</ul>
+<p>It is imported with the <code>RoslynAnalyzer</code> asset label, so Unity treats it as analyzer tooling instead of runtime gameplay code.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="../core-concepts/field-property-and-method-injection.html">Field, property &amp; method injection</a></li>
+<li><a href="../core-concepts/serialized-interface.html">Serialized interface</a></li>
+<li><a href="injection-toolbar-and-context-menus.html">Injection toolbar &amp; context menus</a></li>
+<li><a href="logging-and-validation.html">Logging &amp; validation</a></li>
+<li><a href="settings.html">Settings</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

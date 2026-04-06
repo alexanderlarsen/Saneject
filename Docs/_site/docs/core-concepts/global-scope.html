@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Global scope | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Global scope | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/core-concepts/global-scope.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="global-scope">Global scope</h1>
+
+<p><code>GlobalScope</code> is Saneject's static runtime registry for globally accessible <code>Component</code> instances.</p>
+<p>Saneject is mostly editor-time DI, but some runtime scenarios still need lookup by type. <code>GlobalScope</code> and <code>RuntimeProxy</code> covers that gap:</p>
+<ul>
+<li><code>BindGlobal&lt;TComponent&gt;()</code> stores resolved components in a <code>Scope</code> at editor-time and registers them at runtime.</li>
+<li><code>RuntimeProxy</code> can resolve through <code>FromGlobalScope()</code> for fast lookup.</li>
+<li>You can also call <code>GlobalScope</code> directly as a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">service locator</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Service locator</span><span class="glossary-term__body">Object or API that lets runtime code request dependencies on demand instead of receiving them through injection. In Saneject docs, this usually refers to <code>GlobalScope</code>.</span></span></span> when needed.</li>
+</ul>
+<h2 id="what-problem-it-solves">What problem it solves</h2>
+<p>Unity serialization cannot serialize direct references between certain boundaries:</p>
+<ul>
+<li>Scene ↔ other scene</li>
+<li>Scene ↔ <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span></li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">Prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span> ↔ other <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span></li>
+</ul>
+<p><code>GlobalScope</code> gives you a shared runtime lookup point for registered components. You declare those components in a normal <code>Scope</code>, then Saneject registers them <code>GlobalScope</code> before regular <code>Awake()</code> methods run.</p>
+<p>This keeps the common workflow explicit:</p>
+<ol>
+<li>Resolve <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">dependency candidates</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Dependency candidate</span><span class="glossary-term__body">Object considered during resolution before qualifiers, filters, and assignment determine whether it becomes the final injected dependency.</span></span></span> in the editor through <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-6"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-6" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>.</li>
+<li>Persist global candidates on the declaring <code>Scope</code>.</li>
+<li>Register those components into <code>GlobalScope</code> at <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-7"><span class="glossary-term__label">runtime startup</span><span class="glossary-term__tooltip" id="glossary-tooltip-7" role="tooltip"><span class="glossary-term__title">Runtime startup</span><span class="glossary-term__body">Phase after entering Play Mode when scopes initialize, global registrations are populated, and runtime proxy references can be swapped to real instances.</span></span></span>.</li>
+</ol>
+<h2 id="declaring-global-components-with-bindings">Declaring global components with bindings</h2>
+<p>Use <code>BindGlobal&lt;TConcrete&gt;()</code> inside <code>DeclareBindings()</code>:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class BootstrapScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindGlobal&lt;AudioManager&gt;()
+            .FromScopeSelf();
+    }
+}
+</code></pre>
+<p><code>BindGlobal&lt;T&gt;()</code>:</p>
+<ul>
+<li>Only accepts <code>Component</code> types.</li>
+<li>Supports normal <code>From...</code> locator methods and <code>Where...</code> filters.</li>
+<li>Does not support qualifiers (<code>ToID</code>, <code>ToTarget</code>, <code>ToMember</code>).</li>
+<li>Does not support <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-8"><span class="glossary-term__label">runtime proxy binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-8" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span> methods.</li>
+</ul>
+<p>See <a href="binding.html">Binding</a> and <a href="scope.html">Scope</a> for more information.</p>
+<h2 id="global-lifecycle">Global lifecycle</h2>
+<p>When you declare <code>BindGlobal&lt;T&gt;()</code>, Saneject handles it in two phases.</p>
+<p>Editor phase:</p>
+<ol>
+<li>During injection, Saneject resolves the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-9"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-9" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> like any other component locator.</li>
+<li>If multiple candidates are found, the first candidate is selected.</li>
+<li>The selected component is serialized into the declaring <code>Scope</code>'s global components list.</li>
+</ol>
+<p>Runtime phase:</p>
+<ol>
+<li><code>Scope.Awake()</code> runs at execution order <code>-10000</code>.</li>
+<li>The <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-10"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-10" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> registers serialized global components into <code>GlobalScope</code>.</li>
+<li>The same <code>Awake()</code> then swaps <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-11"><span class="glossary-term__label">runtime proxies</span><span class="glossary-term__tooltip" id="glossary-tooltip-11" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> to real instances.</li>
+<li><code>Scope.OnDestroy()</code> unregisters the components that this <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-12"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-12" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> owns.</li>
+</ol>
+<p>That order matters: <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-13"><span class="glossary-term__label">global registration</span><span class="glossary-term__tooltip" id="glossary-tooltip-13" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span> runs before proxy swapping, so <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-14"><span class="glossary-term__label">runtime proxies</span><span class="glossary-term__tooltip" id="glossary-tooltip-14" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> configured to resolve from <code>GlobalScope</code> can do that during startup.</p>
+<p>For full proxy behavior, see <a href="runtime-proxy.html">Runtime proxy</a>.</p>
+<h2 id="using-global-scope-with-runtime-proxy">Using global scope with runtime proxy</h2>
+<p>A common pattern is:</p>
+<ul>
+<li>In one <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-15"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-15" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>, declare a global component with <code>BindGlobal&lt;TConcrete&gt;()</code>.</li>
+<li>In another <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-16"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-16" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> or <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-17"><span class="glossary-term__label">context</span><span class="glossary-term__tooltip" id="glossary-tooltip-17" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span>, bind an interface through <code>FromRuntimeProxy().FromGlobalScope()</code>.</li>
+</ul>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class BootstrapScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindGlobal&lt;GameManager&gt;()
+            .FromScopeSelf();
+    }
+}
+</code></pre>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class HudScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindComponent&lt;IGameManager, GameManager&gt;()
+            .FromRuntimeProxy()
+            .FromGlobalScope();
+    }
+}
+</code></pre>
+<p>This is usually the intended use of <code>GlobalScope</code>: fast runtime lookup for proxy resolution, not a replacement for normal <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-18"><span class="glossary-term__label">editor-time injection</span><span class="glossary-term__tooltip" id="glossary-tooltip-18" role="tooltip"><span class="glossary-term__title">Editor-time injection</span><span class="glossary-term__body">Saneject workflow that resolves dependencies and writes them into serialized objects in the Unity Editor, before entering Play Mode.</span></span></span>.</p>
+<p>For full proxy behavior, see <a href="runtime-proxy.html">Runtime proxy</a>.</p>
+<h2 id="using-global-scope-directly-as-a-service-locator">Using global scope directly as a service locator</h2>
+<p>If you want to avoid <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-19"><span class="glossary-term__label">runtime proxies</span><span class="glossary-term__tooltip" id="glossary-tooltip-19" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span>, direct usage is available when you need fast runtime lookup outside the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-20"><span class="glossary-term__label">injection pipeline</span><span class="glossary-term__tooltip" id="glossary-tooltip-20" role="tooltip"><span class="glossary-term__title">Injection pipeline</span><span class="glossary-term__body">Ordered stages Saneject runs during injection, from graph build and context filtering through validation, resolution, assignment, and summary logging.</span></span></span>:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+using UnityEngine;
+
+public class AudioBootstrap : MonoBehaviour
+{
+    private void Start()
+    {
+        if (GlobalScope.TryGetComponent&lt;AudioManager&gt;(out AudioManager audio))
+            audio.InitializeMixer();
+    }
+}
+</code></pre>
+<p>API overview:</p>
+<ul>
+<li><code>GlobalScope.GetComponent&lt;T&gt;()</code></li>
+<li><code>GlobalScope.TryGetComponent&lt;T&gt;(out T component)</code></li>
+<li><code>GlobalScope.IsRegistered&lt;T&gt;()</code></li>
+<li><code>GlobalScope.RegisterComponent(Component instance, Object caller)</code></li>
+<li><code>GlobalScope.UnregisterComponent(Component instance, Object caller)</code></li>
+<li><code>GlobalScope.Clear()</code></li>
+</ul>
+<p><a class="xref" href="../../api/Plugins.Saneject.Runtime.Scopes.GlobalScope.html">Full API here</a></p>
+<p>Use manual <code>RegisterComponent</code> and <code>UnregisterComponent</code> carefully. Most projects should let <code>Scope</code> manage lifecycle through <code>BindGlobal&lt;T&gt;()</code>.</p>
+<h2 id="rules-and-constraints">Rules and constraints</h2>
+<ul>
+<li><code>GlobalScope</code> stores <code>Component</code> instances only.</li>
+<li>Only one registration per concrete component type is allowed at a time.</li>
+<li>Lookup is exact-type by key. If <code>AudioManager</code> is registered, <code>GetComponent&lt;MonoBehaviour&gt;()</code> does not return it.</li>
+<li>Generic lookup methods require <code>T : Component</code>, so interface lookups are not supported.</li>
+<li>Global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-21"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-21" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are validated for unique type ownership. Duplicate <code>BindGlobal&lt;SameType&gt;()</code> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-22"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-22" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are invalid.</li>
+<li>Global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-23"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-23" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> candidate selection still obeys <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-24"><span class="glossary-term__label">context isolation</span><span class="glossary-term__tooltip" id="glossary-tooltip-24" role="tooltip"><span class="glossary-term__title">Context isolation</span><span class="glossary-term__body">Project setting (<code>UseContextIsolation</code>) that controls whether dependency resolution can cross context boundaries.</span></span></span> rules during editor resolution.</li>
+<li>Global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-25"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-25" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are not used to resolve <code>[Inject]</code> fields or methods directly. They feed runtime registration, not normal <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-26"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-26" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> resolution.</li>
+<li>Modifying <code>GlobalScope</code> (<code>Register</code>, <code>Unregister</code>, <code>Clear</code>) is runtime-only. Calls outside Play Mode are rejected.</li>
+<li>Unregister requires ownership: only the same caller object that registered a type can unregister that type.</li>
+</ul>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="scope.html">Scope</a></li>
+<li><a href="binding.html">Binding</a></li>
+<li><a href="runtime-proxy.html">Runtime proxy</a></li>
+<li><a href="context.html">Context</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

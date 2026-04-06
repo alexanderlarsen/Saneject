@@ -1,0 +1,359 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Sample game | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Sample game | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/getting-started/sample-game.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="sample-game">Sample game</h1>
+
+<p>The sample game is a compact reference project that shows how Saneject is used in a real Unity setup.</p>
+<p>You control a green player character. Red enemies wander around the map and flee when you get close. Catch them all to end the round, then restart from the game-over UI.</p>
+<p><img src="../../images/sample-game-screenshot.webp" alt="Screenshot of Saneject sample game"></p>
+<blockquote>
+<p>Some older Unity versions (for example <code>2022.3.12f1</code>) can lose script references when importing samples from Package Manager.
+If that happens, right-click the imported <code>Samples</code> folder and choose <strong>Reimport</strong>.
+Reference discussion: <a href="https://discussions.unity.com/t/broken-script-references-on-updating-custom-package-through-package-manager-and-committing-it-to-git/910632/7">https://discussions.unity.com/t/broken-script-references-on-updating-custom-package-through-package-manager-and-committing-it-to-git/910632/7</a></p>
+</blockquote>
+<p>The sample intentionally keeps gameplay simple so you can focus on dependency structure:</p>
+<ul>
+<li><strong>Multiple <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> levels:</strong> bootstrap, scene-wide, object-local, and prefab-local <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>.</li>
+<li><strong>Interface-first wiring:</strong> most systems communicate through interfaces instead of hard references.</li>
+<li><strong>Global gameplay registrations:</strong> the player, camera controller, enemy manager, score manager, and game-state manager are registered through <code>BindGlobal&lt;T&gt;()</code>.</li>
+<li><strong>Runtime proxy bridges:</strong> UI and prefab systems consume scene-owned services through <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">runtime proxy bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span>.</li>
+<li><strong>Runtime-created service:</strong> the sample's <code>ISceneManager</code> is created from a runtime proxy binding with <code>FromNewComponentOnNewGameObject().AsSingleton()</code>.</li>
+<li><strong>UI integration:</strong> HUD, game-over UI, and enemy markers react to gameplay state through interfaces.</li>
+</ul>
+<h2 id="where-to-find-it">Where to find it</h2>
+<table>
+<thead>
+<tr>
+<th>Install method</th>
+<th>Location</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Unity package</td>
+<td><code>Assets/Plugins/Saneject/Samples~/DemoGame</code></td>
+</tr>
+<tr>
+<td>Imported Package Manager sample</td>
+<td><code>Assets/Samples/Saneject/&lt;version&gt;/DemoGame</code></td>
+</tr>
+</tbody>
+</table>
+<h2 id="how-to-run-the-sample">How to run the sample</h2>
+<ol>
+<li>Add scenes to Build Settings in this order:
+<ul>
+<li><code>StartScene</code></li>
+<li><code>GameScene</code></li>
+<li><code>UIScene</code></li>
+</ul>
+</li>
+<li>Open <code>StartScene</code>.</li>
+<li>Enter Play Mode.</li>
+</ol>
+<h2 id="scene-flow">Scene flow</h2>
+<p>The sample uses a small bootstrap scene plus two additive runtime scenes:</p>
+<ul>
+<li><code>StartScene</code>: bootstrap scene that contains <code>BootstrapScope</code> and <code>Bootstrapper</code>.</li>
+<li><code>GameScene</code>: gameplay systems (player, enemies, score, game state, camera).</li>
+<li><code>UIScene</code>: HUD and game-over UI.</li>
+</ul>
+<p>At runtime:</p>
+<ol>
+<li><code>Bootstrapper</code> resolves <code>ISceneManager</code>.</li>
+<li>The <code>ISceneManager</code> implementation loads <code>GameScene</code> and <code>UIScene</code> additively.</li>
+<li><code>StartScene</code> is unloaded.</li>
+<li>Restart loads <code>StartScene</code> again with <code>LoadSceneMode.Single</code>.</li>
+</ol>
+<h2 id="scope-layout-and-responsibilities">Scope layout and responsibilities</h2>
+<p>The sample demonstrates <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> composition at multiple levels:</p>
+<ul>
+<li><code>BootstrapScope</code>: declares the bootstrap binding that creates the runtime <code>ISceneManager</code>.</li>
+<li><code>GameSceneScope</code>: declares scene-level gameplay <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-6"><span class="glossary-term__label">global registrations</span><span class="glossary-term__tooltip" id="glossary-tooltip-6" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span>, and the enemy prefab asset binding.</li>
+<li><code>PlayerScope</code>: declares player-local <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-7"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-7" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> such as movement dependencies.</li>
+<li><code>EnemyScope</code>: declares per-enemy prefab <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-8"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-8" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> and runtime proxy access to the player and camera.</li>
+<li><code>UISceneScope</code>: declares UI-side <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-9"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-9" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>, including runtime proxies to gameplay systems and the restart scene manager.</li>
+</ul>
+<p>This layout shows the core Saneject rule in practice: each <code>Scope</code> owns <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-10"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-10" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> for its local part of the hierarchy, while parent <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-11"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-11" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> provide fallback when local <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-12"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-12" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> do not match.</p>
+<p>See <a href="../core-concepts/scope.html">Scope</a> and <a href="../core-concepts/binding.html">Binding</a>.</p>
+<h2 id="binding-patterns-shown-by-the-sample">Binding patterns shown by the sample</h2>
+<h3 id="1-bootstrap-created-runtime-service">1. Bootstrap-created runtime service</h3>
+<p><code>BootstrapScope</code> binds <code>ISceneManager</code> through a runtime proxy that creates the concrete component on demand:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement;
+
+public class BootstrapScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindComponent&lt;ISceneManager, SceneManager&gt;()
+            .FromRuntimeProxy()
+            .FromNewComponentOnNewGameObject()
+            .AsSingleton();
+    }
+}
+</code></pre>
+<p>Why this matters:</p>
+<ul>
+<li>The sample is not limited to resolving pre-existing scene objects.</li>
+<li><code>SceneManager</code> is created at runtime, cached as a singleton, and then reused through the same interface from other <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-13"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-13" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span>.</li>
+<li>This shows the creation-based side of <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-14"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-14" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> bindings, not just lookup-based proxies.</li>
+</ul>
+<p>See <a href="../core-concepts/runtime-proxy.html">Runtime proxy</a>.</p>
+<h3 id="2-scene-level-composition-and-globals">2. Scene-level composition and globals</h3>
+<p><code>GameSceneScope</code> declares both normal <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-15"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-15" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-16"><span class="glossary-term__label">global registrations</span><span class="glossary-term__tooltip" id="glossary-tooltip-16" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span>:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
+using Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems;
+using UnityEngine;
+
+public class GameSceneScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindGlobal&lt;Player&gt;()
+            .FromScopeDescendants();
+
+        BindGlobal&lt;EnemyManager&gt;()
+            .FromScopeDescendants();
+
+        BindGlobal&lt;ScoreManager&gt;()
+            .FromScopeDescendants();
+
+        BindGlobal&lt;CameraController&gt;()
+            .FromScopeDescendants();
+
+        BindGlobal&lt;GameStateManager&gt;()
+            .FromScopeDescendants();
+
+        BindComponent&lt;ICameraFollowTarget, Player&gt;()
+            .FromScopeDescendants();
+
+        BindComponent&lt;IScoreUpdater, ScoreManager&gt;()
+            .FromScopeDescendants();
+
+        BindComponent&lt;IEnemyObservable, EnemyManager&gt;()
+            .FromScopeDescendants();
+
+        BindComponent&lt;Camera&gt;()
+            .FromAnywhere();
+
+        BindAsset&lt;GameObject&gt;()
+            .ToTarget&lt;EnemyManager&gt;()
+            .ToMember(&quot;enemyPrefab&quot;)
+            .FromAssetLoad(&quot;Assets/Plugins/Saneject/Samples/DemoGame/Prefabs/Enemy.prefab&quot;);
+    }
+}
+</code></pre>
+<p>Why this matters:</p>
+<ul>
+<li>Gameplay systems in <code>GameScene</code> resolve dependencies directly with component and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-17"><span class="glossary-term__label">asset bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-17" role="tooltip"><span class="glossary-term__title">Asset binding</span><span class="glossary-term__body">Binding declared with <code>BindAsset...</code> or <code>BindAssets...</code> that resolves <code>UnityEngine.Object</code> assets from project content instead of scene or hierarchy components.</span></span></span>.</li>
+<li>UI and prefab <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-18"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-18" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> can resolve the player, camera, score manager, enemy manager, and game-state manager at runtime through <code>GlobalScope</code>.</li>
+<li>The sample shows both local scene wiring and the global-registration pattern in the same scope.</li>
+</ul>
+<p>See <a href="../core-concepts/global-scope.html">Global scope</a>.</p>
+<h3 id="3-runtime-proxy-bridges-for-ui-and-enemy-prefabs">3. Runtime proxy bridges for UI and enemy prefabs</h3>
+<p>UI systems and enemy prefab systems consume gameplay interfaces through <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-19"><span class="glossary-term__label">runtime proxies</span><span class="glossary-term__tooltip" id="glossary-tooltip-19" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span>:</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.Enemy;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class EnemyScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindComponent&lt;IEnemyEvadeTarget, Player&gt;()
+            .FromRuntimeProxy()
+            .FromGlobalScope();
+
+        BindComponent&lt;IMainCamera, CameraController&gt;()
+            .FromRuntimeProxy();
+    }
+}
+</code></pre>
+<p>The UI scene uses the same pattern for <code>IGameStateObservable</code>, <code>IScoreObservable</code>, <code>IEnemyObservable</code>, and <code>ISceneManager</code>.</p>
+<p>Why this matters:</p>
+<ul>
+<li>Enemy prefabs and UI components stay decoupled from direct scene references.</li>
+<li>The sample demonstrates both explicit <code>FromGlobalScope()</code> and the default behavior when <code>FromRuntimeProxy()</code> is used without a follow-up resolve method.</li>
+<li>The shipped sample also includes pre-generated proxy assets under <code>DemoGame/Proxies</code>, so you can inspect the concrete proxy setup directly.</li>
+</ul>
+<p>See <a href="../core-concepts/runtime-proxy.html">Runtime proxy</a> and <a href="../core-concepts/context.html">Context</a>.</p>
+<h3 id="4-interface-injection-in-gameplay-and-ui">4. Interface injection in gameplay and UI</h3>
+<p>Most sample systems depend on interfaces, not concrete classes. That is why interface fields use <code>[SerializeInterface]</code>.</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Attributes;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
+using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
+using Plugins.Saneject.Samples.DemoGame.Scripts.UI.MVC;
+
+public partial class HUDController : ControllerBase&lt;HUDView&gt;
+{
+    [Inject, SerializeInterface]
+    private IGameStateObservable gameStateObservable;
+
+    [Inject, SerializeInterface]
+    private IScoreObservable scoreObservable;
+
+    [Inject, SerializeInterface]
+    private IEnemyObservable enemyObservable;
+}
+</code></pre>
+<p>This gives you:</p>
+<ul>
+<li>Decoupled systems that are easier to replace and test.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-20"><span class="glossary-term__label">Serialized interface</span><span class="glossary-term__tooltip" id="glossary-tooltip-20" role="tooltip"><span class="glossary-term__title">Serialized interface</span><span class="glossary-term__body"><code>SerializeInterface</code> member (<code>IService</code>, <code>IService[]</code>, or <code>List&lt;IService&gt;</code>) that Saneject persists through a generated hidden <code>Object</code> backing member.</span></span></span> references that persist in scenes and prefabs.</li>
+<li>Automatic proxy swap support for single interface members when <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-21"><span class="glossary-term__label">runtime proxy bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-21" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span> are used.</li>
+<li>The same pattern is used in <code>GameOverController</code>, which also injects <code>ISceneManager</code> for restart.</li>
+</ul>
+<p>See <a href="../core-concepts/field-property-and-method-injection.html">Field, property &amp; method injection</a> and <a href="../core-concepts/serialized-interface.html">Serialized interface</a>.</p>
+<h2 id="game-loop-wiring-shown-by-the-sample">Game loop wiring shown by the sample</h2>
+<p>The game loop is connected through interface events and injected collaborators:</p>
+<ol>
+<li><code>Bootstrapper</code> resolves <code>ISceneManager</code> and starts the additive scene flow.</li>
+<li><code>EnemyManager</code> spawns enemies and tracks the active set.</li>
+<li>Each <code>Enemy</code> raises <code>OnEnemyCaught</code> when the player collides with it.</li>
+<li><code>ScoreManager</code> adds points for each caught enemy.</li>
+<li><code>GameStateManager</code> monitors the remaining enemy count and emits game over when the count reaches zero.</li>
+<li><code>HUDController</code> updates the live HUD, while <code>GameOverController</code> shows the final summary and restart button.</li>
+<li>Restart uses the same injected <code>ISceneManager</code>, which reloads <code>StartScene</code>.</li>
+</ol>
+<p>Separately, <code>EnemyMarker</code> uses runtime proxy access to the player and camera so it can clamp off-screen enemy indicators without direct cross-context references.</p>
+<p>The important part is not the gameplay logic itself. The important part is that each step is wired through scoped <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-22"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-22" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>, interface contracts, and runtime proxy boundaries instead of direct <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-23"><span class="glossary-term__label">scene object</span><span class="glossary-term__tooltip" id="glossary-tooltip-23" role="tooltip"><span class="glossary-term__title">Scene object</span><span class="glossary-term__body">Non-prefab <code>GameObject</code> in a scene.</span></span></span> references.</p>
+<h2 id="what-to-study-first-in-the-sample">What to study first in the sample</h2>
+<p>If you are new to Saneject, inspect these in order:</p>
+<ol>
+<li>Bootstrap flow: <code>BootstrapScope</code>, <code>Bootstrapper</code>, <code>SceneManager</code>.</li>
+<li>Scene and prefab <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-24"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-24" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>: <code>GameSceneScope</code>, <code>UISceneScope</code>, <code>PlayerScope</code>, <code>EnemyScope</code>.</li>
+<li>Interface contracts: <code>IEnemyObservable</code>, <code>IScoreObservable</code>, <code>IGameStateObservable</code>, <code>ISceneManager</code>, <code>IMainCamera</code>.</li>
+<li>UI systems: <code>HUDController</code>, <code>GameOverController</code>, <code>EnemyMarker</code>.</li>
+<li>Gameplay services and entities: <code>EnemyManager</code>, <code>ScoreManager</code>, <code>GameStateManager</code>, <code>Enemy</code>, <code>Player</code>.</li>
+</ol>
+<p>This path gives you the fastest overview of how <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-25"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-25" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-26"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-26" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>, and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-27"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-27" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> features fit together.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="quick-start.html">Quick start</a></li>
+<li><a href="../core-concepts/scope.html">Scope</a></li>
+<li><a href="../core-concepts/binding.html">Binding</a></li>
+<li><a href="../core-concepts/context.html">Context</a></li>
+<li><a href="../core-concepts/field-property-and-method-injection.html">Field, property &amp; method injection</a></li>
+<li><a href="../core-concepts/serialized-interface.html">Serialized interface</a></li>
+<li><a href="../core-concepts/runtime-proxy.html">Runtime proxy</a></li>
+<li><a href="../core-concepts/global-scope.html">Global scope</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

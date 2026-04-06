@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Binding | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Binding | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/core-concepts/binding.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="binding">Binding</h1>
+
+<p>A <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> is a rule declared in a <code>Scope</code> that tells Saneject:</p>
+<ul>
+<li>What dependency type should be resolved</li>
+<li>Where candidates come from</li>
+<li>Which <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">injection sites</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Injection site</span><span class="glossary-term__body">Injected field, property or method.</span></span></span> may use the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span></li>
+<li>Optional filters that reject candidates</li>
+</ul>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">Bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are collected from <code>Scope.DeclareBindings()</code> during editor injection, validated, then used to resolve
+<code>[Inject]</code> fields, properties and method parameters.</p>
+<h2 id="binding-rules">Binding rules</h2>
+<ol>
+<li>Every <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> must specify a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-6"><span class="glossary-term__label">locator strategy</span><span class="glossary-term__tooltip" id="glossary-tooltip-6" role="tooltip"><span class="glossary-term__title">Locator strategy</span><span class="glossary-term__body">The <code>From...</code> part of a binding that defines where candidates are searched or loaded from.</span></span></span> with a <code>From...</code> call.</li>
+<li>Type matching is strict:
+<ul>
+<li>Specifying an interface is optional; concrete-only <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-7"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-7" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are valid.</li>
+<li><code>BindComponent&lt;TConcrete&gt;()</code> and <code>BindAsset&lt;TConcrete&gt;()</code> only match <code>TConcrete</code> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-8"><span class="glossary-term__label">injection sites</span><span class="glossary-term__tooltip" id="glossary-tooltip-8" role="tooltip"><span class="glossary-term__title">Injection site</span><span class="glossary-term__body">Injected field, property or method.</span></span></span>.</li>
+<li><code>BindComponent&lt;TInterface&gt;()</code> only matches <code>TInterface</code> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-9"><span class="glossary-term__label">injection sites</span><span class="glossary-term__tooltip" id="glossary-tooltip-9" role="tooltip"><span class="glossary-term__title">Injection site</span><span class="glossary-term__body">Injected field, property or method.</span></span></span>.</li>
+<li><code>BindComponent&lt;TInterface, TConcrete&gt;()</code> and <code>BindAsset&lt;TInterface, TConcrete&gt;</code> only match <code>TInterface</code> injection
+sites, with a <code>TConcrete</code> object that implements <code>TInterface</code>.</li>
+</ul>
+</li>
+<li>Single and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-10"><span class="glossary-term__label">collection bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-10" role="tooltip"><span class="glossary-term__title">Collection binding</span><span class="glossary-term__body">Binding declared as multiple (<code>BindComponents</code>/<code>BindAssets</code>/<code>BindMultiple...</code>) that resolves arrays or <code>List&lt;&gt;</code> injection sites.</span></span></span> do not mix:
+<ul>
+<li>Single <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-11"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-11" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> (<code>BindComponent</code>, <code>BindAsset</code>) resolve single fields/properties, parameters.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-12"><span class="glossary-term__label">Collection bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-12" role="tooltip"><span class="glossary-term__title">Collection binding</span><span class="glossary-term__body">Binding declared as multiple (<code>BindComponents</code>/<code>BindAssets</code>/<code>BindMultiple...</code>) that resolves arrays or <code>List&lt;&gt;</code> injection sites.</span></span></span> (<code>BindComponents</code>/<code>BindAssets</code>/<code>BindMultiple...</code>) resolve arrays and <code>List&lt;&gt;</code>.</li>
+</ul>
+</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-13"><span class="glossary-term__label">Bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-13" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are local to the declaring <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-14"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-14" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>. If the nearest <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-15"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-15" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> to an <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-16"><span class="glossary-term__label">injection site</span><span class="glossary-term__tooltip" id="glossary-tooltip-16" role="tooltip"><span class="glossary-term__title">Injection site</span><span class="glossary-term__body">Injected field, property or method.</span></span></span> has no matching <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-17"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-17" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>,
+Saneject walks up parent <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-18"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-18" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> until it finds one.</li>
+<li>Invalid <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-19"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-19" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are excluded from valid resolution and logged.</li>
+</ol>
+<p>See <a href="scope.html">Scope</a> for more information</p>
+<h2 id="fluent-binding-flow">Fluent binding flow</h2>
+<p>Most <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-20"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-20" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> follow this general pattern or a combination of these:</p>
+<pre><code class="lang-csharp">BindComponent&lt;IAudioService, AudioManager&gt;()
+    .ToID(&quot;hud&quot;) // Optional qualifier that matches [Inject(&quot;hud&quot;)]
+    .ToTarget&lt;CombatHud&gt;() // Optional qualifier that matches injection targets of type CombatHud
+    .ToMember(&quot;audioService&quot;) // Optional qualifier that matches and methods named &quot;audioService&quot;
+    .FromTargetSelf() // Required locator strategy that looks for the AudioManager on the transform of the CombatHud
+    .WhereComponent(c =&gt; c.isActiveAndEnabled); // Optional filter that only includes enabled components
+</code></pre>
+<p>This resolves candidates in three phases:</p>
+<ol>
+<li>Match <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-21"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-21" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> by <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-22"><span class="glossary-term__label">binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-22" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> (if any).</li>
+<li>Locate candidates with a <code>From...</code> method.</li>
+<li>Apply <code>Where...</code> filters (if any).</li>
+</ol>
+<h2 id="binding-families">Binding families</h2>
+<h3 id="component-bindings">Component bindings</h3>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-23"><span class="glossary-term__label">Component bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-23" role="tooltip"><span class="glossary-term__title">Component binding</span><span class="glossary-term__body">Binding declared with <code>BindComponent...</code> or <code>BindComponents...</code> that resolves <code>Component</code> instances from transforms, hierarchies, scenes, or explicit instances.</span></span></span> resolve <code>UnityEngine.Component</code> dependencies from transforms, hierarchy traversal, scene-wide search,
+or explicit instances.</p>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    // Interface + concrete mapping.
+    BindComponent&lt;IAudioService, AudioManager&gt;()
+        .FromScopeSelf();
+
+    // Collection binding.
+    BindComponents&lt;EnemyController&gt;()
+        .FromScopeDescendants(includeSelf: true)
+        .WhereComponent(c =&gt; c.gameObject.activeInHierarchy);
+}
+</code></pre>
+<p>Full component API:</p>
+<ul>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Scopes.Scope.html">Scope binding entry points</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html">Component locator methods</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html">Component qualifiers</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">Component filters</a></li>
+</ul>
+<h3 id="global-component-bindings">Global component bindings</h3>
+<p>Global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-24"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-24" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-25"><span class="glossary-term__label">component bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-25" role="tooltip"><span class="glossary-term__title">Component binding</span><span class="glossary-term__body">Binding declared with <code>BindComponent...</code> or <code>BindComponents...</code> that resolves <code>Component</code> instances from transforms, hierarchies, scenes, or explicit instances.</span></span></span> declared with <code>BindGlobal&lt;TComponent&gt;()</code>. The resolved component is serialized
+into the declaring <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-26"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-26" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> at editor time and registered in <code>GlobalScope</code> during that <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-27"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-27" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>'s <code>Awake()</code>.</p>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    BindGlobal&lt;AudioManager&gt;()
+        .FromScopeSelf()
+        .WhereGameObject(go =&gt; go.activeInHierarchy);
+}
+</code></pre>
+<p>Global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-28"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-28" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> support locator and filter methods, but not <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-29"><span class="glossary-term__label">binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-29" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> and not <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-30"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-30" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> methods.</p>
+<p>Full global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-31"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-31" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> API:</p>
+<ul>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Scopes.Scope.html">Scope binding entry points</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html">Global component binding builder</a></li>
+</ul>
+<h3 id="asset-bindings">Asset bindings</h3>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-32"><span class="glossary-term__label">Asset bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-32" role="tooltip"><span class="glossary-term__title">Asset binding</span><span class="glossary-term__body">Binding declared with <code>BindAsset...</code> or <code>BindAssets...</code> that resolves <code>UnityEngine.Object</code> assets from project content instead of scene or hierarchy components.</span></span></span> resolve <code>UnityEngine.Object</code> assets from <code>Resources</code>, <code>AssetDatabase</code> paths/folders, or explicit
+instances.</p>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    BindAsset&lt;IGameConfig, GameConfigAsset&gt;()
+        .ToID(&quot;default&quot;)
+        .FromResources(&quot;Configs/GameConfig&quot;);
+
+    BindAssets&lt;AudioClip&gt;()
+        .FromFolder(&quot;Assets/Game/Audio/Sfx&quot;)
+        .Where(clip =&gt; clip.name.StartsWith(&quot;Enemy_&quot;));
+}
+</code></pre>
+<p>Full asset API:</p>
+<ul>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Scopes.Scope.html">Scope binding entry points</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html">Asset binding builder</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html">Asset filters</a></li>
+</ul>
+<h3 id="runtime-proxy-bindings">Runtime proxy bindings</h3>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-33"><span class="glossary-term__label">Runtime proxy bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-33" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span> are configured from <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-34"><span class="glossary-term__label">component bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-34" role="tooltip"><span class="glossary-term__title">Component binding</span><span class="glossary-term__body">Binding declared with <code>BindComponent...</code> or <code>BindComponents...</code> that resolves <code>Component</code> instances from transforms, hierarchies, scenes, or explicit instances.</span></span></span> via <code>FromRuntimeProxy()</code>. They inject a proxy asset at
+editor time, then swap to a real runtime instance in the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-35"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-35" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>'s <code>Awake()</code>.</p>
+<p>Rules:</p>
+<ul>
+<li>Must be <code>BindComponent&lt;TInterface, TConcrete&gt;()</code>.</li>
+<li>Must be single-value (not collection).</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-36"><span class="glossary-term__label">Binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-36" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> are supported.</li>
+<li>Filters are not supported.</li>
+</ul>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    BindComponent&lt;ICombatService, CombatService&gt;()
+        .ToID(&quot;combatService&quot;)
+        .FromRuntimeProxy()
+        .FromGlobalScope();
+}
+</code></pre>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    BindComponent&lt;ICombatService, CombatService&gt;()
+        .FromRuntimeProxy()
+        .FromComponentOnPrefab(combatServicePrefab, dontDestroyOnLoad: true)
+        .AsSingleton();
+}
+</code></pre>
+<p>Full <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-37"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-37" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> API:</p>
+<ul>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Scopes.Scope.html">Scope binding entry points</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html">Runtime proxy binding builder</a></li>
+<li><a class="xref" href="../../api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html">Runtime proxy instance mode builder</a></li>
+</ul>
+<h2 id="binding-qualifiers">Binding qualifiers</h2>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-38"><span class="glossary-term__label">Binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-38" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> restrict which <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-39"><span class="glossary-term__label">injection sites</span><span class="glossary-term__tooltip" id="glossary-tooltip-39" role="tooltip"><span class="glossary-term__title">Injection site</span><span class="glossary-term__body">Injected field, property or method.</span></span></span> (fields, properties, methods) can be resolved from a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-40"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-40" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>.</p>
+<table>
+<thead>
+<tr>
+<th>Qualifier</th>
+<th>Injection site match</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>ToID(&quot;someId&quot;)</code></td>
+<td>Fields, properties, methods marked with <code>[Inject(&quot;someId&quot;)]</code></td>
+</tr>
+<tr>
+<td><code>ToTarget&lt;TTarget&gt;()</code></td>
+<td>Fields, properties, methods declared in a <code>TTarget</code> component</td>
+</tr>
+<tr>
+<td><code>ToMember(&quot;someMemberName&quot;)</code></td>
+<td>Fields, properties, methods with name <code>&quot;someMemberName&quot;</code></td>
+</tr>
+</tbody>
+</table>
+<p>Important behavior:</p>
+<ul>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-41"><span class="glossary-term__label">Binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-41" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> are additive, so all specified qualifiers must match.</li>
+<li>If a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-42"><span class="glossary-term__label">binding qualifier</span><span class="glossary-term__tooltip" id="glossary-tooltip-42" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> is not set on the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-43"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-43" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>, the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-44"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-44" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> matches by <code>TInterface</code> or <code>TConcrete</code> only.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-45"><span class="glossary-term__label">Binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-45" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> apply to component, asset, and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-46"><span class="glossary-term__label">runtime proxy bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-46" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span>.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-47"><span class="glossary-term__label">Binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-47" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> do not apply to global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-48"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-48" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>.</li>
+</ul>
+<p>Example:</p>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    BindAsset&lt;IGameConfig, GameConfigAsset&gt;()
+        .ToID(&quot;menu&quot;)
+        .ToTarget&lt;MainMenuController&gt;()
+        .ToMember(&quot;config&quot;)
+        .FromResources(&quot;Configs/Menu&quot;);
+}
+</code></pre>
+<h2 id="binding-filters">Binding filters</h2>
+<p><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-49"><span class="glossary-term__label">Binding filters</span><span class="glossary-term__tooltip" id="glossary-tooltip-49" role="tooltip"><span class="glossary-term__title">Binding filter</span><span class="glossary-term__body">Predicate declared with <code>Where...</code> methods that removes candidates after location and before injection.</span></span></span> run after locator search and before final assignment. A candidate (potentially injected dependency) must pass
+all filters on the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-50"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-50" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>.</p>
+<p>Component filter example:</p>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    // First component anywhere in the scene, that is active/enabled and is a descendant of a Transform tagged &quot;GameplayRoot&quot;.
+    BindComponent&lt;EnemyController&gt;()
+        .FromAnywhere()
+        .WhereComponent(c =&gt; c.isActiveAndEnabled)
+        .WhereAnyAncestor(t =&gt; t.CompareTag(&quot;GameplayRoot&quot;));
+}
+</code></pre>
+<p>Asset filter example:</p>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    // All assets in the &quot;Assets/Game/Audio/Music&quot; folder with names starting with &quot;Boss_&quot;.
+    BindAssets&lt;AudioClip&gt;()
+        .FromFolder(&quot;Assets/Game/Audio/Music&quot;)
+        .Where(clip =&gt; clip.name.StartsWith(&quot;Boss_&quot;));
+}
+</code></pre>
+<table>
+<thead>
+<tr>
+<th><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-51"><span class="glossary-term__label">Binding Family</span><span class="glossary-term__tooltip" id="glossary-tooltip-51" role="tooltip"><span class="glossary-term__title">Binding family</span><span class="glossary-term__body">Binding category with its own resolution behavior and API surface: component, global component, asset, or runtime proxy.</span></span></span></th>
+<th>Filter Support</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-52"><span class="glossary-term__label">Component bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-52" role="tooltip"><span class="glossary-term__title">Component binding</span><span class="glossary-term__body">Binding declared with <code>BindComponent...</code> or <code>BindComponents...</code> that resolves <code>Component</code> instances from transforms, hierarchies, scenes, or explicit instances.</span></span></span></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-53"><span class="glossary-term__label">Asset bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-53" role="tooltip"><span class="glossary-term__title">Asset binding</span><span class="glossary-term__body">Binding declared with <code>BindAsset...</code> or <code>BindAssets...</code> that resolves <code>UnityEngine.Object</code> assets from project content instead of scene or hierarchy components.</span></span></span></td>
+<td>Yes</td>
+</tr>
+<tr>
+<td>Global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-54"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-54" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span></td>
+<td>Yes (same filter API as <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-55"><span class="glossary-term__label">component bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-55" role="tooltip"><span class="glossary-term__title">Component binding</span><span class="glossary-term__body">Binding declared with <code>BindComponent...</code> or <code>BindComponents...</code> that resolves <code>Component</code> instances from transforms, hierarchies, scenes, or explicit instances.</span></span></span>).</td>
+</tr>
+<tr>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-56"><span class="glossary-term__label">Runtime proxy bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-56" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span></td>
+<td>No</td>
+</tr>
+</tbody>
+</table>
+<p>If a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-57"><span class="glossary-term__label">binding filter</span><span class="glossary-term__tooltip" id="glossary-tooltip-57" role="tooltip"><span class="glossary-term__title">Binding filter</span><span class="glossary-term__body">Predicate declared with <code>Where...</code> methods that removes candidates after location and before injection.</span></span></span> throws an exception, Saneject logs a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-58"><span class="glossary-term__label">binding filter</span><span class="glossary-term__tooltip" id="glossary-tooltip-58" role="tooltip"><span class="glossary-term__title">Binding filter</span><span class="glossary-term__body">Predicate declared with <code>Where...</code> methods that removes candidates after location and before injection.</span></span></span> error for that <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-59"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-59" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>.</p>
+<h2 id="binding-uniqueness">Binding uniqueness</h2>
+<p>Saneject enforces <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-60"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-60" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> unique within each <code>Scope</code>. When a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-61"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-61" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> is considered duplicate, Saneject logs an error and excludes the duplicate from the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-62"><span class="glossary-term__label">injection run</span><span class="glossary-term__tooltip" id="glossary-tooltip-62" role="tooltip"><span class="glossary-term__title">Injection run</span><span class="glossary-term__body">One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.</span></span></span>.</p>
+<p>Duplicate checks use these criteria:</p>
+<ol>
+<li>Same <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-63"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-63" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>.</li>
+<li>Same <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-64"><span class="glossary-term__label">binding family</span><span class="glossary-term__tooltip" id="glossary-tooltip-64" role="tooltip"><span class="glossary-term__title">Binding family</span><span class="glossary-term__body">Binding category with its own resolution behavior and API surface: component, global component, asset, or runtime proxy.</span></span></span> (<code>ComponentBindingNode</code>, <code>AssetBindingNode</code>, or <code>GlobalComponentBindingNode</code>).</li>
+<li>Same primary type:
+<ul>
+<li><code>TInterface</code> when present.</li>
+<li>Otherwise <code>TConcrete</code>.</li>
+</ul>
+</li>
+<li>Same single/collection shape.</li>
+<li>Qualifier overlap:
+<ul>
+<li>If both <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-65"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-65" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> have no <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-66"><span class="glossary-term__label">binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-66" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> at all, they conflict.</li>
+<li>Otherwise, conflict requires full overlap in <code>ToTarget</code>, <code>ToMember</code>, and <code>ToID</code> simultaneously.</li>
+</ul>
+</li>
+</ol>
+<p>Examples:</p>
+<pre><code class="lang-csharp">// Duplicate: same scope, same family, same type, same shape, no qualifiers.
+BindComponent&lt;AudioManager&gt;()
+    .FromScopeSelf();
+
+BindComponent&lt;AudioManager&gt;()
+    .FromScopeParent(); // Invalid duplicate.
+</code></pre>
+<pre><code class="lang-csharp">// Distinct: different qualifier sets.
+BindAsset&lt;IGameConfig, GameConfigAsset&gt;()
+    .ToTarget&lt;MainMenuController&gt;()
+    .ToMember(&quot;config&quot;)
+    .ToID(&quot;menu&quot;)
+    .FromResources(&quot;Configs/Menu&quot;);
+
+BindAsset&lt;IGameConfig, GameConfigAsset&gt;()
+    .ToTarget&lt;GameplayController&gt;()
+    .ToMember(&quot;config&quot;)
+    .ToID(&quot;gameplay&quot;)
+    .FromResources(&quot;Configs/Gameplay&quot;);
+</code></pre>
+<p>Global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-67"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-67" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> have an extra rule: only one global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-68"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-68" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> per concrete component type is allowed across active
+<span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-69"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-69" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> across all <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-70"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-70" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>. A second <code>BindGlobal&lt;AudioManager&gt;()</code> is invalid even if declared in another <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-71"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-71" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>.</p>
+<h2 id="binding-validation">Binding validation</h2>
+<p>While the fluent API prevents most invalid <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-72"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-72" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>, it's still possible to create invalid <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-73"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-73" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> that will compile. However, the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-74"><span class="glossary-term__label">injection run</span><span class="glossary-term__tooltip" id="glossary-tooltip-74" role="tooltip"><span class="glossary-term__title">Injection run</span><span class="glossary-term__body">One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.</span></span></span> has a validation step that catches invalid <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-75"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-75" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>, excludes them from the run and logs them as errors.</p>
+<p>Current validation checks include:</p>
+<ul>
+<li>Duplicate <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-76"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-76" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> in the same <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-77"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-77" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>.</li>
+<li>Duplicate global <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-78"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-78" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> by concrete type.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-79"><span class="glossary-term__label">Runtime proxy binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-79" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span> constraints:
+<ul>
+<li>Interface type required.</li>
+<li>Concrete type required.</li>
+<li>Collection mode not allowed.</li>
+</ul>
+</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-80"><span class="glossary-term__label">Component binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-80" role="tooltip"><span class="glossary-term__title">Component binding</span><span class="glossary-term__body">Binding declared with <code>BindComponent...</code> or <code>BindComponents...</code> that resolves <code>Component</code> instances from transforms, hierarchies, scenes, or explicit instances.</span></span></span> concrete type must derive from <code>UnityEngine.Component</code>.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-81"><span class="glossary-term__label">Asset binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-81" role="tooltip"><span class="glossary-term__title">Asset binding</span><span class="glossary-term__body">Binding declared with <code>BindAsset...</code> or <code>BindAssets...</code> that resolves <code>UnityEngine.Object</code> assets from project content instead of scene or hierarchy components.</span></span></span> concrete type must not derive from <code>UnityEngine.Component</code>.</li>
+<li>Interface type must actually be an interface.</li>
+<li>Concrete type must implement the declared interface.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-82"><span class="glossary-term__label">Locator strategy</span><span class="glossary-term__tooltip" id="glossary-tooltip-82" role="tooltip"><span class="glossary-term__title">Locator strategy</span><span class="glossary-term__body">The <code>From...</code> part of a binding that defines where candidates are searched or loaded from.</span></span></span> must be set.</li>
+</ul>
+<p>Examples of invalid but compilable <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-83"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-83" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>:</p>
+<pre><code class="lang-csharp">// Invalid: no locator strategy specified.
+BindAsset&lt;GameConfigAsset&gt;();
+</code></pre>
+<pre><code class="lang-csharp">// Invalid: runtime proxy bindings cannot be collection bindings.
+BindComponents&lt;ICombatService, CombatService&gt;()
+    .FromRuntimeProxy();
+</code></pre>
+<p>Validation runs before dependency resolution, so invalid <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-84"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-84" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are never used to satisfy <code>[Inject]</code> members.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="scope.html">Scope</a></li>
+<li><a href="context.html">Context</a></li>
+<li><a href="field-property-and-method-injection.html">Field &amp; property injection</a></li>
+<li><a href="runtime-proxy.html">Runtime proxy</a></li>
+<li><a href="global-scope.html">Global scope</a></li>
+<li><a href="../editor-and-tooling/logging-and-validation.html">Logging &amp; validation</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,293 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  id: AssetFilterBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  children:
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.Where(System.Func{`0,System.Boolean})
+  langs:
+  - csharp
+  - vb
+  name: AssetFilterBuilder<TAsset>
+  nameWithType: AssetFilterBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AssetFilterBuilder
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
+    startLine: 9
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Builder for configuring filters on asset bindings.
+  example: []
+  syntax:
+    content: 'public class AssetFilterBuilder<TAsset> where TAsset : Object'
+    typeParameters:
+    - id: TAsset
+      description: The type of the asset being filtered.
+    content.vb: Public Class AssetFilterBuilder(Of TAsset As [Object])
+  inheritance:
+  - System.Object
+  nameWithType.vb: AssetFilterBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset)
+  name.vb: AssetFilterBuilder(Of TAsset)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  id: '#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)'
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: AssetFilterBuilder(AssetBinding)
+  nameWithType: AssetFilterBuilder<TAsset>.AssetFilterBuilder(AssetBinding)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>.AssetFilterBuilder(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  type: Constructor
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: .ctor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
+    startLine: 17
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Initializes a new instance of the <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder(AssetBinding binding)
+    parameters:
+    - id: binding
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+      description: The asset binding to configure.
+    content.vb: Public Sub New(binding As AssetBinding)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.#ctor*
+  nameWithType.vb: AssetFilterBuilder(Of TAsset).New(AssetBinding)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset).New(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  name.vb: New(AssetBinding)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.Where(System.Func{`0,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.Where(System.Func{`0,System.Boolean})
+  id: Where(System.Func{`0,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: Where(Func<TAsset, bool>)
+  nameWithType: AssetFilterBuilder<TAsset>.Where(Func<TAsset, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>.Where(System.Func<TAsset, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: Where
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
+    startLine: 29
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Filter using a predicate on <code class="typeparamref">TAsset</code> for custom search logic.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> Where(Func<TAsset, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{{TAsset},System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function Where(predicate As Func(Of TAsset, Boolean)) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.Where*
+  nameWithType.vb: AssetFilterBuilder(Of TAsset).Where(Func(Of TAsset, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset).Where(System.Func(Of TAsset, Boolean))
+  name.vb: Where(Func(Of TAsset, Boolean))
+references:
+- uid: Plugins.Saneject.Runtime.Bindings.Asset
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Asset
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Asset
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  name: AssetFilterBuilder<TAsset>
+  nameWithType: AssetFilterBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>
+  nameWithType.vb: AssetFilterBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset)
+  name.vb: AssetFilterBuilder(Of TAsset)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.#ctor*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.#ctor
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetFilterBuilder_1__ctor_Plugins_Saneject_Runtime_Bindings_Asset_AssetBinding_
+  name: AssetFilterBuilder
+  nameWithType: AssetFilterBuilder<TAsset>.AssetFilterBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>.AssetFilterBuilder
+  nameWithType.vb: AssetFilterBuilder(Of TAsset).New
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset).New
+  name.vb: New
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  name: AssetBinding
+  nameWithType: AssetBinding
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.Where*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1.Where
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetFilterBuilder_1_Where_System_Func__0_System_Boolean__
+  name: Where
+  nameWithType: AssetFilterBuilder<TAsset>.Where
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>.Where
+  nameWithType.vb: AssetFilterBuilder(Of TAsset).Where
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset).Where
+- uid: System.Func{{TAsset},System.Boolean}
+  commentId: T:System.Func{`0,System.Boolean}
+  parent: System
+  definition: System.Func`2
+  name: Func<TAsset, bool>
+  nameWithType: Func<TAsset, bool>
+  fullName: System.Func<TAsset, bool>
+  nameWithType.vb: Func(Of TAsset, Boolean)
+  fullName.vb: System.Func(Of TAsset, Boolean)
+  name.vb: Func(Of TAsset, Boolean)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - name: TAsset
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: System.Func`2
+  commentId: T:System.Func`2
+  isExternal: true
+  name: Func<T, TResult>
+  nameWithType: Func<T, TResult>
+  fullName: System.Func<T, TResult>
+  nameWithType.vb: Func(Of T, TResult)
+  fullName.vb: System.Func(Of T, TResult)
+  name.vb: Func(Of T, TResult)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TResult
+  - name: )

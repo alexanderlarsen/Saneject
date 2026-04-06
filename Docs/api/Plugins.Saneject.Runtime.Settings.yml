@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Settings
+  commentId: N:Plugins.Saneject.Runtime.Settings
+  id: Plugins.Saneject.Runtime.Settings
+  children:
+  - Plugins.Saneject.Runtime.Settings.ProjectSettings
+  - Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Runtime.Settings
+  nameWithType: Plugins.Saneject.Runtime.Settings
+  fullName: Plugins.Saneject.Runtime.Settings
+  type: Namespace
+  assemblies:
+  - Saneject.Runtime
+references:
+- uid: Plugins.Saneject.Runtime.Settings.ProjectSettings
+  commentId: T:Plugins.Saneject.Runtime.Settings.ProjectSettings
+  href: Plugins.Saneject.Runtime.Settings.ProjectSettings.html
+  name: ProjectSettings
+  nameWithType: ProjectSettings
+  fullName: Plugins.Saneject.Runtime.Settings.ProjectSettings
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings
+  commentId: T:Plugins.Saneject.Runtime.Settings.UserSettings
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html
+  name: UserSettings
+  nameWithType: UserSettings
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings

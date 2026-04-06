@@ -1,0 +1,276 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  id: RuntimeProxyInstanceModeBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  children:
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient
+  langs:
+  - csharp
+  - vb
+  name: RuntimeProxyInstanceModeBuilder
+  nameWithType: RuntimeProxyInstanceModeBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: RuntimeProxyInstanceModeBuilder
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+    startLine: 9
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Builder for configuring the instance mode of a runtime proxy.
+  example: []
+  syntax:
+    content: public class RuntimeProxyInstanceModeBuilder
+    content.vb: Public Class RuntimeProxyInstanceModeBuilder
+  inheritance:
+  - System.Object
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  id: '#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)'
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  langs:
+  - csharp
+  - vb
+  name: RuntimeProxyInstanceModeBuilder(ComponentBinding)
+  nameWithType: RuntimeProxyInstanceModeBuilder.RuntimeProxyInstanceModeBuilder(ComponentBinding)
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.RuntimeProxyInstanceModeBuilder(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  type: Constructor
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: .ctor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+    startLine: 17
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Initializes a new instance of the <xref href="Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public RuntimeProxyInstanceModeBuilder(ComponentBinding binding)
+    parameters:
+    - id: binding
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+      description: The component binding to configure.
+    content.vb: Public Sub New(binding As ComponentBinding)
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.#ctor*
+  nameWithType.vb: RuntimeProxyInstanceModeBuilder.New(ComponentBinding)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.New(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  name.vb: New(ComponentBinding)
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient
+  id: AsTransient
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  langs:
+  - csharp
+  - vb
+  name: AsTransient()
+  nameWithType: RuntimeProxyInstanceModeBuilder.AsTransient()
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AsTransient
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+    startLine: 25
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Sets the proxy instance mode to transient, creating a new instance for each resolution.
+  example: []
+  syntax:
+    content: public void AsTransient()
+    content.vb: Public Sub AsTransient()
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient*
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton
+  id: AsSingleton
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  langs:
+  - csharp
+  - vb
+  name: AsSingleton()
+  nameWithType: RuntimeProxyInstanceModeBuilder.AsSingleton()
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AsSingleton
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
+    startLine: 39
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Sets the proxy instance mode to singleton, which reuses one created <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> instance, caches it in <xref href="Plugins.Saneject.Runtime.Scopes.GlobalScope" data-throw-if-not-resolved="false"></xref>, and forces <code>dontDestroyOnLoad</code> to <code>true</code>.
+  example: []
+  syntax:
+    content: public void AsSingleton()
+    content.vb: Public Sub AsSingleton()
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton*
+references:
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  commentId: N:Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  nameWithType: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html
+  name: RuntimeProxyInstanceModeBuilder
+  nameWithType: RuntimeProxyInstanceModeBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.#ctor*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.#ctor
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyInstanceModeBuilder__ctor_Plugins_Saneject_Runtime_Bindings_Component_ComponentBinding_
+  name: RuntimeProxyInstanceModeBuilder
+  nameWithType: RuntimeProxyInstanceModeBuilder.RuntimeProxyInstanceModeBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.RuntimeProxyInstanceModeBuilder
+  nameWithType.vb: RuntimeProxyInstanceModeBuilder.New
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.New
+  name.vb: New
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  name: ComponentBinding
+  nameWithType: ComponentBinding
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyInstanceModeBuilder_AsTransient
+  name: AsTransient
+  nameWithType: RuntimeProxyInstanceModeBuilder.AsTransient
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsTransient
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.GlobalScope
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html
+  name: GlobalScope
+  nameWithType: GlobalScope
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyInstanceModeBuilder_AsSingleton
+  name: AsSingleton
+  nameWithType: RuntimeProxyInstanceModeBuilder.AsSingleton
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.AsSingleton

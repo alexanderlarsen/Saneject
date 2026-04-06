@@ -1,0 +1,1052 @@
+{
+  "source_base_path": "E:/Unity/Personal/Saneject/docs",
+  "xrefmap": "xrefmap.yml",
+  "files": [
+    {
+      "type": "Resource",
+      "output": {
+        "resource": {
+          "relative_path": "index.json"
+        }
+      }
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Editor.Inspectors.Models.ComponentModel",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.yml\" sourcestartlinenumber=\"1\">Encapsulates a target component and its inspectable properties for drawing in the custom Saneject inspector.\nThis model reflects on the target object's type to collect all drawable fields and constructs\nPropertyModel instances for each field, handling serialized interfaces, nested types, and\ninjection-aware properties.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Editor.Inspectors.Models.PropertyModel",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.yml\" sourcestartlinenumber=\"1\">Encapsulates metadata and state for a serializable property in the custom Saneject inspector.\nThis model combines reflection information about a field with its serialized property representation,\nhandling special cases like <xref href=\"Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute\" data-throw-if-not-resolved=\"false\"></xref> fields, nested serializable types, injected fields,\nand read-only properties. It supports hierarchical property structures for nested types and collections.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Editor.Inspectors.Models.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Editor.Inspectors.Models.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Editor.Inspectors.Models",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Editor.Inspectors.SanejectInspector",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.yml\" sourcestartlinenumber=\"1\">Provides UI drawing and validation logic for the custom Saneject inspector.\nHandles rendering of serialized properties with injection-aware read-only states,\ncustom handling for <xref href=\"Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute\" data-throw-if-not-resolved=\"false\"></xref> fields, nested serializable types, and validation\nto ensure assigned objects implement expected interface types.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Editor.Inspectors.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Editor.Inspectors.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Editor.Inspectors",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Attributes.InjectAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Attributes.InjectAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Attributes.InjectAttribute",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Attributes.InjectAttribute.yml\" sourcestartlinenumber=\"1\">Marks a field or method for dependency injection by Saneject.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute.yml\" sourcestartlinenumber=\"1\">Marks a field as read-only in the Unity inspector.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.yml\" sourcestartlinenumber=\"1\">Marks an interface-typed member for Saneject's serialized-interface code generation.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Attributes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Attributes.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Attributes",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.yml\" sourcestartlinenumber=\"1\">Fluent builder for configuring asset bindings in a <xref href=\"Plugins.Saneject.Runtime.Scopes.Scope\" data-throw-if-not-resolved=\"false\"></xref>.\nAllows specifying how to locate <xref href=\"UnityEngine.Object\" data-throw-if-not-resolved=\"false\"></xref> assets via direct instance, Resources, or AssetDatabase.\nReturned from <code>BindAsset&lt;TAsset&gt;()</code> or <code>BindAssets&lt;TAsset&gt;()</code>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.yml\" sourcestartlinenumber=\"1\">Builder for configuring filters on asset bindings.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Asset.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Asset.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Asset",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.yml\" sourcestartlinenumber=\"1\">Base class for component binding builders, providing fluent methods for locating components.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.yml\" sourcestartlinenumber=\"1\">Fluent builder for configuring component bindings within a <xref href=\"Plugins.Saneject.Runtime.Scopes.Scope\" data-throw-if-not-resolved=\"false\"></xref>.\nAllows specifying how to locate <xref href=\"Plugins.Saneject.Runtime.Bindings.Component\" data-throw-if-not-resolved=\"false\"></xref> instances from the scene- or prefab hierarchy.\nSupports locating from the scope, injection target, custom transforms, scene-wide queries, or explicit instances.\nReturned from binding methods like <code>BindComponent&lt;TComponent&gt;()</code> or <code>BindMultipleComponents&lt;TComponent&gt;()</code>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.yml\" sourcestartlinenumber=\"1\">Builder for configuring filters on component bindings.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder<TComponent>",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.yml\" sourcestartlinenumber=\"1\">Builder for configuring global component bindings.\nSame as <xref href=\"Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder%601\" data-throw-if-not-resolved=\"false\"></xref>, except this builder doesn't allow qualifiers and <xref href=\"Plugins.Saneject.Runtime.Proxy.RuntimeProxy%601\" data-throw-if-not-resolved=\"false\"></xref> bindings.\nComponents bound with this builder are added to the declaring <xref href=\"Plugins.Saneject.Runtime.Scopes.Scope\" data-throw-if-not-resolved=\"false\"></xref> and added to the <xref href=\"Plugins.Saneject.Runtime.Scopes.GlobalScope\" data-throw-if-not-resolved=\"false\"></xref> at runtime before any Awake methods execute.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.Component.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.Component",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.yml\" sourcestartlinenumber=\"1\">Builder for configuring runtime proxy resolution strategies.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.yml\" sourcestartlinenumber=\"1\">Builder for configuring the instance mode of a runtime proxy.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Bindings.RuntimeProxy",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Scopes.GlobalScope.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Scopes.GlobalScope.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Scopes.GlobalScope",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Scopes.GlobalScope.yml\" sourcestartlinenumber=\"1\">Static runtime registry and service locator for globally accessible <xref href=\"UnityEngine.Component\" data-throw-if-not-resolved=\"false\"></xref> instances.\nStores one registration per concrete component type and is intended for Play Mode usage.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Scopes.Scope.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Scopes.Scope.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Scopes.Scope",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Scopes.Scope.yml\" sourcestartlinenumber=\"1\">Base class for scopes that declare bindings for a portion of a <xref href=\"UnityEngine.GameObject\" data-throw-if-not-resolved=\"false\"></xref> hierarchy.\nDuring injection, Saneject resolves each injection site from the nearest scope at the same transform or above, then falls back to parent scopes when needed.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Scopes.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Scopes.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Scopes",
+      "Summary": null
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Settings.ProjectSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Settings.ProjectSettings.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Settings.ProjectSettings",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Settings.ProjectSettings.yml\" sourcestartlinenumber=\"1\">Provides access to project-scoped Saneject settings stored in <code>ProjectSettings/Saneject/ProjectSettings.json</code>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Settings.UserSettings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Settings.UserSettings.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Settings.UserSettings",
+      "Summary": "<p sourcefile=\"api/Plugins.Saneject.Runtime.Settings.UserSettings.yml\" sourcestartlinenumber=\"1\">Provides access to user-scoped Saneject settings stored locally in <xref href=\"UnityEditor.EditorPrefs\" data-throw-if-not-resolved=\"false\"></xref>.</p>\n"
+    },
+    {
+      "type": "ManagedReference",
+      "source_relative_path": "api/Plugins.Saneject.Runtime.Settings.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/Plugins.Saneject.Runtime.Settings.html"
+        }
+      },
+      "version": "",
+      "Uid": null,
+      "IsMRef": true,
+      "Title": "Plugins.Saneject.Runtime.Settings",
+      "Summary": null
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "api/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "api/toc.html"
+        },
+        ".json": {
+          "relative_path": "api/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/architecture-overview.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/architecture-overview.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/edit-time-architecture.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/edit-time-architecture.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/roslyn-and-generated-code.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/roslyn-and-generated-code.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/architecture/runtime-architecture.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/architecture/runtime-architecture.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/binding.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/binding.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/context.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/context.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/field-property-and-method-injection.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/field-property-and-method-injection.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/global-scope.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/global-scope.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/runtime-proxy.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/runtime-proxy.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/scope.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/scope.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/core-concepts/serialized-interface.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/core-concepts/serialized-interface.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/batch-injection.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/batch-injection.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/code-analyzers.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/code-analyzers.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/injection-toolbar-and-context-menus.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/injection-toolbar-and-context-menus.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/inspectors/monobehaviour-inspector.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/inspectors/monobehaviour-inspector.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/inspectors/runtime-proxy-inspector.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/inspectors/runtime-proxy-inspector.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/inspectors/scope-inspector.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/inspectors/scope-inspector.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/logging-and-validation.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/logging-and-validation.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/runtime-proxy-tools.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/runtime-proxy-tools.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/editor-and-tooling/settings.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/editor-and-tooling/settings.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/feature-overview.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/feature-overview.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/installation-and-requirements.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/installation-and-requirements.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/introduction.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/introduction.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/quick-start.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/quick-start.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/getting-started/sample-game.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/getting-started/sample-game.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/reference/glossary.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/reference/glossary.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "docs/reference/tested-unity-versions.md",
+      "output": {
+        ".html": {
+          "relative_path": "docs/reference/tested-unity-versions.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "docs/toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "docs/toc.html"
+        },
+        ".json": {
+          "relative_path": "docs/toc.json"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "favicon.ico",
+      "output": {
+        "resource": {
+          "relative_path": "favicon.ico"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/batch-injection-context-menu.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/batch-injection-context-menu.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/batch-injection-main-toolbar.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/batch-injection-main-toolbar.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/batch-injector-logs.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/batch-injector-logs.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/batch-injector-window-context-menus.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/batch-injector-window-context-menus.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/batch-injector-window-sorting.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/batch-injector-window-sorting.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/batch-injector-window.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/batch-injector-window.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/code-analyzers-inj001-fixes.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/code-analyzers-inj001-fixes.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/code-analyzers-inj001-inj001-unity-console.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/code-analyzers-inj001-inj001-unity-console.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/code-analyzers-inj001-tooltip.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/code-analyzers-inj001-tooltip.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/code-analyzers-inj002-fixes.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/code-analyzers-inj002-fixes.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/code-analyzers-inj002-tooltip.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/code-analyzers-inj002-tooltip.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/component-console-filter-01.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/component-console-filter-01.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/component-console-filter-02.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/component-console-filter-02.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/injection-confirmation.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/injection-confirmation.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/injection-context-menus.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/injection-context-menus.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/injection-main-toolbar.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/injection-main-toolbar.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo-dark.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo-dark.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/logo-light.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/logo-light.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/project-settings.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/project-settings.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/quick-start-1.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/quick-start-1.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/quick-start-2.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/quick-start-2.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/quick-start-3.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/quick-start-3.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/quick-start-4.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/quick-start-4.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/quick-start-5.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/quick-start-5.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/quick-start-6.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/quick-start-6.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/runtime-proxy-inspector.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/runtime-proxy-inspector.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/runtime-proxy-tools.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/runtime-proxy-tools.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/sample-game-screenshot.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/sample-game-screenshot.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/scope-console-filter-01.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/scope-console-filter-01.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/scope-console-filter-02.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/scope-console-filter-02.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/scope-inspector-hierarchy-tooltip.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/scope-inspector-hierarchy-tooltip.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/scope-inspector.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/scope-inspector.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/serialize-interface-inspector.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/serialize-interface-inspector.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Resource",
+      "source_relative_path": "images/user-settings.webp",
+      "output": {
+        "resource": {
+          "relative_path": "images/user-settings.webp"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Conceptual",
+      "source_relative_path": "index.md",
+      "output": {
+        ".html": {
+          "relative_path": "index.html"
+        }
+      },
+      "version": ""
+    },
+    {
+      "type": "Toc",
+      "source_relative_path": "toc.yml",
+      "output": {
+        ".html": {
+          "relative_path": "toc.html"
+        },
+        ".json": {
+          "relative_path": "toc.json"
+        }
+      },
+      "version": ""
+    }
+  ],
+  "groups": [
+    {
+      "xrefmap": "xrefmap.yml"
+    }
+  ]
+}

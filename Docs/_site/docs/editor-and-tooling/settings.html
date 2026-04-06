@@ -1,0 +1,340 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Settings | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Settings | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/editor-and-tooling/settings.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="settings">Settings</h1>
+
+<p>Saneject settings control editor behavior for injection, inspector presentation, logging, and code generation.</p>
+<p>The Settings window has two tabs:</p>
+<ul>
+<li><code>User Settings</code>: personal settings stored on your machine.</li>
+<li><code>Project Settings</code>: shared settings stored in the Unity project.</li>
+</ul>
+<h2 id="open-the-settings-window">Open the Settings window</h2>
+<p>Use the Unity main menu:</p>
+<ul>
+<li><code>Saneject/Settings</code></li>
+</ul>
+<p>This opens the <code>Saneject Settings</code> editor window.</p>
+<h2 id="user-settings-vs-project-settings">User settings vs project settings</h2>
+<table>
+<thead>
+<tr>
+<th>Type</th>
+<th><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">Scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span></th>
+<th>Storage</th>
+<th>Shared with team</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>User Settings</code></td>
+<td>Current Unity user on current machine</td>
+<td><code>EditorPrefs</code> keys with prefix <code>SanejectSettings_</code></td>
+<td>No</td>
+</tr>
+<tr>
+<td><code>Project Settings</code></td>
+<td>Entire Unity project</td>
+<td><code>ProjectSettings/Saneject/ProjectSettings.json</code></td>
+<td>Yes, if the file is version controlled</td>
+</tr>
+</tbody>
+</table>
+<p>Important behavior:</p>
+<ul>
+<li>Settings are editable only in Edit Mode.</li>
+<li>Outside the Unity Editor, settings access falls back to default values.</li>
+<li>Reset actions show a confirmation dialog before applying changes.</li>
+</ul>
+<h2 id="user-settings">User settings</h2>
+<p>User settings are stored locally on your machine using <code>EditorPrefs</code>.</p>
+<p><img src="../../images/user-settings.webp" alt="User settings"></p>
+<h3 id="ask-before-injection">Ask Before Injection</h3>
+<p>All of these default to <code>true</code>, which shows a confirmation dialog before <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">injection runs</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Injection run</span><span class="glossary-term__body">One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.</span></span></span>.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Scene</code></td>
+<td>Ask before injecting the current scene.</td>
+</tr>
+<tr>
+<td><code>Prefab Asset</code></td>
+<td>Ask before injecting the current <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>.</td>
+</tr>
+<tr>
+<td><code>Selected Scene Hierarchies</code></td>
+<td>Ask before injecting selected scene hierarchies.</td>
+</tr>
+<tr>
+<td><code>Batch Injection</code></td>
+<td>Ask before <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">batch injection</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Batch injection</span><span class="glossary-term__body">Running injection across multiple selected scene and prefab assets in one operation.</span></span></span> runs.</td>
+</tr>
+</tbody>
+</table>
+<p>These toggles affect injection commands and batch commands described in <a href="injection-toolbar-and-context-menus.html">Injection toolbar &amp; context menus</a> and <a href="batch-injection.html">Batch injection</a>.</p>
+<h3 id="inspector">Inspector</h3>
+<p>All of these default to <code>true</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Show Injected Fields &amp; Properties</code></td>
+<td>Shows members marked with <code>[Inject]</code> and <code>[field: Inject]</code> in inspectors.</td>
+</tr>
+<tr>
+<td><code>Show Help Boxes</code></td>
+<td>Shows explanatory Saneject help boxes in inspectors.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="play-mode-logging-editor-only">Play Mode Logging (Editor Only)</h3>
+<p>All of these default to <code>true</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Log On Proxy Instance Resolve</code></td>
+<td>Logs when a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> resolves its runtime instance.</td>
+</tr>
+<tr>
+<td><code>Log On Global Scope Register &amp; Unregister</code></td>
+<td>Logs <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-6"><span class="glossary-term__label">global registration</span><span class="glossary-term__tooltip" id="glossary-tooltip-6" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span> lifecycle events in <code>GlobalScope</code>.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="editor-logging">Editor Logging</h3>
+<p>All of these default to <code>true</code>.</p>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Clear Logs On Injection</code></td>
+<td>Clears the Unity Console before an <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-7"><span class="glossary-term__label">injection run</span><span class="glossary-term__tooltip" id="glossary-tooltip-7" role="tooltip"><span class="glossary-term__title">Injection run</span><span class="glossary-term__body">One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.</span></span></span> starts.</td>
+</tr>
+<tr>
+<td><code>Log Injection Summary</code></td>
+<td>Writes end-of-run summary logs.</td>
+</tr>
+<tr>
+<td><code>Log Unused Bindings</code></td>
+<td>Warns when <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-8"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-8" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> were declared but not used in a run.</td>
+</tr>
+<tr>
+<td><code>Log Unused Runtime Proxies On Domain Reload</code></td>
+<td>On domain reload, scans for <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-9"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-9" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> assets and scripts that are not referenced by any <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-10"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-10" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-11"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-11" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> and logs findings.</td>
+</tr>
+</tbody>
+</table>
+<p>For logging semantics and output shape, see <a href="logging-and-validation.html">Logging &amp; validation</a>.</p>
+<h2 id="project-settings">Project settings</h2>
+<p>Project settings are stored in the Unity project at <code>ProjectSettings/Saneject/ProjectSettings.json</code> and are version controlled if the project is under source control, which means that these settings are shared with team members.</p>
+<p><img src="../../images/project-settings.webp" alt="Project settings"></p>
+<h3 id="context-isolation">Context Isolation</h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Use Context Isolation</code></td>
+<td><code>false</code></td>
+<td>Enables strict <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-12"><span class="glossary-term__label">context</span><span class="glossary-term__tooltip" id="glossary-tooltip-12" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> boundaries during resolution. When enabled, scene and prefab-instance dependencies resolve only inside the same <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-13"><span class="glossary-term__label">context</span><span class="glossary-term__tooltip" id="glossary-tooltip-13" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span>. <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-14"><span class="glossary-term__label">Prefab assets</span><span class="glossary-term__tooltip" id="glossary-tooltip-14" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span> are always context-isolated.</td>
+</tr>
+</tbody>
+</table>
+<p>For details on <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-15"><span class="glossary-term__label">context</span><span class="glossary-term__tooltip" id="glossary-tooltip-15" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> behavior, see <a href="../core-concepts/context.html">Context</a>.</p>
+<h3 id="scope-file-generation">Scope File Generation</h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Generate Scope Namespace From Folder</code></td>
+<td><code>true</code></td>
+<td>When creating a new <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-16"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-16" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> from <code>Assets/Saneject/Create New Scope</code>, generates a namespace based on the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-17"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-17" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> file's folder path.</td>
+</tr>
+</tbody>
+</table>
+<h3 id="proxy-generation">Proxy Generation</h3>
+<table>
+<thead>
+<tr>
+<th>Setting</th>
+<th>Default</th>
+<th>What it controls</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>Generate Proxy Scripts On Domain Reload</code></td>
+<td><code>true</code></td>
+<td>Automatically generates missing <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-18"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-18" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> scripts on Unity domain reload.</td>
+</tr>
+<tr>
+<td><code>Output Folder</code></td>
+<td><code>Assets/SanejectGenerated/RuntimeProxies</code></td>
+<td>Target folder for auto-generated <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-19"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-19" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> scripts and assets.</td>
+</tr>
+</tbody>
+</table>
+<p><code>Output Folder</code> notes:</p>
+<ul>
+<li>The folder picker accepts only folders under the current project's <code>Assets</code> directory.</li>
+<li>If the picker selects a folder outside <code>Assets</code>, Saneject logs a warning and keeps the current value.</li>
+<li>Typed values are sanitized to forward slashes and invalid path characters are removed.</li>
+</ul>
+<p>For <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-20"><span class="glossary-term__label">runtime proxy</span><span class="glossary-term__tooltip" id="glossary-tooltip-20" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> behavior, see <a href="../core-concepts/runtime-proxy.html">Runtime proxy</a>.</p>
+<h2 id="reset-settings-to-defaults">Reset settings to defaults</h2>
+<p>The Settings window includes two reset actions:</p>
+<ul>
+<li><code>Use Default User Settings</code>: clears Saneject user keys from <code>EditorPrefs</code>.</li>
+<li><code>Use Default Project Settings</code>: rewrites Saneject <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-21"><span class="glossary-term__label">project settings</span><span class="glossary-term__tooltip" id="glossary-tooltip-21" role="tooltip"><span class="glossary-term__title">Project settings</span><span class="glossary-term__body">Saneject settings shared at project scope, stored in <code>ProjectSettings/Saneject/ProjectSettings.json</code> and available from <code>Saneject/Settings -&gt; Project Settings</code>.</span></span></span> to defaults in <code>ProjectSettings/Saneject/ProjectSettings.json</code>.</li>
+</ul>
+<p>Use project reset carefully because it affects all contributors who use the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-22"><span class="glossary-term__label">project settings</span><span class="glossary-term__tooltip" id="glossary-tooltip-22" role="tooltip"><span class="glossary-term__title">Project settings</span><span class="glossary-term__body">Saneject settings shared at project scope, stored in <code>ProjectSettings/Saneject/ProjectSettings.json</code> and available from <code>Saneject/Settings -&gt; Project Settings</code>.</span></span></span> file.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="injection-toolbar-and-context-menus.html">Injection toolbar &amp; context menus</a></li>
+<li><a href="batch-injection.html">Batch injection</a></li>
+<li><a href="logging-and-validation.html">Logging &amp; validation</a></li>
+<li><a href="../core-concepts/context.html">Context</a></li>
+<li><a href="../core-concepts/runtime-proxy.html">Runtime proxy</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

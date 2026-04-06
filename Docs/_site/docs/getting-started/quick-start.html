@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Quick start | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Quick start | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/getting-started/quick-start.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="quick-start">Quick start</h1>
+
+<p>This page walks through a minimal Saneject setup in one scene and shows how to run your first injection. It should take around 5 minutes.</p>
+<p>For prerequisites and installation methods, see <a href="installation-and-requirements.html">Installation &amp; requirements</a>.</p>
+<h2 id="1-create-the-scene-hierarchy">1. Create the scene hierarchy</h2>
+<ol>
+<li>Create a <code>GameObject</code> named <code>Root</code>.</li>
+<li>Create a child <code>GameObject</code> named <code>GameManager</code> under <code>Root</code></li>
+<li>Create a child <code>GameObject</code> named <code>Player</code> under <code>Root</code>.</li>
+<li>Add <code>CharacterController</code> to <code>Player</code>.</li>
+</ol>
+<p><img src="../../images/quick-start-1.webp" alt="Scene hierarchy"></p>
+<h2 id="2-create-a-component-to-inject">2. Create a component to inject</h2>
+<p>Create <code>GameManager.cs</code>.</p>
+<pre><code class="lang-csharp">using UnityEngine;
+
+public interface IGameStateObservable
+{
+}
+
+public class GameManager : MonoBehaviour, IGameStateObservable
+{
+}
+</code></pre>
+<p>Attach it to <code>GameManager</code>.</p>
+<p><img src="../../images/quick-start-2.webp" alt="GameManager component in Inspector"></p>
+<h2 id="3-create-an-injection-target">3. Create an injection target</h2>
+<p>Create <code>Player.cs</code>. <code>Player</code> is <code>partial</code> because <code>[SerializeInterface]</code> uses generated code to serialize interface references.</p>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+
+public partial class Player : MonoBehaviour
+{
+    [Inject, SerializeInterface]
+    private IGameStateObservable gameStateObservable;
+
+    [Inject, SerializeField]
+    private CharacterController controller;
+}
+</code></pre>
+<p>Attach it to <code>Player</code>.</p>
+<p><img src="../../images/quick-start-3.webp" alt="Player component in Inspector"></p>
+<h2 id="4-create-a-scope-and-declare-bindings">4. Create a scope and declare bindings</h2>
+<p>Create <code>GameScope.cs</code> and declare <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span>:</p>
+<p>You can create a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> manually or from:</p>
+<ul>
+<li>Main menu: <code>Saneject/Create New Scope</code></li>
+<li>Project window context menu: <code>Assets/Saneject/Create New Scope</code></li>
+</ul>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class GameScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        // Find first GameManager that implements IGameStateObservable anywhere in the scene
+        BindComponent&lt;IGameStateObservable, GameManager&gt;()
+            .FromAnywhere();
+
+        // Find first CharacterController on the injection target (Player) Transform 
+        BindComponent&lt;CharacterController&gt;()
+            .FromTargetSelf();
+    }
+}
+</code></pre>
+<p>Attach it to <code>Root</code>.</p>
+<p><img src="../../images/quick-start-4.webp" alt="GameScope component in Inspector"></p>
+<p><code>Scope</code> is where <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> are declared. During injection, Saneject resolves each <code>[Inject]</code> site from the nearest <code>Scope</code>, with fallback to parent <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">scopes</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span>.</p>
+<h2 id="5-run-injection">5. Run injection</h2>
+<p>Run dependency injection via the main toolbar button <code>Inject Scene</code>.</p>
+<p><img src="../../images/quick-start-5.webp" alt="Inject Scene button"></p>
+<p>After injection, <code>Player</code> has serialized values for <code>gameStateObservable</code> and <code>controller</code>. Enter Play Mode and the scene runs without a runtime container.</p>
+<p><img src="../../images/quick-start-6.webp" alt="Injected result in Player component Inspector"></p>
+<h2 id="inspector-integration-note">Inspector integration note</h2>
+<p>Saneject includes a custom <code>MonoBehaviour</code> inspector that keeps injected and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">serialized interface</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Serialized interface</span><span class="glossary-term__body"><code>SerializeInterface</code> member (<code>IService</code>, <code>IService[]</code>, or <code>List&lt;IService&gt;</code>) that Saneject persists through a generated hidden <code>Object</code> backing member.</span></span></span> fields ordered and preserves Saneject's intended inspector UX.
+If the inspector looks wrong or incomplete, another custom inspector or plugin is likely overriding Saneject.
+In that case, either disable the conflicting inspector or integrate Saneject's inspector API in your custom inspector to restore the Saneject inspector UX.</p>
+<p>See <a href="../editor-and-tooling/inspectors/monobehaviour-inspector.html">MonoBehaviour inspector</a> and <a class="xref" href="../../api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html">Saneject inspector API</a> for details.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="introduction.html">Introduction</a></li>
+<li><a href="feature-overview.html">Feature overview</a></li>
+<li><a href="sample-game.html">Sample game</a></li>
+<li><a href="../core-concepts/scope.html">Scope</a></li>
+<li><a href="../core-concepts/binding.html">Binding</a></li>
+<li><a href="../core-concepts/field-property-and-method-injection.html">Field, property &amp; method injection</a></li>
+<li><a href="../core-concepts/serialized-interface.html">Serialized interface</a></li>
+<li><a href="installation-and-requirements.html">Installation &amp; requirements</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

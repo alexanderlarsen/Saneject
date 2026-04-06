@@ -1,0 +1,342 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Injection toolbar &amp; context menus | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Injection toolbar &amp; context menus | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/editor-and-tooling/injection-toolbar-and-context-menus.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="injection-toolbar--context-menus">Injection toolbar &amp; context menus</h1>
+
+<p>Saneject <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">injection context menus</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Injection context menu</span><span class="glossary-term__body">Editor command under <code>Saneject/Inject Scene/...</code>, <code>Saneject/Inject Selected Scene Hierarchies/...</code>, <code>Saneject/Inject Prefab Asset/...</code>, or the matching <code>GameObject/Saneject/...</code> paths that start an injection run with a selected target and <code>ContextWalkFilter</code>.</span></span></span> are editor commands that run dependency injection on scenes, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">prefab assets</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>, or batches of assets.</p>
+<p>For common full-run workflows, Saneject also exposes contextual main toolbar buttons:</p>
+<ul>
+<li><code>Inject Scene</code></li>
+<li><code>Inject Selected Scene Hierarchies</code></li>
+<li><code>Inject Prefab Asset</code></li>
+<li><code>Batch Inject Selected Assets</code></li>
+</ul>
+<p>Those toolbar buttons appear only when they apply to the current selection or editor stage, and they always run with <code>ContextWalkFilter.AllContexts</code>.</p>
+<p>If you are new to <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> and filters, read <a href="../core-concepts/context.html">Context</a> first.</p>
+<h2 id="toolbar-buttons">Toolbar buttons</h2>
+<p>The contextual main toolbar buttons cover the most common <code>AllContexts</code> runs.</p>
+<p><img src="../../images/injection-main-toolbar.webp" alt="Saneject injection toolbar buttons"></p>
+<ul>
+<li><code>Inject Scene</code>: shown while editing a scene.</li>
+<li><code>Inject Selected Scene Hierarchies</code>: shown while editing a scene and one or more scene objects are selected.</li>
+<li><code>Inject Prefab Asset</code>: shown in Prefab Mode.</li>
+<li><code>Batch Inject Selected Assets</code>: shown when the Project selection contains one or more scene assets, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">prefab assets</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>, or folders that contain them.</li>
+</ul>
+<p>For more focused runs, use the <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">injection context menus</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Injection context menu</span><span class="glossary-term__body">Editor command under <code>Saneject/Inject Scene/...</code>, <code>Saneject/Inject Selected Scene Hierarchies/...</code>, <code>Saneject/Inject Prefab Asset/...</code>, or the matching <code>GameObject/Saneject/...</code> paths that start an injection run with a selected target and <code>ContextWalkFilter</code>.</span></span></span> described below.</p>
+<h2 id="context-menus">Context menus</h2>
+<p>Saneject exposes the same grouped injection commands in multiple Unity menus.</p>
+<p><img src="../../images/injection-context-menus.webp" alt="Saneject injection context menus"></p>
+<ul>
+<li>Main menu:
+<ul>
+<li><code>Saneject/Inject Scene/...</code></li>
+<li><code>Saneject/Inject Selected Scene Hierarchies/...</code></li>
+<li><code>Saneject/Inject Prefab Asset/...</code></li>
+</ul>
+</li>
+<li>Hierarchy context menu:
+<ul>
+<li><code>GameObject/Saneject/Inject Scene/...</code></li>
+<li><code>GameObject/Saneject/Inject Selected Scene Hierarchies/...</code></li>
+<li><code>GameObject/Saneject/Inject Prefab Asset/...</code></li>
+</ul>
+</li>
+<li>Project window context menu:
+<ul>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/All Contexts</code></li>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/Scene Objects</code></li>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects</code></li>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/Prefab Instances</code></li>
+</ul>
+</li>
+<li>Main menu batch shortcuts:
+<ul>
+<li><code>Saneject/Batch Inject Selected Assets/All Contexts</code></li>
+<li><code>Saneject/Batch Inject Selected Assets/Scene Objects</code></li>
+<li><code>Saneject/Batch Inject Selected Assets/Prefab Asset Objects</code></li>
+<li><code>Saneject/Batch Inject Selected Assets/Prefab Instances</code></li>
+</ul>
+</li>
+</ul>
+<p>There is also a dedicated <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-6"><span class="glossary-term__label">batch injector</span><span class="glossary-term__tooltip" id="glossary-tooltip-6" role="tooltip"><span class="glossary-term__title">Batch Injector</span><span class="glossary-term__body">Editor window for preparing and running batch injection with per-asset enable state, status, and <code>ContextWalkFilter</code>.</span></span></span> window:</p>
+<ul>
+<li><code>Saneject/Open Batch Injector Window</code></li>
+</ul>
+<p>That window is covered in <a href="batch-injection.html">Batch injection</a>.</p>
+<h2 id="scene-and-prefab-injection-commands">Scene and prefab injection commands</h2>
+<p>All commands in <code>Saneject/Inject Scene/...</code>, <code>Saneject/Inject Selected Scene Hierarchies/...</code>, <code>Saneject/Inject Prefab Asset/...</code>, and the matching <code>GameObject/Saneject/...</code> paths use the same <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-7"><span class="glossary-term__label">injection pipeline</span><span class="glossary-term__tooltip" id="glossary-tooltip-7" role="tooltip"><span class="glossary-term__title">Injection pipeline</span><span class="glossary-term__body">Ordered stages Saneject runs during injection, from graph build and context filtering through validation, resolution, assignment, and summary logging.</span></span></span>. The only differences are:</p>
+<ul>
+<li>Start objects for the run.</li>
+<li><code>ContextWalkFilter</code> selected by that menu item.</li>
+</ul>
+<h3 id="inject-scene-group">Inject Scene group</h3>
+<p>Menu paths:</p>
+<ul>
+<li><code>Saneject/Inject Scene/All Contexts</code></li>
+<li><code>Saneject/Inject Scene/Scene Objects</code></li>
+<li><code>Saneject/Inject Scene/Prefab Instances</code></li>
+<li><code>GameObject/Saneject/Inject Scene/...</code></li>
+</ul>
+<p>Availability:</p>
+<ul>
+<li>Enabled only while editing a scene.</li>
+<li>Disabled in Prefab Mode.</li>
+</ul>
+<p>Behavior:</p>
+<ul>
+<li>Uses the active scene's root <code>GameObject</code> objects as start objects.</li>
+<li>Runs injection for that scene using the selected filter.</li>
+</ul>
+<h3 id="inject-selected-scene-hierarchies-group">Inject Selected Scene Hierarchies group</h3>
+<p>Menu paths:</p>
+<ul>
+<li><code>Saneject/Inject Selected Scene Hierarchies/All Contexts</code></li>
+<li><code>Saneject/Inject Selected Scene Hierarchies/Scene Objects</code></li>
+<li><code>Saneject/Inject Selected Scene Hierarchies/Prefab Instances</code></li>
+<li><code>Saneject/Inject Selected Scene Hierarchies/Same Contexts As Selection</code></li>
+<li><code>GameObject/Saneject/Inject Selected Scene Hierarchies/...</code></li>
+</ul>
+<p>Availability:</p>
+<ul>
+<li>Enabled only while editing a scene.</li>
+<li>Requires at least one selected <code>GameObject</code>.</li>
+</ul>
+<p>Behavior:</p>
+<ul>
+<li>Uses <code>Selection.gameObjects</code> as start objects.</li>
+<li>The graph is built from each selected object's root transform, then filtered by the selected <code>ContextWalkFilter</code>.</li>
+<li>This means a selected child can still cause its full root hierarchy to be part of the run.</li>
+</ul>
+<h3 id="inject-prefab-asset-group">Inject Prefab Asset group</h3>
+<p>Menu paths:</p>
+<ul>
+<li><code>Saneject/Inject Prefab Asset/All Contexts</code></li>
+<li><code>Saneject/Inject Prefab Asset/Prefab Asset Objects</code></li>
+<li><code>Saneject/Inject Prefab Asset/Prefab Instances</code></li>
+<li><code>Saneject/Inject Prefab Asset/Same Contexts As Selection</code></li>
+<li><code>GameObject/Saneject/Inject Prefab Asset/...</code></li>
+</ul>
+<p>Availability:</p>
+<ul>
+<li>Enabled only in Prefab Mode.</li>
+<li><code>Same Contexts As Selection</code> also requires a selection.</li>
+</ul>
+<p>Behavior:</p>
+<ul>
+<li>For <code>All Contexts</code>, <code>Prefab Asset Objects</code>, and <code>Prefab Instances</code>, Saneject starts from the current <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-8"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-8" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span> root.</li>
+<li>For <code>Same Contexts As Selection</code>, Saneject starts from the current selection.</li>
+</ul>
+<h2 id="filter-labels-used-in-menu-names">Filter labels used in menu names</h2>
+<p>Menu labels in these command groups, including <code>Batch Inject Selected Assets/...</code>, map directly to <code>ContextWalkFilter</code> values:</p>
+<table>
+<thead>
+<tr>
+<th>Menu label suffix</th>
+<th>Context walk filter</th>
+<th>Included contexts</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>All Contexts</code></td>
+<td><code>AllContexts</code></td>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-9"><span class="glossary-term__label">Scene objects</span><span class="glossary-term__tooltip" id="glossary-tooltip-9" role="tooltip"><span class="glossary-term__title">Scene object</span><span class="glossary-term__body">Non-prefab <code>GameObject</code> in a scene.</span></span></span>, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-10"><span class="glossary-term__label">prefab instances</span><span class="glossary-term__tooltip" id="glossary-tooltip-10" role="tooltip"><span class="glossary-term__title">Prefab instance</span><span class="glossary-term__body">Instantiated prefab placed in a scene or nested inside another prefab.</span></span></span>, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-11"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-11" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span> objects</td>
+</tr>
+<tr>
+<td><code>Scene Objects</code></td>
+<td><code>SceneObjects</code></td>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-12"><span class="glossary-term__label">Scene object</span><span class="glossary-term__tooltip" id="glossary-tooltip-12" role="tooltip"><span class="glossary-term__title">Scene object</span><span class="glossary-term__body">Non-prefab <code>GameObject</code> in a scene.</span></span></span> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-13"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-13" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> only</td>
+</tr>
+<tr>
+<td><code>Prefab Instances</code></td>
+<td><code>PrefabInstances</code></td>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-14"><span class="glossary-term__label">Prefab instance</span><span class="glossary-term__tooltip" id="glossary-tooltip-14" role="tooltip"><span class="glossary-term__title">Prefab instance</span><span class="glossary-term__body">Instantiated prefab placed in a scene or nested inside another prefab.</span></span></span> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-15"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-15" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> only</td>
+</tr>
+<tr>
+<td><code>Prefab Asset Objects</code></td>
+<td><code>PrefabAssetObjects</code></td>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-16"><span class="glossary-term__label">Prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-16" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span> <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-17"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-17" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> only</td>
+</tr>
+<tr>
+<td><code>Same Contexts As Selection</code></td>
+<td><code>SameContextsAsSelection</code></td>
+<td><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-18"><span class="glossary-term__label">Contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-18" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> matching selected start object contexts only</td>
+</tr>
+</tbody>
+</table>
+<p><code>ContextWalkFilter</code> controls what enters the run. It does not override <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-19"><span class="glossary-term__label">context isolation</span><span class="glossary-term__tooltip" id="glossary-tooltip-19" role="tooltip"><span class="glossary-term__title">Context isolation</span><span class="glossary-term__body">Project setting (<code>UseContextIsolation</code>) that controls whether dependency resolution can cross context boundaries.</span></span></span>.
+<span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-20"><span class="glossary-term__label">Context isolation</span><span class="glossary-term__tooltip" id="glossary-tooltip-20" role="tooltip"><span class="glossary-term__title">Context isolation</span><span class="glossary-term__body">Project setting (<code>UseContextIsolation</code>) that controls whether dependency resolution can cross context boundaries.</span></span></span> is configured in <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-21"><span class="glossary-term__label">project settings</span><span class="glossary-term__tooltip" id="glossary-tooltip-21" role="tooltip"><span class="glossary-term__title">Project settings</span><span class="glossary-term__body">Saneject settings shared at project scope, stored in <code>ProjectSettings/Saneject/ProjectSettings.json</code> and available from <code>Saneject/Settings -&gt; Project Settings</code>.</span></span></span> and still applies during resolution.
+See <a href="../core-concepts/context.html">Context</a>.</p>
+<h2 id="batch-inject-from-selected-assets">Batch inject from selected assets</h2>
+<p>Entry points:</p>
+<ul>
+<li>Main toolbar: <code>Batch Inject Selected Assets</code> (<code>ContextWalkFilter.AllContexts</code>)</li>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/All Contexts</code></li>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/Scene Objects</code></li>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects</code></li>
+<li><code>Assets/Saneject/Batch Inject Selected Assets/Prefab Instances</code></li>
+<li><code>Saneject/Batch Inject Selected Assets/All Contexts</code></li>
+<li><code>Saneject/Batch Inject Selected Assets/Scene Objects</code></li>
+<li><code>Saneject/Batch Inject Selected Assets/Prefab Asset Objects</code></li>
+<li><code>Saneject/Batch Inject Selected Assets/Prefab Instances</code></li>
+</ul>
+<p><img src="../../images/batch-injection-main-toolbar.webp" alt="Saneject batch injection main toolbar"></p>
+<p><img src="../../images/batch-injection-context-menu.webp" alt="Saneject batch injection context menu"></p>
+<p>Availability:</p>
+<ul>
+<li>Enabled only when the current Project selection includes at least one scene asset or <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-22"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-22" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>.</li>
+<li>Folder selection works because Saneject scans deep selected assets.</li>
+</ul>
+<p>Behavior:</p>
+<ol>
+<li>Collect selected scene and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-23"><span class="glossary-term__label">prefab assets</span><span class="glossary-term__tooltip" id="glossary-tooltip-23" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>.</li>
+<li>Apply the <code>ContextWalkFilter</code> chosen by the toolbar button or menu item to each collected asset.</li>
+<li>Show batch confirmation dialog with scene and prefab counts.</li>
+<li>Ask to save currently modified open scenes before running.</li>
+<li>Inject each selected scene and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-24"><span class="glossary-term__label">prefab asset</span><span class="glossary-term__tooltip" id="glossary-tooltip-24" role="tooltip"><span class="glossary-term__title">Prefab asset</span><span class="glossary-term__body">Reusable prefab definition in the Project window.</span></span></span>.</li>
+<li>Save scene and asset changes.</li>
+<li>Log per-asset sections and final batch summary.</li>
+</ol>
+<p>If an injected asset has no <code>Scope</code> components, the run logs that nothing was injected for that asset or run.</p>
+<p>The toolbar button stays on <code>AllContexts</code>; the menu variants give you focused batch runs for <code>SceneObjects</code>, <code>PrefabAssetObjects</code>, or <code>PrefabInstances</code>.
+The chosen filter is forwarded as-is to every collected asset, so mixed scene/prefab selections only process matching <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-25"><span class="glossary-term__label">contexts</span><span class="glossary-term__tooltip" id="glossary-tooltip-25" role="tooltip"><span class="glossary-term__title">Context</span><span class="glossary-term__body">Serialization boundary Saneject uses during injection to decide scope traversal and candidate eligibility.</span></span></span> inside each asset.</p>
+<h2 id="confirmation-dialogs">Confirmation dialogs</h2>
+<p>By default, <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-26"><span class="glossary-term__label">injection context menu</span><span class="glossary-term__tooltip" id="glossary-tooltip-26" role="tooltip"><span class="glossary-term__title">Injection context menu</span><span class="glossary-term__body">Editor command under <code>Saneject/Inject Scene/...</code>, <code>Saneject/Inject Selected Scene Hierarchies/...</code>, <code>Saneject/Inject Prefab Asset/...</code>, or the matching <code>GameObject/Saneject/...</code> paths that start an injection run with a selected target and <code>ContextWalkFilter</code>.</span></span></span> commands and contextual toolbar buttons show a confirmation dialog before running injection.</p>
+<p><img src="../../images/injection-confirmation.webp" alt="Saneject inject confirmation dialog"></p>
+<p>You can toggle these prompts in:</p>
+<ul>
+<li><code>Saneject/Settings/User Settings/Ask Before Injection</code></li>
+</ul>
+<p>Relevant toggles:</p>
+<ul>
+<li><code>Scene</code></li>
+<li><code>Prefab Asset</code></li>
+<li><code>Selected Scene Hierarchies</code></li>
+<li><code>Batch Injection</code></li>
+</ul>
+<h2 id="example-running-a-focused-scene-injection">Example: running a focused scene injection</h2>
+<p>Run steps:</p>
+<ol>
+<li>Select one or more <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-27"><span class="glossary-term__label">scene objects</span><span class="glossary-term__tooltip" id="glossary-tooltip-27" role="tooltip"><span class="glossary-term__title">Scene object</span><span class="glossary-term__body">Non-prefab <code>GameObject</code> in a scene.</span></span></span> in the hierarchy.</li>
+<li>Run <code>Saneject/Inject Selected Scene Hierarchies/Scene Objects</code>.</li>
+<li>Check the Console for Saneject summary logs and any missing <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-28"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-28" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> or dependency errors.</li>
+</ol>
+<p>This workflow is useful when you want to validate scene-object wiring without also processing <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-29"><span class="glossary-term__label">prefab instances</span><span class="glossary-term__tooltip" id="glossary-tooltip-29" role="tooltip"><span class="glossary-term__title">Prefab instance</span><span class="glossary-term__body">Instantiated prefab placed in a scene or nested inside another prefab.</span></span></span> in the same run.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="../core-concepts/context.html">Context</a></li>
+<li><a href="../core-concepts/scope.html">Scope</a></li>
+<li><a href="../core-concepts/field-property-and-method-injection.html">Field, property &amp; method injection</a></li>
+<li><a href="batch-injection.html">Batch injection</a></li>
+<li><a href="settings.html">Settings</a></li>
+<li><a href="logging-and-validation.html">Logging &amp; validation</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

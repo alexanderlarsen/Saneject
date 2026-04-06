@@ -1,0 +1,116 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.Asset
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Asset
+  id: Plugins.Saneject.Runtime.Bindings.Asset
+  children:
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Runtime.Bindings.Asset
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Asset
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset
+  type: Namespace
+  assemblies:
+  - Saneject.Runtime
+references:
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  name: AssetBindingBuilder<TAsset>
+  nameWithType: AssetBindingBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>
+  nameWithType.vb: AssetBindingBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset)
+  name.vb: AssetBindingBuilder(Of TAsset)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  name: AssetFilterBuilder<TAsset>
+  nameWithType: AssetFilterBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>
+  nameWithType.vb: AssetFilterBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset)
+  name.vb: AssetFilterBuilder(Of TAsset)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Asset
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Asset
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html

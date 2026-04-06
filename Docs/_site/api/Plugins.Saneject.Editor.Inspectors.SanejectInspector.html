@@ -1,0 +1,438 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class SanejectInspector | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class SanejectInspector | Saneject: Dependency injection the Unity way ">
+      
+      <meta name="description" content="Provides UI drawing and validation logic for the custom Saneject inspector. Handles rendering of serialized properties with injection-aware read-only states, custom handling for  fields, nested serializable types, and validation to ensure assigned objects implement expected interface types.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/new/wip/experimental-architecture-rewrite/apiSpec/new?filename=Plugins_Saneject_Editor_Inspectors_SanejectInspector.md&amp;value=---%0Auid%3A%20Plugins.Saneject.Editor.Inspectors.SanejectInspector%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector">
+
+
+
+  <h1 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector" class="text-break">
+Class SanejectInspector  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L20"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Plugins.html">Plugins</a>.<a class="xref" href="Plugins.Saneject.html">Saneject</a>.<a class="xref" href="Plugins.Saneject.Editor.html">Editor</a>.<a class="xref" href="Plugins.Saneject.Editor.Inspectors.html">Inspectors</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Saneject.Editor.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Provides UI drawing and validation logic for the custom Saneject inspector.
+Handles rendering of serialized properties with injection-aware read-only states,
+custom handling for <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a> fields, nested serializable types, and validation
+to ensure assigned objects implement expected interface types.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static class SanejectInspector</code></pre>
+  </div>
+
+
+
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">SanejectInspector</span></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_DrawMonoBehaviourScriptField_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_DrawMonoBehaviourScriptField_UnityEngine_Object_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField(UnityEngine.Object)">
+  DrawMonoBehaviourScriptField(Object)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L46"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws the default script field at the top of a <span class="xref">UnityEngine.MonoBehaviour</span> inspector.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void DrawMonoBehaviourScriptField(Object target)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>target</code> <span class="xref">Object</span></dt>
+    <dd><p>The target object. If not a <span class="xref">UnityEngine.MonoBehaviour</span>, this method returns without drawing anything.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_DrawProperty_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_DrawProperty_Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)">
+  DrawProperty(PropertyModel)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws a single property with the given display name and read-only state, handling foldouts for nested serializable types.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void DrawProperty(PropertyModel model)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>model</code> <a class="xref" href="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html">PropertyModel</a></dt>
+    <dd><p>The property model to draw.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_GetFieldInfosForInspector_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_GetFieldInfosForInspector_System_Type_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector(System.Type)">
+  GetFieldInfosForInspector(Type)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L160"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Collects all drawable <span class="xref">System.Reflection.FieldInfo</span> of the type, including base classes.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static IEnumerable&lt;FieldInfo&gt; GetFieldInfosForInspector(this Type type)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>type</code> <span class="xref">Type</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">IEnumerable</span>&lt;<span class="xref">FieldInfo</span>&gt;</dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_HasInjectAttribute_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_HasInjectAttribute_System_Reflection_FieldInfo_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute(System.Reflection.FieldInfo)">
+  HasInjectAttribute(FieldInfo)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L196"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns true if the field is marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool HasInjectAttribute(this FieldInfo field)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>field</code> <span class="xref">FieldInfo</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_HasReadOnlyAttribute_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_HasReadOnlyAttribute_System_Reflection_FieldInfo_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute(System.Reflection.FieldInfo)">
+  HasReadOnlyAttribute(FieldInfo)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L188"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns true if the field is marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute.html">ReadOnlyAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool HasReadOnlyAttribute(this FieldInfo field)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>field</code> <span class="xref">FieldInfo</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_IsSerializeInterface_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_IsSerializeInterface_System_Reflection_FieldInfo_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface(System.Reflection.FieldInfo)">
+  IsSerializeInterface(FieldInfo)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L204"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Returns true if the field is marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static bool IsSerializeInterface(this FieldInfo field)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>field</code> <span class="xref">FieldInfo</span></dt>
+    <dd></dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><span class="xref">bool</span></dt>
+    <dd></dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_OnInspectorGUI_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_OnInspectorGUI_Plugins_Saneject_Editor_Inspectors_Models_ComponentModel_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI(Plugins.Saneject.Editor.Inspectors.Models.ComponentModel)">
+  OnInspectorGUI(ComponentModel)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L28"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Draws the complete default Saneject <span class="xref">UnityEngine.MonoBehaviour</span> inspector, including the script field, all serializable fields and interfaces in declaration order, injection-aware read-only handling, custom UI and validation for <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a> fields, and recursive drawing of nested serializable types.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void OnInspectorGUI(ComponentModel componentModel)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>componentModel</code> <a class="xref" href="Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html">ComponentModel</a></dt>
+    <dd><p>The component model containing the target object and its inspectable properties.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_ValidateProperty_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty*"></a>
+
+  <h3 id="Plugins_Saneject_Editor_Inspectors_SanejectInspector_ValidateProperty_Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_" data-uid="Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)">
+  ValidateProperty(PropertyModel)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs/#L109"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Validates that the field is assigned to an object that implements the expected type.
+For <a class="xref" href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html">SerializeInterfaceAttribute</a> fields, validates each element if the property is a collection,
+or the single value if not. Also recursively validates child properties.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public static void ValidateProperty(PropertyModel property)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>property</code> <a class="xref" href="Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html">PropertyModel</a></dt>
+    <dd><p>The property model to validate.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

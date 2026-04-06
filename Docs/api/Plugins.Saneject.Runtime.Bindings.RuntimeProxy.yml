@@ -1,0 +1,78 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  commentId: N:Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  id: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  children:
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  nameWithType: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  type: Namespace
+  assemblies:
+  - Saneject.Runtime
+references:
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html
+  name: RuntimeProxyInstanceModeBuilder
+  nameWithType: RuntimeProxyInstanceModeBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html
+  name: RuntimeProxyBindingBuilder
+  nameWithType: RuntimeProxyBindingBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  commentId: N:Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  nameWithType: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html

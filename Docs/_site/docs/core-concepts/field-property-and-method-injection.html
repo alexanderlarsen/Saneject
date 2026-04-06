@@ -1,0 +1,352 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Field, property &amp; method injection | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Field, property &amp; method injection | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="../../favicon.ico">
+      <link rel="stylesheet" href="../../public/docfx.min.css">
+      <link rel="stylesheet" href="../../public/main.css">
+      <meta name="docfx:navrel" content="../../toc.html">
+      <meta name="docfx:tocrel" content="../toc.html">
+      
+      <meta name="docfx:rel" content="../../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/docs/core-concepts/field-property-and-method-injection.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../../index.html">
+            <img id="logo" class="svg" src="../../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="field-property--method-injection">Field, property &amp; method injection</h1>
+
+<p>Field, property, and method injection is how Saneject writes resolved dependencies into components during an editor <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-1"><span class="glossary-term__label">injection run</span><span class="glossary-term__tooltip" id="glossary-tooltip-1" role="tooltip"><span class="glossary-term__title">Injection run</span><span class="glossary-term__body">One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.</span></span></span>.</p>
+<p>For <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-2"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-2" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> setup details, see <a href="binding.html">Binding</a> and <a href="scope.html">Scope</a>.</p>
+<h2 id="how-it-works">How it works</h2>
+<p>At a high level, Saneject performs these steps:</p>
+<ol>
+<li>Scans active <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-3"><span class="glossary-term__label">injection targets</span><span class="glossary-term__tooltip" id="glossary-tooltip-3" role="tooltip"><span class="glossary-term__title">Injection target</span><span class="glossary-term__body"><code>Component</code> with injected fields, properties or methods.</span></span></span> for <code>[Inject]</code> fields and <code>[Inject]</code> methods.</li>
+<li>Also scans nested <code>[Serializable]</code> class instances inside those components.</li>
+<li>For each <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-4"><span class="glossary-term__label">injection site</span><span class="glossary-term__tooltip" id="glossary-tooltip-4" role="tooltip"><span class="glossary-term__title">Injection site</span><span class="glossary-term__body">Injected field, property or method.</span></span></span>, finds a matching <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-5"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-5" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> by walking from the nearest <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-6"><span class="glossary-term__label">scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-6" role="tooltip"><span class="glossary-term__title">Scope</span><span class="glossary-term__body"><code>MonoBehaviour</code> that declares bindings for a part of your hierarchy.</span></span></span> upward.</li>
+<li>Matches on requested type, collection shape (single vs array/list), and optional <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-7"><span class="glossary-term__label">binding qualifiers</span><span class="glossary-term__tooltip" id="glossary-tooltip-7" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> (ID, target type, member name).</li>
+<li>Locates dependency objects from the selected <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-8"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-8" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> and applies <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-9"><span class="glossary-term__label">context isolation</span><span class="glossary-term__tooltip" id="glossary-tooltip-9" role="tooltip"><span class="glossary-term__title">Context isolation</span><span class="glossary-term__body">Project setting (<code>UseContextIsolation</code>) that controls whether dependency resolution can cross context boundaries.</span></span></span> rules.</li>
+<li>Injects values in this order: <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-10"><span class="glossary-term__label">global registrations</span><span class="glossary-term__tooltip" id="glossary-tooltip-10" role="tooltip"><span class="glossary-term__title">Global registration</span><span class="glossary-term__body">Entry added to <code>GlobalScope</code> at runtime, keyed by the component's concrete type and owned by the caller that registered it.</span></span></span>, fields and auto-properties, then methods.</li>
+</ol>
+<p>Important behavior:</p>
+<ul>
+<li>For single-value sites, Saneject assigns the first located candidate.</li>
+<li>For <code>T[]</code> and <code>List&lt;T&gt;</code>, Saneject assigns all located candidates.</li>
+<li>If no match is found, Saneject records missing <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-11"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-11" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> or missing dependency errors and injects <code>null</code>.</li>
+<li><code>suppressMissingErrors</code> only suppresses missing <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-12"><span class="glossary-term__label">binding</span><span class="glossary-term__tooltip" id="glossary-tooltip-12" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> and missing dependency logs. It does not suppress method invocation exceptions.</li>
+</ul>
+<h2 id="inject-attribute-options">Inject attribute options</h2>
+<p><code>InjectAttribute</code> supports these forms:</p>
+<table>
+<thead>
+<tr>
+<th>Syntax</th>
+<th>Meaning</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><code>[Inject]</code></td>
+<td>Type-only matching.</td>
+</tr>
+<tr>
+<td><code>[Inject(&quot;id&quot;)]</code></td>
+<td>Type + ID matching.</td>
+</tr>
+<tr>
+<td><code>[Inject(suppressMissingErrors: true)]</code></td>
+<td>Type matching, but suppress missing binding/dependency logs.</td>
+</tr>
+<tr>
+<td><code>[Inject(&quot;id&quot;, suppressMissingErrors: true)]</code></td>
+<td>Type + ID matching, with suppressed missing binding/dependency logs.</td>
+</tr>
+</tbody>
+</table>
+<p>The <code>ID</code> value must match a <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-13"><span class="glossary-term__label">binding qualifier</span><span class="glossary-term__tooltip" id="glossary-tooltip-13" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> declared with <code>ToID(...)</code>.</p>
+<h2 id="field-injection">Field injection</h2>
+<p>Annotate a field with <code>[Inject]</code>. Field injection is persisted through Unity serialization, so injected fields should be serializable.</p>
+<p>In practice:</p>
+<ul>
+<li>Concrete fields should be <code>public</code> or <code>[SerializeField] private</code>.</li>
+<li>Interface fields should use <code>[SerializeInterface]</code>, so Unity can serialize and show them in the inspector. Access modifier does not matter for this case.</li>
+<li>Arrays and <code>List&lt;&gt;</code> require <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-14"><span class="glossary-term__label">collection bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-14" role="tooltip"><span class="glossary-term__title">Collection binding</span><span class="glossary-term__body">Binding declared as multiple (<code>BindComponents</code>/<code>BindAssets</code>/<code>BindMultiple...</code>) that resolves arrays or <code>List&lt;&gt;</code> injection sites.</span></span></span> (<code>BindComponents</code>, <code>BindAssets</code>, or equivalent collection forms).</li>
+</ul>
+<pre><code class="lang-csharp">using System.Collections.Generic;
+using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+using UnityEngine.UI;
+
+public partial class HUDView : MonoBehaviour
+{
+    // Concrete component dependency.
+    [Inject, SerializeField]
+    private Camera mainCamera;
+
+    // Same type can be disambiguated by ID.
+    [Inject(&quot;scoreText&quot;), SerializeField]
+    private Text scoreText;
+
+    // Interface dependency.
+    [Inject, SerializeInterface]
+    private IScoreService scoreService;
+
+    // Interface collection dependency.
+    [Inject, SerializeInterface]
+    private List&lt;IEnemyObservable&gt; enemyObservables;
+
+    // Collection dependencies.
+    [Inject, SerializeField]
+    private AudioClip[] hitSfx;
+
+    [Inject, SerializeField]
+    private List&lt;AudioClip&gt; uiSfx;
+
+    // Optional dependency. Missing logs are suppressed.
+    [Inject(suppressMissingErrors: true), SerializeField]
+    private Text optionalDebugText;
+}
+</code></pre>
+<pre><code class="lang-csharp">using Plugins.Saneject.Runtime.Scopes;
+
+public class HUDScope : Scope
+{
+    protected override void DeclareBindings()
+    {
+        BindComponent&lt;Camera&gt;()
+            .ToMember(&quot;mainCamera&quot;)
+            .FromAnywhere();
+
+        BindComponent&lt;Text&gt;()
+            .ToID(&quot;scoreText&quot;)
+            .FromScopeDescendants(includeSelf: true);
+
+        BindComponent&lt;IScoreService, ScoreService&gt;()
+            .FromRuntimeProxy()
+            .FromGlobalScope();
+        
+        BindComponents&lt;IEnemyObservable&gt;()
+            .FromAnywhere();
+
+        BindAssets&lt;AudioClip&gt;()
+            .ToMember(&quot;hitSfx&quot;)
+            .FromFolder(&quot;Assets/Game/Audio/Sfx/Hit&quot;);
+
+        BindAssets&lt;AudioClip&gt;()
+            .ToMember(&quot;uiSfx&quot;)
+            .FromFolder(&quot;Assets/Game/Audio/Sfx/UI&quot;);
+    }
+}
+</code></pre>
+<h2 id="property-injection">Property injection</h2>
+<p><code>InjectAttribute</code> targets fields and methods, but not normal properties.<br>
+For properties, use auto-properties with a field target:</p>
+<ul>
+<li><code>[field: Inject]</code></li>
+<li><code>[field: SerializeField]</code> for concrete types</li>
+<li><code>[field: SerializeInterface]</code> for interface types</li>
+</ul>
+<pre><code class="lang-csharp">using System.Collections.Generic;
+using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+
+public partial class CombatHud : MonoBehaviour
+{
+    [field: Inject, SerializeField]
+    public Camera MainCamera { get; private set; }
+
+    [field: Inject(&quot;playerRoot&quot;), SerializeField]
+    public Transform PlayerRoot { get; private set; }
+
+    [field: Inject, SerializeInterface]
+    public ICombatService CombatService { get; private set; }
+
+    [field: Inject, SerializeInterface]
+    public IEnemyObservable[] EnemyObservables { get; private set; }
+
+    [field: Inject, SerializeField]
+    public List&lt;AudioClip&gt; UISounds { get; private set; }
+}
+</code></pre>
+<p>Notes:</p>
+<ul>
+<li>This works for auto-properties because the compiler generates a backing field that Saneject can inject.</li>
+<li><span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-15"><span class="glossary-term__label">Binding qualifier</span><span class="glossary-term__tooltip" id="glossary-tooltip-15" role="tooltip"><span class="glossary-term__title">Binding qualifier</span><span class="glossary-term__body">Optional binding restriction declared with <code>ToID</code>, <code>ToTarget</code>, or <code>ToMember</code>.</span></span></span> <code>ToMember(&quot;MainCamera&quot;)</code> matches the logical property name, not the compiler-generated backing field name.</li>
+</ul>
+<h2 id="method-injection">Method injection</h2>
+<p>Annotate a method with <code>[Inject]</code>. Saneject resolves each parameter from <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-16"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-16" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> and then invokes the method.</p>
+<p>Because this invocation happens at editor-time, method injection is mostly useful for setup/configuration logic. Typical examples include configuring components whose source you cannot modify and add <code>[Inject]</code> to, applying values to built-in Unity components from injected config assets, validating setup, or running custom wiring logic inside your type.</p>
+<p>Key rules:</p>
+<ul>
+<li>Qualifiers (<code>ID</code>, <code>ToTarget</code>, <code>ToMember</code>) are matched against the method as a whole.</li>
+<li>Method-level <code>ID</code> and <code>suppressMissingErrors</code> settings apply to all parameters in that method.</li>
+<li>Each parameter is resolved by its own requested type and shape.</li>
+<li>Methods are invoked after field and property injection.</li>
+<li>If any parameter is not resolved (<code>null</code>), the method is not invoked.</li>
+<li>Method exceptions are caught and logged. They do not break the overall <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-17"><span class="glossary-term__label">injection run</span><span class="glossary-term__tooltip" id="glossary-tooltip-17" role="tooltip"><span class="glossary-term__title">Injection run</span><span class="glossary-term__body">One execution of the injection pipeline for a chosen selection, context walk filter, and active set of targets.</span></span></span>.</li>
+</ul>
+<pre><code class="lang-csharp">using System.Collections.Generic;
+using Plugins.Saneject.Runtime.Attributes;
+using UnityEngine;
+using UnityEngine.UI;
+
+public class CombatController : MonoBehaviour
+{
+    [Inject(&quot;combatInit&quot;)]
+    private void Initialize(
+        ICombatService combatService,
+        Camera mainCamera,
+        IEnemyObservable[] enemyObservables,
+        List&lt;EnemyController&gt; enemies)
+    {
+        // Use injected parameters.
+    }
+
+    [Inject(&quot;optionalUI&quot;, suppressMissingErrors: true)]
+    private void TryWireOptionalUI(Text debugText, Button retryButton)
+    {
+        if (debugText == null || retryButton == null)
+            return;
+    }
+}
+</code></pre>
+<p>Example <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-18"><span class="glossary-term__label">bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-18" role="tooltip"><span class="glossary-term__title">Binding</span><span class="glossary-term__body">Instruction declared in a <code>Scope</code> that tells Saneject what to resolve, how to inject it, and where to search.</span></span></span> for <code>Initialize</code>:</p>
+<pre><code class="lang-csharp">protected override void DeclareBindings()
+{
+    BindComponent&lt;ICombatService, CombatService&gt;()
+        .ToID(&quot;combatInit&quot;)
+        .ToMember(&quot;Initialize&quot;)
+        .FromScopeSelf();
+
+    BindComponent&lt;Camera&gt;()
+        .ToID(&quot;combatInit&quot;)
+        .ToMember(&quot;Initialize&quot;)
+        .FromAnywhere();
+
+    BindComponents&lt;IEnemyObservable, EnemyManager&gt;()
+        .ToID(&quot;combatInit&quot;)
+        .ToMember(&quot;Initialize&quot;)
+        .FromScopeDescendants(includeSelf: true);
+
+    BindComponents&lt;EnemyController&gt;()
+        .ToID(&quot;combatInit&quot;)
+        .ToMember(&quot;Initialize&quot;)
+        .FromScopeDescendants(includeSelf: true);
+}
+</code></pre>
+<h2 id="supported-dependency-types">Supported dependency types</h2>
+<p>Saneject resolves dependencies from <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-19"><span class="glossary-term__label">component bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-19" role="tooltip"><span class="glossary-term__title">Component binding</span><span class="glossary-term__body">Binding declared with <code>BindComponent...</code> or <code>BindComponents...</code> that resolves <code>Component</code> instances from transforms, hierarchies, scenes, or explicit instances.</span></span></span> and <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-20"><span class="glossary-term__label">asset bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-20" role="tooltip"><span class="glossary-term__title">Asset binding</span><span class="glossary-term__body">Binding declared with <code>BindAsset...</code> or <code>BindAssets...</code> that resolves <code>UnityEngine.Object</code> assets from project content instead of scene or hierarchy components.</span></span></span>. That means injected objects are Unity objects, such as:</p>
+<ul>
+<li><code>UnityEngine.Component</code> instances</li>
+<li><code>UnityEngine.Object</code> assets, e.g., <code>ScriptableObject</code>, <code>AudioClip</code>, <code>Texture2D</code>, etc.</li>
+</ul>
+<p>Plain C# object (POCO) services are not supported.</p>
+<p>For service-like patterns, use <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-21"><span class="glossary-term__label">runtime proxies</span><span class="glossary-term__tooltip" id="glossary-tooltip-21" role="tooltip"><span class="glossary-term__title">Runtime proxy</span><span class="glossary-term__body"><code>ScriptableObject</code> placeholder asset (<code>RuntimeProxy&lt;TComponent&gt;</code>) injected into interface members at editor time and swapped to the real instance during scope startup.</span></span></span> with component implementations. <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-22"><span class="glossary-term__label">Runtime proxy bindings</span><span class="glossary-term__tooltip" id="glossary-tooltip-22" role="tooltip"><span class="glossary-term__title">Runtime proxy binding</span><span class="glossary-term__body">Component binding configured with <code>FromRuntimeProxy()</code> that injects a proxy asset at editor time and swaps it for a real runtime instance during scope initialization.</span></span></span> can resolve from <span class="glossary-term" tabindex="0" aria-describedby="glossary-tooltip-23"><span class="glossary-term__label">global scope</span><span class="glossary-term__tooltip" id="glossary-tooltip-23" role="tooltip"><span class="glossary-term__title">Global scope</span><span class="glossary-term__body">Static runtime registry and service locator in Saneject for globally accessible <code>Component</code> instances.</span></span></span>, loaded scenes, prefabs, or newly created <code>GameObject</code>s, with transient or singleton instance modes. See <a href="runtime-proxy.html">Runtime proxy</a> for details.</p>
+<h2 id="interface-injection-notes">Interface injection notes</h2>
+<p>Interface injection is supported for fields, auto-properties, and method parameters.</p>
+<p>For serialized fields and auto-properties, use <code>[SerializeInterface]</code> so references are visible and persisted in Unity's inspector/serialization workflow. See <a href="serialized-interface.html">Serialized interface</a>.</p>
+<h2 id="related-pages">Related pages</h2>
+<ul>
+<li><a href="scope.html">Scope</a></li>
+<li><a href="binding.html">Binding</a></li>
+<li><a href="context.html">Context</a></li>
+<li><a href="serialized-interface.html">Serialized interface</a></li>
+<li><a href="runtime-proxy.html">Runtime proxy</a></li>
+<li><a href="global-scope.html">Global scope</a></li>
+<li><a href="../reference/glossary.html">Glossary</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

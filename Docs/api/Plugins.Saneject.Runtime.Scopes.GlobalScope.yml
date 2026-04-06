@@ -1,0 +1,373 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.GlobalScope
+  id: GlobalScope
+  parent: Plugins.Saneject.Runtime.Scopes
+  children:
+  - Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear
+  - Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent``1
+  - Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered``1
+  - Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent(UnityEngine.Component,UnityEngine.Object)
+  - Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent``1(``0@)
+  - Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent(UnityEngine.Component,UnityEngine.Object)
+  langs:
+  - csharp
+  - vb
+  name: GlobalScope
+  nameWithType: GlobalScope
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: GlobalScope
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+    startLine: 12
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Static runtime registry and service locator for globally accessible <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> instances.
+
+    Stores one registration per concrete component type and is intended for Play Mode usage.
+  example: []
+  syntax:
+    content: public static class GlobalScope
+    content.vb: Public Module GlobalScope
+  inheritance:
+  - System.Object
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent(UnityEngine.Component,UnityEngine.Object)
+  commentId: M:Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent(UnityEngine.Component,UnityEngine.Object)
+  id: RegisterComponent(UnityEngine.Component,UnityEngine.Object)
+  parent: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  langs:
+  - csharp
+  - vb
+  name: RegisterComponent(Component, Object)
+  nameWithType: GlobalScope.RegisterComponent(Component, Object)
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent(UnityEngine.Component, UnityEngine.Object)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: RegisterComponent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+    startLine: 27
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: Register a global instance. Only valid in Play Mode. Only one instance per type.
+  example: []
+  syntax:
+    content: public static void RegisterComponent(Component instance, Object caller)
+    parameters:
+    - id: instance
+      type: UnityEngine.Component
+    - id: caller
+      type: UnityEngine.Object
+    content.vb: Public Shared Sub RegisterComponent(instance As Component, caller As [Object])
+  overload: Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent*
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent(UnityEngine.Component,UnityEngine.Object)
+  commentId: M:Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent(UnityEngine.Component,UnityEngine.Object)
+  id: UnregisterComponent(UnityEngine.Component,UnityEngine.Object)
+  parent: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  langs:
+  - csharp
+  - vb
+  name: UnregisterComponent(Component, Object)
+  nameWithType: GlobalScope.UnregisterComponent(Component, Object)
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent(UnityEngine.Component, UnityEngine.Object)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: UnregisterComponent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+    startLine: 59
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: Unregister a global instance. Only valid in Play Mode.
+  example: []
+  syntax:
+    content: public static void UnregisterComponent(Component instance, Object caller)
+    parameters:
+    - id: instance
+      type: UnityEngine.Component
+    - id: caller
+      type: UnityEngine.Object
+    content.vb: Public Shared Sub UnregisterComponent(instance As Component, caller As [Object])
+  overload: Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent*
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered``1
+  id: IsRegistered``1
+  parent: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  langs:
+  - csharp
+  - vb
+  name: IsRegistered<T>()
+  nameWithType: GlobalScope.IsRegistered<T>()
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered<T>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: IsRegistered
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+    startLine: 96
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: Returns true if a global instance of type <code class="typeparamref">T</code> is registered.
+  example: []
+  syntax:
+    content: 'public static bool IsRegistered<T>() where T : Component'
+    typeParameters:
+    - id: T
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function IsRegistered(Of T As Component)() As Boolean
+  overload: Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered*
+  nameWithType.vb: GlobalScope.IsRegistered(Of T)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered(Of T)()
+  name.vb: IsRegistered(Of T)()
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent``1
+  id: GetComponent``1
+  parent: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  langs:
+  - csharp
+  - vb
+  name: GetComponent<T>()
+  nameWithType: GlobalScope.GetComponent<T>()
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent<T>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: GetComponent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+    startLine: 104
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: Get the registered global instance of type <code class="typeparamref">T</code>. Returns <code>null</code> if not registered.
+  example: []
+  syntax:
+    content: 'public static T GetComponent<T>() where T : Component'
+    typeParameters:
+    - id: T
+    return:
+      type: '{T}'
+    content.vb: Public Shared Function GetComponent(Of T As Component)() As T
+  overload: Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent*
+  nameWithType.vb: GlobalScope.GetComponent(Of T)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent(Of T)()
+  name.vb: GetComponent(Of T)()
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent``1(``0@)
+  commentId: M:Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent``1(``0@)
+  id: TryGetComponent``1(``0@)
+  parent: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  langs:
+  - csharp
+  - vb
+  name: TryGetComponent<T>(out T)
+  nameWithType: GlobalScope.TryGetComponent<T>(out T)
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent<T>(out T)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: TryGetComponent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+    startLine: 111
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  syntax:
+    content: 'public static bool TryGetComponent<T>(out T component) where T : Component'
+    parameters:
+    - id: component
+      type: '{T}'
+    typeParameters:
+    - id: T
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function TryGetComponent(Of T As Component)(component As T) As Boolean
+  overload: Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent*
+  nameWithType.vb: GlobalScope.TryGetComponent(Of T)(T)
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent(Of T)(T)
+  name.vb: TryGetComponent(Of T)(T)
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear
+  commentId: M:Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear
+  id: Clear
+  parent: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  langs:
+  - csharp
+  - vb
+  name: Clear()
+  nameWithType: GlobalScope.Clear()
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: Clear
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
+    startLine: 120
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: Remove all registered global instances. Only valid in Play Mode.
+  example: []
+  syntax:
+    content: public static void Clear()
+    content.vb: Public Shared Sub Clear()
+  overload: Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear*
+references:
+- uid: UnityEngine.Component
+  commentId: T:UnityEngine.Component
+  parent: UnityEngine
+  isExternal: true
+  name: Component
+  nameWithType: Component
+  fullName: UnityEngine.Component
+- uid: Plugins.Saneject.Runtime.Scopes
+  commentId: N:Plugins.Saneject.Runtime.Scopes
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Scopes
+  nameWithType: Plugins.Saneject.Runtime.Scopes
+  fullName: Plugins.Saneject.Runtime.Scopes
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Scopes
+    name: Scopes
+    href: Plugins.Saneject.Runtime.Scopes.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Scopes
+    name: Scopes
+    href: Plugins.Saneject.Runtime.Scopes.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html#Plugins_Saneject_Runtime_Scopes_GlobalScope_RegisterComponent_UnityEngine_Component_UnityEngine_Object_
+  name: RegisterComponent
+  nameWithType: GlobalScope.RegisterComponent
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.RegisterComponent
+- uid: UnityEngine.Object
+  commentId: T:UnityEngine.Object
+  parent: UnityEngine
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: UnityEngine.Object
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html#Plugins_Saneject_Runtime_Scopes_GlobalScope_UnregisterComponent_UnityEngine_Component_UnityEngine_Object_
+  name: UnregisterComponent
+  nameWithType: GlobalScope.UnregisterComponent
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.UnregisterComponent
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html#Plugins_Saneject_Runtime_Scopes_GlobalScope_IsRegistered__1
+  name: IsRegistered
+  nameWithType: GlobalScope.IsRegistered
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.IsRegistered
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html#Plugins_Saneject_Runtime_Scopes_GlobalScope_GetComponent__1
+  name: GetComponent
+  nameWithType: GlobalScope.GetComponent
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.GetComponent
+- uid: '{T}'
+  commentId: '!:T'
+  definition: T
+  name: T
+  nameWithType: T
+  fullName: T
+- uid: T
+  name: T
+  nameWithType: T
+  fullName: T
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html#Plugins_Saneject_Runtime_Scopes_GlobalScope_TryGetComponent__1___0__
+  name: TryGetComponent
+  nameWithType: GlobalScope.TryGetComponent
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.TryGetComponent
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html#Plugins_Saneject_Runtime_Scopes_GlobalScope_Clear
+  name: Clear
+  nameWithType: GlobalScope.Clear
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope.Clear

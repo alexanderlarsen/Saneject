@@ -1,0 +1,168 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  id: Plugins.Saneject.Runtime.Bindings.Component
+  children:
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  - Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  type: Namespace
+  assemblies:
+  - Saneject.Runtime
+references:
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  name: BaseComponentBindingBuilder<TComponent>
+  nameWithType: BaseComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent)
+  name.vb: BaseComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+    name: BaseComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+    name: BaseComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  name: ComponentBindingBuilder<TComponent>
+  nameWithType: ComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent)
+  name.vb: ComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html
+  name: ComponentFilterBuilder<TComponent>
+  nameWithType: ComponentFilterBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent)
+  name.vb: ComponentFilterBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+    name: ComponentFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+    name: ComponentFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  name: GlobalComponentBindingBuilder<TComponent>
+  nameWithType: GlobalComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder<TComponent>
+  nameWithType.vb: GlobalComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder(Of TComponent)
+  name.vb: GlobalComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+    name: GlobalComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+    name: GlobalComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html

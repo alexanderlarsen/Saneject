@@ -1,0 +1,37 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Attributes
+  commentId: N:Plugins.Saneject.Runtime.Attributes
+  id: Plugins.Saneject.Runtime.Attributes
+  children:
+  - Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  - Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  - Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Runtime.Attributes
+  nameWithType: Plugins.Saneject.Runtime.Attributes
+  fullName: Plugins.Saneject.Runtime.Attributes
+  type: Namespace
+  assemblies:
+  - Saneject.Runtime
+references:
+- uid: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  href: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html
+  name: SerializeInterfaceAttribute
+  nameWithType: SerializeInterfaceAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+- uid: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  href: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute.html
+  name: ReadOnlyAttribute
+  nameWithType: ReadOnlyAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+- uid: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  href: Plugins.Saneject.Runtime.Attributes.InjectAttribute.html
+  name: InjectAttribute
+  nameWithType: InjectAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.InjectAttribute

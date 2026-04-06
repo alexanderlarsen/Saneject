@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Saneject | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Saneject | Saneject: Dependency injection the Unity way ">
+      
+      
+      <link rel="icon" href="favicon.ico">
+      <link rel="stylesheet" href="public/docfx.min.css">
+      <link rel="stylesheet" href="public/main.css">
+      <meta name="docfx:navrel" content="toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/docs/index.md/#L1">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="_landing" data-yaml-mime="">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="index.html">
+            <img id="logo" class="svg" src="logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+
+      <div class="content">
+        <div class="actionbar">
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="">
+<h1 id="saneject">Saneject</h1>
+
+<p>Dependency injection the Unity way</p>
+<p><img src="https://img.shields.io/badge/Unity-2022.3.12+-ff8383" alt="Unity">
+<a href="https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml"><img src="https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests" alt="Tests"></a>
+<a href="https://github.com/alexanderlarsen/Saneject/releases"><img src="https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&amp;color=blue&amp;label=Release" alt="Release"></a>
+<a href="https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE"><img src="https://img.shields.io/badge/License-MIT-yellow" alt="License: MIT"></a></p>
+<p>Resolve dependencies in the Unity Editor, not Play Mode, and write them directly into serialized fields so everything stays visible in the Inspector, including interfaces.</p>
+<p>No runtime container, no startup cost, no hidden wiring. Just simple, deterministic DI that works with Unity instead of around it.</p>
+<h2 id="main-features">Main features</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Description</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Editor-time injection</td>
+<td>Resolve dependencies before Play Mode and store them as normal serialized references.</td>
+</tr>
+<tr>
+<td>Inspector-visible wiring</td>
+<td>Keep dependencies, including interfaces, visible and editable in the Inspector instead of hiding them behind a runtime container.</td>
+</tr>
+<tr>
+<td>Fluent binding API</td>
+<td>Declare bindings in <code>Scope</code> components with familiar DI-style syntax.</td>
+</tr>
+<tr>
+<td>Serialized interfaces</td>
+<td>Use <code>[SerializeInterface]</code> for interface fields, arrays, and lists without wrapper classes.</td>
+</tr>
+<tr>
+<td>Scene, prefab, and context awareness</td>
+<td>Control what gets injected where and how cross-context resolution behaves.</td>
+</tr>
+<tr>
+<td>Runtime proxy bridging</td>
+<td>Handle references Unity cannot serialize directly across scene and prefab boundaries.</td>
+</tr>
+<tr>
+<td>Low runtime overhead</td>
+<td>No runtime container, no reflection-based startup pass, and no extra lifecycle layer.</td>
+</tr>
+<tr>
+<td>Built-in tooling</td>
+<td>Use injection menus, batch injection, logging, validation, settings, analyzers, and more directly in the Unity Editor.</td>
+</tr>
+</tbody>
+</table>
+<p>For more features, see <a href="docs/getting-started/feature-overview.html">Feature overview</a>.</p>
+<h2 id="mental-model">Mental model</h2>
+<ol>
+<li>Mark fields, properties, or methods with <code>[Inject]</code> in your code.</li>
+<li>Declare bindings in <code>Scope</code> code.</li>
+<li>Run injection in the Unity Editor.</li>
+<li>Saneject injects dependencies into serialized fields.</li>
+<li>Start game and enjoy Unity's normal lifecycle.</li>
+</ol>
+<h2 id="try-saneject-now">Try Saneject now</h2>
+<p>Add this URL to Unity Package Manager (Unity 2022.3.12 or newer):</p>
+<pre><code class="lang-text">https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Assets/Plugins/Saneject
+</code></pre>
+<p>Or download the <a href="https://github.com/alexanderlarsen/Saneject/releases">latest release</a> and import the <code>Saneject</code> folder into your Unity project.</p>
+<p>Then jump to <a href="https://docs.saneject.dev/getting-started/quick-start">Quick start</a>.</p>
+<h2 id="feedback-appreciated">Feedback appreciated</h2>
+<p>If you try Saneject and something works well, feels unclear, or seems broken, I would love to hear about it.</p>
+<ul>
+<li>If you find a bug, please open an <a href="https://github.com/alexanderlarsen/Saneject/issues">Issue</a>.</li>
+<li>If you want to share feedback, ideas, or first impressions, drop a note in <a href="https://github.com/alexanderlarsen/Saneject/discussions">Discussions</a>.</li>
+</ul>
+<h2 id="links">Links</h2>
+<ul>
+<li><a href="docs/getting-started/introduction.html">Docs</a></li>
+<li><a class="xref" href="api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html">API</a></li>
+<li><a href="https://github.com/alexanderlarsen/Saneject">GitHub repo</a></li>
+<li><a href="https://github.com/alexanderlarsen/Saneject/releases">Releases</a></li>
+<li><a href="https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE">MIT license</a></li>
+</ul>
+
+</article>
+
+
+        <div class="next-article d-print-none border-top" id="nextArticle"></div>
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

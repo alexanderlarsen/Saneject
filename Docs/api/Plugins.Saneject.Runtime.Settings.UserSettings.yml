@@ -1,0 +1,605 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings
+  commentId: T:Plugins.Saneject.Runtime.Settings.UserSettings
+  id: UserSettings
+  parent: Plugins.Saneject.Runtime.Settings
+  children:
+  - Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject
+  - Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset
+  - Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene
+  - Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies
+  - Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection
+  - Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration
+  - Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary
+  - Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve
+  - Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings
+  - Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+  - Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes
+  - Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties
+  - Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
+  langs:
+  - csharp
+  - vb
+  name: UserSettings
+  nameWithType: UserSettings
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: UserSettings
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 16
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Provides access to user-scoped Saneject settings stored locally in <xref href="UnityEditor.EditorPrefs" data-throw-if-not-resolved="false"></xref>.
+  remarks: These settings are personal to the current Unity user on the current machine. They can be changed only in Edit Mode and fall back to default values outside the Unity Editor.
+  example: []
+  syntax:
+    content: public static class UserSettings
+    content.vb: Public Module UserSettings
+  inheritance:
+  - System.Object
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene
+  id: AskBeforeInjectScene
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: AskBeforeInjectScene
+  nameWithType: UserSettings.AskBeforeInjectScene
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AskBeforeInjectScene
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 25
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Show a confirmation dialog before injecting a whole scene.
+  example: []
+  syntax:
+    content: public static bool AskBeforeInjectScene { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property AskBeforeInjectScene As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset
+  id: AskBeforeInjectPrefabAsset
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: AskBeforeInjectPrefabAsset
+  nameWithType: UserSettings.AskBeforeInjectPrefabAsset
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AskBeforeInjectPrefabAsset
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 34
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Show a confirmation dialog before injecting a prefab asset.
+  example: []
+  syntax:
+    content: public static bool AskBeforeInjectPrefabAsset { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property AskBeforeInjectPrefabAsset As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies
+  id: AskBeforeInjectSelectedSceneHierarchies
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: AskBeforeInjectSelectedSceneHierarchies
+  nameWithType: UserSettings.AskBeforeInjectSelectedSceneHierarchies
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AskBeforeInjectSelectedSceneHierarchies
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 43
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Show a confirmation dialog before injecting selected scene hierarchies.
+  example: []
+  syntax:
+    content: public static bool AskBeforeInjectSelectedSceneHierarchies { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property AskBeforeInjectSelectedSceneHierarchies As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject
+  id: AskBeforeBatchInject
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: AskBeforeBatchInject
+  nameWithType: UserSettings.AskBeforeBatchInject
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AskBeforeBatchInject
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 52
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Show a confirmation dialog before batch injecting scenes and prefab assets.
+  example: []
+  syntax:
+    content: public static bool AskBeforeBatchInject { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property AskBeforeBatchInject As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties
+  id: ShowInjectedFieldsProperties
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: ShowInjectedFieldsProperties
+  nameWithType: UserSettings.ShowInjectedFieldsProperties
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ShowInjectedFieldsProperties
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 65
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: 'Show [Inject] fields and [field: Inject] auto-properties in the Inspector.'
+  example: []
+  syntax:
+    content: public static bool ShowInjectedFieldsProperties { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property ShowInjectedFieldsProperties As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes
+  id: ShowHelpBoxes
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: ShowHelpBoxes
+  nameWithType: UserSettings.ShowHelpBoxes
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ShowHelpBoxes
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 74
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Shows explanatory Saneject help boxes in inspectors.
+  example: []
+  syntax:
+    content: public static bool ShowHelpBoxes { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property ShowHelpBoxes As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve
+  id: LogProxyResolve
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: LogProxyResolve
+  nameWithType: UserSettings.LogProxyResolve
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: LogProxyResolve
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 87
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Logs when a runtime proxy resolves its runtime instance.
+  example: []
+  syntax:
+    content: public static bool LogProxyResolve { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property LogProxyResolve As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration
+  id: LogGlobalScopeRegistration
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: LogGlobalScopeRegistration
+  nameWithType: UserSettings.LogGlobalScopeRegistration
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: LogGlobalScopeRegistration
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 96
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Logs global registration lifecycle events in <xref href="Plugins.Saneject.Runtime.Scopes.GlobalScope" data-throw-if-not-resolved="false"></xref> at runtime.
+  example: []
+  syntax:
+    content: public static bool LogGlobalScopeRegistration { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property LogGlobalScopeRegistration As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings
+  id: LogUnusedBindings
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: LogUnusedBindings
+  nameWithType: UserSettings.LogUnusedBindings
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: LogUnusedBindings
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 110
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: >-
+    Log a message when a binding is unused during injection.
+
+    This can happen when a binding is registered in a scope but never used in the scene or prefab.
+  example: []
+  syntax:
+    content: public static bool LogUnusedBindings { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property LogUnusedBindings As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary
+  id: LogInjectionSummary
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: LogInjectionSummary
+  nameWithType: UserSettings.LogInjectionSummary
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: LogInjectionSummary
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 119
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Logs the end-of-run injection summary.
+  example: []
+  syntax:
+    content: public static bool LogInjectionSummary { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property LogInjectionSummary As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection
+  id: ClearLogsOnInjection
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: ClearLogsOnInjection
+  nameWithType: UserSettings.ClearLogsOnInjection
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ClearLogsOnInjection
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 128
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Clear console logs before injection starts. Useful for only seeing logs related to the latest injection run.
+  example: []
+  syntax:
+    content: public static bool ClearLogsOnInjection { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property ClearLogsOnInjection As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+  id: LogUnusedRuntimeProxiesOnDomainReload
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: LogUnusedRuntimeProxiesOnDomainReload
+  nameWithType: UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+  type: Property
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: LogUnusedRuntimeProxiesOnDomainReload
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 137
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: On domain reload, scans for runtime proxy assets and scripts not referenced by any scope binding and logs the findings.
+  example: []
+  syntax:
+    content: public static bool LogUnusedRuntimeProxiesOnDomainReload { get; set; }
+    parameters: []
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Property LogUnusedRuntimeProxiesOnDomainReload As Boolean
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload*
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
+  commentId: M:Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
+  id: UseDefaultSettings
+  parent: Plugins.Saneject.Runtime.Settings.UserSettings
+  langs:
+  - csharp
+  - vb
+  name: UseDefaultSettings()
+  nameWithType: UserSettings.UseDefaultSettings()
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: UseDefaultSettings
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
+    startLine: 150
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Settings
+  summary: Resets all user settings to their default values.
+  example: []
+  syntax:
+    content: public static void UseDefaultSettings()
+    content.vb: Public Shared Sub UseDefaultSettings()
+  overload: Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings*
+references:
+- uid: UnityEditor.EditorPrefs
+  commentId: T:UnityEditor.EditorPrefs
+  isExternal: true
+  name: EditorPrefs
+  nameWithType: EditorPrefs
+  fullName: UnityEditor.EditorPrefs
+- uid: Plugins.Saneject.Runtime.Settings
+  commentId: N:Plugins.Saneject.Runtime.Settings
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Settings
+  nameWithType: Plugins.Saneject.Runtime.Settings
+  fullName: Plugins.Saneject.Runtime.Settings
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Settings
+    name: Settings
+    href: Plugins.Saneject.Runtime.Settings.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Settings
+    name: Settings
+    href: Plugins.Saneject.Runtime.Settings.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_AskBeforeInjectScene
+  name: AskBeforeInjectScene
+  nameWithType: UserSettings.AskBeforeInjectScene
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectScene
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_AskBeforeInjectPrefabAsset
+  name: AskBeforeInjectPrefabAsset
+  nameWithType: UserSettings.AskBeforeInjectPrefabAsset
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectPrefabAsset
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_AskBeforeInjectSelectedSceneHierarchies
+  name: AskBeforeInjectSelectedSceneHierarchies
+  nameWithType: UserSettings.AskBeforeInjectSelectedSceneHierarchies
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeInjectSelectedSceneHierarchies
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_AskBeforeBatchInject
+  name: AskBeforeBatchInject
+  nameWithType: UserSettings.AskBeforeBatchInject
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.AskBeforeBatchInject
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_ShowInjectedFieldsProperties
+  name: ShowInjectedFieldsProperties
+  nameWithType: UserSettings.ShowInjectedFieldsProperties
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_ShowHelpBoxes
+  name: ShowHelpBoxes
+  nameWithType: UserSettings.ShowHelpBoxes
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_LogProxyResolve
+  name: LogProxyResolve
+  nameWithType: UserSettings.LogProxyResolve
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.GlobalScope
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html
+  name: GlobalScope
+  nameWithType: GlobalScope
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_LogGlobalScopeRegistration
+  name: LogGlobalScopeRegistration
+  nameWithType: UserSettings.LogGlobalScopeRegistration
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogGlobalScopeRegistration
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_LogUnusedBindings
+  name: LogUnusedBindings
+  nameWithType: UserSettings.LogUnusedBindings
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_LogInjectionSummary
+  name: LogInjectionSummary
+  nameWithType: UserSettings.LogInjectionSummary
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_ClearLogsOnInjection
+  name: ClearLogsOnInjection
+  nameWithType: UserSettings.ClearLogsOnInjection
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_LogUnusedRuntimeProxiesOnDomainReload
+  name: LogUnusedRuntimeProxiesOnDomainReload
+  nameWithType: UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
+- uid: Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings*
+  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
+  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_UseDefaultSettings
+  name: UseDefaultSettings
+  nameWithType: UserSettings.UseDefaultSettings
+  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings

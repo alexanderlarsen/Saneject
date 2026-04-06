@@ -1,0 +1,1734 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+      <title>Class BaseComponentBindingBuilder&lt;TComponent&gt; | Saneject: Dependency injection the Unity way </title>
+      <meta name="viewport" content="width=device-width, initial-scale=1.0">
+      <meta name="title" content="Class BaseComponentBindingBuilder&lt;TComponent&gt; | Saneject: Dependency injection the Unity way ">
+      
+      <meta name="description" content="Base class for component binding builders, providing fluent methods for locating components.">
+      <link rel="icon" href="../favicon.ico">
+      <link rel="stylesheet" href="../public/docfx.min.css">
+      <link rel="stylesheet" href="../public/main.css">
+      <meta name="docfx:navrel" content="../toc.html">
+      <meta name="docfx:tocrel" content="toc.html">
+      
+      <meta name="docfx:rel" content="../">
+      
+      
+      <meta name="docfx:docurl" content="https://github.com/alexanderlarsen/Saneject/new/wip/experimental-architecture-rewrite/apiSpec/new?filename=Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1.md&amp;value=---%0Auid%3A%20Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder%601%0Asummary%3A%20&#39;*You%20can%20override%20summary%20for%20the%20API%20here%20using%20*MARKDOWN*%20syntax&#39;%0A---%0A%0A*Please%20type%20below%20more%20information%20about%20this%20API%3A*%0A%0A">
+      <meta name="loc:inThisArticle" content="In this article">
+      <meta name="loc:searchResultsCount" content="{count} results for &quot;{query}&quot;">
+      <meta name="loc:searchNoResults" content="No results for &quot;{query}&quot;">
+      <meta name="loc:tocFilter" content="Filter by title">
+      <meta name="loc:nextArticle" content="Next">
+      <meta name="loc:prevArticle" content="Previous">
+      <meta name="loc:themeLight" content="Light">
+      <meta name="loc:themeDark" content="Dark">
+      <meta name="loc:themeAuto" content="Auto">
+      <meta name="loc:changeTheme" content="Change theme">
+      <meta name="loc:copy" content="Copy">
+      <meta name="loc:downloadPdf" content="Download PDF">
+
+      <script type="module" src="./../public/docfx.min.js"></script>
+
+      <script>
+        const theme = localStorage.getItem('theme') || 'auto'
+        document.documentElement.setAttribute('data-bs-theme', theme === 'auto' ? (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light') : theme)
+      </script>
+
+  </head>
+
+  <body class="tex2jax_ignore" data-layout="" data-yaml-mime="ManagedReference">
+    <header class="bg-body border-bottom">
+      <nav id="autocollapse" class="navbar navbar-expand-md" role="navigation">
+        <div class="container-xxl flex-nowrap">
+          <a class="navbar-brand" href="../index.html">
+            <img id="logo" class="svg" src="../logo.svg" alt="Saneject">
+            Saneject
+          </a>
+          <button class="btn btn-lg d-md-none border-0" type="button" data-bs-toggle="collapse" data-bs-target="#navpanel" aria-controls="navpanel" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="bi bi-three-dots"></i>
+          </button>
+          <div class="collapse navbar-collapse" id="navpanel">
+            <div id="navbar">
+              <form class="search" role="search" id="search">
+                <i class="bi bi-search"></i>
+                <input class="form-control" id="search-query" type="search" disabled placeholder="Search" autocomplete="off" aria-label="Search">
+              </form>
+            </div>
+          </div>
+        </div>
+      </nav>
+    </header>
+
+    <main class="container-xxl">
+      <div class="toc-offcanvas">
+        <div class="offcanvas-md offcanvas-start" tabindex="-1" id="tocOffcanvas" aria-labelledby="tocOffcanvasLabel">
+          <div class="offcanvas-header">
+            <h5 class="offcanvas-title" id="tocOffcanvasLabel">Table of Contents</h5>
+            <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#tocOffcanvas" aria-label="Close"></button>
+          </div>
+          <div class="offcanvas-body">
+            <nav class="toc" id="toc"></nav>
+          </div>
+        </div>
+      </div>
+
+      <div class="content">
+        <div class="actionbar">
+          <button class="btn btn-lg border-0 d-md-none" type="button" data-bs-toggle="offcanvas" data-bs-target="#tocOffcanvas" aria-controls="tocOffcanvas" aria-expanded="false" aria-label="Show table of contents">
+            <i class="bi bi-list"></i>
+          </button>
+
+          <nav id="breadcrumb"></nav>
+        </div>
+
+        <article data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1">
+
+
+
+  <h1 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1" class="text-break">
+Class BaseComponentBindingBuilder&lt;TComponent&gt;  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L15"><i class="bi bi-code-slash"></i></a>
+  </h1>
+
+  <div class="facts text-secondary">
+    <dl><dt>Namespace</dt><dd><a class="xref" href="Plugins.html">Plugins</a>.<a class="xref" href="Plugins.Saneject.html">Saneject</a>.<a class="xref" href="Plugins.Saneject.Runtime.html">Runtime</a>.<a class="xref" href="Plugins.Saneject.Runtime.Bindings.html">Bindings</a>.<a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.html">Component</a></dd></dl>
+  <dl><dt>Assembly</dt><dd>Saneject.Runtime.dll</dd></dl>
+  </div>
+
+  <div class="markdown summary"><p>Base class for component binding builders, providing fluent methods for locating components.</p>
+</div>
+  <div class="markdown conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public abstract class BaseComponentBindingBuilder&lt;TComponent&gt; where TComponent : class</code></pre>
+  </div>
+
+
+
+  <h4 class="section">Type Parameters</h4>
+  <dl class="parameters">
+    <dt><code>TComponent</code></dt>
+    <dd><p>The type of the component being bound. Can also be an interface.</p>
+</dd>
+  </dl>
+
+  <dl class="typelist inheritance">
+    <dt>Inheritance</dt>
+    <dd>
+      <div><span class="xref">object</span></div>
+      <div><span class="xref">BaseComponentBindingBuilder&lt;TComponent&gt;</span></div>
+    </dd>
+  </dl>
+
+
+  <dl class="typelist derived">
+    <dt>Derived</dt>
+    <dd>
+      <div><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html">ComponentBindingBuilder&lt;TComponent&gt;</a></div>
+      <div><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html">GlobalComponentBindingBuilder&lt;TComponent&gt;</a></div>
+    </dd>
+  </dl>
+
+
+
+
+
+
+
+  <h2 class="section" id="constructors">Constructors
+</h2>
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1__ctor_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.#ctor*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1__ctor_Plugins_Saneject_Runtime_Bindings_Component_ComponentBinding_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)">
+  BaseComponentBindingBuilder(ComponentBinding)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L27"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Initializes a new instance of the <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html">BaseComponentBindingBuilder&lt;TComponent&gt;</a> class.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">protected BaseComponentBindingBuilder(ComponentBinding binding)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>binding</code> <span class="xref">ComponentBinding</span></dt>
+    <dd><p>The <span class="xref">Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding</span> to configure.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+  <h2 class="section" id="methods">Methods
+</h2>
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.From*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_UnityEngine_Transform_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.From(UnityEngine.Transform)">
+  From(Transform)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L421"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the specified <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; From(Transform transform)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform to search on.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestors*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestors(System.Boolean)">
+  FromAncestors(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L61"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on any ancestor <span class="xref">UnityEngine.Transform</span> of the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>.
+Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_">FromScopeAncestors(bool)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromAncestors(bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s own transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestorsOf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_UnityEngine_Transform_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestorsOf(UnityEngine.Transform,System.Boolean)">
+  FromAncestorsOf(Transform, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L451"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any ancestor <span class="xref">UnityEngine.Transform</span> of the specified <span class="xref">UnityEngine.Transform</span>.
+Searches recursively upwards in all parents, grandparents, etc. until it finds a match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromAncestorsOf(Transform target, bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>target</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform whose ancestors to search.</p>
+</dd>
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the target transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAnywhere*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_UnityEngine_FindObjectsInactive_UnityEngine_FindObjectsSortMode_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)">
+  FromAnywhere(FindObjectsInactive, FindObjectsSortMode)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L553"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> anywhere in the scene using <span class="xref">UnityEngine.Object.FindObjectsByType(System.Type, UnityEngine.FindObjectsSortMode)</span></p>
+<ul>
+<li>or within an isolated prefab asset using <span class="xref">UnityEngine.Component.GetComponentsInChildren(System.Type, bool)</span> from the prefab root.</li>
+</ul>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromAnywhere(FindObjectsInactive findObjectsInactive = FindObjectsInactive.Include, FindObjectsSortMode sortMode = FindObjectsSortMode.None)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>findObjectsInactive</code> <span class="xref">FindObjectsInactive</span></dt>
+    <dd><p>Whether to include inactive objects in the search.</p>
+</dd>
+    <dt><code>sortMode</code> <span class="xref">FindObjectsSortMode</span></dt>
+    <dd><p>The sort mode for the results.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndex*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_System_Int32_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndex(System.Int32)">
+  FromChildWithIndex(int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L92"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s direct child <span class="xref">UnityEngine.Transform</span> with index.
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_">FromScopeChildWithIndex(int)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromChildWithIndex(int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <span class="xref">int</span></dt>
+    <dd><p>The child index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndexOf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_UnityEngine_Transform_System_Int32_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)">
+  FromChildWithIndexOf(Transform, int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L497"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the specified <span class="xref">UnityEngine.Transform</span>'s direct child <span class="xref">UnityEngine.Transform</span> with index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromChildWithIndexOf(Transform transform, int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform whose child to search on.</p>
+</dd>
+    <dt><code>index</code> <span class="xref">int</span></dt>
+    <dd><p>The child index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendants*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendants(System.Boolean)">
+  FromDescendants(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L104"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on any descendant <span class="xref">UnityEngine.Transform</span> of the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>.
+Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_">FromScopeDescendants(bool)</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromDescendants(bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s own transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendantsOf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_UnityEngine_Transform_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendantsOf(UnityEngine.Transform,System.Boolean)">
+  FromDescendantsOf(Transform, bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L516"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any descendant <span class="xref">UnityEngine.Transform</span> of the specified <span class="xref">UnityEngine.Transform</span>.
+Searches recursively downwards in all children, grandchildren, etc. until it finds a match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromDescendantsOf(Transform transform, bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform whose descendants to search.</p>
+</dd>
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the target transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild">
+  FromFirstChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L71"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s first direct child <span class="xref">UnityEngine.Transform</span>.
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild">FromScopeFirstChild()</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromFirstChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_UnityEngine_Transform_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf(UnityEngine.Transform)">
+  FromFirstChildOf(Transform)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L468"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the specified <span class="xref">UnityEngine.Transform</span>'s first direct child <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromFirstChildOf(Transform transform)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform whose first child to search on.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance(`0)">
+  FromInstance(TComponent)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L570"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Bind to the specified <span class="xref">UnityEngine.Component</span> instance.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromInstance(TComponent instance)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>instance</code> <span class="xref">TComponent</span></dt>
+    <dd><p>The component instance.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild">
+  FromLastChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L81"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s last direct child <span class="xref">UnityEngine.Transform</span>.
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild">FromScopeLastChild()</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromLastChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_UnityEngine_Transform_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf(UnityEngine.Transform)">
+  FromLastChildOf(Transform)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L482"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the specified <span class="xref">UnityEngine.Transform</span>'s last direct child <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromLastChildOf(Transform transform)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform whose last child to search on.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func_System_Collections_Generic_IEnumerable__0___" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})">
+  FromMethod(Func&lt;IEnumerable&lt;TComponent&gt;&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L605"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate multiple <span class="xref">UnityEngine.Component</span>s using the provided method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromMethod(Func&lt;IEnumerable&lt;TComponent&gt;&gt; method)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>method</code> <span class="xref">Func</span>&lt;<span class="xref">IEnumerable</span>&lt;TComponent&gt;&gt;</dt>
+    <dd><p>The method to resolve the components.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})">
+  FromMethod(Func&lt;TComponent&gt;)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L583"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> using the provided method.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromMethod(Func&lt;TComponent&gt; method)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>method</code> <span class="xref">Func</span>&lt;TComponent&gt;</dt>
+    <dd><p>The method to resolve the component.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParent*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParent">
+  FromParent()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L49"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s direct <span class="xref">UnityEngine.Transform.parent</span>.
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent">FromScopeParent()</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromParent()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParentOf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_UnityEngine_Transform_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParentOf(UnityEngine.Transform)">
+  FromParentOf(Transform)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L435"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the direct parent of the specified <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromParentOf(Transform transform)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform whose parent to search on.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootChildWithIndex*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_System_Int32_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootChildWithIndex(System.Int32)">
+  FromRootChildWithIndex(int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L272"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a> <span class="xref">UnityEngine.Transform</span> <span class="xref">UnityEngine.Transform.root</span>'s direct child <span class="xref">UnityEngine.Transform</span> with index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromRootChildWithIndex(int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <span class="xref">int</span></dt>
+    <dd><p>The child index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootDescendants*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootDescendants(System.Boolean)">
+  FromRootDescendants(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L287"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any descendant <span class="xref">UnityEngine.Transform</span> of the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a> <span class="xref">UnityEngine.Transform</span> <span class="xref">UnityEngine.Transform.root</span>.
+Searches recursively downwards in all children, grandchildren, etc. until it finds a match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromRootDescendants(bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the root in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootFirstChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootFirstChild">
+  FromRootFirstChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L247"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a> <span class="xref">UnityEngine.Transform</span> <span class="xref">UnityEngine.Transform.root</span>'s first direct child <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromRootFirstChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootLastChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootLastChild">
+  FromRootLastChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L259"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a> <span class="xref">UnityEngine.Transform</span> <span class="xref">UnityEngine.Transform.root</span>'s last direct child <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromRootLastChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootSelf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootSelf">
+  FromRootSelf()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L235"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a> <span class="xref">UnityEngine.Transform</span> <span class="xref">UnityEngine.Transform.root</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromRootSelf()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeAncestors*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeAncestors(System.Boolean)">
+  FromScopeAncestors(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L153"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any ancestor <span class="xref">UnityEngine.Transform</span> of the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>.
+Searches recursively upwards in all parents, grandparents, etc. until it finds a match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeAncestors(bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the current transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeChildWithIndex*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeChildWithIndex(System.Int32)">
+  FromScopeChildWithIndex(int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L191"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s direct child <span class="xref">UnityEngine.Transform</span> with index.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeChildWithIndex(int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <span class="xref">int</span></dt>
+    <dd><p>The child index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeDescendants*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeDescendants(System.Boolean)">
+  FromScopeDescendants(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L206"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any descendant <span class="xref">UnityEngine.Transform</span> of the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>.
+Searches recursively downwards in all children, grandchildren, etc. until it finds a match.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeDescendants(bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the current transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeFirstChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeFirstChild">
+  FromScopeFirstChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L166"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s first direct child <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeFirstChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeLastChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeLastChild">
+  FromScopeLastChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L178"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s last direct child <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeLastChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeParent*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeParent">
+  FromScopeParent()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L139"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s direct <span class="xref">UnityEngine.Transform.parent</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeParent()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSelf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSelf">
+  FromScopeSelf()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L127"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s own <span class="xref">UnityEngine.Transform</span>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeSelf()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSiblings*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSiblings">
+  FromScopeSiblings()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L219"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any sibling <span class="xref">UnityEngine.Transform</span> of the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a> (other children of the same parent).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromScopeSiblings()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSelf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSelf">
+  FromSelf()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L39"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a>'s own <span class="xref">UnityEngine.Transform</span>.
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf">FromScopeSelf()</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromSelf()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblings*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblings">
+  FromSiblings()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L114"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the component on any sibling <span class="xref">UnityEngine.Transform</span> of the <a class="xref" href="Plugins.Saneject.Runtime.Scopes.Scope.html">Scope</a> (other children of the same parent).
+Shorthand for <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings">FromScopeSiblings()</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromSiblings()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblingsOf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_UnityEngine_Transform_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblingsOf(UnityEngine.Transform)">
+  FromSiblingsOf(Transform)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L533"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any sibling <span class="xref">UnityEngine.Transform</span> of the specified <span class="xref">UnityEngine.Transform</span> (other children of the same parent).</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromSiblingsOf(Transform transform)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>transform</code> <span class="xref">Transform</span></dt>
+    <dd><p>The transform whose siblings to search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetAncestors*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetAncestors(System.Boolean)">
+  FromTargetAncestors(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L333"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any ancestor <span class="xref">UnityEngine.Transform</span> of the injection target.
+Searches recursively upwards in all parents, grandparents, etc. until it finds a match.
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetAncestors(bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the target transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetChildWithIndex*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_System_Int32_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetChildWithIndex(System.Int32)">
+  FromTargetChildWithIndex(int)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L374"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the injection target's direct child <span class="xref">UnityEngine.Transform</span> with index.
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetChildWithIndex(int index)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>index</code> <span class="xref">int</span></dt>
+    <dd><p>The child index.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetDescendants*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_System_Boolean_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetDescendants(System.Boolean)">
+  FromTargetDescendants(bool)
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L390"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any descendant <span class="xref">UnityEngine.Transform</span> of the injection target.
+Searches recursively downwards in all children, grandchildren, etc. until it finds a match.
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetDescendants(bool includeSelf = false)</code></pre>
+  </div>
+
+  <h4 class="section">Parameters</h4>
+  <dl class="parameters">
+    <dt><code>includeSelf</code> <span class="xref">bool</span></dt>
+    <dd><p>Whether to include the target transform in the search.</p>
+</dd>
+  </dl>
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetFirstChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetFirstChild">
+  FromTargetFirstChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L347"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the injection target's first direct child <span class="xref">UnityEngine.Transform</span>.
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetFirstChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetLastChild*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetLastChild">
+  FromTargetLastChild()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L360"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the injection target's last direct child <span class="xref">UnityEngine.Transform</span>.
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetLastChild()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetParent*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetParent">
+  FromTargetParent()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L318"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the injection target's direct <span class="xref">UnityEngine.Transform.parent</span>.
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetParent()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSelf*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSelf">
+  FromTargetSelf()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L305"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on the injection target's own <span class="xref">UnityEngine.Transform</span>.
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetSelf()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+  <a id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings_" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSiblings*"></a>
+
+  <h3 id="Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings" data-uid="Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSiblings">
+  FromTargetSiblings()
+  <a class="header-action link-secondary" title="View source" href="https://github.com/alexanderlarsen/Saneject/blob/wip/experimental-architecture-rewrite/UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs/#L404"><i class="bi bi-code-slash"></i></a>
+  </h3>
+
+  <div class="markdown level1 summary"><p>Locate the <span class="xref">UnityEngine.Component</span> on any sibling <span class="xref">UnityEngine.Transform</span> of the injection target (other children of the same parent).
+Injection target is the <span class="xref">UnityEngine.Component</span> of a field/property marked with <a class="xref" href="Plugins.Saneject.Runtime.Attributes.InjectAttribute.html">InjectAttribute</a>.</p>
+</div>
+  <div class="markdown level1 conceptual"></div>
+
+  <div class="codewrapper">
+    <pre><code class="lang-csharp hljs">public ComponentFilterBuilder&lt;TComponent&gt; FromTargetSiblings()</code></pre>
+  </div>
+
+
+  <h4 class="section">Returns</h4>
+  <dl class="parameters">
+    <dt><a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder</a>&lt;TComponent&gt;</dt>
+    <dd><p>A <a class="xref" href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html">ComponentFilterBuilder&lt;TComponent&gt;</a> to further configure the binding.</p>
+</dd>
+  </dl>
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+      </div>
+
+      <div class="affix">
+        <nav id="affix"></nav>
+      </div>
+    </main>
+
+    <div class="container-xxl search-results" id="search-results"></div>
+
+    <footer class="border-top text-secondary">
+      <div class="container-xxl">
+        <div class="flex-fill">
+          <span>© 2026 <a href="https://alexanderlarsen.com" target="_blank" rel="noopener noreferrer">Alexander Larsen</a>. All rights reserved.</span>
+        </div>
+      </div>
+    </footer>
+  </body>
+</html>

@@ -1,0 +1,1263 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Scopes.Scope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.Scope
+  id: Scope
+  parent: Plugins.Saneject.Runtime.Scopes
+  children:
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindAsset``1
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindAsset``2
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindAssets``1
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindAssets``2
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindComponent``1
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindComponent``2
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindComponents``1
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindComponents``2
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal``1
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``1
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``2
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``1
+  - Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``2
+  - Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings
+  langs:
+  - csharp
+  - vb
+  name: Scope
+  nameWithType: Scope
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: Scope
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 22
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Base class for scopes that declare bindings for a portion of a <xref href="UnityEngine.GameObject" data-throw-if-not-resolved="false"></xref> hierarchy.
+
+    During injection, Saneject resolves each injection site from the nearest scope at the same transform or above, then falls back to parent scopes when needed.
+  remarks: >-
+    At runtime, a <code>Scope</code> registers its serialized global components in <xref href="Plugins.Saneject.Runtime.Scopes.GlobalScope" data-throw-if-not-resolved="false"></xref> and swaps
+
+    <xref href="Plugins.Saneject.Runtime.Proxy.RuntimeProxy%601" data-throw-if-not-resolved="false"></xref> placeholders on registered proxy swap targets during early startup.
+  example: []
+  syntax:
+    content: >-
+      [DisallowMultipleComponent]
+
+      [DefaultExecutionOrder(-10000)]
+
+      public abstract class Scope : MonoBehaviour
+    content.vb: >-
+      <DisallowMultipleComponent>
+
+      <DefaultExecutionOrder(-10000)>
+
+      Public MustInherit Class Scope Inherits MonoBehaviour
+  inheritance:
+  - System.Object
+  - UnityEngine.Object
+  - UnityEngine.Component
+  - UnityEngine.Behaviour
+  - UnityEngine.MonoBehaviour
+  attributes:
+  - type: UnityEngine.DisallowMultipleComponent
+    ctor: UnityEngine.DisallowMultipleComponent.#ctor
+    arguments: []
+  - type: UnityEngine.DefaultExecutionOrder
+    ctor: UnityEngine.DefaultExecutionOrder.#ctor(System.Int32)
+    arguments:
+    - type: System.Int32
+      value: -10000
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings
+  id: DeclareBindings
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: DeclareBindings()
+  nameWithType: Scope.DeclareBindings()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: DeclareBindings
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 121
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: Set up your bindings in this method.
+  example: []
+  syntax:
+    content: protected abstract void DeclareBindings()
+    content.vb: Protected MustOverride Sub DeclareBindings()
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings*
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindComponent``1
+  id: BindComponent``1
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindComponent<T>()
+  nameWithType: Scope.BindComponent<T>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent<T>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindComponent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 131
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a binding for a single <code class="typeparamref">T</code> component or interface type in this scope.
+
+    Use this for concrete <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> or interface you wish to inject.
+  example: []
+  syntax:
+    content: 'protected ComponentBindingBuilder<T> BindComponent<T>() where T : class'
+    typeParameters:
+    - id: T
+      description: The concrete component or interface type to bind.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{T}}
+      description: A fluent builder for configuring the component binding.
+    content.vb: Protected Function BindComponent(Of T As Class)() As ComponentBindingBuilder(Of T)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent*
+  nameWithType.vb: Scope.BindComponent(Of T)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent(Of T)()
+  name.vb: BindComponent(Of T)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindComponents``1
+  id: BindComponents``1
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindComponents<T>()
+  nameWithType: Scope.BindComponents<T>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents<T>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindComponents
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 153
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding for <code class="typeparamref">T</code> component type in this scope.
+
+    Use this to inject all matching components or interfaces as a collection.
+
+    Shorthand for <xref href="Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents%60%601" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: 'protected ComponentBindingBuilder<T> BindComponents<T>() where T : class'
+    typeParameters:
+    - id: T
+      description: The concrete component or interface type to bind as a collection.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{T}}
+      description: A fluent builder for configuring the component collection binding.
+    content.vb: Protected Function BindComponents(Of T As Class)() As ComponentBindingBuilder(Of T)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents*
+  nameWithType.vb: Scope.BindComponents(Of T)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents(Of T)()
+  name.vb: BindComponents(Of T)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``1
+  id: BindMultipleComponents``1
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindMultipleComponents<T>()
+  nameWithType: Scope.BindMultipleComponents<T>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents<T>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindMultipleComponents
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 164
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding for <code class="typeparamref">T</code> component type in this scope.
+
+    Use this to inject all matching components or interfaces as a collection.
+  example: []
+  syntax:
+    content: 'protected ComponentBindingBuilder<T> BindMultipleComponents<T>() where T : class'
+    typeParameters:
+    - id: T
+      description: The concrete component or interface type to bind as a collection.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{T}}
+      description: A fluent builder for configuring the component collection binding.
+    content.vb: Protected Function BindMultipleComponents(Of T As Class)() As ComponentBindingBuilder(Of T)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents*
+  nameWithType.vb: Scope.BindMultipleComponents(Of T)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents(Of T)()
+  name.vb: BindMultipleComponents(Of T)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindComponent``2
+  id: BindComponent``2
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindComponent<TInterface, TConcrete>()
+  nameWithType: Scope.BindComponent<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent<TInterface, TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindComponent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 187
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a binding from interface type <code class="typeparamref">TInterface</code> to concrete component type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject components via an interface abstraction.
+  example: []
+  syntax:
+    content: 'protected ComponentBindingBuilder<TConcrete> BindComponent<TInterface, TConcrete>() where TInterface : class where TConcrete : Component, TInterface'
+    typeParameters:
+    - id: TInterface
+      description: The interface type to inject.
+    - id: TConcrete
+      description: The concrete component type that implements the interface.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the component binding.
+    content.vb: Protected Function BindComponent(Of TInterface As Class, TConcrete As {Component, TInterface})() As ComponentBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent*
+  nameWithType.vb: Scope.BindComponent(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent(Of TInterface, TConcrete)()
+  name.vb: BindComponent(Of TInterface, TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindComponents``2
+  id: BindComponents``2
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindComponents<TInterface, TConcrete>()
+  nameWithType: Scope.BindComponents<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents<TInterface, TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindComponents
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 209
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding from interface type <code class="typeparamref">TInterface</code> to concrete component type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject multiple components implementing the interface as a collection.
+
+    Shorthand for <xref href="Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents%60%602" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: 'protected ComponentBindingBuilder<TConcrete> BindComponents<TInterface, TConcrete>() where TInterface : class where TConcrete : Component, TInterface'
+    typeParameters:
+    - id: TInterface
+      description: The interface type to inject.
+    - id: TConcrete
+      description: The concrete component type that implements the interface.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the component collection binding.
+    content.vb: Protected Function BindComponents(Of TInterface As Class, TConcrete As {Component, TInterface})() As ComponentBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents*
+  nameWithType.vb: Scope.BindComponents(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents(Of TInterface, TConcrete)()
+  name.vb: BindComponents(Of TInterface, TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``2
+  id: BindMultipleComponents``2
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindMultipleComponents<TInterface, TConcrete>()
+  nameWithType: Scope.BindMultipleComponents<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents<TInterface, TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindMultipleComponents
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 223
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding from interface type <code class="typeparamref">TInterface</code> to concrete component type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject multiple components implementing the interface as a collection.
+  example: []
+  syntax:
+    content: 'protected ComponentBindingBuilder<TConcrete> BindMultipleComponents<TInterface, TConcrete>() where TInterface : class where TConcrete : Component, TInterface'
+    typeParameters:
+    - id: TInterface
+      description: The interface type to inject.
+    - id: TConcrete
+      description: The concrete component type that implements the interface.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the component collection binding.
+    content.vb: Protected Function BindMultipleComponents(Of TInterface As Class, TConcrete As {Component, TInterface})() As ComponentBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents*
+  nameWithType.vb: Scope.BindMultipleComponents(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents(Of TInterface, TConcrete)()
+  name.vb: BindMultipleComponents(Of TInterface, TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindAsset``1
+  id: BindAsset``1
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindAsset<TConcrete>()
+  nameWithType: Scope.BindAsset<TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset<TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindAsset
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 248
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a binding for a single asset of type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject a specific asset (e.g. <xref href="UnityEngine.GameObject" data-throw-if-not-resolved="false"></xref>, <xref href="UnityEngine.Material" data-throw-if-not-resolved="false"></xref>, <xref href="UnityEngine.Texture" data-throw-if-not-resolved="false"></xref>, etc.) by reference.
+  example: []
+  syntax:
+    content: 'protected AssetBindingBuilder<TConcrete> BindAsset<TConcrete>() where TConcrete : Object'
+    typeParameters:
+    - id: TConcrete
+      description: The <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref>-derived asset type to bind.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the asset binding.
+    content.vb: Protected Function BindAsset(Of TConcrete As [Object])() As AssetBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset*
+  nameWithType.vb: Scope.BindAsset(Of TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset(Of TConcrete)()
+  name.vb: BindAsset(Of TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindAssets``1
+  id: BindAssets``1
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindAssets<TConcrete>()
+  nameWithType: Scope.BindAssets<TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets<TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindAssets
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 266
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding for all assets of type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject multiple assets (e.g. from a folder) as a collection.
+
+    Shorthand for <xref href="Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets%60%601" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: 'protected AssetBindingBuilder<TConcrete> BindAssets<TConcrete>() where TConcrete : Object'
+    typeParameters:
+    - id: TConcrete
+      description: The UnityEngine.Object-derived asset type to bind as a collection.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the asset collection binding.
+    content.vb: Protected Function BindAssets(Of TConcrete As [Object])() As AssetBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets*
+  nameWithType.vb: Scope.BindAssets(Of TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets(Of TConcrete)()
+  name.vb: BindAssets(Of TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``1
+  id: BindMultipleAssets``1
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindMultipleAssets<TConcrete>()
+  nameWithType: Scope.BindMultipleAssets<TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets<TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindMultipleAssets
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 277
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding for all assets of type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject multiple assets (e.g. from a folder) as a collection.
+  example: []
+  syntax:
+    content: 'protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TConcrete>() where TConcrete : Object'
+    typeParameters:
+    - id: TConcrete
+      description: The <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref>-derived asset type to bind as a collection.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the asset collection binding.
+    content.vb: Protected Function BindMultipleAssets(Of TConcrete As [Object])() As AssetBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets*
+  nameWithType.vb: Scope.BindMultipleAssets(Of TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets(Of TConcrete)()
+  name.vb: BindMultipleAssets(Of TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindAsset``2
+  id: BindAsset``2
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindAsset<TInterface, TConcrete>()
+  nameWithType: Scope.BindAsset<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset<TInterface, TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindAsset
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 296
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a binding from interface type <code class="typeparamref">TInterface</code> to asset type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject an asset by interface abstraction (e.g. <xref href="UnityEngine.ScriptableObject" data-throw-if-not-resolved="false"></xref> implementing an interface).
+  example: []
+  syntax:
+    content: 'protected AssetBindingBuilder<TConcrete> BindAsset<TInterface, TConcrete>() where TInterface : class where TConcrete : Object, TInterface'
+    typeParameters:
+    - id: TInterface
+      description: The interface type to inject.
+    - id: TConcrete
+      description: The concrete asset type that implements the interface.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the asset binding.
+    content.vb: Protected Function BindAsset(Of TInterface As Class, TConcrete As {[Object], TInterface})() As AssetBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset*
+  nameWithType.vb: Scope.BindAsset(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset(Of TInterface, TConcrete)()
+  name.vb: BindAsset(Of TInterface, TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindAssets``2
+  id: BindAssets``2
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindAssets<TInterface, TConcrete>()
+  nameWithType: Scope.BindAssets<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets<TInterface, TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindAssets
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 318
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding from interface type <code class="typeparamref">TInterface</code> to asset type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject multiple assets implementing the interface as a collection.
+
+    Shorthand for <xref href="Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets%60%602" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: 'protected AssetBindingBuilder<TConcrete> BindAssets<TInterface, TConcrete>() where TInterface : class where TConcrete : Object, TInterface'
+    typeParameters:
+    - id: TInterface
+      description: The interface type to inject.
+    - id: TConcrete
+      description: The concrete asset type that implements the interface.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the asset collection binding.
+    content.vb: Protected Function BindAssets(Of TInterface As Class, TConcrete As {[Object], TInterface})() As AssetBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets*
+  nameWithType.vb: Scope.BindAssets(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets(Of TInterface, TConcrete)()
+  name.vb: BindAssets(Of TInterface, TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``2
+  id: BindMultipleAssets``2
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindMultipleAssets<TInterface, TConcrete>()
+  nameWithType: Scope.BindMultipleAssets<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets<TInterface, TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindMultipleAssets
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 332
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: >-
+    Registers a collection binding from interface type <code class="typeparamref">TInterface</code> to asset type <code class="typeparamref">TConcrete</code>.
+
+    Use this to inject multiple assets implementing the interface as a collection.
+  example: []
+  syntax:
+    content: 'protected AssetBindingBuilder<TConcrete> BindMultipleAssets<TInterface, TConcrete>() where TInterface : class where TConcrete : Object, TInterface'
+    typeParameters:
+    - id: TInterface
+      description: The interface type to inject.
+    - id: TConcrete
+      description: The concrete asset type that implements the interface.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the asset collection binding.
+    content.vb: Protected Function BindMultipleAssets(Of TInterface As Class, TConcrete As {[Object], TInterface})() As AssetBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets*
+  nameWithType.vb: Scope.BindMultipleAssets(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets(Of TInterface, TConcrete)()
+  name.vb: BindMultipleAssets(Of TInterface, TConcrete)()
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal``1
+  id: BindGlobal``1
+  parent: Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: BindGlobal<TConcrete>()
+  nameWithType: Scope.BindGlobal<TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal<TConcrete>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: BindGlobal
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
+    startLine: 361
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Scopes
+  summary: Registers a component for runtime global registration through <xref href="Plugins.Saneject.Runtime.Scopes.GlobalScope" data-throw-if-not-resolved="false"></xref>.
+  remarks: >-
+    During editor-time injection, Saneject resolves the target <code class="typeparamref">TConcrete</code> and serializes it on the declaring scope.
+
+    During <xref href="Plugins.Saneject.Runtime.Scopes.Scope.Awake" data-throw-if-not-resolved="false"></xref>, the scope registers that component in <xref href="Plugins.Saneject.Runtime.Scopes.GlobalScope" data-throw-if-not-resolved="false"></xref> before runtime proxy swapping runs.
+
+    This is commonly used so <xref href="Plugins.Saneject.Runtime.Proxy.RuntimeProxy%601" data-throw-if-not-resolved="false"></xref> can resolve the component through <xref href="Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: 'protected GlobalComponentBindingBuilder<TConcrete> BindGlobal<TConcrete>() where TConcrete : Component'
+    typeParameters:
+    - id: TConcrete
+      description: The <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> type to bind globally.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder{{TConcrete}}
+      description: A fluent builder for configuring the global component binding.
+    content.vb: Protected Function BindGlobal(Of TConcrete As Component)() As GlobalComponentBindingBuilder(Of TConcrete)
+  overload: Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal*
+  nameWithType.vb: Scope.BindGlobal(Of TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal(Of TConcrete)()
+  name.vb: BindGlobal(Of TConcrete)()
+references:
+- uid: UnityEngine.GameObject
+  commentId: T:UnityEngine.GameObject
+  parent: UnityEngine
+  isExternal: true
+  name: GameObject
+  nameWithType: GameObject
+  fullName: UnityEngine.GameObject
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.GlobalScope
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html
+  name: GlobalScope
+  nameWithType: GlobalScope
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope
+- uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+  commentId: T:Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+  name: RuntimeProxy<TComponent>
+  nameWithType: RuntimeProxy<TComponent>
+  fullName: Plugins.Saneject.Runtime.Proxy.RuntimeProxy<TComponent>
+  nameWithType.vb: RuntimeProxy(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Proxy.RuntimeProxy(Of TComponent)
+  name.vb: RuntimeProxy(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+    name: RuntimeProxy
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+    name: RuntimeProxy
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Scopes
+  commentId: N:Plugins.Saneject.Runtime.Scopes
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Scopes
+  nameWithType: Plugins.Saneject.Runtime.Scopes
+  fullName: Plugins.Saneject.Runtime.Scopes
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Scopes
+    name: Scopes
+    href: Plugins.Saneject.Runtime.Scopes.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Scopes
+    name: Scopes
+    href: Plugins.Saneject.Runtime.Scopes.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: UnityEngine.Object
+  commentId: T:UnityEngine.Object
+  parent: UnityEngine
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: UnityEngine.Object
+- uid: UnityEngine.Component
+  commentId: T:UnityEngine.Component
+  parent: UnityEngine
+  isExternal: true
+  name: Component
+  nameWithType: Component
+  fullName: UnityEngine.Component
+- uid: UnityEngine.Behaviour
+  commentId: T:UnityEngine.Behaviour
+  parent: UnityEngine
+  isExternal: true
+  name: Behaviour
+  nameWithType: Behaviour
+  fullName: UnityEngine.Behaviour
+- uid: UnityEngine.MonoBehaviour
+  commentId: T:UnityEngine.MonoBehaviour
+  parent: UnityEngine
+  isExternal: true
+  name: MonoBehaviour
+  nameWithType: MonoBehaviour
+  fullName: UnityEngine.MonoBehaviour
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_DeclareBindings
+  name: DeclareBindings
+  nameWithType: Scope.DeclareBindings
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.DeclareBindings
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.BindComponent
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindComponent__1
+  name: BindComponent
+  nameWithType: Scope.BindComponent
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindComponent
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{T}}
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{``0}
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  definition: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  name: ComponentBindingBuilder<T>
+  nameWithType: ComponentBindingBuilder<T>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<T>
+  nameWithType.vb: ComponentBindingBuilder(Of T)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of T)
+  name.vb: ComponentBindingBuilder(Of T)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  name: ComponentBindingBuilder<TComponent>
+  nameWithType: ComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent)
+  name.vb: ComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``1
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleComponents__1
+  name: BindMultipleComponents<T>()
+  nameWithType: Scope.BindMultipleComponents<T>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents<T>()
+  nameWithType.vb: Scope.BindMultipleComponents(Of T)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents(Of T)()
+  name.vb: BindMultipleComponents(Of T)()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``1
+    name: BindMultipleComponents
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleComponents__1
+  - name: <
+  - name: T
+  - name: '>'
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``1
+    name: BindMultipleComponents
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleComponents__1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.BindComponents
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindComponents__1
+  name: BindComponents
+  nameWithType: Scope.BindComponents
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindComponents
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleComponents__1
+  name: BindMultipleComponents
+  nameWithType: Scope.BindMultipleComponents
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{{TConcrete}}
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder{``1}
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  definition: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  name: ComponentBindingBuilder<TConcrete>
+  nameWithType: ComponentBindingBuilder<TConcrete>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TConcrete>
+  nameWithType.vb: ComponentBindingBuilder(Of TConcrete)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TConcrete)
+  name.vb: ComponentBindingBuilder(Of TConcrete)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: <
+  - name: TConcrete
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TConcrete
+  - name: )
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``2
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleComponents__2
+  name: BindMultipleComponents<TInterface, TConcrete>()
+  nameWithType: Scope.BindMultipleComponents<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents<TInterface, TConcrete>()
+  nameWithType.vb: Scope.BindMultipleComponents(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents(Of TInterface, TConcrete)()
+  name.vb: BindMultipleComponents(Of TInterface, TConcrete)()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``2
+    name: BindMultipleComponents
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleComponents__2
+  - name: <
+  - name: TInterface
+  - name: ','
+  - name: " "
+  - name: TConcrete
+  - name: '>'
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleComponents``2
+    name: BindMultipleComponents
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleComponents__2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TInterface
+  - name: ','
+  - name: " "
+  - name: TConcrete
+  - name: )
+  - name: (
+  - name: )
+- uid: UnityEngine.Material
+  commentId: T:UnityEngine.Material
+  isExternal: true
+  name: Material
+  nameWithType: Material
+  fullName: UnityEngine.Material
+- uid: UnityEngine.Texture
+  commentId: T:UnityEngine.Texture
+  isExternal: true
+  name: Texture
+  nameWithType: Texture
+  fullName: UnityEngine.Texture
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.BindAsset
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindAsset__1
+  name: BindAsset
+  nameWithType: Scope.BindAsset
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindAsset
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{{TConcrete}}
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder{``0}
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  definition: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  name: AssetBindingBuilder<TConcrete>
+  nameWithType: AssetBindingBuilder<TConcrete>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TConcrete>
+  nameWithType.vb: AssetBindingBuilder(Of TConcrete)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TConcrete)
+  name.vb: AssetBindingBuilder(Of TConcrete)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: <
+  - name: TConcrete
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TConcrete
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  name: AssetBindingBuilder<TAsset>
+  nameWithType: AssetBindingBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>
+  nameWithType.vb: AssetBindingBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset)
+  name.vb: AssetBindingBuilder(Of TAsset)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Asset
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Asset
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``1
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``1
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleAssets__1
+  name: BindMultipleAssets<TConcrete>()
+  nameWithType: Scope.BindMultipleAssets<TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets<TConcrete>()
+  nameWithType.vb: Scope.BindMultipleAssets(Of TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets(Of TConcrete)()
+  name.vb: BindMultipleAssets(Of TConcrete)()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``1
+    name: BindMultipleAssets
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleAssets__1
+  - name: <
+  - name: TConcrete
+  - name: '>'
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``1
+    name: BindMultipleAssets
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleAssets__1
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TConcrete
+  - name: )
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.BindAssets
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindAssets__1
+  name: BindAssets
+  nameWithType: Scope.BindAssets
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindAssets
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleAssets__1
+  name: BindMultipleAssets
+  nameWithType: Scope.BindMultipleAssets
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets
+- uid: UnityEngine.ScriptableObject
+  commentId: T:UnityEngine.ScriptableObject
+  isExternal: true
+  name: ScriptableObject
+  nameWithType: ScriptableObject
+  fullName: UnityEngine.ScriptableObject
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``2
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``2
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleAssets__2
+  name: BindMultipleAssets<TInterface, TConcrete>()
+  nameWithType: Scope.BindMultipleAssets<TInterface, TConcrete>()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets<TInterface, TConcrete>()
+  nameWithType.vb: Scope.BindMultipleAssets(Of TInterface, TConcrete)()
+  fullName.vb: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets(Of TInterface, TConcrete)()
+  name.vb: BindMultipleAssets(Of TInterface, TConcrete)()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``2
+    name: BindMultipleAssets
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleAssets__2
+  - name: <
+  - name: TInterface
+  - name: ','
+  - name: " "
+  - name: TConcrete
+  - name: '>'
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.BindMultipleAssets``2
+    name: BindMultipleAssets
+    href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindMultipleAssets__2
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TInterface
+  - name: ','
+  - name: " "
+  - name: TConcrete
+  - name: )
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.Awake
+  commentId: M:Plugins.Saneject.Runtime.Scopes.Scope.Awake
+  name: Awake()
+  nameWithType: Scope.Awake()
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.Awake()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.Awake
+    name: Awake
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Scopes.Scope.Awake
+    name: Awake
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope
+  commentId: F:Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope
+  name: FromGlobalScope
+  nameWithType: RuntimeProxyResolveMethod.FromGlobalScope
+  fullName: Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope
+- uid: Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal*
+  commentId: Overload:Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html#Plugins_Saneject_Runtime_Scopes_Scope_BindGlobal__1
+  name: BindGlobal
+  nameWithType: Scope.BindGlobal
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope.BindGlobal
+- uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder{{TConcrete}}
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder{``0}
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  definition: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  name: GlobalComponentBindingBuilder<TConcrete>
+  nameWithType: GlobalComponentBindingBuilder<TConcrete>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder<TConcrete>
+  nameWithType.vb: GlobalComponentBindingBuilder(Of TConcrete)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder(Of TConcrete)
+  name.vb: GlobalComponentBindingBuilder(Of TConcrete)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+    name: GlobalComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  - name: <
+  - name: TConcrete
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+    name: GlobalComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TConcrete
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  name: GlobalComponentBindingBuilder<TComponent>
+  nameWithType: GlobalComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder<TComponent>
+  nameWithType.vb: GlobalComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder(Of TComponent)
+  name.vb: GlobalComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+    name: GlobalComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+    name: GlobalComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
