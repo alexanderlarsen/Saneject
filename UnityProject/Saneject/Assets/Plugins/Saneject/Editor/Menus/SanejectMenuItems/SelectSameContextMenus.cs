@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel;
+﻿using System.ComponentModel;
 using System.Linq;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Utilities;
@@ -25,28 +24,16 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
                 return;
 
-            IEnumerable<GameObject> validGameObjects = Object
-                .FindObjectsByType<GameObject>(FindObjectsInactive.Include, FindObjectsSortMode.None)
-                .Where(x => new ContextIdentity(x).Type is ContextType.SceneObject or ContextType.PrefabInstance);
+            Object[] selection = SceneHierarchyUtility.GetSameContextInSceneSelection
+            (
+                Selection.gameObjects
+            );
+
+            Selection.objects = selection;
+            SceneHierarchyUtility.Expand(selection);
 
             if (!ProjectSettings.UseContextIsolation)
-            {
-                Selection.objects = validGameObjects.ToArray<Object>();
-                SceneHierarchyUtility.Expand(Selection.objects);
                 Debug.Log("Saneject: Context isolation is disabled in project settings. Selecting all GameObjects in the current scene.");
-                return;
-            }
-
-            HashSet<ContextIdentity> contextIdentities = Selection
-                .gameObjects
-                .Select(x => new ContextIdentity(x))
-                .ToHashSet();
-
-            Selection.objects = validGameObjects
-                .Where(x => contextIdentities.Contains(new ContextIdentity(x)))
-                .ToArray<Object>();
-
-            SceneHierarchyUtility.Expand(Selection.objects);
         }
 
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Hierarchy", false,
@@ -58,37 +45,16 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
             if (!MenuCommandUtility.IsFirstInvocation(cmd))
                 return;
 
-            HashSet<GameObject> validGameObjects = Selection
-                .gameObjects
-                .ToHashSet();
+            Object[] selection = SceneHierarchyUtility.GetSameContextInHierarchySelection
+            (
+                Selection.gameObjects
+            );
 
-            HashSet<Transform> roots = validGameObjects
-                .Select(x => x.transform.root)
-                .ToHashSet();
+            Selection.objects = selection;
+            SceneHierarchyUtility.Expand(selection);
 
             if (!ProjectSettings.UseContextIsolation)
-            {
-                Selection.objects = roots
-                    .SelectMany(x => x.GetComponentsInChildren<Transform>())
-                    .Select(x => x.gameObject)
-                    .ToArray<Object>();
-
-                SceneHierarchyUtility.Expand(Selection.objects);
                 Debug.Log("Saneject: Context isolation is disabled in project settings. Selecting all GameObjects in the selected hierarchy.");
-                return;
-            }
-
-            HashSet<ContextIdentity> contextIdentities = validGameObjects
-                .Select(x => new ContextIdentity(x))
-                .ToHashSet();
-
-            Selection.objects = roots
-                .SelectMany(x => x.GetComponentsInChildren<Transform>())
-                .Select(x => x.gameObject)
-                .Where(x => contextIdentities.Contains(new ContextIdentity(x)))
-                .ToArray<Object>();
-
-            SceneHierarchyUtility.Expand(Selection.objects);
         }
 
         #endregion
@@ -104,7 +70,7 @@ namespace Plugins.Saneject.Editor.Menus.SanejectMenuItems
                 .gameObjects
                 .Select(x => x.transform.root)
                 .Distinct()
-                .Any(x => new ContextIdentity(x).Type is ContextType.SceneObject or ContextType.PrefabInstance); 
+                .Any(x => new ContextIdentity(x).Type is ContextType.SceneObject or ContextType.PrefabInstance);
         }
 
         [MenuItem("GameObject/Saneject/Select Same Context Objects/In Hierarchy", true,
