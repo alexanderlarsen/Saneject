@@ -3,9 +3,8 @@ layout: _landing
 title: Saneject
 ---
 
-# Saneject
-
-Dependency injection the Unity way
+<img class="index-logo index-logo-light-theme" src="images/logo-dark.webp" alt="Saneject logo" width="260">
+<img class="index-logo index-logo-dark-theme" src="images/logo-light.webp" alt="Saneject logo" width="260">
 
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)

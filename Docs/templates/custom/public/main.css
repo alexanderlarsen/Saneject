@@ -66,6 +66,24 @@
     --bs-code-color: var(--site-code);
 }
 
+/* Logos */
+.logo-dark-theme,
+[data-bs-theme="light"] .logo-dark-theme
+{
+    display: none;
+}
+
+[data-bs-theme="dark"] .logo-light-theme
+{
+    display: none;
+}
+
+[data-bs-theme="dark"] .logo-dark-theme,
+[data-bs-theme="light"] .logo-light-theme
+{
+    display: inline-block;
+}
+
 /* Reserve scrollbar space so short pages do not shift the layout. */
 html
 {
@@ -585,12 +603,34 @@ pre.mermaid svg foreignObject *
 }
 
 /* Media */
-article img:not([src*="shields.io"]),
+article img:not([src*="shields.io"]):not(.index-logo),
 article figure
 {
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: calc(var(--bs-border-radius) * 2);
     background: var(--site-surface);
+}
+
+.index-logo
+{
+    margin-bottom: 1rem;
+}
+
+.index-logo-dark-theme,
+[data-bs-theme="light"] .index-logo-dark-theme
+{
+    display: none;
+}
+
+[data-bs-theme="dark"] .index-logo-light-theme
+{
+    display: none;
+}
+
+[data-bs-theme="dark"] .index-logo-dark-theme,
+[data-bs-theme="light"] .index-logo-light-theme
+{
+    display: inline-block;
 }
 
 article figure

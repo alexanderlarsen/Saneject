@@ -2,7 +2,7 @@
     <picture>
       <source media="(prefers-color-scheme: dark)" srcset="Docs/images/logo-light.webp">
       <source media="(prefers-color-scheme: light)" srcset="Docs/images/logo-dark.webp">
-      <img src="Docs/images/logo-light.webp" alt="Saneject logo" width="300">
+      <img src="Docs/images/logo-light.webp" alt="Saneject logo" width="260">
     </picture>
 </p>
 
