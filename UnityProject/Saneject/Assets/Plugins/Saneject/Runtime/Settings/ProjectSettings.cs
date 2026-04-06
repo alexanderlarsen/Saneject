@@ -18,8 +18,6 @@ namespace Plugins.Saneject.Runtime.Settings
         private static readonly string Folder = Path.GetFullPath(Path.Combine(Application.dataPath, "../ProjectSettings/Saneject"));
         private static readonly string FullPath = Path.Combine(Folder, "ProjectSettings.json");
 
-        private static JObject cachedModel;
-
         #region Context Isolation
 
         /// <summary>
@@ -80,8 +78,7 @@ namespace Plugins.Saneject.Runtime.Settings
         public static void UseDefaultSettings()
         {
 #if UNITY_EDITOR
-            cachedModel = new JObject();
-            SaveModel(cachedModel);
+            SaveModel(new JObject());
             Debug.LogWarning("Saneject: All project settings were reset to default values. This affects all users of this project.");
 #endif
         }
@@ -142,23 +139,20 @@ namespace Plugins.Saneject.Runtime.Settings
         private static JObject LoadModel()
         {
 #if UNITY_EDITOR
-            if (cachedModel != null)
-                return cachedModel;
-
             if (!File.Exists(FullPath))
-                return cachedModel = new JObject();
+                return new JObject();
 
             try
             {
                 string json = File.ReadAllText(FullPath);
-                return cachedModel = JObject.Parse(json);
+                return JObject.Parse(json);
             }
             catch (Exception e)
             {
                 Debug.LogError($"Saneject: Failed to load project settings. {e.Message}. Resetting to defaults.");
-                cachedModel = new JObject();
-                SaveModel(cachedModel);
-                return cachedModel;
+                JObject defaultModel = new();
+                SaveModel(defaultModel);
+                return defaultModel;
             }
 #else
             return null;
@@ -171,7 +165,6 @@ namespace Plugins.Saneject.Runtime.Settings
             Directory.CreateDirectory(Folder);
             string json = model.ToString(Formatting.Indented);
             File.WriteAllText(FullPath, json);
-            cachedModel = model;
 #endif
         }
 
