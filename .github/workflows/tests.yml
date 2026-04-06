@@ -1,11 +1,11 @@
-name: tests
+name: Tests
 on:
   pull_request:
     branches:
       - main
     paths:
       - 'UnityProject/Saneject/**'
-      - 'RoslynTools/**'
+      - 'Roslyn/**'
   workflow_dispatch:
       
 jobs:
@@ -29,6 +29,20 @@ jobs:
           unityVersion: ${{ matrix.unity }}
           testMode: editmode
           projectPath: UnityProject/Saneject
-          customParameters: -nographics -assemblyNames Saneject.Tests.Editor
+          customParameters: -nographics -assemblyNames Tests.Saneject.Editor
           githubToken: ${{ secrets.GITHUB_TOKEN }}
           checkName: "EditMode (${{ matrix.unity }})"
+
+      - name: PlayMode tests
+        uses: game-ci/unity-test-runner@v4
+        env:
+          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
+          UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
+          UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
+        with:
+          unityVersion: ${{ matrix.unity }}
+          testMode: playmode
+          projectPath: UnityProject/Saneject
+          customParameters: -nographics -assemblyNames Tests.Saneject.Runtime
+          githubToken: ${{ secrets.GITHUB_TOKEN }}
+          checkName: "PlayMode (${{ matrix.unity }})"
