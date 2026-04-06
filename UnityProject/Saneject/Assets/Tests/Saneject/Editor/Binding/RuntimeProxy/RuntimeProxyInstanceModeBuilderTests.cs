@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Runtime.Proxy;
+using Plugins.Saneject.Runtime.Settings;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
@@ -13,8 +14,36 @@ namespace Tests.Saneject.Editor.Binding.RuntimeProxy
 {
     public class RuntimeProxyInstanceModeBuilderTests
     {
-        [SetUp, TearDown]
-        public void CleanUpExistingProxyAssets()
+        private const string TestAssetFolder = "Assets/Tests/Saneject/Fixtures/RuntimeProxyInstanceModeBuilderAssets";
+
+        private string originalProxyAssetGenerationFolder;
+
+        [SetUp]
+        public void SetUp()
+        {
+            originalProxyAssetGenerationFolder = ProjectSettings.ProxyAssetGenerationFolder;
+            ProjectSettings.ProxyAssetGenerationFolder = TestAssetFolder;
+
+            AssetDatabase.DeleteAsset(TestAssetFolder);
+
+            if (!AssetDatabase.IsValidFolder(TestAssetFolder))
+                AssetDatabase.CreateFolder("Assets/Tests/Saneject/Fixtures", "RuntimeProxyInstanceModeBuilderAssets");
+
+            CleanUpExistingProxyAssets();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ProjectSettings.ProxyAssetGenerationFolder = originalProxyAssetGenerationFolder;
+
+            CleanUpExistingProxyAssets();
+            AssetDatabase.DeleteAsset(TestAssetFolder);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        private static void CleanUpExistingProxyAssets()
         {
             string[] assetGuids = AssetDatabase.FindAssets($"t:{nameof(TestRuntimeProxy)}");
 
