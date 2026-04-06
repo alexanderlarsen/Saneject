@@ -1,10 +1,10 @@
-name: Deploy DocFX Site
+name: Build and Deploy DocFX
 
 on:
   push:
     branches: [ "main" ]
     paths:
-      - 'Docs/_site/**'
+      - 'Docs/**'
       - '.github/workflows/docfx.yml'
   workflow_dispatch:
 
@@ -14,18 +14,53 @@ permissions:
   id-token: write
 
 jobs:
-  deploy:
+  build:
     runs-on: ubuntu-latest
 
     steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
+      - uses: actions/checkout@v4
 
-      - name: Upload site artifact
+      - name: Setup .NET
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install DocFX
+        run: dotnet tool update -g docfx
+
+      - name: Add tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Build DocFX site
+        working-directory: Docs
+        run: docfx build
+
+      - name: Fix API TOC
+        working-directory: Docs
+        run: python fix-api-toc.py
+
+      - name: Rebuild DocFX site
+        working-directory: Docs
+        run: docfx build
+
+      - name: Build glossary tooltips
+        working-directory: Docs
+        run: python build-glossary-tooltips.py
+
+      - name: Upload artifact
         uses: actions/upload-pages-artifact@v3
         with:
           path: Docs/_site
 
-      - name: Deploy to GitHub Pages
-        id: deployment
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    steps:
+      - id: deployment
         uses: actions/deploy-pages@v4
