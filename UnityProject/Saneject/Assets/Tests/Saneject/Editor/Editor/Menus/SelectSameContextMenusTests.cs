@@ -135,6 +135,9 @@ namespace Tests.Saneject.Editor.Editor.Menus
         [Test]
         public void SelectSameContextInHierarchy_GivenContextIsolationOn_SelectsMatchingContextsInSelectedHierarchy()
         {
+            if (Application.isBatchMode)
+                Assert.Ignore("Requires scene hierarchy UI.");
+
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 2, depth: 2);
             TestPrefabAsset prefab = TestPrefabAsset.Create("Prefab Root", width: 1, depth: 2);

@@ -2,6 +2,7 @@ using NUnit.Framework;
 using Plugins.Saneject.Editor.Core;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Runtime.Proxy;
+using Plugins.Saneject.Runtime.Settings;
 using Tests.Saneject.Fixtures.Scripts;
 using Tests.Saneject.Fixtures.Scripts.Dependencies;
 using Tests.Saneject.Fixtures.Scripts.InjectionTargets;
@@ -13,14 +14,41 @@ namespace Tests.Saneject.Editor.Binding.RuntimeProxy
 {
     public class RuntimeProxyBindingBuilderTests
     {
-        [SetUp, TearDown]
-        public void CleanUpExistingProxyAssets()
+        private const string TestAssetFolder = "Assets/Tests/Saneject/Fixtures/RuntimeProxyBindingBuilderAssets";
+
+        private string originalProxyAssetGenerationFolder;
+
+        [SetUp]
+        public void SetUp()
         {
+            originalProxyAssetGenerationFolder = ProjectSettings.ProxyAssetGenerationFolder;
+            ProjectSettings.ProxyAssetGenerationFolder = TestAssetFolder;
+
+            AssetDatabase.DeleteAsset(TestAssetFolder);
+
+            if (!AssetDatabase.IsValidFolder(TestAssetFolder))
+                AssetDatabase.CreateFolder("Assets/Tests/Saneject/Fixtures", "RuntimeProxyBindingBuilderAssets");
+
             string[] assetGuids = AssetDatabase.FindAssets($"t:{nameof(TestRuntimeProxy)}");
 
             foreach (string guid in assetGuids)
                 AssetDatabase.DeleteAsset(AssetDatabase.GUIDToAssetPath(guid));
 
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+        }
+
+        [TearDown]
+        public void TearDown()
+        {
+            ProjectSettings.ProxyAssetGenerationFolder = originalProxyAssetGenerationFolder;
+
+            string[] assetGuids = AssetDatabase.FindAssets($"t:{nameof(TestRuntimeProxy)}");
+
+            foreach (string guid in assetGuids)
+                AssetDatabase.DeleteAsset(AssetDatabase.GUIDToAssetPath(guid));
+
+            AssetDatabase.DeleteAsset(TestAssetFolder);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
