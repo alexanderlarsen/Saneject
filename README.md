@@ -61,7 +61,7 @@ If you try Saneject and something works well, feels unclear, or seems broken, I 
 
 ## Links
 
-- [Docs](https://alexanderlarsen.github.io/Saneject/docs)
-- [API](https://alexanderlarsen.github.io/Saneject/api)
+- [Docs](https://alexanderlarsen.github.io/Saneject/docs/getting-started/introduction.html)
+- [API](https://alexanderlarsen.github.io/Saneject/api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html)
 - [Releases](https://github.com/alexanderlarsen/Saneject/releases)
 - [MIT license](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
