@@ -1,0 +1,80 @@
+name: Build and Deploy DocFX
+
+on:
+  push:
+    branches: [ "main" ]
+    paths:
+      - 'Docs/**'
+      - 'UnityProject/**/*.cs'
+      - 'RoslynTools/**/*.cs'
+      - '.github/workflows/docfx.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup .NET (for DocFX)
+        uses: actions/setup-dotnet@v4
+        with:
+          dotnet-version: '8.0.x'
+
+      - name: Install DocFX
+        run: dotnet tool update -g docfx
+
+      - name: Add .NET tools to PATH
+        run: echo "$HOME/.dotnet/tools" >> $GITHUB_PATH
+
+      - name: Setup Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Install Python dependencies (if any)
+        run: |
+          if [ -f Docs/requirements.txt ]; then
+            pip install -r Docs/requirements.txt
+          fi
+
+      - name: Run DocFX metadata
+        working-directory: Docs
+        run: docfx metadata
+
+      - name: Fix API TOC
+        working-directory: Docs
+        run: python fix-api-toc.py
+
+      - name: Build DocFX site
+        working-directory: Docs
+        run: docfx build
+
+      - name: Build glossary tooltips
+        working-directory: Docs
+        run: python build-glossary-tooltips.py
+
+      - name: Upload artifact for GitHub Pages
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: Docs/_site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - name: Deploy to GitHub Pages
+        id: deployment
+        uses: actions/deploy-pages@v4
