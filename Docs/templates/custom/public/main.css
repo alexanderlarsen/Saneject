@@ -700,6 +700,20 @@ article .table > tbody > tr:last-child > *
     max-height: calc(100vh - 105px) !important;
 }
 
+@media (max-width: 767.98px)
+{
+    .toc-offcanvas
+    {
+        z-index: calc(var(--bs-offcanvas-zindex, 1045) + 1);
+        isolation: isolate;
+    }
+
+    .toc-offcanvas .offcanvas-md
+    {
+        z-index: calc(var(--bs-offcanvas-zindex, 1045) + 2);
+    }
+}
+
 /* Branding */
 #logo
 {
