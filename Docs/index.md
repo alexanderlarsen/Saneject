@@ -17,7 +17,7 @@ No runtime container, no startup cost, no hidden wiring. Just simple, determinis
 
 ## Mental model
 
-1. Mark your fields, properties and methods `[Inject]`.
+1. Mark your fields, properties and methods with `[Inject]`.
 2. Create a `Scope` that binds dependencies for `[Inject]` members and add it to the scene.
 3. Click **Inject** in the Unity Editor.
 4. Dependencies are injected into serialized fields.
