@@ -462,6 +462,9 @@ article dd > code
     color: var(--bs-code-color);
     font-family: var(--bs-font-monospace);
     padding: 0.06em 0.28em;
+    white-space: normal;
+    overflow-wrap: anywhere;
+    word-break: break-word;
 }
 
 pre
@@ -644,7 +647,8 @@ article .table-responsive
 {
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: calc(var(--bs-border-radius) * 2);
-    overflow: hidden;
+    overflow-x: auto;
+    overflow-y: hidden;
     margin-bottom: 1rem;
 }
 
@@ -674,6 +678,23 @@ article .table > :not(caption) > * > *:last-child
 article .table > tbody > tr:last-child > *
 {
     border-bottom: 0;
+}
+
+@media (max-width: 767.98px)
+{
+    article table
+    {
+        width: 100%;
+        table-layout: fixed;
+    }
+
+    article th,
+    article td
+    {
+        min-width: 0;
+        overflow-wrap: anywhere;
+        word-break: break-word;
+    }
 }
 
 /* Late DocFX-specific overrides */
