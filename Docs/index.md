@@ -11,9 +11,11 @@ title: Saneject
 [![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
 
+Dependency injection the Unity way.
+
 Resolve dependencies in the Unity Editor, not Play Mode, and write them directly into serialized fields so everything stays visible in the Inspector, including interfaces.
 
-No runtime container, no startup cost, no hidden wiring. Just simple, deterministic DI that works with Unity instead of around it.
+No runtime container, no startup cost, no hidden wiring, no weird lifecycle. Just simple, deterministic DI that works with Unity instead of around it.
 
 ## Mental model
 
@@ -22,7 +24,7 @@ No runtime container, no startup cost, no hidden wiring. Just simple, determinis
 3. Click **Inject** in the Unity Editor.
 4. Dependencies are injected into serialized fields.
 5. Start the game and enjoy fast startup with Unity’s normal lifecycle.
- 
+
 ## Main features
 
 | Feature                              | Description                                                                                                                       |
