@@ -4,6 +4,8 @@ title: Tested Unity versions
 
 # Tested Unity versions
 
+[![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
+
 Saneject is automatically tested in [CI](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml) against the following Unity editor versions.
 
 The test matrix is defined using minimum and maximum tested editor versions per supported Unity release line.
