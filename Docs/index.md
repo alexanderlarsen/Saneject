@@ -18,10 +18,10 @@ No runtime container, no startup cost, no hidden wiring. Just simple, determinis
 ## Mental model
 
 1. Mark your fields, properties and methods `[Inject]`.
-2. Configure bindings in a `Scope` component and add it to the scene.
-3. Click "Inject" in the Unity Editor.
-4. Dependencies are injected and stored in serialized fields.
-5. Start game and enjoy a fast startup and Unity's normal lifecycle.
+2. Create a `Scope` that binds dependencies for `[Inject]` members and add it to the scene.
+3. Click **Inject** in the Unity Editor.
+4. Dependencies are injected into serialized fields.
+5. Start the game and enjoy fast startup with Unity’s normal lifecycle.
  
 ## Main features
 

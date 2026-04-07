@@ -645,7 +645,6 @@ article .table-responsive
     border: var(--bs-border-width) solid var(--bs-border-color);
     border-radius: calc(var(--bs-border-radius) * 2);
     overflow: hidden;
-    font-size: 14px;
     margin-bottom: 1rem;
 }
 
