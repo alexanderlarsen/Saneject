@@ -15,6 +15,14 @@ Resolve dependencies in the Unity Editor, not Play Mode, and write them directly
 
 No runtime container, no startup cost, no hidden wiring. Just simple, deterministic DI that works with Unity instead of around it.
 
+## Mental model
+
+1. Mark your fields, properties and methods `[Inject]`.
+2. Configure bindings in a `Scope` component and add it to the scene.
+3. Click "Inject" in the Unity Editor.
+4. Dependencies are injected and stored in serialized fields.
+5. Start game and enjoy a fast startup and Unity's normal lifecycle.
+ 
 ## Main features
 
 | Feature                              | Description                                                                                                                       |
@@ -29,14 +37,6 @@ No runtime container, no startup cost, no hidden wiring. Just simple, determinis
 | Built-in tooling                     | Use injection menus, batch injection, logging, validation, settings, analyzers, and more directly in the Unity Editor.            |
 
 For more features, see [Feature overview](docs/getting-started/feature-overview.md).
-
-## Mental model
-
-1. Mark fields, properties, or methods with `[Inject]` in your code.
-2. Declare bindings in `Scope` code.
-3. Run injection in the Unity Editor.
-4. Saneject injects dependencies into serialized fields.
-5. Start game and enjoy Unity's normal lifecycle.
 
 ## Try Saneject now
 
