@@ -17,7 +17,10 @@ The test matrix is defined using minimum and maximum tested editor versions per 
 | 6000.1.17f1   | Supported    | Minimum/maximum tested Unity 6.1                              |
 | 6000.2.6f2    | Supported    | Minimum tested Unity 6.2                                      |
 | 6000.2.15f1   | Supported    | Maximum tested Unity 6.2                                      |
-| 6000.3.0f1    | Supported    | Minimum/maximum tested Unity 6.3                              |
+| 6000.3.0f1    | LTS          | Minimum tested Unity 6.3                                      |
+| 6000.3.12f1   | LTS          | Maximum tested Unity 6.3                                      |
+| 6000.4.0f1    | Supported    | Minimum tested Unity 6.4                                      |
+| 6000.4.1f1    | Supported    | Maximum tested Unity 6.4                                      |
 
 In-between versions will likely work, but only the above are verified in automated tests.  
 Unity 2023 releases are skipped since they are tech stream builds (not long-term supported), and Unity does not recommend them for production.
