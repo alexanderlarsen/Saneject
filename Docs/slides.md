@@ -1,4 +1,8 @@
-﻿![Saneject title slide with the tagline 'Unity.EditorTime.DI' on a dark circuit-pattern background. The image reads 'Inject dependencies in the Unity Editor, before you even press Play,' highlights that it is 100% free and open source, and shows the URL saneject.dev.](images/slides/saneject-01.webp)
+﻿---
+title: Pitch slides
+---
+
+![Saneject title slide with the tagline 'Unity.EditorTime.DI' on a dark circuit-pattern background. The image reads 'Inject dependencies in the Unity Editor, before you even press Play,' highlights that it is 100% free and open source, and shows the URL saneject.dev.](images/slides/saneject-01.webp)
 
 ![Comparison slide titled 'Cleaner, faster components with fewer moving parts' contrasting a manual Unity component setup with a Saneject-injected version. Red callouts list drawbacks like expensive searches and hidden dependencies, while green callouts highlight edit-time injection, serialized fields, Inspector interface support, and cleaner code.](images/slides/saneject-02.webp)
 
