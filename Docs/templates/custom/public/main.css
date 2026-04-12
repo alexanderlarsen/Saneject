@@ -750,3 +750,25 @@ article .table > tbody > tr:last-child > *
         margin-right: auto;
     }
 }
+
+/* Slides page */
+body[data-layout="slides"] > main > .toc-offcanvas,
+body[data-layout="_slides"] > main > .toc-offcanvas,
+body[data-layout="slides"] > main > .affix,
+body[data-layout="_slides"] > main > .affix
+{
+    display: none !important;
+}
+
+body[data-layout="slides"] article > p,
+body[data-layout="_slides"] article > p
+{
+    margin-bottom: 1.5rem;
+}
+
+body[data-layout="_slides"] article img
+{
+    display: block;
+    width: 100%;
+    height: auto;
+}

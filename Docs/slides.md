@@ -1,5 +1,6 @@
 ﻿---
 title: Pitch slides
+layout: _slides
 ---
 
 ![Saneject title slide with the tagline 'Unity.EditorTime.DI' on a dark circuit-pattern background. The image reads 'Inject dependencies in the Unity Editor, before you even press Play,' highlights that it is 100% free and open source, and shows the URL saneject.dev.](images/slides/saneject-01.webp)
@@ -27,3 +28,12 @@ title: Pitch slides
 ![Slide titled 'Bridge scenes & prefabs with runtime proxies' explaining a four-step example where a prefab needs a scene-only GameManager reference. Diagrams and Inspector screenshots show Saneject injecting a runtime proxy and swapping it for the real instance at startup.](images/slides/saneject-12.webp)
 
 ![Slide titled 'Quality-of-life editor features' listing many Unity editor conveniences provided by Saneject. The badges mention features such as native UI, show or hide injected fields, batch injection, filtered logs, ping from logs, auto proxy creation, analyzer support, configurable logging, and validated interface drag-and-drop.](images/slides/saneject-13.webp)
+
+## Links
+
+- [Home](/)
+- [Docs](docs/getting-started/introduction.md)
+- [API](xref:Plugins.Saneject.Editor.Inspectors.SanejectInspector)
+- [GitHub repo](https://github.com/alexanderlarsen/Saneject)
+- [Releases](https://github.com/alexanderlarsen/Saneject/releases)
+- [MIT license](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
