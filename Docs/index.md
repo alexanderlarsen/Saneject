@@ -40,6 +40,14 @@ No runtime container, no startup cost, no hidden wiring, no weird lifecycle. Jus
 
 For more features, see [Feature overview](docs/getting-started/feature-overview.md).
 
+## Slide overview
+
+A quick visual tour of how Saneject works, why editor-time DI differs from runtime DI, and its core benefits, APIs, examples, and features.
+
+[Open the full slide overview](slides)
+
+[![Preview of the Saneject slide overview](images/slides/slides-preview.webp)](slides)
+
 ## Try Saneject now
 
 Add this URL to Unity Package Manager (Unity 2022.3.12 or newer):

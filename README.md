@@ -40,6 +40,14 @@ No runtime container, no startup cost, no hidden wiring, no weird lifecycle. Jus
 
 For more features, see [Feature overview](https://saneject.dev/docs/getting-started/feature-overview).
 
+## Slide overview
+
+A quick visual tour of how Saneject works, why editor-time DI differs from runtime DI, and its core benefits, APIs, examples, and features.
+
+[Open the full slide overview](https://saneject.dev/slides)
+
+[![Preview of the Saneject slide overview](Docs/images/slides/slides-preview.webp)](https://saneject.dev/slides)
+
 ## Try Saneject now
 
 Add this URL to Unity Package Manager (Unity 2022.3.12 or newer):
@@ -61,7 +69,7 @@ If you try Saneject and something works well, feels unclear, or seems broken, I 
 
 ## Links
 
-- [Docs](https://saneject.dev/docs/getting-started/introduction.html)
-- [API](https://saneject.dev/api/Plugins.Saneject.Editor.Inspectors.SanejectInspector.html)
+- [Docs](https://saneject.dev/docs/getting-started/introduction)
+- [API](https://saneject.dev/api/Plugins.Saneject.Editor.Inspectors.SanejectInspector)
 - [Releases](https://github.com/alexanderlarsen/Saneject/releases)
 - [MIT license](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)

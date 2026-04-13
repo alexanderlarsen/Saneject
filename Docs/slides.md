@@ -1,5 +1,5 @@
 ﻿---
-title: Pitch slides
+title: Slide overview
 layout: _slides
 ---
 
