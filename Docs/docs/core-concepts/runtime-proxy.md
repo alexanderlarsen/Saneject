@@ -1,5 +1,6 @@
 ---
 title: Runtime proxy
+description: Learn how Saneject runtime proxies bridge Unity references that cannot be serialized directly across scenes, prefabs, and runtime contexts.
 ---
 
 # Runtime proxy

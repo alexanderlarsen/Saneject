@@ -1,5 +1,6 @@
 ---
 title: Feature overview
+description: Explore Saneject features for Unity, including editor-time injection, serialized interfaces, context-aware bindings, runtime proxies, and tooling.
 ---
 
 # Feature overview

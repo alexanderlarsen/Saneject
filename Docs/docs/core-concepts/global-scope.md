@@ -1,5 +1,6 @@
 ---
 title: Global scope
+description: See how GlobalScope provides runtime registration and lookup for globally accessible Unity components that cannot be serialized directly.
 ---
 
 # Global scope

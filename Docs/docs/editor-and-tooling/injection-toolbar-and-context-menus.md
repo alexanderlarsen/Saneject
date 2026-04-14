@@ -1,5 +1,6 @@
 ---
 title: Injection toolbar & context menus
+description: Learn how to run Saneject injection from Unity toolbar buttons and context menus for scenes, prefabs, and batch asset workflows.
 ---
 
 # Injection toolbar & context menus

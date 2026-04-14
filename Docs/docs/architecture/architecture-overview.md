@@ -1,5 +1,6 @@
 ---
 title: Architecture overview
+description: Learn how Saneject's editor-time architecture wires Unity dependencies before Play Mode, with a minimal runtime layer for globals and proxy swaps.
 ---
 
 # Architecture overview

@@ -1,5 +1,6 @@
 ---
 title: Runtime architecture
+description: See how Saneject keeps Unity runtime startup lightweight by reusing editor-prepared data for global registration and runtime proxy swapping.
 ---
 
 # Runtime architecture

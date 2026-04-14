@@ -1,5 +1,6 @@
 ---
 title: Field, property & method injection
+description: Learn how Saneject injects fields, properties, methods, and nested serializable classes in Unity during editor-time dependency resolution.
 ---
 
 # Field, property & method injection

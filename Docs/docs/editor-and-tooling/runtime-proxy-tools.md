@@ -1,5 +1,6 @@
 ---
 title: Runtime proxy tools
+description: Learn how Saneject runtime proxy tools generate missing proxy scripts and clean unused proxy assets in your Unity project.
 ---
 
 # Runtime proxy tools

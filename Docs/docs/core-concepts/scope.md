@@ -1,5 +1,6 @@
 ---
 title: Scope
+description: Understand how Saneject scopes declare bindings for part of a Unity hierarchy and drive editor-time injection plus early runtime setup.
 ---
 
 # Scope

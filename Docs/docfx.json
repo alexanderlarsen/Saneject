@@ -37,6 +37,9 @@
       }
     ],
     "output": "_site",
+    "sitemap": {
+      "baseUrl": "https://saneject.dev"
+    },
     "template": [
       "default",
       "modern",

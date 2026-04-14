@@ -1,6 +1,7 @@
 ---
 layout: _landing
 title: Saneject
+description: Resolve dependencies in the Unity Editor, not Play Mode. No runtime container, no startup cost, no hidden wiring, no weird lifecycle. Just simple, deterministic DI that works with Unity instead of around it.
 ---
 
 <img class="index-logo index-logo-light-theme" src="images/logo-dark.webp" alt="Saneject logo" width="260">

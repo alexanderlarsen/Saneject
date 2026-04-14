@@ -1,5 +1,6 @@
 ---
 title: Edit-time architecture
+description: Explore Saneject's edit-time injection pipeline for Unity, from graph building and validation to dependency resolution and serialized runtime handoff.
 ---
 
 # Edit-time architecture

@@ -1,5 +1,6 @@
 ---
 title: Scope inspector
+description: Learn how the Saneject Scope inspector helps you inspect Unity contexts, runtime preparation data, and related scopes in one place.
 ---
 
 # Scope inspector

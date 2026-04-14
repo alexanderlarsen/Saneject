@@ -1,5 +1,6 @@
 ---
 title: Runtime proxy inspector
+description: Understand the read-only Saneject runtime proxy inspector and how it exposes generated proxy configuration and resolved runtime state.
 ---
 
 # Runtime proxy inspector

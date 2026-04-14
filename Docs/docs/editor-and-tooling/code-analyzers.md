@@ -1,5 +1,6 @@
 ---
 title: Code analyzers
+description: Explore Saneject Roslyn analyzers that catch invalid Unity injection and interface serialization patterns during compilation and editor analysis.
 ---
 
 # Code analyzers

@@ -1,5 +1,6 @@
 ---
 title: Quick start
+description: Follow a quick Unity setup to create your first Saneject scope, bind dependencies, run injection, and verify serialized results in minutes.
 ---
 
 # Quick start

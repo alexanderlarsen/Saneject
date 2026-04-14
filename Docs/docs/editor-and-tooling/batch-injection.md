@@ -1,5 +1,6 @@
 ---
 title: Batch injection
+description: Learn how to batch inject Unity scenes and prefabs with Saneject for large-scale validation, repeatable runs, and consolidated dependency logs.
 ---
 
 # Batch injection

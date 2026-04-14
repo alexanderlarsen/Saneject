@@ -1,5 +1,6 @@
 ---
 title: Tested Unity versions
+description: Check which Unity editor versions are automatically tested for Saneject in CI, including supported LTS and Unity 6 release lines.
 ---
 
 # Tested Unity versions

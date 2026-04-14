@@ -40,9 +40,9 @@ jobs:
         working-directory: Docs
         run: docfx build
 
-      - name: Rewrite logo link
+      - name: Run postbuild scripts
         working-directory: Docs
-        run: python rewrite-logo-link.py
+        run: python python/postbuild.py
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v3

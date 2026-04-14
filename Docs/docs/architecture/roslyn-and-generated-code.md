@@ -1,5 +1,6 @@
 ---
 title: Roslyn & generated code
+description: Understand how Saneject uses Roslyn analyzers and source generation to support serialized interfaces, runtime proxies, and early misuse detection.
 ---
 
 # Roslyn & generated code

@@ -1,5 +1,6 @@
 ---
 title: Binding
+description: Learn how Saneject bindings define what to resolve, where dependencies come from, and which Unity injection sites may consume them.
 ---
 
 # Binding

@@ -1,5 +1,6 @@
 ---
 title: Introduction
+description: Discover Saneject, a Unity editor-time dependency injection framework that keeps dependencies visible in the Inspector and runtime startup lean.
 ---
 
 # Introduction

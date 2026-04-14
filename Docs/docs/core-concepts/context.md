@@ -1,5 +1,6 @@
 ---
 title: Context
+description: Understand Saneject contexts in Unity, including scene objects, prefab instances, and prefab assets, and how they affect injection boundaries.
 ---
 
 # Context

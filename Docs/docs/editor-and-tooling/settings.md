@@ -1,5 +1,6 @@
 ---
 title: Settings
+description: Configure Saneject editor behavior, logging, inspector options, and code generation settings for your Unity project and local workflow.
 ---
 
 # Settings

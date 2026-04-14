@@ -8,18 +8,18 @@ If the API changes, regenerate the API docs locally and commit the updated files
 
 ```powershell
 docfx metadata
-python fix-api-toc.py
+python python/prebuild.py
 ```
 
-`fix-api-toc.py` must run after `docfx metadata` because `docfx metadata` generates `Docs/api`, including the raw `Docs/api/toc.yml` file that the script rewrites into the structure used by the site.
+`python/prebuild.py` must run after `docfx metadata` because `docfx metadata` generates `Docs/api`, including the raw `Docs/api/toc.yml` file that the prebuild script rewrites into the structure used by the site.
 
 ## Full local build and serve
 
 ```powershell
 docfx metadata
-python fix-api-toc.py
+python python/prebuild.py
 docfx build
-python rewrite-logo-link.py
+python python/postbuild.py
 docfx serve _site
 ```
 
@@ -29,4 +29,4 @@ CI is defined in [`.github/workflows/docfx.yml`](E:/Unity/Personal/Saneject/.git
 
 It does not run `docfx metadata`.
 
-It builds the site from the checked-in docs content, including the already-generated files in `Docs/api`, rewrites the DocFX navbar brand link to `/`, and deploys `Docs/_site` to GitHub Pages.
+It builds the site from the checked-in docs content, including the already-generated files in `Docs/api`, runs the postbuild Python scripts, and deploys `Docs/_site` to GitHub Pages.

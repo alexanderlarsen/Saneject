@@ -1,5 +1,6 @@
 ---
 title: Serialized interface
+description: Learn how Saneject makes interface fields and auto-properties serializable in Unity with generated backing members and inspector support.
 ---
 
 # Serialized interface

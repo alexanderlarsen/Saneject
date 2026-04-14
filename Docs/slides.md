@@ -1,5 +1,6 @@
 ﻿---
 title: Slide overview
+description: View the Saneject slide overview for a visual tour of editor-time dependency injection, core features, runtime proxies, and Unity tooling.
 layout: _slides
 ---
 

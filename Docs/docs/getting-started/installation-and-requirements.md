@@ -1,5 +1,6 @@
 ---
 title: Installation & requirements
+description: Install Saneject in Unity with UPM or a .unitypackage and review version, platform, and tooling requirements before getting started.
 ---
 
 # Installation & requirements

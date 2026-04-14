@@ -1,5 +1,6 @@
 ---
 title: MonoBehaviour inspector
+description: Learn how Saneject's custom MonoBehaviour inspector preserves Unity workflows while improving injected field and serialized interface rendering.
 ---
 
 # MonoBehaviour inspector

@@ -1,5 +1,6 @@
 ---
 title: Sample game
+description: Explore the Saneject sample game to see scopes, global bindings, runtime proxies, and interface-driven Unity architecture in a real project.
 ---
 
 # Sample game

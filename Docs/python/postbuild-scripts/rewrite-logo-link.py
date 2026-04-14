@@ -8,7 +8,7 @@ DocFX emits relative links like:
     index.html
     ../index.html
 
-This post-build step rewrites navbar brand anchors to:
+This postbuild step rewrites navbar brand anchors to:
     /
 """
 
@@ -19,8 +19,8 @@ import re
 from pathlib import Path
 
 
-ROOT = Path(__file__).resolve().parent
-SITE_DIR = ROOT / "_site"
+DOCS_ROOT = Path(__file__).resolve().parent.parent.parent
+SITE_DIR = DOCS_ROOT / "_site"
 ANCHOR_START_TAG_PATTERN = re.compile(
     r"<a\b(?P<attrs>[^>]*)>",
     re.IGNORECASE | re.DOTALL,

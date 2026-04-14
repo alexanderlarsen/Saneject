@@ -1,5 +1,6 @@
 ---
 title: Glossary
+description: Browse the Saneject glossary for clear definitions of scopes, bindings, contexts, runtime proxies, analyzers, and other core Unity DI terms.
 ---
 
 # Glossary

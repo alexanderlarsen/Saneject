@@ -1,5 +1,6 @@
 ---
 title: Logging & validation
+description: See how Saneject validates bindings, reports dependency issues, and summarizes Unity injection runs with actionable logs and diagnostics.
 ---
 
 # Logging & validation
