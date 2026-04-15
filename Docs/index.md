@@ -1,7 +1,7 @@
 ---
 layout: _landing
 title: Saneject
-description: Resolve dependencies in the Unity Editor, not Play Mode. No runtime container, no startup cost, no hidden wiring, no weird lifecycle. Just simple, deterministic DI that works with Unity instead of around it.
+description: Inject dependencies in the Unity Editor, not Play Mode. No runtime container. No startup cost. No hidden wiring. No weird lifecycles. Just simple, deterministic edit-time DI that works with Unity, not around it.
 ---
 
 <img class="index-logo index-logo-light-theme" src="images/logo-dark.webp" alt="Saneject logo" width="260">
@@ -14,14 +14,14 @@ description: Resolve dependencies in the Unity Editor, not Play Mode. No runtime
 
 Dependency injection the Unity way.
 
-Resolve dependencies in the Unity Editor, not Play Mode, and write them directly into serialized fields so everything stays visible in the Inspector, including interfaces.
+Inject dependencies in the Unity Editor, not Play Mode, by writing them directly into serialized fields at edit-time using familiar DI APIs, so everything stays visible in the Inspector, including interfaces.
 
-No runtime container, no startup cost, no hidden wiring, no weird lifecycle. Just simple, deterministic DI that works with Unity instead of around it.
+No runtime container. No startup cost. No hidden wiring. No weird lifecycles. Just simple, deterministic edit-time DI that works with Unity, not around it.
 
 ## Mental model
 
 1. Mark your fields, properties and methods with `[Inject]`.
-2. Create a `Scope` that binds dependencies for `[Inject]` members and add it to the scene.
+2. Create a `Scope` that binds dependencies for `[Inject]` members, and add it to a scene or prefab.
 3. Click **Inject** in the Unity Editor.
 4. Dependencies are injected into serialized fields.
 5. Start the game and enjoy fast startup with Unity’s normal lifecycle.
