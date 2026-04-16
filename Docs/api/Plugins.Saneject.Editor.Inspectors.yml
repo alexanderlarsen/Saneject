@@ -1,0 +1,23 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Editor.Inspectors
+  commentId: N:Plugins.Saneject.Editor.Inspectors
+  id: Plugins.Saneject.Editor.Inspectors
+  children:
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Editor.Inspectors
+  nameWithType: Plugins.Saneject.Editor.Inspectors
+  fullName: Plugins.Saneject.Editor.Inspectors
+  type: Namespace
+  assemblies:
+  - Saneject.Editor
+references:
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  commentId: T:Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html
+  name: SanejectInspector
+  nameWithType: SanejectInspector
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector

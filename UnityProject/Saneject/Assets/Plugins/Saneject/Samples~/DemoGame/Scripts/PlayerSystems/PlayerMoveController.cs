@@ -5,8 +5,8 @@ using UnityEngine;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems
 {
     /// <summary>
-    /// Handles input and movement logic for the player.
-    /// Note that <see cref="PlayerMoveController" /> is a serializable class nested inside <see cref="Player" /> and dependency injection also works here.
+    /// Serializable helper that handles player input and movement.
+    /// Saneject injects into this nested object as part of the owning <see cref="Player" /> during editor injection.
     /// </summary>
     [Serializable]
     public class PlayerMoveController
@@ -17,6 +17,9 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems
         [SerializeField]
         private float moveSpeed = 6;
 
+        /// <summary>
+        /// Applies one-time platform-specific movement adjustments.
+        /// </summary>
         public void Initialize()
         {
             // Reduce moveSpeed because moveInput is higher on touch than keyboard.
@@ -24,6 +27,9 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems
                 moveSpeed /= 10f;
         }
 
+        /// <summary>
+        /// Reads input and moves the player for the current frame.
+        /// </summary>
         public void Move()
         {
             // Use old input system for compatibility with old Unity versions:

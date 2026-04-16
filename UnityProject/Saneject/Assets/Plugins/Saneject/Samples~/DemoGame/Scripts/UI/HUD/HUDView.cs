@@ -7,9 +7,8 @@ using UnityEngine.UI;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.HUD
 {
     /// <summary>
-    /// View logic for displaying the player's HUD.
-    /// Shows current score and remaining enemies.
-    /// Uses IDs in <c>[Inject]</c> attributes to distinguish between multiple dependencies of the same type.
+    /// Serializable view backing the in-game HUD.
+    /// Displays the current score and remaining enemy count.
     /// </summary>
     [Serializable]
     public class HUDView : ViewBase
@@ -23,24 +22,27 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.HUD
         private int totalEnemies;
 
         /// <summary>
-        /// Set number of total enemies.
+        /// Stores the total number of enemies that were spawned for the round.
         /// </summary>
+        /// <param name="totalEnemies">The total enemy count for the round.</param>
         public void SetTotalEnemies(int totalEnemies)
         {
             this.totalEnemies = totalEnemies;
         }
 
         /// <summary>
-        /// Updates the score text.
+        /// Updates the score label shown in the HUD.
         /// </summary>
+        /// <param name="points">The score to display.</param>
         public void UpdateScore(int points)
         {
             scoreText.text = $"Score: {points}";
         }
 
         /// <summary>
-        /// Updates the enemies left text.
+        /// Updates the remaining-enemies label shown in the HUD.
         /// </summary>
+        /// <param name="enemiesLeft">The number of enemies still active.</param>
         public void UpdateEnemiesLeft(int enemiesLeft)
         {
             enemiesLeftText.text = $"Enemies left: {enemiesLeft}/{totalEnemies}";

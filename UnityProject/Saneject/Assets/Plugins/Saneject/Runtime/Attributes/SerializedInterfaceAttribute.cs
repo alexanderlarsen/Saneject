@@ -3,10 +3,13 @@
 namespace Plugins.Saneject.Runtime.Attributes
 {
     /// <summary>
-    /// Marks an interface field for serialization support.
-    /// Tells the <c>SerializeInterfaceGenerator.dll</c> Roslyn generator to generate a partial class for the owner with a backing <see cref="UnityEngine.Object" /> field,
-    /// assigning it to the interface during deserialization and enabling Unity to (indirectly) show serialized interface references in the inspector.
+    /// Marks an interface-typed member for Saneject's serialized-interface code generation.
     /// </summary>
+    /// <remarks>
+    /// Apply this attribute to interface fields, interface arrays, interface lists, or auto-properties via <c>[field: SerializeInterface]</c>.
+    /// Saneject generates hidden <see cref="UnityEngine.Object"/> backing members plus serialization sync code so Unity can display and persist
+    /// interface references in scenes and prefabs.
+    /// </remarks>
     [AttributeUsage(AttributeTargets.Field)]
     public sealed class SerializeInterfaceAttribute : Attribute
     {

@@ -1,0 +1,661 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  commentId: T:Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  id: SanejectInspector
+  parent: Plugins.Saneject.Editor.Inspectors
+  children:
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField(UnityEngine.Object)
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector(System.Type)
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute(System.Reflection.FieldInfo)
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute(System.Reflection.FieldInfo)
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface(System.Reflection.FieldInfo)
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI(Plugins.Saneject.Editor.Inspectors.Models.ComponentModel)
+  - Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  langs:
+  - csharp
+  - vb
+  name: SanejectInspector
+  nameWithType: SanejectInspector
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: SanejectInspector
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 19
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: >-
+    Provides UI drawing and validation logic for the custom Saneject inspector.
+
+    Handles rendering of serialized properties with injection-aware read-only states,
+
+    custom handling for <xref href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute" data-throw-if-not-resolved="false"></xref> fields, nested serializable types, and validation
+
+    to ensure assigned objects implement expected interface types.
+  example: []
+  syntax:
+    content: public static class SanejectInspector
+    content.vb: Public Module SanejectInspector
+  inheritance:
+  - System.Object
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI(Plugins.Saneject.Editor.Inspectors.Models.ComponentModel)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI(Plugins.Saneject.Editor.Inspectors.Models.ComponentModel)
+  id: OnInspectorGUI(Plugins.Saneject.Editor.Inspectors.Models.ComponentModel)
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: OnInspectorGUI(ComponentModel)
+  nameWithType: SanejectInspector.OnInspectorGUI(ComponentModel)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI(Plugins.Saneject.Editor.Inspectors.Models.ComponentModel)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: OnInspectorGUI
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 27
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: Draws the complete default Saneject <xref href="UnityEngine.MonoBehaviour" data-throw-if-not-resolved="false"></xref> inspector, including the script field, all serializable fields and interfaces in declaration order, injection-aware read-only handling, custom UI and validation for <xref href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute" data-throw-if-not-resolved="false"></xref> fields, and recursive drawing of nested serializable types.
+  example: []
+  syntax:
+    content: public static void OnInspectorGUI(ComponentModel componentModel)
+    parameters:
+    - id: componentModel
+      type: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+      description: The component model containing the target object and its inspectable properties.
+    content.vb: Public Shared Sub OnInspectorGUI(componentModel As ComponentModel)
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI*
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField(UnityEngine.Object)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField(UnityEngine.Object)
+  id: DrawMonoBehaviourScriptField(UnityEngine.Object)
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: DrawMonoBehaviourScriptField(Object)
+  nameWithType: SanejectInspector.DrawMonoBehaviourScriptField(Object)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField(UnityEngine.Object)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: DrawMonoBehaviourScriptField
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 45
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: Draws the default script field at the top of a <xref href="UnityEngine.MonoBehaviour" data-throw-if-not-resolved="false"></xref> inspector.
+  example: []
+  syntax:
+    content: public static void DrawMonoBehaviourScriptField(Object target)
+    parameters:
+    - id: target
+      type: UnityEngine.Object
+      description: The target object. If not a <xref href="UnityEngine.MonoBehaviour" data-throw-if-not-resolved="false"></xref>, this method returns without drawing anything.
+    content.vb: Public Shared Sub DrawMonoBehaviourScriptField(target As [Object])
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField*
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  id: DrawProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: DrawProperty(PropertyModel)
+  nameWithType: SanejectInspector.DrawProperty(PropertyModel)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: DrawProperty
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 60
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: Draws a single property with the given display name and read-only state, handling foldouts for nested serializable types.
+  example: []
+  syntax:
+    content: public static void DrawProperty(PropertyModel model)
+    parameters:
+    - id: model
+      type: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+      description: The property model to draw.
+    content.vb: Public Shared Sub DrawProperty(model As PropertyModel)
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty*
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  id: ValidateProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: ValidateProperty(PropertyModel)
+  nameWithType: SanejectInspector.ValidateProperty(PropertyModel)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty(Plugins.Saneject.Editor.Inspectors.Models.PropertyModel)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ValidateProperty
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 108
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: >-
+    Validates that the field is assigned to an object that implements the expected type.
+
+    For <xref href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute" data-throw-if-not-resolved="false"></xref> fields, validates each element if the property is a collection,
+
+    or the single value if not. Also recursively validates child properties.
+  example: []
+  syntax:
+    content: public static void ValidateProperty(PropertyModel property)
+    parameters:
+    - id: property
+      type: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+      description: The property model to validate.
+    content.vb: Public Shared Sub ValidateProperty([property] As PropertyModel)
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty*
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector(System.Type)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector(System.Type)
+  id: GetFieldInfosForInspector(System.Type)
+  isExtensionMethod: true
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: GetFieldInfosForInspector(Type)
+  nameWithType: SanejectInspector.GetFieldInfosForInspector(Type)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector(System.Type)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: GetFieldInfosForInspector
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 159
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: Collects all drawable <xref href="System.Reflection.FieldInfo" data-throw-if-not-resolved="false"></xref> of the type, including base classes.
+  example: []
+  syntax:
+    content: public static IEnumerable<FieldInfo> GetFieldInfosForInspector(this Type type)
+    parameters:
+    - id: type
+      type: System.Type
+    return:
+      type: System.Collections.Generic.IEnumerable{System.Reflection.FieldInfo}
+    content.vb: Public Shared Function GetFieldInfosForInspector(type As Type) As IEnumerable(Of FieldInfo)
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector*
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute(System.Reflection.FieldInfo)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute(System.Reflection.FieldInfo)
+  id: HasReadOnlyAttribute(System.Reflection.FieldInfo)
+  isExtensionMethod: true
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: HasReadOnlyAttribute(FieldInfo)
+  nameWithType: SanejectInspector.HasReadOnlyAttribute(FieldInfo)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute(System.Reflection.FieldInfo)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: HasReadOnlyAttribute
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 187
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: Returns true if the field is marked with <xref href="Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public static bool HasReadOnlyAttribute(this FieldInfo field)
+    parameters:
+    - id: field
+      type: System.Reflection.FieldInfo
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function HasReadOnlyAttribute(field As FieldInfo) As Boolean
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute*
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute(System.Reflection.FieldInfo)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute(System.Reflection.FieldInfo)
+  id: HasInjectAttribute(System.Reflection.FieldInfo)
+  isExtensionMethod: true
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: HasInjectAttribute(FieldInfo)
+  nameWithType: SanejectInspector.HasInjectAttribute(FieldInfo)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute(System.Reflection.FieldInfo)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: HasInjectAttribute
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 195
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: Returns true if the field is marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public static bool HasInjectAttribute(this FieldInfo field)
+    parameters:
+    - id: field
+      type: System.Reflection.FieldInfo
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function HasInjectAttribute(field As FieldInfo) As Boolean
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute*
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface(System.Reflection.FieldInfo)
+  commentId: M:Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface(System.Reflection.FieldInfo)
+  id: IsSerializeInterface(System.Reflection.FieldInfo)
+  isExtensionMethod: true
+  parent: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+  langs:
+  - csharp
+  - vb
+  name: IsSerializeInterface(FieldInfo)
+  nameWithType: SanejectInspector.IsSerializeInterface(FieldInfo)
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface(System.Reflection.FieldInfo)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: IsSerializeInterface
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
+    startLine: 203
+  assemblies:
+  - Saneject.Editor
+  namespace: Plugins.Saneject.Editor.Inspectors
+  summary: Returns true if the field is marked with <xref href="Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public static bool IsSerializeInterface(this FieldInfo field)
+    parameters:
+    - id: field
+      type: System.Reflection.FieldInfo
+    return:
+      type: System.Boolean
+    content.vb: Public Shared Function IsSerializeInterface(field As FieldInfo) As Boolean
+  overload: Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface*
+references:
+- uid: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  href: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute.html
+  name: SerializeInterfaceAttribute
+  nameWithType: SerializeInterfaceAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+- uid: Plugins.Saneject.Editor.Inspectors
+  commentId: N:Plugins.Saneject.Editor.Inspectors
+  href: Plugins.html
+  name: Plugins.Saneject.Editor.Inspectors
+  nameWithType: Plugins.Saneject.Editor.Inspectors
+  fullName: Plugins.Saneject.Editor.Inspectors
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: UnityEngine.MonoBehaviour
+  commentId: T:UnityEngine.MonoBehaviour
+  parent: UnityEngine
+  isExternal: true
+  name: MonoBehaviour
+  nameWithType: MonoBehaviour
+  fullName: UnityEngine.MonoBehaviour
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_OnInspectorGUI_Plugins_Saneject_Editor_Inspectors_Models_ComponentModel_
+  name: OnInspectorGUI
+  nameWithType: SanejectInspector.OnInspectorGUI
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.OnInspectorGUI
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  commentId: T:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  parent: Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html
+  name: ComponentModel
+  nameWithType: ComponentModel
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: Plugins.Saneject.Editor.Inspectors.Models
+  commentId: N:Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.html
+  name: Plugins.Saneject.Editor.Inspectors.Models
+  nameWithType: Plugins.Saneject.Editor.Inspectors.Models
+  fullName: Plugins.Saneject.Editor.Inspectors.Models
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors.Models
+    name: Models
+    href: Plugins.Saneject.Editor.Inspectors.Models.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors.Models
+    name: Models
+    href: Plugins.Saneject.Editor.Inspectors.Models.html
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_DrawMonoBehaviourScriptField_UnityEngine_Object_
+  name: DrawMonoBehaviourScriptField
+  nameWithType: SanejectInspector.DrawMonoBehaviourScriptField
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawMonoBehaviourScriptField
+- uid: UnityEngine.Object
+  commentId: T:UnityEngine.Object
+  parent: UnityEngine
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: UnityEngine.Object
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_DrawProperty_Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_
+  name: DrawProperty
+  nameWithType: SanejectInspector.DrawProperty
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.DrawProperty
+- uid: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+  commentId: T:Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+  parent: Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html
+  name: PropertyModel
+  nameWithType: PropertyModel
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_ValidateProperty_Plugins_Saneject_Editor_Inspectors_Models_PropertyModel_
+  name: ValidateProperty
+  nameWithType: SanejectInspector.ValidateProperty
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.ValidateProperty
+- uid: System.Reflection.FieldInfo
+  commentId: T:System.Reflection.FieldInfo
+  parent: System.Reflection
+  isExternal: true
+  name: FieldInfo
+  nameWithType: FieldInfo
+  fullName: System.Reflection.FieldInfo
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_GetFieldInfosForInspector_System_Type_
+  name: GetFieldInfosForInspector
+  nameWithType: SanejectInspector.GetFieldInfosForInspector
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.GetFieldInfosForInspector
+- uid: System.Type
+  commentId: T:System.Type
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type
+- uid: System.Collections.Generic.IEnumerable{System.Reflection.FieldInfo}
+  commentId: T:System.Collections.Generic.IEnumerable{System.Reflection.FieldInfo}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  name: IEnumerable<FieldInfo>
+  nameWithType: IEnumerable<FieldInfo>
+  fullName: System.Collections.Generic.IEnumerable<System.Reflection.FieldInfo>
+  nameWithType.vb: IEnumerable(Of FieldInfo)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of System.Reflection.FieldInfo)
+  name.vb: IEnumerable(Of FieldInfo)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - uid: System.Reflection.FieldInfo
+    name: FieldInfo
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Reflection.FieldInfo
+    name: FieldInfo
+    isExternal: true
+  - name: )
+- uid: System.Reflection
+  commentId: N:System.Reflection
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Reflection
+  nameWithType: System.Reflection
+  fullName: System.Reflection
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Reflection
+    name: Reflection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.reflection
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Reflection
+    name: Reflection
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.reflection
+- uid: System.Collections.Generic.IEnumerable`1
+  commentId: T:System.Collections.Generic.IEnumerable`1
+  isExternal: true
+  name: IEnumerable<T>
+  nameWithType: IEnumerable<T>
+  fullName: System.Collections.Generic.IEnumerable<T>
+  nameWithType.vb: IEnumerable(Of T)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of T)
+  name.vb: IEnumerable(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+- uid: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+  href: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute.html
+  name: ReadOnlyAttribute
+  nameWithType: ReadOnlyAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_HasReadOnlyAttribute_System_Reflection_FieldInfo_
+  name: HasReadOnlyAttribute
+  nameWithType: SanejectInspector.HasReadOnlyAttribute
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasReadOnlyAttribute
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  href: Plugins.Saneject.Runtime.Attributes.InjectAttribute.html
+  name: InjectAttribute
+  nameWithType: InjectAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_HasInjectAttribute_System_Reflection_FieldInfo_
+  name: HasInjectAttribute
+  nameWithType: SanejectInspector.HasInjectAttribute
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.HasInjectAttribute
+- uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface*
+  commentId: Overload:Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface
+  href: Plugins.Saneject.Editor.Inspectors.SanejectInspector.html#Plugins_Saneject_Editor_Inspectors_SanejectInspector_IsSerializeInterface_System_Reflection_FieldInfo_
+  name: IsSerializeInterface
+  nameWithType: SanejectInspector.IsSerializeInterface
+  fullName: Plugins.Saneject.Editor.Inspectors.SanejectInspector.IsSerializeInterface

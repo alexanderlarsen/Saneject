@@ -3,12 +3,12 @@
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.GameState
 {
     /// <summary>
-    /// Exposes game state change events.
+    /// Exposes the game-state events that UI systems react to.
     /// </summary>
     public interface IGameStateObservable
     {
         /// <summary>
-        /// Invoked once when the game is over (e.g., no enemies remain).
+        /// Raised once when the round ends because no enemies remain.
         /// </summary>
         event Action OnGameOver;
     }

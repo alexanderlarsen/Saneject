@@ -982,6 +982,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6ee2d343d1ed4075a05dcef0984fe258, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalComponents: []
+  proxySwapTargets:
+  - {fileID: 2130916105}
+  - {fileID: 2125961247}
 --- !u!4 &1801980457
 Transform:
   m_ObjectHideFlags: 0
@@ -1387,10 +1391,10 @@ MonoBehaviour:
     enemiesLeftText: {fileID: 1886484449}
     scoreText: {fileID: 163977813}
     restartButton: {fileID: 1084788498}
-  __gameStateObservable: {fileID: 11400000, guid: 34c43b50d0d21f245a6fcf715b166c46, type: 2}
-  __scoreObservable: {fileID: 11400000, guid: a18faf9235da59a4ca14b01009406dcb, type: 2}
-  __enemyObservable: {fileID: 11400000, guid: 0ef8fc17fe3feec4886015bd41e7bbf5, type: 2}
-  __sceneManager: {fileID: 11400000, guid: b4350c50f0558ef4eaef944c03853ad1, type: 2}
+  __gameStateObservable: {fileID: 11400000, guid: babb3733487338f488848f9052cdd531, type: 2}
+  __scoreObservable: {fileID: 11400000, guid: 70848ceab7bdcb540a198a71111bd04c, type: 2}
+  __enemyObservable: {fileID: 11400000, guid: 32411652e43c2c14ab51ce82664e0a6e, type: 2}
+  __sceneManager: {fileID: 11400000, guid: 150e36c50bb5ee54f98058aa14f8ed7d, type: 2}
 --- !u!1 &2130916102
 GameObject:
   m_ObjectHideFlags: 0
@@ -1446,9 +1450,9 @@ MonoBehaviour:
     gameObject: {fileID: 2130916102}
     enemiesLeftText: {fileID: 1958942919}
     scoreText: {fileID: 1373578029}
-  __gameStateObservable: {fileID: 11400000, guid: 34c43b50d0d21f245a6fcf715b166c46, type: 2}
-  __scoreObservable: {fileID: 11400000, guid: a18faf9235da59a4ca14b01009406dcb, type: 2}
-  __enemyObservable: {fileID: 11400000, guid: 0ef8fc17fe3feec4886015bd41e7bbf5, type: 2}
+  __gameStateObservable: {fileID: 11400000, guid: babb3733487338f488848f9052cdd531, type: 2}
+  __scoreObservable: {fileID: 11400000, guid: 70848ceab7bdcb540a198a71111bd04c, type: 2}
+  __enemyObservable: {fileID: 11400000, guid: 32411652e43c2c14ab51ce82664e0a6e, type: 2}
 --- !u!114 &2130916106
 MonoBehaviour:
   m_ObjectHideFlags: 0

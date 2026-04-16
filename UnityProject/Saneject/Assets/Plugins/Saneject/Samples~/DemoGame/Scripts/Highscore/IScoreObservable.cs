@@ -3,17 +3,17 @@
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Highscore
 {
     /// <summary>
-    /// Exposes read-only score data and a change event.
+    /// Exposes read-only score state for systems that display points.
     /// </summary>
     public interface IScoreObservable
     {
         /// <summary>
-        /// Invoked when score points change.
+        /// Raised whenever the current score changes.
         /// </summary>
         event Action<int> OnPointsChanged;
 
         /// <summary>
-        /// Current score points.
+        /// Gets the current score.
         /// </summary>
         int Points { get; }
     }

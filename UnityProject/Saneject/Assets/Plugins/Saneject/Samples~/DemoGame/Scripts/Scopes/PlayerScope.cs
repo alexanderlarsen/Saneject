@@ -4,11 +4,14 @@ using UnityEngine;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {
     /// <summary>
-    /// DI scope for the player.
+    /// Prefab-local scope for the player character.
     /// </summary>
     public class PlayerScope : Scope
     {
-        public override void ConfigureBindings()
+        /// <summary>
+        /// Declares the bindings required by components inside the player prefab.
+        /// </summary>
+        protected override void DeclareBindings()
         {
             BindComponent<CharacterController>()
                 .FromScopeSelf();

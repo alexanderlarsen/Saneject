@@ -1,0 +1,59 @@
+{
+  "$schema": "https://raw.githubusercontent.com/dotnet/docfx/main/schemas/docfx.schema.json",
+  "metadata": [
+    {
+      "src": [
+        {
+          "src": "../UnityProject/Saneject",
+          "files": [
+            "**/Saneject.Runtime.csproj",
+            "**/Saneject.Editor.csproj"
+          ]
+        }
+      ],
+      "dest": "api",
+      "filter": "filter.yml"
+    }
+  ],
+  "build": {
+    "content": [
+      {
+        "files": [
+          "**/*.{md,yml}"
+        ],
+        "exclude": [
+          "_site/**",
+          "filter.yml",
+          "README.md"
+        ]
+      }
+    ],
+    "resource": [
+      {
+        "files": [
+          "images/**",
+          "favicon.ico"
+        ]
+      }
+    ],
+    "output": "_site",
+    "sitemap": {
+      "baseUrl": "https://saneject.dev"
+    },
+    "template": [
+      "default",
+      "modern",
+      "templates/custom"
+    ],
+    "globalMetadata": {
+      "_appName": "Saneject",
+      "_appTitle": "Saneject: Dependency injection the Unity way",
+      "_appFaviconPath": "favicon.ico",
+      "_enableSearch": true,
+      "_enableSearchInGeneratedFiles": true,
+      "_disableContribution": "true",
+      "_appFooter": "<span>© 2026 <a href=\"https://alexanderlarsen.com\" target=\"_blank\" rel=\"noopener noreferrer\">Alexander Larsen</a>. All rights reserved.</span>",
+      "pdf": false
+    }
+  }
+}

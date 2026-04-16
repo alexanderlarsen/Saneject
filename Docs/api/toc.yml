@@ -1,0 +1,95 @@
+### YamlMime:TableOfContent
+items:
+  - name: Editor
+    items:
+    - name: Inspectors
+      uid: Plugins.Saneject.Editor.Inspectors
+      type: Namespace
+      items:
+      - uid: Plugins.Saneject.Editor.Inspectors.SanejectInspector
+        name: SanejectInspector
+        type: Class
+      - name: Models
+        uid: Plugins.Saneject.Editor.Inspectors.Models
+        type: Namespace
+        items:
+        - uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+          name: ComponentModel
+          type: Class
+        - uid: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+          name: PropertyModel
+          type: Class
+  - name: Runtime
+    items:
+    - name: Attributes
+      uid: Plugins.Saneject.Runtime.Attributes
+      type: Namespace
+      items:
+      - uid: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+        name: InjectAttribute
+        type: Class
+      - uid: Plugins.Saneject.Runtime.Attributes.ReadOnlyAttribute
+        name: ReadOnlyAttribute
+        type: Class
+      - uid: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+        name: SerializeInterfaceAttribute
+        type: Class
+    - name: Bindings
+      items:
+      - name: Asset
+        uid: Plugins.Saneject.Runtime.Bindings.Asset
+        type: Namespace
+        items:
+        - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+          name: AssetBindingBuilder<TAsset>
+          type: Class
+        - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+          name: AssetFilterBuilder<TAsset>
+          type: Class
+      - name: Component
+        uid: Plugins.Saneject.Runtime.Bindings.Component
+        type: Namespace
+        items:
+        - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+          name: BaseComponentBindingBuilder<TComponent>
+          type: Class
+        - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+          name: ComponentBindingBuilder<TComponent>
+          type: Class
+        - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+          name: ComponentFilterBuilder<TComponent>
+          type: Class
+        - uid: Plugins.Saneject.Runtime.Bindings.Component.GlobalComponentBindingBuilder`1
+          name: GlobalComponentBindingBuilder<TComponent>
+          type: Class
+      - name: RuntimeProxy
+        uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+        type: Namespace
+        items:
+        - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+          name: RuntimeProxyBindingBuilder
+          type: Class
+        - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+          name: RuntimeProxyInstanceModeBuilder
+          type: Class
+    - name: Scopes
+      uid: Plugins.Saneject.Runtime.Scopes
+      type: Namespace
+      items:
+      - uid: Plugins.Saneject.Runtime.Scopes.GlobalScope
+        name: GlobalScope
+        type: Class
+      - uid: Plugins.Saneject.Runtime.Scopes.Scope
+        name: Scope
+        type: Class
+    - name: Settings
+      uid: Plugins.Saneject.Runtime.Settings
+      type: Namespace
+      items:
+      - uid: Plugins.Saneject.Runtime.Settings.ProjectSettings
+        name: ProjectSettings
+        type: Class
+      - uid: Plugins.Saneject.Runtime.Settings.UserSettings
+        name: UserSettings
+        type: Class
+memberLayout: SamePage

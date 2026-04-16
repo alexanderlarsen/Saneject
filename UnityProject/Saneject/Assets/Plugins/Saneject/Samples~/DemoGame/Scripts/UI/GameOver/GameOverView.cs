@@ -8,9 +8,8 @@ using UnityEngine.UI;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver
 {
     /// <summary>
-    /// View logic for the Game Over screen.
-    /// Displays score, enemies caught, and handles the restart button.
-    /// Uses IDs in <c>[Inject]</c> attributes to distinguish between multiple dependencies of the same type.
+    /// Serializable view backing the game-over panel.
+    /// Displays the final score, the number of enemies caught, and exposes the restart button.
     /// </summary>
     [Serializable]
     public class GameOverView : ViewBase
@@ -27,27 +26,33 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.GameOver
         /// <summary>
         /// Registers a callback for the restart button.
         /// </summary>
+        /// <param name="action">The callback to invoke when the restart button is clicked.</param>
         public void OnRestartButtonClick(UnityAction action)
         {
             restartButton.onClick.AddListener(action);
         }
 
         /// <summary>
-        /// Updates the score text.
+        /// Updates the score label shown on the game-over panel.
         /// </summary>
+        /// <param name="points">The final score to display.</param>
         public void UpdateScore(int points)
         {
             scoreText.text = $"Score: {points}";
         }
 
         /// <summary>
-        /// Updates the enemies caught text.
+        /// Updates the enemy summary shown on the game-over panel.
         /// </summary>
-        public void UpdateEnemiesCaught(int enemiesLeft)
+        /// <param name="enemiesCaught">The number of enemies caught during the round.</param>
+        public void UpdateEnemiesCaught(int enemiesCaught)
         {
-            enemiesLeftText.text = $"Enemies caught: {enemiesLeft}";
+            enemiesLeftText.text = $"Enemies caught: {enemiesCaught}";
         }
 
+        /// <summary>
+        /// Clears the registered button listeners owned by this view.
+        /// </summary>
         public override void Dispose()
         {
             base.Dispose();

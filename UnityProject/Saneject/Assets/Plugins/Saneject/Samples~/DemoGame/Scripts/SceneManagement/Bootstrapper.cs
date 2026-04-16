@@ -4,11 +4,12 @@ using UnityEngine;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
 {
     /// <summary>
-    /// Bootstraps the game and UI scenes.
+    /// Start-scene entry point that kicks off the sample's additive scene flow.
+    /// Marked <c>partial</c> so Saneject can serialize the injected <see cref="ISceneManager" /> reference.
     /// </summary>
     public partial class Bootstrapper : MonoBehaviour
     {
-        [SerializeInterface]
+        [Inject, SerializeInterface]
         private ISceneManager sceneManager;
 
         private void Start()

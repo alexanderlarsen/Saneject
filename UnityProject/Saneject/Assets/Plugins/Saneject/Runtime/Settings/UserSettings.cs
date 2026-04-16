@@ -1,140 +1,183 @@
-﻿using System.Runtime.CompilerServices;
+﻿using System.Linq;
+using System.Reflection;
+using System.Runtime.CompilerServices;
 using UnityEditor;
+using UnityEngine;
+
+// ReSharper disable InconsistentNaming
 
 namespace Plugins.Saneject.Runtime.Settings
 {
     /// <summary>
-    /// Provides strongly-typed accessors for Saneject user/editor settings, backed by <see cref="UnityEditor.EditorPrefs" /> and is used by an <see cref="UnityEditor.EditorWindow" /> found under <c>Saneject/User Settings</c>.
-    /// Settings affect injection prompts, inspector options, and logging behavior in the Unity Editor.
-    /// These settings have no effect at runtime.
+    /// Provides access to user-scoped Saneject settings stored locally in <see cref="EditorPrefs"/>.
     /// </summary>
+    /// <remarks>
+    /// These settings are personal to the current Unity user on the current machine. They can be changed only in Edit Mode and fall back to default values outside the Unity Editor.
+    /// </remarks>
     public static class UserSettings
     {
-        // Injection
-        public static bool AskBeforeSceneInjection
+        private const string SettingsPrefix = "SanejectSettings_";
+ 
+        #region Ask Before Injection
+
+        /// <summary>
+        /// Show a confirmation dialog before injecting a whole scene.
+        /// </summary>
+        public static bool AskBeforeInjectScene
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
+        /// <summary>
+        /// Show a confirmation dialog before injecting a prefab asset.
+        /// </summary>
+        public static bool AskBeforeInjectPrefabAsset
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        } 
+
+        /// <summary>
+        /// Show a confirmation dialog before injecting selected scene hierarchies.
+        /// </summary>
+        public static bool AskBeforeInjectSelectedSceneHierarchies
+        {
+            get => GetBool(defaultValue: true);
+            set => SetBool(value);
+        }
+        
+        /// <summary>
+        /// Show a confirmation dialog before batch injecting scenes and prefab assets.
+        /// </summary>
+        public static bool AskBeforeBatchInject
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
-        public static bool AskBeforeHierarchyInjection
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        #endregion
 
-        public static bool AskBeforePrefabInjection
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        #region Inspector
 
-        public static bool UseContextIsolation
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
-
-        // Inspector
+        /// <summary>
+        /// Show [Inject] fields and [field: Inject] auto-properties in the Inspector.
+        /// </summary>
         public static bool ShowInjectedFieldsProperties
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Shows explanatory Saneject help boxes in inspectors.
+        /// </summary>
         public static bool ShowHelpBoxes
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
-        public static bool ShowScopePath
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        #endregion
 
-        // Play Mode Logging
+        #region Play Mode Logging
+
+        /// <summary>
+        /// Logs when a runtime proxy resolves its runtime instance.
+        /// </summary>
         public static bool LogProxyResolve
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Logs global registration lifecycle events in <see cref="Scopes.GlobalScope"/> at runtime.
+        /// </summary>
         public static bool LogGlobalScopeRegistration
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
-        // Editor Logging
-        public static bool LogDifferentContextSkipping
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        #endregion
 
+        #region Editor Logging
+
+        /// <summary>
+        /// Log a message when a binding is unused during injection.
+        /// This can happen when a binding is registered in a scope but never used in the scene or prefab.
+        /// </summary>
         public static bool LogUnusedBindings
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
-        public static bool LogInjectionStats
+        /// <summary>
+        /// Logs the end-of-run injection summary.
+        /// </summary>
+        public static bool LogInjectionSummary
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Clear console logs before injection starts. Useful for only seeing logs related to the latest injection run.
+        /// </summary>
         public static bool ClearLogsOnInjection
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
-
-        // Proxy Generation
-        public static string ProxyAssetGenerationFolder
-        {
-            get => GetString(defaultValue: "Assets/Generated");
-            set => SetString(value);
-        }
-
-        // Scope File Generation
-        public static bool GenerateScopeNamespaceFromFolder
+        
+        /// <summary>
+        /// On domain reload, scans for runtime proxy assets and scripts not referenced by any scope binding and logs the findings.
+        /// </summary>
+        public static bool LogUnusedRuntimeProxiesOnDomainReload
         {
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
 
-        // Batch Injection
-        public static bool AskBeforeBatchInjectAll
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Resets all user settings to their default values.
+        /// </summary>
+        public static void UseDefaultSettings()
         {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
+#if UNITY_EDITOR
+            string[] prefsKeys = typeof(UserSettings)
+                .GetProperties(BindingFlags.Public | BindingFlags.Static)
+                .Where(prop => prop.CanWrite)
+                .Select(prop => $"{SettingsPrefix}{prop.Name}")
+                .Where(EditorPrefs.HasKey)
+                .ToArray();
+
+            foreach (string key in prefsKeys)
+                EditorPrefs.DeleteKey(key);
+
+            Debug.Log("Saneject: All user settings were reset to default values.");
+#endif
         }
 
-        public static bool AskBeforeBatchInjectScenes
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        #endregion
 
-        public static bool AskBeforeBatchInjectPrefabs
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
+        #region Shared helpers
 
-        // Shared helpers
         private static string GetString(
             string defaultValue,
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
-            string key = $"UserSettings_{propertyName}";
+            string key = $"{SettingsPrefix}{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetString(key);
 #else
-            return string.Empty;
+            return defaultValue;
 #endif
         }
 
@@ -143,7 +186,13 @@ namespace Plugins.Saneject.Runtime.Settings
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
-            string key = $"UserSettings_{propertyName}";
+            if (Application.isPlaying)
+            {
+                Debug.LogWarning("Saneject: User settings can only be modified in edit mode.");
+                return;
+            }
+
+            string key = $"{SettingsPrefix}{propertyName}";
             EditorPrefs.SetString(key, value);
 #endif
         }
@@ -153,10 +202,10 @@ namespace Plugins.Saneject.Runtime.Settings
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
-            string key = $"UserSettings_{propertyName}";
+            string key = $"{SettingsPrefix}{propertyName}";
             return !EditorPrefs.HasKey(key) ? defaultValue : EditorPrefs.GetBool(key);
 #else
-            return false;
+            return defaultValue;
 #endif
         }
 
@@ -165,9 +214,17 @@ namespace Plugins.Saneject.Runtime.Settings
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
-            string key = $"UserSettings_{propertyName}";
+            if (Application.isPlaying)
+            {
+                Debug.LogWarning("Saneject: User settings can only be modified in edit mode.");
+                return;
+            }
+
+            string key = $"{SettingsPrefix}{propertyName}";
             EditorPrefs.SetBool(key, value);
 #endif
         }
+
+        #endregion
     }
 }

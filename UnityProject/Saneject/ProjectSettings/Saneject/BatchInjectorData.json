@@ -1,0 +1,23 @@
+{
+    "sceneList": {
+        "sortMode": 0,
+        "list": [],
+        "scroll": {
+            "x": 0.0,
+            "y": 0.0
+        }
+    },
+    "prefabList": {
+        "sortMode": 0,
+        "list": [],
+        "scroll": {
+            "x": 0.0,
+            "y": 0.0
+        }
+    },
+    "windowTab": 0,
+    "references": {
+        "version": 2,
+        "RefIds": []
+    }
+}

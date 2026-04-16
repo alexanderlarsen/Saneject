@@ -3,8 +3,8 @@
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.MVC
 {
     /// <summary>
-    /// Abstract base class for MVC controllers.
-    /// Manages the lifetime and GameObject binding of a <see cref="ViewBase" /> instance.
+    /// Base class for the sample's UI controllers.
+    /// Owns a serializable <see cref="ViewBase" /> instance and keeps it bound to the controller's <see cref="GameObject" />.
     /// </summary>
     public abstract class ControllerBase<TView> : MonoBehaviour where TView : ViewBase, new()
     {

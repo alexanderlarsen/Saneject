@@ -164,57 +164,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   __enemyObservable: {fileID: 2874387223255488611}
---- !u!1 &1405265394
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1405265396}
-  - component: {fileID: 1405265395}
-  m_Layer: 0
-  m_Name: SceneGlobalContainer
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &1405265395
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405265394}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 4fc23f65d0d943be83178defc43e5484, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  globalBindings:
-  - instance: {fileID: 142810265356923021}
-  - instance: {fileID: 2874387223255488611}
-  - instance: {fileID: 15540888646719327}
-  - instance: {fileID: 274076467875348428}
-  - instance: {fileID: 559519672}
-  createdByDependencyInjector: 1
---- !u!4 &1405265396
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1405265394}
-  serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &15540888646719327
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -606,6 +555,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6e8684ed97e740959b9b7d96276c0c29, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalComponents: []
+  proxySwapTargets: []
 --- !u!1 &5591532268916079153
 GameObject:
   m_ObjectHideFlags: 0
@@ -783,6 +734,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 276756150d3c4f12aa518508226651b3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalComponents:
+  - {fileID: 142810265356923021}
+  - {fileID: 2874387223255488611}
+  - {fileID: 15540888646719327}
+  - {fileID: 274076467875348428}
+  - {fileID: 559519672}
+  proxySwapTargets: []
 --- !u!4 &7619134572789606709
 Transform:
   m_ObjectHideFlags: 0
@@ -793,7 +751,7 @@ Transform:
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 10, y: 10, z: 10}
+  m_LocalScale: {x: 100, y: 100, z: 100}
   m_ConstrainProportionsScale: 1
   m_Children: []
   m_Father: {fileID: 7250975890217056284}
@@ -842,4 +800,3 @@ SceneRoots:
   m_ObjectHideFlags: 0
   m_Roots:
   - {fileID: 7250975890217056284}
-  - {fileID: 1405265396}

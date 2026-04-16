@@ -1,0 +1,70 @@
+- name: Getting started
+  items:
+    - name: Introduction
+      href: getting-started/introduction.md
+    - name: Feature overview
+      href: getting-started/feature-overview.md
+    - name: Installation & requirements
+      href: getting-started/installation-and-requirements.md
+    - name: Quick start
+      href: getting-started/quick-start.md
+    - name: Sample game
+      href: getting-started/sample-game.md
+
+- name: Core concepts
+  items:
+    - name: Scope
+      href: core-concepts/scope.md
+    - name: Binding
+      href: core-concepts/binding.md
+    - name: Context
+      href: core-concepts/context.md
+    - name: Field, property & method injection
+      href: core-concepts/field-property-and-method-injection.md
+    - name: Serialized interface
+      href: core-concepts/serialized-interface.md
+    - name: Runtime proxy
+      href: core-concepts/runtime-proxy.md
+    - name: Global scope
+      href: core-concepts/global-scope.md
+
+- name: Editor & tooling
+  items:
+    - name: Injection toolbar & context menus
+      href: editor-and-tooling/injection-toolbar-and-context-menus.md
+    - name: Batch injection
+      href: editor-and-tooling/batch-injection.md
+    - name: Inspectors
+      items:
+        - name: MonoBehaviour inspector
+          href: editor-and-tooling/inspectors/monobehaviour-inspector.md
+        - name: Scope inspector
+          href: editor-and-tooling/inspectors/scope-inspector.md
+        - name: Runtime proxy inspector
+          href: editor-and-tooling/inspectors/runtime-proxy-inspector.md
+    - name: Runtime proxy tools
+      href: editor-and-tooling/runtime-proxy-tools.md
+    - name: Logging & validation
+      href: editor-and-tooling/logging-and-validation.md
+    - name: Settings
+      href: editor-and-tooling/settings.md
+    - name: Code analyzers
+      href: editor-and-tooling/code-analyzers.md
+
+- name: Architecture
+  items:
+    - name: Architecture overview
+      href: architecture/architecture-overview.md
+    - name: Edit-time architecture
+      href: architecture/edit-time-architecture.md
+    - name: Runtime architecture
+      href: architecture/runtime-architecture.md
+    - name: Roslyn & generated code
+      href: architecture/roslyn-and-generated-code.md
+
+- name: Reference
+  items:
+    - name: Tested Unity versions
+      href: reference/tested-unity-versions.md
+    - name: Glossary
+      href: reference/glossary.md

@@ -1,34 +1,29 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using Plugins.Saneject.Editor.Core;
-using Plugins.Saneject.Editor.Extensions;
-using Plugins.Saneject.Editor.Inspectors.API;
-using Plugins.Saneject.Editor.Utility;
-using Plugins.Saneject.Runtime.Extensions;
+﻿using System.ComponentModel;
+using System.Text;
+using Plugins.Saneject.Editor.Data.Context;
+using Plugins.Saneject.Editor.Inspectors.Models;
+using Plugins.Saneject.Editor.Utilities;
 using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
-using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Editor.Inspectors
 {
-    /// <summary>
-    /// Custom inspector for <see cref="Scope" /> components.
-    /// Presents help, context, and runtime injection tools for both scene and prefab scopes.
-    /// </summary>
-    [CustomEditor(typeof(Scope), true), CanEditMultipleObjects]
+    [EditorBrowsable(EditorBrowsableState.Never), CustomEditor(typeof(Scope), true, isFallback = false), CanEditMultipleObjects]
     public class ScopeInspector : UnityEditor.Editor
     {
-        private readonly List<ScopeNode> scopeHierarchy = new();
-        private Scope inspectedScope;
-
-        private HashSet<Scope> rootScopes = new();
+        private Scope scope;
+        private ContextIdentity contextIdentity;
+        private ScopeHierarchyModel scopeHierarchyModel;
+        private ComponentModel componentModel;
 
         private void OnEnable()
         {
-            inspectedScope = target as Scope;
-            rootScopes = targets.OfType<Scope>().Select(s => s.FindRootScope()).ToHashSet();
+            scope = (Scope)target;
+            new ContextIdentity(scope.transform.root);
+            contextIdentity = new ContextIdentity(scope);
+            componentModel = new ComponentModel(target, serializedObject);
             BuildScopeHierarchy();
             EditorApplication.hierarchyChanged += BuildScopeHierarchy;
         }
@@ -40,233 +35,213 @@ namespace Plugins.Saneject.Editor.Inspectors
 
         public override void OnInspectorGUI()
         {
-            serializedObject.Update();
-            SelectionType selectionType = GetSelectionType();
-            EditorGUI.BeginDisabledGroup(Application.isPlaying);
             SanejectInspector.DrawMonoBehaviourScriptField(target);
-            DrawHelpBox();
-            EditorGUILayout.LabelField("Scope Type", selectionType.ToString());
-            DrawScopePath();
-            SanejectInspector.CollectPropertyData(serializedObject, target, out IReadOnlyCollection<PropertyData> properties);
-            SanejectInspector.DrawAndValidateProperties(properties);
 
-            if (Application.isPlaying)
-                GUILayout.Label("Injection is editor-only. Exit Play Mode to inject.", EditorStyles.boldLabel);
-
-            GUILayout.Space(3);
-            DrawButton(selectionType);
-            EditorGUI.EndDisabledGroup();
-            serializedObject.ApplyModifiedProperties();
-        }
-
-        private void DrawButton(SelectionType selectionType)
-        {
-            switch (selectionType)
+            if (targets.Length > 1)
             {
-                case SelectionType.Scene:
-                {
-                    string suffix = rootScopes.Count > 1 ? $" ({rootScopes.Count} hierarchies)" : string.Empty;
+                HelpBoxUtility.DrawHelpBox
+                (
+                    "Select one scope to view its scope-specific inspector sections.\n" +
+                    "To inject multiple scene hierarchies, use the injection menus or batch injection.",
+                    MessageType.Info
+                );
 
-                    if (GUILayout.Button($"Inject Hierarchy Dependencies{suffix}"))
-                        InjectHierarchy();
-
-                    break;
-                }
-
-                case SelectionType.Prefab:
-                {
-                    string suffix = rootScopes.Count > 1 ? $" ({rootScopes.Count} prefabs)" : string.Empty;
-
-                    if (GUILayout.Button($"Inject Prefab Dependencies{suffix}"))
-                        InjectPrefab();
-
-                    break;
-                }
-
-                case SelectionType.Mixed:
-                {
-                    GUI.enabled = false;
-                    GUILayout.Button("Injection requires selecting Prefab or Scene scopes only");
-                    GUI.enabled = true;
-                    break;
-                }
+                GUILayout.Label($"{targets.Length} scopes selected");
             }
-        }
+            else
+            {
+                DrawHelpBox();
+                DrawContext();
+                DrawGlobalComponents();
+                DrawProxySwapTargets();
+                DrawScopeHierarchy();
+            }
 
-        private SelectionType GetSelectionType()
-        {
-            bool hasPrefab = false;
-            bool hasScene = false;
-
-            foreach (Object t in targets)
-                if (t is Scope s)
-                {
-                    if (s.gameObject.IsPrefab())
-                        hasPrefab = true;
-                    else
-                        hasScene = true;
-                }
-
-            return hasPrefab && hasScene
-                ? SelectionType.Mixed
-                : hasPrefab
-                    ? SelectionType.Prefab
-                    : SelectionType.Scene;
+            DrawDefault();
         }
 
         private static void DrawHelpBox()
         {
-            if (UserSettings.ShowHelpBoxes)
-                EditorGUILayout.HelpBox(
-                    "• Two scope types: Prefab and Scene (both managed by this Scope component).\n" +
-                    "• The system auto-detects scope context (Prefab or Scene object).\n" +
-                    "• Prefab scopes are skipped during scene injection and must resolve dependencies themselves.\n" +
-                    "• Scopes define how dependencies are resolved in their downward hierarchy.\n" +
-                    "• Lower (child) scopes override higher (parent) ones if identical bindings exist in different scopes.\n" +
-                    "• If not resolved locally, the dependency resolver walks up through parent scopes and attempts to resolve from there.\n" +
-                    "• Scope components are automatically stripped from builds using HideFlags.DontSaveInBuild.",
-                    MessageType.None, true);
+            HelpBoxUtility.DrawHelpBox
+            (
+                "A Scope declares bindings for part of the hierarchy. During injection, Saneject resolves each injection site from the nearest Scope at the same transform or above, then falls back to parent Scopes when needed.\n\n" +
+                "A context is a serialization boundary for GameObject hierarchies: scene object, prefab instance, or prefab asset. Context filtering decides which transforms enter a run. Context isolation decides whether resolution may cross scene-object and prefab-instance boundaries inside that run.\n\n" +
+                "With context isolation enabled, only same-context Scopes and candidates are used. With it disabled, scene objects and prefab instances in the active hierarchy can resolve across those boundaries. If a dependency must cross a boundary Unity cannot serialize directly, bind it through a runtime proxy."
+            );
         }
 
-        private void DrawScopePath()
+        private void DrawContext()
         {
-            if (!UserSettings.ShowScopePath)
+            EditorGUILayout.LabelField
+            (
+                "Context",
+                contextIdentity.ToString()
+            );
+        }
+
+        private void DrawGlobalComponents()
+        {
+            SerializedProperty property = serializedObject.FindProperty("globalComponents");
+
+            bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
+            (
+                text: $"Global Components ({property.arraySize})",
+                tooltip: "Serialized components this scope will register in GlobalScope during Scope.Awake(). Runtime proxies using FromGlobalScope() can resolve them there, and runtime code can also query GlobalScope directly.",
+                defaultFoldoutState: true,
+                prefsKey: "Saneject.ScopeInspector.Foldouts.GlobalComponents"
+            );
+
+            if (!isFoldedOut)
                 return;
 
-            if (targets.Length > 1)
+            if (property.arraySize == 0)
             {
-                EditorGUILayout.LabelField("Path To Scope", "Select one scope to view its path");
+                EditorGUILayout.LabelField("No global components declared in this scope.");
                 return;
             }
 
-            for (int i = 0; i < scopeHierarchy.Count; i++)
+            using (new EditorGUI.DisabledScope(true))
             {
-                ScopeNode node = scopeHierarchy[i];
-
-                bool sameContext = !UserSettings.UseContextIsolation || node.AreSameContext;
-
-                GUIStyle labelStyle = new(i == scopeHierarchy.Count - 1 ? EditorStyles.boldLabel : EditorStyles.label);
-                Color textColor = labelStyle.normal.textColor;
-                textColor.a = sameContext ? 1f : 0.5f;
-                labelStyle.normal.textColor = textColor;
-
-                GUIContent labelContent = new
-                (
-                    node.LabelText,
-                    sameContext
-                        ? string.Empty
-                        : $"'{node.LabelText}' is in a different context than the selected Scope and will not participate in injection from this Scope.\n\nContext isolation can be toggled in Saneject → User Settings → Use Context Isolation, but it's recommended to keep it on."
-                );
-
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(i == 0 ? "Path To Scope" : " ", GUILayout.Width(EditorGUIUtility.labelWidth));
-                EditorGUILayout.LabelField(labelContent, labelStyle);
-
-                if (i != scopeHierarchy.Count - 1)
+                for (int i = 0; i < property.arraySize; i++)
                 {
-                    Texture icon = EditorGUIUtility.IconContent("d_GameObject Icon").image;
+                    SerializedProperty element = property.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(element);
+                }
+            }
+        }
 
-                    if (GUILayout.Button(new GUIContent("", $"Jump to {node.GameObject.name} GameObject"), GUILayout.Width(18), GUILayout.Height(18)))
+        private void DrawProxySwapTargets()
+        {
+            SerializedProperty property = serializedObject.FindProperty("proxySwapTargets");
+
+            bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
+            (
+                text: $"Runtime Proxy Swap Targets ({property.arraySize})",
+                tooltip: "Components in this scope whose single-value serialized interface members currently hold runtime proxy placeholders. During scope startup, Saneject asks them to swap those proxies for resolved runtime instances before normal Awake() methods run.",
+                defaultFoldoutState: true,
+                prefsKey: "Saneject.ScopeInspector.Foldouts.RuntimeProxySwapTargets"
+            );
+
+            if (!isFoldedOut)
+                return;
+
+            if (property.arraySize == 0)
+            {
+                EditorGUILayout.LabelField("No proxy swap targets declared in this scope.");
+                return;
+            }
+
+            using (new EditorGUI.DisabledScope(true))
+            {
+                for (int i = 0; i < property.arraySize; i++)
+                {
+                    SerializedProperty element = property.GetArrayElementAtIndex(i);
+                    EditorGUILayout.PropertyField(element);
+                }
+            }
+        }
+
+        private void DrawScopeHierarchy()
+        {
+            bool isFoldedOut = EditorLayoutUtility.PersistentFoldout
+            (
+                text: "Scope Hierarchy",
+                tooltip: "Click a scope to navigate to its GameObject. When context isolation is enabled, scopes in different contexts are grayed out because they are outside the inspected scope's resolution boundary.",
+                defaultFoldoutState: true,
+                prefsKey: "Saneject.ScopeInspector.Foldouts.ScopeHierarchy"
+            );
+
+            if (!isFoldedOut)
+                return;
+
+            DrawHierarchyRecursive(scopeHierarchyModel);
+            GUILayout.Space(2);
+            return;
+
+            static void DrawHierarchyRecursive(ScopeHierarchyModel model)
+            {
+                using (new EditorGUILayout.HorizontalScope())
+                {
+                    GUILayout.Space(EditorGUI.indentLevel * 15 + 2);
+                    StringBuilder sb = new();
+
+                    sb.Append($"{model.GameObject.name} ({model.ScopeName})");
+
+                    GUIContent labelContent = new
+                    (
+                        text: sb.ToString(),
+                        tooltip: $"GameObject: {model.GameObject.name}\n" +
+                                 $"Scope: {model.ScopeName}\n" +
+                                 $"Context Identity: {model.ContextIdentity}\n\n" +
+                                 (model.IsCurrent
+                                     ? "You are currently inspecting this Scope."
+                                     : $"Click to navigate to GameObject: {model.GameObject.name}")
+                    );
+
+                    GUIStyle styleToCopy = model.IsCurrent
+                        ? EditorStyles.boldLabel
+                        : EditorStyles.label;
+
+                    GUIStyle style = new(styleToCopy)
                     {
-                        Selection.activeObject = node.GameObject;
-                        EditorGUIUtility.PingObject(node.GameObject);
+                        margin = EditorStyles.label.margin,
+                        padding = EditorStyles.label.padding
+                    };
+
+                    Color textColor = style.normal.textColor;
+
+                    textColor.a =
+                        !ProjectSettings.UseContextIsolation || model.IsSameContext
+                            ? 1
+                            : 0.5f;
+
+                    style.normal.textColor = textColor;
+                    style.hover.textColor = textColor;
+                    style.onHover.textColor = textColor;
+                    style.focused.textColor = textColor;
+                    style.active.textColor = textColor;
+
+                    if (model.IsCurrent)
+                    {
+                        GUILayout.Label(labelContent, style);
                     }
-
-                    Rect r = GUILayoutUtility.GetLastRect();
-
-                    if (Event.current.type == EventType.Repaint)
+                    else if (GUILayout.Button(labelContent, style))
                     {
-                        const float padTop = 3f;
-                        const float padRight = 2f;
-                        const float padBottom = 3f;
-                        const float padLeft = 3f;
-
-                        GUI.DrawTexture
-                        (
-                            position: new Rect
-                            (
-                                r.x + padLeft,
-                                r.y + padTop,
-                                r.width - (padLeft + padRight),
-                                r.height - (padTop + padBottom)
-                            ),
-                            image: icon,
-                            scaleMode: ScaleMode.ScaleToFit
-                        );
+                        Selection.activeObject = model.GameObject;
+                        EditorGUIUtility.PingObject(model.GameObject);
                     }
                 }
 
-                EditorGUILayout.EndHorizontal();
+                foreach (ScopeHierarchyModel child in model.Children)
+                {
+                    EditorGUI.indentLevel++;
+                    DrawHierarchyRecursive(child);
+                    EditorGUI.indentLevel--;
+                }
             }
         }
 
-        private void InjectHierarchy()
+        private void DrawDefault()
         {
-            if (!Dialogs.Injection.ConfirmInjectHierarchy())
+            if (componentModel.Properties.Count == 0)
                 return;
 
-            if (UserSettings.ClearLogsOnInjection)
-                ConsoleUtils.ClearLog();
+            EditorGUILayout.Space(4);
+            componentModel.SerializedObject.Update();
 
-            foreach (Scope rootScope in rootScopes)
-                DependencyInjector.InjectSingleHierarchy(rootScope);
-        }
+            foreach (PropertyModel propertyData in componentModel.Properties)
+            {
+                SanejectInspector.DrawProperty(propertyData);
+                SanejectInspector.ValidateProperty(propertyData);
+            }
 
-        private void InjectPrefab()
-        {
-            if (!Dialogs.Injection.ConfirmInjectPrefab())
-                return;
-
-            if (UserSettings.ClearLogsOnInjection)
-                ConsoleUtils.ClearLog();
-
-            foreach (Scope rootScope in rootScopes)
-                DependencyInjector.InjectPrefab(rootScope);
+            componentModel.SerializedObject.ApplyModifiedProperties();
         }
 
         private void BuildScopeHierarchy()
         {
-            if (!UserSettings.ShowScopePath)
-                return;
-
-            scopeHierarchy.Clear();
-
-            Component current = target as Component;
-
-            while (current != null)
-            {
-                if (current.TryGetComponent(out Scope scope))
-                    scopeHierarchy.Add(new ScopeNode(scope, inspectedScope));
-
-                current = current.transform.parent;
-            }
-
-            scopeHierarchy.Reverse();
-        }
-
-        private class ScopeNode
-        {
-            public ScopeNode(
-                Scope scope,
-                Scope inspectedScope)
-            {
-                GameObject = scope.gameObject;
-                LabelText = $"{scope.gameObject.name} ({scope.GetType().Name})";
-                AreSameContext = ContextFilter.AreSameContext(scope, inspectedScope);
-                IsPrefab = scope.gameObject.IsPrefab();
-            }
-
-            public GameObject GameObject { get; }
-            public string LabelText { get; }
-            public bool AreSameContext { get; }
-            public bool IsPrefab { get; }
-        }
-
-        private enum SelectionType
-        {
-            Scene,
-            Prefab,
-            Mixed
+            Scope rootScope = scope.transform.root.GetComponentInChildren<Scope>();
+            scopeHierarchyModel = new ScopeHierarchyModel(rootScope, scope, contextIdentity);
         }
     }
 }

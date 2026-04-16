@@ -1,21 +1,23 @@
 ﻿using Plugins.Saneject.Runtime.Scopes;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Camera;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Enemies;
+using Plugins.Saneject.Samples.DemoGame.Scripts.GameState;
 using Plugins.Saneject.Samples.DemoGame.Scripts.Highscore;
 using Plugins.Saneject.Samples.DemoGame.Scripts.PlayerSystems;
 using UnityEngine;
-using CameraController = Plugins.Saneject.Samples.DemoGame.Scripts.Camera.CameraController;
-using EnemyManager = Plugins.Saneject.Samples.DemoGame.Scripts.Enemies.EnemyManager;
-using GameStateManager = Plugins.Saneject.Samples.DemoGame.Scripts.GameState.GameStateManager;
 
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {
     /// <summary>
-    /// Scene-level DI scope for the main game scene.
+    /// Scene-level scope for the gameplay scene.
+    /// Declares gameplay bindings and global registrations that other contexts consume through runtime proxies.
     /// </summary>
     public class GameSceneScope : Scope
     {
-        public override void ConfigureBindings()
+        /// <summary>
+        /// Declares the gameplay bindings and global registrations used throughout the sample.
+        /// </summary>
+        protected override void DeclareBindings()
         {
             BindGlobal<Player>()
                 .FromScopeDescendants();
@@ -42,7 +44,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
                 .FromScopeDescendants();
 
             BindComponent<UnityEngine.Camera>()
-                .FromAnywhereInScene();
+                .FromAnywhere();
 
             BindAsset<GameObject>()
                 .ToTarget<EnemyManager>()

@@ -1,18 +1,17 @@
 ﻿namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
 {
     /// <summary>
-    /// Interface for scene transition logic.
-    /// Implemented by the in-game scene manager.
+    /// Coordinates the sample game's scene transitions.
     /// </summary>
     public interface ISceneManager
     {
         /// <summary>
-        /// Starts the game by loading game and UI scenes, and unloading the start scene.
+        /// Starts the game by loading the gameplay and UI scenes, then unloading the start scene.
         /// </summary>
         void StartGame();
 
         /// <summary>
-        /// Restarts the game by unloading all current scenes and reloading the start scene.
+        /// Restarts the sample by returning to the start scene.
         /// </summary>
         void RestartGame();
     }

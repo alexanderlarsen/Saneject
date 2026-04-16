@@ -9,11 +9,15 @@ using UnityEngine.UI;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
 {
     /// <summary>
-    /// Scene-level DI scope for the UI scene.
+    /// Scene-level scope for the UI scene.
+    /// Declares UI element bindings and runtime proxy bindings back to gameplay services in the game scene.
     /// </summary>
     public class UISceneScope : Scope
     {
-        public override void ConfigureBindings()
+        /// <summary>
+        /// Declares the bindings used by the HUD and game-over UI.
+        /// </summary>
+        protected override void DeclareBindings()
         {
             BindComponent<Text>()
                 .ToID("enemiesLeftText")
@@ -32,16 +36,16 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
                 .WhereGameObject(go => go.name == "RestartButton");
 
             BindComponent<IGameStateObservable, GameStateManager>()
-                .FromProxy();
+                .FromRuntimeProxy();
 
             BindComponent<IScoreObservable, ScoreManager>()
-                .FromProxy();
+                .FromRuntimeProxy();
 
             BindComponent<IEnemyObservable, EnemyManager>()
-                .FromProxy();
+                .FromRuntimeProxy();
 
             BindComponent<ISceneManager, SceneManager>()
-                .FromProxy();
+                .FromRuntimeProxy();
         }
     }
 }

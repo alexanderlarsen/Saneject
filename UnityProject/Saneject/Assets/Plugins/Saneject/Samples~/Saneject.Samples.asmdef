@@ -1,0 +1,16 @@
+{
+    "name": "Saneject.Samples",
+    "rootNamespace": "",
+    "references": [
+        "GUID:9d4efcdc038880a47bec379313b2bed9"
+    ],
+    "includePlatforms": [],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

@@ -6,9 +6,8 @@ using UnityEngine.UI;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.Enemy
 {
     /// <summary>
-    /// UI element that points to off-screen enemies by clamping their position to screen bounds.
-    /// Note: This class is marked <c>partial</c> because it uses <see cref="SerializeInterfaceAttribute" />.
-    /// The Roslyn source generator <c>SerializeInterfaceGenerator.dll</c> generates a matching partial that implements the serialized backing field and assigns it to the interface reference.
+    /// HUD marker that points toward an enemy when it moves off-screen.
+    /// Marked <c>partial</c> so Saneject can serialize the injected <see cref="IMainCamera" /> interface reference.
     /// </summary>
     public partial class EnemyMarker : MonoBehaviour
     {
@@ -47,26 +46,4 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.UI.Enemy
             transform.position = clampedPosition;
         }
     }
-
-    /*
-    Roslyn generated partial:
-
-    public partial class EnemyMarker : ISerializationCallbackReceiver
-    {
-        [SerializeField, InterfaceBackingField(interfaceType: typeof(IMainCamera), isInjected: true, injectId: null)]
-        private Object __mainCamera;
-
-        public void OnBeforeSerialize()
-        {
-    #if UNITY_EDITOR
-            __mainCamera = mainCamera as Object;
-    #endif
-        }
-
-        public void OnAfterDeserialize()
-        {
-            mainCamera = __mainCamera as IMainCamera;
-        }
-    }
-    */
 }

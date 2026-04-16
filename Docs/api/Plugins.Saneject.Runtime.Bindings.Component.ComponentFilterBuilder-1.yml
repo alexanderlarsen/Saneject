@@ -1,0 +1,1035 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  id: ComponentFilterBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  children:
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.Where(System.Func{`0,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyAncestor(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean,System.Int32)
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyChild(System.Func{UnityEngine.Transform,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyDescendant(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnySibling(System.Func{UnityEngine.Transform,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereChildAt(System.Int32,System.Func{UnityEngine.Transform,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereComponent(System.Func{UnityEngine.Component,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereFirstChild(System.Func{UnityEngine.Transform,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereGameObject(System.Func{UnityEngine.GameObject,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereLastChild(System.Func{UnityEngine.Transform,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereParent(System.Func{UnityEngine.Transform,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereRoot(System.Func{UnityEngine.Transform,System.Boolean})
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereTransform(System.Func{UnityEngine.Transform,System.Boolean})
+  langs:
+  - csharp
+  - vb
+  name: ComponentFilterBuilder<TComponent>
+  nameWithType: ComponentFilterBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ComponentFilterBuilder
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 10
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Builder for configuring filters on component bindings.
+  example: []
+  syntax:
+    content: 'public class ComponentFilterBuilder<TComponent> where TComponent : class'
+    typeParameters:
+    - id: TComponent
+      description: The type of the component being filtered.
+    content.vb: Public Class ComponentFilterBuilder(Of TComponent As Class)
+  inheritance:
+  - System.Object
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent)
+  name.vb: ComponentFilterBuilder(Of TComponent)
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  id: '#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)'
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ComponentFilterBuilder(ComponentBinding)
+  nameWithType: ComponentFilterBuilder<TComponent>.ComponentFilterBuilder(ComponentBinding)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.ComponentFilterBuilder(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  type: Constructor
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: .ctor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 18
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Initializes a new instance of the <xref href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder%601" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder(ComponentBinding binding)
+    parameters:
+    - id: binding
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+      description: The component binding to configure.
+    content.vb: Public Sub New(binding As ComponentBinding)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.#ctor*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).New(ComponentBinding)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).New(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  name.vb: New(ComponentBinding)
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.Where(System.Func{`0,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.Where(System.Func{`0,System.Boolean})
+  id: Where(System.Func{`0,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: Where(Func<TComponent, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.Where(Func<TComponent, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.Where(System.Func<TComponent, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: Where
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 30
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on <code class="typeparamref">TComponent</code> for custom search logic.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> Where(Func<TComponent, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{{TComponent},System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function Where(predicate As Func(Of TComponent, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.Where*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).Where(Func(Of TComponent, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).Where(System.Func(Of TComponent, Boolean))
+  name.vb: Where(Func(Of TComponent, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereComponent(System.Func{UnityEngine.Component,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereComponent(System.Func{UnityEngine.Component,System.Boolean})
+  id: WhereComponent(System.Func{UnityEngine.Component,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereComponent(Func<Component, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereComponent(Func<Component, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereComponent(System.Func<UnityEngine.Component, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereComponent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 47
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on <code class="typeparamref">TComponent</code> as <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> for custom search logic. Useful if <code class="typeparamref">TComponent</code> is an interface.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereComponent(Func<Component, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Component,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereComponent(predicate As Func(Of Component, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereComponent*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereComponent(Func(Of Component, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereComponent(System.Func(Of UnityEngine.Component, Boolean))
+  name.vb: WhereComponent(Func(Of Component, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereTransform(System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereTransform(System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereTransform(System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereTransform(Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereTransform(Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereTransform(System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereTransform
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 64
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on the candidate’s own <xref href="UnityEngine.Transform" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereTransform(Func<Transform, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereTransform(predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereTransform*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereTransform(Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereTransform(System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereTransform(Func(Of Transform, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereGameObject(System.Func{UnityEngine.GameObject,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereGameObject(System.Func{UnityEngine.GameObject,System.Boolean})
+  id: WhereGameObject(System.Func{UnityEngine.GameObject,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereGameObject(Func<GameObject, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereGameObject(Func<GameObject, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereGameObject(System.Func<UnityEngine.GameObject, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereGameObject
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 81
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on the candidate’s own <xref href="UnityEngine.GameObject" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereGameObject(Func<GameObject, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.GameObject,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereGameObject(predicate As Func(Of GameObject, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereGameObject*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereGameObject(Func(Of GameObject, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereGameObject(System.Func(Of UnityEngine.GameObject, Boolean))
+  name.vb: WhereGameObject(Func(Of GameObject, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereParent(System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereParent(System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereParent(System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereParent(Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereParent(Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereParent(System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereParent
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 102
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on the candidate’s immediate parent <xref href="UnityEngine.Transform" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereParent(Func<Transform, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereParent(predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereParent*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereParent(Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereParent(System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereParent(Func(Of Transform, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyAncestor(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean,System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyAncestor(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean,System.Int32)
+  id: WhereAnyAncestor(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean,System.Int32)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereAnyAncestor(Func<Transform, bool>, bool, int)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnyAncestor(Func<Transform, bool>, bool, int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnyAncestor(System.Func<UnityEngine.Transform, bool>, bool, int)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereAnyAncestor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 122
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: >-
+    Filter using a predicate on any ancestor <xref href="UnityEngine.Transform" data-throw-if-not-resolved="false"></xref> of the candidate.
+
+    Supports optional inclusion of the candidate itself and limiting the depth.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereAnyAncestor(Func<Transform, bool> predicate, bool includeSelf = false, int maxDepth = 2147483647)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    - id: includeSelf
+      type: System.Boolean
+      description: Whether to include the candidate itself.
+    - id: maxDepth
+      type: System.Int32
+      description: The maximum search depth.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereAnyAncestor(predicate As Func(Of Transform, Boolean), includeSelf As Boolean = False, maxDepth As Integer = 2147483647) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyAncestor*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnyAncestor(Func(Of Transform, Boolean), Boolean, Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnyAncestor(System.Func(Of UnityEngine.Transform, Boolean), Boolean, Integer)
+  name.vb: WhereAnyAncestor(Func(Of Transform, Boolean), Boolean, Integer)
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereRoot(System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereRoot(System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereRoot(System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereRoot(Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereRoot(Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereRoot(System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereRoot
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 159
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on the candidate’s root <xref href="UnityEngine.Transform" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereRoot(Func<Transform, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereRoot(predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereRoot*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereRoot(Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereRoot(System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereRoot(Func(Of Transform, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyChild(System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyChild(System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereAnyChild(System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereAnyChild(Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnyChild(Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnyChild(System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereAnyChild
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 180
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on any direct child <xref href="UnityEngine.Transform" data-throw-if-not-resolved="false"></xref> of the candidate.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereAnyChild(Func<Transform, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereAnyChild(predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyChild*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnyChild(Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnyChild(System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereAnyChild(Func(Of Transform, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereChildAt(System.Int32,System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereChildAt(System.Int32,System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereChildAt(System.Int32,System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereChildAt(int, Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereChildAt(int, Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereChildAt(int, System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereChildAt
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 210
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on the child at a specific <code class="paramref">index</code>.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereChildAt(int index, Func<Transform, bool> predicate)
+    parameters:
+    - id: index
+      type: System.Int32
+      description: The child index.
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereChildAt(index As Integer, predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereChildAt*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereChildAt(Integer, Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereChildAt(Integer, System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereChildAt(Integer, Func(Of Transform, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereFirstChild(System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereFirstChild(System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereFirstChild(System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereFirstChild(Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereFirstChild(Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereFirstChild(System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereFirstChild
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 241
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on the first direct child of the candidate.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereFirstChild(Func<Transform, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereFirstChild(predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereFirstChild*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereFirstChild(Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereFirstChild(System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereFirstChild(Func(Of Transform, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereLastChild(System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereLastChild(System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereLastChild(System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereLastChild(Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereLastChild(Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereLastChild(System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereLastChild
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 262
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on the last direct child of the candidate.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereLastChild(Func<Transform, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereLastChild(predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereLastChild*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereLastChild(Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereLastChild(System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereLastChild(Func(Of Transform, Boolean))
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyDescendant(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyDescendant(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean)
+  id: WhereAnyDescendant(System.Func{UnityEngine.Transform,System.Boolean},System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereAnyDescendant(Func<Transform, bool>, bool)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnyDescendant(Func<Transform, bool>, bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnyDescendant(System.Func<UnityEngine.Transform, bool>, bool)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereAnyDescendant
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 293
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: >-
+    Filter using a predicate on any descendant <xref href="UnityEngine.Transform" data-throw-if-not-resolved="false"></xref> of the candidate (recursive search).
+
+    Supports optional inclusion of the candidate itself.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereAnyDescendant(Func<Transform, bool> predicate, bool includeSelf = false)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    - id: includeSelf
+      type: System.Boolean
+      description: Whether to include the candidate itself.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereAnyDescendant(predicate As Func(Of Transform, Boolean), includeSelf As Boolean = False) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyDescendant*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnyDescendant(Func(Of Transform, Boolean), Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnyDescendant(System.Func(Of UnityEngine.Transform, Boolean), Boolean)
+  name.vb: WhereAnyDescendant(Func(Of Transform, Boolean), Boolean)
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnySibling(System.Func{UnityEngine.Transform,System.Boolean})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnySibling(System.Func{UnityEngine.Transform,System.Boolean})
+  id: WhereAnySibling(System.Func{UnityEngine.Transform,System.Boolean})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: WhereAnySibling(Func<Transform, bool>)
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnySibling(Func<Transform, bool>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnySibling(System.Func<UnityEngine.Transform, bool>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: WhereAnySibling
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
+    startLine: 338
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Filter using a predicate on any sibling <xref href="UnityEngine.Transform" data-throw-if-not-resolved="false"></xref> of the candidate (excluding itself).
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> WhereAnySibling(Func<Transform, bool> predicate)
+    parameters:
+    - id: predicate
+      type: System.Func{UnityEngine.Transform,System.Boolean}
+      description: The predicate function.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function WhereAnySibling(predicate As Func(Of Transform, Boolean)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnySibling*
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnySibling(Func(Of Transform, Boolean))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnySibling(System.Func(Of UnityEngine.Transform, Boolean))
+  name.vb: WhereAnySibling(Func(Of Transform, Boolean))
+references:
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html
+  name: ComponentFilterBuilder<TComponent>
+  nameWithType: ComponentFilterBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent)
+  name.vb: ComponentFilterBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+    name: ComponentFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1
+    name: ComponentFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.#ctor*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.#ctor
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1__ctor_Plugins_Saneject_Runtime_Bindings_Component_ComponentBinding_
+  name: ComponentFilterBuilder
+  nameWithType: ComponentFilterBuilder<TComponent>.ComponentFilterBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.ComponentFilterBuilder
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).New
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).New
+  name.vb: New
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  name: ComponentBinding
+  nameWithType: ComponentBinding
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.Where*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.Where
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_Where_System_Func__0_System_Boolean__
+  name: Where
+  nameWithType: ComponentFilterBuilder<TComponent>.Where
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.Where
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).Where
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).Where
+- uid: System.Func{{TComponent},System.Boolean}
+  commentId: T:System.Func{`0,System.Boolean}
+  parent: System
+  definition: System.Func`2
+  name: Func<TComponent, bool>
+  nameWithType: Func<TComponent, bool>
+  fullName: System.Func<TComponent, bool>
+  nameWithType.vb: Func(Of TComponent, Boolean)
+  fullName.vb: System.Func(Of TComponent, Boolean)
+  name.vb: Func(Of TComponent, Boolean)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: System.Func`2
+  commentId: T:System.Func`2
+  isExternal: true
+  name: Func<T, TResult>
+  nameWithType: Func<T, TResult>
+  fullName: System.Func<T, TResult>
+  nameWithType.vb: Func(Of T, TResult)
+  fullName.vb: System.Func(Of T, TResult)
+  name.vb: Func(Of T, TResult)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: ','
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereComponent*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereComponent
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereComponent_System_Func_UnityEngine_Component_System_Boolean__
+  name: WhereComponent
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereComponent
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereComponent
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereComponent
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereComponent
+- uid: System.Func{UnityEngine.Component,System.Boolean}
+  commentId: T:System.Func{UnityEngine.Component,System.Boolean}
+  parent: System
+  definition: System.Func`2
+  name: Func<Component, bool>
+  nameWithType: Func<Component, bool>
+  fullName: System.Func<UnityEngine.Component, bool>
+  nameWithType.vb: Func(Of Component, Boolean)
+  fullName.vb: System.Func(Of UnityEngine.Component, Boolean)
+  name.vb: Func(Of Component, Boolean)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - uid: UnityEngine.Component
+    name: Component
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: UnityEngine.Component
+    name: Component
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: UnityEngine.Transform
+  commentId: T:UnityEngine.Transform
+  parent: UnityEngine
+  isExternal: true
+  name: Transform
+  nameWithType: Transform
+  fullName: UnityEngine.Transform
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereTransform*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereTransform
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereTransform_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereTransform
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereTransform
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereTransform
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereTransform
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereTransform
+- uid: System.Func{UnityEngine.Transform,System.Boolean}
+  commentId: T:System.Func{UnityEngine.Transform,System.Boolean}
+  parent: System
+  definition: System.Func`2
+  name: Func<Transform, bool>
+  nameWithType: Func<Transform, bool>
+  fullName: System.Func<UnityEngine.Transform, bool>
+  nameWithType.vb: Func(Of Transform, Boolean)
+  fullName.vb: System.Func(Of UnityEngine.Transform, Boolean)
+  name.vb: Func(Of Transform, Boolean)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: UnityEngine.GameObject
+  commentId: T:UnityEngine.GameObject
+  parent: UnityEngine
+  isExternal: true
+  name: GameObject
+  nameWithType: GameObject
+  fullName: UnityEngine.GameObject
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereGameObject*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereGameObject
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereGameObject_System_Func_UnityEngine_GameObject_System_Boolean__
+  name: WhereGameObject
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereGameObject
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereGameObject
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereGameObject
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereGameObject
+- uid: System.Func{UnityEngine.GameObject,System.Boolean}
+  commentId: T:System.Func{UnityEngine.GameObject,System.Boolean}
+  parent: System
+  definition: System.Func`2
+  name: Func<GameObject, bool>
+  nameWithType: Func<GameObject, bool>
+  fullName: System.Func<UnityEngine.GameObject, bool>
+  nameWithType.vb: Func(Of GameObject, Boolean)
+  fullName.vb: System.Func(Of UnityEngine.GameObject, Boolean)
+  name.vb: Func(Of GameObject, Boolean)
+  spec.csharp:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: <
+  - uid: UnityEngine.GameObject
+    name: GameObject
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`2
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: UnityEngine.GameObject
+    name: GameObject
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereParent*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereParent
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereParent_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereParent
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereParent
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereParent
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereParent
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereParent
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyAncestor*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyAncestor
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereAnyAncestor_System_Func_UnityEngine_Transform_System_Boolean__System_Boolean_System_Int32_
+  name: WhereAnyAncestor
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnyAncestor
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnyAncestor
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnyAncestor
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnyAncestor
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: System.Int32
+  commentId: T:System.Int32
+  parent: System
+  isExternal: true
+  name: int
+  nameWithType: int
+  fullName: int
+  nameWithType.vb: Integer
+  fullName.vb: Integer
+  name.vb: Integer
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereRoot*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereRoot
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereRoot_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereRoot
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereRoot
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereRoot
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereRoot
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereRoot
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyChild*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereAnyChild_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereAnyChild
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnyChild
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnyChild
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnyChild
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnyChild
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereChildAt*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereChildAt
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereChildAt_System_Int32_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereChildAt
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereChildAt
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereChildAt
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereChildAt
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereChildAt
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereFirstChild*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereFirstChild_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereFirstChild
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereFirstChild
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereFirstChild
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereFirstChild
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereFirstChild
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereLastChild*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereLastChild_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereLastChild
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereLastChild
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereLastChild
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereLastChild
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereLastChild
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyDescendant*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnyDescendant
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereAnyDescendant_System_Func_UnityEngine_Transform_System_Boolean__System_Boolean_
+  name: WhereAnyDescendant
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnyDescendant
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnyDescendant
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnyDescendant
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnyDescendant
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnySibling*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder`1.WhereAnySibling
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentFilterBuilder_1_WhereAnySibling_System_Func_UnityEngine_Transform_System_Boolean__
+  name: WhereAnySibling
+  nameWithType: ComponentFilterBuilder<TComponent>.WhereAnySibling
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder<TComponent>.WhereAnySibling
+  nameWithType.vb: ComponentFilterBuilder(Of TComponent).WhereAnySibling
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder(Of TComponent).WhereAnySibling

@@ -1,0 +1,1132 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  id: AssetBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  children:
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromAssetLoad(System.String)
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromFolder(System.String)
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromInstance(`0)
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod(System.Func{`0})
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResources(System.String)
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResourcesAll(System.String)
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToID(System.String[])
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToMember(System.String[])
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget(System.Type[])
+  - Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget``1
+  langs:
+  - csharp
+  - vb
+  name: AssetBindingBuilder<TAsset>
+  nameWithType: AssetBindingBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: AssetBindingBuilder
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 14
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: >-
+    Fluent builder for configuring asset bindings in a <xref href="Plugins.Saneject.Runtime.Scopes.Scope" data-throw-if-not-resolved="false"></xref>.
+
+    Allows specifying how to locate <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref> assets via direct instance, Resources, or AssetDatabase.
+
+    Returned from <code>BindAsset&lt;TAsset&gt;()</code> or <code>BindAssets&lt;TAsset&gt;()</code>.
+  example: []
+  syntax:
+    content: 'public class AssetBindingBuilder<TAsset> where TAsset : Object'
+    typeParameters:
+    - id: TAsset
+    content.vb: Public Class AssetBindingBuilder(Of TAsset As [Object])
+  inheritance:
+  - System.Object
+  nameWithType.vb: AssetBindingBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset)
+  name.vb: AssetBindingBuilder(Of TAsset)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  id: '#ctor(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)'
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: AssetBindingBuilder(AssetBinding)
+  nameWithType: AssetBindingBuilder<TAsset>.AssetBindingBuilder(AssetBinding)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.AssetBindingBuilder(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  type: Constructor
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: .ctor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 22
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Initializes a new instance of the <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder%601" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public AssetBindingBuilder(AssetBinding binding)
+    parameters:
+    - id: binding
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+      description: The <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding" data-throw-if-not-resolved="false"></xref> to configure.
+    content.vb: Public Sub New(binding As AssetBinding)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.#ctor*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).New(AssetBinding)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).New(Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding)
+  name.vb: New(AssetBinding)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromAssetLoad(System.String)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromAssetLoad(System.String)
+  id: FromAssetLoad(System.String)
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromAssetLoad(string)
+  nameWithType: AssetBindingBuilder<TAsset>.FromAssetLoad(string)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromAssetLoad(string)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromAssetLoad
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 34
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Locate the <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref> asset at the specified path using <xref href="UnityEditor.AssetDatabase.LoadAssetAtPath(System.String%2cSystem.Type)" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> FromAssetLoad(string assetPath)
+    parameters:
+    - id: assetPath
+      type: System.String
+      description: The asset path.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromAssetLoad(assetPath As String) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromAssetLoad*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromAssetLoad(String)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromAssetLoad(String)
+  name.vb: FromAssetLoad(String)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromFolder(System.String)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromFolder(System.String)
+  id: FromFolder(System.String)
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromFolder(string)
+  nameWithType: AssetBindingBuilder<TAsset>.FromFolder(string)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromFolder(string)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromFolder
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 52
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: >-
+    Locate all <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref>s of type <code class="typeparamref">TAsset</code> in the specified folder
+
+    using <xref href="UnityEditor.AssetDatabase.FindAssets(System.String%2cSystem.String%5b%5d)" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> FromFolder(string folderPath)
+    parameters:
+    - id: folderPath
+      type: System.String
+      description: The folder path.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromFolder(folderPath As String) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromFolder*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromFolder(String)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromFolder(String)
+  name.vb: FromFolder(String)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToID(System.String[])
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToID(System.String[])
+  id: ToID(System.String[])
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToID(params string[])
+  nameWithType: AssetBindingBuilder<TAsset>.ToID(params string[])
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.ToID(params string[])
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToID
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 71
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: >-
+    Qualifies this binding with an ID.
+
+    Only injection targets annotated with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>
+
+    that specify the same ID will resolve using this binding.
+  example: []
+  syntax:
+    content: public AssetBindingBuilder<TAsset> ToID(params string[] ids)
+    parameters:
+    - id: ids
+      type: System.String[]
+      description: The identifiers to match against injection targets.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToID(ParamArray ids As String()) As AssetBindingBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToID*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).ToID(ParamArray String())
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).ToID(ParamArray String())
+  name.vb: ToID(ParamArray String())
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget``1
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget``1
+  id: ToTarget``1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToTarget<TTarget>()
+  nameWithType: AssetBindingBuilder<TAsset>.ToTarget<TTarget>()
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.ToTarget<TTarget>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToTarget
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 84
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: >-
+    Qualifies this binding to apply only when the injection target is of the given type.
+
+    The injection target is the <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> that owns the field or property
+
+    marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public AssetBindingBuilder<TAsset> ToTarget<TTarget>()
+    typeParameters:
+    - id: TTarget
+      description: The target type this binding applies to.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToTarget(Of TTarget)() As AssetBindingBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).ToTarget(Of TTarget)()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).ToTarget(Of TTarget)()
+  name.vb: ToTarget(Of TTarget)()
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget(System.Type[])
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget(System.Type[])
+  id: ToTarget(System.Type[])
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToTarget(params Type[])
+  nameWithType: AssetBindingBuilder<TAsset>.ToTarget(params Type[])
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.ToTarget(params System.Type[])
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToTarget
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 97
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: >-
+    Qualifies this binding to apply only when the injection target is one of the specified types.
+
+    The injection target is the <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> that owns the field or property
+
+    marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public AssetBindingBuilder<TAsset> ToTarget(params Type[] targetTypes)
+    parameters:
+    - id: targetTypes
+      type: System.Type[]
+      description: One or more target <xref href="System.Type" data-throw-if-not-resolved="false"></xref> objects to match against.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToTarget(ParamArray targetTypes As Type()) As AssetBindingBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).ToTarget(ParamArray Type())
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).ToTarget(ParamArray System.Type())
+  name.vb: ToTarget(ParamArray Type())
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToMember(System.String[])
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToMember(System.String[])
+  id: ToMember(System.String[])
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToMember(params string[])
+  nameWithType: AssetBindingBuilder<TAsset>.ToMember(params string[])
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.ToMember(params string[])
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToMember
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 109
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: >-
+    Qualifies this binding to apply only when the injection target member (field or property)
+
+    has one of the specified names.
+  example: []
+  syntax:
+    content: public AssetBindingBuilder<TAsset> ToMember(params string[] memberNames)
+    parameters:
+    - id: memberNames
+      type: System.String[]
+      description: The field or property names on the injection target that this binding should apply to.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToMember(ParamArray memberNames As String()) As AssetBindingBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToMember*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).ToMember(ParamArray String())
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).ToMember(ParamArray String())
+  name.vb: ToMember(ParamArray String())
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResources(System.String)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResources(System.String)
+  id: FromResources(System.String)
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromResources(string)
+  nameWithType: AssetBindingBuilder<TAsset>.FromResources(string)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromResources(string)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromResources
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 124
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Locate the <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref> in a <xref href="UnityEngine.Resources" data-throw-if-not-resolved="false"></xref> folder at the specified path using <xref href="UnityEngine.Resources.Load(System.String)" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> FromResources(string path)
+    parameters:
+    - id: path
+      type: System.String
+      description: The resource path.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromResources(path As String) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResources*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromResources(String)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromResources(String)
+  name.vb: FromResources(String)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResourcesAll(System.String)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResourcesAll(System.String)
+  id: FromResourcesAll(System.String)
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromResourcesAll(string)
+  nameWithType: AssetBindingBuilder<TAsset>.FromResourcesAll(string)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromResourcesAll(string)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromResourcesAll
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 137
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Locate all <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref>s in a <xref href="UnityEngine.Resources" data-throw-if-not-resolved="false"></xref> folder at the specified path using <xref href="UnityEngine.Resources.LoadAll(System.String%2cSystem.Type)" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> FromResourcesAll(string path)
+    parameters:
+    - id: path
+      type: System.String
+      description: The resource path.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromResourcesAll(path As String) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResourcesAll*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromResourcesAll(String)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromResourcesAll(String)
+  name.vb: FromResourcesAll(String)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromInstance(`0)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromInstance(`0)
+  id: FromInstance(`0)
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromInstance(TAsset)
+  nameWithType: AssetBindingBuilder<TAsset>.FromInstance(TAsset)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromInstance(TAsset)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromInstance
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 154
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Bind to the specified <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref> instance.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> FromInstance(TAsset instance)
+    parameters:
+    - id: instance
+      type: '{TAsset}'
+      description: The asset instance.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromInstance(instance As TAsset) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromInstance*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromInstance(TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromInstance(TAsset)
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod(System.Func{`0})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod(System.Func{`0})
+  id: FromMethod(System.Func{`0})
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromMethod(Func<TAsset>)
+  nameWithType: AssetBindingBuilder<TAsset>.FromMethod(Func<TAsset>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromMethod(System.Func<TAsset>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromMethod
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 167
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Locate the <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref> using the provided method.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> FromMethod(Func<TAsset> method)
+    parameters:
+    - id: method
+      type: System.Func{{TAsset}}
+      description: The method to resolve the asset.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromMethod(method As Func(Of TAsset)) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromMethod(Func(Of TAsset))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromMethod(System.Func(Of TAsset))
+  name.vb: FromMethod(Func(Of TAsset))
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  id: FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  parent: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromMethod(Func<IEnumerable<TAsset>>)
+  nameWithType: AssetBindingBuilder<TAsset>.FromMethod(Func<IEnumerable<TAsset>>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromMethod(System.Func<System.Collections.Generic.IEnumerable<TAsset>>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromMethod
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
+    startLine: 189
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Asset
+  summary: Locate multiple <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref>s using the provided method.
+  example: []
+  syntax:
+    content: public AssetFilterBuilder<TAsset> FromMethod(Func<IEnumerable<TAsset>> method)
+    parameters:
+    - id: method
+      type: System.Func{System.Collections.Generic.IEnumerable{{TAsset}}}
+      description: The method to resolve the assets.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromMethod(method As Func(Of IEnumerable(Of TAsset))) As AssetFilterBuilder(Of TAsset)
+  overload: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod*
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromMethod(Func(Of IEnumerable(Of TAsset)))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromMethod(System.Func(Of System.Collections.Generic.IEnumerable(Of TAsset)))
+  name.vb: FromMethod(Func(Of IEnumerable(Of TAsset)))
+references:
+- uid: Plugins.Saneject.Runtime.Scopes.Scope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.Scope
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html
+  name: Scope
+  nameWithType: Scope
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope
+- uid: UnityEngine.Object
+  commentId: T:UnityEngine.Object
+  parent: UnityEngine
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: UnityEngine.Object
+- uid: Plugins.Saneject.Runtime.Bindings.Asset
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Asset
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Asset
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset
+    name: Asset
+    href: Plugins.Saneject.Runtime.Bindings.Asset.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  name: AssetBindingBuilder<TAsset>
+  nameWithType: AssetBindingBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>
+  nameWithType.vb: AssetBindingBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset)
+  name.vb: AssetBindingBuilder(Of TAsset)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
+    name: AssetBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  name: AssetBinding
+  nameWithType: AssetBinding
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBinding
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.#ctor*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.#ctor
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1__ctor_Plugins_Saneject_Runtime_Bindings_Asset_AssetBinding_
+  name: AssetBindingBuilder
+  nameWithType: AssetBindingBuilder<TAsset>.AssetBindingBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.AssetBindingBuilder
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).New
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).New
+  name.vb: New
+- uid: UnityEditor.AssetDatabase.LoadAssetAtPath(System.String,System.Type)
+  commentId: M:UnityEditor.AssetDatabase.LoadAssetAtPath(System.String,System.Type)
+  isExternal: true
+  name: LoadAssetAtPath(string, Type)
+  nameWithType: AssetDatabase.LoadAssetAtPath(string, Type)
+  fullName: UnityEditor.AssetDatabase.LoadAssetAtPath(string, System.Type)
+  nameWithType.vb: AssetDatabase.LoadAssetAtPath(String, Type)
+  fullName.vb: UnityEditor.AssetDatabase.LoadAssetAtPath(String, System.Type)
+  name.vb: LoadAssetAtPath(String, Type)
+  spec.csharp:
+  - uid: UnityEditor.AssetDatabase.LoadAssetAtPath(System.String,System.Type)
+    name: LoadAssetAtPath
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: UnityEditor.AssetDatabase.LoadAssetAtPath(System.String,System.Type)
+    name: LoadAssetAtPath
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  name: AssetFilterBuilder<TAsset>
+  nameWithType: AssetFilterBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>
+  nameWithType.vb: AssetFilterBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset)
+  name.vb: AssetFilterBuilder(Of TAsset)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromAssetLoad*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromAssetLoad
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_FromAssetLoad_System_String_
+  name: FromAssetLoad
+  nameWithType: AssetBindingBuilder<TAsset>.FromAssetLoad
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromAssetLoad
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromAssetLoad
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromAssetLoad
+- uid: System.String
+  commentId: T:System.String
+  parent: System
+  isExternal: true
+  name: string
+  nameWithType: string
+  fullName: string
+  nameWithType.vb: String
+  fullName.vb: String
+  name.vb: String
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{{TAsset}}
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder{`0}
+  parent: Plugins.Saneject.Runtime.Bindings.Asset
+  definition: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  name: AssetFilterBuilder<TAsset>
+  nameWithType: AssetFilterBuilder<TAsset>
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder<TAsset>
+  nameWithType.vb: AssetFilterBuilder(Of TAsset)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder(Of TAsset)
+  name.vb: AssetFilterBuilder(Of TAsset)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder`1
+    name: AssetFilterBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Asset.AssetFilterBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: UnityEditor.AssetDatabase.FindAssets(System.String,System.String[])
+  commentId: M:UnityEditor.AssetDatabase.FindAssets(System.String,System.String[])
+  isExternal: true
+  name: FindAssets(string, string[])
+  nameWithType: AssetDatabase.FindAssets(string, string[])
+  fullName: UnityEditor.AssetDatabase.FindAssets(string, string[])
+  nameWithType.vb: AssetDatabase.FindAssets(String, String())
+  fullName.vb: UnityEditor.AssetDatabase.FindAssets(String, String())
+  name.vb: FindAssets(String, String())
+  spec.csharp:
+  - uid: UnityEditor.AssetDatabase.FindAssets(System.String,System.String[])
+    name: FindAssets
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: '['
+  - name: ']'
+  - name: )
+  spec.vb:
+  - uid: UnityEditor.AssetDatabase.FindAssets(System.String,System.String[])
+    name: FindAssets
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: (
+  - name: )
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromFolder*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromFolder
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_FromFolder_System_String_
+  name: FromFolder
+  nameWithType: AssetBindingBuilder<TAsset>.FromFolder
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromFolder
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromFolder
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromFolder
+- uid: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  href: Plugins.Saneject.Runtime.Attributes.InjectAttribute.html
+  name: InjectAttribute
+  nameWithType: InjectAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToID*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToID
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_ToID_System_String___
+  name: ToID
+  nameWithType: AssetBindingBuilder<TAsset>.ToID
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.ToID
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).ToID
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).ToID
+- uid: System.String[]
+  isExternal: true
+  name: string[]
+  nameWithType: string[]
+  fullName: string[]
+  nameWithType.vb: String()
+  fullName.vb: String()
+  name.vb: String()
+  spec.csharp:
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_ToTarget__1
+  name: ToTarget
+  nameWithType: AssetBindingBuilder<TAsset>.ToTarget
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.ToTarget
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).ToTarget
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).ToTarget
+- uid: System.Type
+  commentId: T:System.Type
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type
+- uid: System.Type[]
+  isExternal: true
+  name: Type[]
+  nameWithType: Type[]
+  fullName: System.Type[]
+  nameWithType.vb: Type()
+  fullName.vb: System.Type()
+  name.vb: Type()
+  spec.csharp:
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToMember*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToMember
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_ToMember_System_String___
+  name: ToMember
+  nameWithType: AssetBindingBuilder<TAsset>.ToMember
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.ToMember
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).ToMember
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).ToMember
+- uid: UnityEngine.Resources
+  commentId: T:UnityEngine.Resources
+  isExternal: true
+  name: Resources
+  nameWithType: Resources
+  fullName: UnityEngine.Resources
+- uid: UnityEngine.Resources.Load(System.String)
+  commentId: M:UnityEngine.Resources.Load(System.String)
+  isExternal: true
+  name: Load(string)
+  nameWithType: Resources.Load(string)
+  fullName: UnityEngine.Resources.Load(string)
+  nameWithType.vb: Resources.Load(String)
+  fullName.vb: UnityEngine.Resources.Load(String)
+  name.vb: Load(String)
+  spec.csharp:
+  - uid: UnityEngine.Resources.Load(System.String)
+    name: Load
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: UnityEngine.Resources.Load(System.String)
+    name: Load
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResources*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResources
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_FromResources_System_String_
+  name: FromResources
+  nameWithType: AssetBindingBuilder<TAsset>.FromResources
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromResources
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromResources
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromResources
+- uid: UnityEngine.Resources.LoadAll(System.String,System.Type)
+  commentId: M:UnityEngine.Resources.LoadAll(System.String,System.Type)
+  isExternal: true
+  name: LoadAll(string, Type)
+  nameWithType: Resources.LoadAll(string, Type)
+  fullName: UnityEngine.Resources.LoadAll(string, System.Type)
+  nameWithType.vb: Resources.LoadAll(String, Type)
+  fullName.vb: UnityEngine.Resources.LoadAll(String, System.Type)
+  name.vb: LoadAll(String, Type)
+  spec.csharp:
+  - uid: UnityEngine.Resources.LoadAll(System.String,System.Type)
+    name: LoadAll
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: UnityEngine.Resources.LoadAll(System.String,System.Type)
+    name: LoadAll
+    isExternal: true
+  - name: (
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResourcesAll*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromResourcesAll
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_FromResourcesAll_System_String_
+  name: FromResourcesAll
+  nameWithType: AssetBindingBuilder<TAsset>.FromResourcesAll
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromResourcesAll
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromResourcesAll
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromResourcesAll
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromInstance*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromInstance
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_FromInstance__0_
+  name: FromInstance
+  nameWithType: AssetBindingBuilder<TAsset>.FromInstance
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromInstance
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromInstance
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromInstance
+- uid: '{TAsset}'
+  commentId: '!:TAsset'
+  definition: TAsset
+  name: TAsset
+  nameWithType: TAsset
+  fullName: TAsset
+- uid: TAsset
+  commentId: '!:TAsset'
+  name: TAsset
+  nameWithType: TAsset
+  fullName: TAsset
+- uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.FromMethod
+  href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_FromMethod_System_Func__0__
+  name: FromMethod
+  nameWithType: AssetBindingBuilder<TAsset>.FromMethod
+  fullName: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder<TAsset>.FromMethod
+  nameWithType.vb: AssetBindingBuilder(Of TAsset).FromMethod
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder(Of TAsset).FromMethod
+- uid: System.Func{{TAsset}}
+  commentId: T:System.Func{`0}
+  parent: System
+  definition: System.Func`1
+  name: Func<TAsset>
+  nameWithType: Func<TAsset>
+  fullName: System.Func<TAsset>
+  nameWithType.vb: Func(Of TAsset)
+  fullName.vb: System.Func(Of TAsset)
+  name.vb: Func(Of TAsset)
+  spec.csharp:
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: <
+  - name: TAsset
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+- uid: System.Func`1
+  commentId: T:System.Func`1
+  isExternal: true
+  name: Func<TResult>
+  nameWithType: Func<TResult>
+  fullName: System.Func<TResult>
+  nameWithType.vb: Func(Of TResult)
+  fullName.vb: System.Func(Of TResult)
+  name.vb: Func(Of TResult)
+  spec.csharp:
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: <
+  - name: TResult
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TResult
+  - name: )
+- uid: System.Func{System.Collections.Generic.IEnumerable{{TAsset}}}
+  commentId: T:System.Func{System.Collections.Generic.IEnumerable{`0}}
+  parent: System
+  definition: System.Func`1
+  name: Func<IEnumerable<TAsset>>
+  nameWithType: Func<IEnumerable<TAsset>>
+  fullName: System.Func<System.Collections.Generic.IEnumerable<TAsset>>
+  nameWithType.vb: Func(Of IEnumerable(Of TAsset))
+  fullName.vb: System.Func(Of System.Collections.Generic.IEnumerable(Of TAsset))
+  name.vb: Func(Of IEnumerable(Of TAsset))
+  spec.csharp:
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: <
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: TAsset
+  - name: '>'
+  - name: '>'
+  spec.vb:
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TAsset
+  - name: )
+  - name: )

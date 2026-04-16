@@ -53,7 +53,7 @@ MonoBehaviour:
   markerTarget: {fileID: 9153909654693612790}
   markerImage: {fileID: 8796291780960885798}
   padding: 20
-  __mainCamera: {fileID: 11400000, guid: 0c27dd2ff21ff4b44885d928d9c0c952, type: 2}
+  __mainCamera: {fileID: 11400000, guid: 7978de8b86aa00c45bfc0e66017c6669, type: 2}
 --- !u!222 &8919195443713171182
 CanvasRenderer:
   m_ObjectHideFlags: 0
@@ -132,7 +132,7 @@ Transform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4982463863073542035
 MonoBehaviour:
-  m_ObjectHideFlags: 16
+  m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
@@ -142,6 +142,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 99be87a0bc894393bbe93525168cd721, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  globalComponents: []
+  proxySwapTargets:
+  - {fileID: 1028328457214396874}
+  - {fileID: 6589209672442903516}
 --- !u!114 &1028328457214396874
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -159,7 +163,7 @@ MonoBehaviour:
   walkSpeed: 3
   runSpeed: 5
   evadeDistance: 3
-  __evadeTarget: {fileID: 11400000, guid: e54f004f87f4478499ec975bc94c8b6b, type: 2}
+  __evadeTarget: {fileID: 11400000, guid: 11f2dbb6280a5c64fad4b2b2654f3645, type: 2}
 --- !u!33 &8924227375775184379
 MeshFilter:
   m_ObjectHideFlags: 0

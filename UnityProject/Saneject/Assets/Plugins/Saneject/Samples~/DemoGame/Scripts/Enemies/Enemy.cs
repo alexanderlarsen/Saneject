@@ -6,10 +6,10 @@ using Random = UnityEngine.Random;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
     /// <summary>
-    /// Represents a single enemy instance in the scene. Handles movement, catching logic, and visual feedback.
-    /// Implements <see cref="IEnemyCatchNotifiable" /> to signal when it is caught, and <see cref="IEnemyEvadeTarget" /> for its position.
-    /// Note: Marked as <c>partial</c> since it uses <see cref="SerializeInterfaceAttribute" />.
-    /// The Roslyn generator <c>SerializeInterfaceGenerator.dll</c> generates a partial to provide the serialized backing field and assignment logic.
+    /// Enemy behaviour for the demo game's enemy prefab.
+    /// Wanders until the injected <see cref="IEnemyEvadeTarget" /> comes close, then flees and
+    /// raises <see cref="OnEnemyCaught" /> when the player catches it.
+    /// Marked <c>partial</c> so Saneject can serialize the injected interface reference.
     /// </summary>
     public partial class Enemy : MonoBehaviour, IEnemy
     {
@@ -52,6 +52,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
         {
             timer += Time.deltaTime;
             Vector3 toEvade = transform.position - evadeTarget.Position;
+            toEvade.y = 0f;
 
             float moveSpeed = walkSpeed;
 
@@ -65,8 +66,10 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
                 PickNewTarget();
             }
 
-            Vector3 direction = (currentTarget - transform.position).normalized;
-            characterController.SimpleMove(direction * moveSpeed);
+            Vector3 direction = currentTarget - transform.position;
+            direction.y = 0f;
+            direction.Normalize();
+            characterController.Move(direction * (moveSpeed * Time.deltaTime));
         }
 
         private void PickNewTarget()
@@ -85,26 +88,4 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
             Destroy(gameObject);
         }
     }
-
-    /*
-    Roslyn generated partial:
-
-    public partial class Enemy : ISerializationCallbackReceiver
-    {
-        [SerializeField, InterfaceBackingField(interfaceType: typeof(IEnemyEvadeTarget), isInjected: true, injectId: null)]
-        private Object __evadeTarget;
-
-        public void OnBeforeSerialize()
-        {
-    #if UNITY_EDITOR
-            __evadeTarget = evadeTarget as Object;
-    #endif
-        }
-
-        public void OnAfterDeserialize()
-        {
-            evadeTarget = __evadeTarget as IEnemyEvadeTarget;
-        }
-    }
-    */
 }

@@ -1,0 +1,2854 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  id: ComponentBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  children:
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.FromRuntimeProxy
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToID(System.String[])
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToMember(System.String[])
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget(System.Type[])
+  - Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget``1
+  langs:
+  - csharp
+  - vb
+  name: ComponentBindingBuilder<TComponent>
+  nameWithType: ComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ComponentBindingBuilder
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+    startLine: 14
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: >-
+    Fluent builder for configuring component bindings within a <xref href="Plugins.Saneject.Runtime.Scopes.Scope" data-throw-if-not-resolved="false"></xref>.
+
+    Allows specifying how to locate <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> instances from the scene- or prefab hierarchy.
+
+    Supports locating from the scope, injection target, custom transforms, scene-wide queries, or explicit instances.
+
+    Returned from binding methods like <code>BindComponent&lt;TComponent&gt;()</code> or <code>BindMultipleComponents&lt;TComponent&gt;()</code>.
+  example: []
+  syntax:
+    content: 'public class ComponentBindingBuilder<TComponent> : BaseComponentBindingBuilder<TComponent> where TComponent : class'
+    typeParameters:
+    - id: TComponent
+    content.vb: Public Class ComponentBindingBuilder(Of TComponent As Class) Inherits BaseComponentBindingBuilder(Of TComponent)
+  inheritance:
+  - System.Object
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  inheritedMembers:
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromSelf
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromParent
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromAncestors(System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromFirstChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromLastChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromChildWithIndex(System.Int32)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromDescendants(System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromSiblings
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeSelf
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeParent
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeAncestors(System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeFirstChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeLastChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeChildWithIndex(System.Int32)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeDescendants(System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeSiblings
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootSelf
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootFirstChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootLastChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootChildWithIndex(System.Int32)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootDescendants(System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetSelf
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetParent
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetAncestors(System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetFirstChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetLastChild
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetChildWithIndex(System.Int32)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetDescendants(System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetSiblings
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.From(UnityEngine.Transform)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromParentOf(UnityEngine.Transform)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromFirstChildOf(UnityEngine.Transform)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromLastChildOf(UnityEngine.Transform)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromSiblingsOf(UnityEngine.Transform)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromInstance({TComponent})
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromMethod(System.Func{{TComponent}})
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromMethod(System.Func{System.Collections.Generic.IEnumerable{{TComponent}}})
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent)
+  name.vb: ComponentBindingBuilder(Of TComponent)
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  id: '#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)'
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ComponentBindingBuilder(ComponentBinding)
+  nameWithType: ComponentBindingBuilder<TComponent>.ComponentBindingBuilder(ComponentBinding)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ComponentBindingBuilder(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  type: Constructor
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: .ctor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+    startLine: 20
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Initializes a new instance of the <xref href="Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder%601" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public ComponentBindingBuilder(ComponentBinding binding)
+    parameters:
+    - id: binding
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+      description: The <xref href="Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding" data-throw-if-not-resolved="false"></xref> to configure.
+    content.vb: Public Sub New(binding As ComponentBinding)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.#ctor*
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).New(ComponentBinding)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).New(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  name.vb: New(ComponentBinding)
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.FromRuntimeProxy
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.FromRuntimeProxy
+  id: FromRuntimeProxy
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromRuntimeProxy()
+  nameWithType: ComponentBindingBuilder<TComponent>.FromRuntimeProxy()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.FromRuntimeProxy()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromRuntimeProxy
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+    startLine: 33
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Configures this binding to use a <xref href="Plugins.Saneject.Runtime.Proxy.RuntimeProxy%601" data-throw-if-not-resolved="false"></xref> intermediary.
+  remarks: >-
+    Runtime proxies act as serialized placeholder assets for interface references Unity cannot serialize directly across runtime boundaries.
+
+    During injection, Saneject creates or reuses the required proxy asset. During scope startup, registered components swap that placeholder for the real instance.
+
+    If you do not specify a resolve method after calling this, the default is <xref href="Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public RuntimeProxyBindingBuilder FromRuntimeProxy()
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder" data-throw-if-not-resolved="false"></xref> to configure the runtime proxy resolution strategy.
+    content.vb: Public Function FromRuntimeProxy() As RuntimeProxyBindingBuilder
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.FromRuntimeProxy*
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).FromRuntimeProxy()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).FromRuntimeProxy()
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToID(System.String[])
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToID(System.String[])
+  id: ToID(System.String[])
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToID(params string[])
+  nameWithType: ComponentBindingBuilder<TComponent>.ToID(params string[])
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToID(params string[])
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToID
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+    startLine: 57
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: >-
+    Qualifies this binding with one or more IDs.
+
+    Only injection sites (fields/properties/methods) annotated with an <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>
+
+    that specify the same ID will resolve using this binding.
+  example: []
+  syntax:
+    content: public ComponentBindingBuilder<TComponent> ToID(params string[] ids)
+    parameters:
+    - id: ids
+      type: System.String[]
+      description: The identifiers to match against injection sites.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToID(ParamArray ids As String()) As ComponentBindingBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToID*
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToID(ParamArray String())
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToID(ParamArray String())
+  name.vb: ToID(ParamArray String())
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget``1
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget``1
+  id: ToTarget``1
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToTarget<TTarget>()
+  nameWithType: ComponentBindingBuilder<TComponent>.ToTarget<TTarget>()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToTarget<TTarget>()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToTarget
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+    startLine: 70
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: >-
+    Qualifies this binding to apply only when the injection target is of the given type.
+
+    The injection target is the <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> that owns the field, property or method
+
+    marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public ComponentBindingBuilder<TComponent> ToTarget<TTarget>()
+    typeParameters:
+    - id: TTarget
+      description: The target type this binding applies to.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToTarget(Of TTarget)() As ComponentBindingBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget*
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToTarget(Of TTarget)()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToTarget(Of TTarget)()
+  name.vb: ToTarget(Of TTarget)()
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget(System.Type[])
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget(System.Type[])
+  id: ToTarget(System.Type[])
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToTarget(params Type[])
+  nameWithType: ComponentBindingBuilder<TComponent>.ToTarget(params Type[])
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToTarget(params System.Type[])
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToTarget
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+    startLine: 83
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: >-
+    Qualifies this binding to apply only when the injection target is one of the specified types.
+
+    The injection target is the <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> that owns the field, property or method
+
+    marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
+  example: []
+  syntax:
+    content: public ComponentBindingBuilder<TComponent> ToTarget(params Type[] targetTypes)
+    parameters:
+    - id: targetTypes
+      type: System.Type[]
+      description: One or more target <xref href="System.Type" data-throw-if-not-resolved="false"></xref> objects to match against.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToTarget(ParamArray targetTypes As Type()) As ComponentBindingBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget*
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToTarget(ParamArray Type())
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToTarget(ParamArray System.Type())
+  name.vb: ToTarget(ParamArray Type())
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToMember(System.String[])
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToMember(System.String[])
+  id: ToMember(System.String[])
+  parent: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: ToMember(params string[])
+  nameWithType: ComponentBindingBuilder<TComponent>.ToMember(params string[])
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToMember(params string[])
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: ToMember
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
+    startLine: 94
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Qualifies this binding to apply only when the injection target member (field or property) has one of the specified names.
+  example: []
+  syntax:
+    content: public ComponentBindingBuilder<TComponent> ToMember(params string[] memberNames)
+    parameters:
+    - id: memberNames
+      type: System.String[]
+      description: The field or property names on the injection target that this binding should apply to.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+      description: The builder instance for fluent chaining.
+    content.vb: Public Function ToMember(ParamArray memberNames As String()) As ComponentBindingBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToMember*
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToMember(ParamArray String())
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToMember(ParamArray String())
+  name.vb: ToMember(ParamArray String())
+references:
+- uid: Plugins.Saneject.Runtime.Scopes.Scope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.Scope
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html
+  name: Scope
+  nameWithType: Scope
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  name: BaseComponentBindingBuilder<TComponent>
+  nameWithType: BaseComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent)
+  name.vb: BaseComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+    name: BaseComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+    name: BaseComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSelf
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf
+  name: FromSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSelf
+    name: FromSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSelf
+    name: FromSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromParent
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromParent
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParent
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent
+  name: FromParent()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromParent()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromParent()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromParent()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromParent()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromParent
+    name: FromParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromParent
+    name: FromParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromAncestors(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAncestors(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestors(System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_System_Boolean_
+  name: FromAncestors(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromAncestors(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromAncestors(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromAncestors(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromAncestors(Boolean)
+  name.vb: FromAncestors(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAncestors(System.Boolean)
+    name: FromAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAncestors(System.Boolean)
+    name: FromAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromFirstChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild
+  name: FromFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromFirstChild
+    name: FromFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromFirstChild
+    name: FromFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromLastChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild
+  name: FromLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromLastChild
+    name: FromLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromLastChild
+    name: FromLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromChildWithIndex(System.Int32)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndex(System.Int32)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_System_Int32_
+  name: FromChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromChildWithIndex(Integer)
+  name.vb: FromChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromChildWithIndex(System.Int32)
+    name: FromChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromChildWithIndex(System.Int32)
+    name: FromChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromDescendants(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendants(System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_System_Boolean_
+  name: FromDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromDescendants(Boolean)
+  name.vb: FromDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromDescendants(System.Boolean)
+    name: FromDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromDescendants(System.Boolean)
+    name: FromDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromSiblings
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSiblings
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblings
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings
+  name: FromSiblings()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromSiblings()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromSiblings()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromSiblings()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromSiblings()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSiblings
+    name: FromSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSiblings
+    name: FromSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeSelf
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf
+  name: FromScopeSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeSelf
+    name: FromScopeSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeSelf
+    name: FromScopeSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeParent
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeParent
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeParent
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent
+  name: FromScopeParent()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeParent()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeParent()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeParent()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeParent()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeParent
+    name: FromScopeParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeParent
+    name: FromScopeParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeAncestors(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeAncestors(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeAncestors(System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_
+  name: FromScopeAncestors(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeAncestors(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeAncestors(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeAncestors(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeAncestors(Boolean)
+  name.vb: FromScopeAncestors(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeAncestors(System.Boolean)
+    name: FromScopeAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeAncestors(System.Boolean)
+    name: FromScopeAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeFirstChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild
+  name: FromScopeFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeFirstChild
+    name: FromScopeFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeFirstChild
+    name: FromScopeFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeLastChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild
+  name: FromScopeLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeLastChild
+    name: FromScopeLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeLastChild
+    name: FromScopeLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeChildWithIndex(System.Int32)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeChildWithIndex(System.Int32)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_
+  name: FromScopeChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeChildWithIndex(Integer)
+  name.vb: FromScopeChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeChildWithIndex(System.Int32)
+    name: FromScopeChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeChildWithIndex(System.Int32)
+    name: FromScopeChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeDescendants(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeDescendants(System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_
+  name: FromScopeDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeDescendants(Boolean)
+  name.vb: FromScopeDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeDescendants(System.Boolean)
+    name: FromScopeDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeDescendants(System.Boolean)
+    name: FromScopeDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromScopeSiblings
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeSiblings
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSiblings
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings
+  name: FromScopeSiblings()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeSiblings()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeSiblings()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeSiblings()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeSiblings()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeSiblings
+    name: FromScopeSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromScopeSiblings
+    name: FromScopeSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootSelf
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf
+  name: FromRootSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootSelf
+    name: FromRootSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootSelf
+    name: FromRootSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootFirstChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild
+  name: FromRootFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootFirstChild
+    name: FromRootFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootFirstChild
+    name: FromRootFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootLastChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild
+  name: FromRootLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootLastChild
+    name: FromRootLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootLastChild
+    name: FromRootLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootChildWithIndex(System.Int32)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootChildWithIndex(System.Int32)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_System_Int32_
+  name: FromRootChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootChildWithIndex(Integer)
+  name.vb: FromRootChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootChildWithIndex(System.Int32)
+    name: FromRootChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootChildWithIndex(System.Int32)
+    name: FromRootChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromRootDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootDescendants(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootDescendants(System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_System_Boolean_
+  name: FromRootDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootDescendants(Boolean)
+  name.vb: FromRootDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootDescendants(System.Boolean)
+    name: FromRootDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromRootDescendants(System.Boolean)
+    name: FromRootDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetSelf
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf
+  name: FromTargetSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetSelf
+    name: FromTargetSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetSelf
+    name: FromTargetSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetParent
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetParent
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetParent
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent
+  name: FromTargetParent()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetParent()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetParent()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetParent()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetParent()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetParent
+    name: FromTargetParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetParent
+    name: FromTargetParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetAncestors(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetAncestors(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetAncestors(System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_System_Boolean_
+  name: FromTargetAncestors(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetAncestors(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetAncestors(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetAncestors(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetAncestors(Boolean)
+  name.vb: FromTargetAncestors(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetAncestors(System.Boolean)
+    name: FromTargetAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetAncestors(System.Boolean)
+    name: FromTargetAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetFirstChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild
+  name: FromTargetFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetFirstChild
+    name: FromTargetFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetFirstChild
+    name: FromTargetFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetLastChild
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild
+  name: FromTargetLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetLastChild
+    name: FromTargetLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetLastChild
+    name: FromTargetLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetChildWithIndex(System.Int32)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetChildWithIndex(System.Int32)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_System_Int32_
+  name: FromTargetChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetChildWithIndex(Integer)
+  name.vb: FromTargetChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetChildWithIndex(System.Int32)
+    name: FromTargetChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetChildWithIndex(System.Int32)
+    name: FromTargetChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetDescendants(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetDescendants(System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_System_Boolean_
+  name: FromTargetDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetDescendants(Boolean)
+  name.vb: FromTargetDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetDescendants(System.Boolean)
+    name: FromTargetDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetDescendants(System.Boolean)
+    name: FromTargetDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromTargetSiblings
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetSiblings
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSiblings
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings
+  name: FromTargetSiblings()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetSiblings()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetSiblings()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetSiblings()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetSiblings()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetSiblings
+    name: FromTargetSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromTargetSiblings
+    name: FromTargetSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.From(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.From(UnityEngine.Transform)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.From(UnityEngine.Transform)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_UnityEngine_Transform_
+  name: From(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.From(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.From(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).From(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).From(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.From(UnityEngine.Transform)
+    name: From
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.From(UnityEngine.Transform)
+    name: From
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromParentOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromParentOf(UnityEngine.Transform)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParentOf(UnityEngine.Transform)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_UnityEngine_Transform_
+  name: FromParentOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromParentOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromParentOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromParentOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromParentOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromParentOf(UnityEngine.Transform)
+    name: FromParentOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromParentOf(UnityEngine.Transform)
+    name: FromParentOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_UnityEngine_Transform_System_Boolean_
+  name: FromAncestorsOf(Transform, bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromAncestorsOf(Transform, bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromAncestorsOf(UnityEngine.Transform, bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromAncestorsOf(Transform, Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromAncestorsOf(UnityEngine.Transform, Boolean)
+  name.vb: FromAncestorsOf(Transform, Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+    name: FromAncestorsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+    name: FromAncestorsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromFirstChildOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromFirstChildOf(UnityEngine.Transform)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf(UnityEngine.Transform)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_UnityEngine_Transform_
+  name: FromFirstChildOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromFirstChildOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromFirstChildOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromFirstChildOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromFirstChildOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromFirstChildOf(UnityEngine.Transform)
+    name: FromFirstChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromFirstChildOf(UnityEngine.Transform)
+    name: FromFirstChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromLastChildOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromLastChildOf(UnityEngine.Transform)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf(UnityEngine.Transform)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_UnityEngine_Transform_
+  name: FromLastChildOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromLastChildOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromLastChildOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromLastChildOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromLastChildOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromLastChildOf(UnityEngine.Transform)
+    name: FromLastChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromLastChildOf(UnityEngine.Transform)
+    name: FromLastChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_UnityEngine_Transform_System_Int32_
+  name: FromChildWithIndexOf(Transform, int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromChildWithIndexOf(Transform, int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromChildWithIndexOf(UnityEngine.Transform, int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromChildWithIndexOf(Transform, Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromChildWithIndexOf(UnityEngine.Transform, Integer)
+  name.vb: FromChildWithIndexOf(Transform, Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+    name: FromChildWithIndexOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_UnityEngine_Transform_System_Int32_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+    name: FromChildWithIndexOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_UnityEngine_Transform_System_Int32_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_UnityEngine_Transform_System_Boolean_
+  name: FromDescendantsOf(Transform, bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromDescendantsOf(Transform, bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromDescendantsOf(UnityEngine.Transform, bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromDescendantsOf(Transform, Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromDescendantsOf(UnityEngine.Transform, Boolean)
+  name.vb: FromDescendantsOf(Transform, Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+    name: FromDescendantsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+    name: FromDescendantsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromSiblingsOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSiblingsOf(UnityEngine.Transform)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblingsOf(UnityEngine.Transform)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_UnityEngine_Transform_
+  name: FromSiblingsOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromSiblingsOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromSiblingsOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromSiblingsOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromSiblingsOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSiblingsOf(UnityEngine.Transform)
+    name: FromSiblingsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromSiblingsOf(UnityEngine.Transform)
+    name: FromSiblingsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_UnityEngine_FindObjectsInactive_UnityEngine_FindObjectsSortMode_
+  name: FromAnywhere(FindObjectsInactive, FindObjectsSortMode)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromAnywhere(FindObjectsInactive, FindObjectsSortMode)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromAnywhere(UnityEngine.FindObjectsInactive, UnityEngine.FindObjectsSortMode)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromAnywhere(FindObjectsInactive, FindObjectsSortMode)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromAnywhere(UnityEngine.FindObjectsInactive, UnityEngine.FindObjectsSortMode)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+    name: FromAnywhere
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_UnityEngine_FindObjectsInactive_UnityEngine_FindObjectsSortMode_
+  - name: (
+  - uid: UnityEngine.FindObjectsInactive
+    name: FindObjectsInactive
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: UnityEngine.FindObjectsSortMode
+    name: FindObjectsSortMode
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+    name: FromAnywhere
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_UnityEngine_FindObjectsInactive_UnityEngine_FindObjectsSortMode_
+  - name: (
+  - uid: UnityEngine.FindObjectsInactive
+    name: FindObjectsInactive
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: UnityEngine.FindObjectsSortMode
+    name: FindObjectsSortMode
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromInstance({TComponent})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromInstance(`0)
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance(`0)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_
+  name: FromInstance(TComponent)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromInstance(TComponent)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromInstance(TComponent)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromInstance(TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromInstance(TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromInstance(`0)
+    name: FromInstance
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_
+  - name: (
+  - name: TComponent
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromInstance(`0)
+    name: FromInstance
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_
+  - name: (
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromMethod(System.Func{{TComponent}})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromMethod(System.Func{`0})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__
+  name: FromMethod(Func<TComponent>)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromMethod(Func<TComponent>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromMethod(System.Func<TComponent>)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromMethod(Func(Of TComponent))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromMethod(System.Func(Of TComponent))
+  name.vb: FromMethod(Func(Of TComponent))
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromMethod(System.Func{`0})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: '>'
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromMethod(System.Func{`0})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromMethod(System.Func{System.Collections.Generic.IEnumerable{{TComponent}}})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func_System_Collections_Generic_IEnumerable__0___
+  name: FromMethod(Func<IEnumerable<TComponent>>)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromMethod(Func<IEnumerable<TComponent>>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromMethod(System.Func<System.Collections.Generic.IEnumerable<TComponent>>)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromMethod(Func(Of IEnumerable(Of TComponent)))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromMethod(System.Func(Of System.Collections.Generic.IEnumerable(Of TComponent)))
+  name.vb: FromMethod(Func(Of IEnumerable(Of TComponent)))
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func_System_Collections_Generic_IEnumerable__0___
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: <
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: '>'
+  - name: '>'
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func_System_Collections_Generic_IEnumerable__0___
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+  - name: )
+  - name: )
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  name: BaseComponentBindingBuilder<TComponent>
+  nameWithType: BaseComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent)
+  name.vb: BaseComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+    name: BaseComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+    name: BaseComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf
+  name: FromSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSelf
+    name: FromSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSelf
+    name: FromSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParent
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParent
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent
+  name: FromParent()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromParent()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromParent()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromParent()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromParent()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParent
+    name: FromParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParent
+    name: FromParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParent
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestors(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestors(System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_System_Boolean_
+  name: FromAncestors(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromAncestors(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromAncestors(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromAncestors(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromAncestors(Boolean)
+  name.vb: FromAncestors(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestors(System.Boolean)
+    name: FromAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestors(System.Boolean)
+    name: FromAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild
+  name: FromFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild
+    name: FromFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild
+    name: FromFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild
+  name: FromLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild
+    name: FromLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild
+    name: FromLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndex(System.Int32)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_System_Int32_
+  name: FromChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromChildWithIndex(Integer)
+  name.vb: FromChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndex(System.Int32)
+    name: FromChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndex(System.Int32)
+    name: FromChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendants(System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_System_Boolean_
+  name: FromDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromDescendants(Boolean)
+  name.vb: FromDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendants(System.Boolean)
+    name: FromDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendants(System.Boolean)
+    name: FromDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblings
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblings
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings
+  name: FromSiblings()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromSiblings()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromSiblings()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromSiblings()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromSiblings()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblings
+    name: FromSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblings
+    name: FromSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblings
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf
+  name: FromScopeSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSelf
+    name: FromScopeSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSelf
+    name: FromScopeSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeParent
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeParent
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent
+  name: FromScopeParent()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeParent()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeParent()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeParent()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeParent()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeParent
+    name: FromScopeParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeParent
+    name: FromScopeParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeParent
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeAncestors(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeAncestors(System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_
+  name: FromScopeAncestors(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeAncestors(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeAncestors(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeAncestors(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeAncestors(Boolean)
+  name.vb: FromScopeAncestors(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeAncestors(System.Boolean)
+    name: FromScopeAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeAncestors(System.Boolean)
+    name: FromScopeAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild
+  name: FromScopeFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeFirstChild
+    name: FromScopeFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeFirstChild
+    name: FromScopeFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild
+  name: FromScopeLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeLastChild
+    name: FromScopeLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeLastChild
+    name: FromScopeLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeChildWithIndex(System.Int32)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_
+  name: FromScopeChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeChildWithIndex(Integer)
+  name.vb: FromScopeChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeChildWithIndex(System.Int32)
+    name: FromScopeChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeChildWithIndex(System.Int32)
+    name: FromScopeChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeDescendants(System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_
+  name: FromScopeDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeDescendants(Boolean)
+  name.vb: FromScopeDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeDescendants(System.Boolean)
+    name: FromScopeDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeDescendants(System.Boolean)
+    name: FromScopeDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSiblings
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSiblings
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings
+  name: FromScopeSiblings()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromScopeSiblings()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromScopeSiblings()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromScopeSiblings()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromScopeSiblings()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSiblings
+    name: FromScopeSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromScopeSiblings
+    name: FromScopeSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromScopeSiblings
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf
+  name: FromRootSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootSelf
+    name: FromRootSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootSelf
+    name: FromRootSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild
+  name: FromRootFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootFirstChild
+    name: FromRootFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootFirstChild
+    name: FromRootFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild
+  name: FromRootLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootLastChild
+    name: FromRootLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootLastChild
+    name: FromRootLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootChildWithIndex(System.Int32)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_System_Int32_
+  name: FromRootChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootChildWithIndex(Integer)
+  name.vb: FromRootChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootChildWithIndex(System.Int32)
+    name: FromRootChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootChildWithIndex(System.Int32)
+    name: FromRootChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootDescendants(System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_System_Boolean_
+  name: FromRootDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromRootDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromRootDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromRootDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromRootDescendants(Boolean)
+  name.vb: FromRootDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootDescendants(System.Boolean)
+    name: FromRootDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromRootDescendants(System.Boolean)
+    name: FromRootDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromRootDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSelf
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSelf
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf
+  name: FromTargetSelf()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetSelf()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetSelf()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetSelf()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetSelf()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSelf
+    name: FromTargetSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSelf
+    name: FromTargetSelf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSelf
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetParent
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetParent
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent
+  name: FromTargetParent()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetParent()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetParent()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetParent()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetParent()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetParent
+    name: FromTargetParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetParent
+    name: FromTargetParent
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetParent
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetAncestors(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetAncestors(System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_System_Boolean_
+  name: FromTargetAncestors(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetAncestors(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetAncestors(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetAncestors(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetAncestors(Boolean)
+  name.vb: FromTargetAncestors(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetAncestors(System.Boolean)
+    name: FromTargetAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetAncestors(System.Boolean)
+    name: FromTargetAncestors
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetAncestors_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetFirstChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetFirstChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild
+  name: FromTargetFirstChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetFirstChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetFirstChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetFirstChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetFirstChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetFirstChild
+    name: FromTargetFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetFirstChild
+    name: FromTargetFirstChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetFirstChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetLastChild
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetLastChild
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild
+  name: FromTargetLastChild()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetLastChild()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetLastChild()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetLastChild()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetLastChild()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetLastChild
+    name: FromTargetLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetLastChild
+    name: FromTargetLastChild
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetLastChild
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetChildWithIndex(System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetChildWithIndex(System.Int32)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_System_Int32_
+  name: FromTargetChildWithIndex(int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetChildWithIndex(int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetChildWithIndex(int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetChildWithIndex(Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetChildWithIndex(Integer)
+  name.vb: FromTargetChildWithIndex(Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetChildWithIndex(System.Int32)
+    name: FromTargetChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetChildWithIndex(System.Int32)
+    name: FromTargetChildWithIndex
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetChildWithIndex_System_Int32_
+  - name: (
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetDescendants(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetDescendants(System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_System_Boolean_
+  name: FromTargetDescendants(bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetDescendants(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetDescendants(bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetDescendants(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetDescendants(Boolean)
+  name.vb: FromTargetDescendants(Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetDescendants(System.Boolean)
+    name: FromTargetDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetDescendants(System.Boolean)
+    name: FromTargetDescendants
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetDescendants_System_Boolean_
+  - name: (
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSiblings
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSiblings
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings
+  name: FromTargetSiblings()
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromTargetSiblings()
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromTargetSiblings()
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromTargetSiblings()
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromTargetSiblings()
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSiblings
+    name: FromTargetSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings
+  - name: (
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromTargetSiblings
+    name: FromTargetSiblings
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromTargetSiblings
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.From(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.From(UnityEngine.Transform)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_UnityEngine_Transform_
+  name: From(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.From(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.From(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).From(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).From(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.From(UnityEngine.Transform)
+    name: From
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.From(UnityEngine.Transform)
+    name: From
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_From_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParentOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParentOf(UnityEngine.Transform)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_UnityEngine_Transform_
+  name: FromParentOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromParentOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromParentOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromParentOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromParentOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParentOf(UnityEngine.Transform)
+    name: FromParentOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromParentOf(UnityEngine.Transform)
+    name: FromParentOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromParentOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_UnityEngine_Transform_System_Boolean_
+  name: FromAncestorsOf(Transform, bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromAncestorsOf(Transform, bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromAncestorsOf(UnityEngine.Transform, bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromAncestorsOf(Transform, Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromAncestorsOf(UnityEngine.Transform, Boolean)
+  name.vb: FromAncestorsOf(Transform, Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+    name: FromAncestorsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAncestorsOf(UnityEngine.Transform,System.Boolean)
+    name: FromAncestorsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAncestorsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf(UnityEngine.Transform)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_UnityEngine_Transform_
+  name: FromFirstChildOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromFirstChildOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromFirstChildOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromFirstChildOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromFirstChildOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf(UnityEngine.Transform)
+    name: FromFirstChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf(UnityEngine.Transform)
+    name: FromFirstChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromFirstChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf(UnityEngine.Transform)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_UnityEngine_Transform_
+  name: FromLastChildOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromLastChildOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromLastChildOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromLastChildOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromLastChildOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf(UnityEngine.Transform)
+    name: FromLastChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf(UnityEngine.Transform)
+    name: FromLastChildOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromLastChildOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_UnityEngine_Transform_System_Int32_
+  name: FromChildWithIndexOf(Transform, int)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromChildWithIndexOf(Transform, int)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromChildWithIndexOf(UnityEngine.Transform, int)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromChildWithIndexOf(Transform, Integer)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromChildWithIndexOf(UnityEngine.Transform, Integer)
+  name.vb: FromChildWithIndexOf(Transform, Integer)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+    name: FromChildWithIndexOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_UnityEngine_Transform_System_Int32_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Int32
+    name: int
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromChildWithIndexOf(UnityEngine.Transform,System.Int32)
+    name: FromChildWithIndexOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromChildWithIndexOf_UnityEngine_Transform_System_Int32_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Int32
+    name: Integer
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_UnityEngine_Transform_System_Boolean_
+  name: FromDescendantsOf(Transform, bool)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromDescendantsOf(Transform, bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromDescendantsOf(UnityEngine.Transform, bool)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromDescendantsOf(Transform, Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromDescendantsOf(UnityEngine.Transform, Boolean)
+  name.vb: FromDescendantsOf(Transform, Boolean)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+    name: FromDescendantsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: bool
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromDescendantsOf(UnityEngine.Transform,System.Boolean)
+    name: FromDescendantsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromDescendantsOf_UnityEngine_Transform_System_Boolean_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: System.Boolean
+    name: Boolean
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblingsOf(UnityEngine.Transform)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblingsOf(UnityEngine.Transform)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_UnityEngine_Transform_
+  name: FromSiblingsOf(Transform)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromSiblingsOf(Transform)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromSiblingsOf(UnityEngine.Transform)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromSiblingsOf(Transform)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromSiblingsOf(UnityEngine.Transform)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblingsOf(UnityEngine.Transform)
+    name: FromSiblingsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromSiblingsOf(UnityEngine.Transform)
+    name: FromSiblingsOf
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromSiblingsOf_UnityEngine_Transform_
+  - name: (
+  - uid: UnityEngine.Transform
+    name: Transform
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_UnityEngine_FindObjectsInactive_UnityEngine_FindObjectsSortMode_
+  name: FromAnywhere(FindObjectsInactive, FindObjectsSortMode)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromAnywhere(FindObjectsInactive, FindObjectsSortMode)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromAnywhere(UnityEngine.FindObjectsInactive, UnityEngine.FindObjectsSortMode)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromAnywhere(FindObjectsInactive, FindObjectsSortMode)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromAnywhere(UnityEngine.FindObjectsInactive, UnityEngine.FindObjectsSortMode)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+    name: FromAnywhere
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_UnityEngine_FindObjectsInactive_UnityEngine_FindObjectsSortMode_
+  - name: (
+  - uid: UnityEngine.FindObjectsInactive
+    name: FindObjectsInactive
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: UnityEngine.FindObjectsSortMode
+    name: FindObjectsSortMode
+    isExternal: true
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
+    name: FromAnywhere
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromAnywhere_UnityEngine_FindObjectsInactive_UnityEngine_FindObjectsSortMode_
+  - name: (
+  - uid: UnityEngine.FindObjectsInactive
+    name: FindObjectsInactive
+    isExternal: true
+  - name: ','
+  - name: " "
+  - uid: UnityEngine.FindObjectsSortMode
+    name: FindObjectsSortMode
+    isExternal: true
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance(`0)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance(`0)
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_
+  name: FromInstance(TComponent)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromInstance(TComponent)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromInstance(TComponent)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromInstance(TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromInstance(TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance(`0)
+    name: FromInstance
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_
+  - name: (
+  - name: TComponent
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance(`0)
+    name: FromInstance
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_
+  - name: (
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__
+  name: FromMethod(Func<TComponent>)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromMethod(Func<TComponent>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromMethod(System.Func<TComponent>)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromMethod(Func(Of TComponent))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromMethod(System.Func(Of TComponent))
+  name.vb: FromMethod(Func(Of TComponent))
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: '>'
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func_System_Collections_Generic_IEnumerable__0___
+  name: FromMethod(Func<IEnumerable<TComponent>>)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromMethod(Func<IEnumerable<TComponent>>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromMethod(System.Func<System.Collections.Generic.IEnumerable<TComponent>>)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromMethod(Func(Of IEnumerable(Of TComponent)))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromMethod(System.Func(Of System.Collections.Generic.IEnumerable(Of TComponent)))
+  name.vb: FromMethod(Func(Of IEnumerable(Of TComponent)))
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func_System_Collections_Generic_IEnumerable__0___
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: <
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: '>'
+  - name: '>'
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
+    name: FromMethod
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func_System_Collections_Generic_IEnumerable__0___
+  - name: (
+  - uid: System.Func`1
+    name: Func
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+  - name: )
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  name: ComponentBindingBuilder<TComponent>
+  nameWithType: ComponentBindingBuilder<TComponent>
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent)
+  name.vb: ComponentBindingBuilder(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
+    name: ComponentBindingBuilder
+    href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  name: ComponentBinding
+  nameWithType: ComponentBinding
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.#ctor*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.#ctor
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentBindingBuilder_1__ctor_Plugins_Saneject_Runtime_Bindings_Component_ComponentBinding_
+  name: ComponentBindingBuilder
+  nameWithType: ComponentBindingBuilder<TComponent>.ComponentBindingBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ComponentBindingBuilder
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).New
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).New
+  name.vb: New
+- uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+  commentId: T:Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+  name: RuntimeProxy<TComponent>
+  nameWithType: RuntimeProxy<TComponent>
+  fullName: Plugins.Saneject.Runtime.Proxy.RuntimeProxy<TComponent>
+  nameWithType.vb: RuntimeProxy(Of TComponent)
+  fullName.vb: Plugins.Saneject.Runtime.Proxy.RuntimeProxy(Of TComponent)
+  name.vb: RuntimeProxy(Of TComponent)
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+    name: RuntimeProxy
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxy`1
+    name: RuntimeProxy
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope
+  commentId: F:Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope
+  name: FromGlobalScope
+  nameWithType: RuntimeProxyResolveMethod.FromGlobalScope
+  fullName: Plugins.Saneject.Runtime.Proxy.RuntimeProxyResolveMethod.FromGlobalScope
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html
+  name: RuntimeProxyBindingBuilder
+  nameWithType: RuntimeProxyBindingBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.FromRuntimeProxy*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.FromRuntimeProxy
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentBindingBuilder_1_FromRuntimeProxy
+  name: FromRuntimeProxy
+  nameWithType: ComponentBindingBuilder<TComponent>.FromRuntimeProxy
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.FromRuntimeProxy
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).FromRuntimeProxy
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).FromRuntimeProxy
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  commentId: N:Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  nameWithType: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html
+- uid: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.InjectAttribute
+  href: Plugins.Saneject.Runtime.Attributes.InjectAttribute.html
+  name: InjectAttribute
+  nameWithType: InjectAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.InjectAttribute
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToID*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToID
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentBindingBuilder_1_ToID_System_String___
+  name: ToID
+  nameWithType: ComponentBindingBuilder<TComponent>.ToID
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToID
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToID
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToID
+- uid: System.String[]
+  isExternal: true
+  name: string[]
+  nameWithType: string[]
+  fullName: string[]
+  nameWithType.vb: String()
+  fullName.vb: String()
+  name.vb: String()
+  spec.csharp:
+  - uid: System.String
+    name: string
+    isExternal: true
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.String
+    name: String
+    isExternal: true
+  - name: (
+  - name: )
+- uid: UnityEngine.Component
+  commentId: T:UnityEngine.Component
+  parent: UnityEngine
+  isExternal: true
+  name: Component
+  nameWithType: Component
+  fullName: UnityEngine.Component
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentBindingBuilder_1_ToTarget__1
+  name: ToTarget
+  nameWithType: ComponentBindingBuilder<TComponent>.ToTarget
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToTarget
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToTarget
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToTarget
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: System.Type
+  commentId: T:System.Type
+  parent: System
+  isExternal: true
+  name: Type
+  nameWithType: Type
+  fullName: System.Type
+- uid: System.Type[]
+  isExternal: true
+  name: Type[]
+  nameWithType: Type[]
+  fullName: System.Type[]
+  nameWithType.vb: Type()
+  fullName.vb: System.Type()
+  name.vb: Type()
+  spec.csharp:
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: '['
+  - name: ']'
+  spec.vb:
+  - uid: System.Type
+    name: Type
+    isExternal: true
+  - name: (
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToMember*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToMember
+  href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentBindingBuilder_1_ToMember_System_String___
+  name: ToMember
+  nameWithType: ComponentBindingBuilder<TComponent>.ToMember
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToMember
+  nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToMember
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToMember

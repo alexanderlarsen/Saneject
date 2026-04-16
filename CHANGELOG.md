@@ -1,5 +1,36 @@
 ﻿# Changelog
 
+## Version 1.0.0
+
+### Full framework rewrite
+
+- Saneject 1.0.0 is a full rewrite of the framework rather than an incremental update.
+- The core architecture has been rebuilt around a clearer editor-time pipeline: graph construction, context-aware filtering, binding validation, dependency resolution, injection, runtime proxy preparation, and structured logging.
+- Runtime has been reduced to a lightweight startup handoff where scopes register global components and swap runtime proxies before normal gameplay startup.
+- With this release, Saneject leaves beta and is now considered production ready.
+
+### Major changes
+
+- Reworked `Scope` and binding APIs around `DeclareBindings()`, typed binding families for components, assets and globals, stricter validation, and clearer qualifier/filter behavior.
+- Added a more explicit context model for scene objects, prefab instances and prefab assets, with more solid context-aware traversal, filtering, and resolution than the legacy system.
+- Rebuilt the editor tooling around the new architecture, including stronger context tooling, a more capable scope inspector, improved logging/validation, batch injection, settings, and runtime proxy utilities.
+- Replaced the old proxy workflow with the new `RuntimeProxy` system. Legacy proxies forwarded interface calls through generated code inside the proxy itself, while the new model injects an intentional placeholder that is swapped with the real instance during early startup. Generated proxy interface members now throw if the placeholder is accessed before swap, which makes the bridge more stable and predictable.
+- Added comprehensive architecture and API documentation, plus a broader test suite covering bindings, graph traversal, contexts, injection, scopes, proxies, inspectors, and runtime behavior.
+
+### Breaking changes
+
+- This is not a drop-in upgrade from the 0.x beta line. Existing projects should expect migration work.
+- Custom `Scope` classes must now override `DeclareBindings()` instead of the previous scope binding method.
+- The old `ProxyObject` / `FromProxy()` workflow has been replaced by `RuntimeProxy` / `FromRuntimeProxy()`.
+- Several APIs have been cleaned up or renamed, including `FromAnywhereInScene()` to `FromAnywhere()`, and proxy generation terminology moving from `ProxyObject` / `[GenerateProxyObject]` to `RuntimeProxy` / `[GenerateRuntimeProxy]`.
+- Global registration no longer uses `SceneGlobalContainer`; scopes now serialize and register their own global components directly into `GlobalScope` during startup.
+- Settings are now split more clearly into machine-local `User Settings` and shared `Project Settings`. Options that affect project-wide injection behavior and correctness now live under `ProjectSettings/Saneject/` and be version controlled, while cosmetic and workflow-specific preferences remain local and stored in `EditorPrefs`.
+- Custom tooling or integrations built against older internal inspectors, menus, Roslyn tooling, or editor/runtime internals will likely need updates.
+
+### Summary
+
+This release marks the end of Saneject's beta period. The new foundation is clearer, stricter and more maintainable, with production-ready editor-time injection, better context handling, stronger tooling, and a more stable and predictable runtime bridge for the cases Unity cannot serialize directly.
+
 ## Version 0.21.1
 
 ### Fixes
@@ -187,7 +218,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
 
 ### Fixes
 
-- Nicified type names in `SceneGlobalContainerEditor` inspector – raw type names are now shown with user-friendly formatting and spaces, matching the default Unity inspector.
+- Nicified type names in `SceneGlobalContainerEditor` inspector: raw type names are now shown with user-friendly formatting and spaces, matching the default Unity inspector.
 
 ### Improvements
 
@@ -341,7 +372,7 @@ This release is mostly invisible to end users but significantly improves Sanejec
 
 - Added new user setting **Filter By Same Context** (default: enabled).
     - When enabled, Saneject filters out prefab components when injecting into scene objects, and filters out scene components when injecting into prefabs. This enforces context isolation and avoids broken references.
-    - When disabled, scene ↔ prefab references are allowed as an escape hatch. This is not recommended because such links are not serialized reliably — removing a prefab instance from the scene will silently break the dependency.
+    - When disabled, scene ↔ prefab references are allowed as an escape hatch. This is not recommended because such links are not serialized reliably; removing a prefab instance from the scene will silently break the dependency.
     - For proper cross-context references, the recommended workflow is to use **ProxyObjects** (`BindComponent<TInterface, TConcrete>().FromProxy()`).
 
 ### Changes

@@ -1,0 +1,30 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Scopes
+  commentId: N:Plugins.Saneject.Runtime.Scopes
+  id: Plugins.Saneject.Runtime.Scopes
+  children:
+  - Plugins.Saneject.Runtime.Scopes.GlobalScope
+  - Plugins.Saneject.Runtime.Scopes.Scope
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Runtime.Scopes
+  nameWithType: Plugins.Saneject.Runtime.Scopes
+  fullName: Plugins.Saneject.Runtime.Scopes
+  type: Namespace
+  assemblies:
+  - Saneject.Runtime
+references:
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.GlobalScope
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html
+  name: GlobalScope
+  nameWithType: GlobalScope
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope
+- uid: Plugins.Saneject.Runtime.Scopes.Scope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.Scope
+  href: Plugins.Saneject.Runtime.Scopes.Scope.html
+  name: Scope
+  nameWithType: Scope
+  fullName: Plugins.Saneject.Runtime.Scopes.Scope

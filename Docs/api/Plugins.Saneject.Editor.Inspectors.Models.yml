@@ -1,0 +1,78 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Editor.Inspectors.Models
+  commentId: N:Plugins.Saneject.Editor.Inspectors.Models
+  id: Plugins.Saneject.Editor.Inspectors.Models
+  children:
+  - Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  - Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+  langs:
+  - csharp
+  - vb
+  name: Plugins.Saneject.Editor.Inspectors.Models
+  nameWithType: Plugins.Saneject.Editor.Inspectors.Models
+  fullName: Plugins.Saneject.Editor.Inspectors.Models
+  type: Namespace
+  assemblies:
+  - Saneject.Editor
+references:
+- uid: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+  commentId: T:Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+  parent: Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel.html
+  name: PropertyModel
+  nameWithType: PropertyModel
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.PropertyModel
+- uid: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  commentId: T:Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+  parent: Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel.html
+  name: ComponentModel
+  nameWithType: ComponentModel
+  fullName: Plugins.Saneject.Editor.Inspectors.Models.ComponentModel
+- uid: Plugins.Saneject.Editor.Inspectors.Models
+  commentId: N:Plugins.Saneject.Editor.Inspectors.Models
+  href: Plugins.html
+  name: Plugins.Saneject.Editor.Inspectors.Models
+  nameWithType: Plugins.Saneject.Editor.Inspectors.Models
+  fullName: Plugins.Saneject.Editor.Inspectors.Models
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors.Models
+    name: Models
+    href: Plugins.Saneject.Editor.Inspectors.Models.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Editor
+    name: Editor
+    href: Plugins.Saneject.Editor.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors
+    name: Inspectors
+    href: Plugins.Saneject.Editor.Inspectors.html
+  - name: .
+  - uid: Plugins.Saneject.Editor.Inspectors.Models
+    name: Models
+    href: Plugins.Saneject.Editor.Inspectors.Models.html

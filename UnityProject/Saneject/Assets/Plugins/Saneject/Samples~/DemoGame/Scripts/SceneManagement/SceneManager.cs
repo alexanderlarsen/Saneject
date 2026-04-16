@@ -5,9 +5,7 @@ using UnityEngine.SceneManagement;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.SceneManagement
 {
     /// <summary>
-    /// Implements <see cref="ISceneManager" /> to coordinate scene loading and unloading across game states.
-    /// Loads the game and UI scenes, and removes the start scene on game start.
-    /// Fully resets the game by unloading all scenes and reloading the start scene on restart.
+    /// Runtime scene-flow coordinator for the sample game's additive scene setup.
     /// </summary>
     public class SceneManager : MonoBehaviour, ISceneManager
     {

@@ -1,0 +1,16 @@
+﻿apiRules:
+
+  # Exclude anything tagged [EditorBrowsable(EditorBrowsableState.Never)]
+  - exclude:
+      hasAttribute:
+        uid: System.ComponentModel.EditorBrowsableAttribute
+        ctorArguments:
+          - System.ComponentModel.EditorBrowsableState.Never
+
+  # Include everything else in the Saneject namespace
+  - include:
+      uidRegex: ^Plugins\.Saneject(\..*)?$
+
+  # Exclude everything else
+  - exclude:
+      uidRegex: .*

@@ -3,12 +3,12 @@
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
 {
     /// <summary>
-    /// Represents a target that the camera can follow.
+    /// Provides the world-space position that the demo game's camera should follow.
     /// </summary>
     public interface ICameraFollowTarget
     {
         /// <summary>
-        /// The world position of the target.
+        /// Gets the target's current world position.
         /// </summary>
         Vector3 Position { get; }
     }

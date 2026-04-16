@@ -1,0 +1,5 @@
+{
+  "UseContextIsolation": true,
+  "GenerateProxyScriptsOnDomainReload": true,
+  "ProxyAssetGenerationFolder": "Assets/SanejectGenerated/RuntimeProxies"
+}

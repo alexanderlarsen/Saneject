@@ -1,0 +1,127 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  commentId: T:Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  id: SerializeInterfaceAttribute
+  parent: Plugins.Saneject.Runtime.Attributes
+  children: []
+  langs:
+  - csharp
+  - vb
+  name: SerializeInterfaceAttribute
+  nameWithType: SerializeInterfaceAttribute
+  fullName: Plugins.Saneject.Runtime.Attributes.SerializeInterfaceAttribute
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/SerializedInterfaceAttribute.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: SerializeInterfaceAttribute
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/SerializedInterfaceAttribute.cs
+    startLine: 12
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Attributes
+  summary: Marks an interface-typed member for Saneject's serialized-interface code generation.
+  remarks: >-
+    Apply this attribute to interface fields, interface arrays, interface lists, or auto-properties via <code>[field: SerializeInterface]</code>.
+
+    Saneject generates hidden <xref href="UnityEngine.Object" data-throw-if-not-resolved="false"></xref> backing members plus serialization sync code so Unity can display and persist
+
+    interface references in scenes and prefabs.
+  example: []
+  syntax:
+    content: >-
+      [AttributeUsage(AttributeTargets.Field)]
+
+      public sealed class SerializeInterfaceAttribute : Attribute
+    content.vb: >-
+      <AttributeUsage(AttributeTargets.Field)>
+
+      Public NotInheritable Class SerializeInterfaceAttribute Inherits Attribute
+  inheritance:
+  - System.Object
+  - System.Attribute
+  attributes:
+  - type: System.AttributeUsageAttribute
+    ctor: System.AttributeUsageAttribute.#ctor(System.AttributeTargets)
+    arguments:
+    - type: System.AttributeTargets
+      value: 256
+references:
+- uid: UnityEngine.Object
+  commentId: T:UnityEngine.Object
+  parent: UnityEngine
+  isExternal: true
+  name: Object
+  nameWithType: Object
+  fullName: UnityEngine.Object
+- uid: Plugins.Saneject.Runtime.Attributes
+  commentId: N:Plugins.Saneject.Runtime.Attributes
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Attributes
+  nameWithType: Plugins.Saneject.Runtime.Attributes
+  fullName: Plugins.Saneject.Runtime.Attributes
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Attributes
+    name: Attributes
+    href: Plugins.Saneject.Runtime.Attributes.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Attributes
+    name: Attributes
+    href: Plugins.Saneject.Runtime.Attributes.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System.Attribute
+  commentId: T:System.Attribute
+  parent: System
+  isExternal: true
+  name: Attribute
+  nameWithType: Attribute
+  fullName: System.Attribute
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System

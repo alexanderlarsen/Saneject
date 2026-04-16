@@ -1,0 +1,173 @@
+﻿using System;
+using System.IO;
+using System.Runtime.CompilerServices;
+using Newtonsoft.Json;
+using Newtonsoft.Json.Linq;
+using UnityEngine;
+
+namespace Plugins.Saneject.Runtime.Settings
+{
+    /// <summary>
+    /// Provides access to project-scoped Saneject settings stored in <c>ProjectSettings/Saneject/ProjectSettings.json</c>.
+    /// </summary>
+    /// <remarks>
+    /// These settings are shared with the Unity project. They can be changed only in Edit Mode and fall back to default values outside the Unity Editor.
+    /// </remarks>
+    public static class ProjectSettings
+    {
+        private static readonly string Folder = Path.GetFullPath(Path.Combine(Application.dataPath, "../ProjectSettings/Saneject"));
+        private static readonly string FullPath = Path.Combine(Folder, "ProjectSettings.json");
+
+        #region Context Isolation
+
+        /// <summary>
+        /// Enables strict context boundaries during resolution.
+        /// When enabled, scene and prefab-instance dependencies resolve only inside the same context.
+        /// Prefab assets are always context-isolated, regardless of this setting.
+        /// </summary>
+        public static bool UseContextIsolation
+        {
+            get => Get(defaultValue: false);
+            set => Set(value);
+        }
+
+        #endregion
+
+        #region Scope File Generation
+
+        /// <summary>
+        /// When enabled, a new Scope created via 'Assets/Saneject/Create New Scope' gets a namespace matching its folder path.
+        /// When disabled, the Scope is created without a namespace.
+        /// </summary>
+        public static bool GenerateScopeNamespaceFromFolder
+        {
+            get => Get(defaultValue: true);
+            set => Set(value);
+        }
+
+        #endregion
+
+        #region Proxy Generation
+
+        /// <summary>
+        /// When enabled, all proxy scripts are generated from declared bindings on domain reload.
+        /// When disabled, they must be generated manually from the Saneject menu.
+        /// </summary>
+        public static bool GenerateProxyScriptsOnDomainReload
+        {
+            get => Get(defaultValue: true);
+            set => Set(value);
+        }
+
+        /// <summary>
+        /// Target folder for auto-generated runtime proxy scripts and assets.
+        /// </summary>
+        public static string ProxyAssetGenerationFolder
+        {
+            get => Get(defaultValue: "Assets/SanejectGenerated/RuntimeProxies");
+            set => Set(value);
+        }
+
+        #endregion
+
+        #region Methods
+
+        /// <summary>
+        /// Resets all project settings to their default values.
+        /// </summary>
+        public static void UseDefaultSettings()
+        {
+#if UNITY_EDITOR
+            SaveModel(new JObject());
+            Debug.LogWarning("Saneject: All project settings were reset to default values. This affects all users of this project.");
+#endif
+        }
+
+        #endregion
+
+        #region Shared helpers
+
+        private static T Get<T>(
+            T defaultValue,
+            [CallerMemberName] string propertyName = null)
+        {
+#if UNITY_EDITOR
+            if (propertyName == null)
+                return defaultValue;
+
+            JObject model = LoadModel();
+
+            if (!model.TryGetValue(propertyName, out JToken token))
+                return defaultValue;
+
+            try
+            {
+                return token.ToObject<T>();
+            }
+            catch (Exception e)
+            {
+                Debug.LogWarning(
+                    $"Saneject: Failed to read project setting '{propertyName}'. Using default. ({e.Message})");
+
+                return defaultValue;
+            }
+#else
+            return defaultValue;
+#endif
+        }
+
+        private static void Set(
+            object value,
+            [CallerMemberName] string propertyName = null)
+        {
+#if UNITY_EDITOR
+            if (Application.isPlaying)
+            {
+                Debug.LogWarning("Saneject: Project settings can only be modified in edit mode.");
+                return;
+            }
+
+            if (propertyName == null)
+                return;
+
+            JObject model = LoadModel();
+            model[propertyName] = JToken.FromObject(value);
+            SaveModel(model);
+#endif
+        }
+
+        private static JObject LoadModel()
+        {
+#if UNITY_EDITOR
+            if (!File.Exists(FullPath))
+                return new JObject();
+
+            try
+            {
+                string json = File.ReadAllText(FullPath);
+                return JObject.Parse(json);
+            }
+            catch (Exception e)
+            {
+                Debug.LogError($"Saneject: Failed to load project settings. {e.Message}. Resetting to defaults.");
+                JObject defaultModel = new();
+                SaveModel(defaultModel);
+                return defaultModel;
+            }
+#else
+            return null;
+#endif
+        }
+
+        private static void SaveModel(JObject model)
+        {
+#if UNITY_EDITOR
+            Directory.CreateDirectory(Folder);
+            string json = model.ToString(Formatting.Indented);
+            File.WriteAllText(FullPath, json);
+#endif
+        }
+
+        #endregion
+    }
+}

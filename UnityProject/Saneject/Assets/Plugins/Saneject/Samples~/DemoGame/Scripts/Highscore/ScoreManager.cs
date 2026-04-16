@@ -4,8 +4,7 @@ using UnityEngine;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Highscore
 {
     /// <summary>
-    /// Concrete implementation of both <see cref="IScoreObservable" /> and <see cref="IScoreUpdater" />.
-    /// Tracks the current score and raises an event when points are added.
+    /// Scene-level score service that exposes read and write interfaces for the current score.
     /// </summary>
     public class ScoreManager : MonoBehaviour, IScoreObservable, IScoreUpdater
     {

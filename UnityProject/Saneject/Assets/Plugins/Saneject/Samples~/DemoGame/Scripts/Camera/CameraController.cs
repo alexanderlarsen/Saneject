@@ -4,10 +4,9 @@ using UnityEngine;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
 {
     /// <summary>
-    /// Controls the main camera movement to follow a target.
-    /// Implements <see cref="IMainCamera" /> for screen space conversion.
-    /// Note: This class is marked as <c>partial</c> because it uses <see cref="SerializeInterfaceAttribute" />.
-    /// The Roslyn generator <c>SerializeInterfaceGenerator.dll</c> automatically generates a matching partial that implements the serialized backing field and assigns it to the interface reference after deserialization.
+    /// Scene camera component that follows an injected <see cref="ICameraFollowTarget" />
+    /// and exposes screen-space conversion through <see cref="IMainCamera" />.
+    /// Marked <c>partial</c> so Saneject can generate serialized interface support for the target reference.
     /// </summary>
     public partial class CameraController : MonoBehaviour, IMainCamera
     {
@@ -26,31 +25,14 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Camera
             transform.LookAt(target.Position);
         }
 
+        /// <summary>
+        /// Converts a world position into screen coordinates using the injected Unity camera.
+        /// </summary>
+        /// <param name="worldPosition">The world position to convert.</param>
+        /// <returns>The screen-space position for <paramref name="worldPosition" />.</returns>
         public Vector3 WorldToScreenPoint(Vector3 worldPosition)
         {
             return cam.WorldToScreenPoint(worldPosition);
         }
     }
-
-    /*
-    Roslyn generated partial:
-
-    public partial class CameraController : ISerializationCallbackReceiver
-    {
-        [SerializeField, InterfaceBackingField(interfaceType: typeof(ICameraFollowTarget), isInjected: true, injectId: null)]
-        private Object __target;
-
-        public void OnBeforeSerialize()
-        {
-    #if UNITY_EDITOR
-            __target = target as Object;
-    #endif
-        }
-
-        public void OnAfterDeserialize()
-        {
-            target = __target as ICameraFollowTarget;
-        }
-    }
-    */
 }

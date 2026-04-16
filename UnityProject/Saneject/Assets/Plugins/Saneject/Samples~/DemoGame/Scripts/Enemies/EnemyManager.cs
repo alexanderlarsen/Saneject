@@ -8,10 +8,9 @@ using Random = UnityEngine.Random;
 namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
 {
     /// <summary>
-    /// Manages spawning and tracking of enemies in the scene. Keeps count of total and remaining enemies, and notifies observers on state change.
-    /// Implements <see cref="IEnemyObservable" /> to provide enemy counts and change notifications.
-    /// Note: Marked as <c>partial</c> since it uses <see cref="SerializeInterfaceAttribute" />.
-    /// The Roslyn generator <c>SerializeInterfaceGenerator.dll</c> generates a partial to provide the serialized backing field and assignment logic.
+    /// Scene-level gameplay service that spawns enemies, tracks the active set, and awards score
+    /// when enemies are caught.
+    /// Marked <c>partial</c> so Saneject can serialize the injected score updater and enemy list interfaces.
     /// </summary>
     public partial class EnemyManager : MonoBehaviour, IEnemyObservable
     {
@@ -69,33 +68,4 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Enemies
             TotalEnemies = activeEnemies.Count;
         }
     }
-
-    /*
-    Roslyn generated partial:
-
-    public partial class EnemyManager : ISerializationCallbackReceiver
-    {
-        [SerializeField, InterfaceBackingField(typeof(IScoreUpdater), true, null), EditorBrowsable(EditorBrowsableState.Never)]
-        private Object __scoreUpdater;
-
-        [SerializeField, InterfaceBackingField(typeof(IEnemy), false, null), EditorBrowsable(EditorBrowsableState.Never)]
-        private List<Object> __activeEnemies;
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void OnBeforeSerialize()
-        {
-#if UNITY_EDITOR
-            __scoreUpdater = scoreUpdater as Object;
-            __activeEnemies = activeEnemies?.Cast<Object>().ToList();
-#endif
-        }
-
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public void OnAfterDeserialize()
-        {
-            scoreUpdater = __scoreUpdater as IScoreUpdater;
-            activeEnemies = (__activeEnemies ?? new List<Object>()).Select(x => x as IEnemy).ToList();
-        }
-    }
-    */
 }

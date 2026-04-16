@@ -1,0 +1,405 @@
+### YamlMime:ManagedReference
+items:
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  id: RuntimeProxyBindingBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  children:
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab(UnityEngine.GameObject,System.Boolean)
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope
+  - Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject(System.Boolean)
+  langs:
+  - csharp
+  - vb
+  name: RuntimeProxyBindingBuilder
+  nameWithType: RuntimeProxyBindingBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  type: Class
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: RuntimeProxyBindingBuilder
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+    startLine: 10
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Builder for configuring runtime proxy resolution strategies.
+  example: []
+  syntax:
+    content: public class RuntimeProxyBindingBuilder
+    content.vb: Public Class RuntimeProxyBindingBuilder
+  inheritance:
+  - System.Object
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  id: '#ctor(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)'
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  langs:
+  - csharp
+  - vb
+  name: RuntimeProxyBindingBuilder(ComponentBinding)
+  nameWithType: RuntimeProxyBindingBuilder.RuntimeProxyBindingBuilder(ComponentBinding)
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.RuntimeProxyBindingBuilder(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  type: Constructor
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: .ctor
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+    startLine: 18
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Initializes a new instance of the <xref href="Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder" data-throw-if-not-resolved="false"></xref> class.
+  example: []
+  syntax:
+    content: public RuntimeProxyBindingBuilder(ComponentBinding binding)
+    parameters:
+    - id: binding
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+      description: The component binding to configure.
+    content.vb: Public Sub New(binding As ComponentBinding)
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.#ctor*
+  nameWithType.vb: RuntimeProxyBindingBuilder.New(ComponentBinding)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.New(Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding)
+  name.vb: New(ComponentBinding)
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope
+  id: FromGlobalScope
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  langs:
+  - csharp
+  - vb
+  name: FromGlobalScope()
+  nameWithType: RuntimeProxyBindingBuilder.FromGlobalScope()
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromGlobalScope
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+    startLine: 27
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: >-
+    Resolves the target <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> from <xref href="Plugins.Saneject.Runtime.Scopes.GlobalScope" data-throw-if-not-resolved="false"></xref>.
+
+    The target must already be registered there, usually via a global component binding.
+  example: []
+  syntax:
+    content: public void FromGlobalScope()
+    content.vb: Public Sub FromGlobalScope()
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope*
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes
+  id: FromAnywhereInLoadedScenes
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  langs:
+  - csharp
+  - vb
+  name: FromAnywhereInLoadedScenes()
+  nameWithType: RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes()
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes()
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromAnywhereInLoadedScenes
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+    startLine: 42
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: >-
+    Resolves the target <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> by finding the first instance of that type in any loaded scene.
+
+    Includes inactive objects in the search.
+  example: []
+  syntax:
+    content: public void FromAnywhereInLoadedScenes()
+    content.vb: Public Sub FromAnywhereInLoadedScenes()
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes*
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab(UnityEngine.GameObject,System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab(UnityEngine.GameObject,System.Boolean)
+  id: FromComponentOnPrefab(UnityEngine.GameObject,System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  langs:
+  - csharp
+  - vb
+  name: FromComponentOnPrefab(GameObject, bool)
+  nameWithType: RuntimeProxyBindingBuilder.FromComponentOnPrefab(GameObject, bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab(UnityEngine.GameObject, bool)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromComponentOnPrefab
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+    startLine: 59
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Resolves the proxy by instantiating the specified prefab and getting the target <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> from it.
+  example: []
+  syntax:
+    content: public RuntimeProxyInstanceModeBuilder FromComponentOnPrefab(GameObject prefab, bool dontDestroyOnLoad = false)
+    parameters:
+    - id: prefab
+      type: UnityEngine.GameObject
+      description: The prefab to instantiate.
+    - id: dontDestroyOnLoad
+      type: System.Boolean
+      description: Whether to apply DontDestroyOnLoad to the instantiated object.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder" data-throw-if-not-resolved="false"></xref> to configure the instance mode.
+    content.vb: Public Function FromComponentOnPrefab(prefab As GameObject, dontDestroyOnLoad As Boolean = False) As RuntimeProxyInstanceModeBuilder
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab*
+  nameWithType.vb: RuntimeProxyBindingBuilder.FromComponentOnPrefab(GameObject, Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab(UnityEngine.GameObject, Boolean)
+  name.vb: FromComponentOnPrefab(GameObject, Boolean)
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject(System.Boolean)
+  commentId: M:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject(System.Boolean)
+  id: FromNewComponentOnNewGameObject(System.Boolean)
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  langs:
+  - csharp
+  - vb
+  name: FromNewComponentOnNewGameObject(bool)
+  nameWithType: RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject(bool)
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject(bool)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+      branch: wip/experimental-architecture-rewrite
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromNewComponentOnNewGameObject
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
+    startLine: 79
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  summary: Resolves the target <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> by creating a new <xref href="UnityEngine.GameObject" data-throw-if-not-resolved="false"></xref> and adding the <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> to it.
+  example: []
+  syntax:
+    content: public RuntimeProxyInstanceModeBuilder FromNewComponentOnNewGameObject(bool dontDestroyOnLoad = false)
+    parameters:
+    - id: dontDestroyOnLoad
+      type: System.Boolean
+      description: Whether to apply DontDestroyOnLoad to the new object.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder" data-throw-if-not-resolved="false"></xref> to configure the instance mode.
+    content.vb: Public Function FromNewComponentOnNewGameObject(dontDestroyOnLoad As Boolean = False) As RuntimeProxyInstanceModeBuilder
+  overload: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject*
+  nameWithType.vb: RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject(Boolean)
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject(Boolean)
+  name.vb: FromNewComponentOnNewGameObject(Boolean)
+references:
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  commentId: N:Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  nameWithType: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+    name: RuntimeProxy
+    href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.html
+- uid: System.Object
+  commentId: T:System.Object
+  parent: System
+  isExternal: true
+  name: object
+  nameWithType: object
+  fullName: object
+  nameWithType.vb: Object
+  fullName.vb: Object
+  name.vb: Object
+- uid: System
+  commentId: N:System
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System
+  nameWithType: System
+  fullName: System
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html
+  name: RuntimeProxyBindingBuilder
+  nameWithType: RuntimeProxyBindingBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.#ctor*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.#ctor
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyBindingBuilder__ctor_Plugins_Saneject_Runtime_Bindings_Component_ComponentBinding_
+  name: RuntimeProxyBindingBuilder
+  nameWithType: RuntimeProxyBindingBuilder.RuntimeProxyBindingBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.RuntimeProxyBindingBuilder
+  nameWithType.vb: RuntimeProxyBindingBuilder.New
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.New
+  name.vb: New
+- uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  commentId: T:Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+  parent: Plugins.Saneject.Runtime.Bindings.Component
+  name: ComponentBinding
+  nameWithType: ComponentBinding
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBinding
+- uid: Plugins.Saneject.Runtime.Bindings.Component
+  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
+  href: Plugins.html
+  name: Plugins.Saneject.Runtime.Bindings.Component
+  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
+  fullName: Plugins.Saneject.Runtime.Bindings.Component
+  spec.csharp:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+  spec.vb:
+  - uid: Plugins
+    name: Plugins
+    href: Plugins.html
+  - name: .
+  - uid: Plugins.Saneject
+    name: Saneject
+    href: Plugins.Saneject.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime
+    name: Runtime
+    href: Plugins.Saneject.Runtime.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings
+    name: Bindings
+    href: Plugins.Saneject.Runtime.Bindings.html
+  - name: .
+  - uid: Plugins.Saneject.Runtime.Bindings.Component
+    name: Component
+    href: Plugins.Saneject.Runtime.Bindings.Component.html
+- uid: Plugins.Saneject.Runtime.Scopes.GlobalScope
+  commentId: T:Plugins.Saneject.Runtime.Scopes.GlobalScope
+  href: Plugins.Saneject.Runtime.Scopes.GlobalScope.html
+  name: GlobalScope
+  nameWithType: GlobalScope
+  fullName: Plugins.Saneject.Runtime.Scopes.GlobalScope
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyBindingBuilder_FromGlobalScope
+  name: FromGlobalScope
+  nameWithType: RuntimeProxyBindingBuilder.FromGlobalScope
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromGlobalScope
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyBindingBuilder_FromAnywhereInLoadedScenes
+  name: FromAnywhereInLoadedScenes
+  nameWithType: RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromAnywhereInLoadedScenes
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  commentId: T:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+  parent: Plugins.Saneject.Runtime.Bindings.RuntimeProxy
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder.html
+  name: RuntimeProxyInstanceModeBuilder
+  nameWithType: RuntimeProxyInstanceModeBuilder
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyInstanceModeBuilder
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyBindingBuilder_FromComponentOnPrefab_UnityEngine_GameObject_System_Boolean_
+  name: FromComponentOnPrefab
+  nameWithType: RuntimeProxyBindingBuilder.FromComponentOnPrefab
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromComponentOnPrefab
+- uid: UnityEngine.GameObject
+  commentId: T:UnityEngine.GameObject
+  parent: UnityEngine
+  isExternal: true
+  name: GameObject
+  nameWithType: GameObject
+  fullName: UnityEngine.GameObject
+- uid: System.Boolean
+  commentId: T:System.Boolean
+  parent: System
+  isExternal: true
+  name: bool
+  nameWithType: bool
+  fullName: bool
+  nameWithType.vb: Boolean
+  fullName.vb: Boolean
+  name.vb: Boolean
+- uid: UnityEngine
+  commentId: N:UnityEngine
+  isExternal: true
+  name: UnityEngine
+  nameWithType: UnityEngine
+  fullName: UnityEngine
+- uid: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject
+  href: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.html#Plugins_Saneject_Runtime_Bindings_RuntimeProxy_RuntimeProxyBindingBuilder_FromNewComponentOnNewGameObject_System_Boolean_
+  name: FromNewComponentOnNewGameObject
+  nameWithType: RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject
+  fullName: Plugins.Saneject.Runtime.Bindings.RuntimeProxy.RuntimeProxyBindingBuilder.FromNewComponentOnNewGameObject

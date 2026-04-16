@@ -1,0 +1,26 @@
+{
+    "name": "Tests.Saneject.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:82700f7d29b0f5944a5264876055ce1b",
+        "GUID:9d4efcdc038880a47bec379313b2bed9",
+        "GUID:10b3bfa0bc5262b4fb2320b792668924",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a",
+        "GUID:0acc523941302664db1f4e527237feb3"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": true,
+    "precompiledReferences": [
+        "nunit.framework.dll"
+    ],
+    "autoReferenced": false,
+    "defineConstraints": [
+        "UNITY_INCLUDE_TESTS"
+    ],
+    "versionDefines": [],
+    "noEngineReferences": false
+}

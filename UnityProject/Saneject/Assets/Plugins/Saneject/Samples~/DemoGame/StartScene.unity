@@ -128,6 +128,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 275804399}
+  - component: {fileID: 275804401}
   - component: {fileID: 275804400}
   m_Layer: 0
   m_Name: Bootstrapper
@@ -163,7 +164,22 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5594851247574d3e820358d611189efd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  __sceneManager: {fileID: 11400000, guid: b4350c50f0558ef4eaef944c03853ad1, type: 2}
+  __sceneManager: {fileID: 11400000, guid: 740bd7dc3e02d43418989c5130f23049, type: 2}
+--- !u!114 &275804401
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 275804398}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 819e3738474b8a04294dca6237bb2a36, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  globalComponents: []
+  proxySwapTargets:
+  - {fileID: 275804400}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0
