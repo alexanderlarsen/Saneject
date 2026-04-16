@@ -14,6 +14,9 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
     /// </summary>
     public class GameSceneScope : Scope
     {
+        [SerializeField]
+        private GameObject enemyPrefab;
+        
         /// <summary>
         /// Declares the gameplay bindings and global registrations used throughout the sample.
         /// </summary>
@@ -49,7 +52,7 @@ namespace Plugins.Saneject.Samples.DemoGame.Scripts.Scopes
             BindAsset<GameObject>()
                 .ToTarget<EnemyManager>()
                 .ToMember("enemyPrefab")
-                .FromAssetLoad("Assets/Plugins/Saneject/Samples/DemoGame/Prefabs/Enemy.prefab");
+                .FromInstance(enemyPrefab);
         }
     }
 }

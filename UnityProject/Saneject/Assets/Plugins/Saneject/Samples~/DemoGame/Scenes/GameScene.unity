@@ -741,6 +741,7 @@ MonoBehaviour:
   - {fileID: 274076467875348428}
   - {fileID: 559519672}
   proxySwapTargets: []
+  enemyPrefab: {fileID: 4772603026273723368, guid: a2049a1cff4cb1244a304c467207ae48, type: 3}
 --- !u!4 &7619134572789606709
 Transform:
   m_ObjectHideFlags: 0
