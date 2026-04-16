@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 329aaa64cb625dc4d93e1874256e3fc1, type: 3}
+  m_Script: {fileID: 11500000, guid: b0afb70804cceb44d927fc0bfe9eb523, type: 3}
   m_Name: GameStateManagerProxy854760C8 (FromGlobalScope)
   m_EditorClassIdentifier: 
   resolveMethod: 0

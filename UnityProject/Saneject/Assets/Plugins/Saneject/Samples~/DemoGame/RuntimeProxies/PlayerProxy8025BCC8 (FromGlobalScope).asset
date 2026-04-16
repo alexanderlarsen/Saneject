@@ -9,7 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd68a219158d4644da9168421f5be1fc, type: 3}
+  m_Script: {fileID: 11500000, guid: 62e796f0a6098714c9d50284c63c6001, type: 3}
   m_Name: PlayerProxy8025BCC8 (FromGlobalScope)
   m_EditorClassIdentifier: 
   resolveMethod: 0

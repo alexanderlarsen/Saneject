@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## Version 1.0.2
+
+### Fixes
+
+- Updated sample game `GameSceneScope` to use a direct prefab reference instead of loading by asset path.
+- Fixed an issue where the Enemy prefab failed to load when importing the sample via UPM due to changed asset paths.
+
 ## Version 1.0.1
 
 ### Fixes
