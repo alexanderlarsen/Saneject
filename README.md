@@ -25,11 +25,19 @@ No runtime container. No startup cost. No hidden wiring. No weird lifecycles. Ju
 4. Dependencies are injected into serialized fields.
 5. Start the game and enjoy fast startup with Unity’s normal lifecycle.
 
+## Slide overview
+
+A quick visual tour of how Saneject works, how editor-time DI differs from runtime DI, its core features, benefits, APIs, and examples.
+
+[Open the full slide overview](https://saneject.dev/slides)
+
+[![Preview of the Saneject slide overview](Docs/images/slides/slides-preview.webp)](https://saneject.dev/slides)
+
 ## Main features
 
 | Feature                              | Description                                                                                                                       |
 |--------------------------------------|-----------------------------------------------------------------------------------------------------------------------------------|
-| Editor-time injection                | Resolve dependencies before Play Mode and store them as normal serialized references.                                             |
+| Editor-time injection                | Resolve dependencies in the editor and store them as normal serialized references.                                                |
 | Inspector-visible wiring             | Keep dependencies, including interfaces, visible and editable in the Inspector instead of hiding them behind a runtime container. |
 | Fluent binding API                   | Declare bindings in `Scope` components with familiar DI-style syntax.                                                             |
 | Serialized interfaces                | Use `[SerializeInterface]` for interface fields, arrays, and lists without wrapper classes.                                       |
@@ -39,14 +47,6 @@ No runtime container. No startup cost. No hidden wiring. No weird lifecycles. Ju
 | Built-in tooling                     | Use injection menus, batch injection, logging, validation, settings, analyzers, and more directly in the Unity Editor.            |
 
 For more features, see [Feature overview](https://saneject.dev/docs/getting-started/feature-overview).
-
-## Slide overview
-
-A quick visual tour of how Saneject works, why editor-time DI differs from runtime DI, and its core benefits, APIs, examples, and features.
-
-[Open the full slide overview](https://saneject.dev/slides)
-
-[![Preview of the Saneject slide overview](Docs/images/slides/slides-preview.webp)](https://saneject.dev/slides)
 
 ## Try Saneject now
 
