@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## Version 1.0.1
+
+### Fixes
+
+- Removed dependency on Newtonsoft.Json that caused compile errors when importing the package into a clean Unity project.
+- Replaced serialization in ProjectSettings with Unity's built-in JsonUtility to ensure the package works out of the box without external dependencies.
+
 ## Version 1.0.0
 
 ### Full framework rewrite

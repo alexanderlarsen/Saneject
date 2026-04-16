@@ -1,8 +1,6 @@
-﻿using System;
+using System;
 using System.IO;
 using System.Runtime.CompilerServices;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 using UnityEngine;
 
 namespace Plugins.Saneject.Runtime.Settings
@@ -27,8 +25,8 @@ namespace Plugins.Saneject.Runtime.Settings
         /// </summary>
         public static bool UseContextIsolation
         {
-            get => Get(defaultValue: false);
-            set => Set(value);
+            get => Get(model => model.useContextIsolation);
+            set => Set((model, newValue) => model.useContextIsolation = newValue, value);
         }
 
         #endregion
@@ -41,8 +39,8 @@ namespace Plugins.Saneject.Runtime.Settings
         /// </summary>
         public static bool GenerateScopeNamespaceFromFolder
         {
-            get => Get(defaultValue: true);
-            set => Set(value);
+            get => Get(model => model.generateScopeNamespaceFromFolder);
+            set => Set((model, newValue) => model.generateScopeNamespaceFromFolder = newValue, value);
         }
 
         #endregion
@@ -55,8 +53,8 @@ namespace Plugins.Saneject.Runtime.Settings
         /// </summary>
         public static bool GenerateProxyScriptsOnDomainReload
         {
-            get => Get(defaultValue: true);
-            set => Set(value);
+            get => Get(model => model.generateProxyScriptsOnDomainReload);
+            set => Set((model, newValue) => model.generateProxyScriptsOnDomainReload = newValue, value);
         }
 
         /// <summary>
@@ -64,8 +62,8 @@ namespace Plugins.Saneject.Runtime.Settings
         /// </summary>
         public static string ProxyAssetGenerationFolder
         {
-            get => Get(defaultValue: "Assets/SanejectGenerated/RuntimeProxies");
-            set => Set(value);
+            get => Get(model => model.proxyAssetGenerationFolder);
+            set => Set((model, newValue) => model.proxyAssetGenerationFolder = newValue, value);
         }
 
         #endregion
@@ -78,7 +76,7 @@ namespace Plugins.Saneject.Runtime.Settings
         public static void UseDefaultSettings()
         {
 #if UNITY_EDITOR
-            SaveModel(new JObject());
+            SaveModel(new ProjectSettingsModel());
             Debug.LogWarning("Saneject: All project settings were reset to default values. This affects all users of this project.");
 #endif
         }
@@ -88,36 +86,32 @@ namespace Plugins.Saneject.Runtime.Settings
         #region Shared helpers
 
         private static T Get<T>(
-            T defaultValue,
+            Func<ProjectSettingsModel, T> selector,
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
             if (propertyName == null)
-                return defaultValue;
-
-            JObject model = LoadModel();
-
-            if (!model.TryGetValue(propertyName, out JToken token))
-                return defaultValue;
+                return default;
 
             try
             {
-                return token.ToObject<T>();
+                return selector(LoadModel());
             }
             catch (Exception e)
             {
                 Debug.LogWarning(
                     $"Saneject: Failed to read project setting '{propertyName}'. Using default. ({e.Message})");
 
-                return defaultValue;
+                return selector(new ProjectSettingsModel());
             }
 #else
-            return defaultValue;
+            return default;
 #endif
         }
 
-        private static void Set(
-            object value,
+        private static void Set<T>(
+            Action<ProjectSettingsModel, T> setter,
+            T value,
             [CallerMemberName] string propertyName = null)
         {
 #if UNITY_EDITOR
@@ -130,42 +124,52 @@ namespace Plugins.Saneject.Runtime.Settings
             if (propertyName == null)
                 return;
 
-            JObject model = LoadModel();
-            model[propertyName] = JToken.FromObject(value);
+            ProjectSettingsModel model = LoadModel();
+            setter(model, value);
             SaveModel(model);
 #endif
         }
 
-        private static JObject LoadModel()
+        private static ProjectSettingsModel LoadModel()
         {
 #if UNITY_EDITOR
+            ProjectSettingsModel model = new();
+
             if (!File.Exists(FullPath))
-                return new JObject();
+                return model;
 
             try
             {
-                string json = File.ReadAllText(FullPath);
-                return JObject.Parse(json);
+                JsonUtility.FromJsonOverwrite(File.ReadAllText(FullPath), model);
+                return model;
             }
             catch (Exception e)
             {
                 Debug.LogError($"Saneject: Failed to load project settings. {e.Message}. Resetting to defaults.");
-                JObject defaultModel = new();
-                SaveModel(defaultModel);
-                return defaultModel;
+                SaveModel(model);
+                return model;
             }
 #else
             return null;
 #endif
         }
 
-        private static void SaveModel(JObject model)
+        private static void SaveModel(ProjectSettingsModel model)
         {
 #if UNITY_EDITOR
             Directory.CreateDirectory(Folder);
-            string json = model.ToString(Formatting.Indented);
+            string json = JsonUtility.ToJson(model, prettyPrint: true);
             File.WriteAllText(FullPath, json);
 #endif
+        }
+
+        [Serializable]
+        private sealed class ProjectSettingsModel
+        {
+            public bool useContextIsolation;
+            public bool generateScopeNamespaceFromFolder = true;
+            public bool generateProxyScriptsOnDomainReload = true;
+            public string proxyAssetGenerationFolder = "Assets/SanejectGenerated/RuntimeProxies";
         }
 
         #endregion
