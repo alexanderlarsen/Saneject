@@ -40,6 +40,8 @@ The sample intentionally keeps gameplay simple so you can focus on dependency st
 2. Open `StartScene`.
 3. Enter Play Mode.
 
+> ⚠️ If you are in a URP project and materials are pink, go to `Window/Rendering/Render Pipeline Converter` and upgrade materials (menu path may vary slightly between Unity versions).
+
 ## Scene flow
 
 The sample uses a small bootstrap scene plus two additive runtime scenes:
