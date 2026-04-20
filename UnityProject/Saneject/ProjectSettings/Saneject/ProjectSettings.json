@@ -1,5 +1,6 @@
 {
-  "UseContextIsolation": true,
-  "GenerateProxyScriptsOnDomainReload": true,
-  "ProxyAssetGenerationFolder": "Assets/SanejectGenerated/RuntimeProxies"
+    "useContextIsolation": false,
+    "generateScopeNamespaceFromFolder": true,
+    "generateProxyScriptsOnDomainReload": true,
+    "proxyAssetGenerationFolder": "Assets/SanejectGenerated/RuntimeProxies"
 }

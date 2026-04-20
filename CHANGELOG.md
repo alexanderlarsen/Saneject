@@ -1,5 +1,13 @@
 ﻿# Changelog
 
+## Version 1.0.3
+
+### Fixes
+
+- Fixed `GlobalScope` persistence across Play Mode sessions when Unity domain reload is disabled.
+- Added an editor Play Mode lifecycle reset that clears `GlobalScope` on Enter Edit Mode (after Play Mode exit), ensuring stale global registrations do not leak into the next run.
+- This makes `BindGlobal<T>()` and runtime proxy singleton registrations behave correctly regardless of whether domain reload is enabled.
+
 ## Version 1.0.2
 
 ### Fixes
