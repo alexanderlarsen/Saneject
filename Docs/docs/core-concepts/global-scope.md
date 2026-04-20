@@ -13,9 +13,11 @@ Saneject is mostly editor-time DI, but some runtime scenarios still need lookup 
 - `RuntimeProxy` can resolve through `FromGlobalScope()` for fast lookup.
 - You can also call `GlobalScope` directly as a service locator when needed.
 
+> ℹ️ `GlobalScope` is automatically cleared when returning to Edit Mode after Play Mode ends. This prevents stale global registrations from leaking into the next Play session when domain reload is disabled.
+
 ## What problem it solves
 
-Unity serialization cannot serialize direct references between certain boundaries: 
+Unity serialization cannot serialize direct references between certain boundaries:
 
 - Scene ↔ other scene
 - Scene ↔ prefab asset

@@ -1,13 +1,15 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.ComponentModel;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEngine;
+using Component = UnityEngine.Component;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Runtime.Scopes
 {
     /// <summary>
-    /// Static runtime registry and service locator for globally accessible <see cref="Component"/> instances.
+    /// Static runtime registry and service locator for globally accessible <see cref="UnityEngine.Component" /> instances.
     /// Stores one registration per concrete component type and is intended for Play Mode usage.
     /// </summary>
     public static class GlobalScope
@@ -114,7 +116,7 @@ namespace Plugins.Saneject.Runtime.Scopes
             component = GetComponent<T>();
             return component != null;
         }
-
+        
         /// <summary>
         /// Remove all registered global instances. Only valid in Play Mode.
         /// </summary>
@@ -123,11 +125,17 @@ namespace Plugins.Saneject.Runtime.Scopes
             if (!CheckModificationAllowed())
                 return;
 
-            Instances.Clear();
-            OwnerTypeMap.Clear();
+            ClearInternal();
 
             if (UserSettings.LogGlobalScopeRegistration)
                 Debug.Log("Saneject: GlobalScope cleared. All global registrations removed.");
+        }
+
+        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void ClearInternal()
+        {
+            Instances.Clear();
+            OwnerTypeMap.Clear();
         }
 
         private static bool CheckModificationAllowed()

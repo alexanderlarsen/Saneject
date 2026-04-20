@@ -1,5 +1,17 @@
 ﻿# Changelog
 
+## Version 1.0.3
+
+### Fixes
+
+- Fixed `GlobalScope` persistence when domain reload is disabled.
+  - Added an editor Play Mode lifecycle reset that clears `GlobalScope` on Enter Edit Mode after Play Mode exit.
+  - Prevents stale global registrations from leaking into the next run.
+  - Ensures `BindGlobal<T>()` and runtime proxy singleton registrations behave correctly regardless of domain reload settings.
+- Fixed sample game player-build failures caused by legacy hide flags on shipped scopes.
+  - Removed serialized `DontSaveInBuild` flags that remained on `PlayerScope`, `GameSceneScope`, and `UISceneScope`.
+  - Ensures the demo scenes register globals and finalize runtime proxies correctly in player builds, including the additive scene flow.
+
 ## Version 1.0.2
 
 ### Fixes
