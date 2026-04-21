@@ -19,7 +19,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ComponentModel
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
@@ -55,7 +55,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
@@ -93,7 +93,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: Target
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
@@ -124,7 +124,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: SerializedObject
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
@@ -155,7 +155,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: Properties
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/ComponentModel.cs

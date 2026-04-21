@@ -28,7 +28,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UserSettings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -58,7 +58,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AskBeforeInjectScene
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -89,7 +89,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AskBeforeInjectPrefabAsset
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -120,7 +120,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AskBeforeInjectSelectedSceneHierarchies
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -151,7 +151,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AskBeforeBatchInject
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -182,7 +182,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ShowInjectedFieldsProperties
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -213,7 +213,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ShowHelpBoxes
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -244,7 +244,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: LogProxyResolve
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -275,7 +275,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: LogGlobalScopeRegistration
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -306,7 +306,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: LogUnusedBindings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -340,7 +340,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: LogInjectionSummary
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -371,7 +371,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ClearLogsOnInjection
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -402,7 +402,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: LogUnusedRuntimeProxiesOnDomainReload
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
@@ -433,7 +433,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UseDefaultSettings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs

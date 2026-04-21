@@ -57,7 +57,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BaseComponentBindingBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -95,7 +95,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -130,7 +130,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -166,7 +166,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromParent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -202,7 +202,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAncestors
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -245,7 +245,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -281,7 +281,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -317,7 +317,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -358,7 +358,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -401,7 +401,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromSiblings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -437,7 +437,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -470,7 +470,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeParent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -503,7 +503,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeAncestors
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -544,7 +544,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -577,7 +577,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -610,7 +610,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -648,7 +648,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -689,7 +689,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeSiblings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -722,7 +722,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -755,7 +755,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -788,7 +788,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -821,7 +821,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -859,7 +859,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -900,7 +900,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -936,7 +936,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetParent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -972,7 +972,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetAncestors
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1015,7 +1015,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1051,7 +1051,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1087,7 +1087,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1128,7 +1128,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1171,7 +1171,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetSiblings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1207,7 +1207,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: From
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1244,7 +1244,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromParentOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1281,7 +1281,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAncestorsOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1325,7 +1325,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromFirstChildOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1362,7 +1362,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromLastChildOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1399,7 +1399,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromChildWithIndexOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1440,7 +1440,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromDescendantsOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1484,7 +1484,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromSiblingsOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1521,7 +1521,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAnywhere
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1564,7 +1564,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromInstance
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1601,7 +1601,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromMethod
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1639,7 +1639,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromMethod
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs

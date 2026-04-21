@@ -21,11 +21,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GlobalScope
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-    startLine: 12
+    startLine: 14
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Scopes
@@ -53,11 +53,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: RegisterComponent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-    startLine: 27
+    startLine: 29
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Scopes
@@ -86,11 +86,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UnregisterComponent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-    startLine: 59
+    startLine: 61
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Scopes
@@ -119,11 +119,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: IsRegistered
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-    startLine: 96
+    startLine: 98
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Scopes
@@ -154,11 +154,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GetComponent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-    startLine: 104
+    startLine: 106
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Scopes
@@ -189,11 +189,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: TryGetComponent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-    startLine: 111
+    startLine: 113
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Scopes
@@ -225,11 +225,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: Clear
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/GlobalScope.cs
-    startLine: 120
+    startLine: 122
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Scopes

@@ -1,9 +1,11 @@
 ﻿using System;
+using System.ComponentModel;
 using Plugins.Saneject.Editor.Data.Context;
 using Plugins.Saneject.Editor.Utilities;
 
 namespace Plugins.Saneject.Editor.Menus.Toolbar
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class InjectToolbarData
     {
         #region Inject scene button

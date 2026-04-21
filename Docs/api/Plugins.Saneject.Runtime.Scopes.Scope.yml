@@ -29,7 +29,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: Scope
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -88,7 +88,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: DeclareBindings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -116,7 +116,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindComponent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -156,7 +156,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindComponents
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -198,7 +198,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindMultipleComponents
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -238,7 +238,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindComponent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -280,7 +280,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindComponents
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -324,7 +324,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindMultipleComponents
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -366,7 +366,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindAsset
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -406,7 +406,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindAssets
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -448,7 +448,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindMultipleAssets
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -488,7 +488,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindAsset
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -530,7 +530,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindAssets
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -574,7 +574,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindMultipleAssets
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
@@ -616,7 +616,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BindGlobal
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Scopes/Scope.cs

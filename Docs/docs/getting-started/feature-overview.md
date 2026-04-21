@@ -46,7 +46,7 @@ description: Explore Saneject features for Unity, including editor-time injectio
 
 ## Tooling & validation
 
-- **Contextual toolbar buttons and injection context menus:** The main toolbar exposes `Inject Scene`, `Inject Selected Scene Hierarchies`, `Inject Prefab Asset`, and `Batch Inject Selected Assets` when they apply, while injection context menus let you run more focused scene, hierarchy, prefab, and selected-asset batch passes with specific context walk filter values.
+- **Contextual toolbar buttons and injection context menus:** The main toolbar exposes `Inject Scene`, `Inject Hierarchies`, `Inject Prefab`, and `Batch Inject` when they apply, while injection context menus let you run more focused scene, hierarchy, prefab, and selected-asset batch passes with specific context walk filter values.
 - **Batch injection:** Batch Injector can inject all (or selected) scenes and prefabs in a project in one click.
 - **Structured logging and validation:** Structured logging and validation with per-run and batch summaries help make dependency validation repeatable and easier to audit.
 - **Configurable settings:** Settings cover injection prompts, logging, context behavior, and proxy generation.

@@ -1,5 +1,8 @@
-﻿namespace Plugins.Saneject.Editor.Menus.Toolbar
+﻿using System.ComponentModel;
+
+namespace Plugins.Saneject.Editor.Menus.Toolbar
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public readonly struct InjectToolbarState
     {
         private InjectToolbarState(

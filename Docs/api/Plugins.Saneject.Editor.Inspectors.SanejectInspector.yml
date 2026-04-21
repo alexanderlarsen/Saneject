@@ -23,7 +23,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: SanejectInspector
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -59,7 +59,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: OnInspectorGUI
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -91,7 +91,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: DrawMonoBehaviourScriptField
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -123,7 +123,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: DrawProperty
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -155,7 +155,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ValidateProperty
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -193,7 +193,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GetFieldInfosForInspector
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -227,7 +227,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: HasReadOnlyAttribute
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -261,7 +261,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: HasInjectAttribute
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
@@ -295,7 +295,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: IsSerializeInterface
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/SanejectInspector.cs

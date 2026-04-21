@@ -99,6 +99,8 @@ Run dependency injection via the main toolbar button `Inject Scene`.
 
 ![Inject Scene button](../../images/quick-start-5.webp)
 
+> ℹ️ If you are using Unity 6000.3 or later, you need to **manually enable the Inject toolbar** by right-clicking the toolbar area and selecting `Saneject Inject Toolbar`
+
 After injection, `Player` has serialized values for `gameStateObservable` and `controller`. Enter Play Mode and the scene runs without a runtime container.
 
 ![Injected result in Player component Inspector](../../images/quick-start-6.webp)

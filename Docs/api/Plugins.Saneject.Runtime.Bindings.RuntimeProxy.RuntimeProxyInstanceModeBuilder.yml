@@ -18,7 +18,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: RuntimeProxyInstanceModeBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
@@ -47,7 +47,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
@@ -82,7 +82,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AsTransient
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
@@ -110,7 +110,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AsSingleton
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyInstanceModeBuilder.cs
