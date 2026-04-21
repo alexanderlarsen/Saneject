@@ -20,7 +20,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: RuntimeProxyBindingBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
@@ -49,7 +49,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
@@ -84,7 +84,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromGlobalScope
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
@@ -115,7 +115,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAnywhereInLoadedScenes
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
@@ -146,7 +146,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromComponentOnPrefab
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
@@ -187,7 +187,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromNewComponentOnNewGameObject
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/RuntimeProxy/RuntimeProxyBindingBuilder.cs

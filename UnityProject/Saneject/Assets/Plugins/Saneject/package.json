@@ -2,7 +2,7 @@
   "name": "com.alexanderlarsen.saneject",
   "author": "Alexander Larsen",
   "displayName": "Saneject",
-  "version": "1.0.3",
+  "version": "1.0.4",
   "description": "Inject dependencies in the Unity Editor, not Play Mode, by writing them directly into serialized fields at edit-time using familiar DI APIs, so everything stays visible in the Inspector, including interfaces.\n\nNo runtime container. No startup cost. No hidden wiring. No weird lifecycles. Just simple, deterministic edit-time DI that works with Unity, not around it.",
   "documentationUrl": "https://github.com/alexanderlarsen/Saneject/blob/main/README.md",
   "changelogUrl": "https://github.com/alexanderlarsen/Saneject/blob/main/CHANGELOG.md",

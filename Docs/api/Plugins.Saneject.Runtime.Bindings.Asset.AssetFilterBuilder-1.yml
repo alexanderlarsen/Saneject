@@ -17,7 +17,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AssetFilterBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
@@ -52,7 +52,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
@@ -87,7 +87,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: Where
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetFilterBuilder.cs

@@ -20,11 +20,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ProjectSettings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-    startLine: 15
+    startLine: 13
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Settings
@@ -50,11 +50,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UseContextIsolation
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-    startLine: 27
+    startLine: 25
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Settings
@@ -86,11 +86,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GenerateScopeNamespaceFromFolder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-    startLine: 41
+    startLine: 39
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Settings
@@ -120,11 +120,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GenerateProxyScriptsOnDomainReload
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-    startLine: 55
+    startLine: 53
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Settings
@@ -154,11 +154,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ProxyAssetGenerationFolder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-    startLine: 64
+    startLine: 62
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Settings
@@ -185,11 +185,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UseDefaultSettings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-    startLine: 77
+    startLine: 75
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Settings

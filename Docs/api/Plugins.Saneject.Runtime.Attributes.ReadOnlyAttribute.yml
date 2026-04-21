@@ -15,7 +15,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/ReadOnlyAttribute.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ReadOnlyAttribute
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/ReadOnlyAttribute.cs

@@ -10,9 +10,9 @@ Saneject injection context menus are editor commands that run dependency injecti
 For common full-run workflows, Saneject also exposes contextual main toolbar buttons:
 
 - `Inject Scene`
-- `Inject Selected Scene Hierarchies`
-- `Inject Prefab Asset`
-- `Batch Inject Selected Assets`
+- `Inject Hierarchies`
+- `Inject Prefab`
+- `Batch Inject`
 
 Those toolbar buttons appear only when they apply to the current selection or editor stage, and they always run with `ContextWalkFilter.AllContexts`.
 
@@ -20,14 +20,16 @@ If you are new to contexts and filters, read [Context](../core-concepts/context.
 
 ## Toolbar buttons
 
+> ℹ️ If you are using Unity 6000.3 or later, you need to **manually enable the Inject toolbar** by right-clicking the toolbar area and selecting `Saneject Inject Toolbar`
+
 The contextual main toolbar buttons cover the most common `AllContexts` runs.
 
 ![Saneject injection toolbar buttons](../../images/injection-main-toolbar.webp)
 
 - `Inject Scene`: shown while editing a scene.
-- `Inject Selected Scene Hierarchies`: shown while editing a scene and one or more scene objects are selected.
-- `Inject Prefab Asset`: shown in Prefab Mode.
-- `Batch Inject Selected Assets`: shown when the Project selection contains one or more scene assets, prefab assets, or folders that contain them.
+- `Inject Hierarchies`: shown while editing a scene and one or more scene objects are selected.
+- `Inject Prefab`: shown in Prefab Mode.
+- `Batch Inject`: shown when the Project selection contains one or more scene assets, prefab assets, or folders that contain them.
 
 For more focused runs, use the injection context menus described below.
 
@@ -149,7 +151,7 @@ See [Context](../core-concepts/context.md).
 
 Entry points:
 
-- Main toolbar: `Batch Inject Selected Assets` (`ContextWalkFilter.AllContexts`)
+- Main toolbar: `Batch Inject` (`ContextWalkFilter.AllContexts`)
 - `Assets/Saneject/Batch Inject Selected Assets/All Contexts`
 - `Assets/Saneject/Batch Inject Selected Assets/Scene Objects`
 - `Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects`

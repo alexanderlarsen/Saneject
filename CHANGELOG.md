@@ -1,5 +1,17 @@
 ﻿# Changelog
 
+## Version 1.0.4
+
+### Added
+
+- Added Inject toolbar support for Unity 6000.3 and newer using Unity's `MainToolbar` API.
+- Kept a legacy Inject toolbar implementation for earlier supported Unity versions that do not expose the new toolbar API.
+
+### Improved
+
+- Optimized both Inject toolbar implementations to use proper editor callbacks instead of polling.
+- Simplified the legacy toolbar flow while preserving the required fallback attachment approach for older Unity versions.
+
 ## Version 1.0.3
 
 ### Fixes

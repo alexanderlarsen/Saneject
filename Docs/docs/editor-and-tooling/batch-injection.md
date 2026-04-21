@@ -31,7 +31,7 @@ Use this when you want a targeted pass for a folder or a specific Project window
 
 Entry points:
 
-- Main toolbar: `Batch Inject Selected Assets` (`ContextWalkFilter.AllContexts`)
+- Main toolbar: `Batch Inject` (`ContextWalkFilter.AllContexts`)
 - Project window context menu: `Assets/Saneject/Batch Inject Selected Assets/All Contexts`
 - Project window context menu: `Assets/Saneject/Batch Inject Selected Assets/Scene Objects`
 - Project window context menu: `Assets/Saneject/Batch Inject Selected Assets/Prefab Asset Objects`

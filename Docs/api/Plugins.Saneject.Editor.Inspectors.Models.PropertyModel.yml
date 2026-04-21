@@ -24,7 +24,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: PropertyModel
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -60,7 +60,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -104,7 +104,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: SerializedProperty
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -135,7 +135,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: DisplayName
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -169,7 +169,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: IsReadOnly
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -203,7 +203,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: IsSerializedInterface
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -234,7 +234,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ExpectedType
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -270,7 +270,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: HasInjectAttribute
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -301,7 +301,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: IsCollection
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
@@ -332,7 +332,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: Children
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Editor/Inspectors/Models/PropertyModel.cs

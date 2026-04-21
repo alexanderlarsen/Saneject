@@ -29,7 +29,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ComponentFilterBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -64,7 +64,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -99,7 +99,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: Where
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -137,7 +137,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereComponent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -175,7 +175,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereTransform
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -213,7 +213,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereGameObject
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -251,7 +251,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereParent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -289,7 +289,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereAnyAncestor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -336,7 +336,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereRoot
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -374,7 +374,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereAnyChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -412,7 +412,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereChildAt
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -453,7 +453,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -491,7 +491,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -529,7 +529,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereAnyDescendant
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
@@ -573,7 +573,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
-      branch: wip/experimental-architecture-rewrite
+      branch: fix/inject-toolbar
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: WhereAnySibling
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentFilterBuilder.cs
