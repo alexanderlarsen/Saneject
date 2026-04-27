@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+using System.IO;
+using UnityEditor;
 using UnityEngine;
 
 namespace DevTools.Editor.VersionTool
@@ -27,7 +28,7 @@ namespace DevTools.Editor.VersionTool
             Event currentEvent = Event.current;
 
             return currentEvent.type == EventType.KeyDown &&
-                   currentEvent.keyCode is KeyCode.Return or KeyCode.KeypadEnter;
+                   (currentEvent.keyCode == KeyCode.Return || currentEvent.keyCode == KeyCode.KeypadEnter);
         }
 
         private void OnGUI()
@@ -39,10 +40,7 @@ namespace DevTools.Editor.VersionTool
             using (new EditorGUI.DisabledScope(string.IsNullOrWhiteSpace(version)))
             {
                 if (GUILayout.Button("Set Version And Export Package") || IsEnterPressed())
-                {
-                    VersionToolUtility.SetVersionAndExportUnityPackage(version);
-                    Close();
-                }
+                    SetVersionAndExportUnityPackage();
             }
 
             if (shouldFocusVersion)
@@ -50,6 +48,27 @@ namespace DevTools.Editor.VersionTool
                 shouldFocusVersion = false;
                 EditorGUI.FocusTextInControl("ReleaseVersion");
             }
+        }
+
+        private void SetVersionAndExportUnityPackage()
+        {
+            string releaseVersion = version.Trim();
+
+            if (string.IsNullOrWhiteSpace(releaseVersion))
+                return;
+
+            string defaultDirectory = Directory.GetParent(Application.dataPath)?.FullName ?? Application.dataPath;
+            string packagePath = EditorUtility.SaveFilePanel(
+                "Export Unity Package",
+                defaultDirectory,
+                $"Saneject-{releaseVersion}.unitypackage",
+                "unitypackage");
+
+            if (string.IsNullOrWhiteSpace(packagePath))
+                return;
+
+            VersionToolUtility.SetVersionAndExportUnityPackage(releaseVersion, packagePath);
+            Close();
         }
     }
 }

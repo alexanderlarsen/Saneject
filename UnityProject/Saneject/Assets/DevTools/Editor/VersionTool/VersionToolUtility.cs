@@ -9,27 +9,33 @@ namespace DevTools.Editor.VersionTool
 {
     public static class VersionToolUtility
     {
-        private const string ChangelogPath = @"E:\Unity\Personal\Saneject\CHANGELOG.md";
-        private const string PackageJsonPath = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\package.json";
+        private const string FinalizationPendingKey = "Saneject.VersionTool.FinalizationPending";
+        private const string VersionKey = "Saneject.VersionTool.Version";
+        private const string PackagePathKey = "Saneject.VersionTool.PackagePath";
         private const string PackageRootAssetPath = "Assets/Plugins/Saneject";
-        private const string SamplesTildePath = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Samples~";
-        private const string SamplesPath = @"E:\Unity\Personal\Saneject\UnityProject\Saneject\Assets\Plugins\Saneject\Samples";
-        private const string PackageExportPath = @"C:\Users\Alexander\Desktop";
-        private const string ReleasePreparationStepKey = "Saneject.ReleasePreparation.Step";
-        private const string ReleasePreparationVersionKey = "Saneject.ReleasePreparation.Version";
-        private const string ExportAfterSamplesRenameStep = "ExportAfterSamplesRename";
 
-        public static void SetVersionAndExportUnityPackage(string version)
+        private static readonly string RepoRootPath = Path.Combine(Application.dataPath, "..", "..", "..");
+        private static readonly string ChangelogPath = Path.Combine(RepoRootPath, "CHANGELOG.md");
+        private static readonly string PackageJsonPath = Path.Combine(RepoRootPath, @"UnityProject\Saneject\Assets\Plugins\Saneject\package.json");
+        private static readonly string SamplesPath = Path.Combine(RepoRootPath, @"UnityProject\Saneject\Assets\Plugins\Saneject\Samples");
+        private static readonly string SamplesTildePath = SamplesPath + "~";
+
+        public static void SetVersionAndExportUnityPackage(
+            string version,
+            string packagePath)
         {
             string releaseVersion = version.Trim();
 
             if (string.IsNullOrWhiteSpace(releaseVersion))
                 return;
 
+            if (string.IsNullOrWhiteSpace(packagePath))
+                return;
+
             Debug.Log($"Starting release preparation for version {releaseVersion}");
             CheckChangelogVersion(releaseVersion);
             UpdatePackageJsonVersion(releaseVersion);
-            PrepareUnityPackage(releaseVersion);
+            PrepareUnityPackage(releaseVersion, packagePath);
         }
 
         public static string GetPackageJsonVersion()
@@ -56,7 +62,7 @@ namespace DevTools.Editor.VersionTool
         [InitializeOnLoadMethod]
         private static void ResumeAfterDomainReload()
         {
-            EditorApplication.delayCall += TryFinish;
+            EditorApplication.delayCall += TryFinalize;
         }
 
         private static void CheckChangelogVersion(string releaseVersion)
@@ -113,7 +119,9 @@ namespace DevTools.Editor.VersionTool
             Debug.Log($"Package.json version updated to {releaseVersion}.");
         }
 
-        private static void PrepareUnityPackage(string releaseVersion)
+        private static void PrepareUnityPackage(
+            string releaseVersion,
+            string packagePath)
         {
             if (!Directory.Exists(SamplesTildePath))
                 throw new DirectoryNotFoundException("Samples folder not found at: " + SamplesTildePath);
@@ -121,32 +129,35 @@ namespace DevTools.Editor.VersionTool
             if (Directory.Exists(SamplesPath))
                 throw new IOException("Cannot prepare release because Samples already exists at: " + SamplesPath);
 
-            SessionState.SetString(ReleasePreparationStepKey, ExportAfterSamplesRenameStep);
-            SessionState.SetString(ReleasePreparationVersionKey, releaseVersion);
+            SessionState.SetBool(FinalizationPendingKey, true);
+            SessionState.SetString(VersionKey, releaseVersion);
+            SessionState.SetString(PackagePathKey, packagePath);
 
             Directory.Move(SamplesTildePath, SamplesPath);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
-            Debug.Log("Samples folder renamed from Samples~ to Samples.");
 
-            TryFinish();
+            Debug.Log("Samples folder renamed from Samples~ to Samples.");
         }
 
-        private static void TryFinish()
+        private static void TryFinalize()
         {
-            if (SessionState.GetString(ReleasePreparationStepKey, string.Empty) != ExportAfterSamplesRenameStep)
+            if (!SessionState.GetBool(FinalizationPendingKey, defaultValue: false))
                 return;
 
-            string releaseVersion = SessionState.GetString(ReleasePreparationVersionKey, string.Empty);
+            string releaseVersion = SessionState.GetString(VersionKey, string.Empty);
+            string packagePath = SessionState.GetString(PackagePathKey, string.Empty);
 
             if (string.IsNullOrWhiteSpace(releaseVersion))
                 throw new InvalidOperationException("Cannot resume release preparation because the version was not stored.");
 
+            if (string.IsNullOrWhiteSpace(packagePath))
+                throw new InvalidOperationException("Cannot resume release preparation because the package path was not stored.");
+
             try
             {
-                string packagePath = Path.Combine(PackageExportPath, $"Saneject-{releaseVersion}.unitypackage");
                 AssetDatabase.ExportPackage(PackageRootAssetPath, packagePath, ExportPackageOptions.Recurse);
-                Debug.Log($"Saneject-{releaseVersion}.unitypackage created.");
+                Debug.Log($"Unity package created at: {packagePath}");
             }
             finally
             {
@@ -156,8 +167,9 @@ namespace DevTools.Editor.VersionTool
                 File.Delete(SamplesPath + ".meta");
                 Debug.Log("Samples folder renamed back from Samples to Samples~.");
 
-                SessionState.EraseString(ReleasePreparationStepKey);
-                SessionState.EraseString(ReleasePreparationVersionKey);
+                SessionState.EraseBool(FinalizationPendingKey);
+                SessionState.EraseString(VersionKey);
+                SessionState.EraseString(PackagePathKey);
                 AssetDatabase.SaveAssets();
                 AssetDatabase.Refresh();
             }
