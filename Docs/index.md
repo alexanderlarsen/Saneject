@@ -9,7 +9,7 @@ description: Inject dependencies in the Unity Editor, not Play Mode. No runtime 
 
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
-[![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?include_prereleases&color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
+[![Release](https://img.shields.io/github/v/release/alexanderlarsen/Saneject?color=blue&label=Release)](https://github.com/alexanderlarsen/Saneject/releases)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow)](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
 
 Dependency injection the Unity way.
