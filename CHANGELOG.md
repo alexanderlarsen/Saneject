@@ -1,5 +1,16 @@
 ﻿# Changelog
 
+## Version 1.0.5
+
+### Fixes
+
+- Fixed inherited private injection sites being skipped during graph construction.
+- Component traversal now walks each declaring type in the inheritance chain, allowing private base class fields, methods, and auto-property backing fields to be discovered reliably.
+
+### Tests
+
+- Added inheritance injection coverage for public and private base class fields, methods, and properties.
+
 ## Version 1.0.4
 
 ### Added

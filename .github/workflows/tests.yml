@@ -1,11 +1,19 @@
 name: Tests
 on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'UnityProject/Saneject/**'
+      - 'Roslyn/**'
+      - '.github/workflows/tests.yml'
   pull_request:
     branches:
       - main
     paths:
       - 'UnityProject/Saneject/**'
       - 'Roslyn/**'
+      - '.github/workflows/tests.yml'
   workflow_dispatch:
       
 jobs:

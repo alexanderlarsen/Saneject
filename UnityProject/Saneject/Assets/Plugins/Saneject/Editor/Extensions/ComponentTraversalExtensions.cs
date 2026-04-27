@@ -13,11 +13,11 @@ namespace Plugins.Saneject.Editor.Extensions
     [EditorBrowsable(EditorBrowsableState.Never)]
     public static class ComponentTraversalExtensions
     {
-        private const BindingFlags BindingFlags =
-            System.Reflection.BindingFlags.Public |
-            System.Reflection.BindingFlags.NonPublic |
-            System.Reflection.BindingFlags.Instance |
-            System.Reflection.BindingFlags.FlattenHierarchy;
+        private const BindingFlags Flags =
+            BindingFlags.Public |
+            BindingFlags.NonPublic |
+            BindingFlags.Instance |
+            BindingFlags.DeclaredOnly;
 
         public static IEnumerable<FieldTraversalResult> GetInjectionFieldsDeep(this Component component)
         {
@@ -33,31 +33,32 @@ namespace Plugins.Saneject.Editor.Extensions
             object owner,
             string path)
         {
-            if(owner == null)
+            if (owner == null)
                 yield break;
-            
-            Type type = owner.GetType();
 
-            foreach (FieldInfo field in type.GetFields(BindingFlags))
+            foreach (Type type in GetTraversalTypes(owner.GetType()))
             {
-                string fieldPath =
-                    string.IsNullOrEmpty(path)
-                        ? field.Name
-                        : $"{path}.{field.Name}";
+                foreach (FieldInfo field in type.GetFields(Flags))
+                {
+                    string fieldPath =
+                        string.IsNullOrEmpty(path)
+                            ? field.Name
+                            : $"{path}.{field.Name}";
 
-                if (field.TryGetAttribute(out InjectAttribute injectAttribute))
-                    yield return new FieldTraversalResult(owner, field, fieldPath, injectAttribute);
+                    if (field.TryGetAttribute(out InjectAttribute injectAttribute))
+                        yield return new FieldTraversalResult(owner, field, fieldPath, injectAttribute);
 
-                if (!field.FieldType.IsNestedSerializable())
-                    continue;
+                    if (!field.FieldType.IsNestedSerializable())
+                        continue;
 
-                object nested = field.GetValue(owner);
+                    object nested = field.GetValue(owner);
 
-                if (nested == null)
-                    continue;
+                    if (nested == null)
+                        continue;
 
-                foreach (FieldTraversalResult child in WalkFields(nested, fieldPath))
-                    yield return child;
+                    foreach (FieldTraversalResult child in WalkFields(nested, fieldPath))
+                        yield return child;
+                }
             }
         }
 
@@ -65,39 +66,56 @@ namespace Plugins.Saneject.Editor.Extensions
             object owner,
             string path)
         {
-            if(owner == null)
+            if (owner == null)
                 yield break;
-            
-            Type type = owner.GetType();
 
-            foreach (MethodInfo method in type.GetMethods(BindingFlags))
+            foreach (Type type in GetTraversalTypes(owner.GetType()))
             {
-                string methodPath =
-                    string.IsNullOrEmpty(path)
-                        ? method.Name
-                        : $"{path}.{method.Name}";
+                foreach (MethodInfo method in type.GetMethods(Flags))
+                {
+                    string methodPath =
+                        string.IsNullOrEmpty(path)
+                            ? method.Name
+                            : $"{path}.{method.Name}";
 
-                if (method.TryGetAttribute(out InjectAttribute injectAttribute))
-                    yield return new MethodTraversalResult(owner, method, methodPath, injectAttribute);
+                    if (method.TryGetAttribute(out InjectAttribute injectAttribute))
+                        yield return new MethodTraversalResult(owner, method, methodPath, injectAttribute);
+                }
             }
 
-            foreach (FieldInfo field in type.GetFields(BindingFlags))
+            foreach (Type type in GetTraversalTypes(owner.GetType()))
             {
-                if (!field.FieldType.IsNestedSerializable())
-                    continue;
+                foreach (FieldInfo field in type.GetFields(Flags))
+                {
+                    if (!field.FieldType.IsNestedSerializable())
+                        continue;
 
-                object nested = field.GetValue(owner);
+                    object nested = field.GetValue(owner);
 
-                if (nested == null)
-                    continue;
+                    if (nested == null)
+                        continue;
 
-                string nestedPath =
-                    string.IsNullOrEmpty(path)
-                        ? field.Name
-                        : $"{path}.{field.Name}";
+                    string nestedPath =
+                        string.IsNullOrEmpty(path)
+                            ? field.Name
+                            : $"{path}.{field.Name}";
 
-                foreach (MethodTraversalResult child in WalkMethods(nested, nestedPath))
-                    yield return child;
+                    foreach (MethodTraversalResult child in WalkMethods(nested, nestedPath))
+                        yield return child;
+                }
+            }
+        }
+
+        private static IEnumerable<Type> GetTraversalTypes(Type type)
+        {
+            while (type != null &&
+                   type != typeof(object) &&
+                   type != typeof(UnityEngine.Object) &&
+                   type != typeof(Component) &&
+                   type != typeof(UnityEngine.MonoBehaviour))
+            {
+                yield return type;
+                type = type.BaseType;
             }
         }
     }
