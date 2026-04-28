@@ -16,7 +16,7 @@ Unity serialization supports concrete serializable data and `UnityEngine.Object`
 An interface is only a contract, not a concrete serializable type.
 So a member typed as `IMyService` is skipped by Unity's serializer unless you add an explicit serialization bridge.
 
-In DI-heavy code, this matters because Saneject writes resolved dependencies into serialized members.
+This matters because Saneject writes resolved dependencies into serialized members.
 If interface members cannot serialize, interface-based injection cannot persist in scenes and prefabs.
 
 ## What the Saneject Roslyn generator adds

@@ -56,7 +56,7 @@ Add this URL to Unity Package Manager (Unity 2022.3.12 or newer):
 https://github.com/alexanderlarsen/Saneject.git?path=UnityProject/Saneject/Assets/Plugins/Saneject
 ```
 
-Or download the [latest release](https://github.com/alexanderlarsen/Saneject/releases) and import the `Saneject` folder into your Unity project.
+Or download the [latest release](https://github.com/alexanderlarsen/Saneject/releases) and import it folder into your Unity project.
 
 Then jump to [Quick start](https://saneject.dev/docs/getting-started/quick-start).
 
@@ -72,4 +72,5 @@ If you try Saneject and something works well, feels unclear, or seems broken, I 
 - [Docs](https://saneject.dev/docs/getting-started/introduction)
 - [API](https://saneject.dev/api/Plugins.Saneject.Editor.Inspectors.SanejectInspector)
 - [Releases](https://github.com/alexanderlarsen/Saneject/releases)
+- [Changelog](https://github.com/alexanderlarsen/Saneject/blob/main/CHANGELOG.md)
 - [MIT license](https://github.com/alexanderlarsen/Saneject/blob/main/LICENSE)
