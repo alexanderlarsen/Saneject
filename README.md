@@ -4,7 +4,7 @@
       <source media="(prefers-color-scheme: light)" srcset="Docs/images/logo-dark.webp">
       <img src="Docs/images/logo-light.webp" alt="Saneject logo" width="260">
     </picture>
-</p> 
+</p>
 
 ![Unity](https://img.shields.io/badge/Unity-2022.3.12+-ff8383)
 [![Tests](https://img.shields.io/github/actions/workflow/status/alexanderlarsen/Saneject/tests.yml?label=Tests)](https://github.com/alexanderlarsen/Saneject/actions/workflows/tests.yml)
