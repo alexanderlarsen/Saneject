@@ -3,6 +3,8 @@ on:
   pull_request:
     branches:
       - main
+    # Do not add a paths filter here. Branch protection requires the matrix
+    # checks below, so the workflow must create them for every PR to main.
   workflow_dispatch:
       
 jobs:
@@ -16,28 +18,46 @@ jobs:
     steps:
       - uses: actions/checkout@v4
         with:
+          # Required so git can compare the PR commits below.
           fetch-depth: 0
 
       - name: Check if Unity tests are needed
         id: test-paths
         shell: bash
         run: |
+          # Manual runs should always execute the real Unity tests.
           if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
             echo "run=true" >> "$GITHUB_OUTPUT"
             exit 0
           fi
 
-          if git diff --quiet "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" -- UnityProject/Saneject Roslyn .github/workflows/tests.yml; then
+          # When an existing PR gets a new push, check only the newly pushed
+          # commits. Otherwise, old test-related commits in the PR would make
+          # every later README/docs-only push run the full Unity matrix again.
+          if [[ "${{ github.event.action }}" == "synchronize" ]]; then
+            diff_base="${{ github.event.before }}"
+            diff_head="${{ github.event.after }}"
+          else
+            # For a newly opened/reopened PR, check the full PR diff.
+            diff_base="${{ github.event.pull_request.base.sha }}"
+            diff_head="${{ github.event.pull_request.head.sha }}"
+          fi
+
+          if git diff --quiet "$diff_base" "$diff_head" -- UnityProject/Saneject Roslyn .github/workflows/tests.yml; then
             echo "run=false" >> "$GITHUB_OUTPUT"
           else
             echo "run=true" >> "$GITHUB_OUTPUT"
           fi
 
       - name: Skip tests
+        # Keep the required matrix job successful when this PR update did not
+        # touch test-relevant paths.
         if: steps.test-paths.outputs.run != 'true'
         run: echo "No test-relevant files changed."
 
       - name: EditMode tests
+        # Do not put this condition on the job itself. Branch protection
+        # requires these matrix jobs to complete successfully.
         if: steps.test-paths.outputs.run == 'true'
         uses: game-ci/unity-test-runner@v4
         env:
