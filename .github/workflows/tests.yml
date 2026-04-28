@@ -31,19 +31,10 @@ jobs:
             exit 0
           fi
 
-          # When an existing PR gets a new push, check only the newly pushed
-          # commits. Otherwise, old test-related commits in the PR would make
-          # every later README/docs-only push run the full Unity matrix again.
-          if [[ "${{ github.event.action }}" == "synchronize" ]]; then
-            diff_base="${{ github.event.before }}"
-            diff_head="${{ github.event.after }}"
-          else
-            # For a newly opened/reopened PR, check the full PR diff.
-            diff_base="${{ github.event.pull_request.base.sha }}"
-            diff_head="${{ github.event.pull_request.head.sha }}"
-          fi
-
-          if git diff --quiet "$diff_base" "$diff_head" -- UnityProject/Saneject Roslyn .github/workflows/tests.yml; then
+          # Check the full PR diff. This means docs-only PRs skip tests, while
+          # PRs that contain any test-relevant changes keep running tests even
+          # if the latest push only changed docs.
+          if git diff --quiet "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" -- UnityProject/Saneject Roslyn .github/workflows/tests.yml; then
             echo "run=false" >> "$GITHUB_OUTPUT"
           else
             echo "run=true" >> "$GITHUB_OUTPUT"
