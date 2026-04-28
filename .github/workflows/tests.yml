@@ -3,10 +3,6 @@ on:
   pull_request:
     branches:
       - main
-    paths:
-      - 'UnityProject/Saneject/**'
-      - 'Roslyn/**'
-      - '.github/workflows/tests.yml'
   workflow_dispatch:
       
 jobs:
@@ -19,8 +15,30 @@ jobs:
         unity: [2022.3.12f1, 2022.3.62f3, 6000.0.58f2, 6000.0.63f1, 6000.1.17f1, 6000.2.6f2, 6000.2.15f1, 6000.3.0f1, 6000.3.12f1, 6000.4.0f1, 6000.4.1f1]
     steps:
       - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+
+      - name: Check if Unity tests are needed
+        id: test-paths
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "workflow_dispatch" ]]; then
+            echo "run=true" >> "$GITHUB_OUTPUT"
+            exit 0
+          fi
+
+          if git diff --quiet "${{ github.event.pull_request.base.sha }}" "${{ github.event.pull_request.head.sha }}" -- UnityProject/Saneject Roslyn .github/workflows/tests.yml; then
+            echo "run=false" >> "$GITHUB_OUTPUT"
+          else
+            echo "run=true" >> "$GITHUB_OUTPUT"
+          fi
+
+      - name: Skip tests
+        if: steps.test-paths.outputs.run != 'true'
+        run: echo "No test-relevant files changed."
 
       - name: EditMode tests
+        if: steps.test-paths.outputs.run == 'true'
         uses: game-ci/unity-test-runner@v4
         env:
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
