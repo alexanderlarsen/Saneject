@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Runtime.Attributes
         /// <summary>
         /// Marks the field or method for injection with an ID while optionally suppressing missing binding and missing dependency logs for the field.
         /// </summary>
-        /// <param name="id">The binding ID to match against.</param>
+        /// <param name="id">The binding ID to match against. Only bindings with the same ID will be used for resolution.</param>
         /// <param name="suppressMissingErrors">
         /// If <c>true</c>, suppresses error logs when no binding or dependency is found.
         /// </param>

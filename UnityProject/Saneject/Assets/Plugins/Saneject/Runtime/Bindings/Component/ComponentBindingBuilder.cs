@@ -49,8 +49,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
         #region QUALIFIER METHODS
 
         /// <summary>
-        /// Qualifies this binding with one or more IDs.
-        /// Only injection sites (fields/properties/methods) annotated with an <see cref="Attributes.InjectAttribute" />
+        /// Only injection sites annotated with <see cref="Attributes.InjectAttribute" />
         /// that specify the same ID will resolve using this binding.
         /// </summary>
         /// <param name="ids">The identifiers to match against injection sites.</param>

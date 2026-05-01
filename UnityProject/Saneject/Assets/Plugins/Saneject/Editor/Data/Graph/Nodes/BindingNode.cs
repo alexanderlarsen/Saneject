@@ -82,7 +82,8 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
                 other.MemberNameQualifiers.Count > 0 &&
                 !MemberNameQualifiers.OverlapsWith(other.MemberNameQualifiers);
 
-            bool separatedById = !IdQualifiers.OverlapsWith(other.IdQualifiers);
+            bool separatedById = (IdQualifiers.Count > 0 || other.IdQualifiers.Count > 0) && 
+                                 !IdQualifiers.OverlapsWith(other.IdQualifiers);
 
             return !separatedByTarget
                    && !separatedByMemberName

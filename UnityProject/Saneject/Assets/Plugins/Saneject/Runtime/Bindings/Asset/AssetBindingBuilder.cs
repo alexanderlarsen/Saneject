@@ -63,11 +63,10 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         #region QUALIFIER METHODS
 
         /// <summary>
-        /// Qualifies this binding with an ID.
-        /// Only injection targets annotated with <see cref="Attributes.InjectAttribute" />
+        /// Only injection sites annotated with <see cref="Attributes.InjectAttribute" />
         /// that specify the same ID will resolve using this binding.
         /// </summary>
-        /// <param name="ids">The identifiers to match against injection targets.</param>
+        /// <param name="ids">The identifiers to match against injection sites.</param>
         /// <returns>The builder instance for fluent chaining.</returns>
         public AssetBindingBuilder<TAsset> ToID(params string[] ids)
         {
