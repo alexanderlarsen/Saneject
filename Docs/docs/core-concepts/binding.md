@@ -238,7 +238,7 @@ If a binding filter throws an exception, Saneject logs a binding filter error fo
 
 Saneject enforces unambiguous bindings within each `Scope`. When two bindings are considered duplicate or ambiguous, Saneject logs an error and excludes the conflicting binding from the injection run.
 
-Duplicate checks use these criteria:
+Duplicate and ambiguity checks use these criteria:
 
 1. Same scope.
 2. Same binding family (`ComponentBindingNode`, `AssetBindingNode`, or `GlobalComponentBindingNode`).
@@ -247,11 +247,11 @@ Duplicate checks use these criteria:
     - Otherwise `TConcrete`.
 4. Same single/collection shape.
 5. Qualifier ambiguity:
-    - If neither binding has qualifiers that separate it from the other, they conflict.
-    - `ToID` separates bindings by ID. A binding without `ToID` does not overlap a binding with `ToID`, and two bindings with `ToID` overlap only when their IDs overlap.
-    - `ToTarget` qualifiers overlap when their target component type hierarchies overlap.
-    - `ToMember` qualifiers separate bindings only when both bindings specify non-overlapping values.
-    - Empty `ToTarget` and `ToMember` qualifier sets are unrestricted and do not separate bindings.
+   - If the criteria above do not separate two bindings, they conflict unless at least one qualifier rule below separates them.
+   - `ToID` separates bindings by ID. A binding without `ToID` does not overlap a binding with `ToID`, and two bindings with `ToID` overlap only when their IDs overlap.
+   - `ToTarget` qualifiers overlap when their target component type hierarchies overlap.
+   - `ToMember` qualifiers separate bindings only when both bindings specify non-overlapping values.
+   - Empty `ToTarget` and `ToMember` qualifier sets are unrestricted and do not separate bindings.
 
 Examples:
 
