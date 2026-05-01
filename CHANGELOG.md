@@ -2,6 +2,11 @@
 
 ## Version 1.0.6
 
+### Changes
+
+- Updated ID matching so injection sites with an ID only match bindings with the same `ToID`.
+- Updated binding uniqueness detection so ID-qualified and non-ID-qualified bindings are distinct.
+
 ### Fixes
 
 - Fixed `ToTarget<T>` matching for inherited component targets, so target qualifiers now match derived component types.

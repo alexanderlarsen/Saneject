@@ -7,7 +7,6 @@ using Plugins.Saneject.Editor.Data.Errors;
 using Plugins.Saneject.Editor.Data.Graph;
 using Plugins.Saneject.Editor.Data.Graph.Nodes;
 using Plugins.Saneject.Editor.Data.Injection;
-using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Plugins.Saneject.Editor.Core
@@ -332,9 +331,9 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             bool MatchesTargetTypeQualifiers(BindingNode bindingNode)
-            { 
+            {
                 return bindingNode.TargetTypeQualifiers.Count == 0 ||
-                    bindingNode.TargetTypeQualifiers.Any(t => t.IsAssignableFrom(componentType));
+                       bindingNode.TargetTypeQualifiers.Any(t => t.IsAssignableFrom(componentType));
             }
 
             bool MatchesMemberNameQualifiers(BindingNode bindingNode)
@@ -345,8 +344,10 @@ namespace Plugins.Saneject.Editor.Core
 
             bool MatchesIdQualifiers(BindingNode bindingNode)
             {
-                return bindingNode.IdQualifiers.Count == 0 ||
-                       bindingNode.IdQualifiers.Contains(injectId);
+                if (!string.IsNullOrWhiteSpace(injectId))
+                    return bindingNode.IdQualifiers.Count > 0 && bindingNode.IdQualifiers.Contains(injectId);
+
+                return bindingNode.IdQualifiers.Count == 0;
             }
         }
 

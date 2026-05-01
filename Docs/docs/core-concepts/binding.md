@@ -176,7 +176,8 @@ Binding qualifiers restrict which injection sites (fields, properties, methods) 
 Important behavior:
 
 - Binding qualifiers are additive, so all specified qualifiers must match.
-- If a binding qualifier is not set on the binding, the binding matches by `TInterface` or `TConcrete` only.
+- Injection sites without an ID match bindings without `ToID`. Injection sites with an ID only match bindings with the same `ToID`.
+- If `ToTarget` or `ToMember` is not set on the binding, that qualifier does not restrict where the binding applies.
 - `ToTarget<TTarget>()` matches the actual injection target component type. A binding targeted to a base component type also matches derived component types.
 - Binding qualifiers apply to component, asset, and runtime proxy bindings.
 - Binding qualifiers do not apply to global bindings.
@@ -247,9 +248,10 @@ Duplicate checks use these criteria:
 4. Same single/collection shape.
 5. Qualifier ambiguity:
     - If neither binding has qualifiers that separate it from the other, they conflict.
-    - Empty qualifier sets are unrestricted and do not separate bindings.
+    - `ToID` separates bindings by ID. A binding without `ToID` does not overlap a binding with `ToID`, and two bindings with `ToID` overlap only when their IDs overlap.
     - `ToTarget` qualifiers overlap when their target component type hierarchies overlap.
-    - `ToMember` and `ToID` qualifiers separate bindings only when both bindings specify non-overlapping values.
+    - `ToMember` qualifiers separate bindings only when both bindings specify non-overlapping values.
+    - Empty `ToTarget` and `ToMember` qualifier sets are unrestricted and do not separate bindings.
 
 Examples:
 
@@ -278,9 +280,20 @@ BindAsset<IGameConfig, GameConfigAsset>()
 ```
 
 ```csharp
-// Ambiguous: both bindings can resolve [Inject("menu")] members on MainMenuController.
+// Distinct: one binding matches ID "menu" and the other matches injection sites without an ID.
 BindAsset<IGameConfig, GameConfigAsset>()
     .ToID("menu")
+    .FromResources("Configs/Menu");
+
+BindAsset<IGameConfig, GameConfigAsset>()
+    .ToTarget<MainMenuController>()
+    .FromResources("Configs/Menu");
+```
+
+```csharp
+// Ambiguous: both bindings can resolve the config member on MainMenuController.
+BindAsset<IGameConfig, GameConfigAsset>()
+    .ToMember("config")
     .FromResources("Configs/Menu");
 
 BindAsset<IGameConfig, GameConfigAsset>()
