@@ -1,11 +1,11 @@
 ﻿# Changelog
 
-## Version 1.0.6
+## Version 1.1.0
 
 ### Changes
 
-- Updated ID matching so injection sites with an ID only match bindings with the same `ToID`.
-- Updated binding uniqueness detection so ID-qualified and non-ID-qualified bindings are distinct.
+- ID-qualified injection sites now require a matching `ToID(...)` binding. Unqualified bindings only match injection sites without an ID.
+- If an `[Inject("id")]` site previously relied on an unqualified binding, add `.ToID("id")` to the binding or remove the ID from the injection site.
 
 ### Fixes
 
