@@ -16,7 +16,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GlobalComponentBindingBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs
@@ -99,7 +99,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs

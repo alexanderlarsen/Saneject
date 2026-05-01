@@ -21,7 +21,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: InjectAttribute
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
@@ -79,7 +79,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
@@ -87,8 +87,8 @@ items:
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Attributes
-  summary: Marks the field or method for injection, using only type-based binding resolution.
-  remarks: The dependency is resolved by matching the member's type against bindings in the scope hierarchy.
+  summary: Marks the field or method for injection without an ID.
+  remarks: The dependency is resolved by matching the member's type against bindings in the scope hierarchy that do not specify an ID.
   example: []
   syntax:
     content: public InjectAttribute()
@@ -111,7 +111,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
@@ -146,7 +146,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
@@ -181,7 +181,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
@@ -196,7 +196,7 @@ items:
     parameters:
     - id: id
       type: System.String
-      description: The binding ID to match against.
+      description: The binding ID to match against. Only bindings with the same ID will be used for resolution.
     - id: suppressMissingErrors
       type: System.Boolean
       description: If <code>true</code>, suppresses error logs when no binding or dependency is found.
@@ -219,7 +219,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ID
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
@@ -227,7 +227,7 @@ items:
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Attributes
-  summary: Gets the binding ID used for dependency resolution, or <code>null</code> if only type-based resolution is used.
+  summary: Gets the binding ID used for dependency resolution, or <code>null</code> if bindings without an ID should be used.
   example: []
   syntax:
     content: public string ID { get; }
@@ -250,7 +250,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: SuppressMissingErrors
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/InjectAttribute.cs

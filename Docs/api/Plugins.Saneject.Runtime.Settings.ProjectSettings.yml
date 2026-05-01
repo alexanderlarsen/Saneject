@@ -20,7 +20,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ProjectSettings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
@@ -50,7 +50,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UseContextIsolation
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
@@ -86,7 +86,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GenerateScopeNamespaceFromFolder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
@@ -120,7 +120,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GenerateProxyScriptsOnDomainReload
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
@@ -154,7 +154,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ProxyAssetGenerationFolder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
@@ -185,7 +185,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UseDefaultSettings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/ProjectSettings.cs

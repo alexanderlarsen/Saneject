@@ -21,7 +21,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ComponentBindingBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
@@ -105,7 +105,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
@@ -140,7 +140,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRuntimeProxy
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
@@ -179,18 +179,16 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToID
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-    startLine: 57
+    startLine: 56
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Component
   summary: >-
-    Qualifies this binding with one or more IDs.
-
-    Only injection sites (fields/properties/methods) annotated with an <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>
+    Only injection sites annotated with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>
 
     that specify the same ID will resolve using this binding.
   example: []
@@ -222,18 +220,18 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToTarget
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-    startLine: 70
+    startLine: 69
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Component
   summary: >-
-    Qualifies this binding to apply only when the injection target is of the given type.
+    Qualifies this binding to apply only when the injection target is of the given type or a derived type.
 
-    The injection target is the <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> that owns the field, property or method
+    The injection target is the object that owns the field, property or method
 
     marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
   example: []
@@ -264,18 +262,18 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToTarget
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-    startLine: 83
+    startLine: 82
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Component
   summary: >-
-    Qualifies this binding to apply only when the injection target is one of the specified types.
+    Qualifies this binding to apply only when the injection target is one of the specified types or a derived type.
 
-    The injection target is the <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> that owns the field, property or method
+    The injection target is the object that owns the field, property or method
 
     marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
   example: []
@@ -307,22 +305,22 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToMember
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/ComponentBindingBuilder.cs
-    startLine: 94
+    startLine: 93
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Component
-  summary: Qualifies this binding to apply only when the injection target member (field or property) has one of the specified names.
+  summary: Qualifies this binding to apply only when the injection target member (field, property, or method) has one of the specified names.
   example: []
   syntax:
     content: public ComponentBindingBuilder<TComponent> ToMember(params string[] memberNames)
     parameters:
     - id: memberNames
       type: System.String[]
-      description: The field or property names on the injection target that this binding should apply to.
+      description: The field, property, or method names on the injection target that this binding should apply to.
     return:
       type: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1
       description: The builder instance for fluent chaining.
@@ -2796,13 +2794,6 @@ references:
     isExternal: true
   - name: (
   - name: )
-- uid: UnityEngine.Component
-  commentId: T:UnityEngine.Component
-  parent: UnityEngine
-  isExternal: true
-  name: Component
-  nameWithType: Component
-  fullName: UnityEngine.Component
 - uid: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget*
   commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder`1.ToTarget
   href: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_ComponentBindingBuilder_1_ToTarget__1
@@ -2811,12 +2802,6 @@ references:
   fullName: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder<TComponent>.ToTarget
   nameWithType.vb: ComponentBindingBuilder(Of TComponent).ToTarget
   fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.ComponentBindingBuilder(Of TComponent).ToTarget
-- uid: UnityEngine
-  commentId: N:UnityEngine
-  isExternal: true
-  name: UnityEngine
-  nameWithType: UnityEngine
-  fullName: UnityEngine
 - uid: System.Type
   commentId: T:System.Type
   parent: System

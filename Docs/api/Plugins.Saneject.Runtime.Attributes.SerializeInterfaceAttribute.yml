@@ -15,7 +15,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/SerializedInterfaceAttribute.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: SerializeInterfaceAttribute
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/SerializedInterfaceAttribute.cs
