@@ -62,7 +62,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
 
         /// <summary>
         /// Qualifies this binding to apply only when the injection target is of the given type or a derived type.
-        /// The injection target is the <see cref="UnityEngine.Component" /> that owns the field, property or method
+        /// The injection target is the object that owns the field, property or method
         /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
@@ -75,7 +75,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
 
         /// <summary>
         /// Qualifies this binding to apply only when the injection target is one of the specified types or a derived type.
-        /// The injection target is the <see cref="UnityEngine.Component" /> that owns the field, property or method
+        /// The injection target is the object that owns the field, property or method
         /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>

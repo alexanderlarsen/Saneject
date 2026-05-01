@@ -40,8 +40,8 @@ Most bindings follow this general pattern or a combination of these:
 ```csharp
 BindComponent<IAudioService, AudioManager>()
     .ToID("hud") // Optional qualifier that matches [Inject("hud")]
-    .ToTarget<CombatHud>() // Optional qualifier that matches injection targets of type CombatHud
-    .ToMember("audioService") // Optional qualifier that matches and methods named "audioService"
+    .ToTarget<CombatHud>() // Optional qualifier that matches injection target objects of type CombatHud
+    .ToMember("audioService") // Optional qualifier that matches members named "audioService"
     .FromTargetSelf() // Required locator strategy that looks for the AudioManager on the transform of the CombatHud
     .WhereComponent(c => c.isActiveAndEnabled); // Optional filter that only includes enabled components
 ```
@@ -170,7 +170,7 @@ Binding qualifiers restrict which injection sites (fields, properties, methods) 
 | Qualifier                    | Injection site match                                                            |
 |------------------------------|---------------------------------------------------------------------------------|
 | `ToID("someId")`             | Fields, properties, methods marked with `[Inject("someId")]`                    |
-| `ToTarget<TTarget>()`        | Fields, properties, methods on `TTarget` components and derived component types |
+| `ToTarget<TTarget>()`        | Fields, properties, methods owned by `TTarget` objects and derived types        |
 | `ToMember("someMemberName")` | Fields, properties, methods with name `"someMemberName"`                        |
 
 Important behavior:
@@ -178,7 +178,7 @@ Important behavior:
 - Binding qualifiers are additive, so all specified qualifiers must match.
 - Injection sites without an ID match bindings without `ToID`. Injection sites with an ID only match bindings with the same `ToID`.
 - If `ToTarget` or `ToMember` is not set on the binding, that qualifier does not restrict where the binding applies.
-- `ToTarget<TTarget>()` matches the actual injection target component type. A binding targeted to a base component type also matches derived component types.
+- `ToTarget<TTarget>()` matches the actual object that owns the injected member. This can be a component or a nested serializable object, and a binding targeted to a base type also matches derived types.
 - Binding qualifiers apply to component, asset, and runtime proxy bindings.
 - Binding qualifiers do not apply to global bindings.
 
@@ -249,7 +249,7 @@ Duplicate and ambiguity checks use these criteria:
 5. Qualifier ambiguity:
    - If the criteria above do not separate two bindings, they conflict unless at least one qualifier rule below separates them.
    - `ToID` separates bindings by ID. A binding without `ToID` does not overlap a binding with `ToID`, and two bindings with `ToID` overlap only when their IDs overlap.
-   - `ToTarget` qualifiers overlap when their target component type hierarchies overlap.
+    - `ToTarget` qualifiers overlap when their target type hierarchies overlap.
    - `ToMember` qualifiers separate bindings only when both bindings specify non-overlapping values.
    - Empty `ToTarget` and `ToMember` qualifier sets are unrestricted and do not separate bindings.
 

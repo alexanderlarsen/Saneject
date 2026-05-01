@@ -131,5 +131,60 @@ namespace Tests.Saneject.Editor.Binding.Qualification
             Assert.That(matchingTarget.dependency, Is.EqualTo(dependency));
             Assert.That(nonMatchingTarget.dependency, Is.Null);
         }
+
+        [Test]
+        public void ToTarget_Generic_TConcrete_InjectsNestedSerializableTarget()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 2);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+            NestedRootTarget target = scene.Add<NestedRootTarget>("Root 1");
+
+            // Find dependency
+            AssetDependency assetDependency = Resources.Load<AssetDependency>("AssetDependency 1");
+            ComponentDependency singleDependency = scene.Add<ComponentDependency>("Root 1");
+
+            ComponentDependency[] dependencies =
+            {
+                singleDependency,
+                scene.Add<ComponentDependency>("Root 1/Child 1")
+            };
+
+            // Bind
+            scope.BindAsset<AssetDependency>()
+                .ToTarget<NestedChildTarget>()
+                .FromAssetLoad("Assets/Tests/Saneject/Fixtures/Resources/AssetDependency 1.asset");
+
+            scope.BindAsset<AssetDependency>()
+                .ToID("nested-method-id")
+                .ToTarget<NestedChildTarget>()
+                .FromAssetLoad("Assets/Tests/Saneject/Fixtures/Resources/AssetDependency 1.asset");
+
+            scope.BindComponents<ComponentDependency>()
+                .ToID("nested-method-id")
+                .ToTarget<NestedChildTarget>()
+                .FromDescendants(includeSelf: true);
+
+            scope.BindComponent<IDependency>()
+                .ToID("nested-method-id")
+                .ToTarget<NestedChildTarget>()
+                .FromSelf();
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+
+            // Assert
+            Assert.That(assetDependency, Is.Not.Null);
+            Assert.That(target.nested.nestedFieldDependency, Is.EqualTo(assetDependency));
+            Assert.That(target.nested.NestedMethodAssetDependency, Is.EqualTo(assetDependency));
+
+            CollectionAssert.AreEquivalent
+            (
+                dependencies,
+                target.nested.NestedMethodComponentDependencies
+            );
+
+            Assert.That(target.nested.NestedMethodInterfaceDependency, Is.EqualTo(singleDependency));
+        }
     }
 }

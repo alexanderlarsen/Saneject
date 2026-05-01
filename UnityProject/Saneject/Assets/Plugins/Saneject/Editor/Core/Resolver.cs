@@ -159,7 +159,7 @@ namespace Plugins.Saneject.Editor.Core
             (
                 currentScope: fieldNode.ComponentNode.TransformNode.NearestScopeNode,
                 context: context,
-                componentType: fieldNode.ComponentNode.Component.GetType(),
+                targetType: fieldNode.Owner.GetType(),
                 requestedType: fieldNode.RequestedType,
                 isCollection: fieldNode.IsCollection,
                 qualifyingMemberName: fieldNode.QualifyingName,
@@ -226,7 +226,7 @@ namespace Plugins.Saneject.Editor.Core
                 (
                     currentScope: methodNode.ComponentNode.TransformNode.NearestScopeNode,
                     context: context,
-                    componentType: methodNode.ComponentNode.Component.GetType(),
+                    targetType: methodNode.Owner.GetType(),
                     requestedType: parameterNode.RequestedType,
                     isCollection: parameterNode.IsCollection,
                     qualifyingMemberName: methodNode.QualifyingName,
@@ -286,7 +286,7 @@ namespace Plugins.Saneject.Editor.Core
         private static BindingNode FindMatchingBindingNode(
             ScopeNode currentScope,
             InjectionContext context,
-            Type componentType,
+            Type targetType,
             Type requestedType,
             bool isCollection,
             string qualifyingMemberName,
@@ -333,7 +333,7 @@ namespace Plugins.Saneject.Editor.Core
             bool MatchesTargetTypeQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.TargetTypeQualifiers.Count == 0 ||
-                       bindingNode.TargetTypeQualifiers.Any(t => t.IsAssignableFrom(componentType));
+                       bindingNode.TargetTypeQualifiers.Any(t => t.IsAssignableFrom(targetType));
             }
 
             bool MatchesMemberNameQualifiers(BindingNode bindingNode)
