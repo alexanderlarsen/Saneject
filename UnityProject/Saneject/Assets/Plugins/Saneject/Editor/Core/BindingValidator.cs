@@ -43,7 +43,7 @@ namespace Plugins.Saneject.Editor.Core
                 errors.Add(new InvalidBindingError
                 (
                     bindingNode: bindingNode,
-                    reason: "Duplicate binding within same Scope detected"
+                    reason: "Duplicate or ambiguous binding within same Scope detected"
                 ));
 
             switch (bindingNode)

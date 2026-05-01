@@ -47,7 +47,6 @@ namespace Tests.Saneject.Editor.Graph
 
             FieldNode concreteFieldNode = concreteFieldComponentNode.FieldNodes.Single();
             Assert.That(concreteFieldNode.Owner, Is.EqualTo(concreteFieldComponentNode.Component));
-            Assert.That(concreteFieldNode.DeclaringType, Is.EqualTo(typeof(SingleConcreteComponentTarget)));
             Assert.That(concreteFieldNode.QualifyingName, Is.EqualTo("dependency"));
             Assert.That(concreteFieldNode.InjectId, Is.Null);
             Assert.That(concreteFieldNode.SuppressMissingErrors, Is.False);
@@ -61,7 +60,6 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(concreteFieldNode.ShortPath, Is.EqualTo("SingleConcreteComponentTarget.dependency"));
 
             FieldNode interfaceFieldNode = interfaceFieldComponentNode.FieldNodes.Single();
-            Assert.That(interfaceFieldNode.DeclaringType, Is.EqualTo(typeof(SingleInterfaceTarget)));
             Assert.That(interfaceFieldNode.QualifyingName, Is.EqualTo("dependency"));
             Assert.That(interfaceFieldNode.FieldType, Is.EqualTo(typeof(IDependency)));
             Assert.That(interfaceFieldNode.RequestedType, Is.EqualTo(typeof(IDependency)));
@@ -73,7 +71,6 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(interfaceFieldNode.ShortPath, Is.EqualTo("SingleInterfaceTarget.dependency"));
 
             FieldNode concretePropertyNode = concretePropertyComponentNode.FieldNodes.Single();
-            Assert.That(concretePropertyNode.DeclaringType, Is.EqualTo(typeof(SingleConcreteComponentPropertyTarget)));
             Assert.That(concretePropertyNode.QualifyingName, Is.EqualTo("Dependency"));
             Assert.That(concretePropertyNode.FieldType, Is.EqualTo(typeof(ComponentDependency)));
             Assert.That(concretePropertyNode.RequestedType, Is.EqualTo(typeof(ComponentDependency)));
@@ -163,7 +160,6 @@ namespace Tests.Saneject.Editor.Graph
 
             MethodNode singleMethodNode = singleMethodComponentNode.MethodNodes.Single();
             Assert.That(singleMethodNode.Owner, Is.EqualTo(singleMethodComponentNode.Component));
-            Assert.That(singleMethodNode.DeclaringType, Is.EqualTo(typeof(SingleConcreteComponentMethodTarget)));
             Assert.That(singleMethodNode.QualifyingName, Is.EqualTo("Inject"));
             Assert.That(singleMethodNode.InjectId, Is.Null);
             Assert.That(singleMethodNode.SuppressMissingErrors, Is.False);
@@ -282,14 +278,12 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(componentNode.MethodNodes.Count, Is.EqualTo(2));
 
             Assert.That(topLevelFieldNode.Owner, Is.EqualTo(target));
-            Assert.That(topLevelFieldNode.DeclaringType, Is.EqualTo(typeof(NestedRootTarget)));
             Assert.That(topLevelFieldNode.InjectId, Is.EqualTo("field-id"));
             Assert.That(topLevelFieldNode.SuppressMissingErrors, Is.True);
             Assert.That(topLevelFieldNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/fieldDependency"));
             Assert.That(topLevelFieldNode.ShortPath, Is.EqualTo("NestedRootTarget.fieldDependency"));
 
             Assert.That(topLevelPropertyNode.Owner, Is.EqualTo(target));
-            Assert.That(topLevelPropertyNode.DeclaringType, Is.EqualTo(typeof(NestedRootTarget)));
             Assert.That(topLevelPropertyNode.InjectId, Is.EqualTo("property-id"));
             Assert.That(topLevelPropertyNode.SuppressMissingErrors, Is.True);
             Assert.That(topLevelPropertyNode.TypeShape, Is.EqualTo(TypeShape.List));
@@ -299,14 +293,12 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(topLevelPropertyNode.ShortPath, Is.EqualTo("NestedRootTarget.PropertyDependencies"));
 
             Assert.That(nestedFieldNode.Owner, Is.EqualTo(target.nested));
-            Assert.That(nestedFieldNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedFieldNode.InjectId, Is.Null);
             Assert.That(nestedFieldNode.SuppressMissingErrors, Is.False);
             Assert.That(nestedFieldNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/nested.nestedFieldDependency"));
             Assert.That(nestedFieldNode.ShortPath, Is.EqualTo("NestedChildTarget.nestedFieldDependency"));
 
             Assert.That(nestedPropertyNode.Owner, Is.EqualTo(target.nested));
-            Assert.That(nestedPropertyNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedPropertyNode.InjectId, Is.EqualTo("nested-property-id"));
             Assert.That(nestedPropertyNode.SuppressMissingErrors, Is.True);
             Assert.That(nestedPropertyNode.IsPropertyBackingField, Is.True);
@@ -314,7 +306,6 @@ namespace Tests.Saneject.Editor.Graph
             Assert.That(nestedPropertyNode.ShortPath, Is.EqualTo("NestedChildTarget.NestedPropertyDependency"));
 
             Assert.That(deepFieldNode.Owner, Is.EqualTo(target.nested.deepNested));
-            Assert.That(deepFieldNode.DeclaringType, Is.EqualTo(typeof(NestedDeepTarget)));
             Assert.That(deepFieldNode.InjectId, Is.EqualTo("deep-field-id"));
             Assert.That(deepFieldNode.SuppressMissingErrors, Is.True);
             Assert.That(deepFieldNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/nested.deepNested.deepFieldDependency"));
@@ -323,7 +314,6 @@ namespace Tests.Saneject.Editor.Graph
             CollectionAssert.IsEmpty(componentNode.FieldNodes.Where(node => node.DisplayPath.Contains("nullNested")).ToArray());
 
             Assert.That(topLevelMethodNode.Owner, Is.EqualTo(target));
-            Assert.That(topLevelMethodNode.DeclaringType, Is.EqualTo(typeof(NestedRootTarget)));
             Assert.That(topLevelMethodNode.InjectId, Is.EqualTo("method-id"));
             Assert.That(topLevelMethodNode.SuppressMissingErrors, Is.True);
             Assert.That(topLevelMethodNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/InjectTopLevel"));
@@ -342,7 +332,6 @@ namespace Tests.Saneject.Editor.Graph
             );
 
             Assert.That(nestedMethodNode.Owner, Is.EqualTo(target.nested));
-            Assert.That(nestedMethodNode.DeclaringType, Is.EqualTo(typeof(NestedChildTarget)));
             Assert.That(nestedMethodNode.InjectId, Is.EqualTo("nested-method-id"));
             Assert.That(nestedMethodNode.SuppressMissingErrors, Is.False);
             Assert.That(nestedMethodNode.DisplayPath, Is.EqualTo("Root 1/NestedRootTarget/nested.InjectNested"));

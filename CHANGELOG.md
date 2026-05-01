@@ -1,5 +1,12 @@
 ﻿# Changelog
 
+## Version 1.0.6
+
+### Fixes
+
+- Fixed `ToTarget<T>` matching for inherited component targets, so target qualifiers now match derived component types.
+- Fixed binding validation for duplicate or ambiguous qualifier combinations that could resolve the same injection site.
+
 ## Version 1.0.5
 
 ### Fixes

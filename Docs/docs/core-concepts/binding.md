@@ -167,16 +167,17 @@ Full runtime proxy API:
 
 Binding qualifiers restrict which injection sites (fields, properties, methods) can be resolved from a binding.
 
-| Qualifier                    | Injection site match                                          |
-|------------------------------|---------------------------------------------------------------|
-| `ToID("someId")`             | Fields, properties, methods marked with `[Inject("someId")]`  |
-| `ToTarget<TTarget>()`        | Fields, properties, methods declared in a `TTarget` component |
-| `ToMember("someMemberName")` | Fields, properties, methods with name `"someMemberName"`      |
+| Qualifier                    | Injection site match                                                            |
+|------------------------------|---------------------------------------------------------------------------------|
+| `ToID("someId")`             | Fields, properties, methods marked with `[Inject("someId")]`                    |
+| `ToTarget<TTarget>()`        | Fields, properties, methods on `TTarget` components and derived component types |
+| `ToMember("someMemberName")` | Fields, properties, methods with name `"someMemberName"`                        |
 
 Important behavior:
 
 - Binding qualifiers are additive, so all specified qualifiers must match.
 - If a binding qualifier is not set on the binding, the binding matches by `TInterface` or `TConcrete` only.
+- `ToTarget<TTarget>()` matches the actual injection target component type. A binding targeted to a base component type also matches derived component types.
 - Binding qualifiers apply to component, asset, and runtime proxy bindings.
 - Binding qualifiers do not apply to global bindings.
 
@@ -223,18 +224,18 @@ protected override void DeclareBindings()
 }
 ```
 
-| Binding Family                | Filter Support                                                                             |
-|--------------------------------------------------------------------------|--------------------------------------------------------------------------------------------|
-| Component bindings         | Yes                                                                                        |
-| Asset bindings                 | Yes                                                                                        |
-| Global bindings                      | Yes (same filter API as component bindings). |
-| Runtime proxy bindings | No                                                                                         |
+| Binding Family         | Filter Support                               |
+|------------------------|----------------------------------------------|
+| Component bindings     | Yes                                          |
+| Asset bindings         | Yes                                          |
+| Global bindings        | Yes (same filter API as component bindings). |
+| Runtime proxy bindings | No                                           |
 
 If a binding filter throws an exception, Saneject logs a binding filter error for that binding.
 
 ## Binding uniqueness
 
-Saneject enforces binding unique within each `Scope`. When a binding is considered duplicate, Saneject logs an error and excludes the duplicate from the injection run.
+Saneject enforces unambiguous bindings within each `Scope`. When two bindings are considered duplicate or ambiguous, Saneject logs an error and excludes the conflicting binding from the injection run.
 
 Duplicate checks use these criteria:
 
@@ -244,14 +245,16 @@ Duplicate checks use these criteria:
     - `TInterface` when present.
     - Otherwise `TConcrete`.
 4. Same single/collection shape.
-5. Qualifier overlap:
-    - If both bindings have no binding qualifiers at all, they conflict.
-    - Otherwise, conflict requires full overlap in `ToTarget`, `ToMember`, and `ToID` simultaneously.
+5. Qualifier ambiguity:
+    - If neither binding has qualifiers that separate it from the other, they conflict.
+    - Empty qualifier sets are unrestricted and do not separate bindings.
+    - `ToTarget` qualifiers overlap when their target component type hierarchies overlap.
+    - `ToMember` and `ToID` qualifiers separate bindings only when both bindings specify non-overlapping values.
 
 Examples:
 
 ```csharp
-// Duplicate: same scope, same family, same type, same shape, no qualifiers.
+// Duplicate or ambiguous: same scope, same family, same type, same shape, no qualifiers.
 BindComponent<AudioManager>()
     .FromScopeSelf();
 
@@ -272,6 +275,17 @@ BindAsset<IGameConfig, GameConfigAsset>()
     .ToMember("config")
     .ToID("gameplay")
     .FromResources("Configs/Gameplay");
+```
+
+```csharp
+// Ambiguous: both bindings can resolve [Inject("menu")] members on MainMenuController.
+BindAsset<IGameConfig, GameConfigAsset>()
+    .ToID("menu")
+    .FromResources("Configs/Menu");
+
+BindAsset<IGameConfig, GameConfigAsset>()
+    .ToTarget<MainMenuController>()
+    .FromResources("Configs/Menu");
 ```
 
 Global bindings have an extra rule: only one global binding per concrete component type is allowed across active

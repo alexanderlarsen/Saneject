@@ -19,7 +19,6 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
         {
             Owner = owner;
             ComponentNode = componentNode;
-            DeclaringType = memberInfo.DeclaringType;
             QualifyingName = NameUtility.GetLogicalName(memberInfo.Name);
             InjectId = injectAttribute.ID;
             SuppressMissingErrors = injectAttribute.SuppressMissingErrors;
@@ -29,7 +28,6 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
 
         public object Owner { get; }
         public ComponentNode ComponentNode { get; }
-        public Type DeclaringType { get; }
         public string QualifyingName { get; }
         public string InjectId { get; }
         public bool SuppressMissingErrors { get; }

@@ -47,32 +47,49 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
             if (other is null)
                 return false;
 
-            if (ReferenceEquals(this, other))
+            if (ReferenceEquals
+                (
+                    this,
+                    other
+                ))
                 return true;
 
-            if (!Equals(ScopeNode, other.ScopeNode))
+            if (!Equals
+                (
+                    ScopeNode,
+                    other.ScopeNode
+                ))
                 return false;
 
             if (other.GetType() != GetType())
                 return false;
 
-            if (InterfaceType != null ? InterfaceType != other.InterfaceType : ConcreteType != other.ConcreteType)
+            if (InterfaceType != null
+                    ? InterfaceType != other.InterfaceType
+                    : ConcreteType != other.ConcreteType)
                 return false;
 
             if (IsCollectionBinding != other.IsCollectionBinding)
                 return false;
 
-            if (TargetTypeQualifiers.Count == 0
-                && MemberNameQualifiers.Count == 0
-                && IdQualifiers.Count == 0
-                && other.TargetTypeQualifiers.Count == 0
-                && other.MemberNameQualifiers.Count == 0
-                && other.IdQualifiers.Count == 0)
-                return true;
+            bool separatedByTarget =
+                TargetTypeQualifiers.Count > 0 &&
+                other.TargetTypeQualifiers.Count > 0 &&
+                !TargetTypeQualifiers.OverlapsWith(other.TargetTypeQualifiers);
 
-            return TargetTypeQualifiers.OverlapsWith(other.TargetTypeQualifiers)
-                   && MemberNameQualifiers.OverlapsWith(other.MemberNameQualifiers)
-                   && IdQualifiers.OverlapsWith(other.IdQualifiers);
+            bool separatedByMemberName =
+                MemberNameQualifiers.Count > 0 &&
+                other.MemberNameQualifiers.Count > 0 &&
+                !MemberNameQualifiers.OverlapsWith(other.MemberNameQualifiers);
+
+            bool separatedById =
+                IdQualifiers.Count > 0 &&
+                other.IdQualifiers.Count > 0 &&
+                !IdQualifiers.OverlapsWith(other.IdQualifiers);
+
+            return !separatedByTarget
+                   && !separatedByMemberName
+                   && !separatedById;
         }
 
         public override bool Equals(object obj)
@@ -87,10 +104,7 @@ namespace Plugins.Saneject.Editor.Data.Graph.Nodes
                 ScopeNode,
                 GetType(),
                 InterfaceType ?? ConcreteType,
-                IsCollectionBinding,
-                TargetTypeQualifiers.Count > 0,
-                MemberNameQualifiers.Count > 0,
-                IdQualifiers.Count > 0
+                IsCollectionBinding
             );
         }
     }
