@@ -16,10 +16,10 @@ namespace Plugins.Saneject.Runtime.Attributes
     public sealed class InjectAttribute : PropertyAttribute
     {
         /// <summary>
-        /// Marks the field or method for injection, using only type-based binding resolution.
+        /// Marks the field or method for injection without an ID.
         /// </summary>
         /// <remarks>
-        /// The dependency is resolved by matching the member's type against bindings in the scope hierarchy.
+        /// The dependency is resolved by matching the member's type against bindings in the scope hierarchy that do not specify an ID.
         /// </remarks>
         public InjectAttribute()
         {
@@ -49,7 +49,7 @@ namespace Plugins.Saneject.Runtime.Attributes
         /// <summary>
         /// Marks the field or method for injection with an ID while optionally suppressing missing binding and missing dependency logs for the field.
         /// </summary>
-        /// <param name="id">The binding ID to match against.</param>
+        /// <param name="id">The binding ID to match against. Only bindings with the same ID will be used for resolution.</param>
         /// <param name="suppressMissingErrors">
         /// If <c>true</c>, suppresses error logs when no binding or dependency is found.
         /// </param>
@@ -62,7 +62,7 @@ namespace Plugins.Saneject.Runtime.Attributes
         }
 
         /// <summary>
-        /// Gets the binding ID used for dependency resolution, or <c>null</c> if only type-based resolution is used.
+        /// Gets the binding ID used for dependency resolution, or <c>null</c> if bindings without an ID should be used.
         /// </summary>
         public string ID { get; }
 

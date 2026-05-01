@@ -161,7 +161,7 @@ namespace Tests.Saneject.Editor.Binding.Equality
         }
 
         [Test]
-        public void BindingNode_SameScope_TConcrete_WithOnlyIDQualifiers_IsNotEqual()
+        public void BindingNode_SameScope_TConcrete_WithOnlyIDQualifiers_IsEqual()
         {
             // Set up scene
             TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
@@ -182,7 +182,135 @@ namespace Tests.Saneject.Editor.Binding.Equality
             BindingNode secondBinding = scopeNode.BindingNodes[1];
 
             // Assert
+            Assert.That(firstBinding, Is.EqualTo(secondBinding));
+        }
+
+        [Test]
+        public void BindingNode_SameScope_TConcrete_WithOnlyOverlappingIDQualifiers_IsEqual()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>()
+                .ToID("qualified", "alternate")
+                .FromSelf();
+
+            scope.BindComponent<ComponentDependency>()
+                .ToID("alternate", "other")
+                .FromAnywhere();
+
+            // Build graph and fetch binding nodes
+            ScopeNode scopeNode = CreateScopeNode(scene, "Root 1");
+            BindingNode firstBinding = scopeNode.BindingNodes[0];
+            BindingNode secondBinding = scopeNode.BindingNodes[1];
+
+            // Assert
+            Assert.That(firstBinding, Is.EqualTo(secondBinding));
+        }
+
+        [Test]
+        public void BindingNode_SameScope_TConcrete_WithOnlyDifferentIDQualifiers_IsNotEqual()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>()
+                .ToID("qualified", "alternate")
+                .FromSelf();
+
+            scope.BindComponent<ComponentDependency>()
+                .ToID("other", "fallback")
+                .FromAnywhere();
+
+            // Build graph and fetch binding nodes
+            ScopeNode scopeNode = CreateScopeNode(scene, "Root 1");
+            BindingNode firstBinding = scopeNode.BindingNodes[0];
+            BindingNode secondBinding = scopeNode.BindingNodes[1];
+
+            // Assert
             Assert.That(firstBinding, Is.Not.EqualTo(secondBinding));
+        }
+
+        [Test]
+        public void BindingNode_SameScope_TConcrete_WithIDAndTargetQualifiers_IsNotEqual()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>()
+                .ToID("qualified")
+                .FromSelf();
+
+            scope.BindComponent<ComponentDependency>()
+                .ToTarget<SingleConcreteComponentTarget>()
+                .FromAnywhere();
+
+            // Build graph and fetch binding nodes
+            ScopeNode scopeNode = CreateScopeNode(scene, "Root 1");
+            BindingNode firstBinding = scopeNode.BindingNodes[0];
+            BindingNode secondBinding = scopeNode.BindingNodes[1];
+
+            // Assert
+            Assert.That(firstBinding, Is.Not.EqualTo(secondBinding));
+        }
+
+        [Test]
+        public void BindingNode_SameScope_TConcrete_WithIDAndOverlappingTargetAndMemberQualifiers_IsNotEqual()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>()
+                .ToTarget<SingleConcreteComponentTarget>()
+                .ToMember("dependency")
+                .FromSelf();
+
+            scope.BindComponent<ComponentDependency>()
+                .ToID("qualified")
+                .ToTarget<SingleConcreteComponentTarget>()
+                .ToMember("dependency")
+                .FromAnywhere();
+
+            // Build graph and fetch binding nodes
+            ScopeNode scopeNode = CreateScopeNode(scene, "Root 1");
+            BindingNode firstBinding = scopeNode.BindingNodes[0];
+            BindingNode secondBinding = scopeNode.BindingNodes[1];
+
+            // Assert
+            Assert.That(firstBinding, Is.Not.EqualTo(secondBinding));
+        }
+
+        [Test]
+        public void BindingNode_SameScope_TConcrete_WithOverlappingTargetAndMemberQualifiers_IsEqual()
+        {
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+
+            // Bind
+            scope.BindComponent<ComponentDependency>()
+                .ToTarget<SingleConcreteComponentTarget>()
+                .FromSelf();
+
+            scope.BindComponent<ComponentDependency>()
+                .ToMember("dependency")
+                .FromAnywhere();
+
+            // Build graph and fetch binding nodes
+            ScopeNode scopeNode = CreateScopeNode(scene, "Root 1");
+            BindingNode firstBinding = scopeNode.BindingNodes[0];
+            BindingNode secondBinding = scopeNode.BindingNodes[1];
+
+            // Assert
+            Assert.That(firstBinding, Is.EqualTo(secondBinding));
         }
 
         [Test]

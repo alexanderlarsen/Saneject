@@ -63,11 +63,10 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         #region QUALIFIER METHODS
 
         /// <summary>
-        /// Qualifies this binding with an ID.
-        /// Only injection targets annotated with <see cref="Attributes.InjectAttribute" />
+        /// Only injection sites annotated with <see cref="Attributes.InjectAttribute" />
         /// that specify the same ID will resolve using this binding.
         /// </summary>
-        /// <param name="ids">The identifiers to match against injection targets.</param>
+        /// <param name="ids">The identifiers to match against injection sites.</param>
         /// <returns>The builder instance for fluent chaining.</returns>
         public AssetBindingBuilder<TAsset> ToID(params string[] ids)
         {
@@ -76,8 +75,8 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         }
 
         /// <summary>
-        /// Qualifies this binding to apply only when the injection target is of the given type.
-        /// The injection target is the <see cref="Component" /> that owns the field or property
+        /// Qualifies this binding to apply only when the injection target is of the given type or a derived type.
+        /// The injection target is the object that owns the field, property, or method
         /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <typeparam name="TTarget">The target type this binding applies to.</typeparam>
@@ -89,8 +88,8 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         }
 
         /// <summary>
-        /// Qualifies this binding to apply only when the injection target is one of the specified types.
-        /// The injection target is the <see cref="Component" /> that owns the field or property
+        /// Qualifies this binding to apply only when the injection target is one of the specified types or a derived type.
+        /// The injection target is the object that owns the field, property, or method
         /// marked with <see cref="Attributes.InjectAttribute" />.
         /// </summary>
         /// <param name="targetTypes">One or more target <see cref="Type" /> objects to match against.</param>
@@ -102,10 +101,10 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         }
 
         /// <summary>
-        /// Qualifies this binding to apply only when the injection target member (field or property)
+        /// Qualifies this binding to apply only when the injection target member (field, property, or method)
         /// has one of the specified names.
         /// </summary>
-        /// <param name="memberNames">The field or property names on the injection target that this binding should apply to.</param>
+        /// <param name="memberNames">The field, property, or method names on the injection target that this binding should apply to.</param>
         /// <returns>The builder instance for fluent chaining.</returns>
         public AssetBindingBuilder<TAsset> ToMember(params string[] memberNames)
         {

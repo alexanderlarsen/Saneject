@@ -1,5 +1,17 @@
 ﻿# Changelog
 
+## Version 1.1.0
+
+### Changes
+
+- ID-qualified injection sites now require a matching `ToID(...)` binding. Unqualified bindings only match injection sites without an ID.
+- If an `[Inject("id")]` site previously relied on an unqualified binding, add `.ToID("id")` to the binding or remove the ID from the injection site.
+
+### Fixes
+
+- Fixed `ToTarget<T>` matching for inherited and nested targets. `.ToTarget<Base>()` now matches derived target types, `.ToTarget<Derived>()` also applies to inherited injection members on the same derived target, and nested serializable injection targets are matched by their nested owner type.
+- Fixed binding validation for duplicate or ambiguous qualifier combinations that could resolve the same injection site.
+
 ## Version 1.0.5
 
 ### Fixes

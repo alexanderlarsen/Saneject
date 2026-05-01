@@ -18,9 +18,23 @@ namespace Plugins.Saneject.Editor.Core
             InjectionContext context,
             InjectionProgressTracker progressTracker)
         {
-            ResolveGlobals(context, progressTracker);
-            ResolveFields(context, progressTracker);
-            ResolveMethods(context, progressTracker);
+            ResolveGlobals
+            (
+                context,
+                progressTracker
+            );
+
+            ResolveFields
+            (
+                context,
+                progressTracker
+            );
+
+            ResolveMethods
+            (
+                context,
+                progressTracker
+            );
         }
 
         private static void ResolveGlobals(
@@ -49,16 +63,28 @@ namespace Plugins.Saneject.Editor.Core
                 );
 
                 if (candidates is not { Length: > 0 })
-                    context.RegisterError(new MissingGlobalDependencyError
+                    context.RegisterError
                     (
-                        binding,
-                        rejectedTypes
-                    ));
+                        new MissingGlobalDependencyError
+                        (
+                            binding,
+                            rejectedTypes
+                        )
+                    );
 
-                if (!globalMap.TryGetValue(binding.ScopeNode, out HashSet<object> dependencySet))
+                if (!globalMap.TryGetValue
+                    (
+                        binding.ScopeNode,
+                        out HashSet<object> dependencySet
+                    ))
                 {
                     dependencySet = new HashSet<object>();
-                    globalMap.Add(binding.ScopeNode, dependencySet);
+
+                    globalMap.Add
+                    (
+                        binding.ScopeNode,
+                        dependencySet
+                    );
                 }
 
                 object resolved = candidates.FirstOrDefault();
@@ -68,7 +94,11 @@ namespace Plugins.Saneject.Editor.Core
             }
 
             foreach ((ScopeNode scopeNode, HashSet<object> dependencies) in globalMap)
-                context.RegisterGlobalDependencies(scopeNode, dependencies);
+                context.RegisterGlobalDependencies
+                (
+                    scopeNode,
+                    dependencies
+                );
         }
 
         private static void ResolveFields(
@@ -85,7 +115,13 @@ namespace Plugins.Saneject.Editor.Core
             foreach (FieldNode fieldNode in fieldNodes)
             {
                 progressTracker.UpdateInfoText($"Resolving field: {fieldNode.ShortPath}");
-                ResolveField(fieldNode, context);
+
+                ResolveField
+                (
+                    fieldNode,
+                    context
+                );
+
                 progressTracker.NextStep();
             }
         }
@@ -104,7 +140,13 @@ namespace Plugins.Saneject.Editor.Core
             foreach (MethodNode methodNode in methodNodes)
             {
                 progressTracker.UpdateInfoText($"Resolving method: {methodNode.ShortPath}");
-                ResolveMethod(methodNode, context);
+
+                ResolveMethod
+                (
+                    methodNode,
+                    context
+                );
+
                 progressTracker.NextStep();
             }
         }
@@ -117,7 +159,7 @@ namespace Plugins.Saneject.Editor.Core
             (
                 currentScope: fieldNode.ComponentNode.TransformNode.NearestScopeNode,
                 context: context,
-                declaringType: fieldNode.DeclaringType,
+                targetType: fieldNode.Owner.GetType(),
                 requestedType: fieldNode.RequestedType,
                 isCollection: fieldNode.IsCollection,
                 qualifyingMemberName: fieldNode.QualifyingName,
@@ -144,12 +186,15 @@ namespace Plugins.Saneject.Editor.Core
                 );
 
                 if (candidates is not { Length: > 0 })
-                    context.RegisterError(new MissingDependencyError
+                    context.RegisterError
                     (
-                        bindingNode,
-                        fieldNode,
-                        rejectedTypes
-                    ));
+                        new MissingDependencyError
+                        (
+                            bindingNode,
+                            fieldNode,
+                            rejectedTypes
+                        )
+                    );
 
                 resolved = ResolveCandidates
                 (
@@ -162,7 +207,11 @@ namespace Plugins.Saneject.Editor.Core
                 context.RegisterUsedBinding(bindingNode);
             }
 
-            context.RegisterFieldDependency(fieldNode, resolved);
+            context.RegisterFieldDependency
+            (
+                fieldNode,
+                resolved
+            );
         }
 
         private static void ResolveMethod(
@@ -177,7 +226,7 @@ namespace Plugins.Saneject.Editor.Core
                 (
                     currentScope: methodNode.ComponentNode.TransformNode.NearestScopeNode,
                     context: context,
-                    declaringType: methodNode.DeclaringType,
+                    targetType: methodNode.Owner.GetType(),
                     requestedType: parameterNode.RequestedType,
                     isCollection: parameterNode.IsCollection,
                     qualifyingMemberName: methodNode.QualifyingName,
@@ -204,12 +253,15 @@ namespace Plugins.Saneject.Editor.Core
                     );
 
                     if (candidates is not { Length: > 0 })
-                        context.RegisterError(new MissingDependencyError
+                        context.RegisterError
                         (
-                            bindingNode,
-                            parameterNode,
-                            rejectedTypes
-                        ));
+                            new MissingDependencyError
+                            (
+                                bindingNode,
+                                parameterNode,
+                                rejectedTypes
+                            )
+                        );
 
                     resolved = ResolveCandidates
                     (
@@ -224,13 +276,17 @@ namespace Plugins.Saneject.Editor.Core
                 context.RegisterUsedBinding(bindingNode);
             }
 
-            context.RegisterMethodDependencies(methodNode, resolvedParameters);
+            context.RegisterMethodDependencies
+            (
+                methodNode,
+                resolvedParameters
+            );
         }
 
         private static BindingNode FindMatchingBindingNode(
             ScopeNode currentScope,
             InjectionContext context,
-            Type declaringType,
+            Type targetType,
             Type requestedType,
             bool isCollection,
             string qualifyingMemberName,
@@ -277,7 +333,7 @@ namespace Plugins.Saneject.Editor.Core
             bool MatchesTargetTypeQualifiers(BindingNode bindingNode)
             {
                 return bindingNode.TargetTypeQualifiers.Count == 0 ||
-                       bindingNode.TargetTypeQualifiers.Contains(declaringType);
+                       bindingNode.TargetTypeQualifiers.Any(t => t.IsAssignableFrom(targetType));
             }
 
             bool MatchesMemberNameQualifiers(BindingNode bindingNode)
@@ -288,8 +344,10 @@ namespace Plugins.Saneject.Editor.Core
 
             bool MatchesIdQualifiers(BindingNode bindingNode)
             {
-                return bindingNode.IdQualifiers.Count == 0 ||
-                       bindingNode.IdQualifiers.Contains(injectId);
+                if (!string.IsNullOrWhiteSpace(injectId))
+                    return bindingNode.IdQualifiers.Count > 0 && bindingNode.IdQualifiers.Contains(injectId);
+
+                return bindingNode.IdQualifiers.Count == 0;
             }
         }
 
@@ -311,10 +369,18 @@ namespace Plugins.Saneject.Editor.Core
 
                 case TypeShape.Array:
                 {
-                    Array array = Array.CreateInstance(requestedType, candidates.Length);
+                    Array array = Array.CreateInstance
+                    (
+                        requestedType,
+                        candidates.Length
+                    );
 
                     for (int i = 0; i < candidates.Length; i++)
-                        array.SetValue(candidates[i], i);
+                        array.SetValue
+                        (
+                            candidates[i],
+                            i
+                        );
 
                     return array;
                 }
