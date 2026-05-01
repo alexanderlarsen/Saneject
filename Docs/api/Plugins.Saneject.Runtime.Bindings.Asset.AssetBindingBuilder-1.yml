@@ -27,7 +27,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: AssetBindingBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
@@ -66,7 +66,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
@@ -101,7 +101,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAssetLoad
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
@@ -139,7 +139,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromFolder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
@@ -180,18 +180,16 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToID
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 71
+    startLine: 70
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
   summary: >-
-    Qualifies this binding with an ID.
-
-    Only injection targets annotated with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>
+    Only injection sites annotated with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>
 
     that specify the same ID will resolve using this binding.
   example: []
@@ -200,7 +198,7 @@ items:
     parameters:
     - id: ids
       type: System.String[]
-      description: The identifiers to match against injection targets.
+      description: The identifiers to match against injection sites.
     return:
       type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
       description: The builder instance for fluent chaining.
@@ -223,18 +221,18 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToTarget
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 84
+    startLine: 83
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
   summary: >-
-    Qualifies this binding to apply only when the injection target is of the given type.
+    Qualifies this binding to apply only when the injection target is of the given type or a derived type.
 
-    The injection target is the <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> that owns the field or property
+    The injection target is the object that owns the field, property, or method
 
     marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
   example: []
@@ -265,18 +263,18 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToTarget
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 97
+    startLine: 96
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
   summary: >-
-    Qualifies this binding to apply only when the injection target is one of the specified types.
+    Qualifies this binding to apply only when the injection target is one of the specified types or a derived type.
 
-    The injection target is the <xref href="Plugins.Saneject.Runtime.Bindings.Component" data-throw-if-not-resolved="false"></xref> that owns the field or property
+    The injection target is the object that owns the field, property, or method
 
     marked with <xref href="Plugins.Saneject.Runtime.Attributes.InjectAttribute" data-throw-if-not-resolved="false"></xref>.
   example: []
@@ -308,16 +306,16 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: ToMember
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 109
+    startLine: 108
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
   summary: >-
-    Qualifies this binding to apply only when the injection target member (field or property)
+    Qualifies this binding to apply only when the injection target member (field, property, or method)
 
     has one of the specified names.
   example: []
@@ -326,7 +324,7 @@ items:
     parameters:
     - id: memberNames
       type: System.String[]
-      description: The field or property names on the injection target that this binding should apply to.
+      description: The field, property, or method names on the injection target that this binding should apply to.
     return:
       type: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1
       description: The builder instance for fluent chaining.
@@ -349,11 +347,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromResources
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 124
+    startLine: 123
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
@@ -387,11 +385,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromResourcesAll
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 137
+    startLine: 136
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
@@ -425,11 +423,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromInstance
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 154
+    startLine: 153
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
@@ -462,11 +460,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromMethod
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 167
+    startLine: 166
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
@@ -500,11 +498,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-      branch: fix/inject-toolbar
+      branch: docs-api-update
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromMethod
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Asset/AssetBindingBuilder.cs
-    startLine: 189
+    startLine: 188
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Asset
@@ -839,52 +837,6 @@ references:
     isExternal: true
   - name: (
   - name: )
-- uid: Plugins.Saneject.Runtime.Bindings.Component
-  commentId: N:Plugins.Saneject.Runtime.Bindings.Component
-  href: Plugins.html
-  name: Plugins.Saneject.Runtime.Bindings.Component
-  nameWithType: Plugins.Saneject.Runtime.Bindings.Component
-  fullName: Plugins.Saneject.Runtime.Bindings.Component
-  spec.csharp:
-  - uid: Plugins
-    name: Plugins
-    href: Plugins.html
-  - name: .
-  - uid: Plugins.Saneject
-    name: Saneject
-    href: Plugins.Saneject.html
-  - name: .
-  - uid: Plugins.Saneject.Runtime
-    name: Runtime
-    href: Plugins.Saneject.Runtime.html
-  - name: .
-  - uid: Plugins.Saneject.Runtime.Bindings
-    name: Bindings
-    href: Plugins.Saneject.Runtime.Bindings.html
-  - name: .
-  - uid: Plugins.Saneject.Runtime.Bindings.Component
-    name: Component
-    href: Plugins.Saneject.Runtime.Bindings.Component.html
-  spec.vb:
-  - uid: Plugins
-    name: Plugins
-    href: Plugins.html
-  - name: .
-  - uid: Plugins.Saneject
-    name: Saneject
-    href: Plugins.Saneject.html
-  - name: .
-  - uid: Plugins.Saneject.Runtime
-    name: Runtime
-    href: Plugins.Saneject.Runtime.html
-  - name: .
-  - uid: Plugins.Saneject.Runtime.Bindings
-    name: Bindings
-    href: Plugins.Saneject.Runtime.Bindings.html
-  - name: .
-  - uid: Plugins.Saneject.Runtime.Bindings.Component
-    name: Component
-    href: Plugins.Saneject.Runtime.Bindings.Component.html
 - uid: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget*
   commentId: Overload:Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder`1.ToTarget
   href: Plugins.Saneject.Runtime.Bindings.Asset.AssetBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Asset_AssetBindingBuilder_1_ToTarget__1
