@@ -227,7 +227,7 @@ namespace Plugins.Saneject.Editor.Core
                         .Select(assetPath => AssetDatabase.LoadAssetAtPath(assetPath, bindingNode.ConcreteType))
                         .Where(obj => obj != null),
 
-                AssetLoadType.Instance => bindingNode.ResolveFromInstances,
+                AssetLoadType.Instance => bindingNode.ResolveFromInstances.Where(x => x != null),
 
                 _ => throw new ArgumentOutOfRangeException()
             };

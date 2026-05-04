@@ -121,5 +121,26 @@ namespace Tests.Saneject.Editor.Binding.Validation
             // Inject
             InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
         }
+        
+        [Test]
+        public void BindAsset_TConcrete_ToNullInstance_IsNotInvalid()
+        {
+            // Expect logs
+            LogAssert.Expect(LogType.Warning, new Regex("^Saneject: Unused binding"));
+            LogAssert.Expect(LogType.Warning, new Regex("^Saneject: Injection complete"));
+            
+
+            // Set up scene
+            TestScene scene = TestScene.Create(roots: 1, width: 1, depth: 1);
+            TestScope scope = scene.Add<TestScope>("Root 1");
+
+            // Bind
+            scope.BindAsset<AssetDependency>().FromInstance(null);
+
+            // Inject
+            InjectionRunner.Run(scene.Roots, ContextWalkFilter.SceneObjects);
+            
+            LogAssert.NoUnexpectedReceived();
+        }
     }
 }
