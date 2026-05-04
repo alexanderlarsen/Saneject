@@ -1,5 +1,15 @@
 ﻿# Changelog
 
+## Version 1.1.1
+
+### Fixes
+
+- Fixed an issue where an asset binding specifying a null instance was considered invalid, causing an incompatible asset type error, instead of a missing dependency error.
+
+### Tests
+
+- Added a regression test for asset binding validation with null instance, ensuring null instance binding is not invalidated.
+
 ## Version 1.1.0
 
 ### Changes
