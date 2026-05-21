@@ -17,6 +17,7 @@ items:
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChild
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromFirstChildOf(UnityEngine.Transform)
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance(`0)
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChild
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromLastChildOf(UnityEngine.Transform)
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{System.Collections.Generic.IEnumerable{`0}})
@@ -57,7 +58,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: BaseComponentBindingBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -95,7 +96,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -130,7 +131,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -166,7 +167,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromParent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -202,7 +203,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAncestors
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -245,7 +246,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -281,7 +282,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -317,7 +318,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -358,7 +359,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -401,7 +402,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromSiblings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -437,7 +438,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -470,7 +471,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeParent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -503,7 +504,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeAncestors
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -544,7 +545,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -577,7 +578,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -610,7 +611,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -648,7 +649,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -689,7 +690,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromScopeSiblings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -722,7 +723,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -755,7 +756,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -788,7 +789,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -821,7 +822,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -859,7 +860,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromRootDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -900,7 +901,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetSelf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -936,7 +937,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetParent
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -972,7 +973,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetAncestors
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1015,7 +1016,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetFirstChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1051,7 +1052,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetLastChild
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1087,7 +1088,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetChildWithIndex
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1128,7 +1129,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetDescendants
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1171,7 +1172,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromTargetSiblings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1207,7 +1208,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: From
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1244,7 +1245,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromParentOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1281,7 +1282,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAncestorsOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1325,7 +1326,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromFirstChildOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1362,7 +1363,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromLastChildOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1399,7 +1400,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromChildWithIndexOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1440,7 +1441,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromDescendantsOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1484,7 +1485,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromSiblingsOf
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1521,7 +1522,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromAnywhere
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1564,7 +1565,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromInstance
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
@@ -1572,7 +1573,7 @@ items:
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Component
-  summary: Bind to the specified <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> instance.
+  summary: Provides a specific <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> instance.
   example: []
   syntax:
     content: public ComponentFilterBuilder<TComponent> FromInstance(TComponent instance)
@@ -1587,6 +1588,44 @@ items:
   overload: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstance*
   nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromInstance(TComponent)
   fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromInstance(TComponent)
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
+  id: FromInstances(System.Collections.Generic.IEnumerable{`0})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1
+  langs:
+  - csharp
+  - vb
+  name: FromInstances(IEnumerable<TComponent>)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromInstances(IEnumerable<TComponent>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromInstances(System.Collections.Generic.IEnumerable<TComponent>)
+  type: Method
+  source:
+    remote:
+      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
+      branch: dev
+      repo: https://github.com/alexanderlarsen/Saneject.git
+    id: FromInstances
+    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
+    startLine: 582
+  assemblies:
+  - Saneject.Runtime
+  namespace: Plugins.Saneject.Runtime.Bindings.Component
+  summary: Provides a specific <xref href="UnityEngine.Component" data-throw-if-not-resolved="false"></xref> IEnumerable of instances.
+  example: []
+  syntax:
+    content: public ComponentFilterBuilder<TComponent> FromInstances(IEnumerable<TComponent> instances)
+    parameters:
+    - id: instances
+      type: System.Collections.Generic.IEnumerable{{TComponent}}
+      description: The component instances.
+    return:
+      type: Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder{{TComponent}}
+      description: A <xref href="Plugins.Saneject.Runtime.Bindings.Component.ComponentFilterBuilder%601" data-throw-if-not-resolved="false"></xref> to further configure the binding.
+    content.vb: Public Function FromInstances(instances As IEnumerable(Of TComponent)) As ComponentFilterBuilder(Of TComponent)
+  overload: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances*
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromInstances(IEnumerable(Of TComponent))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromInstances(System.Collections.Generic.IEnumerable(Of TComponent))
+  name.vb: FromInstances(IEnumerable(Of TComponent))
 - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
   commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
   id: FromMethod(System.Func{`0})
@@ -1601,11 +1640,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromMethod
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-    startLine: 582
+    startLine: 595
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Component
@@ -1639,11 +1678,11 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: FromMethod
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/BaseComponentBindingBuilder.cs
-    startLine: 604
+    startLine: 617
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Bindings.Component
@@ -2476,6 +2515,102 @@ references:
   name: TComponent
   nameWithType: TComponent
   fullName: TComponent
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances*
+  commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstances_System_Collections_Generic_IEnumerable__0__
+  name: FromInstances
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromInstances
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromInstances
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromInstances
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromInstances
+- uid: System.Collections.Generic.IEnumerable{{TComponent}}
+  commentId: T:System.Collections.Generic.IEnumerable{`0}
+  parent: System.Collections.Generic
+  definition: System.Collections.Generic.IEnumerable`1
+  name: IEnumerable<TComponent>
+  nameWithType: IEnumerable<TComponent>
+  fullName: System.Collections.Generic.IEnumerable<TComponent>
+  nameWithType.vb: IEnumerable(Of TComponent)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of TComponent)
+  name.vb: IEnumerable(Of TComponent)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+- uid: System.Collections.Generic.IEnumerable`1
+  commentId: T:System.Collections.Generic.IEnumerable`1
+  isExternal: true
+  name: IEnumerable<T>
+  nameWithType: IEnumerable<T>
+  fullName: System.Collections.Generic.IEnumerable<T>
+  nameWithType.vb: IEnumerable(Of T)
+  fullName.vb: System.Collections.Generic.IEnumerable(Of T)
+  name.vb: IEnumerable(Of T)
+  spec.csharp:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: T
+  - name: '>'
+  spec.vb:
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: T
+  - name: )
+- uid: System.Collections.Generic
+  commentId: N:System.Collections.Generic
+  isExternal: true
+  href: https://learn.microsoft.com/dotnet/api/system
+  name: System.Collections.Generic
+  nameWithType: System.Collections.Generic
+  fullName: System.Collections.Generic
+  spec.csharp:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
+  spec.vb:
+  - uid: System
+    name: System
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system
+  - name: .
+  - uid: System.Collections
+    name: Collections
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections
+  - name: .
+  - uid: System.Collections.Generic
+    name: Generic
+    isExternal: true
+    href: https://learn.microsoft.com/dotnet/api/system.collections.generic
 - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod*
   commentId: Overload:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod
   href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromMethod_System_Func__0__

@@ -15,7 +15,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/SerializedInterfaceAttribute.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: SerializeInterfaceAttribute
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Attributes/SerializedInterfaceAttribute.cs

@@ -16,7 +16,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: GlobalComponentBindingBuilder
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs
@@ -80,6 +80,7 @@ items:
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromSiblingsOf(UnityEngine.Transform)
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromAnywhere(UnityEngine.FindObjectsInactive,UnityEngine.FindObjectsSortMode)
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromInstance({TComponent})
+  - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromInstances(System.Collections.Generic.IEnumerable{{TComponent}})
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromMethod(System.Func{{TComponent}})
   - Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromMethod(System.Func{System.Collections.Generic.IEnumerable{{TComponent}}})
   nameWithType.vb: GlobalComponentBindingBuilder(Of TComponent)
@@ -99,7 +100,7 @@ items:
   source:
     remote:
       path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs
-      branch: docs-api-update
+      branch: dev
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: .ctor
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Bindings/Component/GlobalComponentBindingBuilder.cs
@@ -1298,6 +1299,43 @@ references:
   - name: (
   - name: TComponent
   - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromInstances(System.Collections.Generic.IEnumerable{{TComponent}})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromInstances(System.Collections.Generic.IEnumerable{`0})
+  parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
+  definition: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstances_System_Collections_Generic_IEnumerable__0__
+  name: FromInstances(IEnumerable<TComponent>)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromInstances(IEnumerable<TComponent>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromInstances(System.Collections.Generic.IEnumerable<TComponent>)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromInstances(IEnumerable(Of TComponent))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromInstances(System.Collections.Generic.IEnumerable(Of TComponent))
+  name.vb: FromInstances(IEnumerable(Of TComponent))
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromInstances(System.Collections.Generic.IEnumerable{`0})
+    name: FromInstances
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstances_System_Collections_Generic_IEnumerable__0__
+  - name: (
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: '>'
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromInstances(System.Collections.Generic.IEnumerable{`0})
+    name: FromInstances
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstances_System_Collections_Generic_IEnumerable__0__
+  - name: (
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
+  - name: )
 - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}.FromMethod(System.Func{{TComponent}})
   commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{`0}.FromMethod(System.Func{`0})
   parent: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder{{TComponent}}
@@ -2391,6 +2429,42 @@ references:
     href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstance__0_
   - name: (
   - name: TComponent
+  - name: )
+- uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
+  commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
+  isExternal: true
+  href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstances_System_Collections_Generic_IEnumerable__0__
+  name: FromInstances(IEnumerable<TComponent>)
+  nameWithType: BaseComponentBindingBuilder<TComponent>.FromInstances(IEnumerable<TComponent>)
+  fullName: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder<TComponent>.FromInstances(System.Collections.Generic.IEnumerable<TComponent>)
+  nameWithType.vb: BaseComponentBindingBuilder(Of TComponent).FromInstances(IEnumerable(Of TComponent))
+  fullName.vb: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder(Of TComponent).FromInstances(System.Collections.Generic.IEnumerable(Of TComponent))
+  name.vb: FromInstances(IEnumerable(Of TComponent))
+  spec.csharp:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
+    name: FromInstances
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstances_System_Collections_Generic_IEnumerable__0__
+  - name: (
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: <
+  - name: TComponent
+  - name: '>'
+  - name: )
+  spec.vb:
+  - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromInstances(System.Collections.Generic.IEnumerable{`0})
+    name: FromInstances
+    href: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder-1.html#Plugins_Saneject_Runtime_Bindings_Component_BaseComponentBindingBuilder_1_FromInstances_System_Collections_Generic_IEnumerable__0__
+  - name: (
+  - uid: System.Collections.Generic.IEnumerable`1
+    name: IEnumerable
+    isExternal: true
+  - name: (
+  - name: Of
+  - name: " "
+  - name: TComponent
+  - name: )
   - name: )
 - uid: Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
   commentId: M:Plugins.Saneject.Runtime.Bindings.Component.BaseComponentBindingBuilder`1.FromMethod(System.Func{`0})
