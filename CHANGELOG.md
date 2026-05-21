@@ -1,5 +1,15 @@
 ﻿# Changelog
 
+## Version 1.2.0
+
+### Added
+
+- Added `FromInstances(IEnumerable<T>)` locator methods for component and asset bindings. These bind an existing collection of instances directly, allowing `BindComponents<T>().FromInstances(...)` and `BindAssets<T>().FromInstances(...)`.
+
+### Tests
+
+- Added tests for `FromInstances` locator methods.
+
 ## Version 1.1.1
 
 ### Fixes

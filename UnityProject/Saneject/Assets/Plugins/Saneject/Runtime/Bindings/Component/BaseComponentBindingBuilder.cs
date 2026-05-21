@@ -563,7 +563,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
         }
 
         /// <summary>
-        /// Bind to the specified <see cref="UnityEngine.Component" /> instance.
+        /// Provides a specific <see cref="UnityEngine.Component" /> instance.
         /// </summary>
         /// <param name="instance">The component instance.</param>
         /// <returns>A <see cref="ComponentFilterBuilder{TComponent}" /> to further configure the binding.</returns>
@@ -571,6 +571,19 @@ namespace Plugins.Saneject.Runtime.Bindings.Component
         {
             binding.SearchOrigin = SearchOrigin.Instance;
             binding.ResolveFromInstances.Add(instance as Object); // TODO: Silent fail if not UnityEngine.Object?
+            binding.LocatorStrategySpecified = true;
+            return new ComponentFilterBuilder<TComponent>(binding);
+        }
+
+        /// <summary>
+        /// Provides a specific <see cref="UnityEngine.Component" /> IEnumerable of instances.
+        /// </summary>
+        /// <param name="instances">The component instances.</param>
+        /// <returns>A <see cref="ComponentFilterBuilder{TComponent}" /> to further configure the binding.</returns>
+        public ComponentFilterBuilder<TComponent> FromInstances(IEnumerable<TComponent> instances)
+        {
+            binding.SearchOrigin = SearchOrigin.Instance;
+            binding.ResolveFromInstances.AddRange(instances.Cast<Object>()); // TODO: Silent fail if not UnityEngine.Object?
             binding.LocatorStrategySpecified = true;
             return new ComponentFilterBuilder<TComponent>(binding);
         }

@@ -147,7 +147,7 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         #region SPECIAL METHODS
 
         /// <summary>
-        /// Bind to the specified <see cref="Object" /> instance.
+        /// Provides a specific <see cref="Object" /> instance.
         /// </summary>
         /// <param name="instance">The asset instance.</param>
         /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
@@ -155,6 +155,19 @@ namespace Plugins.Saneject.Runtime.Bindings.Asset
         {
             binding.AssetLoadType = AssetLoadType.Instance;
             binding.ResolveFromInstances.Add(instance);
+            binding.LocatorStrategySpecified = true;
+            return new AssetFilterBuilder<TAsset>(binding);
+        }
+        
+        /// <summary>
+        /// Provides a specific <see cref="UnityEngine.Object" /> IEnumerable of instances.
+        /// </summary>
+        /// <param name="instance">The asset instances.</param>
+        /// <returns>A <see cref="AssetFilterBuilder{TAsset}" /> to further configure the binding.</returns>
+        public AssetFilterBuilder<TAsset> FromInstances(IEnumerable<TAsset> instance)
+        {
+            binding.AssetLoadType = AssetLoadType.Instance;
+            binding.ResolveFromInstances.AddRange(instance);
             binding.LocatorStrategySpecified = true;
             return new AssetFilterBuilder<TAsset>(binding);
         }
