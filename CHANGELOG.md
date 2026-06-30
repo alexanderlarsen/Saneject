@@ -1,5 +1,15 @@
 ﻿# Changelog
 
+## Version 1.2.1
+
+### Fixes
+
+- Fixed component and asset resolution ignoring the concrete type when a binding specified both an interface and a concrete type. Candidates are now filtered by both interface and concrete type, so the binding resolves the requested concrete type instead of returning the first interface match.
+
+### Tests
+
+- Added a regression test ensuring an interface plus concrete component binding resolves the specified concrete type when multiple interface implementers exist.
+
 ## Version 1.2.0
 
 ### Added

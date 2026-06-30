@@ -37,46 +37,12 @@ namespace Plugins.Saneject.Editor.Core
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            List<Object> validCandidates = new();
-
-            foreach (Object candidate in allCandidates)
-            {
-                if (CanSkipContextChecks(bindingNode, candidate))
-                {
-                    validCandidates.Add(candidate);
-                    continue;
-                }
-
-                ContextIdentity candidateContext = new(candidate);
-                ContextIdentity scopeContext = bindingNode.ScopeNode.TransformNode.ContextIdentity;
-
-                bool isContextMatch =
-                    ProjectSettings.UseContextIsolation
-                        ? candidateContext.Equals(scopeContext)
-                        : candidateContext.ContainerType == scopeContext.ContainerType &&
-                          candidateContext.ContainerId == scopeContext.ContainerId;
-
-                if (isContextMatch)
-                    validCandidates.Add(candidate);
-                else
-                    rejectedTypes.Add(candidate.GetType());
-            }
-
-            candidates = validCandidates.ToArray();
-        }
-
-        private static bool CanSkipContextChecks(
-            BindingNode bindingNode,
-            Object candidate)
-        {
-            // Persistent assets resolved through asset bindings bypass context checks because they are treated as contextless injected assets. Runtime proxies do too, even though they come from component bindings.
-            if (!EditorUtility.IsPersistent(candidate))
-                return false;
-
-            if (bindingNode is AssetBindingNode)
-                return true;
-
-            return bindingNode is ComponentBindingNode && candidate is RuntimeProxyBase;
+            candidates = GetContextFilteredCandidates
+            (
+                bindingNode,
+                allCandidates,
+                rejectedTypes
+            );
         }
 
         private static IEnumerable<Object> LocateComponentCandidates(
@@ -185,17 +151,7 @@ namespace Plugins.Saneject.Editor.Core
                 _ => throw new ArgumentOutOfRangeException()
             };
 
-            if (candidates != null && bindingNode.DependencyFilters.Count > 0)
-                try
-                {
-                    candidates = candidates.Where(component => bindingNode.DependencyFilters.All(f => f.Filter(component))).ToArray();
-                }
-                catch (Exception e)
-                {
-                    candidates = null;
-                    context.RegisterError(new FilterCandidatesError(bindingNode, e));
-                }
-
+            candidates = GetTypeAndDependencyFilteredCandidates(context, bindingNode, candidates);
             return candidates ?? Enumerable.Empty<Component>();
         }
 
@@ -232,13 +188,27 @@ namespace Plugins.Saneject.Editor.Core
                 _ => throw new ArgumentOutOfRangeException()
             };
 
+            candidates = GetTypeAndDependencyFilteredCandidates(context, bindingNode, candidates);
+            return candidates ?? Enumerable.Empty<Object>();
+        }
+
+        private static IEnumerable<T> GetTypeAndDependencyFilteredCandidates<T>(
+            InjectionContext context,
+            BindingNode bindingNode,
+            IEnumerable<T> candidates) where T : Object
+        {
             if (bindingNode.InterfaceType != null)
-                candidates = candidates.Where(asset => bindingNode.InterfaceType.IsAssignableFrom(asset.GetType()));
+                candidates = candidates?.Where(asset => bindingNode.InterfaceType.IsAssignableFrom(asset.GetType()));
+
+            if (bindingNode.ConcreteType != null)
+                candidates = candidates?.Where(asset => asset.GetType() == bindingNode.ConcreteType);
 
             if (candidates != null && bindingNode.DependencyFilters.Count > 0)
                 try
                 {
-                    candidates = candidates.Where(asset => bindingNode.DependencyFilters.All(f => f.Filter(asset))).ToArray();
+                    candidates = candidates
+                        .Where(x => bindingNode.DependencyFilters.All(f => f.Filter(x)))
+                        .ToArray();
                 }
                 catch (Exception e)
                 {
@@ -246,7 +216,54 @@ namespace Plugins.Saneject.Editor.Core
                     context.RegisterError(new FilterCandidatesError(bindingNode, e));
                 }
 
-            return candidates ?? Enumerable.Empty<Object>();
+            return candidates;
+        }
+
+        private static Object[] GetContextFilteredCandidates(
+            BindingNode bindingNode,
+            IEnumerable<Object> allCandidates,
+            HashSet<Type> rejectedTypes)
+        {
+            List<Object> validCandidates = new();
+
+            foreach (Object candidate in allCandidates)
+            {
+                if (CanSkipContextChecks(bindingNode, candidate))
+                {
+                    validCandidates.Add(candidate);
+                    continue;
+                }
+
+                ContextIdentity candidateContext = new(candidate);
+                ContextIdentity scopeContext = bindingNode.ScopeNode.TransformNode.ContextIdentity;
+
+                bool isContextMatch =
+                    ProjectSettings.UseContextIsolation
+                        ? candidateContext.Equals(scopeContext)
+                        : candidateContext.ContainerType == scopeContext.ContainerType &&
+                          candidateContext.ContainerId == scopeContext.ContainerId;
+
+                if (isContextMatch)
+                    validCandidates.Add(candidate);
+                else
+                    rejectedTypes.Add(candidate.GetType());
+            }
+
+            return validCandidates.ToArray();
+
+            static bool CanSkipContextChecks(
+                BindingNode bindingNode,
+                Object candidate)
+            {
+                // Persistent assets resolved through asset bindings bypass context checks because they are treated as contextless injected assets. Runtime proxies do too, even though they come from component bindings.
+                if (!EditorUtility.IsPersistent(candidate))
+                    return false;
+
+                if (bindingNode is AssetBindingNode)
+                    return true;
+
+                return bindingNode is ComponentBindingNode && candidate is RuntimeProxyBase;
+            }
         }
 
         private static IEnumerable<T> ToEnumerable<T>(this T item)
