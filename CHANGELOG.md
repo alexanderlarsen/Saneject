@@ -1,5 +1,15 @@
 ﻿# Changelog
 
+## Version 1.2.4
+
+### Fixes
+
+- Fixed a `StackOverflowException` during injection when a component exposed a `Dictionary` property that had been iterated at edit time (e.g. from `OnDrawGizmos`), which leaves an internal reference cycle for traversal to follow. Generic collection types are no longer treated as nested serializable, so injection no longer recurses into their internal fields.
+
+### Tests
+
+- Added coverage ensuring generic collection types are excluded from nested serializable traversal while plain `[Serializable]` classes are still included.
+
 ## Version 1.2.3
 
 ### Fixes
