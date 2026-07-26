@@ -4,12 +4,13 @@
 
 ### Unity 6000.4 and 6000.5 support
 
-- Fixed use of `Object.GetInstanceID()`, which was made obsolete in Unity 6000.4 and removed in 6000.5. Added a `GetInstanceIDCompat()` extension that derives the id from `Object.GetEntityId()` (via `EntityId.ToULong(...)`) on Unity 6000.4 and newer and falls back to `Object.GetInstanceID()` on older versions.
-- Fixed use of `Scene.handle` as a context key, which no longer implicitly converts to `int` from Unity 6000.4. Added a `GetHandleCompat()` extension that reads the handle via `SceneHandle.GetRawData()` on Unity 6000.4 and newer and falls back to `Scene.handle` on older versions. Also resolves an ambiguous-conversion error on Unity 6000.3, where `Scene.handle` returns a `SceneHandle` with implicit `int` and `uint` operators.
-- Widened context identity keys (`ContextIdentity.Id`/`ContainerId` and the backing `ContextData` keys) from `int` to `long` so both instance IDs and the raw scene handle are stored without truncation.
-- Fixed hierarchy expansion on Unity 6000.4 and newer, where `SceneHierarchyWindow.SetExpanded` changed its parameter from `int` to `EntityId`. Added a `GetInstanceIDBoxedCompat()` extension that supplies the id boxed as the exact type the reflected method expects, avoiding a runtime `ArgumentException`.
-- Updated `ContextIdentity` and `SceneHierarchyUtility` to use the new compatibility extensions.
+- Added version-aware compatibility extensions for the APIs Unity changed in 6000.4: `Object.GetInstanceID()` (obsolete in 6000.4, removed in 6000.5), `Scene.handle`, and `SceneHierarchyWindow.SetExpanded` (now takes an `EntityId`). Context identity and hierarchy expansion now work across all supported Unity versions.
+- Widened context identity keys from `int` to `long` so the new entity and scene handle values are stored without truncation.
 - Extended the CI test matrix and tested-versions docs to cover Unity 6000.4 and 6000.5.
+
+### Fixes
+
+- Fixed a `NullReferenceException` in the custom inspector when a component had a field Unity cannot serialize (e.g. a multidimensional array). Such fields are now omitted from the inspector, matching Unity's default behavior.
 
 ## Version 1.2.1
 

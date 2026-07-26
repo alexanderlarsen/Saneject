@@ -52,7 +52,7 @@ namespace Plugins.Saneject.Editor.Inspectors.Models
             ExpectedType = elementType;
             HasInjectAttribute = field.HasInjectAttribute();
             IsReadOnly = HasInjectAttribute || field.HasReadOnlyAttribute();
-            IsCollection = SerializedProperty.isArray && SerializedProperty.propertyType != SerializedPropertyType.String;
+            IsCollection = SerializedProperty is { isArray: true } && SerializedProperty.propertyType != SerializedPropertyType.String;
 
             Children = field.FieldType.IsNestedSerializable() && SerializedProperty != null
                 ? field.FieldType
