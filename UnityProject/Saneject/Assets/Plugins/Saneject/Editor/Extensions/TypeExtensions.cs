@@ -45,6 +45,12 @@ namespace Plugins.Saneject.Editor.Extensions
             if (type == typeof(string))
                 return false;
 
+            // Unity does not serialize generic types (e.g. Dictionary<,>, List<T>) as nested custom
+            // classes, and their internal fields can form reference cycles (Dictionary <-> ValueCollection),
+            // so never recurse into them during traversal.
+            if (type.IsGenericType)
+                return false;
+
             return !typeof(Object).IsAssignableFrom(type) &&
                    type.IsDefined(typeof(SerializableAttribute), inherit: false);
         }
