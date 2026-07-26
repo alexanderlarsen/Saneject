@@ -1,5 +1,15 @@
 ﻿# Changelog
 
+## Version 1.2.3
+
+### Fixes
+
+- Fixed a regression from 1.2.1 where component and asset bindings on an abstract or base type (e.g. `BindComponent<Collider>()`) no longer resolved derived instances. Concrete-type candidate filtering now uses `IsAssignableFrom` instead of exact type equality, so a binding resolves the bound type or any subclass, matching Unity's `GetComponent<T>()` semantics. Interface plus concrete bindings still require candidates to satisfy both types.
+
+### Tests
+
+- Added regression coverage for base and abstract class component resolution, and for interface plus concrete bindings resolving a subclass of the concrete type.
+
 ## Version 1.2.2
 
 ### Unity 6000.4 and 6000.5 support

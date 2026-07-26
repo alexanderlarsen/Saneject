@@ -198,10 +198,10 @@ namespace Plugins.Saneject.Editor.Core
             IEnumerable<T> candidates) where T : Object
         {
             if (bindingNode.InterfaceType != null)
-                candidates = candidates?.Where(asset => bindingNode.InterfaceType.IsAssignableFrom(asset.GetType()));
+                candidates = candidates?.Where(x => bindingNode.InterfaceType.IsAssignableFrom(x.GetType()));
 
             if (bindingNode.ConcreteType != null)
-                candidates = candidates?.Where(asset => asset.GetType() == bindingNode.ConcreteType);
+                candidates = candidates?.Where(x => bindingNode.ConcreteType.IsAssignableFrom(x.GetType()));
 
             if (candidates != null && bindingNode.DependencyFilters.Count > 0)
                 try
