@@ -7,9 +7,9 @@ namespace Plugins.Saneject.Editor.Extensions
         public static long GetHandleCompat(this Scene scene)
         {
 #if UNITY_6000_4_OR_NEWER
-            return (long)scene.GetRawData();
+            return (long)scene.handle.GetRawData();
 #else
-            return scene.handle;
+            return (int)scene.handle;
 #endif
         }
     }
