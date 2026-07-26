@@ -2,9 +2,13 @@
 
 ## Version 1.2.2
 
-### Fixes
+### Unity 6000.4 and 6000.5 support
 
-- Fixed use of `Object.GetInstanceID()`, which was made obsolete in Unity 6000.4 and removed in 6000.5. Added a `GetInstanceIDCompat()` extension that calls `Object.GetEntityID()` on Unity 6000.4 and newer and falls back to `Object.GetInstanceID()` on older versions. Updated `ContextIdentity` and `SceneHierarchyUtility` to use the compatibility extension.
+- Fixed use of `Object.GetInstanceID()`, which was made obsolete in Unity 6000.4 and removed in 6000.5. Added a `GetInstanceIDCompat()` extension that calls `Object.GetEntityID()` on Unity 6000.4 and newer and falls back to `Object.GetInstanceID()` on older versions.
+- Fixed use of `Scene.handle` as a context key, which no longer implicitly converts to `int` from Unity 6000.4. Added a `GetHandleCompat()` extension that reads the handle via `GetRawData()` on Unity 6000.4 and newer and falls back to `Scene.handle` on older versions.
+- Widened context identity keys (`ContextIdentity.Id`/`ContainerId` and the backing `ContextData` keys) from `int` to `long` so both instance IDs and the raw scene handle are stored without truncation.
+- Updated `ContextIdentity` and `SceneHierarchyUtility` to use the new compatibility extensions.
+- Extended the CI test matrix and tested-versions docs to cover Unity 6000.4 and 6000.5.
 
 ## Version 1.2.1
 

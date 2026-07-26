@@ -25,9 +25,9 @@ namespace Plugins.Saneject.Editor.Data.Context
         }
 
         public ContextType Type { get; }
-        public int Id { get; }
+        public long Id { get; }
         public ContextType ContainerType { get; }
-        public int ContainerId { get; }
+        public long ContainerId { get; }
         public bool IsPrefab { get; }
 
         public override string ToString()
@@ -86,7 +86,7 @@ namespace Plugins.Saneject.Editor.Data.Context
                         type: ContextType.PrefabInstance,
                         key: prefabInstanceRoot.GetInstanceIDCompat(),
                         containerType: ContextType.SceneObject,
-                        containerKey: gameObject.scene.handle
+                        containerKey: gameObject.scene.GetHandleCompat()
                     ); // Prefab instance inside scene
 
             if (isPrefabAssetObject)
@@ -100,9 +100,9 @@ namespace Plugins.Saneject.Editor.Data.Context
 
             return new ContextData(
                 type: ContextType.SceneObject,
-                key: gameObject.scene.handle,
+                key: gameObject.scene.GetHandleCompat(),
                 containerType: ContextType.SceneObject,
-                containerKey: gameObject.scene.handle
+                containerKey: gameObject.scene.GetHandleCompat()
             ); // Scene object
         }
 
@@ -110,9 +110,9 @@ namespace Plugins.Saneject.Editor.Data.Context
         {
             public ContextData(
                 ContextType type,
-                int key,
+                long key,
                 ContextType containerType,
-                int containerKey)
+                long containerKey)
             {
                 Type = type;
                 Key = key;
@@ -121,9 +121,9 @@ namespace Plugins.Saneject.Editor.Data.Context
             }
 
             public ContextType Type { get; }
-            public int Key { get; }
+            public long Key { get; }
             public ContextType ContainerType { get; }
-            public int ContainerKey { get; }
+            public long ContainerKey { get; }
         }
 
         #region Equality logic
