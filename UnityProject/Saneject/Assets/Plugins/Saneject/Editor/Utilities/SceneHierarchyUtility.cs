@@ -4,6 +4,7 @@ using System.ComponentModel;
 using System.Linq;
 using System.Reflection;
 using Plugins.Saneject.Editor.Data.Context;
+using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEngine;
@@ -94,7 +95,7 @@ namespace Plugins.Saneject.Editor.Utilities
                     {
                         setExpanded!.Invoke(window, new object[]
                         {
-                            current.gameObject.GetInstanceID(),
+                            current.gameObject.GetInstanceIDBoxedCompat(),
                             true
                         });
 
@@ -104,7 +105,7 @@ namespace Plugins.Saneject.Editor.Utilities
                     // Finally expand the object itself
                     setExpanded!.Invoke(window, new object[]
                     {
-                        gameObject.GetInstanceID(),
+                        gameObject.GetInstanceIDBoxedCompat(),
                         true
                     });
                 }

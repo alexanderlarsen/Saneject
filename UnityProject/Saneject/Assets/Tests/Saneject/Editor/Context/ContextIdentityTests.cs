@@ -1,6 +1,6 @@
-using System;
 using NUnit.Framework;
 using Plugins.Saneject.Editor.Data.Context;
+using Plugins.Saneject.Editor.Extensions;
 using Tests.Saneject.Fixtures.Scripts;
 using UnityEditor;
 using UnityEngine;
@@ -20,9 +20,9 @@ namespace Tests.Saneject.Editor.Context
             // Assert
             Assert.That(sceneObject, Is.Not.Null);
             Assert.That(identity.Type, Is.EqualTo(ContextType.SceneObject));
-            Assert.That(identity.Id, Is.EqualTo(Convert.ToInt32(sceneObject.gameObject.scene.handle)));
+            Assert.That(identity.Id, Is.EqualTo(sceneObject.gameObject.scene.GetHandleCompat()));
             Assert.That(identity.ContainerType, Is.EqualTo(ContextType.SceneObject));
-            Assert.That(identity.ContainerId, Is.EqualTo(Convert.ToInt32(sceneObject.gameObject.scene.handle)));
+            Assert.That(identity.ContainerId, Is.EqualTo(sceneObject.gameObject.scene.GetHandleCompat()));
             Assert.That(identity.IsPrefab, Is.False);
         }
 
@@ -43,9 +43,9 @@ namespace Tests.Saneject.Editor.Context
                 // Assert
                 Assert.That(prefabObject, Is.Not.Null);
                 Assert.That(identity.Type, Is.EqualTo(ContextType.PrefabInstance));
-                Assert.That(identity.Id, Is.EqualTo(prefabInstance.Root.GetInstanceID()));
+                Assert.That(identity.Id, Is.EqualTo(prefabInstance.Root.GetInstanceIDCompat()));
                 Assert.That(identity.ContainerType, Is.EqualTo(ContextType.SceneObject));
-                Assert.That(identity.ContainerId, Is.EqualTo(Convert.ToInt32(prefabObject.gameObject.scene.handle)));
+                Assert.That(identity.ContainerId, Is.EqualTo(prefabObject.gameObject.scene.GetHandleCompat()));
                 Assert.That(identity.IsPrefab, Is.True);
             }
             finally
@@ -72,9 +72,9 @@ namespace Tests.Saneject.Editor.Context
                 // Assert
                 Assert.That(prefabObject, Is.Not.Null);
                 Assert.That(identity.Type, Is.EqualTo(ContextType.PrefabAsset));
-                Assert.That(identity.Id, Is.EqualTo(prefabStage.Root.GetInstanceID()));
+                Assert.That(identity.Id, Is.EqualTo(prefabStage.Root.GetInstanceIDCompat()));
                 Assert.That(identity.ContainerType, Is.EqualTo(ContextType.PrefabAsset));
-                Assert.That(identity.ContainerId, Is.EqualTo(prefabStage.Root.GetInstanceID()));
+                Assert.That(identity.ContainerId, Is.EqualTo(prefabStage.Root.GetInstanceIDCompat()));
                 Assert.That(identity.IsPrefab, Is.True);
             }
             finally
@@ -103,9 +103,9 @@ namespace Tests.Saneject.Editor.Context
                 Assert.That(prefabAsset, Is.Not.Null);
                 Assert.That(prefabObject, Is.Not.Null);
                 Assert.That(identity.Type, Is.EqualTo(ContextType.PrefabAsset));
-                Assert.That(identity.Id, Is.EqualTo(prefabAsset.GetInstanceID()));
+                Assert.That(identity.Id, Is.EqualTo(prefabAsset.GetInstanceIDCompat()));
                 Assert.That(identity.ContainerType, Is.EqualTo(ContextType.PrefabAsset));
-                Assert.That(identity.ContainerId, Is.EqualTo(prefabAsset.GetInstanceID()));
+                Assert.That(identity.ContainerId, Is.EqualTo(prefabAsset.GetInstanceIDCompat()));
                 Assert.That(identity.IsPrefab, Is.True);
             }
             finally
@@ -133,9 +133,9 @@ namespace Tests.Saneject.Editor.Context
                 // Assert
                 Assert.That(prefabObject, Is.Not.Null);
                 Assert.That(identity.Type, Is.EqualTo(ContextType.PrefabInstance));
-                Assert.That(identity.Id, Is.EqualTo(nestedInstance.Root.GetInstanceID()));
+                Assert.That(identity.Id, Is.EqualTo(nestedInstance.Root.GetInstanceIDCompat()));
                 Assert.That(identity.ContainerType, Is.EqualTo(ContextType.PrefabAsset));
-                Assert.That(identity.ContainerId, Is.EqualTo(hostStage.Root.GetInstanceID()));
+                Assert.That(identity.ContainerId, Is.EqualTo(hostStage.Root.GetInstanceIDCompat()));
                 Assert.That(identity.IsPrefab, Is.True);
             }
             finally

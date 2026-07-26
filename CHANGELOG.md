@@ -1,5 +1,17 @@
 ﻿# Changelog
 
+## Version 1.2.2
+
+### Unity 6000.4 and 6000.5 support
+
+- Added version-aware compatibility extensions for the APIs Unity changed in 6000.4: `Object.GetInstanceID()` (obsolete in 6000.4, removed in 6000.5), `Scene.handle`, and `SceneHierarchyWindow.SetExpanded` (now takes an `EntityId`). Context identity and hierarchy expansion now work across all supported Unity versions.
+- Widened context identity keys from `int` to `long` so the new entity and scene handle values are stored without truncation.
+- Extended the CI test matrix and tested-versions docs to cover Unity 6000.4 and 6000.5.
+
+### Fixes
+
+- Fixed a `NullReferenceException` in the custom inspector when a component had a field Unity cannot serialize (e.g. a multidimensional array). Such fields are now omitted from the inspector, matching Unity's default behavior.
+
 ## Version 1.2.1
 
 ### Fixes
