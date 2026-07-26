@@ -95,7 +95,7 @@ namespace Plugins.Saneject.Editor.Utilities
                     {
                         setExpanded!.Invoke(window, new object[]
                         {
-                            current.gameObject.GetInstanceIDCompat(),
+                            current.gameObject.GetInstanceIDBoxedCompat(),
                             true
                         });
 
@@ -105,7 +105,7 @@ namespace Plugins.Saneject.Editor.Utilities
                     // Finally expand the object itself
                     setExpanded!.Invoke(window, new object[]
                     {
-                        gameObject.GetInstanceIDCompat(),
+                        gameObject.GetInstanceIDBoxedCompat(),
                         true
                     });
                 }
