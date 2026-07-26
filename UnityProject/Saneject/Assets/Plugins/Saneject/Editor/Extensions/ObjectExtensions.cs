@@ -15,5 +15,14 @@ namespace Plugins.Saneject.Editor.Extensions
         {
             return new[] { obj };
         }
+        
+        public static int GetInstanceIDCompat(this UnityEngine.Object obj)
+        {
+#if UNITY_6000_4_OR_NEWER
+            return obj.GetEntityID();
+#else
+        return obj.GetInstanceID();
+#endif
+        }
     }
 }

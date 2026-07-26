@@ -1,5 +1,11 @@
 ﻿# Changelog
 
+## Version 1.2.2
+
+### Fixes
+
+- Fixed use of `Object.GetInstanceID()`, which was made obsolete in Unity 6000.4 and removed in 6000.5. Added a `GetInstanceIDCompat()` extension that calls `Object.GetEntityID()` on Unity 6000.4 and newer and falls back to `Object.GetInstanceID()` on older versions. Updated `ContextIdentity` and `SceneHierarchyUtility` to use the compatibility extension.
+
 ## Version 1.2.1
 
 ### Fixes

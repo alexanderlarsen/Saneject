@@ -1,6 +1,7 @@
 ﻿using System;
 using System.ComponentModel;
 using System.Text;
+using Plugins.Saneject.Editor.Extensions;
 using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
 using UnityEditor.SceneManagement;
@@ -76,14 +77,14 @@ namespace Plugins.Saneject.Editor.Data.Context
                     ? new ContextData
                     (
                         type: ContextType.PrefabInstance,
-                        key: prefabInstanceRoot.GetInstanceID(),
+                        key: prefabInstanceRoot.GetInstanceIDCompat(),
                         containerType: ContextType.PrefabAsset,
-                        containerKey: prefabAssetRoot.GetInstanceID()
+                        containerKey: prefabAssetRoot.GetInstanceIDCompat()
                     ) // Prefab instance inside prefab asset
                     : new ContextData
                     (
                         type: ContextType.PrefabInstance,
-                        key: prefabInstanceRoot.GetInstanceID(),
+                        key: prefabInstanceRoot.GetInstanceIDCompat(),
                         containerType: ContextType.SceneObject,
                         containerKey: gameObject.scene.handle
                     ); // Prefab instance inside scene
@@ -92,9 +93,9 @@ namespace Plugins.Saneject.Editor.Data.Context
                 return new ContextData
                 (
                     type: ContextType.PrefabAsset,
-                    key: prefabAssetRoot.GetInstanceID(),
+                    key: prefabAssetRoot.GetInstanceIDCompat(),
                     containerType: ContextType.PrefabAsset,
-                    containerKey: prefabAssetRoot.GetInstanceID()
+                    containerKey: prefabAssetRoot.GetInstanceIDCompat()
                 ); // Prefab asset
 
             return new ContextData(
