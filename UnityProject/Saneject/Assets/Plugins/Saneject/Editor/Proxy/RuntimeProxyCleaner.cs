@@ -78,9 +78,13 @@ namespace Plugins.Saneject.Editor.Proxy
                 .Where(t => !t.IsAbstract)
                 .ToHashSet();
 
+            HashSet<Type> manifestTypes = RuntimeProxyManifestUtility
+                .EnumerateManifestTypes()
+                .ToHashSet();
+
             HashSet<Type> unusedTypes = allTypes
                 .Where(t => t.BaseType is { IsGenericType: true })
-                .Where(t => RuntimeProxyManifestUtility.EnumerateManifestTypes().All(mt => t.BaseType.GenericTypeArguments[0] != mt))
+                .Where(t => !manifestTypes.Contains(t.BaseType.GenericTypeArguments[0]))
                 .Where(t => t.GetCustomAttribute<MuteUnusedRuntimeProxyWarningAttribute>() == null)
                 .ToHashSet();
 
@@ -89,7 +93,8 @@ namespace Plugins.Saneject.Editor.Proxy
 
         private static HashSet<string> GetUnusedAssetPaths(HashSet<Type> unusedTypes)
         {
-            HashSet<string> proxyAssetPaths = GetAllProxyAssetPaths();
+            Dictionary<Type, string[]> pathsByProxyType = FindAssetPathsByProxyType();
+            HashSet<string> proxyAssetPaths = GetAllProxyAssetPaths(pathsByProxyType);
 
             if (proxyAssetPaths.Count == 0)
                 return proxyAssetPaths;
@@ -99,8 +104,8 @@ namespace Plugins.Saneject.Editor.Proxy
                 .ToHashSet();
 
             HashSet<string> unusedTypeAssetPaths = unusedTypes
-                .SelectMany(t => AssetDatabase.FindAssets($"t:{t.Name}"))
-                .Select(AssetDatabase.GUIDToAssetPath)
+                .Where(pathsByProxyType.ContainsKey)
+                .SelectMany(t => pathsByProxyType[t])
                 .Where(proxyAssetPaths.Contains)
                 .ToHashSet();
 
@@ -129,19 +134,32 @@ namespace Plugins.Saneject.Editor.Proxy
             AssetDatabase.Refresh();
         }
 
-        private static HashSet<string> GetAllProxyAssetPaths()
+        private static Dictionary<Type, string[]> FindAssetPathsByProxyType()
+        {
+            return TypeCache
+                .GetTypesDerivedFrom<RuntimeProxyBase>()
+                .Where(t => !t.IsAbstract)
+                .ToDictionary
+                (
+                    proxyType => proxyType,
+                    proxyType => AssetDatabase
+                        .FindAssets($"t:{proxyType.Name}")
+                        .Select(AssetDatabase.GUIDToAssetPath)
+                        .ToArray()
+                );
+        }
+
+        private static HashSet<string> GetAllProxyAssetPaths(Dictionary<Type, string[]> pathsByProxyType)
         {
             HashSet<string> proxyAssetPaths = new();
 
-            foreach (Type proxyType in TypeCache.GetTypesDerivedFrom<RuntimeProxyBase>().Where(t => !t.IsAbstract))
-                foreach (string guid in AssetDatabase.FindAssets($"t:{proxyType.Name}"))
+            foreach (KeyValuePair<Type, string[]> pair in pathsByProxyType)
+                foreach (string path in pair.Value)
                 {
-                    string path = AssetDatabase.GUIDToAssetPath(guid);
-
                     if (string.IsNullOrWhiteSpace(path))
                         continue;
 
-                    if (AssetDatabase.LoadAssetAtPath(path, proxyType) is RuntimeProxyBase)
+                    if (AssetDatabase.LoadAssetAtPath(path, pair.Key) is RuntimeProxyBase)
                         proxyAssetPaths.Add(path);
                 }
 
