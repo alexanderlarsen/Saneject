@@ -17,18 +17,15 @@ namespace Tests.Saneject.Editor.RuntimeProxy
         private const string TestAssetFolder = "Assets/Tests/Saneject/Fixtures/RuntimeProxyToolingAssets";
 
         private bool originalGenerateProxyScriptsOnDomainReload;
-        private bool originalLogUnusedRuntimeProxiesOnDomainReload;
         private string originalProxyAssetGenerationFolder;
 
         [SetUp]
         public void SetUp()
         {
             originalGenerateProxyScriptsOnDomainReload = ProjectSettings.GenerateProxyScriptsOnDomainReload;
-            originalLogUnusedRuntimeProxiesOnDomainReload = UserSettings.LogUnusedRuntimeProxiesOnDomainReload;
             originalProxyAssetGenerationFolder = ProjectSettings.ProxyAssetGenerationFolder;
 
             ProjectSettings.GenerateProxyScriptsOnDomainReload = false;
-            UserSettings.LogUnusedRuntimeProxiesOnDomainReload = false;
             ProjectSettings.ProxyAssetGenerationFolder = TestAssetFolder;
 
             string[] generatedProxyGuids = AssetDatabase.FindAssets($"t:{nameof(GeneratedRuntimeProxy)}");
@@ -60,7 +57,6 @@ namespace Tests.Saneject.Editor.RuntimeProxy
         public void TearDown()
         {
             ProjectSettings.GenerateProxyScriptsOnDomainReload = originalGenerateProxyScriptsOnDomainReload;
-            UserSettings.LogUnusedRuntimeProxiesOnDomainReload = originalLogUnusedRuntimeProxiesOnDomainReload;
             ProjectSettings.ProxyAssetGenerationFolder = originalProxyAssetGenerationFolder;
 
             string[] generatedProxyGuids = AssetDatabase.FindAssets($"t:{nameof(GeneratedRuntimeProxy)}");

@@ -14,7 +14,6 @@ items:
   - Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary
   - Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve
   - Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings
-  - Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
   - Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes
   - Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties
   - Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
@@ -388,37 +387,6 @@ items:
       type: System.Boolean
     content.vb: Public Shared Property ClearLogsOnInjection As Boolean
   overload: Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection*
-- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
-  commentId: P:Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
-  id: LogUnusedRuntimeProxiesOnDomainReload
-  parent: Plugins.Saneject.Runtime.Settings.UserSettings
-  langs:
-  - csharp
-  - vb
-  name: LogUnusedRuntimeProxiesOnDomainReload
-  nameWithType: UserSettings.LogUnusedRuntimeProxiesOnDomainReload
-  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
-  type: Property
-  source:
-    remote:
-      path: UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-      branch: dev
-      repo: https://github.com/alexanderlarsen/Saneject.git
-    id: LogUnusedRuntimeProxiesOnDomainReload
-    path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-    startLine: 137
-  assemblies:
-  - Saneject.Runtime
-  namespace: Plugins.Saneject.Runtime.Settings
-  summary: On domain reload, scans for runtime proxy assets and scripts not referenced by any scope binding and logs the findings.
-  example: []
-  syntax:
-    content: public static bool LogUnusedRuntimeProxiesOnDomainReload { get; set; }
-    parameters: []
-    return:
-      type: System.Boolean
-    content.vb: Public Shared Property LogUnusedRuntimeProxiesOnDomainReload As Boolean
-  overload: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload*
 - uid: Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
   commentId: M:Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
   id: UseDefaultSettings
@@ -591,12 +559,6 @@ references:
   name: ClearLogsOnInjection
   nameWithType: UserSettings.ClearLogsOnInjection
   fullName: Plugins.Saneject.Runtime.Settings.UserSettings.ClearLogsOnInjection
-- uid: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload*
-  commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
-  href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_LogUnusedRuntimeProxiesOnDomainReload
-  name: LogUnusedRuntimeProxiesOnDomainReload
-  nameWithType: UserSettings.LogUnusedRuntimeProxiesOnDomainReload
-  fullName: Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload
 - uid: Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings*
   commentId: Overload:Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings
   href: Plugins.Saneject.Runtime.Settings.UserSettings.html#Plugins_Saneject_Runtime_Settings_UserSettings_UseDefaultSettings
