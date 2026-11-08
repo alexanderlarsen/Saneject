@@ -405,7 +405,7 @@ items:
       repo: https://github.com/alexanderlarsen/Saneject.git
     id: UseDefaultSettings
     path: ../UnityProject/Saneject/Assets/Plugins/Saneject/Runtime/Settings/UserSettings.cs
-    startLine: 150
+    startLine: 141
   assemblies:
   - Saneject.Runtime
   namespace: Plugins.Saneject.Runtime.Settings
