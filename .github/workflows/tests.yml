@@ -52,6 +52,8 @@ jobs:
         if: steps.test-paths.outputs.run == 'true'
         uses: game-ci/unity-test-runner@v4
         env:
+          # The CLI release resolver reads the environment, not githubToken.
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
           UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
