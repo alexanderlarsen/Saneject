@@ -274,6 +274,45 @@ namespace Tests.Saneject.Editor.RuntimeProxy
         }
 
         [Test]
+        public void RuntimeProxyCleaner_GivenReferencedAssetOfUnusedProxyType_MarksAssetUnused()
+        {
+            // Set up assets
+            AssetDatabase.CreateFolder("Assets/Tests/Saneject/Fixtures", "RuntimeProxyToolingAssets");
+
+            UnusedRuntimeProxy proxy = ScriptableObject.CreateInstance<UnusedRuntimeProxy>();
+            RuntimeProxyAssetReferenceHolder holder = ScriptableObject.CreateInstance<RuntimeProxyAssetReferenceHolder>();
+            holder.proxy = proxy;
+
+            string proxyPath = $"{TestAssetFolder}/Referenced Unused Proxy.asset";
+            string holderPath = $"{TestAssetFolder}/Unused Proxy Holder.asset";
+            AssetDatabase.CreateAsset(proxy, proxyPath);
+            AssetDatabase.CreateAsset(holder, holderPath);
+            AssetDatabase.SaveAssets();
+            AssetDatabase.Refresh();
+
+            // Verify the persisted reference so an unreferenced asset cannot satisfy the test
+            CollectionAssert.Contains(AssetDatabase.GetDependencies(holderPath, true), proxyPath);
+
+            // Find cleaner results
+            MethodInfo getUnusedTypesMethod = typeof(RuntimeProxyCleaner).GetMethod("GetUnusedTypes", BindingFlags.NonPublic | BindingFlags.Static);
+            MethodInfo getUnusedAssetPathsMethod = typeof(RuntimeProxyCleaner).GetMethod("GetUnusedAssetPaths", BindingFlags.NonPublic | BindingFlags.Static);
+
+            Assert.That(getUnusedTypesMethod, Is.Not.Null);
+            Assert.That(getUnusedAssetPathsMethod, Is.Not.Null);
+
+            HashSet<Type> unusedTypes = getUnusedTypesMethod.Invoke(null, null) as HashSet<Type>;
+
+            Assert.That(unusedTypes, Is.Not.Null);
+            CollectionAssert.Contains(unusedTypes, typeof(UnusedRuntimeProxy));
+
+            HashSet<string> unusedAssetPaths = getUnusedAssetPathsMethod.Invoke(null, new object[] { unusedTypes }) as HashSet<string>;
+
+            // Assert
+            Assert.That(unusedAssetPaths, Is.Not.Null);
+            CollectionAssert.Contains(unusedAssetPaths, proxyPath);
+        }
+
+        [Test]
         public void RuntimeProxyCleaner_GivenUnreferencedProxyAsset_MarksAssetUnused()
         {
             // Set up asset
