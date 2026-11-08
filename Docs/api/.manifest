@@ -173,6 +173,7 @@
   "Plugins.Saneject.Runtime.Settings.UserSettings.LogInjectionSummary": "Plugins.Saneject.Runtime.Settings.UserSettings.yml",
   "Plugins.Saneject.Runtime.Settings.UserSettings.LogProxyResolve": "Plugins.Saneject.Runtime.Settings.UserSettings.yml",
   "Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedBindings": "Plugins.Saneject.Runtime.Settings.UserSettings.yml",
+  "Plugins.Saneject.Runtime.Settings.UserSettings.LogUnusedRuntimeProxiesOnDomainReload": "Plugins.Saneject.Runtime.Settings.UserSettings.yml",
   "Plugins.Saneject.Runtime.Settings.UserSettings.ShowHelpBoxes": "Plugins.Saneject.Runtime.Settings.UserSettings.yml",
   "Plugins.Saneject.Runtime.Settings.UserSettings.ShowInjectedFieldsProperties": "Plugins.Saneject.Runtime.Settings.UserSettings.yml",
   "Plugins.Saneject.Runtime.Settings.UserSettings.UseDefaultSettings": "Plugins.Saneject.Runtime.Settings.UserSettings.yml"

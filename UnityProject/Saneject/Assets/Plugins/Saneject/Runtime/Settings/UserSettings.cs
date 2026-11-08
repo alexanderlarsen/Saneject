@@ -1,4 +1,5 @@
 ﻿using System.Linq;
+using System;
 using System.Reflection;
 using System.Runtime.CompilerServices;
 using UnityEditor;
@@ -132,6 +133,16 @@ namespace Plugins.Saneject.Runtime.Settings
             set => SetBool(value);
         }
 
+        /// <summary>
+        /// Retained for compatibility. Always returns false; assigned values are ignored.
+        /// </summary>
+        [Obsolete("Automatic unused proxy logging has been removed. Use *Saneject/Runtime Proxy/Clean Up Unused Scripts And Assets* instead.")]
+        public static bool LogUnusedRuntimeProxiesOnDomainReload
+        {
+            get => false;
+            set { }
+        }
+
         #endregion
 
         #region Methods
@@ -145,6 +156,7 @@ namespace Plugins.Saneject.Runtime.Settings
             string[] prefsKeys = typeof(UserSettings)
                 .GetProperties(BindingFlags.Public | BindingFlags.Static)
                 .Where(prop => prop.CanWrite)
+                .Where(prop => !prop.IsDefined(typeof(ObsoleteAttribute), inherit: false))
                 .Select(prop => $"{SettingsPrefix}{prop.Name}")
                 .Where(EditorPrefs.HasKey)
                 .ToArray();
