@@ -1,5 +1,13 @@
 # Docs build notes
 
+## DocFX version
+
+CI pins DocFX to `2.78.4` to match the existing local documentation toolchain. Use the same version locally to keep API generation and site builds consistent:
+
+```powershell
+dotnet tool update -g docfx --version 2.78.4
+```
+
 ## Why metadata is generated locally
 
 API metadata must be generated locally because `docfx metadata` needs the Unity-generated `.csproj` files. Those files are gitignored and are not source controlled, so CI does not have them.

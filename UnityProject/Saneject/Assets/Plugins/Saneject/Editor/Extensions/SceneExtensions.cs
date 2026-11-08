@@ -1,7 +1,9 @@
-﻿using UnityEngine.SceneManagement;
+﻿using System.ComponentModel;
+using UnityEngine.SceneManagement;
 
 namespace Plugins.Saneject.Editor.Extensions
 {
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class SceneExtensions
     {
         public static long GetHandleCompat(this Scene scene)
