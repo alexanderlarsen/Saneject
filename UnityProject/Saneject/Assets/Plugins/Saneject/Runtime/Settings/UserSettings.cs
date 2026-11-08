@@ -131,15 +131,6 @@ namespace Plugins.Saneject.Runtime.Settings
             get => GetBool(defaultValue: true);
             set => SetBool(value);
         }
-        
-        /// <summary>
-        /// On domain reload, scans for runtime proxy assets and scripts not referenced by any scope binding and logs the findings.
-        /// </summary>
-        public static bool LogUnusedRuntimeProxiesOnDomainReload
-        {
-            get => GetBool(defaultValue: true);
-            set => SetBool(value);
-        }
 
         #endregion
 

@@ -176,14 +176,6 @@ namespace Plugins.Saneject.Editor.EditorWindows
                 onChanged: newValue => UserSettings.LogUnusedBindings = newValue
             );
 
-            DrawToggle
-            (
-                label: "Log Unused Runtime Proxies On Domain Reload",
-                tooltip: "If enabled, Saneject will scan and report unused runtime proxy scripts and assets during domain reload. They are considered unused, if no Scope binding is referencing them. This can help you keep your project clean and organized.",
-                currentValue: UserSettings.LogUnusedRuntimeProxiesOnDomainReload,
-                onChanged: newValue => UserSettings.LogUnusedRuntimeProxiesOnDomainReload = newValue
-            );
-
             EditorGUILayout.EndScrollView();
 
             EditorGUILayout.Space(8);

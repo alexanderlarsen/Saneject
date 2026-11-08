@@ -6,56 +6,15 @@ using System.Reflection;
 using Plugins.Saneject.Editor.Utilities;
 using Plugins.Saneject.Runtime.Attributes;
 using Plugins.Saneject.Runtime.Proxy;
-using Plugins.Saneject.Runtime.Settings;
 using UnityEditor;
-using UnityEngine;
 
 // ReSharper disable LoopCanBeConvertedToQuery
 
 namespace Plugins.Saneject.Editor.Proxy
 {
-    [EditorBrowsable(EditorBrowsableState.Never), InitializeOnLoad]
+    [EditorBrowsable(EditorBrowsableState.Never)]
     public static class RuntimeProxyCleaner
     {
-        static RuntimeProxyCleaner()
-        {
-            if (!UserSettings.LogUnusedRuntimeProxiesOnDomainReload)
-                return;
-
-            HashSet<Type> unusedTypes = GetUnusedTypes();
-            HashSet<string> unusedAssetPaths = GetUnusedAssetPaths(unusedTypes);
-
-            if (unusedTypes.Count == 0 && unusedAssetPaths.Count == 0)
-                return;
-
-            string unusedTypeList = unusedTypes.Count == 0
-                ? "None"
-                : string.Join(", ", unusedTypes.Select(t => t.Name));
-
-            string unusedAssetSummary = unusedAssetPaths.Count == 0
-                ? "None"
-                : string.Join
-                (
-                    ", ",
-                    unusedAssetPaths
-                        .Select(AssetDatabase.LoadAssetAtPath<RuntimeProxyBase>)
-                        .Where(asset => asset != null)
-                        .GroupBy(asset => asset.GetType().Name)
-                        .OrderBy(group => group.Key)
-                        .Select(group => $"{group.Key} ({group.Count()} unused)")
-                );
-
-            Debug.LogWarning
-            (
-                $"Saneject: Found {unusedTypes.Count} unused runtime proxy {(unusedTypes.Count == 1 ? "type" : "types")} and " +
-                $"{unusedAssetPaths.Count} unused runtime proxy {(unusedAssetPaths.Count == 1 ? "asset" : "assets")}:\n\n" +
-                $"Types: {unusedTypeList}\n" +
-                $"Assets: {unusedAssetSummary}\n\n" +
-                "These scripts and their assets can be cleaned up with one click at: 'Saneject/Runtime Proxy/Cleanup Unused Scripts And Assets'.\n" +
-                "This warning can be disabled at: 'Saneject/Settings/User Settings/Log Unused Proxies On Domain Reload'.\n"
-            );
-        }
-
         public static void CleanUnusedScriptsAndAssets()
         {
             HashSet<Type> unusedTypes = GetUnusedTypes();

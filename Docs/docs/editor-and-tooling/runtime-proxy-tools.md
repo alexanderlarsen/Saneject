@@ -31,6 +31,7 @@ It cleans:
 
 - Runtime proxy script files whose proxy types are no longer required by any runtime proxy binding manifest.
 - Runtime proxy assets whose `.asset` files are not referenced by any non-proxy project asset.
+- Runtime proxy assets whose proxy types are unused, even if the assets are still referenced.
 
 ## How do they work?
 
@@ -62,8 +63,9 @@ For unused proxy assets, it:
 1. Finds all concrete `RuntimeProxyBase` assets in the project.
 2. Builds a dependency set from all non-proxy assets under `Assets/`.
 3. Treats runtime proxy assets not present in that dependency set as unused.
+4. Includes assets belonging to unused proxy types, even if those assets are referenced.
 
-On cleanup, it deletes unused proxy assets first, then deletes unused proxy scripts.
+On cleanup, it asks for confirmation to delete unused proxy assets first, then separately asks for confirmation to delete unused proxy scripts.
 
 ## When are they relevant?
 
@@ -89,7 +91,7 @@ This happens most often when:
 - A binding changed to a different concrete component type.
 - Injection created proxy assets that are no longer referenced by any scene, prefab, or other project asset.
 
-If `Saneject/Settings/User Settings/Log Unused Runtime Proxies On Domain Reload` is enabled, Saneject warns on domain reload when it finds unused runtime proxy types and/or assets.
+Unused runtime proxy scans run only when you choose `Saneject/Runtime Proxy/Clean Up Unused Scripts And Assets`. They do not run on domain reload.
 
 ## Where to find tools
 
@@ -98,10 +100,7 @@ Both tools are in the Unity main menu:
 - `Saneject/Runtime Proxy/Generate Missing Proxy Scripts`
 - `Saneject/Runtime Proxy/Clean Up Unused Scripts And Assets`
 
-Related settings are in:
-
-- `Saneject/Settings/Project Settings`
-- `Saneject/Settings/User Settings`
+Automatic script generation is controlled by `Saneject/Settings/Project Settings/Generate Proxy Scripts On Domain Reload`.
 
 ## Related pages
 

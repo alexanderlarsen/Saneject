@@ -37,8 +37,6 @@ Important behavior:
 
 User settings are stored locally on your machine using `EditorPrefs`.
 
-![User settings](../../images/user-settings.webp)
-
 ### Ask Before Injection
 
 All of these default to `true`, which shows a confirmation dialog before injection runs.
@@ -79,15 +77,12 @@ All of these default to `true`.
 | `Clear Logs On Injection`                     | Clears the Unity Console before an injection run starts.                                                                                                                                           |
 | `Log Injection Summary`                       | Writes end-of-run summary logs.                                                                                                                                                                                                              |
 | `Log Unused Bindings`                         | Warns when bindings were declared but not used in a run.                                                                                                                                                 |
-| `Log Unused Runtime Proxies On Domain Reload` | On domain reload, scans for runtime proxy assets and scripts that are not referenced by any scope binding and logs findings. |
 
 For logging semantics and output shape, see [Logging & validation](logging-and-validation.md).
 
 ## Project settings
 
 Project settings are stored in the Unity project at `ProjectSettings/Saneject/ProjectSettings.json` and are version controlled if the project is under source control, which means that these settings are shared with team members.
-
-![Project settings](../../images/project-settings.webp)
 
 ### Context Isolation
 
