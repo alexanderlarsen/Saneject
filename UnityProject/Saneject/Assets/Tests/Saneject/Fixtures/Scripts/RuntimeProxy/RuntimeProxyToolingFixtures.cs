@@ -12,17 +12,8 @@ namespace Tests.Saneject.Fixtures.Scripts.RuntimeProxy
     {
     }
 
-    public class UnusedRuntimeProxy : RuntimeProxy<UnusedProxyComponent>
-    {
-    }
-
     [MuteUnusedRuntimeProxyWarning]
     public class MutedUnusedRuntimeProxy : RuntimeProxy<UnusedProxyComponent>
     {
-    }
-
-    public class RuntimeProxyAssetReferenceHolder : ScriptableObject
-    {
-        public RuntimeProxyBase proxy;
     }
 }
