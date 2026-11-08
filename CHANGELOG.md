@@ -1,5 +1,28 @@
 ﻿# Changelog
 
+## Version 1.2.5
+
+### Fixes
+
+- Removed automatic unused runtime proxy logging on domain reload and its user settings toggle. The project-wide dependency scan could take minutes in large projects. Cleanup remains available on demand through `Saneject/Runtime Proxy/Clean Up Unused Scripts And Assets`. Addresses [#118](https://github.com/alexanderlarsen/Saneject/issues/118).
+- Reduced repeated work during manual runtime proxy cleanup by collecting manifest types once per scan and reusing asset search results per proxy type. Thanks to [@BFlorry](https://github.com/BFlorry) for [#119](https://github.com/alexanderlarsen/Saneject/pull/119).
+
+### Changes
+
+- Retained `UserSettings.LogUnusedRuntimeProxiesOnDomainReload` as an obsolete compatibility property. It always returns `false`, ignores assignments, and no longer accesses the saved preference. Resetting user settings now skips obsolete properties, leaving retired preferences untouched.
+- Marked the `SceneExtensions` compatibility helper with `EditorBrowsableState.Never` to hide it from IntelliSense and generated API documentation.
+
+### Tests
+
+- Added regression coverage confirming that referenced assets of unused runtime proxy types remain cleanup candidates.
+- Moved the `UnusedRuntimeProxy` and `RuntimeProxyAssetReferenceHolder` fixtures into matching script files so Unity can serialize their assets correctly.
+
+### Documentation and tooling
+
+- Updated runtime proxy cleanup and settings documentation, refreshed API metadata, and removed settings screenshots and their source images.
+- Pinned the GameCI Unity test runner to `4.3.2`.
+- Pinned DocFX to `2.78.4` in CI and documented the matching local installation command.
+
 ## Version 1.2.4
 
 ### Fixes
