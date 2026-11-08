@@ -50,12 +50,13 @@ jobs:
         # Do not put this condition on the job itself. Branch protection
         # requires these matrix jobs to complete successfully.
         if: steps.test-paths.outputs.run == 'true'
-        uses: game-ci/unity-test-runner@v4.3.2
+        uses: game-ci/unity-test-runner@32e57712352b500e17974b245a6dce9e11a73213 # v4.4.0
         env:
-          UNITY_LICENSE: ${{ secrets.UNITY_LICENSE }}
           UNITY_EMAIL: ${{ secrets.UNITY_EMAIL }}
           UNITY_PASSWORD: ${{ secrets.UNITY_PASSWORD }}
         with:
+          # Supports Personal activation directly through the Unity account.
+          cliVersion: v0.1.72
           unityVersion: ${{ matrix.unity }}
           testMode: editmode
           projectPath: UnityProject/Saneject
